@@ -18,7 +18,7 @@ RUN_DIR="$ROOT/profiles/$PROFILE_ID/$PHASE"
 TRACE_DIR="$RUN_DIR/trace"
 mkdir -p "$TRACE_DIR"
 
-if ss -ltn 2>/dev/null | grep -q ':9031 '; then
+if timeout 1 bash -c 'exec 3<>/dev/tcp/127.0.0.1/9031' 2>/dev/null; then
   echo "Port 9031 is already in use; refusing to start a second server" >&2
   exit 2
 fi

@@ -7,10 +7,10 @@ if [[ $# -ne 1 ]]; then
 fi
 
 RUN_DIR=$1
-TRACE_DIR="$RUN_DIR/profile"
+TRACE_DIR="$RUN_DIR/trace"
 mkdir -p "$TRACE_DIR"
 
-if ss -ltn 2>/dev/null | grep -q ':9031 '; then
+if timeout 1 bash -c 'exec 3<>/dev/tcp/127.0.0.1/9031' 2>/dev/null; then
   echo "Port 9031 is already in use; stop the baseline service first" >&2
   exit 2
 fi
@@ -57,6 +57,9 @@ vllm serve /workspace/MiniCPM5-2B \\
 # The profiler options are diagnostic-only and are not part of the official
 # baseline or final scoring command.
 EOF
+
+env | grep -E '^(VLLM_|FLAG|COREX_|USE_C_EXTENSION)=' \
+  | sort > "$RUN_DIR/inherited-env.txt" || true
 
 cd /workspace
 setsid env VLLM_PLUGINS=fl PYTHONUNBUFFERED=1 \

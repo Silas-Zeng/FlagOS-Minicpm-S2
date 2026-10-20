@@ -1,0 +1,199 @@
+diff --git a/src/flag_gems/ops/flash_api.py b/src/flag_gems/ops/flash_api.py
+index a0ba73fd..621b8771 100644
+--- a/src/flag_gems/ops/flash_api.py
++++ b/src/flag_gems/ops/flash_api.py
+@@ -39,6 +39,42 @@ def CHECK_DEVICE(x):
+     assert x.device.type == flag_gems.device
+ 
+ 
++def _select_varlen_fwd_config_name(
++    *,
++    vendor_name: str,
++    seqlenq_ngroups_swapped: bool,
++    max_seqlen_q: int,
++    avg_rows_per_cta: float,
++) -> str:
++    """Select a paged/varlen FlashAttention launch heuristic.
++
++    Iluvatar's 64-thread warp and 16-SM BI-V150 benefit from matching the
++    packed GQA decode tile to the exact query-group extent. With 16 query
++    heads and 2 KV heads this extent is 8, so a 16-row tile computes a masked
++    half-tile for every decode request.
++    """
++    if avg_rows_per_cta > 64:
++        default_name = "mha_block_128"
++    elif avg_rows_per_cta > 32:
++        default_name = "mha_block_64"
++    elif avg_rows_per_cta > 16:
++        default_name = "mha_block_32"
++    else:
++        default_name = "mha_block_16"
++
++    if vendor_name == "mthreads":
++        return "mha_block_32"
++
++    if (
++        vendor_name == "iluvatar"
++        and seqlenq_ngroups_swapped
++        and max_seqlen_q == 8
++    ):
++        return "mha_biv150_gqa8_decode"
++
++    return default_name
++
++
+ class fwd_params:
+     __slots__ = (
+         # pointers and strides
+@@ -545,7 +581,9 @@ def mha_varlan_fwd(
+         kernel = flash_varlen_fwd_kernel[grid]
+         args = tuple(getattr(params, k) for k in params.__slots__)
+ 
+-        # We assess which phase the requests are likely to be in and set the config accordingly.
++        # We assess which phase the requests are likely to be in and set the
++        # config accordingly. Iluvatar has an exact-tile decode specialization
++        # for the packed 8-way GQA layout used by 16Q/2KV models.
+         total_rows = total_q * num_heads
+         num_sms = torch_device_fn.get_device_properties(
+             flag_gems.device
+@@ -553,18 +591,12 @@ def mha_varlan_fwd(
+         avg_rows_per_sm = total_rows / num_sms
+         avg_rows_per_batch = total_q / batch_size
+         avg_rows_per_cta = min(avg_rows_per_batch, avg_rows_per_sm)
+-        # Heuristic: if avg_rows_per_sm >= 128, we are likely in prefill phase.
+-        # This is a rough heuristic and may not be accurate for all scenarios.
+-        if avg_rows_per_cta > 64:
+-            varlen_fwd_config_str = "mha_block_128"
+-        elif avg_rows_per_cta > 32:
+-            varlen_fwd_config_str = "mha_block_64"
+-        elif avg_rows_per_cta > 16:
+-            varlen_fwd_config_str = "mha_block_32"
+-        else:
+-            varlen_fwd_config_str = "mha_block_16"
+-        if flag_gems.vendor_name == "mthreads":
+-            varlen_fwd_config_str = "mha_block_32"
++        varlen_fwd_config_str = _select_varlen_fwd_config_name(
++            vendor_name=flag_gems.vendor_name,
++            seqlenq_ngroups_swapped=seqlenq_ngroups_swapped,
++            max_seqlen_q=max_seqlen_q,
++            avg_rows_per_cta=avg_rows_per_cta,
++        )
+ 
+         cfg = runtime.get_heuristic_config(varlen_fwd_config_str)
+         cfg_params = {
+@@ -895,7 +927,8 @@ def mha_varlan_fwd_opt(
+         kernel = flash_varlen_fwd_kernel[grid]
+         args = tuple(getattr(params, k) for k in params.__slots__)
+ 
+-        # We assess which phase the requests are likely to be in and set the config accordingly.
++        # We assess which phase the requests are likely to be in and set the
++        # config accordingly.
+         total_rows = total_q * num_heads
+         num_sms = torch_device_fn.get_device_properties(
+             flag_gems.device
+@@ -903,18 +936,12 @@ def mha_varlan_fwd_opt(
+         avg_rows_per_sm = total_rows / num_sms
+         avg_rows_per_batch = total_q / batch_size
+         avg_rows_per_cta = min(avg_rows_per_batch, avg_rows_per_sm)
+-        # Heuristic: if avg_rows_per_sm >= 128, we are likely in prefill phase.
+-        # This is a rough heuristic and may not be accurate for all scenarios.
+-        if avg_rows_per_cta > 64:
+-            varlen_fwd_config_str = "mha_block_128"
+-        elif avg_rows_per_cta > 32:
+-            varlen_fwd_config_str = "mha_block_64"
+-        elif avg_rows_per_cta > 16:
+-            varlen_fwd_config_str = "mha_block_32"
+-        else:
+-            varlen_fwd_config_str = "mha_block_16"
+-        if flag_gems.vendor_name == "mthreads":
+-            varlen_fwd_config_str = "mha_block_32"
++        varlen_fwd_config_str = _select_varlen_fwd_config_name(
++            vendor_name=flag_gems.vendor_name,
++            seqlenq_ngroups_swapped=seqlenq_ngroups_swapped,
++            max_seqlen_q=max_seqlen_q,
++            avg_rows_per_cta=avg_rows_per_cta,
++        )
+ 
+         cfg = runtime.get_heuristic_config(varlen_fwd_config_str)
+         cfg_params = {
+diff --git a/src/flag_gems/runtime/backend/_iluvatar/heuristics_config_utils.py b/src/flag_gems/runtime/backend/_iluvatar/heuristics_config_utils.py
+index eeb2272a..e7eeab9b 100644
+--- a/src/flag_gems/runtime/backend/_iluvatar/heuristics_config_utils.py
++++ b/src/flag_gems/runtime/backend/_iluvatar/heuristics_config_utils.py
+@@ -338,6 +338,14 @@ HEURISTICS_CONFIGS = {
+         "num_warps": lambda args: 4,
+         "num_stages": lambda args: 3,
+     },
++    "mha_biv150_gqa8_decode": {
++        # Packed-GQA decode has exactly eight rows. A 16-row tile computes a
++        # masked half-tile for every request on this workload.
++        "BLOCK_M": lambda args: 8,
++        "BLOCK_N": lambda args: 32,
++        "num_warps": lambda args: 4,
++        "num_stages": lambda args: 3,
++    },
+     "elementwise_generic": {
+         "BLOCK_SIZE": simple_elementwise_blocksize_heur,
+         "num_warps": lambda args: 16,
+diff --git a/tests/test_varlen_fwd_heuristics.py b/tests/test_varlen_fwd_heuristics.py
+new file mode 100644
+index 00000000..f870a734
+--- /dev/null
++++ b/tests/test_varlen_fwd_heuristics.py
+@@ -0,0 +1,56 @@
++# Copyright 2026 FlagOS Contributors
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#     http://www.apache.org/licenses/LICENSE-2.0
++
++import importlib
++
++from flag_gems.ops.flash_api import _select_varlen_fwd_config_name
++
++
++def test_iluvatar_uses_exact_tile_for_packed_gqa8_decode():
++    selected = _select_varlen_fwd_config_name(
++        vendor_name="iluvatar",
++        seqlenq_ngroups_swapped=True,
++        max_seqlen_q=8,
++        avg_rows_per_cta=8,
++    )
++
++    assert selected == "mha_biv150_gqa8_decode"
++
++
++def test_iluvatar_prefill_keeps_general_heuristic():
++    selected = _select_varlen_fwd_config_name(
++        vendor_name="iluvatar",
++        seqlenq_ngroups_swapped=False,
++        max_seqlen_q=16384,
++        avg_rows_per_cta=16384,
++    )
++
++    assert selected == "mha_block_128"
++
++
++def test_other_vendors_keep_general_heuristic():
++    selected = _select_varlen_fwd_config_name(
++        vendor_name="nvidia",
++        seqlenq_ngroups_swapped=True,
++        max_seqlen_q=8,
++        avg_rows_per_cta=8,
++    )
++
++    assert selected == "mha_block_16"
++
++
++def test_iluvatar_gqa8_decode_config_is_exact_tile():
++    module = importlib.import_module(
++        "flag_gems.runtime.backend._iluvatar.heuristics_config_utils"
++    )
++    config = module.HEURISTICS_CONFIGS["mha_biv150_gqa8_decode"]
++
++    assert config["BLOCK_M"](None) == 8
++    assert config["BLOCK_N"](None) == 32
++    assert config["num_warps"](None) == 4
++    assert config["num_stages"](None) == 3

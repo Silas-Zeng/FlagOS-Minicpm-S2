@@ -23,6 +23,10 @@ These values are raw repetitions, not the final three-run average.
 | Workload | Raw run | Successful | Failed | Total tok/s | Output tok/s | Mean TTFT ms | Duration s |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | 4K | 1 | 256 | 0 | 1702.13 | 340.43 | 13664.92 | 770.05 |
+| 4K clean rerun | 1 | 256 | 0 | 1689.09 | 337.82 | 14266.14 | 775.99 |
+| 4K clean rerun | 2 | 256 | 0 | 1872.39 | 374.48 | 12388.91 | 700.03 |
+| 4K clean rerun | 3 | 256 | 0 | 1835.56 | 367.11 | 12275.53 | 714.07 |
+| 4K clean rerun | 4 | 256 | 0 | 1918.90 | 383.78 | 12276.81 | 683.06 |
 
 ## Preliminary evidence
 
@@ -33,6 +37,10 @@ These values are raw repetitions, not the final three-run average.
 - The second raw run is also 0 failures, with `1676.28 total tok/s`,
   `335.26 output tok/s`, `12781.48 ms` Mean TTFT, and `781.92 s` duration.
   The two runs differ by about 1.5% in total throughput.
+- The detached clean rerun uses a new server and output files. Its first two
+  runs are `1689.09` and `1872.39 total tok/s`, a difference of about 10.3%.
+  This confirms that same-machine repetitions, not the published reference
+  alone, are required to judge candidate changes.
 - `Mean TTFT` is 13.7 seconds, while `Median TTFT` is 3.38 seconds. The large
   difference and `P99 TTFT` of 79.4 seconds show substantial queuing and
   head-of-line effects under the synchronized burst of 256 prompts.

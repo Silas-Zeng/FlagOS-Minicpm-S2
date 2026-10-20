@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 
-def load_trace(path: Path) -> dict[str, Any]:
+def load_trace(path: Path) -> dict[str, Any] | list[dict[str, Any]]:
     if path.suffix == ".gz":
         with gzip.open(path, "rt", encoding="utf-8") as handle:
             return json.load(handle)
@@ -154,7 +154,12 @@ def main() -> None:
     args = parser.parse_args()
 
     payload = load_trace(args.trace)
-    events = payload.get("traceEvents", [])
+    if isinstance(payload, dict):
+        events = payload.get("traceEvents", [])
+    elif isinstance(payload, list):
+        events = payload
+    else:
+        raise SystemExit("unsupported trace payload; expected object or array")
     summaries = summarize(events)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     for kind, rows in summaries.items():

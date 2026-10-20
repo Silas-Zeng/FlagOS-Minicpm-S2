@@ -149,6 +149,16 @@ def main() -> None:
     inputs = make_inputs(
         args.batch, args.seq_len, args.phase, block_size=args.block_size
     )
+    reference_config = (
+        CANDIDATES[args.phase][0]
+        if args.phase == "prefill"
+        else (16, 32, 4, 3)
+    )
+    install_config(*reference_config)
+    invoke(inputs, args.phase)
+    torch.cuda.synchronize()
+    reference = inputs["out"].clone()
+
     rows = []
     for block_m, block_n, warps, stages in CANDIDATES[args.phase]:
         row = {
@@ -159,6 +169,7 @@ def main() -> None:
             "block_size": args.block_size,
             "status": "ok",
             "error": "",
+            "max_abs_diff": "",
         }
         try:
             install_config(block_m, block_n, warps, stages)
@@ -168,6 +179,9 @@ def main() -> None:
                     "min_ms": min(times),
                     "median_ms": sorted(times)[len(times) // 2],
                     "mean_ms": sum(times) / len(times),
+                    "max_abs_diff": float(
+                        (inputs["out"] - reference).abs().max().item()
+                    ),
                 }
             )
         except Exception as exc:

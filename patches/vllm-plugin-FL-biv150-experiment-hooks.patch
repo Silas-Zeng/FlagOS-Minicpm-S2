@@ -1,0 +1,50 @@
+diff --git a/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py b/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py
+index 0c7758e..db7fdad 100644
+--- a/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py
++++ b/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py
+@@ -10,6 +10,7 @@ Iluvatar uses a CUDA-compatible architecture.
+ from __future__ import annotations
+ 
+ import logging
++import os
+ from typing import Optional, Union
+ 
+ import torch
+@@ -208,6 +209,15 @@ patch_triton_perf_model_for_iluvatar()
+ 
+ 
+ def patch_sampler_compile_for_iluvatar() -> None:
++    keep_compile = os.environ.get(
++        "VLLM_FL_ILUVATAR_KEEP_SAMPLER_COMPILE", "0"
++    ).lower() in ("1", "true", "yes")
++    if keep_compile:
++        logger.info(
++            "Keeping torch.compile on Iluvatar sampler ops for diagnostics"
++        )
++        return
++
+     # Disable torch.compile on vllm sampler ops for Iluvatar.
+     # flagtree triton only supports Iluvatar backend, not cuda target.
+     # TODO: Remove once flagtree triton supports cuda inductor target.
+diff --git a/vllm_fl/platform.py b/vllm_fl/platform.py
+index 86bd70b..f8ad019 100644
+--- a/vllm_fl/platform.py
++++ b/vllm_fl/platform.py
+@@ -189,6 +189,17 @@ class PlatformFL(Platform):
+             elif cls.device_type == "musa":
+                 cache_config.block_size = 64
+                 logger.info("Setting kv cache block size to 64 for MUSA.")
++            elif cls.vendor_name == "iluvatar":
++                block_size = int(os.environ.get("VLLM_FL_ILUVATAR_BLOCK_SIZE", "16"))
++                if block_size not in (16, 32, 64, 128):
++                    raise ValueError(
++                        "VLLM_FL_ILUVATAR_BLOCK_SIZE must be one of 16, 32, 64, 128"
++                    )
++                cache_config.block_size = block_size
++                logger.info(
++                    "Setting kv cache block size to %d for Iluvatar.",
++                    block_size,
++                )
+             else:
+                 cache_config.block_size = 16
+         if cls.device_type == "npu":

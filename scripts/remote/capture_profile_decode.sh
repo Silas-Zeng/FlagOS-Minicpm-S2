@@ -69,8 +69,9 @@ sleep 4
 curl -fsS -X POST http://127.0.0.1:9031/stop_profile \
   | tee "$RUN_DIR/stop-profile.response"
 
-wait "$load_pid"
-sleep 10
+kill "$load_pid" 2>/dev/null || true
+wait "$load_pid" 2>/dev/null || true
+sleep 5
 find "$RUN_DIR/trace" -maxdepth 2 -type f -printf '%P %s bytes\n' \
   | sort > "$RUN_DIR/trace-files.txt"
 cat "$RUN_DIR/trace-files.txt"

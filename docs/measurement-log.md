@@ -28,6 +28,27 @@ The primary timestamp is UTC. The parenthesized value is Asia/Shanghai
   a six-CPU platform allocation. The host exposes more CPUs and memory to the
   container namespace; final reports should use the subscription limits, not
   host totals.
+- `17:18 UTC (01:18 +08:00)`: 16K run 1 was active with 31 running requests,
+  33 waiting, and approximately 98.7% KV-cache usage. The 32 GiB device cannot
+  hold 64 simultaneous 16K contexts at the official 0.85 memory-utilization
+  setting.
+- `17:53 UTC (01:53 +08:00)`: the foreground SSH session reached its lifecycle
+  limit and hung up. The remote benchmark client received the hangup after
+  approximately 95 minutes. The vLLM service remained healthy, but the fourth
+  4K row and the in-progress 16K row were not written. This run is retained as
+  a failed/incomplete attempt and is not used for the final baseline.
+- `17:57 UTC (01:57 +08:00)`: the empty service was stopped, a fresh service
+  started with an empty KV cache, and the benchmark launcher was changed to
+  `setsid`/detached execution so it no longer depends on the SSH session.
+- `18:00 UTC (02:00 +08:00)`: clean rerun started as control run
+  `baseline-clean-20261020T175900Z`; its device output directory is
+  `/workspace/experiments/minicpm-s2/baseline/20261020T180049Z`.
+- `18:51 UTC (02:51 +08:00)`: all four clean 4K runs succeeded. The official
+  final-three average is `1875.62 total tok/s`, `375.12 output tok/s`,
+  `12313.75 ms` mean TTFT, and `699.05 s` duration. The final-three
+  coefficients of variation are 1.82%, 0.43%, and 1.15%, respectively.
+- `18:51 UTC (02:51 +08:00)`: the 16K case started in the same detached
+  runner.
 
 ## Initial observations
 
@@ -46,3 +67,7 @@ The primary timestamp is UTC. The parenthesized value is Asia/Shanghai
   93% to 100%, while board power was approximately 199 W to 211 W for the
   32,768 MiB BI-V150 instance. This makes a pure idle/queueing explanation
   unlikely and motivates kernel-level tracing.
+- At the start of the 16K workload, the scheduler admitted about 31 of 64
+  configured concurrent requests before reaching the KV-cache limit. This
+  explains part of the expected difference from the published full-card
+  reference and must be held constant in local A/B experiments.
