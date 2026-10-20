@@ -26,6 +26,9 @@ Private keys and connection secrets are not stored in this repository.
 | Visible devices | 1 |
 | Device memory | 32,768 MiB |
 | Device UUID | `b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab` |
+| Compute capability reported by PyTorch | `7.1` |
+| Multiprocessor count | 16 |
+| L2 cache | 16 MiB |
 | Driver / IX-ML | 4.5.0 / 4.4.0 |
 | CoreX | 4.5.0 |
 | Python | 3.12.11 |
@@ -35,6 +38,11 @@ Private keys and connection secrets are not stored in this repository.
 | vLLM plugin FL | 0.3.0rc0+g13eb9be69 |
 | FlagGems | 5.3.5 |
 | FlagTree | 0.6.2a3+iluvatar3.6 |
+
+FlagGems reports vendor `iluvatar`, device type `cuda`, and
+`use_c_extension=False`. The observed Attention path is therefore the pure
+Triton implementation in `flag_gems.ops.flash_api`, not the optional C++
+operator extension.
 
 The host PCI topology exposes many accelerators, but both PyTorch and `ixsmi`
 expose only one device to this container. Results must not be described as

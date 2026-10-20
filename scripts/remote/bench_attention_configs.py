@@ -25,6 +25,11 @@ CANDIDATES = {
         (64, 64, 8, 3),
     ],
     "decode": [
+        (8, 32, 2, 2),
+        (8, 32, 2, 3),
+        (8, 32, 4, 2),
+        (8, 64, 2, 2),
+        (8, 64, 4, 2),
         (16, 32, 4, 3),
         (16, 64, 4, 2),
         (16, 32, 8, 2),
@@ -122,6 +127,7 @@ def main() -> None:
     parser.add_argument("--phase", choices=sorted(CANDIDATES), required=True)
     parser.add_argument("--batch", type=int, required=True)
     parser.add_argument("--seq-len", type=int, required=True)
+    parser.add_argument("--block-size", type=int, default=16)
     parser.add_argument("--warmups", type=int, default=2)
     parser.add_argument("--repeats", type=int, default=5)
     parser.add_argument("--out", type=Path, required=True)
@@ -135,24 +141,45 @@ def main() -> None:
                 "phase": args.phase,
                 "batch": args.batch,
                 "seq_len": args.seq_len,
+                "block_size": args.block_size,
             }
         ),
         flush=True,
     )
-    inputs = make_inputs(args.batch, args.seq_len, args.phase)
+    inputs = make_inputs(
+        args.batch, args.seq_len, args.phase, block_size=args.block_size
+    )
     rows = []
     for block_m, block_n, warps, stages in CANDIDATES[args.phase]:
-        install_config(block_m, block_n, warps, stages)
-        times = measure(inputs, args.phase, args.warmups, args.repeats)
         row = {
             "block_m": block_m,
             "block_n": block_n,
             "warps": warps,
             "stages": stages,
-            "min_ms": min(times),
-            "median_ms": sorted(times)[len(times) // 2],
-            "mean_ms": sum(times) / len(times),
+            "block_size": args.block_size,
+            "status": "ok",
+            "error": "",
         }
+        try:
+            install_config(block_m, block_n, warps, stages)
+            times = measure(inputs, args.phase, args.warmups, args.repeats)
+            row.update(
+                {
+                    "min_ms": min(times),
+                    "median_ms": sorted(times)[len(times) // 2],
+                    "mean_ms": sum(times) / len(times),
+                }
+            )
+        except Exception as exc:
+            row.update(
+                {
+                    "status": "error",
+                    "error": f"{type(exc).__name__}: {exc}",
+                    "min_ms": "",
+                    "median_ms": "",
+                    "mean_ms": "",
+                }
+            )
         rows.append(row)
         print(json.dumps(row), flush=True)
 

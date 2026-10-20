@@ -3,6 +3,11 @@
 This repository is the reproducible experiment record for the FlagOS Season 2,
 Track 2 task. It is intentionally separate from any existing source repository.
 
+- Private experiment repository:
+  <https://github.com/Silas-Zeng/flagos-s2-minicpm-throughput>
+- Official task:
+  <https://flagos.io/race-detail-season2?id=539vlt2p&lang=cn>
+
 ## Current environment
 
 - Date established: 2026-10-21 (Asia/Shanghai)

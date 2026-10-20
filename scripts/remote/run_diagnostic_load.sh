@@ -12,7 +12,7 @@ INPUT_LEN=$3
 OUTPUT_LEN=$4
 CONCURRENCY=$5
 NUM_PROMPTS=$6
-mkdir -p "$RUN_DIR"
+mkdir -p "$RUN_DIR/results"
 
 export VLLM_PLUGINS=fl
 export PYTHONUNBUFFERED=1
@@ -32,4 +32,7 @@ exec vllm bench serve \
   --num-warmups 0 \
   --seed 0 \
   --disable-tqdm \
+  --save-result \
+  --result-dir "$RUN_DIR/results" \
+  --label "$LABEL" \
   > "$RUN_DIR/load-$LABEL.log" 2>&1

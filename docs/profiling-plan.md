@@ -42,6 +42,18 @@ settings, and compilation mode, plus vLLM's diagnostic `profiler-config`.
 - Limit automatic capture to five worker iterations.
 - Persist the exact server command and profiler JSON in each trace directory.
 
+## Primary tooling
+
+- `start_profiled_server.sh` starts the profiler-enabled diagnostic server.
+- `profile_control.sh start|stop|wait` controls the two official profiler
+  HTTP endpoints.
+- `profile_workload.py` sends exact-length token prompts without changing the
+  official benchmark.
+- `capture_profile_prefill.sh` and `capture_profile_decode.sh` are higher-level
+  alternatives for repeatable phase capture.
+- `stop_managed_server.sh` verifies the PID belongs to the expected MiniCPM
+  vLLM process before sending SIGTERM.
+
 ## Derived evidence
 
 For each phase, report:
