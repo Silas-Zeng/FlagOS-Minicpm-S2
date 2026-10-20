@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ $# -ne 6 ]]; then
-  echo "usage: $0 <run-dir> <label> <input-len> <output-len> <concurrency> <num-prompts>" >&2
+if [[ $# -lt 6 || $# -gt 7 ]]; then
+  echo "usage: $0 <run-dir> <label> <input-len> <output-len> <concurrency> <num-prompts> [seed]" >&2
   exit 2
 fi
 
@@ -12,6 +12,7 @@ INPUT_LEN=$3
 OUTPUT_LEN=$4
 CONCURRENCY=$5
 NUM_PROMPTS=$6
+SEED=${7:-0}
 mkdir -p "$RUN_DIR/results"
 
 export VLLM_PLUGINS=fl
@@ -30,7 +31,7 @@ exec vllm bench serve \
   --max-concurrency "$CONCURRENCY" \
   --num-prompts "$NUM_PROMPTS" \
   --num-warmups 0 \
-  --seed 0 \
+  --seed "$SEED" \
   --disable-tqdm \
   --save-result \
   --result-dir "$RUN_DIR/results" \

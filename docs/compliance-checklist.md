@@ -10,10 +10,10 @@ Status values: `pending`, `verified`, or `not applicable`.
 | Keep official service arguments | command file in every baseline directory | verified at baseline |
 | Do not edit or tune official benchmark script | script hash `0813eba574e9d1eb50c297c515baa426da1bcb61ce8c78a398b482f246005565` | verified at baseline |
 | Do not change hyperparameters to enable quantization/speculation | launch-command diff review | pending every candidate |
-| Do not switch operators without an implementation change | code diff and kernel evidence | pending every candidate |
+| Do not switch operators without an implementation change | plugin commit `f47b853`; attention launch rewrite and new top-p Triton kernels | verified |
 | Do not merge the latest framework branch | fixed base commit and patch-only diff | pending final |
 | Keep model behavior and output valid | smoke + operator tests | pending final |
-| `math_500` Level 3 >= 0.95 | official evaluation log | pending |
+| `math_500` Level 3 >= 0.95 | exact organizer command with `temperature=1.0`, `top_p=0.95`, `max_tokens=32768`; final run in progress | pending |
 | 4K and 16K performance greater than the 1% window | official benchmark CSV | pending |
 | Report strategies appear and are enabled in submitted code | code-to-report matrix | pending final |
 | Reproducible from a clean environment | clean setup transcript | pending final |

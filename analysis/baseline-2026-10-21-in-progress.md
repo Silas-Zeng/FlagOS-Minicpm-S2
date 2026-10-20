@@ -27,6 +27,7 @@ These values are raw repetitions, not the final three-run average.
 | 4K clean rerun | 2 | 256 | 0 | 1872.39 | 374.48 | 12388.91 | 700.03 |
 | 4K clean rerun | 3 | 256 | 0 | 1835.56 | 367.11 | 12275.53 | 714.07 |
 | 4K clean rerun | 4 | 256 | 0 | 1918.90 | 383.78 | 12276.81 | 683.06 |
+| 16K clean rerun | 1 | 128 | 0 | 858.09 | 50.48 | 639267.43 | 2596.73 |
 
 ## Preliminary evidence
 

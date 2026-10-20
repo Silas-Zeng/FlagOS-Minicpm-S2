@@ -39,6 +39,7 @@ EOF
   printf 'FLAGTUNE=%s\n' "${FLAGTUNE:-<unset>}"
   printf 'COREX_VISIBLE_DEVICES=%s\n' \
     "${COREX_VISIBLE_DEVICES:-<unset>}"
+  printf 'PYTHONPATH=%s\n' "${PYTHONPATH:-<unset>}"
 } > "$RUN_DIR/inherited-env.txt"
 
 cd /workspace

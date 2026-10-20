@@ -49,6 +49,26 @@ The primary timestamp is UTC. The parenthesized value is Asia/Shanghai
   coefficients of variation are 1.82%, 0.43%, and 1.15%, respectively.
 - `18:51 UTC (02:51 +08:00)`: the 16K case started in the same detached
   runner.
+- `19:35 UTC (03:35 +08:00)`: 16K run 1 completed with 128 successful
+  requests, `858.09 total tok/s`, `50.48 output tok/s`,
+  `639267.43 ms` mean TTFT, and `2596.73 s` duration. The local throughput is
+  6.2% below the public page reference and TTFT is 6.7% higher.
+- 16K admitted roughly 30 requests at a time because the 32 GiB device reached
+  95%-99% KV-cache usage; client concurrency was 64.
+- `05:13 UTC (13:13 +08:00)`: histogram top-p microbenchmark completed. The
+  upstream top-p-only kernel was `6.39 ms`; the deterministic single-split
+  replacement was `0.459 ms`, with no dropped probability mass in the tested
+  distribution matrix.
+- `05:43 UTC (13:43 +08:00)`: generic Triton attention sweep found
+  `BM128/TILE64/8w/1s` for prefill, 7.1x faster than the default in both
+  chunked and full 16K shapes.
+- `06:08 UTC (14:08 +08:00)`: the source-patch path completed a 16K diagnostic
+  load at `4611.14 total tok/s` and `113.42 s` mean TTFT.
+- `07:06 UTC (15:06 +08:00)`: the exact organizer `math_500` Level 3 command
+  passed at `96.2%` with prefill attention and deterministic top-p enabled.
+- `07:12 UTC (15:12 +08:00)`: final decode attention was added after a
+  `3.021 -> 1.955 ms` improvement at batch 30 and 16K KV. A second full
+  organizer accuracy run started to gate the final policy.
 
 ## Initial observations
 

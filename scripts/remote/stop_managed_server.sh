@@ -32,7 +32,8 @@ fi
 
 kill -TERM "$pid"
 for _ in $(seq 1 60); do
-  if ! kill -0 "$pid" 2>/dev/null; then
+  process_state=$(awk '/^State:/{print $2}' "/proc/$pid/status" 2>/dev/null || true)
+  if ! kill -0 "$pid" 2>/dev/null || [[ "$process_state" == "Z" ]]; then
     echo "stopped process $pid"
     exit 0
   fi

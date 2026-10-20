@@ -23,6 +23,25 @@ proposes measuring it before making a performance claim. Its illustrative
 optimized CSV is not a reproducible measurement from this device and is not
 used as evidence.
 
+Another public workspace reports concrete, independently reviewable changes:
+
+<https://github.com/xy200303/minicpm-flagserve>
+
+- An attention metadata cache removes repeated pageable device-to-host copies
+  in its MetaX-specific prefill path. Its commit claims roughly 10% end-to-end
+  gain there, but the implementation is not applicable verbatim to
+  `TRITON_ATTN` on Iluvatar.
+- Its sampler work fuses top-k/top-p filtering and Gumbel-Max sampling.
+  `FlagGems v5.3.5` in this environment does not contain those newer fused
+  modules, so they cannot be treated as present capabilities.
+- Its README summarizes organizer Q&A that permits shape-aware dispatch and
+  self-developed speculative strategies while prohibiting a self-trained draft
+  model. These statements require direct organizer confirmation before use.
+
+The repeated DtoH copy pattern is a useful profiling clue for the whole
+attention path. It is not evidence that the same operation exists in the
+Iluvatar baseline.
+
 ## Independently verified here
 
 - The instance exposes one BI-V150 with 32,768 MiB.

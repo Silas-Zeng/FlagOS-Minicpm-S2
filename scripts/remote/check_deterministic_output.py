@@ -10,6 +10,13 @@ from pathlib import Path
 
 import requests
 
+PROMPT_TEXT = (
+    "Explain why a KV cache improves decoder-only language model inference. "
+    "Compare prefill and decode, describe the main memory-bandwidth cost, "
+    "and give one concrete example. Keep the answer concise and technically "
+    "accurate. "
+) * 4
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()
@@ -18,13 +25,13 @@ def main() -> None:
     parser.add_argument("--out", required=True, type=Path)
     args = parser.parse_args()
 
-    # Fixed, ordinary token IDs avoid tokenizer and special-token variability.
-    prompt = [((i * 7919) % 120000) for i in range(128)]
+    # A normal prompt avoids pathological token sequences while remaining
+    # deterministic across implementations.
     response = requests.post(
         args.url,
         json={
             "model": args.model,
-            "prompt": prompt,
+            "prompt": PROMPT_TEXT,
             "max_tokens": 64,
             "temperature": 0,
             "ignore_eos": True,
@@ -35,9 +42,11 @@ def main() -> None:
     payload = response.json()
     content = payload["choices"][0]["text"]
     result = {
-        "prompt_token_ids": prompt,
+        "prompt": PROMPT_TEXT,
         "content": content,
         "sha256": hashlib.sha256(content.encode("utf-8")).hexdigest(),
+        "finish_reason": payload["choices"][0].get("finish_reason"),
+        "service_fingerprint": payload.get("system_fingerprint"),
         "usage": payload.get("usage"),
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)

@@ -45,7 +45,7 @@ def main() -> None:
     args = parser.parse_args()
 
     device = torch.device("cuda")
-    torch.cuda.set_device(device)
+    torch.cuda.set_device(0)
     rows = []
 
     for name, (k, n) in SHAPES.items():

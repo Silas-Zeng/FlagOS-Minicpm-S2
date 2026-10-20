@@ -12,6 +12,12 @@ Verified from
 - 4K workload: `[4096, 1024, 64, 256]`
 - 16K workload: `[16384, 1024, 64, 128]`
 - Accuracy: `math_500` Level 3, at least `0.95`, reference `0.962`
+- Official accuracy sampling configuration:
+  `temperature=1.0`, `top_p=0.95`, `max_tokens=32768`
+- Official accuracy endpoint argument:
+  `http://127.0.0.1:9031/v1/chat/completions`
+- Official dataset argument:
+  `{"math_500":{"dataset_id":"/workspace/evalscope-datasets/math_500","subset_list":["Level 3"]}}`
 - Serving arguments: exactly the command listed on the official page for the
   selected platform
 
@@ -40,6 +46,23 @@ Verified from
   operator changes are submitted.
 - `report.pdf` and `readme.md` are required.
 - The final archive is named after the team.
+
+## Official accuracy command
+
+```bash
+evalscope eval \
+  --model minicpm \
+  --api-url http://127.0.0.1:9031/v1/chat/completions \
+  --api-key EMPTY \
+  --eval-type openai_api \
+  --datasets math_500 \
+  --dataset-args '{"math_500":{"dataset_id":"/workspace/evalscope-datasets/math_500","subset_list":["Level 3"]}}' \
+  --eval-batch-size 8 \
+  --timeout 3600 \
+  --generation-config '{"temperature":1.0,"top_p":0.95,"max_tokens":32768}' \
+  --work-dir /workspace/evalscope-datasets/level3 \
+  --ignore-errors
+```
 
 ## Open questions
 
