@@ -16,7 +16,10 @@ Private keys and connection secrets are not stored in this repository.
 | Item | Observed value |
 |---|---|
 | Kernel | Linux 5.4.0-148-generic x86_64 |
-| System memory | 503 GiB |
+| Host-visible system memory | 503 GiB |
+| Container memory limit | 20 GiB (`memory.max=21474836480`) |
+| Platform-visible CPU allocation | 6 CPUs |
+| Host-visible CPUs | 112 (`nproc`) |
 | Swap | 8 GiB |
 | Container root filesystem | 50 GiB overlay |
 | Accelerator | Iluvatar BI-V150 |
@@ -35,7 +38,8 @@ Private keys and connection secrets are not stored in this repository.
 
 The host PCI topology exposes many accelerators, but both PyTorch and `ixsmi`
 expose only one device to this container. Results must not be described as
-two-card results.
+two-card results. The host-visible CPU count is not the platform allocation:
+the reservation displayed by OnlineLab is 6 CPUs.
 
 ## Workspace
 

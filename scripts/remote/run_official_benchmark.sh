@@ -7,6 +7,7 @@ RUN_DIR="$ROOT/baseline/$STAMP"
 mkdir -p "$RUN_DIR"
 
 cd /workspace
+export PYTHONUNBUFFERED=1
 python3 /workspace/vllm-plugin-FL/benchmarks/benchmark_throughput_serve.py \
   --model /workspace/MiniCPM5-2B \
   --served-model-name minicpm \

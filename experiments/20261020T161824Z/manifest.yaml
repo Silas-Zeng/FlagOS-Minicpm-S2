@@ -1,0 +1,34 @@
+experiment_id: baseline-official-20261020T161824Z
+status: running
+started_at_utc: 2026-10-20T16:18:24Z
+platform: Iluvatar BI-V150
+device_count: 1
+device_memory_mib: 32768
+model:
+  path: /workspace/MiniCPM5-2B
+  dtype: bfloat16
+framework:
+  vllm_plugin_fl_commit: 13eb9be69ecc5b5ca4f79c44e9ee40081eaa1bf0
+  expected_branch: flagos-2026-s2
+  flaggems_commit: 4df52d9168ac55c1c1061cefb4638c570292d896
+  flaggems_tag: v5.3.5
+  benchmark_script_sha256: 0813eba574e9d1eb50c297c515baa426da1bcb61ce8c78a398b482f246005565
+commands:
+  serve: /workspace/experiments/minicpm-s2/baseline/20261020T161534Z/server-command.txt
+  benchmark: /workspace/experiments/minicpm-s2/scripts/run_official_benchmark.sh
+workloads:
+  - [4096, 1024, 64, 256]
+  - [16384, 1024, 64, 128]
+repetitions_per_workload: 4
+skip_for_summary: 1
+artifacts:
+  remote_run_dir: /workspace/experiments/minicpm-s2/baseline/20261020T161824Z
+  server_run_dir: /workspace/experiments/minicpm-s2/baseline/20261020T161534Z
+  raw_csv: /workspace/benchmark_results/raw_runs_20261021_001824.csv
+  summary_csv: /workspace/benchmark_results/summary_pending.csv
+  gpu_metrics: /workspace/experiments/minicpm-s2/baseline/20261020T161824Z/gpu-metrics.csv
+notes:
+  - The first execution was still running when this manifest was created.
+  - Summary CSV path will be updated after the official script prints it.
+  - The published page baseline is reference-only; local relative comparisons use
+    the average of runs 2 through 4 on this device.
