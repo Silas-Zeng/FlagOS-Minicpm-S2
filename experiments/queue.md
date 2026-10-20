@@ -4,7 +4,7 @@ One BI-V150 device is available. Items marked `device` are serialized.
 
 | Order | Status | Type | Experiment | Success condition |
 |---:|---|---|---|---|
-| 1 | running | device | Official unmodified 4K/16K baseline, four runs per case | Complete original raw CSV and service log |
+| 1 | running | device | Official unmodified 4K/16K baseline, four runs per case | 4K complete; 16K in progress |
 | 2 | prepared | device | Capture prefill and steady-decode torch traces | Trace includes exact shapes and at least five useful iterations |
 | 3 | prepared | CPU | Aggregate trace by kernel/operator/phase | Top kernels explain at least 85% and 90% cumulative device time |
 | 4 | prepared | device | Sweep FlagGems FA2 tile and KV block-size candidates | Repeatable local gain; all output parity checks pass |

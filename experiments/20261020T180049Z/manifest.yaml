@@ -1,0 +1,47 @@
+experiment_id: baseline-clean-20261020T175900Z
+status: running
+started_at_utc: 2026-10-20T18:00:49Z
+platform: Iluvatar BI-V150
+device_count: 1
+device_memory_mib: 32768
+model:
+  path: /workspace/MiniCPM5-2B
+  dtype: bfloat16
+framework:
+  vllm_plugin_fl_commit: 13eb9be69ecc5b5ca4f79c44e9ee40081eaa1bf0
+  expected_branch: flagos-2026-s2
+  flaggems_commit: 4df52d9168ac55c1c1061cefb4638c570292d896
+  flaggems_tag: v5.3.5
+  benchmark_script_sha256: 0813eba574e9d1eb50c297c515baa426da1bcb61ce8c78a398b482f246005565
+commands:
+  server: /workspace/experiments/minicpm-s2/baseline/20261020T175819Z/server-command.txt
+  launch_control: /workspace/experiments/minicpm-s2/runners/baseline-clean-20261020T175900Z
+  benchmark_driver: /workspace/experiments/minicpm-s2/scripts/run_official_benchmark.sh
+workloads:
+  - [4096, 1024, 64, 256]
+  - [16384, 1024, 64, 128]
+repetitions_per_workload: 4
+skip_for_summary: 1
+results:
+  four_k:
+    total_tokens_per_second: 1875.62
+    output_tokens_per_second: 375.12
+    mean_ttft_ms: 12313.75
+    mean_tpot_ms: 156.74
+    duration_seconds: 699.05
+    final_three_cv_percent:
+      total_tokens_per_second: 1.82
+      ttft: 0.43
+      tpot: 1.15
+  sixteen_k:
+    status: running
+artifacts:
+  raw_csv: /workspace/benchmark_results/raw_runs_20261021_020049.csv
+  summary_csv: /workspace/benchmark_results/summary_20261021_020049.csv
+  gpu_metrics: /workspace/experiments/minicpm-s2/baseline/20261020T180049Z/gpu-metrics.csv
+  server_log: /workspace/experiments/minicpm-s2/baseline/20261020T175819Z/server.log
+notes:
+  - The previous foreground SSH benchmark was invalidated when the tool session
+    closed; this rerun uses setsid and is independent of the login session.
+  - 16K KV-cache capacity limits active requests to approximately 30 of the
+    client's configured concurrency 64.
