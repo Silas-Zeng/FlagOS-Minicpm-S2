@@ -74,9 +74,13 @@ The primary timestamp is UTC. The parenthesized value is Asia/Shanghai
 - `09:06 UTC (17:06 +08:00)`: two concurrent final smokes completed with zero
   failures: 4K had 16/16 requests and 16K had 8/8.
 - Non-operator short screens rejected KV block size 64,
-  `max_num_batched_tokens=4096/8192`, and disabled prefix caching. The default
-  block 16 / batched-token 2048 / prefix-cache-on policy remained best across
-  the paired 4K and 16K short loads.
+  `max_num_batched_tokens=4096/8192`, disabled prefix caching, and forcing
+  sampler `torch.compile`. The default block 16 / batched-token 2048 /
+  prefix-cache-on / unwrapped sampler path remained best across the paired 4K
+  and 16K short loads.
+- A second sampler-compile run used the already-warm compile cache. It
+  remained non-competitive at 4K 3144.42 and 16K 3535.92 total tok/s, so the
+  first result was not only JIT overhead.
 
 ## Initial observations
 

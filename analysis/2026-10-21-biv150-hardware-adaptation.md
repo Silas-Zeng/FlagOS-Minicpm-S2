@@ -47,6 +47,8 @@ All candidates were tested with the same pair of concurrent smokes: 4K with
 | batched tokens 4096 | 1192.89 | 1628.14 | reject |
 | batched tokens 8192 | 887.23 | 1729.07 | reject |
 | prefix cache off | 3170.73 | 3329.03 | reject |
+| sampler `torch.compile` on | 3131.36 | 3330.25 | reject |
+| same, warm compile cache | 3144.42 | 3535.92 | reject |
 
 These are paired integration measurements, not official four-run scores.
 

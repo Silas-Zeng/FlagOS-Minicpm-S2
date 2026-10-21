@@ -12,7 +12,7 @@ One BI-V150 device is available. Items marked `device` are serialized.
 | 6 | complete | device | BF16 decode GEMM and memory-bandwidth microbenchmarks | Hardware floor recorded |
 | 7 | accepted | device | Rewrite top-p-only sampler | 13.9x kernel gain; deterministic gate passed |
 | 8 | partial | device | Run smoke, parity, 4K/16K diagnostics | Accuracy 96.2%; long official repetitions stopped by user request |
-| 9 | rejected | device | Non-operator short screens | block64, batched-token 8192, no-prefix all slower |
+| 9 | rejected | device | Non-operator/compiler short screens | block64, batch4096/8192, no-prefix, sampler compile all slower |
 | 10 | pending | CPU/device | Produce clean reproduction evidence and report material | Commands and artifacts are self-contained |
 
 ## Guardrails

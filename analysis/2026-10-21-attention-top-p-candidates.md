@@ -192,6 +192,8 @@ default service.
 | `max_num_batched_tokens=4096` | 1192.89 | 1628.14 | reject |
 | `max_num_batched_tokens=8192` | 887.23 | 1729.07 | reject |
 | Prefix cache disabled | 3170.73 | 3329.03 | reject |
+| Sampler `torch.compile` enabled | 3131.36 | 3330.25 | reject |
+| Same, warm compile cache | 3144.42 | 3535.92 | reject |
 
 - The larger KV block has worse short-test throughput on both shapes.
 - Raising the scheduler token cap to 8192 causes a severe regression with the

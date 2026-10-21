@@ -63,3 +63,9 @@ attention, plus a deterministic bounded-histogram top-p kernel. The candidate
 passed the exact organizer `math_500 Level 3` command at 96.2%. Final official
 4K/16K repetitions were stopped by user direction in favor of bounded short
 smokes; the repository therefore does not claim a complete official score.
+
+The non-operator route was screened before further kernel work. KV block 64,
+larger scheduler token batches, disabling prefix caching, and re-enabling
+compiled sampler code did not beat the defaults. Operator changes were retained
+only where profiling showed a dominant hotspot: generic prefill attention was
+93% of 16K prefill device time and top-p was 71.7% of visible 4K decode kernels.
