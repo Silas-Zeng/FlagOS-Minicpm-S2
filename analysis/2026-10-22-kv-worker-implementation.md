@@ -74,3 +74,17 @@ DROP时restore_skips=1，依冻结50375源码只能来自_try_restore复合prech
 systems实现protocol **a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751**，本owner定向互审通过；只保暂态host并继续原FCFS，本次新output实际计划普通重算才drop，真正失效drop，未动worker31cc/transaction616040/init791c/runner或旧queued输出。审阅和作者唯一CPU合同边界见 [`事务独立review`](2026-10-22-kv-transaction-independent-review.md)。没有重跑旧COPY/worker门或扩大测试。
 
 root新builder **ac18b84dfc2e9435c6984f05ddc084d24458d2b158003df29ec9fedc641b6429**、launcher **c4526fa0178989b47647acba2407025cfd04d54034c97c569451d8b77bc5a973** 已实际核hash并与旧89191/e738副本逐byte diff：builder只协议pin与variant，launcher只builderpin、新run/source名、前轮标记/variant及中文注释。原参数/driver/seed/ENV1/preflight/锁/全SHA/alias机制不变，旧副本SHA吻合保存于analysis/source/kv-transaction。末审无进入新隔离诊断的包装阻断，已回root，不重复CPU copy/测试。下一条等待真实门，尚不能把新策略审阅称为恢复通过。
+
+## 202526实际恢复：字节回读与原输出消费已独立核验
+
+上述“等待设备”是历史阶段。`experiments/framework/20261021T202526Z-kv-retain-context16k-long{,-control}` 已于 **20:30:51.274086Z exit0**。本owner新只读 [`review_retained_protocol.py`](source/kv-worker/review_retained_protocol.py) **4a6c7baa1ab8aa509c66b1a207d66d5feb1e982b255cdd914b239b87638d756c** 实际执行2.9s通过，结果 [`retained-protocol-review.json`](source/kv-worker/retained-protocol-review.json) **d866fe1faae212d598c3f048889eb889f5111cc3be896176a64c26fcb788234f**。416份source逐SHA、a1b协议/616事务/31cc worker/c95f copy/791c init/e155 runner、新ac18 builder/c452 launcher/原bc51 driver/服务参数与seed、归档清单与live416/post54c全吻合；没有修改原件或重跑设备。
+
+同一实际事务/worker PID217577依次完成：SAVE serial1成功→原free→暂态保留→ZERO serial2成功→RESTORE serial3成功且整字节回读通过→发布→DROP serial4释放host→runner 6项状态检查全true→原update_from_output消费本次8个scheduled token。前缀 **16704 token/1044页/718405632B**；SAVE物理24段、1008 copy calls。目的页按实际逻辑序有1044段，ZERO **43848 calls**、RESTORE **43848 calls**、诊断回读 **43848 calls/718405632B**。固定31cc源码逐层验证42层，日志verification_performed/pass均true；不是仅CPU ACK链。六检查仍在Attention前，日志明确不宣称GPU完成；后继原输出消费另有记录。
+
+首个defer准确记录allocation_none、free1030、prefix1044页、request_tokens16712、token_budget2018、pending0、placeholder0、full_sequence_must_fit=True，未记录allocator_required_blocks。最终restore_skips454；只能解释首个日志当时的条件，不能把454次逐一归因或当454次GPU恢复失败。
+
+32/0、524288输入/32768输出、CPU6/32GiB、KV521936、preempt0→1；**240.92993535706773s/2312.1078714208797总tok/s/TTFT63227.1205921279ms仅诊断原值**。ENV1回读与新形状调优均在本轮，不能据此与首轮或基线做算法性能归因。DB实际由516表19270行变为518表19337行：新增两张index表共3行，既有两张MM表分别+60/+4行。after实体/schema/logical三SHA分别为 `d93510959a35313ec5331067cca3c496f817e96375ee398e52fb3cc1cbf6741d` / `a5ca71a552e35c3465fdfb85c1f74691a9e455aace1640ab5cafbddb22460d65` / `a180ecc5d609bf746af4c3a9a04d013c4fc6251b864d06317ce1faaf9da010f8`，已重算，不能复用旧DB不变断言或称cache-matched。
+
+20:31:52.483652Z postflight为68MiB/0%、9031双栈关闭、无GPU进程、416 live无失败；controller217396仅Z/PPid1。该run原server.log无ERROR/EngineDeadError检索命中，不改变首轮确有shutdown错误的记录。结论仅为**一次实际抢占的恢复/全字节回读/状态围栏和原consumer通过**，不继承103/105、不证明所有事务情形或整模型准确率，不默认集成。
+
+后继只由systems负责私有目的页逻辑映射升序候选，worker31cc/txn616保持冻结。排序必须在私有分配后、bind/ZERO/RESTORE/publish之前改变同一真实owned Block list，再让copy与payload共同使用新映射；只排序RPC页号会错。未来free顺序可改变，不能冒称后续allocator轨迹完全不变。

@@ -27,3 +27,24 @@ _wrap_schedule只在**本次新建**output.num_scheduled_tokens[rid]>0且tx仍HO
 request对象/epoch、终止、attempt、status/computed或prefix token失效仍明确discard；Core末原有取消/ID复用清理保留。极端same-id新对象在_try_restore早期直接return后可能被本次按rid的ordinary-work检查释放，安全上不恢复旧host，但日志理由不一定精确到新epoch；本owner已告作者，作为非阻断归因边界保留，不扩本次改动。
 
 唯一新针对性合同 `tests/test_biv150_kv_protocol_defer.py` **b1d8cbb3aece15bbe4bfe395e0586f516be8a839db95199ddc99e95447600254** 已全文读：pending重复仅一次理由/不分配、原FIFO后placeholder仍保留、allocateNone保留、output0即便RUNNING也不drop、原output>0才DROP、identity/attempt/digest/terminal失效释放；无框架/设备。作者报告实际1test/0.002s通过，本owner未重复跑，也未重跑旧COPY/worker门。只能证明CPU分支合同，后继仍须实际ZERO/RESTORE、全字节回读和consumer证据，新门未返回前不报性能或accuracy通过。
+
+## 202526真实验收与后继私有页排序边界
+
+本owner已独立验收202526完整原件，详见 [`retained-protocol-review.json`](source/kv-worker/retained-protocol-review.json)：a1b/31cc/616源码身份、42层718405632B恢复回读、6项runner检查及原输出消费均通过，source/live416与正常退出后态通过；仅一次诊断，不继承整模型accuracy。DB实际516/19270→518/19337，240.93s不能作为性能对照。原200957 SAVE→DROP负例不覆盖或删除。
+
+root授权systems仅实现**分配后、未绑定/未发布的私有目的页逻辑映射升序**。本owner实读2e91/9dd0/22e/3fc5/df780/e155，设计暂无阻断，但必须成套守住：
+
+1. `KVCacheManager.get_blocks:580`→coordinator `get_blocks:346–353` 对非空请求直接返回 `single.req_to_blocks[rid]` 原list；`KVCacheBlocks`只是wrapper。应核 `type(list)`、对象身份和完整Block对象集合，以原地sort保所有合法alias的list身份，不能改 `block_id`、只改RPC页号或拿 `allocate_slots(...0...)` 的返回值当完整owned（该返回常为空new-suffix list）。
+2. 原 `add_local_computed_blocks` 在没有local hits时先设置 `num_cached_block[rid]=0`，随后external分配extend真实list；`delay_cache_blocks=True`跳过hash发布。排序只适用于**确认仍HOST、pending0、未bind/ZERO/dispatch、exact整前缀页、唯一且ref1/unhashed/非null、numcached0**的集合。未知既有owned/hashed/shared/local-prefix不应排序。失败应在bind前按真实所有权处理，不能带着已错映射继续publish。
+3. `allocate_new_blocks:278–310` 按已有list长度只extend后续suffix，保持新前缀序。`cache_blocks:318–361` 将真实list交 `BlockPool.cache_full_blocks`；3fc5按logical slice与 `request.block_hashes` 同位置绑定，因此必须先按新逻辑序恢复相应host页内容，再允许后续缓存。只有ID集合相同而逻辑内容错序仍是严重错误。
+4. df780 V2输出在本次schedule末用 `get_block_ids()` **新建ID list**，原queued旧output并不alias Block list；e155 resumed路径整体替换真实runner表，原state/generator与all_token_ids/count保持。仍须原FIFO消费/pending0，不能据ID拷贝事实跳过旧frame；不改旧runner表或旧payload，不以重新绑定页面为理由改RNG。
+5. **FullAttention `new_block_ids` 是历史列表，完全不改、不drain**；早期第3点仅按待清零列表设想的“移尾”已被actual needszero=False证据更正。此次fresh证明仅比较新增尾段/集合，own ZERO只触本次private页。
+6. 初始分配/eviction选择集合与FCFS可保持；原 `free(reversed(req_blocks))` 将来会按新逻辑顺序归还物理页，可能改变后续reuse/eviction时序，不能声称未来allocator轨迹完全不变。真实缓存命中/后续append、字节回读和consumer仍需新隔离设备门验证，不以纯排序数学证明替代。
+
+此节只有实际源码阅读/消息回执，没有修改systems协议或worker、没有新测试/GPU。硬件owner独立得出同alias/cache/free边界；等待systems实现最终SHA后定向互审。
+
+### 最终排序实现定向终审
+
+systems最终protocol **0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86** 已实核，旧a1b副本SHA吻合。实际diff仅新增 `_order_private_pages` 与owned校验后/bind前一条调用；上述list身份/numcached0/生命周期/完整唯一对象集和ID/ref/hash守卫均实现，原地sort后重导destination，guard外False继续旧unsorted路径。history、454次暂态路径、worker31cc/transaction616/copyc95和init footer不变。未见进入新隔离最短恢复诊断的阻断，已回root/作者。
+
+唯一CPU合同 `tests/test_biv150_kv_private_order.py` **29deff8d51fcf6f7f7811aacc84a3ac6f9d431c3e08879a80b39206d178522b5** 与 `analysis/source/kv-transaction/private-order-cpu-check.json` 已只读全文核对。作者实际1test/0.001s通过，本owner未重跑；真实CPU Transaction接受新映射、host逻辑行与新表对应、旧ID副本/history/对象ID对应不变，错alias/cached/shared/hash/pending/bound/published/duplicate均回旧序。去helper及单call精确逆回a1b的记录保留。这个4页构造不证明真实1044页合为66段，也不证明GPU完成。新run仍须实际marker、全42层回读、runner整表和原consumer，之后才讨论性能/accuracy。

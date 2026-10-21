@@ -598,3 +598,31 @@ adapter default-off/exact-source、内存单waiting切口，不改installed；�
 实际核 protocol `a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751`，与 `analysis/source/kv-transaction/biv150_kv_protocol.50375.py` 完整diff，旧文件SHA精确50375。新runtime仅暂态保留/释放及稀疏诊断；worker31cc、txn616、footer不动，不混新前缀选择。pending/placeholders/budget/allocateNone保HOST并走原FCFS；原新output对rid真实scheduled>0普通work才DROP，不能只按RUNNING猜；identity/terminal/epoch/state/digest失效即丢，未settle资源围栏不变。单次reason/cheapfree明确未观测allocator_required，未引额外GPU工作。
 
 只读唯一新CPU合同tests/test_biv150_kv_protocol_defer.py，验证原update后frame清理/暂态无work持有/普通work释放/失效释放，不模拟GPU。本owner无重跑suite或设备，未见增量阻断，已给root/systems明确终审回执，可由root串行新run；200957为何DROP仍未知，不能拿新reason倒推旧现场。研究报告同步，等待真实新版本原件；不提前写恢复成功、accuracy或E2E收益。
+
+### 202526目的页实证与root选择的唯一映射候选（未实现）
+
+root完成真实 `20261021T202526Z-kv-retain-context16k-long`，原件run/control本地，包430d2f7c…。本owner仅专项CPU页图/source核对：control实际31cc/a1b691/616/c95f全符；ZERO与RESTORE1044唯一正页完全同序，43848/43848calls，全42层718405632B回读43848calls passedTrue，6runnerchecks全True，原后继输出8token已消费。首defer allocation_none、free1030/placeholder0/pending0/reservefullTrue可确认；restore_skips454不是454项reason记录，不能臆断全部原因。32/0与240.929935357s仅诊断，root已报告DB516/19270→518/19337，不能作perf比较。
+
+新增 `analysis/source/kv-transaction/202526-restore-page-order-review.json` SHA `ce5328d89cb161bcc70f2a769e73dbcb7a97e7486bced22d57254058bc3eb0d0` 保log7ace8be0、源pins/原序hash/步差/升序和反转66段。实际原序+1runs1044、相邻−1共978对、−1runs66；原序整体反转+1runs66；升序也66，含237..1027(791)、30959..30995(37)、31000..31152(153)三大段+63单页，是同已选集合最少正向段数。每42层理论43848→2772，少93.678%操作提交，**不是实测速度**。
+
+root授权只设计后选systems实现唯一protocol私有映射升序。新中文 `analysis/2026-10-22-kv-owned-page-order-plan.md` 记录actual22e/9dd/2e91/3fc挂点与约束：actualowned[0]须是req_to_blocks[rid]同list，private ref1/unhashed/非null/唯一/num_cached0、HOST未bind无pending，无已发布alias；allocator先选/evict原集合，随后原地排序block对象，ID及对象集守恒、历史new_block_ids完全不改。排序后destination/tx/ZERO/RESTORE/readback/原get_blocks/runner表同逻辑序，host行i仍原逻辑token页i，不能只排序copy提交却声称合段。无需改worker31cc/c95f，无packing/改R/块大小/请求FCFS或其它变体。
+
+actual coordinator get_blocks346–353返回真实list引用，manager get_block_ids另建IDs，cache_blocks353以后按该list逻辑位置赋hash，说明只未发布新页可改；已有KV/共享/已hash不可sort。free原reversed(req_to_blocks)→pool prepend/append有次序语义，**未来freequeue和可能的后继物理eviction轨迹会变**；只保证同次已选/本次evict集合不变，不隐瞒这一边界。root/sys/framework已获明确审点；我不改runtime、不上卡、不加微测，待系统owner必要单合同/冻结SHA再终审。
+
+framework还独立审了前一fragment前缀设计无数学阻断；已把“暂无selector需新Snapshot/保持prompt-output-allIDs-count-generator/async真实输入accuracy”及APC ref0命中仍占free的条件化反例补入该文档，不把外部R分配一定更贵或200957DROP原因当已证。两设计均与a1b当前受测字节分开。
+
+### 私有目的页排序0e2115最终定向互审完成
+
+systems独立实现后root委派终审，实际runtime `patches/framework/biv150_kv_protocol.py` SHA **0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86**。本人只读完整diff；删除唯一helper及bind前唯一call内存逐byte SHA精确回旧 `analysis/source/kv-transaction/biv150_kv_protocol.a1b691.py` 的a1b691，没有附带早退/截R等改动。worker31cc、txn616、copyc95f实际SHA均未变。原件/旧分析JSON的SHA不覆盖。
+
+新guard完整核真实普通list别名/numcached0/HOST未bind无inflight-pending-cancel-closed/已sourcefree/完整R/ref1unhashed非null/正整数唯一ID及唯一block对象；不匹配False保原序。通过只原地sort，post检查list身份/对象集/精确升序，之后原流才取destination；history不改且fresh比较集合，tx/worker/原getblocks-payload映射统一。marker明确host逻辑内容不变、futurefree可能改变，不能当GPU计时。无当前阻断已发root/systems，可由root单卡新源同真实VERIFY门；没有本ownerGPU或运行代码更改。
+
+已读owner唯一CPU合同 `tests/test_biv150_kv_private_order.py` SHA29deff8d…和 `analysis/source/kv-transaction/private-order-cpu-check.json`：1test0.001s，host逻辑行/真实事务命令/对象identity及拒绝guard覆盖必要范围；未重跑suite。首次逆向检查只是LF删除数错、修检查脚本后精确，runtime没变，该失败说明保留。新排序版尚无本人设备原件，不能拿构造4页或旧20252666段当实际新run成功/性能/accuracy。计划文档追加本终审覆盖先前“未实现”的历史状态，继续等待root原件。
+
+### 204159实际排序几何/ACK专项独立验收完成
+
+root完整run/control已本地，包58888697…。本owner只核实际control0e/31cc/616/c95f与页图/命中/ACK，不重复framework完整验收。新增 `analysis/source/kv-transaction/204159-private-order-hardware-review.json` SHA **0cafbe28c8200dae37ee5bd5edff66e3f7e2391837b5bb2b83f884e98a34020f**，保serverlog5c3932d2、全部66runs、实际ACK/消费。PRIVATE marker真实before1044/after66；ZERO/RESTORE命令1044正唯一页同序升序，独立66段=791/37/153+63单页。排序前完整数组未独立log，守恒依据0e postassert与实际marker，不假称读到同次两个完整数组。
+
+SAVE1008不变；ZERO/RESTORE/readback均2772，718405632B全42层回读passedTrue、doneACK，6runnerchecks全True、原8token消费、DROP hostfalse。调用减少已实证，不是理论预测，仍不等GPU实际launch trace/阶段延迟。32/0、227.548345488秒/2448.077567TPS为VERIFY1诊断，root回执本轮DB518/19337三SHA不变，旧202526基点516→518有变；不跨轮报TPS收益、不把93.678%说成吞吐、无accuracy继承。方案文档追加真实状态，四件冻结不动。
+
+root新CPU研究已先查旧fullreserve115950/terminal181041反证，未重做。候选收敛为“完整私有页H2D将覆盖全部bytes时，明确整页覆盖状态而消除显式ZERO阶段”，root同意先独立设计，不伪ZEROACK、不与当前页序performance pair混入，不新代码/上卡。PyTorch2.10官方copy_/empty/synchronize/Event与actual7e3c、31cc、c95f/writer依赖继续审；framework配对wrapper优先互审，等待最终SHA。

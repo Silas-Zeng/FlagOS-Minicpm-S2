@@ -64,3 +64,5 @@ producer fence/事务固定费用未必随 k 变小；不能把它们也按字�
 最短后继是先完成 root 当前独占设备的协议修复门，不再重复672MiB复制微测。仅当真实恢复链路已过、root另行决定实现时，独立加入上述选择器，先核 k≤m/完整页/原逻辑映射/digest/frame 保留，再做一次相同长输出真实服务匹配比较：全安全前缀与调用预算策略分开源码目录/结果，不叠其它候选。实际记录 R0/R、源/目的真实 runs、bytes/calls、稀疏 RPC wall、原调度实际多算的已知后缀、真实回读/消费/预算/清理；保留 CPU quota/host 干扰边界。没有 J 的成本依据时宁可保留设计，不报估算毫秒或虚构收益。
 
 本 owner 只CPU研究和只读审查，无 SSH/GPU/远端导入/共享仓库写入。当前受测50375原件完整保留，暂态保留修复由 systems 独立维护并优先交叉审阅。
+
+framework对本设计只读复核无数学阻断，补充：当前没有selector接口，必须显式构造新Snapshot，不能把参数化构造函数当作“已启用”。后继cached-resume仍须保原prompt/output/all_token_ids/count/generator；num_computed只等于真恢复R，普通scheduler按request.num_tokens−R处理已知suffix，原chunk/discard语义及async prev mapping仍须真实输入门和accuracy验证。APC容量也不能简单认为hit免费：22e把ref0可evict hit计入空闲需求；只有ref>0共享hit、或原chunk先分较小窗口等条件下，external一次分整R才可能更吃free，不能据此判定200957/202526的具体分配原因。

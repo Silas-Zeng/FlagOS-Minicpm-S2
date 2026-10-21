@@ -1,8 +1,36 @@
+## 最新交付：私有目的Block排序0e2115冻结，待root独立新设备门
+
+root授权的唯一新候选已实现，不混454次CPU早退/prefix截断。canonical `patches/framework/biv150_kv_protocol.py` SHA **0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86**；旧a1b全字节在analysis/source/kv-transaction/biv150_kv_protocol.a1b691.py。只有新_order_private_pages helper和owned校验后/bind前1call，完整去除精确逆回a1b；worker31cc/txn616/copyc95f/initfooter/defer/普通FCFS都不变，定稿后未再改runtime。
+
+已先与framework/hardware核exact manager2e91/coordinator9dd0/single22e/e155别名与cache逻辑：nonempty get_blocks就是实际req_to_blocks原list；后续get_block_ids另建ID副本，cache_blocks按真实list逻辑位置配hash。严格type list/同对象别名/numcached整数0、HOST未bind/publish/无pending-inflight-cancel、source已free、完整R/16/唯一页与对象/ref1unhash/非null后，实际Block对象原地按ID升序；重新derive dest用于tail setproof/ZERO/RESTORE/后续完整新payload。host逻辑行不排序、Block自身ID/引用/hash不改，history new_block_ids保原字节与序。guard外False旧unsorted。未来free(reversed list)归还序和后继LRU可能变，不能称allocator轨迹完全一样。
+
+202526旧集合1044目的页原+1run1044，978个−1邻接，升序同set66run仅hardware CPU几何；对旧集合理论每向43848→2772copy，不是新服务已测。**纠正初稿误读**：actual worker31cc:240–247的ZERO也make_plan按run narrow(count).zero_，zero_calls=42×run数；同旧集合ZERO亦可43848→2772，不是固定逐页、不预测新实测。实际新marker PRIVATE_PAGES_ORDERED/完整ACK决定新页set与计数；SAVE源序不变。
+
+唯一新tests/test_biv150_kv_private_order.py SHA29deff8d51fcf6f7f7811aacc84a3ac6f9d431c3e08879a80b39206d178522b5，1test0.001s通过，构造host逻辑行/新表/真实CPU事务映射一致、同list/对象/页集合/ref/hash/history/旧ID副本不变，shared/hash/cached/alias/pending/bind/publish/重复拒绝不排序；没有设备/框架import、没重跑copy/DTO/defer合同。private-order-cpu-check.json存SHA/命令/边界；初次逆检查仅空行数量不符，改检查脚本后完整bytes相同，runtime没有delta。framework与hardware均已独立核最终0e2115+合同29de/精确逆回a1b，终审无阻断并回root，未重复suite/GPU。
+
+新增analysis/2026-10-22-kv-private-page-order.md具体守卫/数据映射/短门/反证齐全；queue72 CPU待门，registry95仍仅真实设备完成行，均LF。下一root独立VERIFY1 long门须真实ordered marker→ZERO/RESTORE全42byteeq→publish/drop→runner6checks/原output消费及32/0源DB/KV/idle，未激活/失败留原件；无新GPU结果/性能/accuracy资格，本agent仍CPU-only。
+
+## 最新：202526完整恢复链路已独立验收，下一候选仅私有页排序
+
+2026-10-22。本agent保持本地CPU，无SSH/GPU；root负责唯一设备/发布归档。202526实际目录为 `experiments/framework/20261021T202526Z-kv-retain-context16k-long{,-control}`（此前在途笔记若写kv-protocol后缀为未看manifest的暂记，现按实际retain纠正），20:30:51.274086Z exit0，原件包430d2f7c211d2f52211e05cc29dca8505e840a3f6b1ec930c6410dca3a5f6c73。独立416source/installed-post不变/原SERVER-bc51/seed/CPU6/物理32768MiB/raw32-0同524288in32768out/KV521936/preempt0→1、DB前后实体/schema/逻辑复算；202526-independent-review.json已落。
+
+协议真实11事件：Engine217577 eligible→SAVE16704token/1044pages/718405632B completed→原free→allocationNone持HOST→ZERO/RESTORE→PUBLISH/DROP→runner六项检查→原output8tokens消费。SAVE1008copy；首defer free1030/prefix1044/request_tokens16712/reserveTrue/pending0/placeholder0/budget2018，final skips454；仅首状态可见，不外推后453次。RESTORE verification_performed/passed=true，全42层718405632B逐byte与host一致；saved/restored/published各1，rollback0。同原CachedState/generator等六checks全true，beforeAttention本身非GPU完成，后继原消费是额外阶段证据；仍非完整accuracy/随机输出相同/取消异常多抢占设备覆盖。200957仍仅SAVE/free→DROP，旧具体拒绝原因未知，绝不回填。
+
+240.92993535706773s/2312.1078714208797total/TTFT63227.1205921279ms为VERIFY诊断绝对值，不计算性能gain。DB51619270→51819337，after physicald93510959a35313ec5331067cca3c496f817e96375ee398e52fb3cc1cbf6741d/schemaa5ca71a552e35c3465fdfb85c1f74691a9e455aace1640ab5cafbddb22460d65/logicala180ecc5d609bf746af4c3a9a04d013c4fc6251b864d06317ce1faaf9da010f8，不能cachematched。20:31:52.483652Z416源无失败、68MiB0/双栈closed/无GPU进程；controller Z及shutdown ERROR原样分类保留。registry95数据行×16/queue71均LF，中文framework-experiments/协议研究已更新。
+
+下一root授权仅新protocol私有目的Block对象排序：已知1044页原序1044个+1runs，升序同set可66run（hardware独立几何），不更改host逻辑token顺序。先共同核真实req_to_blocks list别名、numcached0、ref1/unhashed/非null/完整R/未bindpublish、sorting后缓存逻辑；旧a1b须逐byte保留，不改worker31cc/事务616/copyc95f或history new_block_ids，不混prefix截断/454CPU早退。framework/hardware已收到只读审请求；尚未实现新代码/上卡。未来free(reversed list)顺序会变，不称后续allocator轨迹相同。
+
+454次CPU早退仅研究：strict PREEMPTED/computed0/no-owned FullAttention下，free<savedprefixpages是必要失败下界，可先拒绝再走原FCFS，等可能分配时仍完整digest/实际allocator；现只有首defer free状态、无CPU耗时，不能声称454次全部适用或估造收益/水位。未实现/未额外设备。原cache命中公式N-H+E（ref0 touch计入E）反证仍有效，命中不等于免费容量。
+
 ## 最新接续：200957真实SAVE/free但未恢复；a1b691暂态保留修订已终审
 
 2026-10-22（实验UTC2026-10-21 20:09–20:15）。root唯一GPU owner，本agent全程本地CPU，无SSH/设备。此前“200957启动中/无实际协议”语句为历史，按本节覆盖。
 
-root最新回执：a1b691独立新run `20261021T202526Z-kv-protocol-context16k-long` 已启动，runner217396，包装ac18/c452，worker/txn冻结；以root CURRENT及manifest为准确身份。本agent不设备，下一步只读研究externalR私有全页与原cachedprefix准入所需free差异，等待新DEFERRED理由，不实现或重复测试。
+root最新回执：a1b691独立新run `20261021T202526Z-kv-retain-context16k-long` 已启动，runner217396，包装ac18/c452，worker/txn冻结；以root CURRENT及manifest为准确身份。本agent不设备，下一步只读研究externalR私有全页与原cachedprefix准入所需free差异，等待新DEFERRED理由，不实现或重复测试。
+
+202526在途新事实（仅root稀疏原日志回执，尚未完整本地终审）：SAVE同R16704/718405632B/1008copies completed；首次RESTORE_DEFERRED reason=allocation_none，free_blocks1030、saved_prefix_pages1044、request_tokens16712、full_sequence_must_fit=True、pending_frames0、placeholders0、token_budget2018、host_retained=True，尚未DROP/RESTORE。此时至少完整序列ceil(16712/16)=1045页，free至少缺15页；savedprefix1044页本身缺14页，不把prefix页数当allocator精确required。仅证明新暂态HOST保留实际生效，不能登记已完成、恢复/准确率通过或收益。**200957具体拒绝原因仍未知，不用新run回填旧日志**。下一步等自然free、真实ZERO/RESTORE/消费或ordinary DROP，root继续唯一设备owner，受测源不变。
+
+只读actual allocator反证预备：22e get_num_blocks_to_allocate在FullAttention无旧owned、reserve=True下，私有external路径需要N=ceil(request.num_tokens/16) free；原cachedprefix命中H页需要max(N-H,0)+E，E为ref0命中被touch后离开free的页数。若H全ref0，E=H，门并不降低；只有shared/ref>0的H-E真减少需求。reserve=False时原chunk span可小于R，需另论。此为源码推导，不是当前H/E实测；不因cache-hit token大就断言更早普通准入，也不增加策略/观测或重复测试。
 
 200957本地run/control完整，包6b2abf4554bfdd3e2fc705a4b8d4a5555a033d764d17b35782296977821e253d；独立核416archiveSHA/installed源post未变、原SERVER/bc51/seed721201、DB前后516表19270行实体/逻辑/schema三SHA、CPU6/物理32768MiB。32成功0失败、524288in32768out、221.1178005039692s、2519.2725268176705total、TTFT62550.40631070733ms，KV521936/preempt0→1。Engine/worker215606真正SAVE R16704/1044页/718405632B/1008copy后completed+successful ACK→原free→DROP成功，saved1/restore_skips1，未ZERO/RESTORE/42层回读/publish/runner状态或消费。旧50375复合precheck和allocateNone共计skip，**不能猜拒绝原因**；本轮仅部分协议诊断，无准确率/性能结论。原shutdown ERROR/force-kill保留，20:15:43.088172Z 68MiB0/双栈closed/无GPU进程；controller仅parent1的Z，服务/worker已退出。原件审计analysis/source/kv-transaction/200957-independent-review.json。
 

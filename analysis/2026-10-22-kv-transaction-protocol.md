@@ -1,5 +1,15 @@
 # 有界单victim KV保存/恢复协议：实际接口与调用顺序
 
+## 最新实测：202526单victim恢复链路通过，未评估性能
+
+实际run目录 `experiments/framework/20261021T202526Z-kv-retain-context16k-long{,-control}`，20:30:51.274086Z exit0，a1b691/事务616/worker31cc/e155冻结，原SERVER/bc51/16K1024out/32req/c64/seed721201/VERIFY1。独立416源SHA、CPU6/32GiB、DB实体复算和后态已保存 `analysis/source/kv-transaction/202526-independent-review.json`；raw32成功0失败、524288in32768out、240.92993535706773s/KV521936/preempt0→1。下面200957首门及“未恢复”是历史反例，不能覆盖本轮真实恢复，也不能用新原因回填旧run。
+
+11个稀疏事件按原序：FIRST eligible→SAVE ACK→原free→首allocation_none保HOST→ZERO ACK→RESTORE ACK→发布→DROP ACK→runner六项检查→原output消费。R16704、1044页、718405632B，saved/restored/published各1、restore_skips454、rollback0。首拒绝free1030/request_tokens16712/reserveTrue/pending0/placeholders0/budget2018，保存前缀需1044页、完整序列至少1045页；其余453次没有独立free或原因记录，不能把首状态外推全程。restore后42层718405632B回读全部相等，验证performed/passed true；原CachedState/generator、完整block替换及computed/output/CPU状态六检查全true，随后原update处理8tokens。不增加采样、不提前consume；这是一个实际request恢复成功，仍不等完整模型accuracy或取消/异常/多抢占覆盖。
+
+DB从516表19270行增长至518表19337行，after实体d9351095…/schemaa5ca71a5…/逻辑a180ecc5…；**不称DB不变，不算性能gain**。VERIFY包含额外回读，worker ZERO/RESTORE按原1044个run各43848调用（不是固定逐页算法，不据此猜独立耗时），真实保存1008copy。20:31:52.483652Z 68MiB0%、双栈9031闭、无GPU进程，source416无失败，原shutdown日志保留。硬件owner另审目的页几何，避免重复巨大分析。
+
+root授权唯一下一候选是私有未发布目的Block对象原地升序，减少run；已与两职责核实际list别名/cache逻辑、实现并双终审冻结0e2115，1项CPU映射合同通过，去helper+单call精确逆回a1b，尚待root独立新设备门，细节见analysis/2026-10-22-kv-private-page-order.md。worker31cc/事务616/c95f保持，旧a1b须保字节，不混prefix截断或454次CPU早退。潜在早退只研究：strict PREEMPTED/computed0/no-owned FullAttention、完整R私有分配下，free小于R/16必不够；先早退可省list/digest/历史tuple，但现只首defer有free，没有已测CPU耗时/可省次数，不代替实际allocator或推导watermark，未实现未上卡。
+
 2026-10-22，systems_innovation负责Core/scheduler及CPU事务，framework_innovation负责独立worker，hardware_innovation互审；root唯一GPU owner。`20261021T200957Z-kv-protocol-context16k-long`已以exit0完成，32成功0失败；真实SAVE/free后DROP，**没有ZERO/RESTORE/回读或恢复后消费证据**。本轮只诊断，不报吞吐收益。191545只证明构造normal/packed复制门，195012才观察真实normal42；不能把前者性能当后者收益。
 
 ## 200957反例与最小修订
@@ -22,7 +32,7 @@ worker31cc、事务616、init footer、restore/zero/RPC/resume本体均未变。
 
 ## 代码与当前身份
 
-- `patches/framework/biv150_kv_protocol.py`：当前 **a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751**，200957历史版50375见上。默认installFalse，exact e043 init末尾append general-hook；复用a4de completion-probe的pure `_scope`，不调用其install；a4de本身逐SHA锁定。installed scheduler/Core文件一字不写，只在内存从exact df780 schedule方法插入一条waiting调用，逐byte逆回和compile已核。
+- `patches/framework/biv150_kv_protocol.py`：当前待设备候选 **0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86**；202526实测为a1b691，其全字节保analysis/source/kv-transaction/biv150_kv_protocol.a1b691.py；200957历史版50375见上。默认installFalse，exact e043 init末尾append general-hook；复用a4de completion-probe的pure `_scope`，不调用其install；a4de本身逐SHA锁定。installed scheduler/Core文件一字不写，只在内存从exact df780 schedule方法插入一条waiting调用，逐byte逆回和compile已核。
 - `patches/framework/biv150_kv_transaction.py`：**616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13**，独立stdlib CPU接口，无框架/设备/allocator/RPC/采样。
 - framework worker `patches/framework/biv150_kv_worker.py`：**31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf**；调用方才启用，复用c95f raw copy，实际normal42/source guards、device fence、显式zero/Event ACK及单slot。worker由作者与hardware终审；不在此重复其GPU门。
 - 包装还须带a4de scope helper和c95f copy模块。root独占prepare/launcher，不重复写包装或改原driver/benchmark/serve参数。

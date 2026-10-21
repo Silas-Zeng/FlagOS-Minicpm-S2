@@ -15,7 +15,7 @@ ASSETS = {
     "biv150_kv_completion_probe.py": "a4de3abea10b333aeb73d3c3ab49f82c91510c89cc8f9210c531f666feefb2c6",
     "biv150_kv_page_copy.py": "c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c",
     "biv150_kv_transaction.py": "616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13",
-    "biv150_kv_protocol.py": "a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751",
+    "biv150_kv_protocol.py": "0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86",
     "biv150_kv_worker.py": "31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf",
 }
 CORE = {
@@ -87,7 +87,7 @@ def prepare(base, output, assets, *, root=owner.ROOT):
         if actual != expected:
             raise RuntimeError("包装出现额外源码变化")
         manifest = {
-            "status": "prepared_not_executed", "variant": "single-victim-kv-retain-transient-on-sql-c3",
+            "status": "prepared_not_executed", "variant": "single-victim-kv-private-page-order-on-sql-c3",
             "created_utc": datetime.now(timezone.utc).isoformat(), "command": [sys.executable, *sys.argv],
             "base_source": str(base), "output": str(output),
             "preparer_sha256": owner.sha(Path(__file__).read_bytes()),

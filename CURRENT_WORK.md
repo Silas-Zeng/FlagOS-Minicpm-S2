@@ -1,5 +1,21 @@
 # 当前工作与 API 切换交接
 
+## 私有恢复页映射已通过真实恢复门（2026-10-21 20:49 UTC）
+
+- `20261021T204159Z-kv-page-order-context16k-long` 已于20:47:11.313241Z exit0，32成功/0失败，524288输入/32768输出，KV521936。416份source/live/control一致；退出后68MiB/0%、无GPU进程、9031双栈关闭。当前无GPU作业，root仍为唯一设备owner。
+- 本轮真实1044页从1044个递增连续段重排为66段，实际ZERO、RESTORE、验证回读各2772次调用。42层718405632B回读通过，同事务SAVE→free→暂态保留→ZERO→RESTORE→发布→DROP完整，runner六项状态全真且原输出处理后确认8tokens。页ID/Block对象集合及host逻辑顺序不变；未来free/reuse物理顺序可能变化。
+- DB本轮前后均518表19337行，physical d93510959a35313ec5331067cca3c496f817e96375ee398e52fb3cc1cbf6741d、schema a5ca71a552e35c3465fdfb85c1f74691a9e455aace1640ab5cafbddb22460d65、logical a180ecc5d609bf746af4c3a9a04d013c4fc6251b864d06317ce1faaf9da010f8。227.548345488秒、2448.077567TPS仍是VERIFY1诊断；不与202526的不同DB起点比较收益，不继承整模型accuracy。
+- 完整run/control已本地，tgz SHA256 `588886979857dc1eab16dcfa8ed8b8a76751741f3b21825cfa62fa8219872336`；framework/hardware独立验收中，systems更新registry/负例。下一步准备原bc51/原参数/同DB起点的VERIFY0短服务基线—候选配对，只评估当前0e2115，不混入新早退或省ZERO想法。
+- 后继CPU研究：systems分析容量必要下界早退以避免重复digest/历史复制，需排除streaming前缀可变；hardware研究完整覆盖恢复时能否消除冗余ZERO，必须真实修改状态机且保留失败私有回滚，不能伪造ACK。均尚未实现或测得收益。
+- 当前新增原件与审计仍在本地，尚未包含a0859远端检查点或193403离线ZIP；下方各发布边界按历史时间理解，后续将统一保存。
+
+## 私有恢复页映射候选已上卡（2026-10-21 20:42 UTC）
+
+- 唯一GPU作业 `20261021T204159Z-kv-page-order-context16k-long`，runner PID `219462`，隔离source `code/kv-page-order-20261021T204159Z`。protocol `0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86`，worker31cc、transaction616、copyc95f、init791c及runner e155均不变。仅在allocator原样选完、尚未bind/发布且num_cached0/ref1/unhashed/真实list别名成立时，原地重排自己的Block对象；不适用则原映射。无前缀截断或CPU容量早退叠加。
+- hardware/framework均已最终互审；唯一CPU映射合同1test/0.001秒通过，非设备证明。builder `4c8ae1d50a113fa35f2642dafa4f60f9a2790187e327a369e063cdb587b3790b`、launcher `8d7bdd79a3c0e937694b8a9fe910416cba67f7c075eb46378e2f71abf2e6c6b7`，原bc51/服务/长负载/seed/VERIFY1保持。后继需实际PRIVATE_PAGES_ORDERED、ZERO/RESTORE/全字节回读、runner/原输出消费；不能预设本run仍66段或已有收益。
+- 202526旧页集合原序1044段/978个下降邻接，升序66段只是本地几何证据。实际worker31cc的ZERO也按make_plan连续段zero_，因此与RESTORE/readback都可能减少调用；不能误说ZERO固定逐页。未来free/reuse物理顺序可能变化，已明示；请求和host逻辑token顺序不改。
+- 旧a1b/ac18/c452本地与远端已按SHA封存，旧run/control完全保留。20:39:02Z私有实验库已发布本地c051：远端 `a0859d11ed0f50e51a8dee25f23664122e57f113`，tree `5fed7a9e177bd059e7603ede42a8bb093212886e`，11828项全核验。仅覆盖202526完整原件及当时记录，随后独立验收、页排序候选、本次在途结果/回执不在该tree；两个共享代码库无推送/PR。
+
 ## 真实恢复及后继消费已通过（2026-10-21 20:32 UTC）
 
 - `20261021T202526Z-kv-retain-context16k-long` 于20:30:51.274086Z exit0，32成功/0失败、524288输入/32768输出。当前GPU空闲，postflight416源码一致、68MiB/0%、无设备进程、9031双栈关闭。完整run/control已本地，tgz SHA256 `430d2f7c211d2f52211e05cc29dca8505e840a3f6b1ec930c6410dca3a5f6c73`。

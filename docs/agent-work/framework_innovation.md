@@ -582,3 +582,63 @@ systems按上述建议写新protocol **a1b691f52f3724b95bbcb11f5702611a171031610
 新builder **ac18b84dfc2e9435c6984f05ddc084d24458d2b158003df29ec9fedc641b6429**、launcher **c4526fa0178989b47647acba2407025cfd04d54034c97c569451d8b77bc5a973** 最终SHA已实核；旧89191/e738两副本也逐SHA核同。只读git --no-index差异显示builder仅protocolpin50375→a1b与variant，launcher仅builderpin、全新run/source名、前轮protocol标记/variant与中文注释。原bc51/Serve/contextlong/seed/ENV1/idle双栈/driver锁/全copySHA/aliases不变，worker31cc、transaction616040/init791c不变。无进入新隔离最短诊断包装阻断，已即时回root可唯一owner运行。
 
 没有重跑package copy/CPU合同/COPY门/GPU，没有修改root脚本或协议/worker。中文worker说明已补当前最新pending状态；首门SAVE→DROP/旧source/原shutdown证据均保留。下一步只有等root新run实际事件与完整原件，继续严格区分admit计划、GPU完成回读与后继消费；当前无新恢复/accuracy/吞吐结论。
+
+### 202526在途时CPU交叉审fragment-aware较短前缀设计
+
+root启动202526新run/runner217396为唯一GPU，尚无完整原件或结果时委派本owner仅读hardware `analysis/2026-10-22-kv-fragment-aware-prefix-plan.md` **d6e11591223ee0269905d4169ff2011e91de3c9193e245daaddc126626eac843**。已全文读并核实际616040/2e91/22e/e155，无设计几何阻断：200957前1024页4段→168calls，尾20单页→840calls，少320token/13.125MiB的演算成立；但没有RPC/CPU时间证据，不推毫秒或收益，更不把SAVE-only当恢复已过。
+
+语义上可表达“真R0之后选完整页R<=R0”，不是现有代码已经实现。**必须新增显式selector或Snapshot截短接口**：先按真实issued/queued/known IDs得到安全R0，再保同Key/全部pending_frames，重建前k逻辑source_pages、R长度digest和nbytes。不能拿伪issued=R/少报pending来骗plan_snapshot。当前_wrap_preempt直接选最大R0，未接任何选择器；worker/事务虽然按R参数化，不能据此称安全已验证。新日志须同时保存R0/R/真实source runs，不能把某次16384几何固化为比赛输入特判。
+
+截R后原Request._all_token_ids、prompt长度、num_output_tokens、output_token_ids和generator对象/状态必须完整保留；只把已真恢复前缀的computed设R。actual df780按request.num_tokens-R调度**已有已知后缀**，cached-resume完整替换blockIDs/all_token_ids/count，e155 input batch保存prompt+既有output；原is_prefill_chunk/discard_request_mask控制未到已知末尾的chunk不产生额外输出。不能把320已有token当320新输出/普通decode、删旧output或从NewRequestData streaming重置边界。必须另证async prev_positions/prev_sampled_token_ids不会覆写错误的已知suffix输入；当前只是源码机制审，未实现/未测。
+
+可证伪条件：若R超出真R0/逻辑页不前缀/漏pending/digest或epoch不符，立即不适用；若cachedstate、原prompt/output/all_token_ids/generator身份或已知suffix输入不符则正确性失败；若额外suffix prefill+批轨迹/容量代价高过pin/copy省时则无收益。中间discard对非None generator会原offset回退，但全局未seed RNG仍可能随少/多chunk改变消耗；不同M/Attention分流也会改FP归约，因此byte KV一致不代表整模型同token或继承103/105。先让当前恢复链路真实过，再决定任何新实现，J无本机成本依据前不调参扫形状。
+
+external新页与原APC准入差异已条件化发root/作者：actual22e get_num_blocks_to_allocate在FullAttention无skip/旧owned时为`W-H+E`，H是本地hit页、E为其中ref_cnt0页，ref0 hit也从free计数，不能说所有cache hit都免费；已有ref>0共享hit可使原准入少消耗free，或full-sequence-fit关闭时原chunked-prefill只先分小尾窗，external一次分完整R私有新页才可能需更多free。Full-sequence-fit开启/全hit均ref0时两者预算可接近，不能凭名称一概断言。202526缺真实defer/allocator证据前不猜本run原因。
+
+本批只有阅读/消息和本handoff，没有实现新selector、修改worker/protocol/冻结源、重跑CPU/COPY/设备或联网。下一条收到202526完整实际原件后唯一独立验收；当前仍没有恢复、准确率或性能新结论。
+
+### 202526完整实际恢复已独立验收；31cc继续冻结
+
+root完整原件在 `experiments/framework/20261021T202526Z-kv-retain-context16k-long{,-control}` 后，本owner新增只读 `analysis/source/kv-worker/review_retained_protocol.py` **4a6c7baa1ab8aa509c66b1a207d66d5feb1e982b255cdd914b239b87638d756c**，实际2.9s exit0；结果 `retained-protocol-review.json` **d866fe1faae212d598c3f048889eb889f5111cc3be896176a64c26fcb788234f**。416份source逐SHA/ac18builder/c452launcher/a1bprotocol/616txn/31ccworker/c95copy/791cinit/e155runner、原bc51/服务参数/seed、包410→416/6changes与live416/post54c均过。原件不改，未重复任何设备/COPY/合同测试。
+
+同key、worker217577，serial1 SAVE成功→原free→暂态保留→serial2 ZERO成功→serial3 RESTORE成功且**42层718405632B全字节回读通过**→publish→serial4 DROP释放host→runner6checks全部true→原update消费8个scheduled token。R16704/1044页，SAVE24段/1008calls；目的原逻辑序1044段，ZERO/RESTORE/verify各43848calls，readbackbytes718405632。6checks在Attention前、后继consumer另证，不把两者冒称独立Attention数值/完整accuracy。restore_skips454/preempt0→1；首defer实际allocation_none/free1030/prefix1044/request16712/budget2018/pending0/placeholder0/full-fitTrue，但没有required-blocks，不逐次猜454原因。
+
+32/0、524288in32768out、240.92993535706773s/2312.1078714208797TPS/TTFT63227.1205921279ms仅诊断。CPU6/32GiB/KV521936；DB**516表19270行→518表19337行**，三hash已重算，after实体d93510959a35313ec5331067cca3c496f817e96375ee398e52fb3cc1cbf6741d/schemaa5ca71a552e35c3465fdfb85c1f74691a9e455aace1640ab5cafbddb22460d65/logicala180ecc5d609bf746af4c3a9a04d013c4fc6251b864d06317ce1faaf9da010f8。新增2个index表3行+既有MM表60/4行，不能复用旧DB不变断言、不能称cache-matched或把调优解释成收益。20:30:51.274086Z exit0、post20:31:52.483652Z68/0/双栈闭/无GPU/416live fail[]；217396仅Z/PPid1。当前run无ERROR/EngineDeadError检索命中，首轮原shutdown错误仍保留。
+
+已更新中文 [`kv-worker-implementation`](../../analysis/2026-10-22-kv-worker-implementation.md) 与 [`kv-transaction-independent-review`](../../analysis/2026-10-22-kv-transaction-independent-review.md)。结论只为一次真实抢占恢复/全字节与原consumer通过；没有新accuracy/性能通过或默认合并。root已收到即时回执，31cc/616与已受测a1b保持冻结。
+
+### 后继最小私有页逻辑排序：CPU实际别名/cache/runner边界已审
+
+root新授权systems仅实现目的已分配集合的逻辑升序，不混prefix截短/CPU早退，本owner只读独立审实际2e91/9dd0/22e/3fc5/df780/e155，关键结论已发systems/root：manager.get_blocks返回single.req_to_blocks非空原list，get_block_ids才copy；必须type/list身份/同Block对象集、numcached0、ref1/unhashed/nullFalse、exact完整前缀、HOST/pending0且尚未bind/ZERO/publish时原地sort。不能只sort RPC IDs、改Block.block_id或用allocate_slots返回的空new-suffix wrapper当owned。
+
+后续原allocate_new_blocks只extend suffix；cache_full_blocks按真实新list逻辑位置与request.block_hashes绑定，所以copy必须先按新逻辑序恢复相应内容；df780新output取ID拷贝、e155 resume整体替表，旧queued payload无Blocklist alias，但仍严格原FIFO/pending0，旧runner表/payload不动、RNG对象/次数不新增。FullAttention历史new_block_ids完全原序保留、不drain；fresh仅尾段/集合证明。原free reversed(req_blocks)会改未来物理归还/reuse次序，允许但不能声称后续allocator完全一致。没有本owner新实现/测试/设备。
+
+下一条：等systems原a1b副本及新排序protocol最终SHA，只做定向diff互审；root决定新唯一设备门，需再见byte回读、后续suffix/cache/payload与consumer证据。本owner无SSH/GPU/后台任务、共享代码库修改或push。
+
+### 私有页排序初稿0e2115定向审阅与hardware页图文档回执
+
+systems新protocol草稿 **0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86** 与保存的旧 `analysis/source/kv-transaction/biv150_kv_protocol.a1b691.py` 实核SHA一致；只新增 `_order_private_pages` 和owned检查后/bind前的一条调用。已只读逐diff审，无actual strict scope下明显阻断：普通list/req_to_blocks身份、numcached整型0、HOST未bind/pending/inflight/cancel/closed/source释放、exact R16页数、唯一对象/ID/ref1/unhashed/nonnull均守；原地sort后重导destination，guard外False仍走旧unsorted，没有改变history/worker/txn/footer/暂态路径。初审回执已发作者；尚等其唯一必要CPU映射合同与最终SHA，不把草稿当已冻结或GPU通过。
+
+hardware `analysis/2026-10-22-kv-owned-page-order-plan.md` **9bc25edae611350aeb0c2fc384684e4a953cbf05972c80a7c7885e43097c86c2** 已全文只读，无设计几何/别名/cache边界阻断：原1044个+1run与978个−1邻接说明顺序问题，升序或反原序66段只是同集合几何；唯一候选升序可达2772calls/阶段，字节不变，不是DMA/收益测量。文档明确futurefree/reuse可能变、实际新run页图未必66，与本owner独立源码结论一致。回执已发硬件owner。
+
+目前只新增独立实际原件审阅脚本/JSON与本人中文文档；worker31cc、observer0c89、builder936c和stable/default均未改，无SSH/GPU/共享代码库改动。下一条仅接作者final pin/合同做最后只读回执，root串行实际门归其所有。
+
+### 排序最终0e2115已定向终审并回root，等待新唯一设备门
+
+systems冻结protocol **0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86**，本owner最终实核SHA，实际diff仍仅helper+单call，旧a1b逐SHA一致；worker31cc/txn616/c95/initfooter全不变。唯一CPU合同 `tests/test_biv150_kv_private_order.py` **29deff8d51fcf6f7f7811aacc84a3ac6f9d431c3e08879a80b39206d178522b5** 和 `analysis/source/kv-transaction/private-order-cpu-check.json` 已全文只读：作者1test/0.001s通过，真实CPU事务ZERO/RESTORE/publish同映射，host逻辑行、旧payloadID副本/history/对象集与各guard回退符合设计；本owner未重跑。无进入新隔离最短恢复诊断的阻断，已即时回root与作者可冻结/包装。
+
+最终说明追加到 [`事务独立review`](../../analysis/2026-10-22-kv-transaction-independent-review.md)。CPU4页模型不当实际1044页66段/设备等价，未来free顺序可变边界保留；root新门必须实际PRIVATE_PAGES_ORDERED、ZERO/RESTORE/readback/runner/consumer，设备仍唯一owner。没有本人runtime/共享代码改动、SSH、GPU或后台任务。下一操作仅待新包装pin小delta/新实际原件，不能自行启动设备或把202526诊断耗时做收益结论。
+
+### 排序包装4c8a/8d7最后小delta已审，可由root串行诊断
+
+最终builder **4c8ae1d50a113fa35f2642dafa4f60f9a2790187e327a369e063cdb587b3790b**、launcher **8d7bdd79a3c0e937694b8a9fe910416cba67f7c075eb46378e2f71abf2e6c6b7** 已实际SHA核对，并对保存的旧ac18/c452逐byte diff，旧副本SHA相符。builder只协议pin a1b→0e2115/variant；launcher只builderpin、新kv-page-order run/source名、preceding202526、purpose要求PRIVATE_PAGES_ORDERED实际run减少与中文注释。原全guards/helper/完整copySHA、bc51/Serve/contextlong/seed、VERIFY1、idle双栈/preflight/driverflock均保持；无进入新隔离最短诊断的包装阻断，已即时回root。
+
+没有重复package copy/CPU合同/GPU、没有修改任何root代码。下一run起始DB518表19337行，VERIFY1仅诊断，实际排序段数不预设66；等待root唯一设备原件后核新mapping的ZERO/RESTORE回读、runner/consumer及退出后态。202526原件已由root存实验库a0859d11ed0f50e51a8dee25f23664122e57f113（转录为c051/tree11828），本owner不联网改库。本人任务无设备/后台资源，当前31cc和stable/default仍冻结。
+
+### 204159在途：只准备独立验收脚本，尚未执行或生成成功报告
+
+root于204159启动唯一GPU/runner219462，protocol0e2115/builder4c8/launcher8d7/其余冻结、VERIFY1，派本owner CPU准备后续原件验收。复用202526只读方法另建 `analysis/source/kv-worker/review_private_order_protocol.py` **6ef1ee60a75584416c98fbdc2f2110f26967398d12ecda4b8a3c733fe05abf3b**，只做compile语法通过，**没有执行验收或生成private-order-protocol-review.json**，不把在途任务伪报完成。
+
+新脚本精确pin本次5资产/init/runner/包装，等待完整run/control后逐416source、原argv/seed/VERIFY1、DB三hash实算、post/live与后态；从新raw实际R/页数/目的序计算runs，核PRIVATE_PAGES_ORDERED old/newruns和守恒布尔、ZERO/RESTORE/回读calls=实际newruns×42、相同目的表、全字节/6runnercheck/原consumer。没有硬编码66段、454次、16704token或DB不变。old完整目的序未单独raw输出，报告将明确oldrun/对象集合守恒来自精确pin helper日志，不伪称已从原序ID独立复算。无新设备/合同测试/运行时代码变更。
+
+下一条：root发完整204159原件后仅运行该只读审阅一次，有失败先定位原件/契约而非改诊断结果。当前只等待；关闭VERIFY后的同DB/KV/参数短对照属root后续性能阶段，不能用当前诊断elapsed替代。

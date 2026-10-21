@@ -1,0 +1,35 @@
+{
+  "kind": "唯一私有目的Block顺序CPU合同，非GPU/性能/accuracy",
+  "command": [
+    "python",
+    "-X",
+    "utf8",
+    "tests/test_biv150_kv_private_order.py"
+  ],
+  "tests": 1,
+  "passed": true,
+  "observed_duration_s": 0.001,
+  "inverse_to_a1b691_bytes_exact": true,
+  "delta": "仅_order_private_pages helper及私有校验后/bind前一条调用",
+  "checks": [
+    "实际list原地同identity，同Block对象到block_id对应、同页set/ref/hash，history和旧payloadID副本不变",
+    "host逻辑行不重排，新ZERO/RESTORE目的顺序与后续表一致，真实CPU事务接受fresh集合异序",
+    "shared/hashed/cached/错alias/有pending/已bind或publish/duplicate不排序，回旧路径"
+  ],
+  "guards_do_not_generalize_actual_layout": true,
+  "old_protocol_sha256": "a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751",
+  "asset_sha256": {
+    "patches/framework/biv150_kv_protocol.py": "0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86",
+    "tests/test_biv150_kv_private_order.py": "29deff8d51fcf6f7f7811aacc84a3ac6f9d431c3e08879a80b39206d178522b5",
+    "patches/framework/biv150_kv_transaction.py": "616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13",
+    "patches/framework/biv150_kv_worker.py": "31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf",
+    "patches/framework/biv150_kv_page_copy.py": "c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c"
+  },
+  "limitations": [
+    "旧copy/DTO/原defer合同未重跑；未GPU",
+    "未来free(reversed req_to_blocks)次序会变，非未来allocator轨迹一致",
+    "构造4页CPU映射不等真实1044页66run设备证据；需真实marker/42层回读/payload消费"
+  ],
+  "preparatory_inverse_check": "首次仅删除两个LF而剩一个空行触发assert，未落成功记录；按完整helper段三个LF移除后逐byte精确逆回，受测runtime未改。",
+  "device_ran": false
+}

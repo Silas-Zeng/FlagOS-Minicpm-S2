@@ -120,6 +120,42 @@ def _rollback(state, victim):
     _drop(state, victim)
 
 
+def _order_private_pages(state, victim, single, owned):
+    """只重排尚未绑定/发布的完整私有页映射，不重排host逻辑内容。"""
+    tx, request = victim["tx"], victim["request"]
+    if len(owned) != 1:
+        return False
+    pages = owned[0]
+    cached = single.num_cached_block.get(request.request_id)
+    if (type(pages) is not list or single.req_to_blocks.get(request.request_id) is not pages
+            or type(cached) is not int or cached != 0
+            or tx.phase != "HOST_RESIDENT" or tx.pending_frames or tx.destination_pages
+            or tx.inflight is not None or tx.cancelled or tx.closed or not tx.source_released
+            or len(pages) != len(tx.snapshot.source_pages)
+            or len(pages) * protocol.BLOCK_TOKENS != tx.snapshot.prefix_tokens
+            or any(type(b.block_id) is not int or b.block_id <= 0 or b.ref_cnt != 1
+                   or b.is_null or b.block_hash is not None for b in pages)):
+        return False
+    before = tuple(b.block_id for b in pages)
+    objects = {id(b) for b in pages}
+    if len(set(before)) != len(before) or len(objects) != len(pages):
+        return False
+    # actual非empty get_blocks保同list，cache_blocks随后按此逻辑位置关联hash。
+    # new_block_ids历史及Block对象自身完全不改；future free(reverse(list))次序可变。
+    pages.sort(key=lambda block: block.block_id)
+    after = tuple(b.block_id for b in pages)
+    if (single.req_to_blocks.get(request.request_id) is not pages
+            or {id(b) for b in pages} != objects or after != tuple(sorted(before))):
+        raise RuntimeError("private page排序破坏真实所有权映射")
+    runs = lambda ids: 1 + sum(b != a + 1 for a, b in zip(ids, ids[1:]))
+    _emit(state, "PRIVATE_PAGES_ORDERED", request_id=request.request_id,
+          prefix_tokens=tx.snapshot.prefix_tokens, page_count=len(pages),
+          increasing_runs_before=runs(before), increasing_runs_after=runs(after),
+          same_page_ids=True, same_block_objects=True, owned_list_identity=True,
+          host_logical_order_changed=False, future_free_order_may_change=True)
+    return True
+
+
 def _try_restore(scheduler, request, token_budget):
     frame = _ACTIVE.get()
     if frame is None or frame["engine"].scheduler is not scheduler:
@@ -161,6 +197,7 @@ def _try_restore(scheduler, request, token_budget):
     owned = manager.get_blocks(request.request_id).blocks
     if (len(owned) != 1 or any(b.ref_cnt != 1 or b.is_null or b.block_hash is not None for b in owned[0])):
         raise RuntimeError("restore requires newly allocated private unhashed pages")
+    _order_private_pages(state, victim, single, owned)
     destination = tuple(b.block_id for b in owned[0])
     _, fresh = protocol.split_fresh_zero_ids(victim["zero_before"], single.new_block_ids,
                                             destination, pending_zero=False)

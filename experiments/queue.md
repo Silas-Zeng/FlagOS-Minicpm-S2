@@ -84,7 +84,8 @@
 
 | 69 | 字节与事件门通过20261021T191545Z | 设备 | 42层672MiB每向KV copy四几何 | 独立8SHA/93eb/c95f/四case八pass×五checks与RNG全true，actual42views/guard/未选poison；normal42/336、packed1/8copy；roundtrip wall222.053105/235.270289/119.956194/120.716930ms单warm样本，hostquota/提交混杂未知，不推稳定DMA或E2E；构造非observed布局/无模型恢复protocol；19:18:05Z idle，旧失败保留 |
 | 70 | 已完成，仅SAVE/free | 设备协议诊断 | 200957单victim KV保存恢复v1 | 独立416源/DB三SHA/CPU6/32GiB/idle；32-0，SAVE R16704/718405632B完成后原free，再DROP；skip1但无ZERO/RESTORE/回读/消费，旧日志不区分原因，不报收益；旧50375原字节保留。 |
-| 71 | CPU准备/待新设备门 | CPU | 暂态保留单差分修订a1b691 | pending/placeholders/allocateNone保持HOST并走原FCFS；本次numscheduled>0普通工作计划才DROP，失效仍释放；worker31cc/txn616/footer不动，唯一CPU合同通过，跨职责终审；尚无新GPU结果。 |
+| 71 | 已完成，单victim协议诊断 | 设备 | 202526暂态保留a1b691 | 416源/32-0；SAVE/free→454skip保HOST→ZERO/RESTORE全42层byteequal→PUBLISH/DROP→runner六checks/原output8tokens；DB51619270→51819337、VERIFY1/240.929935s不报性能，非完整accuracy；后态idle通过，200957未知原因不回填。 |
+| 72 | CPU准备/待最短独立门 | CPU | 私有目的Block排序0e2115 | 仅未bind/publish的实际owned list严格guard后原地升序；host逻辑顺序/history/worker31cc/txn616/c95f不变，未来free顺序可变；1项CPU合同过/精确逆回a1b，双职责终审；旧1044页集合推导66run非新服务实测，不混454早退/截断。 |
 
 ## 执行边界
 
