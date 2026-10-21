@@ -1,3 +1,19 @@
+## 最新接续：200957真实SAVE/free但未恢复；a1b691暂态保留修订已终审
+
+2026-10-22（实验UTC2026-10-21 20:09–20:15）。root唯一GPU owner，本agent全程本地CPU，无SSH/设备。此前“200957启动中/无实际协议”语句为历史，按本节覆盖。
+
+root最新回执：a1b691独立新run `20261021T202526Z-kv-protocol-context16k-long` 已启动，runner217396，包装ac18/c452，worker/txn冻结；以root CURRENT及manifest为准确身份。本agent不设备，下一步只读研究externalR私有全页与原cachedprefix准入所需free差异，等待新DEFERRED理由，不实现或重复测试。
+
+200957本地run/control完整，包6b2abf4554bfdd3e2fc705a4b8d4a5555a033d764d17b35782296977821e253d；独立核416archiveSHA/installed源post未变、原SERVER/bc51/seed721201、DB前后516表19270行实体/逻辑/schema三SHA、CPU6/物理32768MiB。32成功0失败、524288in32768out、221.1178005039692s、2519.2725268176705total、TTFT62550.40631070733ms，KV521936/preempt0→1。Engine/worker215606真正SAVE R16704/1044页/718405632B/1008copy后completed+successful ACK→原free→DROP成功，saved1/restore_skips1，未ZERO/RESTORE/42层回读/publish/runner状态或消费。旧50375复合precheck和allocateNone共计skip，**不能猜拒绝原因**；本轮仅部分协议诊断，无准确率/性能结论。原shutdown ERROR/force-kill保留，20:15:43.088172Z 68MiB0/双栈closed/无GPU进程；controller仅parent1的Z，服务/worker已退出。原件审计analysis/source/kv-transaction/200957-independent-review.json。
+
+按root只做单差分修复：旧runtime精确保存analysis/source/kv-transaction/biv150_kv_protocol.50375.py（50375e899acbdcee15d3cdec2ecd77875fb355c56ccbfa663271509982ddc19a），不改sealed原件。当前patches/framework/biv150_kv_protocol.py **a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751**：pending/placeholders/tokenbudget/allocateNone只保HOST继续原waiting FCFS；本victim首条RESTORE_DEFERRED记录reason/free等cheap状态，prefix页数明确不是allocator实际required。原本次output有rid的numscheduled>0且仍HOST才DROP普通重算副本；仅status RUNNING不算，准入计划也不是forward证据。身份/terminal/epoch/state/digest失效DROP，不park/不重排/不提早consume。极端same-id对象替换可先在本次output按rid释放，reason可能归ordinary而非identity，host释放安全、Core末仍身份兜底，不据reason做执行归因。
+
+**冻结后不再改runtime**。事务616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13、framework worker31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf、initfooter及zero/restore/RPC/resume本体全部不变。root拥有新source/launcher，不重复包装。framework+hardware对a1b691逐diff/SHA只读终审无阻断；未重跑copy/旧suite/GPU。唯一新tests/test_biv150_kv_protocol_defer.py实跑1test/0.002s，覆盖暂态持有→原FIFO→无work持有→本次普通计划才DROP与失效释放，无torch/numpy/vllm导入；defer-cpu-check.json存SHA/差分/边界。**新修订尚无上卡结果**，root后继独立新run必须真实ZERO/RESTORE+回读→publish→runner状态→原输出消费，不能凭SAVE/FIRST声称恢复通过。
+
+本轮改文件：protocol canonical/50375历史副本、新唯一CPU合同、200957-independent-review.json、defer-cpu-check.json、analysis/2026-10-22-kv-transaction-protocol.md、framework-experiments、registry/queue及本handoff。registry现在**94数据行×16列，queue71项**，均LF，旧行原字节前缀保留。原正式/稳定候选/负结果没有覆盖；worker/事务/root README/CURRENT/技术报告/官方脚本未改。
+
+本轮最终回执：200957只SAVE/free后DROP，恢复未激活；a1b691仅暂态保留+普通计划时释放已跨owner终审，唯一CPU合同过，等待root单卡新诊断。不能猜旧skip原因/不能报恢复正确或性能收益，下一API按本节与实际新run接续。
+
 # systems_innovation 子智能体交接
 
 ## 最新接续：归档锁解除，实际normal42单victim协议已实现待首门

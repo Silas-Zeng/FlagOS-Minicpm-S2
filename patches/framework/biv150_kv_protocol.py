@@ -84,9 +84,26 @@ def _drop(state, victim):
         state["victim"] = None
 
 
-def _discard_host(state, victim):
+def _discard_host(state, victim, reason):
+    _emit(state, "HOST_DISCARDED", reason=reason,
+          request_id=victim["request"].request_id)
     victim["tx"].discard()
     _drop(state, victim)
+
+
+def _defer_restore(state, victim, scheduler, request, token_budget, reason):
+    """仅保留host；原waiting路径继续，无park/提前消费/逐步日志。"""
+    state["counts"]["restore_skips"] += 1
+    if not victim.get("restore_defer_logged"):
+        tx = victim["tx"]
+        _emit(state, "RESTORE_DEFERRED", reason=reason, request_id=request.request_id,
+              pending_frames=len(tx.pending_frames),
+              output_placeholders=request.num_output_placeholders,
+              token_budget=token_budget, free_blocks=scheduler.kv_cache_manager.block_pool.get_num_free_blocks(),
+              saved_prefix_pages=len(tx.snapshot.source_pages), request_tokens=request.num_tokens,
+              full_sequence_must_fit=scheduler.scheduler_reserve_full_isl,
+              allocator_required_blocks_observed=False, host_retained=True)
+        victim["restore_defer_logged"] = True
 
 
 def _rollback(state, victim):
@@ -113,17 +130,23 @@ def _try_restore(scheduler, request, token_budget):
     tx = victim["tx"]
     if tx.phase != "HOST_RESIDENT":
         raise RuntimeError("unexpected waiting victim phase")
-    # 不park/重排FCFS；本次不适用就回原重算，丢弃这个host副本。
-    if (token_budget <= 0 or tx.pending_frames or request.num_output_placeholders != 0
-            or request.status.name != "PREEMPTED" or request.num_computed_tokens != 0
+    if (scheduler.requests.get(request.request_id) is not request or request.is_finished()
             or request.num_preemptions != tx.snapshot.key.attempt):
-        state["counts"]["restore_skips"] += 1
-        _discard_host(state, victim)
+        _discard_host(state, victim, "request_identity_terminal_or_epoch_changed")
+        return
+    if request.status.name != "PREEMPTED" or request.num_computed_tokens != 0:
+        _discard_host(state, victim, "waiting_request_state_changed")
+        return
+    # 暂态不使已保存prefix失效；原FCFS仍可普通准入，返回output后才判断。
+    if token_budget <= 0 or tx.pending_frames or request.num_output_placeholders != 0:
+        reason = ("pending_frames" if tx.pending_frames else
+                  "output_placeholders" if request.num_output_placeholders != 0 else "token_budget")
+        _defer_restore(state, victim, scheduler, request, token_budget, reason)
         return
     tokens = list(request.all_token_ids)
     if (len(tokens) <= tx.snapshot.prefix_tokens
             or protocol.prefix_digest(tokens, tx.snapshot.prefix_tokens) != tx.snapshot.token_digest):
-        _discard_host(state, victim)
+        _discard_host(state, victim, "token_prefix_changed")
         return
     manager = scheduler.kv_cache_manager
     single = manager.coordinator.single_type_managers[0]
@@ -133,8 +156,7 @@ def _try_restore(scheduler, request, token_budget):
         full_sequence_must_fit=scheduler.scheduler_reserve_full_isl,
         has_scheduled_reqs=bool(scheduler.running))
     if blocks is None:
-        state["counts"]["restore_skips"] += 1
-        _discard_host(state, victim)
+        _defer_restore(state, victim, scheduler, request, token_budget, "allocation_none")
         return
     owned = manager.get_blocks(request.request_id).blocks
     if (len(owned) != 1 or any(b.ref_cnt != 1 or b.is_null or b.block_hash is not None for b in owned[0])):
@@ -293,6 +315,10 @@ def _wrap_schedule(original, injected):
         victim = state["victim"]
         if victim is not None and victim["tx"].phase == "RESTORE_DONE":
             _commit_resume(state, output, victim)
+        elif (victim is not None and victim["tx"].phase == "HOST_RESIDENT"
+                and output.num_scheduled_tokens.get(victim["request"].request_id, 0) > 0):
+            # 仅本次原output真正发出该rid的普通work才释放；不凭RUNNING推断。
+            _discard_host(state, victim, "ordinary_recompute_admitted")
         return output
     return schedule
 

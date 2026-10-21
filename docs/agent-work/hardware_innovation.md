@@ -576,3 +576,25 @@ adapter default-off/exact-source、内存单waiting切口，不改installed；�
 按root任务查已归档actual与plugin的全部直接命名消费者：22e init75、extend276/309、take312–316；free383–410/默认new_step535无清理。2e91 take605–610只汇总，reset_prefix_cache不清；df7801046–1049唯一已归档原调用且当前False不走。CachedRequestData/runner/connector utils同名字段属另一对象；本轮协议新增读取历史作尾段证明。未取回的完整vLLM/反射访问不冒称穷尽。
 
 历史长度随累计分配A增长，页释放复用仍追加，不受物理pool32621限制，且单manager跨42层不乘42。无重算32×(16K+128)条件估33024项，64位槽位约258KiB+list预留，非实测len/RSS；追加已有block_id的int引用，不误按每项另造int估。长期服务无固定上限；当前协议tuple/前缀证明还增加O(A)扫描，仅少数恢复发生。详细证据、反例、条件上界与未来最短稀疏观测入口已追加 `analysis/2026-10-22-kv-save-restore-hardware-evidence.md`。尚无新实现/默认修改/GPU，不能直接clear破坏当前协议尾段证据；root允许后续有限小收益候选，本轮优先worker/protocol。
+
+### 200957实际SAVE输入/host预算专项验收：不等恢复通过
+
+按root委派只CPU读真实 `20261021T200957Z-kv-protocol-context16k-long{,-control}`。worker31cc/proto50375/txn616/copyc95f实际control源SHA全与受审一致；未重做全source/DB/official验收。新增独立 JSON `analysis/source/kv-transaction/200957-save-hardware-review.json` SHA `43567cb1d9377efa109d435e9af6d0cd7f5f8a81e63cb6f2887243d06b963c72` 保log5a532c9f/实际assets/页run/预算计算/局限，研究报告末节中文保存。没有新代码、设备、微测或GPU请求。
+
+真实SAVE1044唯一正页/16704token/718405632B=685.125MiB，submitted=transferred=nbytes且ACK successful/completedTrue；SAVE_ACK_FREE后DROP completedTrue/hostheldFalse。无ZERO/RESTORE/发布/回读，VERIFY requestedTrue不当核验通过。restore_skips1没有reason，明确未知，不猜具体DROP分支。
+
+原序24段=37/757/126/104四大段1024页+20单页；实际42×24=1008copycalls吻合，较逐页43848次少43.5倍。尾20页仅13.125MiB/1.9157% bytes却840/1008=83.333%调用，页号差31只记事实，不推调度因果。旧191545672MiB连续/8run不代表此次685.125MiB/24run，未测RPC独立wall/event/pin/producer成本，不能从完整221.1178秒拆出成本。
+
+单层verify16.3125MiB，两者701.4375MiB；cap尚余338.875MiB；beforeheadroom15878356992B≥需1809252352B，pin后余14429618176B>1GiBguard。整体cgroup usage涨1381.625MiB，比显式额外680.1875MiB，无法归因或当峰值。预算允许SAVE是实证，但CPU长期余量/恢复成本/accuracy仍未证。root当前优先systems最小暂态保留修复，待新SHA定向交叉审；本owner不动50375受测原件。
+
+### root新授权的后继候选：按段/调用预算选前缀，仅设计
+
+新中文 `analysis/2026-10-22-kv-fragment-aware-prefix-plan.md` 只记录一个可证伪方向，不实现、不混入当前暂态修复。已实际浏览一手v0.24 guide https://docs.vllm.ai/en/v0.24.0/features/kv_offloading_usage/ 及CacheOPT v1 https://arxiv.org/html/2503.13773v1 第3.5：只借同硬件/模型的swap与重算成本权衡，不搬A100/OPT交点、排序、预测或nativebackend。
+
+先用真实plan_snapshot得到R0，再按原source_pages逻辑前缀k选择：Csave(k)=42×(1+物理不连续次数)，B(k)=688128k；给定调用/bytes预算O(m)找最大k，保同Key/全部pendingframes/真实knownIDs的短digest，不伪造issued或固定16K。200957的第4段末恰1024页，才有少保320token/13.125MiB、SAVE1008→168几何；J未有计时依据不指定推荐值，恢复目的碎片未知不能许诺H2D同省840calls。额外320是长上下文已知后缀重算，不是320次decode；收益必须实证省pin/提交/搬运/zero大于多算和调度代价，保负结果与新accuracy边界。当前优先新protocol修复互审，之后才由root决定独立实现/服务门；不追加copy微测或GPU请求。
+
+### 200957后暂态保留 a1b691 定向终审完成
+
+实际核 protocol `a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751`，与 `analysis/source/kv-transaction/biv150_kv_protocol.50375.py` 完整diff，旧文件SHA精确50375。新runtime仅暂态保留/释放及稀疏诊断；worker31cc、txn616、footer不动，不混新前缀选择。pending/placeholders/budget/allocateNone保HOST并走原FCFS；原新output对rid真实scheduled>0普通work才DROP，不能只按RUNNING猜；identity/terminal/epoch/state/digest失效即丢，未settle资源围栏不变。单次reason/cheapfree明确未观测allocator_required，未引额外GPU工作。
+
+只读唯一新CPU合同tests/test_biv150_kv_protocol_defer.py，验证原update后frame清理/暂态无work持有/普通work释放/失效释放，不模拟GPU。本owner无重跑suite或设备，未见增量阻断，已给root/systems明确终审回执，可由root串行新run；200957为何DROP仍未知，不能拿新reason倒推旧现场。研究报告同步，等待真实新版本原件；不提前写恢复成功、accuracy或E2E收益。

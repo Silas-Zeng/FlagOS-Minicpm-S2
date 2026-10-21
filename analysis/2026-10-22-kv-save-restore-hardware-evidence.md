@@ -149,3 +149,25 @@ adapter default-off，只在隔离 init 追加安装；exact 源码 guard 后内
 追加的是已有 KVCacheBlock 的 Python int 引用，不是每次额外构造 int。64位进程中仅槽位约 `8A` 字节，再加 Python list 对象/容量预留，33024项槽位约258KiB；未测 RSS/容量，不按“每项36字节”或宿主泄漏速率夸大。普通 extend 的累计 host 工作为 O(A)；当前协议 `tuple(before)` 及完整前缀证明还会在少数恢复尝试读 O(A) 历史，必须与原实现成本区分。
 
 值得保留的后续方向是 exact needs-zero=False、已确认无其它消费者时关闭或分段控制这份未使用记账；尚未选择实现。不能当前直接 clear：本轮协议正依赖追加尾段审计，未知外部消费者未穷尽。下一轮若授权，只先补真实列表长度/累计分配及 host 成本的稀疏证据，再作一个范围严格、可原路回退的小候选并由 root 上卡。当前未实现、未测收益、未改源码；小收益也保留。
+
+## 200957首次真实 SAVE：预算可用，碎片成本尚未知
+
+原件 `experiments/framework/20261021T200957Z-kv-protocol-context16k-long{,-control}` 已本地。此处只做本 owner 的保存输入/预算/碎片专项审计；完整 official/DB/source/退出验收仍归 root 和 framework。实际 control 中 worker31cc、protocol50375、transaction616、copyc95f 与本节审过的固定 SHA 全同；独立 JSON 为 `analysis/source/kv-transaction/200957-save-hardware-review.json`，保留 server.log SHA `5a532c9f2129a7cc8c9cfacf1d891c4524196a254cb2c8266065ac7f822254f1`、原行号及计算。
+
+SAVE 指令1044个唯一正物理页，prefix16704token，逐层页16384B，合42层 `1044×42×16384=718405632B=685.125MiB`。worker ACK 的 submitted/transferred/nbytes 全相同，successful/completed=True、host_held=True；随后原 SAVE_ACK_FREE、DROP completed/successful=True、host_held=False。整个日志没有 ZERO、RESTORE、RESUME_PUBLISHED 或恢复字节回读；VERIFY requested=True只证明为未来恢复预留核验，不是核验通过。restore_skips1没有具体分支 reason，**本轮不能确定为何 DROP**。
+
+按原逻辑次序独立重建连续段，恰24段：前四段37/757/126/104页，共1024页；余20段各1页，尾部物理页号相邻差31。不能仅从差31推断分配交错原因，未记录那一分配轨迹。c95f不排序，只合并源/目的同时连续的页；实际 normal42 的 `42×24=1008` 次 copy 与真实 ACK 完全相等。逐页拷贝本需43848次，合段已减少43.5倍，说明此实现确实消除了大量 Python/传输发起工作。
+
+但20个尾页仅13.125MiB，占payload1.9157%，却贡献840次、占调用83.3333%；前1024页672MiB只用168次。实际输入比旧构造8段更碎，且本次总payload是685.125MiB，不能把191545连续/8段672MiB单样本直接套成当前成本。此事实支持以后研究“保留哪一段已完成前缀”的成本选择，**不等于现在增加一个packing kernel或改变块大小**；当前最优先仍是完成真实恢复链路。
+
+预算也逐项相符：payload cap1GiB尚余355336192B=338.875MiB；单层额外核验buffer17104896B=16.3125MiB，两者701.4375MiB。分配前需 `payload+verify+1GiBguard=1809252352B`，真实余量15878356992B；pin后真实余量14429618176B仍大于1GiB。此次预算护栏允许 SAVE 有实际依据，不是按20GiB填满CPU镜像。
+
+分配前cgroup usage5596479488B、pin后7045218304B，差1448738816B=1381.625MiB；比显式payload+verify多713228288B=680.1875MiB。它是整个cgroup两个离散快照，可能含其它分配/驻留/计账变化，本轮没有分解，不归因给 pinned 分配，不报生产峰值或固定额外开销。没有 RPC 独立 wall/event、producer wait、pin 分配或各 copy 提交计时，日志 ACK 无可作这类分解的时间戳；完整服务221.1178005039692秒、32/0、32768输出仅作上下文，不能据此扣出copy成本或恢复收益。root负责唯一GPU后继门，本 owner不重跑微测。
+
+## 后继暂态保留修复的定向终审
+
+systems 后继 protocol `a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751` 已独立只读审；实际旧文件 `analysis/source/kv-transaction/biv150_kv_protocol.50375.py` SHA精确50375，200957受测源不覆盖。新稿只调整暂态保留/释放及单次诊断，worker31cc、transaction616、init footer不变，未混入 [前缀选择设计](2026-10-22-kv-fragment-aware-prefix-plan.md)。
+
+pending frame、placeholder、token budget 或恢复 allocation 返回 None 时，只保留原 HOST_RESIDENT 与 slot，仍继续原 FCFS waiting/普通准入；不 park、不排队重排、不提前消费 future。若本次原 SchedulerOutput 确实发出该 rid 的普通 work（scheduled tokens >0），才丢 host；不根据状态名 RUNNING 猜本次已准入。identity、terminal、epoch、状态或 digest 真失效则丢弃；实际 DROP 仍须 worker settled ACK，失败保守退出。首个 RESTORE_DEFERRED 记录 reason/pending/placeholder/budget/free 等，明确未观测 allocator required blocks，不把 free 数量当分配必然成功证据。
+
+已读 owner 唯一新增 `tests/test_biv150_kv_protocol_defer.py`：CPU假对象验证暂态保留、原 FIFO update 后 frame 清除、无 work 持有、有 work DROP及失效释放；未模拟GPU完成。本人没有重跑测试或设备。未见该增量阻断下一最短真实服务门的问题；200957缺 reason 的 DROP 仍保持未知，不能用新代码推定旧分支。新版本尚无本人收到的设备原件，恢复/准确率/收益结论仍未成立。

@@ -1,5 +1,20 @@
 # 当前工作与 API 切换交接
 
+## 真实恢复及后继消费已通过（2026-10-21 20:32 UTC）
+
+- `20261021T202526Z-kv-retain-context16k-long` 于20:30:51.274086Z exit0，32成功/0失败、524288输入/32768输出。当前GPU空闲，postflight416源码一致、68MiB/0%、无设备进程、9031双栈关闭。完整run/control已本地，tgz SHA256 `430d2f7c211d2f52211e05cc29dca8505e840a3f6b1ec930c6410dca3a5f6c73`。
+- 同一事务SAVE16704 tokens/1044页/718405632B完成后free；首次DEFERRED确认为allocation_none，free1030、savedprefix1044、request_tokens16712、reserve_full_isl=True、pending0/placeholders0。454次暂态拒绝期间副本保留，随后ZERO→RESTORE真正完成，42层718405632B逐字节回读通过；发布后DROP释放host，runner六项状态检查全真、原输出处理确认后继8tokens。该事实不能回填200957未记录的原因。
+- 实际SAVE1008次copy，ZERO43848次、RESTORE43848次、验证回读43848次；恢复目的页顺序成为明确的后继框架研究点。hardware按原件核序列与排序后的连续段，framework独立验整个协议，systems分析454次等待中的重复digest/历史列表工作并维护注册表；尚未修改受测a1b/31cc/616，也无新GPU任务。
+- 本轮240.929935357秒、2312.107871TPS只属带VERIFY1的诊断；不能报告性能收益或继承整模型accuracy。DB实际由516表19270行变为518表19337行，after physical `d93510959a35313ec5331067cca3c496f817e96375ee398e52fb3cc1cbf6741d`、schema `a5ca71a552e35c3465fdfb85c1f74691a9e455aace1640ab5cafbddb22460d65`、logical `a180ecc5d609bf746af4c3a9a04d013c4fc6251b864d06317ce1faaf9da010f8`。后继性能对照须明确这次缓存变化并使用匹配起点。
+- 受测修正与研究已在本地检查点 `f6d8b670112a660651f40c7245a4888fe99df0a1`；新202526原件/本条尚未同步GitHub或全ZIP。远端最新仍76e94/ab0b对应200957，覆盖边界不混用。
+
+## 暂态保留修正版已上卡（2026-10-21 20:25 UTC）
+
+- 唯一GPU作业 `20261021T202526Z-kv-retain-context16k-long`，runner PID `217396`，隔离source `code/kv-retain-20261021T202526Z`。protocol `a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751`，worker31cc、transaction616、init791c及原runner e155均不变；只修暂态副本保留/普通重算准入后释放，增加首次拒绝原因。framework/hardware终审通过，唯一新增CPU合同通过，不重跑copy门或包装suite。
+- builder `ac18b84dfc2e9435c6984f05ddc084d24458d2b158003df29ec9fedc641b6429` / launcher `c4526fa0178989b47647acba2407025cfd04d54034c97c569451d8b77bc5a973`；原服务参数、原bc51 context-long/seed721201及VERIFY1保持。启动器已核空闲/端口/全部源码，真实恢复与收益尚未知。禁止第二GPU作业。
+- 受测旧50375/89191/e738b在本地analysis/source/kv-transaction、远端scripts及200957/control完整保留，canonical换版没有覆盖旧run。按本次版本选择脚本，不拿新canonical冒充旧复现。
+- 已完成200957全原件和诊断负例对应本地 `ab0b2cd00987b814e9aab223965287403c3ac05d`，私有实验库20:24:43Z发布 `76e94f8e02a6890555625aab6b6d12603ba0d53e`，tree `caa0787e6c47c196cf1789f062c9c1287cee013a`、11365项逐路径/模式/blob SHA验收；这次发布不含随后暂态修正与本次在途结果。两个共享代码库没有远端推送或PR。
+
 ## 首轮真实保存完成，恢复机会丢失已保留（2026-10-21 20:16 UTC）
 
 - `20261021T200957Z-kv-protocol-context16k-long` 于20:15:05.000451Z正常exit0，32成功/0失败，524288输入/32768输出。开启恢复逐字节核验，221.117800504秒仅属协议诊断，不能用作性能收益。当前GPU作业已结束，后态68MiB/0%、无设备进程、9031双栈关闭；root仍为唯一设备owner。

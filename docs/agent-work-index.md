@@ -6,6 +6,8 @@
 
 ## 当前团队
 
+**当前阶段（2026-10-22 04:27，北京时间）：** 200957真实SAVE已完成685.125MiB，但副本随后被丢弃，没有恢复；全原件与独立验收已发布实验库76e94。systems据负例最小修正暂态保留，framework/hardware完成互审；root唯一GPU执行202526新诊断，精确PID/版本与后态读CURRENT顶端。framework继续只读审[碎片前缀选择设计](../analysis/2026-10-22-kv-fragment-aware-prefix-plan.md)，systems核实际准入容量，hardware的预算/碎片审计与一手资料已落盘。后继设计不混入当前受测版本，两个代码仓库仍只改本地。
+
 **当前阶段（2026-10-22 03:56，北京时间）：** 持续优化已恢复，旧阶段归档锁已解除。root串行完成195012真实KV/executor最短smoke，framework独立验收通过，设备已空闲。实际为42层独立normal KV、UniProcExecutor、AsyncScheduler/queue2，完整证据见[运行时布局观察](../analysis/2026-10-22-kv-runtime-descriptor.md)。framework现实现独立worker保存/清零/恢复模块，systems实现单victim事务和调度/V2 resume适配，hardware独立审接口及硬件预算；三者仅CPU，后续唯一GPU门仍由root负责。两个共享代码库先本地更改，实验记录库继续发布；既有小收益、负结果不删除。
 
 **最新完成状态（2026-10-22 03:26，北京时间）：** 本批所有设备作业已完成且空闲后态通过；三位 agent 的实现、复核、负结果与下一操作都已落盘，并暂停写入供统一归档。mapped 首轮121.79秒/复核117.03秒并列保留，KV容量差与稳定性限制不省略；prefix 首次服务负结果保留；KV修正版四case byte/event门通过，但生产恢复协议尚未实现。原件及审计已提交本地 `98f208fd6f37e4f1f654b3a492174f65e430512e`，tree `e88738bfc30ff12848e366f0b9e5904934ed2139`，10,431项；远端发布和离线包最终身份见 CURRENT 顶端及发布回执。

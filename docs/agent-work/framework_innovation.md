@@ -556,3 +556,29 @@ root最后包装builder **89191b57542e8c2e44eb03b8ebee876f083f3e399e1085149ff0b6
 相对已全文预审只有pins和aliases_dereferenced（与observer同块）；owner0ecf先验内部regularfile，外部/目录link仍拒，原8core/5BIV集合/新目录/只init+5module/全copySHA未改。launcher仅填builderpin，bc51/ENV1/positional run_dir/原seed/服务参数/负载/idle/双栈/driver锁全部保持。root唯一CPU package-check.json已读：410→416、6changes/base+runner不变/noimports，与最终pin一致；本owner未重跑copy/suite/GPU。已即时回root可唯一owner串行真实门，中文worker说明追加最终状态，旧UNREVIEWED只是历史。
 
 当前observer0c89/builder936c、worker31cc与父方最终包装均冻结；下一条只等实际事务SAVE/free/ZERO/RESTORE全字节回读与后继consumer原件，再做独立证据验收。不把CPU ACK链/包装通过当GPU恢复、accuracy或吞吐通过。本owner没有在途设备或后台任务。
+
+### 200957真实首门已独立审完：SAVE→DROP，不等恢复成功
+
+root派CPU协助_try_restore暂态拒绝分析，本owner未改worker/protocol/冻结源或设备。完整200957原件本地后，执行新只读 `analysis/source/kv-worker/review_first_protocol.py` **1ef7084c3e257c2ac2808146c40d7dc58fa3343f8294f28aef81fcaca90f4d23** exit0，结果first-protocol-review.json **3dfed5b2ad314aa9508b4837b0877b1999e9f44218804b45fb391a17203ca7ff**。416source逐SHA/8919builder/e738launcher/50375protocol/616040txn/31ccworker/791cinit/e155runner/live416/post54c均通过；source mapSHA910dd6ae11e6b07aa28cc3443dce790f85a7fca3589ebbc28905603f7c823079、rawSHAea111c6e9e8634f1b6ae224c740b4789aa6f7f918f7e2026402da847e968400b，原件未改。
+
+实际四事件：FIRST_CHECKED true→SAVE serial1成功completed→SAVE_ACK_FREE→DROP serial2成功hostheldFalse。R16704/1044唯一非null页/24physicalruns×42层=1008calls/718405632B，命令与ACK同key/pages/bytes/serial，worker同pid215606。诊断额外pin17104896B，实际cgrouppin前后余量约15.88/14.43GB，guard通过非峰值；无ZERO/RESTORE/回读或consumer，SAVE内容也无新增独立byteoracle，不称恢复正确。32-0/524288in32768out/221.1178005039692s/2519.2725268176705TPS/TTFT62550.40631070733ms仅诊断原值，不作收益。CPU6/32GiB/KV521936/preempt0→1，DB实体/schema/logical前后同516/19270；20:15:43.088172Z68/0/双栈闭/无GPU/416live fail[]，shutdown AsyncLLM/EngineDeadError原样保留，不改exit0。
+
+DROP restore_skips=1只把原因缩到复合precheck或external-prefix allocateNone，不能再区分guard，不能断言本次就是pending/容量。原注入在waiting while token_budget>0内，<=0常规不可达。已给systems/root最关键建议：暂态pending/placeholder/allocNone不应永久DROP；保留host继续原调度，原新output真正发出未恢复victim重算时再DROP，或真正cancel/epoch/digest失效DROP；不park/重排/提前future，不盲删discard导致slot持至finish。原已失败机会完整保留，建议尚非代码或收益。中文worker实现文档已追加完整结果/分支证据和限制。
+
+当前worker31cc继续冻结。下一条等systems/父方新的最小协议revision定向互审及root设备安排；若下一run仍无恢复事件就只报未覆盖，不能因SAVE完成假称整协议通过。本owner未SSH/GPU/共享仓库修改或push。
+
+### 暂态保留revision已独立定向终审，等待新隔离真实门
+
+systems按上述建议写新protocol **a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751**；本owner全文diff+最终SHA只读审完，无进入最短新隔离诊断阻断，已即时回root。worker31cc/transaction616040/init791c与footer不变，旧50375副本真实SHA一致，首轮raw/失败机会未改。不修改作者或root脚本、不跑suite/GPU。
+
+新差异只限：临时pending/placeholder/budget/allocateNone保HOST走原waiting/FCFS，首个defer稀疏记理由/free/prefixpages；真正对象/epoch/终止/attempt/status/computed/digest失效discard。原本次新output.num_scheduled_tokens[rid]>0且仍HOST时才ordinary-recompute-admitted DROP，RUNNING本身不足；RESTORE_DONE仍原commit/rollback。没有跳过旧FIFO消费/提前future/改oldpayload，没有新增runner状态改动。output是dispatch前准入计划，非forward证明。极端same-id新对象只可能DROP理由不够精细，安全上不恢复旧host，已告作者作为归因限制，不扩大本批。
+
+唯一新合同 `tests/test_biv150_kv_protocol_defer.py` **b1d8cbb3aece15bbe4bfe395e0586f516be8a839db95199ddc99e95447600254** 已全文读，作者实际1test/0.002s通过（我未重跑）：pending重复只一理由/noalloc、原FIFO后placeholder、allocateNone保留，output0即便RUNNING不drop/原output>0drop，以及identity/attempt/digest/terminal释放。最终互审详情已补 `analysis/2026-10-22-kv-transaction-independent-review.md`。
+
+下一条root将protocol pin改a1b到全新隔离source/唯一设备门；原worker/COPY门不重复。等待实际ZERO/RESTORE、全byte回读、同CachedState/RNG与后继consumer原件再独立审；目前仅SAVE成功/恢复未覆盖，没有新accuracy/性能或默认合并。无本owner在途设备/后台任务。
+
+### 暂态保留新包装最后字节delta已审，可由root串行真实门
+
+新builder **ac18b84dfc2e9435c6984f05ddc084d24458d2b158003df29ec9fedc641b6429**、launcher **c4526fa0178989b47647acba2407025cfd04d54034c97c569451d8b77bc5a973** 最终SHA已实核；旧89191/e738两副本也逐SHA核同。只读git --no-index差异显示builder仅protocolpin50375→a1b与variant，launcher仅builderpin、全新run/source名、前轮protocol标记/variant与中文注释。原bc51/Serve/contextlong/seed/ENV1/idle双栈/driver锁/全copySHA/aliases不变，worker31cc、transaction616040/init791c不变。无进入新隔离最短诊断包装阻断，已即时回root可唯一owner运行。
+
+没有重跑package copy/CPU合同/COPY门/GPU，没有修改root脚本或协议/worker。中文worker说明已补当前最新pending状态；首门SAVE→DROP/旧source/原shutdown证据均保留。下一步只有等root新run实际事件与完整原件，继续严格区分admit计划、GPU完成回读与后继消费；当前无新恢复/accuracy/吞吐结论。

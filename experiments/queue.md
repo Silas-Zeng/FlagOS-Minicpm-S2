@@ -83,6 +83,8 @@
 | 68 | 重复正/首轮负均保留20261021T191131Z | 设备 | mapped同候选唯一重复 | 414SHA（413同首轮，仅包装时间/argv/output异）/32-0同tokens/117.028659571s4514.996599total/TTFT59836.117857ms/KV521840/DB3hash不变/CPU6/32GiB/idle；真实FIRST D15非全程；首轮121.790163836s并列不择优、不归cold或coverage；干净基线KV仍差96，未默认/accuracy |
 
 | 69 | 字节与事件门通过20261021T191545Z | 设备 | 42层672MiB每向KV copy四几何 | 独立8SHA/93eb/c95f/四case八pass×五checks与RNG全true，actual42views/guard/未选poison；normal42/336、packed1/8copy；roundtrip wall222.053105/235.270289/119.956194/120.716930ms单warm样本，hostquota/提交混杂未知，不推稳定DMA或E2E；构造非observed布局/无模型恢复protocol；19:18:05Z idle，旧失败保留 |
+| 70 | 已完成，仅SAVE/free | 设备协议诊断 | 200957单victim KV保存恢复v1 | 独立416源/DB三SHA/CPU6/32GiB/idle；32-0，SAVE R16704/718405632B完成后原free，再DROP；skip1但无ZERO/RESTORE/回读/消费，旧日志不区分原因，不报收益；旧50375原字节保留。 |
+| 71 | CPU准备/待新设备门 | CPU | 暂态保留单差分修订a1b691 | pending/placeholders/allocateNone保持HOST并走原FCFS；本次numscheduled>0普通工作计划才DROP，失效仍释放；worker31cc/txn616/footer不动，唯一CPU合同通过，跨职责终审；尚无新GPU结果。 |
 
 ## 执行边界
 

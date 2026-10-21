@@ -1,6 +1,16 @@
 # 有界单victim KV保存/恢复协议：实际接口与调用顺序
 
-2026-10-22，systems_innovation负责Core/scheduler及CPU事务，framework_innovation负责独立worker，hardware_innovation互审；root唯一GPU owner。root已启动隔离 `20261021T200957Z-kv-protocol-context16k-long`（runner215427，实际目录以root CURRENT/原manifest为准），原long负载+VERIFY1，模型启动中；**尚无协议激活/完成/收益结果**。191545只证明构造normal/packed复制门，195012才观察真实normal42；不能把前者性能当后者收益。
+2026-10-22，systems_innovation负责Core/scheduler及CPU事务，framework_innovation负责独立worker，hardware_innovation互审；root唯一GPU owner。`20261021T200957Z-kv-protocol-context16k-long`已以exit0完成，32成功0失败；真实SAVE/free后DROP，**没有ZERO/RESTORE/回读或恢复后消费证据**。本轮只诊断，不报吞吐收益。191545只证明构造normal/packed复制门，195012才观察真实normal42；不能把前者性能当后者收益。
+
+## 200957反例与最小修订
+
+本地独立核416份archive源码SHA、postflight源未变、原SERVER/bc51、CPU配额6、物理32768MiB、DB前后实体/逻辑/schema三SHA不变（516表19270行）、后态20:15:43.088172Z 68MiB/0%、9031双栈闭且无GPU进程。controller215427为parent1未回收Z，server/worker已退出。原raw 32/0、524288输入/32768输出、221.1178005039692s、KV521936/preempt0→1；完成后shutdown错误及force-kill警告保留，不写“无ERROR”。独立原件审计在 `analysis/source/kv-transaction/200957-independent-review.json`。
+
+Engine/worker215606记录FIRST eligible；SAVE R16704、1044页、718405632B，经1008次copy后真正completed/successful ACK；随后原free完成，再DROP成功释放host。saved1/restore_skips1，restored/published均0。旧50375中复合precheck和allocateNone共用restore_skips，**日志不能确定首次拒绝究竟是pending frame、placeholder还是容量**，不从SAVE→DROP反推原因。host时点从5596479488B到7045218304B，20GiB上限，额外verify预算17104896B；仅SAVE，没有实际restore回读证明。
+
+旧runtime精确保存 `analysis/source/kv-transaction/biv150_kv_protocol.50375.py`，不改原run/control/source。新候选 `patches/framework/biv150_kv_protocol.py` SHA **a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751**：只把暂态pending/placeholder/预算/allocateNone改为保留HOST_RESIDENT，并继续原FCFS；每victim仅首次输出RESTORE_DEFERRED原因、pending/placeholder/free/prefix页数等，明确prefix页数不是allocator实际required计数。身份、结束、epoch、状态、prefix失效仍释放；原scheduler返回的本次新output若num_scheduled_tokens[rid]>0且仍HOST，说明已生成普通重算准入计划，dispatch前DROP。仅status RUNNING不作为准入证据；output计划也不是实际forward执行证明。
+
+worker31cc、事务616、init footer、restore/zero/RPC/resume本体均未变。唯一新CPU合同 `tests/test_biv150_kv_protocol_defer.py` 1项0.002s通过：重复暂态只一条reason，原FIFO后才清pending，placeholder与容量失败保持副本，无work时保留，实际普通计划后释放，身份/epoch/digest/terminal失效释放；没有框架/设备导入，也没有重测copy门。`defer-cpu-check.json`保存差分、命令与SHA。该合同不证明GPU恢复正确；跨职责终审后由root新run做同一最短真实协议门。极端同ID新对象时可先在本次计划处释放，旧日志reason可能写ordinary_recompute，最终Core身份检查仍兜底；不据此分类真实前向。
 
 ## 实际证据与范围
 
@@ -12,7 +22,7 @@
 
 ## 代码与当前身份
 
-- `patches/framework/biv150_kv_protocol.py`：**50375e899acbdcee15d3cdec2ecd77875fb355c56ccbfa663271509982ddc19a**。默认installFalse，exact e043 init末尾append general-hook；复用a4de completion-probe的pure `_scope`，不调用其install；a4de本身逐SHA锁定。installed scheduler/Core文件一字不写，只在内存从exact df780 schedule方法插入一条waiting调用，逐byte逆回和compile已核。
+- `patches/framework/biv150_kv_protocol.py`：当前 **a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751**，200957历史版50375见上。默认installFalse，exact e043 init末尾append general-hook；复用a4de completion-probe的pure `_scope`，不调用其install；a4de本身逐SHA锁定。installed scheduler/Core文件一字不写，只在内存从exact df780 schedule方法插入一条waiting调用，逐byte逆回和compile已核。
 - `patches/framework/biv150_kv_transaction.py`：**616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13**，独立stdlib CPU接口，无框架/设备/allocator/RPC/采样。
 - framework worker `patches/framework/biv150_kv_worker.py`：**31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf**；调用方才启用，复用c95f raw copy，实际normal42/source guards、device fence、显式zero/Event ACK及单slot。worker由作者与hardware终审；不在此重复其GPU门。
 - 包装还须带a4de scope helper和c95f copy模块。root独占prepare/launcher，不重复写包装或改原driver/benchmark/serve参数。
@@ -35,8 +45,8 @@ CPU Transaction要求 SAVE_DONE后才source-free许可；原free实际返回才s
 2. df780 schedule523运行请求分配失败后仍由原FCFS选择victim并pop running；包 `_preempt_request`1116 **原free前**读取group0真实页、queued `(future, SchedulerOutput, exec_future)`中该req的scheduled token跨度，创建单victim计划与预算。scope/长度/预算不适用则原preempt恰好一次，无GPU副作用。
 3. SAVE RPC先覆盖所有旧GPU writer的device fence，再按实际normal42页run D2H，Event完成后ACK。只有这一步真实settle后才执行原 `_preempt_request`：原free、statusPREEMPTED、computed0、waiting.prepend都保持。save失败且已settle可原重算；无法settle则fail closed，不把已pop的request继续执行成半状态。
 4. **不在schedule内重入future.result/update_from_output**。原Core590–607按FIFO消费，原scheduler.update_from_output成功后才标相关旧frame processed；原AsyncScheduler会对PREEMPTED返回输出正常更新placeholder、跳cache。EOS/取消/同ID新Request导致旧victim不再live时，settle后DROP；不写async_tokens_to_discard，不重复/伪造采样。
-5. 恢复只在df780 waiting672、RUNNING分配已完成、原computed==0分支之前处理同一victim对象。旧frames/placeholder未清、非PREEMPTED/epoch变、预算0或prefix digest变则DROP副本并继续原重算，**不park、不跳过队头、不改FCFS顺序**。
-6. 在原等待准入约束下 `allocate_slots(request,0,num_external_computed_tokens=R,delay_cache_blocks=True,num_lookahead_tokens=0,full_sequence_must_fit=原bool,has_scheduled_reqs=原runningbool)`，仅分配R私有prefix页，不混入suffix。actual manager340允许0new+正external，这是内部记账复用；实际新复制实现是本补丁，不开启现成connector/serve选项。失败直接原重算；成功核单group、每页ref1/非null/unhashed、实际页数与本次append尾段。历史list完全不变，不误清其他请求或历史页。
+5. 恢复只在df780 waiting672、RUNNING分配已完成、原computed==0分支之前处理同一victim对象。旧frames/placeholder未清或预算0暂时保留HOST；非PREEMPTED、computed不再为0、身份/epoch/终止或prefix digest变则DROP。全部仍继续原路径，**不park、不跳过队头、不改FCFS顺序**。原本次output真正生成该rid的普通工作计划后，若尚未恢复才DROP；没有work继续保留，等待自然FIFO/容量变化。
+6. 在原等待准入约束下 `allocate_slots(request,0,num_external_computed_tokens=R,delay_cache_blocks=True,num_lookahead_tokens=0,full_sequence_must_fit=原bool,has_scheduled_reqs=原runningbool)`，仅分配R私有prefix页，不混入suffix。actual manager340允许0new+正external，这是内部记账复用；实际新复制实现是本补丁，不开启现成connector/serve选项。None仅保留HOST并继续原路；成功核单group、每页ref1/非null/unhashed、实际页数与本次append尾段。历史list完全不变，不误清其他请求或历史页。
 7. worker显式normal42目的页zero_→真ACK，然后host H2D restore→真ACK。此时只把request.computed临时置R，Transaction仍RESTORE_DONE；原waiting计算后续num_new并走原allocate。若allocation失败、未形成work或schedule异常，未publish的私有页实际free后确认rollback，computed回原0，host DROP；不让已恢复R成为无工作时永久占池。无法判断的原异常保留失败，不吞成性能成功。
 8. 原schedule返回有效新output后，确认target RUNNING、原NewRequestData.computed=R、完整block前缀仍为所恢复页、至少一个scheduled token。**只改这个新建output**：target从scheduled_new_reqs移除；加入cached.req_ids/resumed_req_ids、完整替换block_ids、num_computed_tokens=R、原FIFO已确认output_count、复制all_token_ids，清cached output-count映射cache。普通V2 payload及任何旧queued SchedulerOutput不改。
 9. 这一步必要：df780:1013 V2把resumed当New；e155:1615已有CachedState的streaming分支会清output_token_ids（但其generator对象本身仍保留，不能误称必然重建）。专用cached-resume让e155:1437替换fullblocks，1448按all_token_ids恢复输出；df780:1259在V2原本不填该dict，**必须由本适配器补齐**，否则KeyError。只有全部新payload合法才不可逆publish，再DROP/close释放host预算。发布后任何异常失败退出，不伪装fallback。
@@ -48,6 +58,6 @@ root准备隔离新source+原bc51 long16K/1024/32req/c64/seed721201。首门开 
 
 实际库容量/物理32GiB/CPU配额/DB/并行host条件照原要求明示；verified诊断后才考虑不回读的同参数性能短对照，无最低收益淘汰线。token RNG不新增调用/不重置generator，但少做prefill会改变全局采样批次时序和数值路径，**不能承诺与旧随机输出逐token相同**，后继仍须独立准确率和复现门。
 
-现有CPU证据 `analysis/source/kv-transaction/cpu-check.json`、`adapter-cpu-check.json`：一项事务合同覆盖ack/epoch/旧frame/zero/取消/回滚、按真实反例补守卫后必要复跑；一项adapter合同使用actual f281输出DTO验证V2完整字段/all_token_ids/cache-property/publish-close、exact waiting插入逐byte逆回+compile、e043 exactappend、defaultFalse，无torch/numpy/vllm导入。**不是GPU协议证明**。registry不新增伪设备结果，现93行/queue69仍是此前已完成证据。
+现有CPU证据 `analysis/source/kv-transaction/cpu-check.json`、`adapter-cpu-check.json`保留50375历史身份：一项事务合同覆盖ack/epoch/旧frame/zero/取消/回滚、按真实反例补守卫后必要复跑；一项adapter合同使用actual f281输出DTO验证V2完整字段/all_token_ids/cache-property/publish-close、exact waiting插入逐byte逆回+compile、e043 exactappend、defaultFalse，无torch/numpy/vllm导入。新a1b691仅增加一项defer合同和原恢复函数未变的源比对，**都不是GPU协议证明**。registry现94条数据×16列，queue71项，均LF；200957只登记已发生的部分协议，不新增伪设备成功。
 
 当前官网 [offload worker接口](https://docs.vllm.ai/en/stable/api/vllm/v1/kv_offload/base/)也区分提交、完成查询与等待，这仅支持接口边界的设计参考；它是较新文档，不能代替本机0.24源码，不引入现成connector/新框架分支。191545约120–235ms构造copywall与181041的13758token exposure均不能直接换算服务净收益。

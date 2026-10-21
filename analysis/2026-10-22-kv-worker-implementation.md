@@ -52,3 +52,25 @@ root准备的`prepare_kv_protocol_source.py`与`launch_kv_protocol.sh`已全文�
 root填齐已审pins并仅补原observer同式内部alias清单后，最终builder为 **89191b57542e8c2e44eb03b8ebee876f083f3e399e1085149ff0b6a36b49fa42**，launcher为 **e738b736829172a6cbd525cd0d5e5f9dc343a21e0ffe8bcf1c113bbe4a5db47c**。五asset固定probe a4de3abe、copy c95f59a5、transaction **616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13**、protocol **50375e899acbdcee15d3cdec2ecd77875fb355c56ccbfa663271509982ddc19a**、worker31cc；init精确产物 **791c38c20a648f4868e56e24efdae7351671960462232defb85997738f41a2b8**。
 
 本owner已实核最终各SHA、AST读取protocol literal footer加原e043 bytes独立重算791c，不执行候选import；alias块仍先经owner0ecf验证内部regular-file，外部/目录link不通过。launcher相对预审只填builderpin，原bc51/ENV1/positional run_dir/seed/服务负载/preflight不变。读取root唯一CPU结果 `analysis/source/kv-transaction/package-check.json`：410→416文件/6处改动（init+5module）、base和runner不变、无框架导入，与最终pin吻合；本owner没有重跑copy/suite/GPU。包装末审无阻断已回root，先前UNREVIEWED状态仅历史。下一条等root实际事务原件，copy/准确率/吞吐边界仍未解除。
+
+## 200957首次实际门：完成SAVE→DROP，未运行恢复路径
+
+root唯一设备`experiments/framework/20261021T200957Z-kv-protocol-context16k-long{,-control}`正常结束，20:15:05.000451Z exit0。新纯只读 [`review_first_protocol.py`](source/kv-worker/review_first_protocol.py) **1ef7084c3e257c2ac2808146c40d7dc58fa3343f8294f28aef81fcaca90f4d23** 已exit0，结果 [`first-protocol-review.json`](source/kv-worker/first-protocol-review.json) **3dfed5b2ad314aa9508b4837b0877b1999e9f44218804b45fb391a17203ca7ff**；416份归档source逐SHA、builder8919/launchere738/protocol50375/txn616040/worker31cc/init791c/runner e155、live416及post installed54c均吻合，原件不改。
+
+真实EngineCore/worker215606事件仅四条：FIRST_CHECKED eligibleTrue；SAVE serial1完成成功ACK；SAVE_ACK_FREE；DROP serial2成功、host_heldFalse。R16704=1044页，718405632B；实际物理24个连续run×42层=1008copycalls，命令/ACK key、pages、字节与serial全部匹配。SAVE诊断额外单layer pinned17104896B，cgroup时点余量pin前15878356992B/后14429618176B，guard通过；不是分进程峰值或传输纯耗时。**没有ZERO/RESTORE、回读全字节或consumer事件；本门不能称恢复成功，SAVE数据内容也没有新增独立字节oracle。**
+
+32/0、524288in/32768out，CPU6/32GiB、KV521936、preempt0→1，DB前后同516表19270行且三hash1593d60c/a0a590/90e9a868不变。诊断时长221.1178005039692s/2519.2725268176705TPS/TTFT62550.40631070733ms只保存原值，不作为性能因果。post20:15:43.088172Z68MiB0%、9031双栈闭/无GPU进程/416live fail[]；原shutdown后的AsyncLLM/EngineDeadError保留，不能写全程无ERROR或修改exit0。
+
+### 恢复机会为何可能丢失：只能缩小分支，不能臆测具体guard
+
+DROP时restore_skips=1，依冻结50375源码只能来自_try_restore复合precheck，或external-prefix allocate_slots返回None；纯digest不符/取消路径不增此计数，不能单独解释该记录。没有逐guard/当时free页/placeholder日志，因此本门尚不能区分pending frame、placeholder、容量或其它前置条件。token_budget<=0处于原waiting while token_budget>0内部，正常注入路径不可达；不能笼统把它当主要原因。
+
+当前代码把**暂态**pending_frames、num_output_placeholders>0或allocNone都直接_discard_host。旧FIFO之后才消费、其它请求自然完成后即使条件满足，副本已DROP，后续再无机会。这是实现机会损失，尚未证明本次实际由哪一项触发。已向systems/root建议最小后继：暂态只保留host并继续原调度，绝不park/改FCFS/提前future；原新建output若真的发出victim的未恢复重算工作，再在dispatch前DROP；取消、对象epoch/attempt或token digest真正失效立即DROP。不能仅删_discard而不补原重算已发出的清理，否则slot会占到finish且状态不可恢复。原分配None通常原waiting也break，保留host等待自然下个step不需要修改请求顺序。
+
+这些只是下一协议revision建议，**本owner未改worker、冻结源或在途run，也未启动设备**。旧SAVE→DROP负例完整保留，下一门须仍实际证明ZERO/RESTORE、字节核验与正确CachedState/RNG/后继consumer，不能用旧CPU ACK链替代。
+
+## 暂态保留revision与新包装已审（最新待设备状态）
+
+systems实现protocol **a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751**，本owner定向互审通过；只保暂态host并继续原FCFS，本次新output实际计划普通重算才drop，真正失效drop，未动worker31cc/transaction616040/init791c/runner或旧queued输出。审阅和作者唯一CPU合同边界见 [`事务独立review`](2026-10-22-kv-transaction-independent-review.md)。没有重跑旧COPY/worker门或扩大测试。
+
+root新builder **ac18b84dfc2e9435c6984f05ddc084d24458d2b158003df29ec9fedc641b6429**、launcher **c4526fa0178989b47647acba2407025cfd04d54034c97c569451d8b77bc5a973** 已实际核hash并与旧89191/e738副本逐byte diff：builder只协议pin与variant，launcher只builderpin、新run/source名、前轮标记/variant及中文注释。原参数/driver/seed/ENV1/preflight/锁/全SHA/alias机制不变，旧副本SHA吻合保存于analysis/source/kv-transaction。末审无进入新隔离诊断的包装阻断，已回root，不重复CPU copy/测试。下一条等待真实门，尚不能把新策略审阅称为恢复通过。

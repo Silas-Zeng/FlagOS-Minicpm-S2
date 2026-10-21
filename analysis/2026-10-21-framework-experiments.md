@@ -518,4 +518,14 @@ KV只观察模块a4de与e043→b3b7独立init已获framework全文互审；18104
 
 owner19:18:05.738516Z后态单卡68MiB/0%、9031双栈闭/无GPU进程，owned退出或Z、8源无failures核实。全量tensor没有另存binary；本地独立检查冻结代码的完整oracle和原结果，不重新运行GPU。结果保存 `run/independent-gate-review.json` 和 `analysis/2026-10-22-kv-page-copy-result.json`；registry93数据行×16列/queue69均LF。
 
-这一门仍没有权重/真实runner tensor布局/Attention数学/请求allocator/跨进程恢复protocol/模型accuracy。后继服务入口若继续，须先证明actual executor与持有KV view的worker生命周期、save完成前不free、zero后restore且Attention前ack、host pinned强引用/epoch/cancel及失败回退；这些只是后继约束，**本批没有实现或运行**。181041 gap13758依旧只是exposure，不能把约0.12–0.24秒copywall替换成假定GPU重算节省；不能开启现成connector模式冒充实现。
+这一门本身仍没有权重/真实runner tensor布局/Attention数学/请求allocator/跨进程恢复protocol/模型accuracy。后继服务入口若继续，须先证明actual executor与持有KV view的worker生命周期、save完成前不free、zero后restore且Attention前ack、host pinned强引用/epoch/cancel及失败回退；这是191545时的历史边界，后续195012/200957进展见下。181041 gap13758依旧只是exposure，不能把约0.12–0.24秒copywall替换成假定GPU重算节省；不能开启现成connector模式冒充实现。
+
+## 200957单victim协议首门：SAVE/free发生，恢复未发生
+
+195012已由framework独立验收真实normal42/UniProc同进程descriptor；此后新隔离Core/scheduler50375+事务616+worker31cc在 `20261021T200957Z-kv-protocol-context16k-long` 启用，原SERVER/bc51/16K输入1024输出/32req/c64/seed721201，VERIFY1仅诊断。原件包SHA **6b2abf4554bfdd3e2fc705a4b8d4a5555a033d764d17b35782296977821e253d**，本地独立核416源、installed attention54c/e155、DB前后实体/逻辑/schema三SHA不变（516表19270行）、CPU配额6、BI-V150物理32768MiB。raw32成功0失败、524288in32768out，221.1178005039692s/2519.2725268176705total/TTFT62550.40631070733ms，KV521936/preempt0→1；这一轮不能作性能对照。
+
+Engine/worker215606实际FIRST eligible，SAVE R16704/1044pages/718405632B/1008copy_calls completed+successful后才原free；接着DROP serial2成功释放host。最终saved1/restore_skips1、restored/published0；没有ZERO/RESTORE、42层回读、runner恢复或消费证据。旧50375将复合precheck与allocateNone记为同一个skip，不能从日志确定哪一条件阻断；保存正确和恢复正确是两个门，不能把部分路径称全协议通过。host前后5596479488→7045218304B是时点不是峰值，20GiB限额/17104896B诊断额外预算保留。原raw完成后shutdown ERROR/force-kill警告按时序保留；20:15:43.088172Z单卡68MiB0%、9031双栈闭且无GPU进程，controller仅Z、服务/worker退出，source_failures空。详 `analysis/source/kv-transaction/200957-independent-review.json`。
+
+根据该反例只改新的protocol候选：历史50375逐byte保 `analysis/source/kv-transaction/biv150_kv_protocol.50375.py`；当前 **a1b691f52f3724b95bbcb11f5702611a17103161001bb929096c71ab4fa74751** 暂态pending/placeholders/tokenbudget/allocateNone保HOST并继续原FCFS。本victim首次记录原因和cheap状态，不逐步日志、不提前consume/future、不park/重排。仅原本次output真有rid的num_scheduled_tokens>0且仍HOST时，dispatch前DROP普通重算不再需要的副本；非仅status判断，也不是forward执行证明。身份/epoch/终止/状态/digest失效仍释放；未改worker31cc、事务616、init footer、zero/restore/RPC/resume本体。
+
+唯一新增CPU合同1test/0.002s通过：暂态重复仅一reason，原FIFO后清pending，placeholder及capacityNone保留，无work保持、普通工作计划后释放，身份/attempt/digest/terminal失效释放；源差分锁定3函数和1新helper，原footer/worker/txn不变。framework与hardware均对冻结a1b691独立只读终审无阻断；**尚无此修订GPU结果**，交root独立新run走原最短VERIFY门，不重测copy。新CPU证据 `analysis/source/kv-transaction/defer-cpu-check.json`，具体调用序和边界见 `analysis/2026-10-22-kv-transaction-protocol.md`。registry94数据行×16列/queue71项均LF，原正式成绩和负例未覆盖。
