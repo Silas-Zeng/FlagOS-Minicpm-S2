@@ -810,3 +810,73 @@ root在223613 FULL唯一GPU在途时正式授权framework实现默认关闭首�
 root完整223613原件到齐后，本owner只核新FULL与222731的必要差异，不重跑framework c0全门/旧suite，不算性能。新增 `analysis/source/kv-memory-observer/223613-full-memory-transfer-review.json` SHA **9f319d02d09a906916eca753862b4c90b8ea27062e5bef07d94418360f7272ca**，四MiB报告末尾追加本轮。FULL logd27de1b9…/source-map2748cb69…。Engine235489第91/92行单profile1/PARENT原list/三hook恢复成立，selected非时间profile/snapshot/worker/derived/logger/返回值与222731完全同、四loaded源同、KV同521840。更早两smoke无4MiB偏移、这两个long有偏移是观察事实，不归因long标志/allocator或回填历史。
 
 真实命令链SAVE→RESTORE_FULL→DROP，无ZERO；真ACK zero_stageFalse/zero_calls0/fullcoverage/destinationbound，R16688/P1043/717717504B，SAVE23run966、目的66run2772。已独立逐数组比较，两轮实际SAVE源与RESTORE目的page_ids也完全相同，不只段数匹配。VERIFY0不回读，不能声称本轮42字节验证或accuracy。root/完整门负责DB/CPU/完整后态/总性能，本专项不把调用下降换吞吐。已回root，当前仍等待framework victim只观察模块首稿互审，无新runtime/SSH/GPU/额外套件。
+
+
+### victim观察首稿/包装初审（非最终pin）
+
+作者首runtime50d3b41c与中间7f83d8df、本owner已完整只读；新独立builder初稿5982a063亦完整只读。与actual a4de资格、Core27b队列tuple3、df780 None切口、txn616安全前缀交叉核，暂未见机制阻断。模块sys.modules-only、只导入纯scope helper不install旧probe，原schedule exact单callback逆回，CoreContextVar finally、一次attempt后不再遍历；元信息读取失败记incomplete回原pop/原异常，无future/GPU值/cache/predictor调用。所列payload cap/coverage是描述字段，save_success_predictedFalse，不把它们合成SAVE许可；已建议coverage可要求ref>=1，作者可收窄，无需扩大测试。
+
+builder显式固定新增runtime与a4de两资产（实核stable410不含a4de），scope相对import闭环，完整复制/alias/newtarget/baseimmutability与原e043末尾append01c42→413新树，不叠capacity/FULL/6a。作者当前仍在唯一必要actual innerwhile合同/最终小修，**上述SHA是中间稿，不可用作设备最终pin**；本owner没有运行第二份测试或设备。最终稿/合同交付后再定向终审。
+
+
+### victim纯观察最终三件交叉终审无阻断（替代中间稿pin）
+
+最终实读：runtime `patches/framework/biv150_preemption_snapshot.py` **d38fd18e7a83aa03db43390746731c5caa0defd9b560da65f10e4454016a9124**；builder `scripts/remote/prepare_preemption_snapshot_source.py` **42958bd16759243667340e9575968a1f44e9a8553ce96c500403ad45e1720504**；launcher `scripts/remote/launch_preemption_snapshot.py` **78e21feafd029b5e04374f706703e86fe01802b32735194df282dba9595e1379**。已全文读新launcher/builder、runtime最终delta与前述机制交叉，无当前最短独立诊断阻断，回执发root/framework。旧50d3/7f83/5982仅首稿，不是device资产。
+
+最终runtime较首稿收紧原allocate/_preempt方法身份，还把scope异常后的原Core调用移至except结束外，防给原异常附加观察异常__context__。原schedule exact87a文本仅None/break后pop前单callback、去插入逐byte/AST逆回，原locals直传；globals复制只添callback，不变原全局模块对象属性。snapshot只CPU metadata/真实queued SchedulerOutput counts与sourceFullAttention fastpath整数需求，不新allocator/cache query/future readiness/GPU值；首次attempt后不再遍历，读失败记incomplete原路，CoreContextVar finally复原。安全R留1known/扣queued/不重复扣本步未issued；ref1非null唯一页/1GiB静态cap/逻辑覆盖均单列且save_success_predictedFalse。coverage不合成SAVE许可，未来真正协议仍需worker proof/预算。
+
+唯一合同 `tests/test_biv150_preemption_snapshot.py` **9f2ad5e399794e501dc44a2f145837672059d5bc10d67beca59584f2b97b2787**、`analysis/source/preemption-snapshot/cpu-check.json` **b172c5a1a52f78bed47b31f5a232c5f4917d9399bac5e6ee485993597893e771** 已只读。作者最后1test0.074s，真实actual innerwhile AST取出配CPU对象验证原allocate/pop/preempt/返回/同异常、禁future访问、Corefinally及scope异常context，不是完整scheduler/model/GPU模拟；本owner未重复。整copy/launcher/设备尚未执行，不能把语法/合同称已实际快照。
+
+builder固定080656完整410，显式新增a4de纯scope模块+新runtime+manifest→413，原e043完整末尾append01c42，仅compile不import，原源码不改/新target拒覆盖。launcher固定原bc51 contextlong/seed/服务/VERIFY0与独占准备锁、DBbefore、双栈idle/control/source全hash；不叠6a或capacity/FULL，不install旧a4de探针。INSTALLED仅load前安装预检，真实failure在负载中才能产生，后验必须FIRST_CHECKED eligibleTrue + 恰一FIRST_RUNNING_FAILURE completeTrue/完整running数据及原输出/后态。没有victim选择实现、吞吐/accuracy声明或本ownerSSH/GPU操作。
+
+
+### victim实际快照判读标准已准备；旧安装时序pin未部署hold
+
+root在B2唯一上卡期间要本owner准备硬件/请求后验标准，不写策略收益。新增中文 `analysis/2026-10-22-preemption-snapshot-interpretation.md` 与 `analysis/source/preemption-snapshot/interpretation-schema.json`，schema明确actual_snapshot_observed=False，不是模拟器/新测试。按actual43008B/token/688128B块、16K672MiB、静态1GiB最多24960整页token、当前KV32615块解释长输入压力。32条恰16K无共享且同时驻留时需32768块，才有153块/105283584B条件缺口；不冒称真实已同时驻留32prompt。GQA2不消除16query头compute，16SM不能把请求数差线性换吞吐；6CPU/42storage提交与逐页诊断开销不当性能。
+
+判读按真实event/scope/原tail索引/queued spans/R完整页/coverage先核，private_single_ref只是ref1可释放量（可hashed），不等protocol fresh私有unhashed；shared不单独释放，perrow owned不能相加当全局physical并集。F+U(v)>=N仅在failed请求保留等条件下的必要局部条件，不能作评分。当前快照不含page IDs/runs、APC有效命中、GPU completion、实际host余量/未来EOS/最终tail，全部列未观察，不追加本轮字段/套件去补。仅用primary PagedAttention4.5/7.3提供公平和小块提交维度，不重复旧TRAIL/CacheOPT/调度扫描。
+
+随后root/framework在预部署发现Core general_plugin可能早于scheduler/Async自然加载，旧d38/429/78e三pin**未上传/未部署、现hold**；此前终审是静态语义/包装回执，不声称生命周期已实际激活。root批准最小延迟到Core首step核自然10模块/装schedule，general只包已存在Core。本owner已收新互审：ARMED与INSTALLED分开、原Core恰一次/原异常context、readerror原路/oneattempt、仅针对变更的原唯一合同，不重复旧suite。新finalpin尚待作者，不改当前A2/B2/已受测资产。
+
+
+### victim首次step延迟安装最终交叉审与解读标准更新
+
+最终新runtime **c6b3baa96db494e7c22d8c7a3f02980d06d3469c491bf850e9ebac77675204f6**、builder **ce4e9773900316c1c19c70acc2dfba5822da08bbdc9e32fa5945b76ab3a666ac**、launcher **6ec5d60bf606b8f6c9cee19a1dbce52517b086c65a4d89ad58bf55b37da10812** 已对归档旧三件逐delta只读终审，无当前阻断。实际Core27b110在__init__最前loadgeneral、137才选Scheduler、150才构造实例已核，不能假设general时Async已loaded。现在general只核自然Core/init/runner/helper并挂原Core→CORE_HOOKED；构造后首次step才sys.modules核10源/native methods/87a逆回安装schedule→SCHEDULE_ARMED。初始缺源/异常记录disabled不逐step重试，同Engine原Core在except结束外恰一调用，原异常__context__/return和ContextVarfinally保持，snapshot主体/R/页描述未变。
+
+作者唯一合同 **014a9f6bd55609791386743ec39371b70dbdfd4fbeb255c1ca752b16751d8f5f** 已只读新分支：late arm一次、缺模块保持原异常/不重试；最后1test0.058s，本owner未重跑。新持久 `analysis/source/preemption-snapshot/late-arm-check.json` **c6aedb167f70860e89776ab8c0ac56cbf88fe798adb98bc8c3a11bd51810cf1c** 已读，含中途fixture self阴影AttributeError/仅改fixture参数的失败记录；旧b172/d38等原字节保历史，无部署。builder只pin、launcherpin+CORE_HOOKED预检/实际SCHEDULE_ARMED后验，完整新413/e043append01c42/原bc51/锁/DB/idle仍旧边界。未整copy/启动/设备，不把批准称已激活。
+
+本owner判读报告和schema已同步新最终身份/CORE_HOOKED→SCHEDULE_ARMED→真FIRST_RUNNING_FAILURE，仍actual_snapshot_observedFalse；单位、条件容量、禁止按metadata打时间评分/无策略收益等不变。回执已发root/framework；当前A2/B2不受新观察器影响，继续只CPU互审。
+
+
+### victim后验审计入口首稿只读复核（实际原件仍待）
+
+作者新 `scripts/review_preemption_snapshot_run.py` **e0eaee2211286afe89cb2245a0aaf08ee61005e5343edbd53dd5ed79fc877266** 全文只读；未执行inspect/raw/suite。其2071通用long函数只416→413，不调用KV/VERIFY1门；固定c6/ce4/6ec/a4de/01c42、完整413集合/footer、原bc51/SERVER/seed/VERIFY0、无6a/协议/旧probe安装、EnginePID的SCHEDULE_ARMED/eligible/首次completeTrue及延迟事件链齐。逐row核queued/current/R/cap/confirmed/owned派生、failed/tail索引与derived N>F；不读Future/设备或算性能，policy_selectedNone且最小remaining明确只是合法上界。未发现上述实际门阻断。
+
+已向作者/root指出一项条件候选语义小修：当前alternatives可能含failed_request自身，抢占它会令原循环退出该请求，不符合F+U>=N推导中“保留failed继续”的前提；应排除其ID或单列self-preemption，不能拿它证明同一种替代机会。只涉及后验解释，不改runtime/设备，也不要求新suite；最终审计SHA待作者回执。当前实际快照未产生，解读标准finaldoc583eedd5…/schema7cca85fd…仍actual_snapshot_observedFalse。
+
+
+### victim后验入口最终6eb45终审完成，待实际230548原件解读
+
+作者采纳failed自身语义小修并按root收紧同Engine四段次序。新 `scripts/review_preemption_snapshot_run.py` **6eb45eceb46405e448e1388940c238e6f1c008123e5566b158910ed4e05bdcf0** 对归档旧e0ea精确diff已只读终审无阻断：只排failed自身、解释保留failed继续的容量条件、CORE_HOOKED同Engine唯一和严格四事件顺序；原413/source/参数/逐row/raw门不动。旧e0ea字节已实核，不跑raw/suite。回执已发root/framework，后者负责唯一完整实际门，本owner只接硬件/请求专项，不重复。
+
+判读标准与schema同步最终6eb45/同Engine事件，仍actual_snapshot_observedFalse，无策略/收益。root已自行独占230548新诊断，本owner没有SSH/GPU操作、增字段/测试或改默认。重点待读实际prompt长度而非客户端nominal16K，不能用R−16384猜confirmed输出；32条条件容量与APC/shared反例已有明确界定。
+
+
+### 230548真实31running：独立硬件/请求专项完成，本批停写
+
+root取回完整230548原件后，本owner直接读取server.log第206行Engine240315唯一completeTrue快照，逐行复算queued/R/字节与描述集合；没有运行framework6eb45完整raw门、额外suite、SSH/GPU或新runtime。原log SHA **38a2d12aa6150e122dec776b8efd847877ded5a51232312d7a1f8591ed167672**；root包 **abe046f03d462d01fbd91bb69ff506bb19149e7969416190a406d150bcfe8cc9**。framework唯一完整门另已exit0/1.465s，报告06c16d26…；本专项不重复其完整验收或性能计算。
+
+实际31running，prompt全16384/maxoutput1024、confirmed327..569，全decode/nonstreaming。free0/derivedneed1，failedindex1；本schedule仅index0登记1token，旧queued一帧每条span1。ref1非null唯一页计数合计32620、shared/null引用全0；实际KV521936/16=32621槽，结合冻结3fc5保null1，32620+1+0精确对账。没有物理ID字段，不冒称新增全局ID并集证明；之前32615槽/32条条件缺口不能套本轮。
+
+排未scheduled&非failed&非保护集合&index>failed，描述集合29条含tail；再要求比tail更有进展余28条index2..29。动态规则示例row2 confirmed552/remupper472/R16928/ref1页1059/728039424B，tail327/697/R16704/1045/718405632B。225已确认输出差不等于时间，R仅差224token、保存/可释放量同时多14页9633792B=9.1875MiB；物理runs/APC/主机余量未知。日志只直接采current_scheduled_tokens，未来实现仍须三当前容器实核。索引/ID不能作条件。
+
+最强反证已给root/framework：31running未包含WAITING/已完成全列表，第32条可能决定真正makespan；抢占更有进展对象可能延后更早容量释放，合法remaining不预测EOS/完成时间；新SAVE更大/可能更碎，16SM与6CPU不提供线性收益模型。私有ref1可hashed只表示free容量，不等fresh unhashed恢复资格。建议只保framework唯一c3c11eaf设计作下一阶段受限机制门，本批没有策略实现/新测试/收益或accuracy声称。改变batch与采样行仍需新准确率门，不能继承旧accuracy。
+
+实际专项JSON与中文解读已落盘，判读标准/schema更新为实际230548已观察（先验条件例继续保留为条件，旧d38未部署历史不改）。按root归档要求，下面SHA完成后**本owner暂停文件写入**，等待统一checkpoint/ZIP及后继解锁；goal没有停止，无新设备请求。
+
+最终文件SHA：
+
+- `analysis/source/preemption-snapshot/230548-hardware-request-review.json`：**74ed2f4ac3d57fa0951a12a11266c42d1a02ee90d7c1debed27aefbf4dfcffc1**。
+- `analysis/2026-10-22-preemption-snapshot-230548-hardware.md`：**e59f673c1129ff26194dd91e6be18a57c6f30a552b6c01f53ab8928f0e53747a**。
+- `analysis/2026-10-22-preemption-snapshot-interpretation.md`：**8f3a2247ff3845e1358360ed566615536a642ee1ab203f5280fdf4bf78eba5e5**。
+- `analysis/source/preemption-snapshot/interpretation-schema.json`：**8a114ee716e5cc8bada7d5cdc685482f5025ba991936eab41457873469f94caa**。

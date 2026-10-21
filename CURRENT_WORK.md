@@ -1,5 +1,28 @@
 # 当前工作与 API 切换交接
 
+## 真实抢占快照通过，五轮阶段证据准备统一保存（2026-10-21 23:16 UTC）
+
+- `20261021T230548Z-preemption-snapshot-context16k-long` 已于23:10:54Z exit0，32成功0失败/524288输入+32768输出；413完整源/live、原SERVER/seed/CPU6/32GiB、DB519表19340行三SHA前后一致、23:11:57.075293Z后态68MiB/0%与端口关闭通过。tgz `abe046f03d462d01fbd91bb69ff506bb19149e7969416190a406d150bcfe8cc9` 本地完整。220.418993005秒仅观察诊断，非性能或新accuracy；shutdown EngineDeadError/WARN原样保留。
+- framework唯一6eb45实审通过，报告 `analysis/source/preemption-snapshot/230548-review.json` SHA `06c16d26e8eee184269d46d09f488da5b63867f90e57900eaaf1484c23ae53e4`。实际Engine240315 CORE_HOOKED→SCHEDULE_ARMED→scope eligible→恰一FIRST_RUNNING_FAILURE completeTrue；frontend240147拒绝因Core尚未自然加载单独记录，不误当Engine失败。
+- 实际31running全prompt16384/max1024/纯decode/nonstreaming，confirmed327–569，全体shared0/ref1；free0/derivedneed1，failed index1已输出560，本schedule仅index0已排1token，旧queued帧每请求1token。原tail index30输出327/rem697，R16704/718405632B/1045 owned其中1044 hashed；index0剩余上界455被原策略保留。index2–29存在进展更多、未scheduled且非failed/非最小剩余集合的结构对象；这是候选依据，不是完成时刻/页损失/收益预测，不以ID或benchmark行号评分。
+- 已完成本阶段四个性能run（222731/223613、224411/225501）与一个独立快照run230548。两组同容量TPS小正信号分别约0.1988%、0.0603%，不跨容量均值；该pair重复已结束。registry109×16/queue83，原件/负例/未部署旧稿/唯一CPU合同/输入源码与三agent记录本地齐。
+- 设备现在空闲，root准备一致GitHub检查点和完整ZIP；三agent各自收口后临时停写供一致保存，goal继续。下一单一调度候选先保护最小合法剩余上界者/当前failed，限制在后方尚未scheduled请求中比较恢复长尾，仍需明确实现/独立审/真实字节和服务门。现未实现新victim策略。最新远端暂111910c8，最新ZIP暂221629，均不能宣称包含本段全部；完成后另写精确覆盖回执。
+
+## 两组小收益复核收口，首次调度快照已上卡（2026-10-21 23:06 UTC）
+
+- B2 `20261021T225501Z-kv-observed-pair-full-context16k-long` exit0/32成功0失败，218.7160065015778秒、2546.937505444904总tok/s、TTFT62627.150716711185ms；与A2 KV同521936，启动分项/DB四端三SHA/原SERVER/CPU6/包同，真实R16704/P1044/SAVE1008/目的66/FULL2772/0ZERO/fast454/consumer8/无回读/host释放成立。唯一c0 full报告62b07a8cabef0cf5d9259abb433e83e55ccfb553b121de4e4e0df7ae62af9b2f，418源及23:01:06Z idle通过；tgz472555b4eee2a0d7f1cfd144fa2b56fbe57b6d2caefd161b85b910f3df2e856a全本地。
+- 第二组TPS描述+0.06030565637%、耗时省0.06026931057%/0.131898秒，TTFT+0.2071915373%；首组约+0.1988%与本组均保留，不混KV均值、不称稳定因果/新accuracy。按既定规则结束本项重复，registry108×16、queue82，见analysis/2026-10-22-kv-observed-pair-two-pairs.md。
+- 当前唯一GPU为独立诊断 `20261021T230548Z-preemption-snapshot-context16k-long`，runner240134；source code/preemption-snapshot-20261021T230548Z。新三件先核路径不存在，再上传核SHA/compile；runtime c6b3baa96db494e7c22d8c7a3f02980d06d3469c491bf850e9ebac77675204f6、builderce4e9773900316c1c19c70acc2dfba5822da08bbdc9e32fa5945b76ab3a666ac、launcher6ec5d60bf606b8f6c9cee19a1dbce52517b086c65a4d89ad58bf55b37da10812。冻结stable410+纯scope a4de+新module/manifest=413，init01c42；不叠6a/KV候选，原bc51/contextlong/seed/参数。
+- 新生命周期修订已互审、唯一针对合同过；旧d38/429/78e保存为未部署版本。当前只观察原None后全running描述符，不改victim；CORE_HOOKED仅load前预检，需实际Engine SCHEDULE_ARMED→FIRST_CHECKED eligible→FIRST_RUNNING_FAILURE completeTrue及原输出/全后态。无快照/失败均如实保留，不用诊断耗时作收益。
+- 已CPU只读取回实际benchmark datasets5文件，run230224、tgzcecdaf99f00a8a3dee9cf3da3add5a7140b4dddda75e6ce817fbc77fbb61006b；systems正在核输入生成与实际文本重新tokenize边界。最新远端111910c8仍不含A2/B2完成与新观察阶段，完整ZIP仍221629；持续goal active。
+
+## A2完整通过，B2为本轮最后复核；首组已发布（2026-10-21 22:57 UTC）
+
+- A2 `20261021T224411Z-kv-observed-pair-capacity-context16k-long` 已exit0/32成功0失败，218.84790462488309秒、2545.402483769829总tok/s；KV521936、R16704/P1044/718405632B、SAVE1008、目的66段、ZERO/RESTORE2772、fast454/consumer8。c0唯一实审pass，报告SHA e52a572e7ccbb577acf882934bf8ef06f42a0fe8f01d13efc0cb17442a2a5d45；418源/DB三SHA相同/22:50:43Z完整idle。tgz d899801ffdf287cfadd061f36f6f242a8f62a5bba6d44d251e03e79adb0f08ad 已本地。
+- 当前唯一GPU B2 `20261021T225501Z-kv-observed-pair-full-context16k-long`，runner238456/Engine238635，冻结fc937/d768包装，match A2 control，VERIFY0/原bc51 contextlong/seed/原SERVER。实际KV521936与A2匹配；其余完整原件与性能仍待。无论正负或其它失配，本轮在B2后结束重复，不追样本；与首组521840不混算平均。
+- 首组固定本地1e183816已发布，远端111910c84ecbeb7e54c1505289cf1d1aca154136，tree37b8951fa6b84154aed9ca70ae8f786cbb31a59e，16922项全核通过。回执docs/github-observed-first-pair-publication-20261022.json。远端含222731/223613及A2在途记录，不含A2/B2完成原件/新抢占观察代码。最新完整ZIP仍221629，不冒称覆盖新工作。
+- 新抢占快照仅CPU观察：框架/硬件互审在部署前发现general plugin早于AsyncScheduler自然加载的不确定，正在改为Core首次step再核完整模块并安装schedule。旧d38/429/78e未部署，修订原因/pins保留；B2不受影响。后继仅一次独立contextlong诊断，实际FIRST_RUNNING_FAILURE completeTrue才算成功，不把INSTALLED当结果，不新增victim策略/收益。
+
 ## 首组可比对照保留0.20%小正信号，进行唯一一组复核（2026-10-21 22:44 UTC）
 
 - 223613 FULL已exit0/32-0，218.3848344660364秒、2550.799836270839总tok/s、TTFT62338.00159151724ms；原件已本地，tgz `12ab2569ba15acfca31ad3a3ec9bafab6af8e3c0a42cfbc97c870dc5ac73046e`，418源/DB51919340三SHA/CPU6/32GiB/22:42:01.143516Z idle通过。c0唯一实审报告223613-full-review.json SHA4fb9b2caa35e77ed4b3267bcdc30a3a5d5963cc2f498d0dab5b1920129b909ab。

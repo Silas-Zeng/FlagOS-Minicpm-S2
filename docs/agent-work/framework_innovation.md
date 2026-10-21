@@ -822,3 +822,61 @@ root封存 `20261021T222731Z-kv-observed-pair-capacity-context16k-long{,-control
 32/0，524288in32768out，**218.81890873378143s/2545.7397773504263total tok/s/TTFT62472.47070692538ms**，raw SHA9a6dffcd612d1d746933532ffc0453d48a04c298911a9ae3b40d056e73c61baf。DB519/19340实体三SHA前后同89743b/29d740/71ac19，CPU6/物理32768MiB，preempt0→1；finish22:32:35.393293Z，post22:33:26.459826Z68/0/双栈闭/无GPU进程/source无失败，测前ERROR空，shutdown EngineDeadError/forcekill WARN原样保留。当前只有capacity一侧完成，不计算FULL收益。
 
 已即时回root无阻断并可启动匹配FULL，systems收到报告登记（不重跑入口）；hardware获新c0小delta只读审任务。下一条等新FULL完整原件，再用**同c0入口** `full <真实runID> --output <新full-review.json> --capacity-review analysis/source/kv-memory-observer/222731-capacity-review.json` 实际验收。原受测fc937/d768、31cc/67e/616/6a均未改，本owner无SSH/GPU/后台进程/共享库push。
+
+### 首组223613 FULL真实审计通过，匹配的小正信号保留；A2/B2交systems唯一执行
+
+收到root完整223613 run/control后，仅一次同c0实际入口1.37s exit0。`analysis/source/kv-memory-observer/223613-full-review.json` **4fb9b2caa35e77ed4b3267bcdc30a3a5d5963cc2f498d0dab5b1920129b909ab**：418完整源/live、同6a profile1/3恢复、真实SAVE→RESTORE_FULL→DROP/0ZERO，R16688/1043页/717717504B/源23runs966/目的66runs2772/fast462/consumer16/runner6/host释放；VERIFY0无回读。和222731动态几何/观察等待计数同，两方KV521840/DB51919340四端三SHA同/原SERVER及包installed/CPU6/32768MiB/所有启动非时间分项同。
+
+32/0、524288in32768out，FULL **218.3848344660364s/2550.799836270839total tok/s/TTFT62338.00159151724ms**；raw67df87c79bc3fd4ca13de0629cae1769555f46afb815f12c797a97cfb5e64f45。finish22:41:18.016675Z/post22:42:01.143516Z68/0/双栈closed、测前ERROR空，shutdown警告原样保留。对首capacity单次描述TPS **+0.19876575624233617%**、duration省0.1983714617063148%、TTFT−0.21524539350935568%；不是纯ZERO计时/稳定因果/accuracy/官方成绩，小收益按用户要求保留。root/systems即时获结果，登记已由systems收口。后继仅一组必要A2/B2（不追容量），root224411 A2/runner236809已启动，当前其原件与后继c0唯一执行**改由systems负责**，我不重复该入口。本人专注新victim观察，不混新模块到A2/B2。
+
+hardware对c0相对归档a5b的唯一白名单常量解析delta已只读终审无阻断（不重跑raw）；旧首次解析失败继续保留，原件/运行代码均未因本地审计修复而改动。
+
+### victim只观察模块/独立413 builder/launcher已实现，唯一CPU合同通过，待hardware终审/设备
+
+root正式授权实现后新增 `patches/framework/biv150_preemption_snapshot.py` **d38fd18e7a83aa03db43390746731c5caa0defd9b560da65f10e4454016a9124**，`scripts/remote/prepare_preemption_snapshot_source.py` **42958bd16759243667340e9575968a1f44e9a8553ce96c500403ad45e1720504**，`scripts/remote/launch_preemption_snapshot.py` **78e21feafd029b5e04374f706703e86fe01802b32735194df282dba9595e1379**；均新独立文件，a4de/6a/KV三件/原stable/当前A2/B2未改。中文完整交接 `analysis/2026-10-22-preemption-snapshot-implementation.md`。仍**无victim选择policy**。
+
+exact df780原schedule方法SHA87a6016c…，仅RUNNING while内原allocate返回None/成功break之后、原victim选择前插一callback直取现成locals；反向删一行逐byte/AST逆回原。安装只自然已loaded10actual源+e043完整最后footer/e155与原schedule/Core/allocate/preempt方法identity，Async继承原schedule，a4de只复用_scope不安装旧probe。Core ContextVar原调用一次/原返回及同异常/finally；一次尝试后不逐步遍历或打印。新字典只读queued entry[1] SchedulerOutput，禁Future访问/新GPU/API/predictor/APC查询/token内容。页只计真实ref1非null唯一物理block，R只扣旧queued spans、不扣本schedule未issued项；逻辑页覆盖+1GiB cap不冒称成功SAVE/host余量。失败需求保exactFullAttention RUNNING cached-key公式推导并标derived，直接free整数，无额外allocator调用。
+
+唯一合同 `tests/test_biv150_preemption_snapshot.py` **9f2ad5e399794e501dc44a2f145837672059d5bc10d67beca59584f2b97b2787**：actual内层while AST原版/加callback版对比真实语句的allocate/pop/preempt/return/同异常、整source/AST逆回/漂移拒绝、首次/无失败/读错原路、禁Future/Core上下文；最后1test0.074s通过。实现收紧原allocate/preempt身份guard及scope元数据异常不污染原异常context后，仅重跑同一必要合同，未扩套件/跑旧COPY/DTO/协议/GPU。`analysis/source/preemption-snapshot/cpu-check.json` **b172c5a1a52f78bed47b31f5a232c5f4917d9399bac5e6ee485993597893e771** 保存最终四SHA/合同/反向/global核查。实际df780依赖的globals只有导入类/函数/time/builtins/logger，无后续重新绑定；浅copy保对象属性共享，此结论仅fixed源/无其它wrapper，不泛化任意插件。
+
+新builder固定73e5/5bef参考中的原410输入，e043精确末append→**01c42c6938efb61476669b9bdb76207e79d20d7e19ac4d0165e617649d2a85dd**；显式添普通a4de+新runtime+独立manifest，预计413并保持内部file alias规则，未执行本地整copy。launcher原bc51/context-long/seed721201/SERVER/准备flock→driver重拿/空闲双栈/DBbefore，既有seal收after/live/post，不启profiler/6a/KV。**INSTALLED仅load前快速预检**；真实FIRST_RUNNING_FAILURE只能load中产生，所以最终必须后验eligibleTrue/恰一条completeTrue，无失败/INCOMPLETE不能算通过。没有多跑smoke。
+
+三件已交hardware/root最终静态审，后续仅root在A2/B2结束/确认空闲后上传核pin并执行 `python3 /workspace/experiments/minicpm-s2/scripts/launch_preemption_snapshot.py`，我不SSH/上GPU。当前没有actual snapshot/全running长度分布或新策略收益，不把代码准备当上卡完成。本人无后台资源/共享库push。
+
+victim实现末次互审回执：hardware已全文核d38/429/78e三件、9f2唯一合同与b172记录，终审无阻断；未重跑suite/原件。覆盖页字段保持“逻辑描述”、payload cap不当SAVE预测，load前INSTALLED与负载后真failure complete门界定一致。已通知root冻结可在A2/B2后串行部署，当前没有本人设备或actual snapshot。
+
+### victim延迟安装修订与实际后验入口定稿；230548运行中，未验快照
+
+准备后验时发现真实生命周期边界：Core27b构造110先load_general_plugins、137才get_scheduler_cls，general阶段无法保证Async已自然加载。root批准最小延迟验证：general只核自然已存在Core及原plugin/init/runner/helper并记CORE_HOOKED；首次构造后Core step再核10实际源/原方法并装schedule，真记SCHEDULE_ARMED。缺源只拒该Engine且不逐步重试，原Core一次调用/返回/异常context/finally保持。没有主动框架导入、GPU操作或新policy。旧d38/429/78e/9f2未上传/部署，已逐byte保 `analysis/source/preemption-snapshot/{runtime.d38fd18e.py,builder.42958bd1.py,launcher.78e21fea.py,contract.9f2ad5e3.py}`；旧b172记录不改。
+
+新最终runtime **c6b3baa96db494e7c22d8c7a3f02980d06d3469c491bf850e9ebac77675204f6**，builder **ce4e9773900316c1c19c70acc2dfba5822da08bbdc9e32fa5945b76ab3a666ac**，launcher **6ec5d60bf606b8f6c9cee19a1dbce52517b086c65a4d89ad58bf55b37da10812**。唯一定向合同同文件更新为 **014a9f6bd55609791386743ec39371b70dbdfd4fbeb255c1ca752b16751d8f5f**，补首次step arm-once/缺源原路分支，最终1test0.058s/exit0；一次中间失败是fixture的self被Engine遮蔽而无assertIs，仅修fixture参数名，非设备/runtime失败。新 `analysis/source/preemption-snapshot/late-arm-check.json` **c6aedb167f70860e89776ab8c0ac56cbf88fe798adb98bc8c3a11bd51810cf1c** 保存理由/旧原件/新指纹/失败与最终结果。hardware已只读终审新三件与新记录无阻断，不重跑合同。
+
+上传清单为三新文件到远端ROOT/scripts同名；复用固定a4de scope helper（builder显式添普通文件，不install旧probe）、0ecf sourcehelper、bc51 driver、0f2 DBhelper和原run_diagnostic_load.sh，及73e5/5bef参考链。launcher原bc51/context-long/seed721201/SERVER、原stable410→独立413/01c42c、无6a/KV/profiler。root已上传逐pin核/compile，真实启动 `20261021T230548Z-preemption-snapshot-context16k-long` /runner240134；root报告Engine240315已CORE_HOOKED→SCHEDULE_ARMED（87a逆回true）→FIRST_CHECKED eligibleTrue、KV521936，frontend240147因原Core未自然加载REJECTED单列。**这些是root在途状态，不是本owner完整原件验收；FIRST_RUNNING_FAILURE及原32/0/source413/DB/post仍待。**
+
+新本地后验入口 `scripts/review_preemption_snapshot_run.py` 当前 **6eb45eceb46405e448e1388940c238e6f1c008123e5566b158910ed4e05bdcf0**，旧首稿e0ea逐byte保 `analysis/source/preemption-snapshot/review_preemption_snapshot_run.e0eaee22.py`。复用固定2071通用longraw函数仅416→413，不调用KV/VERIFY1门；固定新三件/原SERVER参数/完整413树/live/DB实体/post，恰一completeTrue真失败及唯一同Engine CORE_HOOKED→SCHEDULE_ARMED→eligible CHECKED→snapshot。逐row核真实queue/R/1GiBcap/private计数/derived需求，替代结构候选排除failed请求自身，保留原failed继续才讨论F+U≥N，绝不选policy/算收益。仅compile/固定函数语法检查，**未对不存在的快照原件运行inspect、没有通过JSON**。hardware首稿全文无raw门阻断，两项小收紧已发定向终审；不重跑任何旧suite。
+
+下一条唯一实际操作：root正常结束seal并把230548完整run/control取回后，执行 `python -X utf8 scripts/review_preemption_snapshot_run.py 20261021T230548Z-preemption-snapshot-context16k-long --output analysis/source/preemption-snapshot/230548-review.json`，只一次必要验收；缺完整事件/全树/后态就如实失败，不造通过。root新取datasets5源由systems核default random_range_ratio0.0、目标prompt采样16383（扣特殊token），不能凭总量或目标长度宣称逐条服务16384；新快照只给失败瞬间全running实际长度。本人无SSH/GPU/后台进程/代码库push。
+
+并行旧A2/B2重复由systems唯一c0验收完成，不重复执行：KV各521936/418/DB四端同/启动分项同，218.84790462488309→218.7160065015778s，TPS+0.060305656369%，TTFT+0.207191537321%；首pair521840/+0.1988%另列，不跨容量层均值、不冒称稳定或纯ZERO收益。按预定结束本项重复，正式登记/中文由systems维护。
+
+hardware已对最终6eb45入口与归档e0ea小diff/两项语义收紧只读终审无阻断，旧e0eaSHA实核，未运行raw/suite。后验入口现冻结；等待root完整230548原件再作唯一实际验收，当前没有生成通过结果。
+
+### 230548真实快照唯一后验已通过；动态31条分布与完整后态落盘
+
+root完整封存230548 run/control后，本owner核6eb45入口原SHA并唯一实际运行，exit0/1.465s，没有解析修复或设备/旧套件重跑。`analysis/source/preemption-snapshot/230548-review.json` **06c16d26e8eee184269d46d09f488da5b63867f90e57900eaaf1484c23ae53e4**；`230548-execution-receipt.json` **a63180798d9be08b2f3c1a27f88214888e2e855d61c0210bcb8e6c55918eadfb** 保存原命令/validator/exit/wall/stdout/输出SHA。新中文 `analysis/2026-10-22-preemption-snapshot-230548-result.md` 完整说明动态结果/边界；实现说明已追加实际完成段，不覆盖旧准备记录。
+
+actual Engine240315唯一同PID CORE_HOOKED→SCHEDULE_ARMED（87a逆回true）→FIRST_CHECKED eligibleTrue→恰一FIRST_RUNNING_FAILURE completeTrue。frontend240147 REJECTED原Core未自然loaded另列。快照running31，全prompt16384/合法max1024/纯decode/nonstreaming，已确认输出327..569；这是该瞬间31条，不凭总量外推第32条或全服务长度分布。旧queue1帧每相关req已issued1，当前schedule只先排1token/remainingbudget2047，不重复从R扣current。
+
+free0，failed index1/output560/new1/owned1059，固定fastpath推导需1且明确非allocator直接local采样。原尾index30/output327/owned1045/R16704/718405632B；进展最高index0/output569/owned1060/R16944/728727552B。全部owned非null唯一ref1/无共享，但多数hashed（1044..1059），**不可把ref1页当fresh/unhashed恢复资格**；cap/逻辑coverage不能预测SAVE/host余量/copycost。尾比最高少242输出，但剩余合法上界不是真实finish，替代结构行排除failed自身，仍无策略/收益结论。hardware只独立解释，不重复全门。
+
+原32-0/524288in32768out/220.41899300506338s/2527.259526982793totalTPS/TTFT62506.0147101176，KV521936、CPU6、32768MiB、preempt0→1；诊断页遍历/日志不作性能收益或accuracy。413全源/live、原bc51long/seed/SERVER、DB51919340前后三SHA89743b/29d740/71ac19均同；finish23:10:54.058246Z/post23:11:57.075293Z idle68/0/双栈closed，无GPU进程。测前ERROR空，shutdownEngineDeadError/forcekill WARN原样保。raw SHA07e249fa9bcdad6f2350229e51be9018d9b8b80664abd0c783da778d76ada845，source manifest ed1dc526b36ece353afbcce8fd0aa9bbbea342c9c00d6ab034f8e2639f6d70b1，server log38a2d12aa6150e122dec776b8efd847877ded5a51232312d7a1f8591ed167672；root封存tgz abe046f03d462d01fbd91bb69ff506bb19149e7969416190a406d150bcfe8cc9。
+
+结果与JSON已即时回root/hardware/systems；systems仅登记/关键字段独立核，不重跑入口。下一步等待root对victim方向的具体授权与hardware独立解释，不自行实现policy/开新GPU/扩CPU套件。当前没有本人后台资源、SSH或共享代码库push。
+
+### 下一候选仅短设计收口：一次受限进展优先victim；按root要求暂时停写
+
+root在快照通过后只授权提出最小候选、不写runtime。新 `analysis/2026-10-22-single-victim-progress-candidate.md` 记录唯一规则：只在原None/FCFS pop处、整个Engine至多一次尝试；原index>failed且本schedule三容器均未scheduled、非最小合法remaining/最大confirmed保护集合、完整R和1GiB静态cap/足够真实ref1页/原FULL空slot，进展严格高于tail，再取confirmed最大（同值偏后）者。actual230548为index2..29共28个结构候选，唯一规则会选原index2/output552/R16928/1059页，对比原tail327/R16704/1045页，多14页且多9633792B保存；不把行号写进规则，不承诺收益。
+
+已读actual df780 RUNNING522–580/_preempt1107与FULL1aff原preempt/schedule/Core挂点。j>failed并显式未scheduled可保current位置并避本schedule PRIORITY撤销，但旧queued帧仍须原FULL fence/ACK/FIFO处理；不改worker5d9a/txn84be/恢复payload/采样参数。一次是主动替换尝试，后续若原allocator仍失败仍原tail，不保证总抢占数1/failed永不被原路抢占。协议slot不空/未知/不符原路，不在已操作后改选；改变victim公平及全局采样顺序，103/105不继承。
+
+文档仅列一个必要CPU合同+一次原long VERIFY1全bytes/consumer机制门，后续匹配DB/KV/原参数VERIFY0比较和必要accuracy，**均未执行/未实现**。hardware获文档只读复核邀请，当前无新源/设备/套件。root准备阶段发布与ZIP，本owner完成此次结果/短设计后暂时停止文件写入；goal未取消，下一步等root解除/单一候选实现授权。本人无后台资源/SSH/GPU/共享库push。

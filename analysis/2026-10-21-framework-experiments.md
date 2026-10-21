@@ -642,3 +642,30 @@ root随后确认FULL223613-kv-observed-pair-full-context16k-long已唯一GPU启�
 两侧418/init39fb/共同6a、原SERVER-bc51-load-seed-packages-installed、CPU6/32GiB/KV521840、启动非时间内存项/DB四快照51919340三SHA同；实际R16688/P1043/717717504B/SAVE23run966/目的66run2772/fast462/consumer16/runner6/host释放一致。hardware独立核源和目的实际page_ids逐项相同（9f319d02…），本人没重复数组专项。FULL真SAVE-FULL-DROP serial123/0ZERO/caps覆盖ACK，无VERIFY0回读；旧VERIFY1单列不移植。FULLpost22:42:01.143516Z418源/68-0/双栈closed/无GPU进程，测前/shutdown ERROR都空，WARN留；capacityshutdownERROR分别记录。
 
 新比较source/kv-memory-observer/observed-pair-first-comparison.json和中文2026-10-22-kv-observed-pair-first-result.md齐，registry106/queue82均LF。root在复核数据前决定仅一组必要A2/B2，无论正负/失配结束该性能重复，不追容量/不改参数/不取最好。A2 224411-capacity runner236809正在唯一GPU，同runtime/fc937-d768完全冻结；本agent将在新原件到齐后唯一执行c0，framework暂专注victim观察。当前A2/B2结果未知，不计算第二组或总体均值，不新增accuracy/默认资格。
+
+## 唯一必要复核A2：224411实际c0通过，B2待
+
+root取回A2原件后，本agent按新分工**唯一实跑**c0 capacity，exit0/pass，生成224411-capacity-review.json SHA **e52a572e7ccbb577acf882934bf8ef06f42a0fe8f01d13efc0cb17442a2a5d45**；actual执行回执224411-audit-execution.json，没有重复旧入口或套件/设备。原包owner SHAd899801ffdf287cfadd061f36f6f242a8f62a5bba6d44d251e03e79adb0f08ad。418/同6a-init39fb/原fc937-d768/原SERVER-bc51long-seed721201/VERIFY0，32-0同524288in32768out，218.84790462488309s/2545.402483769829TPS/TTFT62497.66085240117ms，CPU6/物理32GiB，DB51919340三SHA89729d71ac前后同，post22:50:43.051813Z418源/68-0/双栈闭无GPU进程。测前及shutdown ERROR皆空，forcekill WARN原样保留。
+
+本轮真实KV **521936**，R16704/P1044/718405632B/SAVE24run1008/目的66run、ZERO与RESTORE各2772，fast454/consumer**8**/host释放/runner6；不能套首组521840、R16688/P1043/fast462/consumer16。startup实际PID236995/profile1/原int22447777996→父真list/三恢复，profile非TorchIncrease1000341504/available22447777996.8B。与首组容量层级不同，不合并A1/A2绝对TPS或整体平均；B2当前未齐，不能预报匹配/复核方向。必要前件验收状态已先回root，后由原launcher真核DB/source/post/observer接B2。
+
+registry107数据×16/queue82均LF；首组小信号仍原样保留，第二组只等对应B2。按预先决定，本组后无论正负/失配都结束此性能重复，不追容量/调参数/择最好，不新增accuracy/默认资格。
+
+
+## 两组分层总结已准备；唯一复核B2 225501在途
+
+root已串行启动225501 FULL/runner238456，match完整A2 224411 control；runtime/fc937-d768/VERIFY0/原负载冻结。新中文总结2026-10-22-kv-observed-pair-two-pairs.md先列首组521840与A2的521936，B2完整指标/比率待原件，不跨层级合并均值。下一仅本agent唯一c0 full引用224411报告；无论正负失配均按预定结束性能重复，不追加盲样本。registry107保持、queue82明确在途；当前没有新运行/源码修改/SSH/GPU。random dataset实现本地缺件，actual serve.py仅证add_dataset_parser/get_samples入口，默认range_ratio及逐请求同长仍待root取实际实现，不由总token反推。
+
+
+## 唯一必要B2 225501完整实审：两组小差均保留，本项重复结束
+
+本agent唯一执行固定c0 full并引用A2 e52a，225501-full-review.json SHA **62b07a8cabef0cf5d9259abb433e83e55ccfb553b121de4e4e0df7ae62af9b2f**，实际exit0/pass；225501-audit-execution.json保存唯一命令/exit0/pins，另只读两raw字段与token/duration算术，不重复完整入口或旧suite。32-0/524288in32768out，218.7160065015778s/2546.937505444904TPS/TTFT62627.150716711185ms。418/共同6a-init39fb/原fc937-d768/bc51-SERVER-long-seed721201/VERIFY0；A2B2 CPU6/物理32768MiB/DB四端51919340三SHA89729d71ac/KV521936/启动非时间分项/原args包installed均匹配。实际PID238635/profile1/int22447777996→父真list/三hook恢复；R16704/P1044/718405632B/source24run1008copy/目的66run2772/fast454/consumer8/runner6/host释放，真SAVE-FULL-DROP serial123/0ZERO/完整覆盖ACK，无回读。23:01:06.003547Z418源post无变/68MiB0/双栈闭无GPU进程；测前与shutdown ERROR空，forcekill WARN保留。
+
+组内FULL TPS+0.06030565636920837%、duration−0.0602693105658747%少0.13189812330529094s，TTFT+0.20719153732142725%，小正TPS及负向TTFT均保留。首组KV521840另列TPS+0.198765756%；不跨容量/几何合均值、不当纯ZERO计时/稳定因果/新accuracy。新observed-pair-two-pairs-comparison.json SHAc7f7ffa9…与中文2026-10-22-kv-observed-pair-two-pairs.md齐；registry108×16/queue82均LF，旧未涉及行逐byte保持。本项按结果前预定规则结束重复，不追样本/调参数/取最好；后继victim观察分开，不动CURRENT/冻结资产/SSH/GPU。
+
+
+## 230548真实抢占瞬间snapshot完成：只观察与后继最小路线
+
+framework唯一6eb45实际验收pass，230548-review.json SHA06c16d26e8eee184269d46d09f488da5b63867f90e57900eaaf1484c23ae53e4；本agent只读报告/精确df780-pool-single源，未重跑入口/raw全审。32-0/413/220.41899300506338s仅诊断/KV521936/DB51919340三SHA同，23:11:57.075293Zsource-live/68-0/双栈闭通过；测前ERROR空，shutdown ERROR/WARN原样保留。实际Engine240315 completeTrue，首次失败31running prompt均16384/output327..569，free0/exact派生需1/failed index1/旧queued1；index0为最小remaining455且本轮已排1token，tailindex30 output327/rem697/1045私有页中1044hashed。29个排除protected/failed且可释放够页的结构候选含原tail，不是评分或已选新策略。该31请求prompt同长是本次快照实值，不由aggregate倒推全部32。
+
+新中文2026-10-22-victim-scheduling-minimal-route.md精确核PRIORITY已scheduled撤销/返预算/映射清理、按移除前index处理前方skip未scheduled反例、原free/prepend/preempted列表/本轮禁waiting与queuedFIFO；不改policy参数、不碰运行源。最强反证：保护minremaining当前已被原tail策略满足，可能零变化；free后hashed页留APC，need1或先消耗无hash页，不可把owned全算重算；改变victim无FCFS公平/逐token等价保证，单快照无makespan预测。未选评分或实现controller，旧reserve/terminaldrain不重做。registry109×16/queue83均LF，后继动作仅root决定；本批记录齐后暂时停写供统一publish/ZIP，goal持续。

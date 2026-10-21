@@ -1,0 +1,39 @@
+{
+  "kind": "首次RUNNING实际None后CPU快照，只诊断不计性能",
+  "wrapper_sha256": "6ec5d60bf606b8f6c9cee19a1dbce52517b086c65a4d89ad58bf55b37da10812",
+  "builder_sha256": "ce4e9773900316c1c19c70acc2dfba5822da08bbdc9e32fa5945b76ab3a666ac",
+  "runtime_sha256": "c6b3baa96db494e7c22d8c7a3f02980d06d3469c491bf850e9ebac77675204f6",
+  "source_count": 413,
+  "base": "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z",
+  "source": "/workspace/experiments/minicpm-s2/code/preemption-snapshot-20261021T230548Z",
+  "preflight": {
+    "query": "68, 0\n",
+    "ixsmi": "Timestamp    Thu Oct 22 07:05:48 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  31C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+  },
+  "command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/run_framework_screen.py",
+    "/workspace/experiments/minicpm-s2/framework/20261021T230548Z-preemption-snapshot-context16k-long",
+    "--source-dir",
+    "/workspace/experiments/minicpm-s2/code/preemption-snapshot-20261021T230548Z",
+    "--context-long-screen",
+    "--seed",
+    "721201",
+    "--require-log-marker",
+    "\"event\": \"CORE_HOOKED\""
+  ],
+  "requires_post_load_event": "FIRST_RUNNING_FAILURE",
+  "requires_complete": true,
+  "required_evidence": [
+    "实际SCHEDULE_ARMED/FIRST_CHECKED eligibleTrue/FIRST_RUNNING_FAILURE completeTrue且仅一次",
+    "原tail victim/全running CPU进展/queued spans/1GiB静态资格/真实free及标明derived需求",
+    "原serve/负载/32成功tokens、413source/live、DB前后实体与postidle原件"
+  ],
+  "limits": [
+    "CORE_HOOKED只装原Core入口；首次构造后step才SCHEDULE_ARMED，均不是快照完成。",
+    "scope拒绝/INCOMPLETE/无实际失败均不算诊断通过。",
+    "真实失败在负载中产生，不能把FIRST_RUNNING_FAILURE放进原driver的load前marker。",
+    "不叠6a/两KV协议，不启用旧a4de probe，无future访问/新GPU操作或策略。",
+    "一次页遍历/CPU打印有扰动，不报告吞吐收益或继承accuracy；原seal收DBafter/live/fullpost。"
+  ]
+}

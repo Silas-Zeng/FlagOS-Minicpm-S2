@@ -102,9 +102,11 @@
 
 | 80 | 已完成，两启动分项相同 | 设备 | 220122同6a capacity smoke | 418全源/原innovation5bef字节保持/原bc51 smoke-only-VERIFY0/8in32out完整；PID231998实际profile1/PARENT真list/三hook恢复；内存分项与215849同、KV均521936，未复现旧6块；DB51919340三SHA同/post22:03:14.114658Z68/0/闭/源过，ERROR空/WARN保留，无gain或历史因果。 |
 
-| 81 | 首pair完成，小信号保留待一次复核 | 设备 | 222731capacity→223613FULL，共同6a VERIFY0 | 两侧418/KV521840/内存非时间项/CPU6/32GiB/DB51919340三hash/实际pageIDs和R16688几何/fast462/consumer16均同；218.818909→218.384834s，FULL TPS+0.198765756%、耗时-0.198371462%、TTFT-0.215245394%；0ZERO，VERIFY0无回读；唯一c0全审+独立原字段+hardware页专项，保留单次小信号非稳定收益/纯ZERO时间/accuracy。 |
+| 81 | 首pair完成，小信号及唯一复核均保留 | 设备 | 222731capacity→223613FULL，共同6a VERIFY0 | 两侧418/KV521840/内存非时间项/CPU6/32GiB/DB51919340三hash/实际pageIDs和R16688几何/fast462/consumer16均同；218.818909→218.384834s，FULL TPS+0.198765756%、耗时-0.198371462%、TTFT-0.215245394%；0ZERO，VERIFY0无回读；唯一c0全审+独立原字段+hardware页专项，保留单次小信号非稳定收益/纯ZERO时间/accuracy；唯一复核见82，两组分层，本项不再重复。 |
 
-| 82 | A2已在途，B2待 | 设备 | 唯一必要A2/B2复核，同冻结源码和参数 | root已启224411-capacity runner236809/同418/fc937-d768/6a/VERIFY0；本agent接管新原件唯一c0执行，framework专注新victim观察。只此一组，无论正负或DB/KV等失配都结束该性能重复，不追容量、不改参数、不取最好值；当前未知A2/B2结果，不能提前并入均值。 |
+| 82 | A2/B2已完整验收，本项重复结束 | 设备 | 唯一必要A2/B2复核，同冻结源码和参数 | 224411 capacity e52a→225501 FULL 62b0，本agent各唯一c0 pass；两侧418/KV521936/启动分项/DB四端51919340三hash/原args与环境/R16704-P1044-718405632B-SAVE1008-目的66-fast454-consumer8同，218.847904625→218.716006502s，TPS+0.060305656%/耗时省0.060269311%（0.131898123s）/TTFT+0.207191537%。FULL2772/0ZERO/真ACK/runner6/host释放，VERIFY0无回读，post23:01:06Z源与idle过/ERROR空/WARN留。首组521840分开不混均值；小正TPS与TTFT负向均保留，按预定结束重复，不追容量不择最好，非稳定因果/accuracy。 |
+
+| 83 | 首次真实snapshot已完整验收，无新策略 | 设备 | 230548抢占瞬间CPU只观察 | framework唯一6eb45/06c16d26全审，本agent只读登记；413/32-0/220.418993s仅诊断/KV521936/DB51919340三SHA同/后态23:11:57Z68-0双栈闭。Engine240315真实completeTrue：31running prompt16384/output327..569/free0派生需1/queued1，最小remaining455为已scheduled index0，原tail327/rem697/1045私有页中1044hashed。结构候选含原tail，不选评分/不改victim，不把free等同全前缀重算，不承诺FCFS公平或收益；shutdown ERROR/WARN保留。后继只留中文最小路线，root决定controller/设备。 |
 
 ## 执行边界
 

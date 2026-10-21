@@ -1,0 +1,90 @@
+{
+  "status": "cpu_contract_and_static_packaging_passed_not_device_executed",
+  "created_utc": "2026-10-21T22:51:21.967036+00:00",
+  "sha256": {
+    "patches/framework/biv150_preemption_snapshot.py": "d38fd18e7a83aa03db43390746731c5caa0defd9b560da65f10e4454016a9124",
+    "scripts/remote/prepare_preemption_snapshot_source.py": "42958bd16759243667340e9575968a1f44e9a8553ce96c500403ad45e1720504",
+    "scripts/remote/launch_preemption_snapshot.py": "78e21feafd029b5e04374f706703e86fe01802b32735194df282dba9595e1379",
+    "tests/test_biv150_preemption_snapshot.py": "9f2ad5e399794e501dc44a2f145837672059d5bc10d67beca59584f2b97b2787"
+  },
+  "contract": {
+    "command": "python -X utf8 -m unittest discover -s tests -p test_biv150_preemption_snapshot.py -v",
+    "tests": 1,
+    "last_exit_code": 0,
+    "last_reported_seconds": 0.074,
+    "scope": "actual exact inner allocation while AST original-vs-inserted; not whole scheduler/model/GPU simulation",
+    "checks": [
+      "source SHA/single insertion/remove exact/full AST inverse/compile/drift reject",
+      "same original allocate/pop/preempt/return/exception on FCFS fragment",
+      "success no snapshot; first failure only; metadata failure keeps original path; forbidden Future accesses",
+      "Core original return/same exception/ContextVar reset; scope read failure does not add exception context"
+    ]
+  },
+  "schedule": {
+    "source_sha256": "df78076164fe02a63876d7690cefac810f1ba4d8fb58afc15e786c1608064090",
+    "method_sha256": "87a6016cdb08ae0d5bdb3fc2c14cb6974467a76b58d0ed41c35aadf1b697a8dd",
+    "method_lines": [
+      388,
+      1100
+    ],
+    "globals": [
+      "ECConnectorMetadata",
+      "EngineCoreEventType",
+      "HybridKVCacheCoordinator",
+      "KVCacheBlocks",
+      "NewRequestData",
+      "PauseState",
+      "Request",
+      "RequestStatus",
+      "RuntimeError",
+      "SchedulerOutput",
+      "SchedulingPolicy",
+      "any",
+      "bool",
+      "create_request_queue",
+      "dict",
+      "getattr",
+      "int",
+      "isinstance",
+      "len",
+      "list",
+      "logger",
+      "max",
+      "min",
+      "record_function_or_nullcontext",
+      "set",
+      "str",
+      "sum",
+      "time"
+    ],
+    "module_level_rebindings_of_globals": [
+      {
+        "name": "logger",
+        "line": 65
+      }
+    ],
+    "global_statements": [],
+    "limit": "exact module has imported names/logger/time/builtins, no runtime name rebind; object attributes remain shared in copied globals; not proof for arbitrary other plugins"
+  },
+  "packaging": {
+    "syntax_compile": true,
+    "input_tree_count": 410,
+    "expected_output_count": 413,
+    "scope_helper_sha256": "a4de3abea10b333aeb73d3c3ab49f82c91510c89cc8f9210c531f666feefb2c6",
+    "init_output_sha256": "01c42c6938efb61476669b9bdb76207e79d20d7e19ac4d0165e617649d2a85dd",
+    "whole_copy_executed": false,
+    "source_helper_sha256": "0ecf7dc7536afddd853887ddc412b5f6ee330c7efa90ebd9e6904423501364ca"
+  },
+  "not_executed": [
+    "source builder whole copy",
+    "launcher/SSH/GPU",
+    "snapshot actual full-running data",
+    "victim policy implementation"
+  ],
+  "limits": [
+    "last rerun followed minimal native-method guard/scope-exception fix; same single contract, no old COPY/protocol suites",
+    "snapshot required is pinned fast-path integer derivation, not direct allocator local sample",
+    "logical page coverage + 1GiB payload cap is not successful SAVE or host budget proof",
+    "INSTALLED is preload only; post-load FIRST_RUNNING_FAILURE completeTrue required"
+  ]
+}

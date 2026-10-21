@@ -1,0 +1,81 @@
+{
+  "kind": "actual0.24本实例RandomDataset/parser/get_samples源码静态核；不导入框架或tokenizer",
+  "source_audit": "experiments/source-audits/20261021T230224Z-benchmark-datasets",
+  "source_manifest_sha256": "a29e41a392cae25a3b977de1b15b7b240aee907613097a88ed5115173a4908ac",
+  "source_files_all_five_verified": [
+    {
+      "path": "experiments/source-audits/20261021T230224Z-benchmark-datasets/source/vllm/benchmarks/serve.py",
+      "sha256": "b09e85eed6f5f7a9075b40a19fc1dd8e94a1c449665c2c6510f349e0409e77b7",
+      "bytes": 85442
+    },
+    {
+      "path": "experiments/source-audits/20261021T230224Z-benchmark-datasets/source/vllm/benchmarks/datasets/__init__.py",
+      "sha256": "22e6b6bb8ba98d614a591c37f3175f148b60fb73d243f61b50559998ed416b34",
+      "bytes": 2189
+    },
+    {
+      "path": "experiments/source-audits/20261021T230224Z-benchmark-datasets/source/vllm/benchmarks/datasets/create_txt_slices_dataset.py",
+      "sha256": "69e5ebf29483e42bec794db8a48feb6b69f13413e2949283bcad9d67c92c3550",
+      "bytes": 5900
+    },
+    {
+      "path": "experiments/source-audits/20261021T230224Z-benchmark-datasets/source/vllm/benchmarks/datasets/datasets.py",
+      "sha256": "4aebfc9a1a13b01599a1de8a880e08ff2bae7f6403d430a585908508cc5811b4",
+      "bytes": 176492
+    },
+    {
+      "path": "experiments/source-audits/20261021T230224Z-benchmark-datasets/source/vllm/benchmarks/datasets/utils.py",
+      "sha256": "14efee4c78ea60b38e1be458c192ff1972c3295dbebe91bacff414ebcf89c3b6",
+      "bytes": 3624
+    }
+  ],
+  "actual_B2_log": {
+    "path": "experiments/framework/20261021T225501Z-kv-observed-pair-full-context16k-long/context-16k-long/load-context-16k-long.log",
+    "sha256": "8b43d654131824741cb31ab473d980f9b39c6f2d88a2f379281a03c209134859",
+    "namespace_selected": {
+      "random_input_len": 16384,
+      "random_output_len": 1024,
+      "random_range_ratio": "0.0",
+      "random_prefix_len": 0,
+      "random_batch_size": 1,
+      "ignore_eos": true,
+      "save_detailed": false
+    },
+    "sampling_line": "INFO 10-22 06:56:16 [utils.py:90] Sampling input_len from [16383, 16383] and output_len from [1024, 1024]"
+  },
+  "static_conclusions": {
+    "default_range_ratio": 0.0,
+    "ratio1_is_valid": false,
+    "input_sampling_low_high": [
+      16383,
+      16383
+    ],
+    "output_sampling_low_high": [
+      1024,
+      1024
+    ],
+    "num_special_tokens_inferred_from_actual_range": 1,
+    "all_generated_input_targets_equal": true,
+    "all_requested_output_budgets_equal_1024": true,
+    "all_actual_service_input_lengths_proven_individually": false,
+    "explicit_shared_prefix_len": 0,
+    "prefix0_proves_no_APC_hits": false
+  },
+  "source_ranges": {
+    "datasets.py:1908-1945": "parser默认0.0；prefix0",
+    "datasets.py:2085-2090,2372-2385": "get_samples解析和实际random分支传参",
+    "utils.py:64-99": "special扣除/对称范围/0.0单值/1非法/逐请求rng.integers",
+    "datasets.py:495-549,728-771": "decode/encode add_special_tokens=False，有限重试允许mismatch，记录实际adjusted序列长度",
+    "serve.py:73-144,2025-2031": "首prompt servertokenizer比对，条件式逐项truncate，异常原样返回",
+    "endpoint_request_func.py:175-194,244-247": "文本prompt+max_tokens输出预算，usage可覆盖输入/输出计数",
+    "serve.py:580-601": "成功请求逐项prompt_len汇总而非逐请求明细"
+  },
+  "limits": [
+    "默认range_ratio不是1；不得按其它版本惯例替换actual实源。",
+    "目标同长不等于所有detokenize/retokenize后服务输入已逐条证同长，gen helper最多10次调整仍可能有mismatch。",
+    "总input/output与sum相符只是汇总证据；save_detailed=False没有本轮逐请求明细。",
+    "16383生成目标与汇总平均16384相差1符合special补回解释，但服务preprocess默认special设置/逐请求结果未在本批取证，保持推断。",
+    "只解释snapshot；不把benchmark序号/未来输出/全数据表作为调度输入，不改变官方脚本/请求/RNG。",
+    "未执行datasets/source中的任何代码，未运行numpy/tokenizer/framework/GPU/新suite。"
+  ]
+}

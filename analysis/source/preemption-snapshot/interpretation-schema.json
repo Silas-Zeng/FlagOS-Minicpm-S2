@@ -1,0 +1,93 @@
+{
+  "kind": "preemption_snapshot_interpretation_metadata_not_test_or_strategy",
+  "scope": "仅本实例BI-V150/MiniCPM5-2B；230548实际快照已独立专项核验",
+  "actual_snapshot_observed": true,
+  "runtime_lifecycle_revision_pending": false,
+  "held_not_deployed_pins": {
+    "runtime": "d38fd18e7a83aa03db43390746731c5caa0defd9b560da65f10e4454016a9124",
+    "builder": "42958bd16759243667340e9575968a1f44e9a8553ce96c500403ad45e1720504",
+    "launcher": "78e21feafd029b5e04374f706703e86fe01802b32735194df282dba9595e1379"
+  },
+  "units": {
+    "layers": 42,
+    "kv_heads": 2,
+    "query_heads": 16,
+    "head_size": 128,
+    "dtype_bytes": 2,
+    "block_tokens": 16,
+    "bytes_per_token": 43008,
+    "bytes_per_full_model_block": 688128,
+    "exact16k_prompt_payload_bytes": 704643072,
+    "exact16k_prompt_payload_mib": 672,
+    "host_single_slot_cap_bytes": 1073741824,
+    "max_complete_prefix_under_payload_cap_tokens": 24960,
+    "max_complete_prefix_under_payload_cap_pages": 1560
+  },
+  "conditional_arithmetic_not_actual_snapshot": {
+    "assumptions": [
+      "32条恰16384token",
+      "无任何共享",
+      "全部prompt同时驻留",
+      "忽略后续decode/其他占页"
+    ],
+    "logical_prompt_blocks": 32768,
+    "logical_prompt_payload_bytes": 22548578304,
+    "logical_prompt_payload_gib": 21,
+    "recent_observed_pool_blocks": 32615,
+    "block_deficit_under_assumptions": 153,
+    "byte_deficit_under_assumptions": 105283584,
+    "logical_growth_if32_requests_each_add1token_bytes": 1376256,
+    "logical_growth_is_not_per_step_allocation": true,
+    "null_slot_count_from_frozen_source": 1,
+    "nonnull_capacity_under_recent_pool": 32614,
+    "nonnull_deficit_accounting_null": 154,
+    "nonnull_deficit_bytes_accounting_null": 105971712
+  },
+  "per_request_reading": {
+    "safe_prefix": "max(0,min(issued_computed_tokens-queued_scheduled_span,known_tokens-1))//16*16",
+    "nonempty_prefix_requires_tokens_at_least": 16,
+    "current_schedule_tokens_are_not_subtracted_again": true,
+    "releasable_pages": "unique physical nonnull blocks with ref_cnt==1, hashed allowed; not fresh unhashed restore ownership",
+    "capacity_condition_if_failed_request_retained_and_other_factors_unchanged": "F + U(v) >= N",
+    "condition_is_not_sufficient_or_strategy": true,
+    "remaining_output_is_legal_upper_bound_not_prediction": true
+  },
+  "unobserved_by_current_snapshot": [
+    "actual physical page IDs/runs and copy_calls",
+    "actual APC hit length",
+    "GPU completed work/future readiness",
+    "actual pinned host headroom/SAVE success",
+    "future EOS/actual remaining service or wait",
+    "eventual makespan tail/request completion ordering",
+    "global physical union across shared request mappings"
+  ],
+  "no_actions": [
+    "no new runtime/test/sweep",
+    "no policy score/benefit",
+    "no SSH/GPU/new parameter or pool adjustment",
+    "no changes to A2/B2 or current observed pair"
+  ],
+  "primary_source": "https://arxiv.org/html/2309.06180v1",
+  "related_docs": [
+    "analysis/2026-10-22-preemption-snapshot-interpretation.md",
+    "analysis/2026-10-22-preemption-victim-tail-review.md",
+    "analysis/2026-10-22-kv-memory-four-mib-observation.md"
+  ],
+  "required_real_events": [
+    "CORE_HOOKED",
+    "SCHEDULE_ARMED",
+    "FIRST_CHECKED eligibleTrue",
+    "FIRST_RUNNING_FAILURE completeTrue exactlyOnce"
+  ],
+  "event_pid_rule": "按实际Engine PID核唯一CORE_HOOKED→SCHEDULE_ARMED→FIRST_CHECKED→FIRST_RUNNING_FAILURE严格次序；前端其它PID事件另列",
+  "reviewed_local_posterior_validator_sha256": "6eb45eceb46405e448e1388940c238e6f1c008123e5566b158910ed4e05bdcf0",
+  "actual_specialist_review": "analysis/source/preemption-snapshot/230548-hardware-request-review.json",
+  "actual_specialist_review_sha256": "74ed2f4ac3d57fa0951a12a11266c42d1a02ee90d7c1debed27aefbf4dfcffc1",
+  "reviewed_and_deployed_230548_pins": {
+    "runtime": "c6b3baa96db494e7c22d8c7a3f02980d06d3469c491bf850e9ebac77675204f6",
+    "builder": "ce4e9773900316c1c19c70acc2dfba5822da08bbdc9e32fa5945b76ab3a666ac",
+    "launcher": "6ec5d60bf606b8f6c9cee19a1dbce52517b086c65a4d89ad58bf55b37da10812",
+    "contract": "014a9f6bd55609791386743ec39371b70dbdfd4fbeb255c1ca752b16751d8f5f",
+    "late_arm_check": "c6aedb167f70860e89776ab8c0ac56cbf88fe798adb98bc8c3a11bd51810cf1c"
+  }
+}

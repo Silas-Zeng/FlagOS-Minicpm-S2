@@ -1,3 +1,39 @@
+## 最新收口并暂时停写：230548已登记，victim最小路线仅设计；goal持续
+
+root已确认230548完整run/control/tgz abe046f03d462d01fbd91bb69ff506bb19149e7969416190a406d150bcfe8cc9；framework唯一6eb45审计报告06c16d26e8eee184269d46d09f488da5b63867f90e57900eaaf1484c23ae53e4通过。本agent只读取此报告及exact源码登记，未重复入口/raw全审/套件或设备。32-0/413源/220.41899300506338s仅诊断/KV521936/DB51919340三SHA同/23:11:57.075293Z source-live及68-0双栈闭通过，测前ERROR空/shutdown ERROR-WARN留；API的早期REJECTED和Engine240315真实CORE→ARMED→eligible→completeTrue均保留，不以安装marker替代。
+
+真实31running prompt16384/max1024/output327..569/free0派生需1/failed index1/旧queued1各span1。最小remaining455在index0且已schedule1，原tailindex30 output327/rem697/1045私有页/shared0/hashed1044；保护minremaining并不排除原tail，29个其它结构候选包含它。新中文analysis/2026-10-22-victim-scheduling-minimal-route.md精读df780 PRIORITY撤销已scheduled/返budget/删映射、前方skip未scheduled的index修正、原free+waiting.prepend/preempted列表+本轮不准入waiting/FIFO语义，给下一API精确可实现变更清单但未写runtime/选择评分。强反证：原tail已符合保护最小上界；free的hashed页仍留APC，need1可能先消耗唯一无hash页，不能把全部owned当实际GPU重算；新victim策略不能沿用FCFS公平、全局RNG逐token等价或稳定makespan承诺。
+
+registry109×16/queue83/phase已收口（LF、append保原CSV前缀）；先前两pair最终结果仍各层级独立，小TPS信号/第二组TTFT负向均保留且不再重复。本agent现在按root要求暂时停止文件写入，供统一实验库publish/fullZIP检查点；goal继续，不是暂停goal。无新runtime/controller/GPU/SSH/推送，CURRENT及root资产未动。下一只等root解除一致快照锁/决定策略或设备，不能自主沿旧候选续跑。
+
+## 最新完成：B2 225501唯一c0 pass，两pair收口；registry108/queue82，不再重复本项
+
+root取回完整B2后，本agent唯一执行固定c0 full并引用A2 224411 e52a，225501-full-review.json SHA **62b07a8cabef0cf5d9259abb433e83e55ccfb553b121de4e4e0df7ae62af9b2f**，exit0/pass。225501-audit-execution.json保实际唯一命令/依赖/validator/package，另只读两raw核原字段/哈希与token÷duration，不重跑完整入口或旧suite。包owner SHA472555b4eee2a0d7f1cfd144fa2b56fbe57b6d2caefd161b85b910f3df2e856a。
+
+B2 23:00:06.869321Z exit0，32-0/524288in32768out、218.7160065015778s/2546.937505444904TPS/TTFT62627.150716711185ms；A2B2记录条件匹配：418/6a-init39fb/原args-bc51-fc937-d768-long-seed721201/VERIFY0、DB四端51919340三SHA89729d71ac、CPU6/32GiB/KV521936/启动非时间项/包与installed。实际PID238635/profile1/原int22447777996→父真list/三hook恢复。R16704/P1044/718405632B/source24run/SAVE1008/目的66/FULL2772/0ZERO/fast454/consumer8/runner6/host释放，真ACK serial123/完整覆盖，无回读。23:01:06.003547Z418源post无变/68-0双栈闭无GPU进程；测前与shutdown ERROR均空，仅forcekill WARN原样保留。
+
+第二组描述TPS+0.06030565636920837%、duration−0.0602693105658747%少0.13189812330529094s，TTFT+0.20719153732142725%。首组521840/+0.198765756%另列，第二组521936不跨容量混算均值；小正TPS和TTFT负向都保留，不能称稳定因果/独立ZERO计时/新accuracy/默认资格。新两组比较observed-pair-two-pairs-comparison.json SHAc7f7ffa9f419a91dfe04831c65df438054081941ff59117152b5c54b3f8d20cb与中文2026-10-22-kv-observed-pair-two-pairs.md齐；阶段/first-result已交叉链接，registry108×16/queue82完成均LF，未涉及旧CSV行逐byte不动。
+
+已按结果前预定规则结束本项性能重复，不追容量/调参数/择最好；此处goal仍active，后继victim观察属于独立任务，不能叫本pair继续。未动CURRENT/根资产/冻结运行源码/包装，不SSH/GPU。root另已取实际datasets源，下一仅CPU解释RandomDataset/参数与detokenize-retokenize边界，不能用未来benchmark信息调度。下方B2在途及缺源码段均为历史。
+
+## 当前接续：B2 225501在途，两组分层总结已准备，暂不写完整结论
+
+root确认B2 `20261021T225501Z-kv-observed-pair-full-context16k-long` 已唯一串行启动，runner238456，同fc937/d768，match A2 224411 control。本agent仅CPU准备 `analysis/2026-10-22-kv-observed-pair-two-pairs.md`，明列A1/B1 KV521840与A2/B2待验层级，B2全部完整结果留待，不混四轮绝对TPS/平均、不预报第二组方向。queue82更新运行身份，registry仍107行不增假完成；phase追加该接续。待root全raw取回后本agent唯一c0 full→225501-full-review.json，引用e52的224411报告，不重复framework入口或套件。预先限定此组后正负/失配均结束性能重复，源/参数/worker/事务/包装完全冻结。
+
+首组root固定发布远端111910c84ecbeb7e54c1505289cf1d1aca154136、tree37b8951fa6b84154aed9ca70ae8f786cbb31a59e、16922项核验；当前新增总结和A2/B2完成原件不冒称已包含。root独占SSH/GPU，本agent不动CURRENT/根资产。
+
+另root要求仅解释snapshot的random dataset实源核对：本地174453审计只有actual serve.py b09e85ee，44行从vllm.benchmarks.datasets导入SampleRequest/add_dataset_parser/get_samples；1466注册parser、2026实际get_samples。rg未找到datasets.py或包实现，故默认range_ratio/每请求长度仍未证，不能凭汇总token反推。同实例准确读取建议已发root：site-packages/vllm/benchmarks/datasets.py 或 datasets/__init__.py及所引用实际random实现（纯文件/AST，无framework import），不浏览新版替代、不用benchmark未来信息调度。
+
+## 最新唯一执行：A2 224411 c0实审pass，registry107；B2结果待，不混首组容量
+
+root取回A2后，本agent立即唯一执行固定c0（capacity variant），exit0/pass，analysis/source/kv-memory-observer/224411-capacity-review.json SHA **e52a572e7ccbb577acf882934bf8ef06f42a0fe8f01d13efc0cb17442a2a5d45**，224411-audit-execution.json保存实际命令/exit0/validator pin/一次author execution；framework没有重复该入口，未跑旧suite/设备。c0仍c0c80dcf81b2fc0727f06b43d166a61ad042916ee300511243c2aae42cb14c00。已先将必要门通过回root，让原launcher实际DB/source/post/observer门后接B2；当前未给B2完整结果，不造值。
+
+A2 22:49:15.464759Z exit0，32-0/524288in32768out、218.84790462488309s/2545.402483769829TPS/TTFT62497.66085240117ms、KV521936/CPU6/32GiB/preempt0→1。418/原39fb-6a/67e4-616-31cc/e155/fc937-d768/bc51-SERVER-long-seed721201/VERIFY0，DBbeforeafter51919340三SHA89729d71ac同；post22:50:43.051813Z418源无变/68MiB0/双栈closed无GPU进程。测前与shutdown ERROR都空，forcekill WARN原样保留。包owner SHAd899801ffdf287cfadd061f36f6f242a8f62a5bba6d44d251e03e79adb0f08ad。
+
+真实PID236995/profile1/原int22447777996→父真list/三hook恢复，nonTorchIncrease1000341504/available22447777996.8B；R16704/P1044/718405632B/SAVE24run1008、目的66/ZERO-RESTORE各2772/fast454/consumer8/runner6/host释放，无回读。**不同首组KV521840/R16688/P1043/fast462/consumer16**，不套值、不混A1/A2绝对TPS或整体均值，只等待对应B2做组内比较。首组+0.1988%仍是独立单次小信号，第二组无方向/收益结论。
+
+registry107×16/queue82均LF，旧registry字节前缀保持，中文阶段/first-result本次补充齐。预先限定仅这一A2/B2复核，无论正负或失配后结束性能重复，不追容量/调参数/择最好。B2原件到后由本agent唯一c0 full且引用224411报告；root仍独占SSH/GPU，本agent不动当前运行资产/官方/根文件。下方A2在途为历史。
+
 ## 最新收口：首pair同条件约+0.199%小信号保留，registry106；唯一复核A2在途
 
 223613 FULL完整原件已由framework唯一c0执行pass，报告4fb9b2caa35e77ed4b3267bcdc30a3a5d5963cc2f498d0dab5b1920129b909ab；本人随后独立原raw/TPS公式/选定源角色/原observer-ACK-consumer/DB字节metadata/post字段核，未重复c0/套件，223613-registration-crosscheck.json保存范围。原32-0/524288in32768out/218.3848344660364s/2550.799836270839TPS/TTFT62338.00159151724ms；FULLpost22:42:01.143516Z418源无变/68-0/双栈closed无GPU进程，测前和shutdown ERROR均空，仅forcekill WARN保留（不同于capacity shutdown有ERROR）。包owner SHA12ab2569ba15acfca31ad3a3ec9bafab6af8e3c0a42cfbc97c870dc5ac73046e。
@@ -597,3 +633,8 @@ technical-report未发现否定绝对成绩/accuracy/包装的实质错误：亲
 本轮回报原文：queue顶端已明确冻结所有未开始项。最终取证清单已保存，特别标明791不自动提供完整postflight或live Attention after证据，root需补run/postflight-full.json和最终source-review/原字节；准确字段与取回顺序齐全。原版仍16K2/4，仅等待既有任务结束，无新探索/测试/远端/GPU操作。
 
 root随后14:47Z更新为6raw/1summary：16K第二轮128请求全成功、2585.11s，已进入3/4、bab2正确；queue冻结顶端与final-evidence介绍已同步阶段状态，仍无完整结果。按root要求清单明确两manifest CPU quota600000/period100000=6核；两run初始DB不同不能称cache-matched或清库对齐；实际KV分别读两份完整server.log，不抄相邻短测/默认值；最终两case原2–4描述比率不合比赛总分。只改这三份本地文档，没有运行任何远端/模型/测试。
+
+
+## 230224输入生成实源补齐：default ratio0.0，同长目标不冒充逐条服务输入证明
+
+root实际取回5源，本agent逐byte/尺寸核manifest一致，datasets.py4aeb/utils14ef/serveb09e。parser/default/get_samples都证ratio0.0（1非法），B2实际Namespace同且prefix0/batch1/input16384/output1024；原log sampling input[16383,16383]/output[1024,1024]，故special扣1，所有生成目标相同、输出预算1024。gen decode/encode有限10retry可有mismatch；serveralignment仅首prompt相同就全体跳过，否则仅truncate长者；endpoint文本发送/usage覆盖计数，save_detailedFalse只存汇总。所以不能据524288/32逐条证明服务输入全16384，+1special补回仅相符推断，prefix0也不证明无APC命中。中文2026-10-22-random-dataset-input-length.md及source/kv-memory-observer/random-dataset-source-review.json已保存，5source全核无import/执行/设备/新suite，不增registry。该记录覆盖上方历史“缺datasets源”，仅解释snapshot，不把benchmark序号/未来答案用于调度。
