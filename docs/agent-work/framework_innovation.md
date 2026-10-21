@@ -409,3 +409,96 @@ root已接受上述direct request-index设计，委派本owner继续独立runtim
 当前最新实际状态：已写 `patches/framework/biv150_mapped_decode_source.py` **0433a8de0d1e42962d8c8c1ef671f2937107dfb5ae144447cd5f13df9b10811e**，由实际54c/59d9精确变换生成 `patches/framework/biv150_mapped_attention.py` **67a9830eaa976e79d9d21f5f34ec4bbfe0215d3082d6571d415c1c8f33a85f47**；exacte155仅追加footer生成runner **3566099b2f336f3e7ae768adeca5b0da169748324fec26fc00b150b26b246a73**。运行时初稿 `patches/framework/biv150_mapped_decode.py` **32f40e78afe63e4066e93d966eb8ec24fd9b146dde485e2d32b5483d08048827** 已写，后续仍会收紧guard，不是可提交冻结版。三件syntax通过，runtime纯stdlib导入不加载torch；没有执行GPU或模型导入。hardware已逐挂点只读审source0433，未发现d/r/t、compact scratch、2D skip和launch明显阻断；派生身份与runtime/gate还在收口，不能据此报设备正确性。下一条操作：收紧runtime严格回退与安装顺序，写最短真实Builder/Impl单层门并交互审；稳定SQL+C3/default未改。
 
 systems 的 `biv150_kv_completion_probe.py` **a4de3abea10b333aeb73d3c3ab49f82c91510c89cc8f9210c531f666feefb2c6** 已完成本owner只读互审并发回root/作者：original allocate先调用且仅RUNNING返回None观察；get_num_blocks_to_allocate/free只读，不future.done/result/wait；preempt/resume按真实对象epoch，ID重用清理，ctx finally复原；无干预阻断。terminal仅容量假说、processed floor非GPU完成、gap exposure非真实重算量、周期/weakref不完整边界保留；未重跑作者测试、未改其文件。
+
+### mapped runtime/门已齐；独立审阅进行中（最新接续点）
+
+runtime已收紧到 **7bf4e1337b0afe7a425204a4424ff76e05ebd143feed9d00d809daf9c5d61d47**：exact原C3 wrapper codefile/unwrap原build，固定threshold64，原execute_model qualname+filename先校验后安装。source0433/derived67a/runner3566未变。最短设备门 `scripts/remote/validate_mapped_decode.py` 当前 **c2ded9b854608aedb15b6279d5c84195f0a0698b49117d2b05d155216b4e98bd** 已写；四shape/16K/独立C2 oracle、显式2Dskip哨兵、KV writer整cache oracle+负slotNaN、三行FP32误差、D1中间跨stream释放/churn与capture原2D回退、同cache真实append到16385后puredecode。默认不timing；root要求先仅正确门，等CTA服务结束由root唯一owner执行，本owner无GPU。
+
+`analysis/source/c3-mapped-decode/check_source_contract.py` **57d4a866c386c6f2e365c3226c23d4abaacf119be4bfff3048894687063d1266** 实际exit0：精确派生/runnerappend、4种扰动或二次transform拒绝、32份FP表达式AST不变、gate三asset pin、syntax/纯stdlibimport不载torch。之后只加qualname guard与对应pin，待最终manifest统一；不会把这些CPU检查称设备正确性。hardware已审transform/source首稿与runtime大部无明显阻断，当前最终门正在独立只读审。其曾误称base_forward含KV写，已据actual1219纠正并撤回：writer在独立do_kv_cache_update；mapped不减少writer launch。原C3 build未移除，仍保留unused suffix_cu准备开销。依赖路径/下一命令已写analysis第6节，controller复制全部helper进新run/source，不依赖tmp；最终SHA待互审后冻结统一文档和packaging manifest。
+
+两个小收益服务结果已实读systems独立比较JSON **38f3170c5c0b47edac7af285553abc1d29b00b7f5bb02b027fa4e7e4f0ec849a**：async174741对A1 174402（KV521840）TPS+0.7036569%/TTFT−0.8656382%；metadata175049对A2 175441（KV521936）TPS+0.2867234%/TTFT+0.2344306%。各64/0、262144in8192out、CPU6/32GiB、同DB三hash516表19270行、preempt0→0、真实EngineCore FIRST_SELECTED与fullpostidle核验。单次固定顺序小信号保留、未final合并/未accuracy；A1/A2容量不同不跨pair称matched漂移。analysis第7节已留边界。
+
+### mapped 四件已互审冻结，可由root执行最短正确门
+
+hardware已实际核四个最终SHA并全文只读审，未见进入最短correctness设备门阻断；未跑suite/GPU：
+
+- runtime `patches/framework/biv150_mapped_decode.py` **7bf4e1337b0afe7a425204a4424ff76e05ebd143feed9d00d809daf9c5d61d47**。
+- exact transform `patches/framework/biv150_mapped_decode_source.py` **0433a8de0d1e42962d8c8c1ef671f2937107dfb5ae144447cd5f13df9b10811e**。
+- derived `patches/framework/biv150_mapped_attention.py` **67a9830eaa976e79d9d21f5f34ec4bbfe0215d3082d6571d415c1c8f33a85f47**。
+- gate `scripts/remote/validate_mapped_decode.py` **c2ded9b854608aedb15b6279d5c84195f0a0698b49117d2b05d155216b4e98bd**。
+
+最终source合同因新增qualname guard/pin做必要一次短复核exit0，stdout `analysis/source/c3-mapped-decode/source-contract.log` **22c36a73f0b049ce1a6ab206894f53869e46a4adc04d603d84bf46cd62ecf400**；完整候选/helper身份、精确runner产物和独立审阅 `packaging-manifest.json` **82d03c89c583cdf56576f29427ac3d38ea2900297871115ab5998048e66fd38e**。没有重跑旧CPU suite，全部新文件只在独立candidate/analysis/scripts，stable/fullpatch/default不改。无SSH、远端import、GPU或模型权重加载。
+
+可执行下一步已写 [`analysis/2026-10-22-c3-coverage-and-metadata.md`](../../analysis/2026-10-22-c3-coverage-and-metadata.md) 第6节完整bash命令；root等CTA服务结束后唯一owner执行，**不带--timing**。controller将全部5个候选asset和5个既有helper/monitor复制到新run/source，worker只使用这些归档路径与hash锁定installed源码；绝对derived loader+exact transform双核，不依赖tmp。不执行生产runner install，故门FIRST_SELECTED real_execute=0是预期，不能假称真实模型命中；服务后才应另核real_execute=1。设备正确性、后继decode、capture/stream门均尚未执行，任何失败保留；即使通过也只是单层synthetic，整模型误差/accuracy/服务性能仍待。未经root后续授权不混入final。作者本轮交付完毕，代码冻结等root设备反馈。
+
+### mapped 首次设备门编译失败，服务准备暂停（最新）
+
+root串行启动 `20261021T183421Z-mapped-decode-gate` controller203015/child203018，18:34:44Z exit1；完整原件已回本地对应 experiments/framework 目录，原件不得改写。本owner独立核results记录的17份source SHA全部相符、cases[]/statusfailed/manifestexit1一致，故**没有任何correctness case完成**。原full2D、原C3/compactC2在失败前已调用，首次derived skip2D JIT在compiler.py294 `add_accelerate_matmul(pm,opt.use_sme)`拒绝参数68954357763（0x100e000003，37bit），不是数值门失败也不是策略收益负结果。post9031free/free32700MiB，root已封存并转baseline183543唯一GPU。
+
+已实读actual retained a0c runtime和e5 C2：只设BM/TILE/warps/stages，没有use_sme处理；当前source0433/derived67a新增三个JIT形参但未显式传use_sme。需要actualcompiler parse_options/JIT选项提取/cache元数据分清默认/ABI/缓存命中原因。root将在baseline结束后一次只读取回三源码和cache，不在测量时扫描，本owner不SSH/GPU、不直接设use_sme=0、不改模型/全局编译默认。hardware与我分读compiler语义/JIT参数来源。独立失败复核落 `analysis/source/c3-mapped-decode/first-gate-compile-failure-review.json`，包含原件SHA和边界。
+
+root曾授权并行准备CPU隔离servicebuilder，本owner刚读现有prepare_innovation_source/prepare_mm_cta_group_source和driver，尚未写任何builder/服务代码即收到失败，现已暂停，优先定位编译阻断。四候选和失败run源码尚未修改；下一步读root取回的actualcompiler/JIT/cache，提出最小有证据修复并交hardware审，失败原件保持不变。
+
+### mapped 编译根因已定位，最小两行修复已备（待末次互审）
+
+actual源码已由root取回 `experiments/source-audits/20261021T183920Z-compiler-cache`，本owner实读spec JIT **66a168ae959e719186771e66815e807f1e449e66c5283ef596ec3eb0e35cb775**：get_corex_sme31–71排constexpr后按真实operand位置给符合SME layout的>=2D BF16/FP32等tensor置bit，run761在freshcompile自动覆盖kwargs.use_sme。新派生在未mapped的skip2D里给未用decode_req_indices_ptr传out，多出operand index36，因此额外置1<<36；实际错误0x100e000003=原0x0e000003+2^36。backend默认0不代表实际selector值，显式猜0也会被JIT覆盖。hardware独立读源码确认同一机制；prefix旧派生只新增constexpr，因此不增加operand位，其旧门pass不矛盾。
+
+最小修复仅两launch dummy表达式 `else out`→`else cu_seqlens_q`，仍原1D int32 GPU metadata，分支不读、无新buffer、不禁SME、不改数学/模型/全局选项。当前source **919e80abf5b95c55ea63aa8619fa3202cd78b0c4cc0e303df7b4197bf1898316**，derived **72713a90584bc6567706fb881188afa04335230afc13e021c10f862f88d054a1**；runtime仅derived pin更新为 **d085ad6dcc0fd5dc26188d3e0f5801b8e394dc07a79c05a376192ec9e1e95b4b**，gate仅三asset pin更新为 **ede4519424d467bb4f47f52cb57429c5e489ee2324070c482225cc0499b0dc2f**。旧四件仍完整保存在183421/source，失败不改；旧packaging manifest另保pre-sme-fix原字节。
+
+新增 `check_sme_operand_contract.py` 运行actual selector AST、只把torch/os import换CPU描述符，原/prefix/fixed掩码均234881027、broken精确68954357763、唯一差bit36，exit0；不是native specializer或设备模拟。新两行后原source合同必要重跑exit0，32FP表达式/精确变换/扰动拒绝/pins保持通过。日志/最小diff存同source子目录，hardware正核最终两行与hash。root计划当前baseline184244完成后只重跑正确门，新run/launcher，不加timing。servicebuilder仍无新文件，本owner未GPU。
+
+systems的只读KV取证collector cd0c6a...已完成全文静态互审：固定site内部文件/AST不exec、已完成run证据原字节copy、SHA/missing/mismatch、无类型/布局就unobserved，不subprocess/设备API；post是保存证据非实时idle、PCIe不是DMA实测。未跑suite/未改文件；缺RUN_FILES会留partial且抛错不是成功。回执已发作者，当前优先mapped修复收口。
+
+### SME两行修复已终审冻结，等待root重试（最新接续点）
+
+hardware已将source919e/derived7271与183421 raw做全文diff，确认只有两处未用dummy out→cu；runtime d085仅derived pin、gate ede451仅三pin，无其它逻辑差异。actualJIT机制/bit36复算边界也已独立读，未发现进入修正版最短correctness门阻断，未执行suite/GPU。四件现在冻结，最终SHA已全发root；五helper完全未变，原第6节命令flags不变，仅root给新run/launcher名 `...-mapped-decode-sme-fix-gate`，**不带--timing**。root在baseline184244退出清理后串行操作；本owner不设备操作。
+
+CPU selector proof **cff7be424f9967f200a52f64b7b939b291ae2eb9268ac2565b5a472d7df940d3**，stdout **6ee410ab56c09a766392be5233b6239e7612c00e46aa46036653ca10f94b04dc**；derived最小diff **ceaa696012e8e07d6a6f76035fb3b2b380bd7ec4a840418f76d4af17cf6b1599**，原source合同log仍 **22c36a73f0b049ce1a6ab206894f53869e46a4adc04d603d84bf46cd62ecf400**。最新packaging-manifest保存当前四件/全helper/proofs和终审，旧82d... manifest另存pre-sme-fix原字节。首次失败eb13结果/eba5 manifest/17份raw source未改。尚未有正确性通过、性能或accuracy结论；servicebuilder继续暂停且无代码。下一条是等root新门回包后只读独立分析，失败保留、通过也不继承整模型准确率。
+
+利用等待只读互审hardware新 `biv150_visible_prefix_service.py` 7258ad79与transform464b9ea7：exacte155footer SQL→C2→C3后、原ctor后启用、strict模型/并行/no未知feature/safeKV、ContextVar finally、capture/非scope原C2和原87c6/a6d策略均无阻断；FIRST compiled与REAL_LARGE分开、scheduled>=128仅几何机会而非GPU省mask统计。未跑suite或改作者文件，提醒必须有真实REAL_LARGE/shutdownstatus而不能仅INSTALLED；最终builder/CPU合同交作者后续收口。不会与mapped/CTA叠加。
+
+### 修正版设备门与短计时已独立验收；servicebuilder已备
+
+root串行完成 `184809-mapped-decode-sme-fix-gate` 与 `185023-mapped-decode-sme-fix-timing`，两次均exit0。本owner实际读原results/manifest/exit/source/postflight，全17source SHA逐项复算、四形状全部correctness/nextdecode/crossstream/capture布尔门通过；real_forward_selected0是无runner门预期。原2D最大差0.000732421875、三行FP32最大差0.000314325094223，原C2 compactoracle整输出bits相同，不继承SQL+C3的103/105。第一次坏门183421完整保留。纯只读复核脚本 `analysis/source/c3-mapped-decode/review_device_gates.py` 已实际exit0，结果 `device-gates-review.json` 包含原件SHA。
+
+185023单形状D29/16K的32call ABBA复算：wall14.344921375→12.435507453125ms，省13.3107311777%；event14.216219902038574→12.401883125305176ms，省12.7624416985%。包含真实builder（旧C3 suffix仍创建）与新mapH2D，无profiler。两run post9031free/无GPU进程/free32700；只有单层一轮/一形状信号，非E2E、稳定因果或accuracy。
+
+已恢复并写 `scripts/remote/prepare_mapped_decode_source.py` **a41c3858ac5d19ffbb385d9ad075635b560fb272af2c2d6b5c490f04713d2459**：reuse owner0ecf sourcefiles规则，要求原080656目录/核心7SHA/既有5BIV模块精确集合、无innovationmanifest；pin修正版四asset。只改全新code目录，runner精确追加3566，新加runtime/source/derived三module（runtime相对import需要source）；gate只作为前置证据pin不装入包。所有其它输入/输出文件逐项SHA一致，内部regular-file别名可解引用并记manifest，外部/目录link拒绝；不读写installed、不执行runtime/JIT/modelimport。
+
+CPU真实213→216完整copy、原base不变、runnerbytes逆回、现存output/多余BIV模块/漂移asset拒绝、无torch/triton/framework import均通过；原件scratch `tmp/patch-check/mapped-service-pack-20261021T185137122043Z` 保留。报告 `service-pack-cpu.json`。hardware已收到a41c全文快审任务，尚待最终回执；当前四件不变，不启动任何服务。root拟沿现driver context-screen/seed721201/原SERVER；post必须FIRST_SELECTED real_execute=1，不仅INSTALLED。下一条：hardware审通过后发builderSHA/完整两条prepare+screen命令，再等root真实短服务回包。
+
+同时已完成prefixbuilder a4e97877只读终审：相对已审builder仅替三asset names/pins/variant，原0ecf/5basepins/路径/全copy验证不变，213→215与runner+policy/service两module一致；原87c6运行时生成a6d，不引入新内核。未重跑suite/修改作者文件，已告hardware可交root冻结。
+
+### mapped 服务包装已终审冻结，交root唯一设备短筛（最新接续点）
+
+hardware全文只读审 a41c builder与root `launch_mapped_decode_screen.sh` 3455b8d，无阻断：7core/5BIV exact、修正四件pins、运行时需要的三module入包、0ecf内部filealias/全copySHA/全新直接目录/失败保留边界；launcher仍driverbc51/原SERVER/contextscreen+seed721201，idle/端口与driverflock，不以INSTALLED当实际选中。未重跑suite/GPU。builder现冻结 **a41c3858ac5d19ffbb385d9ad075635b560fb272af2c2d6b5c490f04713d2459**，runtime/source/derived/gate d085/919e/7271/ede451继续冻结。
+
+独立设备复核脚本 **04ffbdbab26e4c3420640e0fda331e270e0002a2794fb2b3dd1b053062a71f82**，结果JSON **d1b3eab61ffd3bc08251068ffa034429a49d794b575cbcd9ba297e115489e751**；CPU source-pack报告 **9bfc8005519c3ac1624fca2650ce73c5cc95facc4e2aa1ad453ed126282f4fdc**。latest packagingmanifest已更新设备已过、servicebuilder审阅通过，旧74c...预设备manifest另存原字节；原raw不改。完整prepare/screen两命令在analysis第9节，root将沿自有launcher执行，本owner无SSH/GPU/服务。下一条仅等真实短服务回包，另核FIRST_SELECTED real_execute=1、实际KV/DB/CPU/来源/完整请求与postidle；正信号后仍要独立accuracy，不以单层13%外推。无需继续改代码或重复已过门。
+
+### prefix服务最终三件身份确认，沿用已完成独立审阅
+
+root在mapped真实服务185627加载/INSTALLED成功期间再委派prefix三件终审；本owner先核作者确认与本地SHA，三件与此前全文审阅完全未变：runtime **7258ad7929ad22676201fec045184f0038be4689f2eef3a51b21e30c658029da**、source **464b9ea73f6961097c1cde2c92d97bdf9ed50909e9da1ecbb65f1dd437bccaba**、builder **a4e978770e98aa3c5a245de96470916aae570ef63a55083534465309ceaf615f**。原87c6 policy/a6d generated与runner4467保持，作者仅新增中文说明，不改代码；故沿用上文独立全文终审，无需重跑旧CPU合同或单层设备门。
+
+结论仍为可做独立最短服务筛选：scope只受审execute/dummy、原ctor后enable、C3先装、capture与非scope原C2、finally复原，无跨候选叠加；FIRST compiled/REAL_LARGE不混淆startup与真实推理、几何机会不冒充省mask GPU计数。实际服务选中/最终shutdownstatus必须另验，本owner未GPU。当前等root mapped185627完整原件做独立source/命中/数值/性能和清理核对，不修改任何candidate。
+
+### mapped 首次服务已独立验收：小幅负结果，KV不完全匹配
+
+root取回185627完整原件后，本owner已运行新纯只读 `analysis/source/c3-mapped-decode/review_service.py` exit0，结果 `first-service-review.json`；414份candidate和410份184244基线归档source全部逐项SHA复算；remote live报告414/fail[]、post installed54c通过，原SERVER/负载/seed/packages/installed源均同。DB四snapshot physical实体及schema/logical三hash复算同（516表19270行），CPU6/32GiB/preempt0→0、32/0、524288in4096out。真实EngineCore207423 FIRST_SELECTED real_execute1/D15成立，但不是全程计数。无accuracy或内部数值新证明。
+
+候选121.79016383597627s/4338.478439947034TPS/TTFT62258.128146859235ms，对最近184244基线120.7632626676932s/4375.370359560136/61145.73857927462，耗时+1.026901168283075s/**+0.8503423521%**，TPS **−0.8431724993%**，TTFT+1.8192429978%。最初聊天“matched184244”称呼已撤回：KV候选521840/对照521936，少96，是同参数/同DB而非完全matched。systems另取更早183543分母约−1.07166%，双方会标清基线，不挑分母。首次负结果完整保留，不能因为单层13.31%而解释掉它。
+
+机制仅可限定：marker无时间戳，夹在02:58:42–52周期日志；不估算全程coverage，原计划/forward最终统计缺失。两边各有一个3276左右prompt低窗，不能单独证明coldcompile；启动torch.compile/AOT cache消息不是新mappedJIT命中证据。CPU计划/小H2D/逐层guard/ContextVar成本和真实batch几何未知，未测不能扣掉后报正。root明确暂不加cache取证脚本/observer，仅等prefix/KV最短门后一次未改runtime/参数repeat；本owner未改任何代码或运行设备。
+
+post19:00:37.354668Z 68MiB0%/9031双栈闭/无GPU进程；runner207242Z/PPid1不持设备。候选shutdown SIGTERM后出现AsyncLLM/EngineDeadError和资源清理告警，保原件、不写完全无ERROR、不修改driverexit0/请求成功。报告边界已补analysis第10节。还只读快速审root `launch_visible_prefix_screen.sh`：原preflight/bc51driver/原SERVER/contextscreen seed/driverflock保留，仅buildera4e/READY/env/suffix变更，env只为artifacts目录；无新阻断，已发root，post仍需REAL_LARGE/status。下一步仅等待一轮不改代码repeat与prefix原件，候选不final/不继承103/105。
+
+### mapped 一次原代码复核独立验收，正负并列；本批文件冻结
+
+本owner新写纯只读 `analysis/source/c3-mapped-decode/review_repeat_service.py` **9304a2f47513ae0360b98ee86714b78d0649a7092c188fc950643d2fe42e58e2**，实际exit0，结果 `repeat-service-review.json` **81b6cacfa34cfbb619cd7be77228e07941e91bf8ed21fdcc709ca0bcaf4603d5**。四run183543/184244/185627/191131共410/410/414/414归档文件逐SHA复算，八份DB实体/schema/logical同（516表19270行），原SERVER/load/seed721201/driverbc51/packages/installed源同；CPU6/32GiB/preempt0→0/live/sourcepost通过。两轮candidate **413非manifest文件相同**，innovation-source.json仅UTC/output/命令output路径不同，不能称全414逐byte相同。首审JSON **258793116a996974f9f92c2bf83dc721d9713e887726e9c64e541c480940806b** 未改。
+
+191131为117.02865957096219s/4514.99659944072TPS/TTFT59836.11785736866ms/32-0/524288in4096out；185627首轮121.79016383597627s负结果完整保留。对184244，首轮TPS−0.8431724993%/TTFT+1.8192429978%，复核TPS+3.1911867661%/TTFT−2.1418021146%；对183543分别TPS−1.0716647543%与+2.9533979264%。两个baseline KV521936，candidate两轮521840，**均为同参数/同DB而非容量完全matched**。同candidate首轮→复核TPS+4.0686651308%不能证明全热/稳定或coldcompile因果；不挑正轮抹掉负轮，不再盲刷。
+
+复核EngineCore210483真实FIRST_SELECTED real_execute1/D15，夹本地03:13:46–56周期日志，不是全程计数；无per-JIT hit/compile证据。post19:15:44.582675Z 68MiB0%、9031双栈闭、无GPU进程、414live source无failures；controller210306为Z/PPid1、其余owned已退。复核无ERROR/EngineDeadError行，但首轮shutdown堆栈仍保留。复核rawSHA568368e0a8feee4f80b851b11ce66aa58cdaa163bfcba3b6810e2a2a4502fb5c、manifest88ae91b1cd2c0d1bde7707230dea053035fb801fb73ab0440d1ce0052e6627b9。没有新accuracy，不继承103/105、不合stable/default。analysis第11节已补，文件SHA **2129ec3904c596b37be1be9902df0bd4911b5dea47bf4852649f77d2920fa991**。
+
+本批下一框架CPU研究已落 [`analysis/2026-10-22-next-framework-priority.md`](../../analysis/2026-10-22-next-framework-priority.md) **c9539e2d16361358a4c1582dc656865cd4f5e0f41e415c5cd917cf54b9fe4170**。已读actual184108 scheduler/core/UniProc及旧closeout/memory/prefillgraph/host证据；优先接systems既有“抢占KV保存/恢复”后继，先一次真实executor/worker/KV descriptor，再审save-ack-before-free、zero-after-restore-before-consume、epoch/cancel/shared页与RNG/输出协议。**非新实现或已证大收益**；191545构造成本约0.12–0.24s只读作者已落盘结论，未独立重跑/冒称生产layout或纯DMA。fullreserve/terminal-drain已否定，不重做；13758只是gap exposure而非GPU重算。备选Attention compiled-handle/step recipe只列精确JIT737–790和C3挂点，缺剩余CPU预算不称大收益，未写候选/设备门。async/CPUmetadata小信号、mapped正负、prefix负结果继续保留。
+
+**本批结束，按root要求现在暂停所有文件写入**，供checkpoint/私有实验库同步/完整离线包。未SSH、未GPU、未改任何runtime/builder/launcher/稳定源/default，也未新增模型导入或网络操作。下一条可执行操作由root统一授权：先只观察实际executor与42层KV描述符/host余量；若无法证明安全事务或可避免重算预算即降级，不继续铺实现。当前无本owner在途设备或后台任务。

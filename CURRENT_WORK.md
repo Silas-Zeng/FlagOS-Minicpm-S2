@@ -1,5 +1,77 @@
 # 当前工作与 API 切换交接
 
+## 当前执行状态（2026-10-21 19:19 UTC，覆盖下方历史快照）
+
+- 本批 GPU 作业全部完成，当前无活跃作业。最后191545后态已核68MiB/0%、无GPU进程、9031双栈关闭；root仍为唯一设备owner。快速接续见 [硬件与输入驱动的框架探索阶段记录](analysis/2026-10-22-framework-milestone.md)。
+- mapped 原代码复核191131于19:14:52Z exit0：32/0、117.028659571秒、4514.996599 TPS、TTFT59836.117857ms、KV521840；414源/live/归档、DB三SHA不变及后态通过。完整本地，包SHA `94b1b7fec34526085b9746329a747a9481fc12f4f186b90060640973ae3622b9`。与首轮121.790164秒并列保留，不取最好、不称缓存全暖或稳定收益；相对基线仍KV差96，framework独立复核。
+- KV修正版191545于19:16:59Z exit0：四case各两pass五项字节/guard/消费者检查及RNG全部通过；8源及后态通过。gate93eb02c7、policyc95f不变、launcherba3336；修复仅四处归档模块名，旧d841保远端 `_pre_archive_fix.py` 及本地失败原件。完整本地，包SHA `7b491c525759e3320ecac8cd385d31fd1f434784ade63eef16bb2ab02a554316`。
+- KV每方向672MiB，normal连续/8段往返wall222.053105/235.270289ms，packed119.956194/120.716930ms，均单样本；wall/event明显不同，未采逐窗CPU节流，不能归因为纯DMA或称稳定带宽。未观测服务实际布局、未实现抢占恢复协议，不能声称端到端收益或整模型准确率。systems/hardware正独立验收，root保存本批检查点与交接。
+- prefix190206独立验收通过：与两基线KV521936/参数/DB一致，本轮负结果；真实多请求FIRST证明主负载命中，REAL_LARGE第一条可能属于bench初始测试，均非全量计数。暂不集成，所有原件保留。
+
+## 当前执行状态（2026-10-21 19:12 UTC，覆盖下方历史快照）
+
+- 唯一 GPU 作业 `20261021T191131Z-mapped-decode-context16k`，runner PID `210306`。这是 d085/919e/7271 原代码、同原参数/负载的一次必要复核；不加 observer、不改数学、不覆盖首轮负结果。源码目录 `code/mapped-decode-20261021T191131Z`。尚无结果，不能预先称缓存已暖或排除编译影响。
+- prefix 短服务 `20261021T190206Z-visible-prefix-context16k` 已 19:05:33Z exit0，32 成功/0 失败，123.557988320 秒、4276.405008 TPS、TTFT 63199.166326 ms。KV521936 与两基线相同，DB516/19270 三 SHA 不变，413 源/live/归档及空闲后态通过。真实 REAL_LARGE delta42、三 FIRST 不是全量计数；首次接入服务负信号，不启用。全原件已本地，包 SHA `5f79f583a41af027c4c5c7a51de968657465353d1127c1300555a8ef7425662c`，hardware 独立复核中。
+- KV 首门 `20261021T191017Z-kv-page-copy-gate` 已 19:10:18Z exit1：归档文件名 `source/copy.py` 遮蔽 Python 标准库，dataclasses 导入循环，cases 为空，未开始复制。d841/policyc95f 原件保留；8 源 SHA 与后态 68MiB/0%、9031 双栈关闭通过，包 SHA `5dad58f0cc1e4dce469817324bf1d1482458c3535dbd1053d1cfb78daab0ec75`。systems 最小修归档模块名，hardware 互审实际目录加载证据后再排唯一 GPU 门。
+- 三 agent 继续 CPU 并行：framework 结合 16SM/6CPU/真实输入提出下一项可证伪调度或 KV 方案；hardware 验收 prefix 并复核 KV 包装；systems 修 KV 门并维护 registry/queue。不得把单层收益、静态布局或样本差异冒充服务收益。
+
+## 当前执行状态（2026-10-21 19:02 UTC，覆盖下方历史快照）
+
+- 唯一GPU作业 `20261021T190206Z-visible-prefix-context16k`，runner PID `208683`。独立prefix-mask入口7258/source464b/buildera4e/runner4467及root launcher已互审，复用受测87c6/a6d，只跑原context16K短服务；需READY与REAL_LARGE_SELECTED，不能把几何机会当每个GPU tile省mask计数。尚无本轮服务结果。
+- mapped真实服务185627已18:59:53Z exit0：32成功0失败、524288in/4096out、121.790163836秒，KV521840，真实FIRST_SELECTED decode_requests15。414源/live/归档及DB516/19270全三SHA前后不变，postidle通过；完整本地，包SHA `67e229ad22b63cc3d23ba94b5fd6533d5a8bf34b5c2da7c59fd1a167ac1175fc`。比两次容量略异基线更慢，不能用单层13%替代E2E收益；framework独立核覆盖/冷编译等证据，不先解释掉负结果，暂不集成。
+- KV copy module c95f已审，gate从hardware审b86a后本地变为d841；root已要求作者解释最后diff并互审最终SHA，确认前不上传/执行。无服务恢复协议实现或accuracy声明。
+
+## 当前执行状态（2026-10-21 18:56 UTC，覆盖下方历史快照）
+
+- 唯一GPU作业 `20261021T185627Z-mapped-decode-context16k`，runner PID `207242`，隔离源码 `code/mapped-decode-20261021T185627Z`。builder a41c/launcher3455已hardware独立全文审阅；新runner3566，只追加d085/919e/7271三个模块，其余原基点不变。原bc51 context16K/32请求/128输出/seed721201与服务参数，必须核FIRST_SELECTED real_execute=1；尚无服务结果。
+- 已执行远端custom gate版本保存：旧c2ded为scripts/validate_mapped_decode_pre_sme_fix.py，canonical与_sme_fix均为ede451。历史183421/source与旧gate launcher均原样保留；旧launcher需按归档源复现，不能直接误用最新canonical。
+
+## 当前执行状态（2026-10-21 18:52 UTC，覆盖下方历史快照）
+
+- 18:55Z 新本地检查点 `d7560eb163febbccb19bc77445fbabccbef91289` / tree `ea86747636a667a890dfce5176f3e66b9bc7daba`，保存至185023的已完成原件、受测实现、launcher和当前交接；后续agent文档/新service/KV WIP另在工作树，尚未全入此提交。新完整历史bundle `recovery/git/experiment-mapped-gate-20261022.bundle` 已verify，SHA256 `ebba9d0b2fe42b1e0200fb174dcc4c5186c00c21f1fc8d9e5af914f162989977`。GitHub仍是上一759f对应29ad阶段，不能称d756已上传。
+
+- 当前无GPU活跃任务。mapped性能门185023已exit0，四形状正确性全部再次通过；D29非前缀单层32call ABBA，wall14.344921375→12.435507453毫秒（省13.3107%）、Event14.216219902→12.401883125毫秒（省12.7624%），包括metadata build及map H2D，只是单层信号。完整原件本地，包SHA `f8c63742a0877c9503274ab0133f5cc8119e67b5ae5cd00d26cc756f067ea7db`，postidle及源SHA通过。
+- framework据已过门的d085/919e/7271准备隔离服务包装；hardware准备prefix-mask小收益独立入口并互审；systems据精确KV布局准备独立保存恢复门、维护记录。尚未把新候选合入稳定代码库，仍需真实服务命中/性能及独立准确率。
+
+## 当前执行状态（2026-10-21 18:50 UTC，覆盖下方历史快照）
+
+- 唯一GPU作业 `20261021T185023Z-mapped-decode-sme-fix-timing`，runner PID `206667`，相同ede451门加原`--timing`，正确性后一次D29非前缀、32call ABBA，计实际metadata build/H2D，不加载模型。还没有性能结果。
+- 修正版184809已18:48:35Z exit0：四形状13项正确性、各自同cache后继16385 decode、跨stream释放/记录、capture原2D回退全部通过；独立C2 oracle逐位一致，prefill逐位不变，原2D最大差0.000732421875。因此不继承103/105整模型准确率。所有源码与输出本地，包SHA `3c9af4123622e28574d90fdeb642262771a96b84745e4774b7783a4c22a9f196`；postidle通过。framework恢复隔离service包装准备。
+- KV13源实际backend布局为(blocks,2,16,2,128)，systems准备normal/packed布局的42层672MiB独立coalesced copy门，未接入调度协议/服务，尚无搬运性能或准确率结论。
+
+## 当前执行状态（2026-10-21 18:48 UTC，覆盖下方历史快照）
+
+- 唯一GPU作业 `20261021T184809Z-mapped-decode-sme-fix-gate`，runner PID `206168`。只修两个未使用map占位参数 out→已有一维int32 cu；source919e/derived7271/runtime d085/gate ede451，hardware已独立核实际JIT位选择与两行diff，无禁SME或数学变化。新远端门文件validate_mapped_decode_sme_fix.py，首次失败原件保留。尚无正确性结果。
+- 第二基线184244已exit0/32成功0失败、120.763262668秒，KV仍521936、DB516/19270三SHA一致、410源/空闲后态通过；完整原件本地，包SHA `440be8583b4e328c30cde4cd1e5068989db955076426148c9492eb9af41baeaa`。不再为凑96token盲刷基线，候选118.42秒与两基线的差异只作带KV限制的描述。
+- MM原service23d与门3639已核实际cache：metadata除hash相同，所有ELF SHF_ALLOC段逐字节相同（text8016B SHA e29f72a3…），仅调试位置不同；不能把编译hash不同当算法变化。hardware正保存详细可复算证据。
+
+## 当前执行状态（2026-10-21 18:43 UTC，覆盖下方历史快照）
+
+- 唯一GPU作业 `20261021T184244Z-baseline-context16k`，runner PID `204830`；只补一次原参数短基线。首基线183543虽32/0、120.484981576秒、DB同三SHA，但KV521936，比gate-up候选521840多96，故尚不作严格匹配收益。首基线完整原件本地，包SHA `1a6247a7a6061ffc51e4898b0f99341248410735c89a3c005e2a3e5190e8002c`；410源与后态通过。
+- mapped编译失败原因已由actual JIT源码定位：`get_corex_sme`自动为二维BF16/FP32 operand置位；未mapped分支给新增第36位map参数传了二维out作为dummy，额外产生`1<<36`，得到超接口范围的`0x100e000003`。framework准备将未使用dummy改现有一维int32 cu，不关闭SME，不改模型或数学；hardware独立复核中，修后尚未GPU。
+- 实际compiler/cache原件 `experiments/source-audits/20261021T183920Z-compiler-cache`，三个精确MM cache都找到，包SHA `eb19121a54593fa3e52b37ec41900487c656f7398a65e09ddb061f23ac9587c6`；使用collector685e，后续0218只是本地未运行补充。
+- KV保存恢复所需13份精确源码及cgroup/PCIe证据已取回 `experiments/source-audits/20261021T184108Z-kv-copy`，无缺项/漂移，包SHA `7e60e9392b2c83eae7b73499614161c1eac878f08a9537ac72f442c933da1883`。runtime对象与tensor布局尚未观测，不能把静态源码类名冒充实测；systems据此准备最短独立42层保存→毒化→恢复门。
+
+## 当前执行状态（2026-10-21 18:36 UTC，覆盖下方历史快照）
+
+- 唯一 GPU 作业：`20261021T183543Z-baseline-context16k`，runner PID `203349`；干净原 SQL+C3、16K/32请求/128输出，与182916 gate-up候选同服务/负载参数，待完成匹配核验。
+- mapped 首门 `20261021T183421Z-mapped-decode-gate` 已18:34:44Z exit1：首case的skip2D派生JIT编译阶段，`add_accelerate_matmul(pm,opt.use_sme)`拒绝68954357763，尚无任何正确性case或性能结果。framework定位原runtime编译入口与派生module的差异，不能绕过数值门；未改失败原件。postflight68MiB/0%、无设备进程/双栈9031关闭。全部run/control本地，包SHA256 `994aa7f9966aee554c439c410bbd89be32702a209722a06c158612f7bbd984b3`。
+- gate-up的REAL_SELECTED只证明至少一个真实step中42层调用；status是首次real flush快照，不能当全负载调用总数。systems正独立验收完整原件。
+
+## 当前执行状态（2026-10-21 18:34 UTC，覆盖下方历史快照）
+
+- 唯一 GPU 作业为 `20261021T183421Z-mapped-decode-gate`，runner PID `203015`。只做四形状真实 Attention 正确性门，不加载模型、不计性能；gate `c2ded9b8…`、runtime `7bf4e133…`、derived `67a9830e…` 已交叉审。尚无结果。root 独占卡。
+- gate-up 服务 `20261021T182916Z-mm-cta-group-context16k` 已18:32:38Z exit0：32成功0失败、524288in/4096out、118.41752643秒，KV521840；FIRST在启动期且真实REAL_SELECTED增量42。413源码/live/归档核验通过，DB516表19270行三类SHA前后相同，postflight 68MiB/0%且9031双栈关闭。完整run/control本地，原包SHA256 `96074323f386817d460bdefd0982c44ba5f58c3f760c07c0e81604364215ccac`。systems独立验收中；还没有匹配基线，不报服务收益。
+- mapped 门完成后先封存清理，再串行干净 SQL+C3 context16K 短基线与 gate-up 比较；不以带 coverage probe 的120.48秒作性能基线。
+
+## 当前执行状态（2026-10-21 18:29 UTC / 北京时间 10-22 02:29，覆盖下方历史快照）
+
+- root 唯一设备作业：`20261021T182916Z-mm-cta-group-context16k`，runner PID `201691`，run/control 均在远端 `/workspace/experiments/minicpm-s2/framework/`。刚启动，尚无服务收益结论。候选为只启用 gate-up 的 group8，runtime `44fc8e5c…`，派生 runner `787665d3…`；原 080656 基点、模型、服务参数、16K/32 请求/128 输出短负载不变。systems 已独立审 runtime、builder 和 launcher。不要启动第二个 GPU 作业。
+- 启动前 18:28:48Z 实查 68 MiB/0%、无 GPU 进程、9031 双栈关闭。候选须有 READY 和真实 execute 的 REAL_SELECTED；dummy 命中不算服务证据。结束后封存原件、核 DB/KV，再运行干净基点短对照。
+- framework 完成 mapped Attention 首稿和最短层级门，hardware 正独立审阅；保持请求/采样行顺序，通过内部 compact map 覆盖前缀外单 token。还没有 GPU 正确性或准确率结论。systems 继续短期准入余量、抢占 KV 保留的 CPU 设计。
+- 已完成阶段本地提交 `759f834d95972b2f5086bef96715cf780878d7d1`，tree `be2d0010939a1653dff4f08d60560572137cc57a`，7445 项。新增恢复包 `recovery/git/experiment-research-20261022.bundle`，SHA256 `972a70ef413e1dd32f83e765b38545536d2bf11bcda585f12d732bf0fa067267`。当前候选 WIP 不在这个提交/包内，另存工作树及 agent handoff。
+- 18:30Z 私有实验库同步完成：远端 main `29ad488ded7cb29f5e1c914ed25e114aca0aa164`，完整 tree 与本地 `be2d001…` 相同，7445 项路径/模式/blob SHA 全核验。HTTP 502、随后大 tree 请求 422 超时均保留；缩为400 KB/200项后同 revision/state 续传成功。回执 `docs/github-research-publication-20261022.json`。在途 gate-up 服务与 mapped WIP 未包含；旧稳定 ZIP 仍只覆盖上一阶段。禁止向官方上游或保留的公开 fork 推送。
+
 ## 实时状态（2026-10-21 18:19 UTC / 北京时间 10-22 02:19）
 
 - 用户最新有效指令是继续自主探索：优先硬件/输入驱动的调度、KV 与框架优化；小收益也上卡测、保留。下方冻结/归档仅是上一阶段历史快照。

@@ -6,6 +6,14 @@
 
 ## 当前团队
 
+**最新阶段（2026-10-22 03:14，北京时间）：** root 按单卡串行完成 mapped 正确性/单层计时、真实服务及 prefix 真实服务；两项首次服务均为负信号，原件保留，未集成。mapped 原代码一次复核在途，KV 页复制门因归档 `copy.py` 遮蔽标准库在加载阶段失败，最小重命名已完成双人互审，等待串行重试。当前 PID 读 CURRENT 顶端。framework 继续实际输入/16SM 下的下一调度与执行方向分析；hardware 独立审 prefix 和 KV 包装；systems 维护 KV 实现、记录及独立实验审计。已有 d756 本地检查点/bundle，最新工作尚未全部同步 GitHub；不能把29ad远端或旧ZIP称为本轮全量。
+
+新增入口：[mapped 与真实覆盖](../analysis/2026-10-22-c3-coverage-and-metadata.md)、[prefix 服务](../analysis/2026-10-22-visible-prefix-service.md)、[KV 页复制门](../analysis/2026-10-22-kv-page-copy-gate.md)、[调度/KV 状态机研究](../analysis/2026-10-22-scheduler-kv-innovation.md)。
+
+**最新阶段（2026-10-22 02:38，北京时间）：** 已完成阶段本地759f/远端29ad完整tree相同，私有实验库7445项核验通过。root继续独占GPU，已完成gate-up真实服务、mapped首门编译失败留档，当前实际作业读CURRENT顶端。framework定位mapped派生内核的实际编译入口；hardware审CTA真实编译证据及准备prefix-mask独立入口；systems独立审服务pair，并推进抢占KV保存/恢复的真实源码与成本门。所有失败、假设和未集成代码保留；不能用单层正信号替代服务收益/accuracy。
+
+本阶段新增入口：[gate-up服务](../analysis/2026-10-22-mm-cta-group-service.md)、[小框架短测](../analysis/2026-10-22-small-framework-comparison.md)、[新阶段GitHub回执](github-research-publication-20261022.json)。下方状态为历史，不是仍在运行的作业。
+
 **最新阶段（2026-10-22 01:53，北京时间）：** 用户已恢复持续优化，重点硬件/输入特征驱动的调度、KV 等框架创新，小收益也需最短上卡实测并保留。稳定阶段已上传、归档；新一轮正在执行。framework 负责真实 C3 覆盖缺口、CPU metadata 复用及保持采样行的 Attention 内部索引；hardware 负责固定 tile CTA 分组的边界失败诊断、已有 prefix-mask 小收益及互审；systems 负责实际 EngineCore/KV 回收机会诊断和独立证据审计。root 是唯一 GPU owner，已完成覆盖诊断、CTA 失败门、metadata 正确性门和 async 短服务，当前设备以 `CURRENT_WORK.md` 顶端及真实状态为准。新阶段结论不得倒填为旧候选的验证结果。
 
 本阶段入口：[C3 与 metadata](../analysis/2026-10-22-c3-coverage-and-metadata.md)、[CTA 分组](../analysis/2026-10-22-mm-cta-group.md)、[调度与 KV](../analysis/2026-10-22-scheduler-kv-innovation.md)。下方“冻结/收尾/不重启”仅描述历史阶段，由本段最新授权覆盖。

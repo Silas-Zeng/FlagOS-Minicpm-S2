@@ -1,0 +1,74 @@
+{
+  "kind": "独立本地stdlib四case/八pass/源/事件源码/计时和后态终审",
+  "run_id": "20261021T191545Z-kv-page-copy-gate",
+  "source_count_verified": 8,
+  "gate_sha256": "93eb02c7dbdaac3ec982fbf5b0dd0f24e29ebf74e73a5b48c7dc820ae0dab56d",
+  "policy_sha256": "c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c",
+  "status": "byte_event_gate_passed_one_cost_sample_per_geometry",
+  "cases_verified": 4,
+  "passes_verified": 8,
+  "checks_true": 40,
+  "rng_cases_true": 4,
+  "transfer_bytes_per_direction": 704643072,
+  "actual_factory_layer_views": 42,
+  "constructed_supported_layouts_not_observed_service": true,
+  "timings": [
+    {
+      "layout": "normal42",
+      "map": "contiguous",
+      "copy_calls_per_direction": 42,
+      "save_wall_ms": 25.946121,
+      "restore_wall_ms": 196.106984,
+      "save_event_ms": 24.756731033325195,
+      "restore_event_ms": 26.48873519897461,
+      "roundtrip_wall_ms": 222.05310500000002,
+      "roundtrip_event_sum_ms": 51.245466232299805
+    },
+    {
+      "layout": "normal42",
+      "map": "fragmented8",
+      "copy_calls_per_direction": 336,
+      "save_wall_ms": 27.699296,
+      "restore_wall_ms": 207.570993,
+      "save_event_ms": 25.073375701904297,
+      "restore_event_ms": 194.10601806640625,
+      "roundtrip_wall_ms": 235.270289,
+      "roundtrip_event_sum_ms": 219.17939376831055
+    },
+    {
+      "layout": "packed42",
+      "map": "contiguous",
+      "copy_calls_per_direction": 1,
+      "save_wall_ms": 24.943508,
+      "restore_wall_ms": 95.012686,
+      "save_event_ms": 24.7347412109375,
+      "restore_event_ms": 26.496109008789062,
+      "roundtrip_wall_ms": 119.95619400000001,
+      "roundtrip_event_sum_ms": 51.23085021972656
+    },
+    {
+      "layout": "packed42",
+      "map": "fragmented8",
+      "copy_calls_per_direction": 8,
+      "save_wall_ms": 25.027936,
+      "restore_wall_ms": 95.688994,
+      "save_event_ms": 24.747791290283203,
+      "restore_event_ms": 26.75897216796875,
+      "roundtrip_wall_ms": 120.71692999999999,
+      "roundtrip_event_sum_ms": 51.50676345825195
+    }
+  ],
+  "host_explicit_bytes_per_layout": 1432682496,
+  "gpu_raw_bytes_per_layout": 728039424,
+  "gpu_peak_allocated_bytes": 1456078848,
+  "postflight_utc": "2026-10-21T19:18:05.738516+00:00",
+  "postflight_idle_verified": true,
+  "limits": [
+    "CPU quota与并行host负载未在本copy gate记录，不宣称与服务6核条件严格匹配。",
+    "wall含host提交/调度/同步完成，event也含方向间隙；normal restore wall196ms/event26ms而fragmented event194ms，单样本差异不能推出稳定DMA带宽或packed因果收益。",
+    "每case只有一warm样本；正常/packed是actual helper支持的构造，真实runner布局未观测。",
+    "consumerclone为测试显存，cgroup是时点不是host峰值。",
+    "全量tensor未作为binary归档；本地独立复核冻结源码的完整byte oracle及结果，不重新执行GPU。",
+    "无模型权重/Attention数学/accuracy/allocator或服务恢复protocol。"
+  ]
+}

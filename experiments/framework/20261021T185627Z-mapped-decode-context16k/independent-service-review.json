@@ -1,0 +1,71 @@
+{
+  "run_id": "20261021T185627Z-mapped-decode-context16k",
+  "started_utc": "2026-10-21T18:56:29.391763+00:00",
+  "finished_utc": "2026-10-21T18:59:53.071773+00:00",
+  "raw_sha256": "a5d7638cafa3dac65a42dd4c8c17ede170b3549ac4e554db59d1c7ebe534ce77",
+  "source_count_verified": 414,
+  "worker_sha256": "3566099b2f336f3e7ae768adeca5b0da169748324fec26fc00b150b26b246a73",
+  "completed": 32,
+  "failed": 0,
+  "input_tokens": 524288,
+  "output_tokens": 4096,
+  "duration_s": 121.79016383597627,
+  "total_tokens_per_s": 4338.478439947034,
+  "mean_ttft_ms": 62258.128146859235,
+  "kv_tokens": 521840,
+  "database": {
+    "before": {
+      "snapshot_sha256": "1593d60cda1b2ed9a70df9fc4cebe3217e863f9fcb428000dea19fe21c8d6352",
+      "schema_sha256": "a0a590080bc570c73c1a25337faa1097038bcc6d755fe379a29066aefff7c5b2",
+      "logical_content_sha256": "90e9a86870767253d7a2f43483f9ddd431f577d9da6516f3a6bac555478a9ade",
+      "table_count": 516,
+      "row_count": 19270
+    },
+    "after": {
+      "snapshot_sha256": "1593d60cda1b2ed9a70df9fc4cebe3217e863f9fcb428000dea19fe21c8d6352",
+      "schema_sha256": "a0a590080bc570c73c1a25337faa1097038bcc6d755fe379a29066aefff7c5b2",
+      "logical_content_sha256": "90e9a86870767253d7a2f43483f9ddd431f577d9da6516f3a6bac555478a9ade",
+      "table_count": 516,
+      "row_count": 19270
+    }
+  },
+  "preemptions": {
+    "before": 0.0,
+    "after": 0.0
+  },
+  "cpu_quota_cores": 6,
+  "physical_memory_mib": 32768,
+  "postflight_idle_verified": true,
+  "postflight_utc": "2026-10-21T19:00:37.354668+00:00",
+  "errors_before_shutdown": [],
+  "errors_during_shutdown": [
+    "(APIServer pid=207255) ERROR 10-22 02:59:50 [async_llm.py:704] AsyncLLM output_handler failed.",
+    "(APIServer pid=207255) ERROR 10-22 02:59:50 [async_llm.py:704] Traceback (most recent call last):",
+    "(APIServer pid=207255) ERROR 10-22 02:59:50 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/async_llm.py\", line 660, in output_handler",
+    "(APIServer pid=207255) ERROR 10-22 02:59:50 [async_llm.py:704]     outputs = await engine_core.get_output_async()",
+    "(APIServer pid=207255) ERROR 10-22 02:59:50 [async_llm.py:704]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "(APIServer pid=207255) ERROR 10-22 02:59:50 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/core_client.py\", line 1061, in get_output_async",
+    "(APIServer pid=207255) ERROR 10-22 02:59:50 [async_llm.py:704]     raise self._format_exception(outputs) from None",
+    "(APIServer pid=207255) ERROR 10-22 02:59:50 [async_llm.py:704] vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause."
+  ],
+  "shutdown_forcekill_lines": [
+    "(APIServer pid=207255) WARNING 10-22 02:59:50 [utils.py:620] [shutdown] Process manager: force killing remaining processes count=1"
+  ],
+  "kind": "独立stdlib本地证据终审；非重复GPU试验",
+  "first_real_marker": {
+    "markers": [
+      "(EngineCore pid=207423) BIV150_MAPPED_DECODE_INSTALLED request_and_sampling_rows_unchanged=1",
+      "(EngineCore pid=207423) BIV150_MAPPED_DECODE_FIRST_SELECTED real_execute=1 decode_requests=15 forward_selected=1"
+    ],
+    "has_real_execute_marker": true,
+    "first_marker_is_full_count": false
+  },
+  "descriptive_vs_183543_tps_change_percent": -1.0716647542680646,
+  "comparison_kv_capacity_matched": false,
+  "limitations": [
+    "32/0成功并真实FIRST_SELECTED不代表全模型accuracy通过。",
+    "构造单层D29省13.31%不能外推服务收益。",
+    "对183543只能描述：实际KV521840与521936不同，非严格容量归因；未默认。",
+    "关停ERROR按raw成功后SIGTERM时序保留；不是无ERROR。"
+  ]
+}

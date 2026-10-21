@@ -410,3 +410,113 @@ actual :287–355/:596–620/:686–745支持区分三种行号：req_idx=map[d]
 随后实际读framework设计文档1124f5b34e65791feb43f0d6049fcc4d0d4e86386c3c313cf6960cc3a87f471c第5–6节与proof4c4fe093f2f7e4b2c38c4025d404ce8931d1cb1c84f4a044c87afbdd89dd4a0c，核哈希一致、没有重跑suite。proof按actual cu//BQ+req虚拟起点和upperbound grid/earlyreturn检查集合，map唯一含全部singleton，2D/mapped不交不漏、scratch上界及N/D边界数学无阻断；它是整数模型，不是Triton执行证明。派生JIT不自动继承原C2代理，必须显式BM16/T16/w2s1/S16、旧FIRST_SELECTED不能作新路径证据，文档已加入。仍建议正式handoff补map pinned H2D strongref、producer→forward stream wait/record_stream、跨步复用与capture/未知feature/KVsharing回退，已发owner/root，未修改其文件。
 
 prefix-mask服务准备仍无runtime/transformer写入，root要求先集中CTA guard。已把只读挂点审计与最短pair方案补入analysis/2026-10-22-mm-cta-group.md最后一节：exact e155 init481–968不load/capture，worker473构造/484load/745capture，适合原init返回后且footer已SQL/C2/C3安装时装独立proxy；每PID新目录避免create(xb)冲突，真实单请求scheduled≥128加selected增量才证大query省mask，不能拿smoke或总M证明。热DB/实际C0/KV匹配、不同seed预热真实形状、原16K32req1024out服务pair、所有小/噪声结果保留边界均已落盘。没有开始分散的新实现或GPU。
+
+### 180646正式CTA门完成；仅gate-up服务入口已交接
+
+root实际执行experiments/framework/20261021T180646Z-mm-cta-group-cpu-guard-gate，10秒exit0；本owner读本地results并核全部source SHA，两个shape bits/finite/inputs/RNG、8phase basic guard、after_timing全true。gate-up wall1.4179341875→1.1885717656249999ms（快16.1758158%），Event1.4043543934822083→1.174988865852356ms（快16.3324535%）；down wall0.735825265625→0.763840109375ms（慢3.8072685%），Event0.7219997048377991→0.7500479817390442ms（慢3.8848045%）。原173921失败、180033异常oracle诊断、down负结果全部保留，不覆盖、不把单次合成ABBA当服务或accuracy。
+
+root授权只实现精确gate-up服务，不启down。已完成且systems独立全文审无阻断：
+
+| 文件 | SHA256 |
+|---|---|
+| patches/framework/biv150_mm_cta_group_service.py | 44fc8e5c887340f245332635a245690946de38f201678b07212137d4c8a716f7 |
+| patches/framework/biv150_mm_cta_group_service_source.py | 4ab31a9cb864af75be8ad891902b1433cf1bb007a05e18bbbc4310b6aa37016d |
+| scripts/remote/prepare_mm_cta_group_source.py | e007cccf21f20ac3130cf1c0f414189ad4ea45687bac7167e3f8a29e68ff4a2c |
+| 复用prepare_innovation_source.py helper（未改） | 0ecf7dc7536afddd853887ddc412b5f6ee330c7efa90ebd9e6904423501364ca |
+| 派生runner（原e155完整prefix+新footer） | 787665d3cf6dabc1afc2bdf7069fab4802fd5f6bfb0baedd119229b5b8ce1775 |
+
+实际入口从fg.mm.__module__找到真实alias模块，验证mm/mm_out globals及FULL_CONFIG/实际mm注册，再仅装mm_kernel代理；注册函数本身不改，不另import未被dispatcher使用的canonical别名。严格MiniCPM原config596/BF16/2048/6144/42/16/2/单卡、无量化specLoRAMM连接器共享KV，ContextVar只在该runner execute/_dummy_run开，exception finally reset，capture/其它模型与作用域原路。只有M2048/N12288/K2048、A(2048,1)/B(1,2048)/C(12288,1)、同device0 BF16、指针16align/storage分离且actual LibEntry热entry的完整BM256BN256BK32SK1/w16s2ctas1/EVENtrue/UPfalse/无hook完全一致才走group8；cachemiss先原调用，让原DB与autotuner选择，entry变化/其它C0全回退。newcompiled cache不持A/B/C，每call用当前26实参；真实改PID实现，不是切换已有backend。
+
+必要CPU合同仅一次：service-cpu-check.json保存原prefix完整/漂移拒绝/compile、提取actual LibEntry.key的fake pointer双调用当前A/B/C、C0变化/cachemiss/capture/无scope/tuplegrid fallback和ContextVar恢复；没有import Torch或设备，不能当模型/FP证明。service-package-check.json保存一次真实归档213文件（含归档base-revision额外一项）复制到215，只runner footer变化+policy/runtime两个新增，其它SHA全同、现有output拒绝。builder锁原080656路径、5核心和3素材/helper SHA，纯stdlib copy/compile，不覆盖原code/协作库/installed/default。pycompile/--help过；systems既审44fc/4ab也审e007，未跑suite/GPU。
+
+中文analysis/2026-10-22-mm-cta-group-service.md保存完整证据、文件身份、挂点、恢复与root命令。root纯CPU build需原policy06c7+runtime44fc+source4ab+buildere007+helper0ecf；输出runner7876。短service建议原context-screen16K32req128out/seed721201匹配热DB/当前C0/KV，原服务参数不改。外层launcher必须export BIV150_MM_CTA_ARTIFACTS="$control/mm-cta-artifacts"，driver --require-log-marker BIV150_MM_CTA_GROUP_READY；每PID存源/C0/resources，必须benchmark真实execute中REAL_SELECTED，不能仅dummy FIRST。新kernel需测量前已编译，否则测外warm或冷窗口另记。shutdown/atexit不一定TERM执行，首次status不能当最终总计。全部已发root串行上卡，本owner不GPU；当前此新服务入口未上卡、无accuracy继承。
+
+### mapped运行时初审与一条明确纠正
+
+已只读mapped source0433a8de/派生67a983与当时磁盘runtimefab3c673；地址3种行号、compact scratch、base_forward一次经context代理分两unified、异常finally不重试、producer wait/record_stream及plan强ref无明显阻断，仍等待其最终runtime/gate审阅。原C3 build仍先执行，prefix非空时旧suffix_cu准备会保留，不能在性能说明中当作已消除。
+
+**纠正本人聊天中的错误推断：base_forward不含KV写，也不能推测mapped少一次KV writer launch。** framework owner指出后，本人实读actual1219 forward结尾及do_kv_cache_update:724–768：writer独立于forward，forward只读cache并调用unified_attention。该“少writer”推断已撤回，已发owner，未来报告不能继承它。本轮没有修改mapped文件或运行其设备门。
+
+最终mapped交叉只读审阅已完成，四文件均实际核hash：runtime7bf4e1337b0afe7a425204a4424ff76e05ebd143feed9d00d809daf9c5d61d47、source0433a8de0d1e42962d8c8c1ef671f2937107dfb5ae144447cd5f13df9b10811e、derived67a9830eaa976e79d9d21f5f34ec4bbfe0215d3082d6571d415c1c8f33a85f47、gatec2ded9b854608aedb15b6279d5c84195f0a0698b49117d2b05d155216b4e98bd。基于实际codefile/unwrap身份、C3 prefix/threshold64、d/r/t/compact scratch/N-D边界/显式C2配置和scope，未发现进入root最短correctness设备门的阻断。plan保持CPU/GPU map强引用，consumer wait生产流并record_stream；ContextVar finally reset、已选路径错误不原路重试。
+
+gate全文核4shape D29非prefix/D1尾/D1中/D64N65：原2D全batch加独立compact原C2按t回填作oracle；actual writer整KV期望、slot-1/NaN尾、全out bits/skip sentinel/prefill三FP32行/KV/RNG；同cache真追加16384→16385后的纯decodefallback、跨流释放map+churn、mixedcapture原2D回退。optional timing确实含原C3 builder保留的unused suffix_cu和新map H2D、32call预recordABBA；默认不加--timing，root先正确性。未重跑owner源合同或任何suite/GPU，不把CPU审阅当设备通过、完整模型准确率或性能结论。已发framework owner与root，最终包装由owner负责。
+
+本轮最终交接已完成：CTA gateup服务runtime44fc/source4ab/builder e007及短service要求已发root，systems双重互审完成；独立mapped实现/门也只读审完。尚待root串行的CTA服务实测与mapped设备门，本owner无设备作业/PID。prefix-mask仍明确下项计划而未写runtime，继续保留用户“小收益也上卡并保留”的要求，不与本次CTA或mapped混测。
+
+### 182916 CTA 实际模型命中与原 compiled hash 取证完成
+
+本节覆盖上一节“未服务”的历史状态。root已完成 `20261021T182916Z-mm-cta-group-context16k`，原run/control包SHA256为 `96074323f386817d460bdefd0982c44ba5f58c3f760c07c0e81604364215ccac`。root回执32/0、118.41752643秒、KV容量521840、DB三项SHA不变。本owner本地逐项核control的413份源SHA、5份每PID文件和日志：group8 compiled08afb545…与180646门相同，实际模型REAL_SELECTED delta42、total2048、requests1。首个真实命中刷出的status只证明当时selected/real计数，不能当TERM后最终总量；此处不从单个时长声称服务因果收益，匹配pair由root持有。
+
+服务原compiled23d5fd…与门原3639b8…不同，root授权先列精确cache/source路径，设备结束后一次只读取证。root实际归档 `experiments/source-audits/20261021T183920Z-compiler-cache`，包SHA256 `eb19121a54593fa3e52b37ec41900487c656f7398a65e09ddb061f23ac9587c6`，实际collector SHA为 `685e6d107f8d96fe5bd5e4f67bb15b5313ec4ee946a2e6a63ea89b17992b892b`（归档collector.py为准）。我在其执行前后衔接期间将本地collector增加了非敏感env白名单，当前本地02187d04…不是本次实际执行版本；已承认该交付版本协调错误并告root，**后续已交付脚本不得不经root协调再覆写；旧run原件和SHA保持原样**。0218只作为未执行补充，不把它写进旧记录。
+
+新增一次纯stdlib取证复核 `analysis/source/mm-cta-group/review_compile_cache.py`，SHA `8d9a7b9d17da7996e084fa6f53a224998b3db717455d6f2f4a50585dc5a220d5`，结果 `compile-cache-review.json` SHA `0324315287afd29e112690aec6f8ae5a0e048bda7504b6c3a7a55b41046fe960`。32份已归档source/cache SHA全符；metadata仅hash不同，其余全部compiler options相同（use_sme7）；原完整函数体byte同，三MLIR阶段只删调试loc定义后同，LLVM只删源码调试定义后同。自行解析ELF64表，全部SHF_ALLOC段payload/type/flags/size相同，8,016B `.text` SHA同为 `e29f72a3564ca0df74e94467a37cddae274641914f3655a1bda65385a4425210`；整个cubin只.debug_info/.debug_line两段不同。实际spec JIT :503 inspect起始行、:549把starting_line_number纳入cache key，原源码decorator50/def78 vs提取20/21与调试身份差异一致。只证明这些exact条目/配置机器码相同，不泛化所有hash差异，不新编译/GPU/模型accuracy。
+
+完整中文报告 `analysis/2026-10-22-mm-cta-compile-cache.md`，CTA service说明同步真实状态。公开Triton v3.6.0 jit/compiler/cache仅机制一手参考，本机结论以actual spec SHA66a168ae…及本次cache为准。已先将结论发root，没有测量期间扫cache，也未SSH。
+
+### mapped 编译失败根因、最小修复与隔离服务包装终审
+
+183421旧mapped门失败发生在首case结果前：派生skip2D fresh compile将68954357763（0x100e000003）传给SME pass而超32bit。与framework owner共同核actual spec `get_corex_sme:31–68` 和freshcompile :761：该选择器按非constexpr operand位置，为满足布局的多维BF16等tensor置bit；旧derived在MAPPED=False时把新增decode-map dummy设为二维BF16 out，位于第36个operand，恰增加2^36。原attention/prefix mask为234881027（0x0e000003），broken精确变68954357763。不是推断backend默认0或猜测环境；actual JIT会计算并传mask。
+
+framework最小两行修复只是两个未使用dummy从out改为现有一维int32 cu_seqlens_q，真map仍为一维int32；没有关闭/覆盖SME或改选项/FP。本人对旧归档source与新件独立diff及核hash：transformer `919e80abf5b95c55ea63aa8619fa3202cd78b0c4cc0e303df7b4197bf1898316`，derived `72713a90584bc6567706fb881188afa04335230afc13e021c10f862f88d054a1`；runtime仅pin变为 `d085ad6dcc0fd5dc26188d3e0f5801b8e394dc07a79c05a376192ec9e1e95b4b`；gate三pin变为 `ede4519424d467bb4f47f52cb57429c5e489ee2324070c482225cc0499b0dc2f`。owner的actual selector AST+CPU stub复算精确匹配数值，我未重跑旧suite或设备。原失败source/raw不改，复核后支持root最短修正版门。owner回执184809四case通过、185023单层timing wall13.31%/event12.76%信号；此处明确是owner回执而非我独立读取全部新raw，更不等于E2E。
+
+当前已全文终审 `scripts/remote/prepare_mapped_decode_source.py` SHA `a41c3858ac5d19ffbb385d9ad075635b560fb272af2c2d6b5c490f04713d2459` 和root新 `launch_mapped_decode_screen.sh` SHA `3455b8d1620305be1af6faa7336e4e785820af01d394ad187c0154e0277cdce0`：owner0ecf完整source_files/内部regular alias规则、原080656七core及五BIV精确集合、修正四件pins、仅runtime/source/derived三文件入包、派生runner3566099b2f336f3e7ae768adeca5b0da169748324fec26fc00b150b26b246a73、全新直接目录/全输入输出SHA，无当前阻断。launcher固定buildera41c/driverbc51、原context16K/seed721201/服务参数、无新env，idle和双栈9031预检后由原driver flock。INSTALLED是启动门，仍需真实 FIRST_SELECTED real_execute=1；不把purpose字段当实际命中。已先通知root可串行上卡，root当前185627是唯一设备作业。未重跑owner打包检查或GPU。
+
+### prefix-mask 小收益独立服务入口已冻结，尚待 root 上卡
+
+本节覆盖旧“尚未实现”计划，落实用户“小收益也要上卡并保留”。保持原受测policy `87c6a31075939c551402d7007b491546a215584a58ec82caddc08fc7249998d6` 和generated `a6d3604aaf3896dce150b8ef56253a3d0fa12dd89095740bb1ec99ce975ddaa2`，原121838两shapebits/KV/RNG/padding/3DC2回退通过、小层wall0.275858%/Event0.453959%信号，不新增数学实现、不重跑旧门。
+
+冻结文件：runtime `patches/framework/biv150_visible_prefix_service.py` SHA `7258ad7929ad22676201fec045184f0038be4689f2eef3a51b21e30c658029da`；transformer `biv150_visible_prefix_service_source.py` SHA `464b9ea73f6961097c1cde2c92d97bdf9ed50909e9da1ecbb65f1dd437bccaba`；builder `scripts/remote/prepare_visible_prefix_source.py` SHA `a4e978770e98aa3c5a245de96470916aae570ef63a55083534465309ceaf615f`；复用helper0ecf未改；输出runner `4467ac262bb22edca90c106ae2361efe5e8917ec7115d51c07d4d3e35245703a`。新服务只在exact e155完整前缀的SQL→C2→C3后追加footer；原ctor返回后装proxy，先load/capture，strict原模型/单卡/BF16/no未知features/安全KV，ContextVar finally、capture/3D/未知路原C2。每PID唯一实验目录下create(xb)生成a6d，保存所有source hash；不改installed、稳定源或default，不叠CTA/mapped/metadata/async。
+
+新增一次最必要CPU wrapper/source合同 `analysis/source/prefill-visible-prefix/service-cpu-check.json`：exactprefix/逆回、漂移拒绝、原87c6生成a6d、fakeinner dummy/real_large分离、小query不当免mask证明、capture/unsafeKV/outsidecontext fallback、原return与exception finally；无Torch/Triton导入，不等FP/stream证明。`service-package-check.json` 记录真实归档213→215文件，只有runner与policy/runtime两个新增变化、其它SHA全同、旧output拒绝。语法/--help通过；framework全文两轮独立只读审7258/464b/a4e无scope/C3顺序/capture/计数/包装阻断，没有重复suite。已有Scoped proxy复用仅instanceof的非阻断建议保留，exact新副本不叠其它候选，未为此扩大实现。
+
+中文 `analysis/2026-10-22-visible-prefix-service.md` 完整记录命令、source与范围。env是 `BIV150_VISIBLE_PREFIX_ARTIFACTS=$control/prefix-artifacts`（替代早期计划的MASK变量名），原driver启动门READY，测后必须 `BIV150_VISIBLE_PREFIX_REAL_LARGE_SELECTED`：真实execute selected增量>0且单请求maxquery>=128，不能拿批token和、dummy或8token smoke代替。此标记仅几何机会而非GPU省mask计数。FIRST按compiled hash记录首次时机，测量期新variant编译需按冷窗口另记；TERM未flush时旧status不当最终数。
+
+最短先匹配原080656 context-screen16K/32req/128out/concurrency64、seed721201、原服务参数/热DB三SHA/KV容量；代替旧优先1024out建议。不同seed测外预热避免APC共享测量prompt；是否追加1024out由root按结果决定。独立小/零/负/噪声均保留，不报未经证实E2E，不继承父基点103/105accuracy。最终代码SHA与全部要求已发root及framework并冻结；root优先当前mapped服务，此新prefix入口未设备执行。本owner无设备PID、SSH、GPU、远端导入或GitHub改动。
+
+### KV page-copy 成本门的独立只读审阅
+
+systems owner提交 `patches/framework/biv150_kv_page_copy.py` SHA `c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c` 与 `scripts/remote/validate_kv_page_copy.py` SHA `b86a3017373aca15f4e757ee5c2c616b91b49464c43f3ad312be3ac16db06513`。我全文只读审两文件，并核 `20261021T184108Z-kv-copy` actual backend1219 shape/stride及reshape helpera351：normal42每层16KiB页、packed42同一raw中offset=i*PAGE、block_stride42*PAGE，均是该helper支持的NHD构造；不把构造写成实际服务layout观测。初次误到170854目录查新helper未找到，随后按rg定位184108正确原件，没有改原source。
+
+无当前阻断：coalesced runs保逻辑次序，source/dest映射一一覆盖、不排序、不分配GPU pack临时；compute生产record ready→transfer等待保存→end_save.synchronize后才读pinned并毒化源；poisoned事件后恢复→compute等待end_restore→42层actualviews clone消费者→consumed同步。raw、host、golden、views和consumer均持强引用，跨流操作完成前不会释放；返回completion_ack=false未谎称copy提交即完成。正数basic CPU全byte、guard/non-target poison判据避免此前负advanced索引oracle问题。
+
+4个计时Event预record排初始化，timed pass的生产/poison同步在copy窗外，单方向wall计submit+完成同步，Event计copy区间，allocation/consumer/CPU校验排除；只是每构造1warm样本，不能称稳定带宽/E2E。cgroup字段准确写observation_not_peak，初步聊天的“host峰值”不可进入结果结论。控制器同锁、68/0双栈pre/post、单child/timeout进程组清理、source仅is_file符合设备owner规。已发systems和root可串行最短门；我没有重复CPU合同、suite或GPU，也没有改对方文件。此门不实现服务allocator/取消/请求restore协议，不是模型accuracy或KV容量收益证明。
+
+### KV 门最终 d841 单点增量终审
+
+root实读gate已变 `d841a1abbfee94a68fddc1afec8bd236b91e2831102217577fa90bd03605f8a3`，要求版本确认前不上KV；此时prefix190206是root唯一GPU。本人本地只读当前gate，内存将唯一新行 `tensor.narrow(0, 1, POOL - 2).fill_(165)` 逆换为旧的整raw fill165及两guard重写90三行，精确重建已审 `b86a3017373aca15f4e757ee5c2c616b91b49464c43f3ad312be3ac16db06513`，证明没有其它delta。policy仍c95f原件不变。
+
+该修正只强化oracle：guard在初始reference复制后完全不再写，避免poison时重写90掩盖前序意外改动；interior 1…POOL-2仍全部毒化165，guard检查保持正数basic CPU。poison仍在计时窗外，copy实现/四构造case/布局/映射/event/强引用/计时与控制器均不变，无当前阻断。已发root和systems支持按最终d841串行最短门；没有重复CPU合同、suite或设备，原b86a审阅回执保留，当前门最终身份以d841为准。
+
+### KV191017 包装失败保留与93eb模块改名终审
+
+root实际191017 gate d841在任何case之前exit1，results.cases=[]。我已本地直接读其results/manifest：归档source/copy.py（policyc95f）被dataclasses的 `import copy` 误当stdlib copy，递归触发partially initialized dataclasses错误，未产生复制正确性或计时结果。**此Python归档命名遮蔽是本人初审漏项**，已明确告root，不能把这次包装失败当KV机制负面。旧run/source/d841原件保留。
+
+systems按root授权仅将gate的4处字面量 `"copy.py"` 改成 `"biv150_kv_page_copy.py"`，policyc95f不动。本人实读新gate并与 `analysis/source/kv-page-copy/validate_kv_page_copy.d841.py` 逐byte核：恰该4处替换，无其它delta；最终gate `93eb02c7dbdaac3ec982fbf5b0dd0f24e29ebf74e73a5b48c7dc820ae0dab56d`。launcher `scripts/remote/launch_kv_page_copy_gate.sh` 全文核，SHA `ba3336e186b9f62c32b6dd053e55a4b990c17912f3c15d88cbbc2bddebf38836`，pin93eb/c95f/owner6072/monitoraf90与source184108命令对应，未增加参数或设备并发。
+
+已读owner `analysis/source/kv-page-copy/source-load-check.json` 及两侧实际scratch源码SHA：每侧为真实source子目录、新Python进程，先断言stdlib copy尚未加载，旧归档精确重现循环导入，新归档成功且copy指向stdlib、run映射正确、无torch/numpy/vllm。此检查能排除父进程已装copy而掩盖bug的假通过；首轮Windows stderr编码收集问题和显式-Xutf8重复必要加载检查由owner保留，不是额外设备实验。我未重跑suite、旧合同或设备；已发root/systems支持按最终93eb最短重试。当前93eb覆盖d841的门版本回执，旧失败绝不覆盖。
+
+### prefix190206 完整原件验收：同容量首次短筛负面，不集成
+
+root完成 `20261021T190206Z-visible-prefix-context16k`，原件run/control已本地，tgz SHA `5f79f583a41af027c4c5c7a51de968657465353d1127c1300555a8ef7425662c` 本人重算相同。未改任何runtime/driver/原run；独立分析JSON为 `analysis/source/prefill-visible-prefix/190206-service-review.json`，保存原result路径/SHA、逐项条件、marker行号、shutdown记录和百分比计算。
+
+直接核两base183543/184244的410/410份source与候选413份实际文件SHA、集合全符，candidate相对base仅runner4467+policy87c6+service7258+创新manifest；原完整prefix保留，perPID七源/派生a6d全符。三run同driverbc51/server参数/seed721201/包版本/installed/model/generation SHA、CPU6核quota、KV521936；各DB before=after且跨run三SHA完全相同，实际六份snapshot文件重算一致（1593d60c…，schemaa0a59008…，logical90e9a868…）。preemptions/APC hit均0，三端完成32/0、524288输入/4096输出token。post候选19:10:00Z为68/0、双栈关闭、413源无漂移。
+
+原始duration/TPS/meanTTFT：base183543 `120.48498157598078 / 4385.476040985142 / 60874.43063224782`，base184244 `120.7632626676932 / 4375.370359560136 / 61145.73857927462`；prefix190206 `123.55798832001165 / 4276.4050077563625 / 63199.166325692204`。相对两base各指标算术均值duration+2.432238%、TPS-2.374615%、TTFT+3.588065%；相对单baseTPS分别-2.487097%/-2.261874%。明确负结果保留，暂不集成，不能把小层+0.45%写成服务正收益。
+
+READY/REAL_LARGE真实delta42/maxquery2048成立，但第一条REAL_LARGE也可能来自bench初始单prompt test，不能单凭它证明主计时段；FIRST的num_seqs2/query_rows2047及16/2048则证明多请求主负载实际用了新kernel。三个FIRST为8query烟测ef393b84…、2/2047的cac38024…、16/2048的15bda8ff…，均101regs/0spill/shared65536；status selected5713等是第三hash初见快照非最终总数，不是GPU免mask次数。原客户端num_warmups0，两变体负载内才首次选中，没有全形状测外预热证明；FIRST不等cache miss/编译时长，既不能归因全为冷编译，也不能把负面归因完全预热后稳态退化。此轮准确表述为**首次接入服务短筛负面，热稳态未被本轮隔离证明**，不追加测试/新方案。
+
+三端首次shutdown前无ERROR，candidate结束阶段forcekill与8行EngineDeadError/traceback完整保留；benchmark32/0、exit0与post空闲分别成立，不写全日志无error。完整中文 `analysis/2026-10-22-visible-prefix-service.md` 已更新真实结果与边界。此前“尚未上卡”历史由本节覆盖；保留受测policy/prototype，准确率未测、不继承父基点103/105。本owner全程CPU本地，无SSH/GPU/设备PID，root唯一设备owner继续其它已授权队列。
+
+### KV191545 成本/计时限制审计完成，本批暂停写入
+
+root已完成修正版93eb/c95f的 `20261021T191545Z-kv-page-copy-gate`，19:16:59Z exit0，原件到本地。本owner独立重算tgz SHA `7b491c525759e3320ecac8cd385d31fd1f434784ade63eef16bb2ab02a554316`，实际8source SHA全符manifest/results，无copy.py残留；四构造八pass共40项全byte/guard/未选页/事件42view消费者检查true，四RNGtrue，每向704643072B，实际calls42/336/1/8。actualhelper两布局描述与pageoffset匹配；ownerpost19:18:05Z为68/0、两栈关闭、8源无漂移。没有运行新设备或修改runtime/driver/gate。
+
+原始savewall/restorewall/roundtripwall ms：normal连续25.946121/196.106984/222.053105；normal8run27.699296/207.570993/235.270289；packed连续24.943508/95.012686/119.956194；packed8run25.027936/95.688994/120.716930。对应saveEvent/restoreEvent ms依次24.756731/26.488735、25.073376/194.106018、24.734741/26.496109、24.747791/26.758972。normal连续restore wall比Event多169.618249ms，packed多约68.5–68.9ms，normal8run连Event也异常升高。不能略去异常后只取26ms当稳定带宽，不能从单次normal/packed差异报因果服务收益。
+
+静态窗口核对：timed ready/poison同步和4 Event预record在窗外；wall覆盖上下文/wait/record/全部主机copy提交和end事件同步返回，Event仅括两record。save后restore前有672MiB CPU torch.equal检查，虽在窗外却不会重置cgroup quota周期，poison GPU同步也不重置；若主机延迟在begin前/end后则wall高Event低，在多个copy中间则Event也可能含等待提交间隙。CPU6核quota在同实例服务证据/root回执有依据，但**本门缺逐window cpu.stat/实际Torch线程数/调度与CPU时间**，不能确认本次差额由多少节流造成，host API/线程池/驻留/设备runtime因素未分离。该边界与systems独立raw终审一致。
+
+实际浏览一手文档仅作语义佐证：PyTorch2.10 Event https://docs.pytorch.org/docs/2.10/generated/torch.cuda.Event.html 、CPU线程 https://docs.pytorch.org/docs/2.10/generated/torch.set_num_threads.html 、Linux CFS https://docs.kernel.org/scheduler/sched-bwc.html 。未把标准CUDA文档当BI-V150实测；事件正确性不等于计时无混杂，memory cgroup只是离散观测非host峰值，GPU峰值含测试consumerclone，不外推生产KV容量。
+
+新增中文 `analysis/2026-10-22-kv-page-copy-timing-review.md` 与独立 `analysis/source/kv-page-copy/191545-cost-review.json` 保存全部数值、源/原件SHA、窗口可知/未知与归档恢复入口。结论为构造byte/event复制门通过、成本单样本且归因未知、真实服务layout/allocator/取消/restore协议未测；不新写runtime或追加GPU。
+
+**本批完成后按root要求暂停本owner文件写入。** 当前prefix190206负结果已保留、KV191017失败/93eb修正/191545成功和计时限制均持久化。root可进行checkpoint、私有实验库同步与完整离线包；下一API先读本节及对应analysis恢复，不恢复新实验或文件编辑，直至root/用户另行授权。本owner无设备PID/SSH/GPU/远端模型导入/GitHub写入。

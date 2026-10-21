@@ -144,7 +144,8 @@ def main():
                 element.pop('sha')
                 element['content'] = obj['text']
             length = len(json.dumps(element, ensure_ascii=True))
-            if batch and size + length > 2_000_000:
+            # 大量源码副本会使 GitHub tree 请求超时；缩小批次不改变最终 tree。
+            if batch and (size + length > 400_000 or len(batch) >= 200):
                 break
             batch.append(element)
             size += length

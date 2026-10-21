@@ -1,0 +1,33 @@
+{
+  "old": {
+    "command": [
+      "C:\\ProgramData\\anaconda3\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\tmp\\kv-page-copy-source-load-20261021T191018Z\\old\\source\\check_load.py"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\r\n  File \"C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\tmp\\kv-page-copy-source-load-20261021T191018Z\\old\\source\\check_load.py\", line 9, in <module>\r\n    module=g.load(p/ARCHIVED)\r\n  File \"C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\tmp\\kv-page-copy-source-load-20261021T191018Z\\old\\source\\gate.py\", line 58, in load\r\n    spec.loader.exec_module(module)\r\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^\r\n  File \"<frozen importlib._bootstrap_external>\", line 1027, in exec_module\r\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\r\n  File \"C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\tmp\\kv-page-copy-source-load-20261021T191018Z\\old\\source\\copy.py\", line 6, in <module>\r\n    from dataclasses import dataclass\r\n  File \"C:\\ProgramData\\anaconda3\\Lib\\dataclasses.py\", line 3, in <module>\r\n    import copy\r\n  File \"C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\tmp\\kv-page-copy-source-load-20261021T191018Z\\old\\source\\copy.py\", line 6, in <module>\r\n    from dataclasses import dataclass\r\nImportError: cannot import name 'dataclass' from partially initialized module 'dataclasses' (most likely due to a circular import) (C:\\ProgramData\\anaconda3\\Lib\\dataclasses.py)\r\n",
+    "gate_sha256": "d841a1abbfee94a68fddc1afec8bd236b91e2831102217577fa90bd03605f8a3"
+  },
+  "fixed": {
+    "command": [
+      "C:\\ProgramData\\anaconda3\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\tmp\\kv-page-copy-source-load-20261021T191018Z\\fixed\\source\\check_load.py"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"status\": \"passed\", \"stdlib_copy\": \"C:\\\\ProgramData\\\\anaconda3\\\\Lib\\\\copy.py\", \"archive\": \"biv150_kv_page_copy.py\", \"runs\": [[1, 0, 2]]}\r\n",
+    "stderr": "",
+    "gate_sha256": "93eb02c7dbdaac3ec982fbf5b0dd0f24e29ebf74e73a5b48c7dc820ae0dab56d"
+  },
+  "kind": "CPU归档加载路径对照：真实source子目录新Python进程；未导入框架/GPU",
+  "fixed_archive": "biv150_kv_page_copy.py",
+  "runtime_sha256": "c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c",
+  "device_ran": false,
+  "harness_note": "首次父进程固定utf8读取Windows默认编码子进程stderr失败，未保存结果；已对子进程显式-Xutf8后同一隔离目录复跑必要加载检查，非候选改动/非GPU。"
+}

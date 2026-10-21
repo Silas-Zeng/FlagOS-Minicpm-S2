@@ -1,0 +1,49 @@
+INFO 10-22 02:34:23 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-22 02:34:23 [__init__.py:46] - fl -> vllm_fl:register
+INFO 10-22 02:34:23 [__init__.py:49] All plugins in this group will be loaded. Set `VLLM_PLUGINS` to control which plugins to load.
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:728: DeprecationWarning: use_cuda_graph is deprecated; use benchmark_mode='replay' or benchmark_mode='event'
+  super().__init__(*args, **kwargs)
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:411: RuntimeWarning: active Triton backend does not provide a replay benchmarker; falling back to event timing
+  resolved_benchmark = resolve_benchmarker(
+INFO 10-22 02:34:30 [__init__.py:237] Platform plugin fl is activated
+WARNING 10-22 02:34:34 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+/usr/local/lib/python3.12/site-packages/torch/jit/_script.py:362: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+WARNING 10-22 02:34:35 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+WARNING 10-22 02:34:35 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+WARNING 10-22 02:34:35 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+[2026-10-22 02:34:35] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_sampler_compile_for_iluvatar: unwrapped topk_topp_sampler.compiled_random_sample
+[2026-10-22 02:34:35] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_sampler_compile_for_iluvatar: unwrapped logprobs.batched_count_greater_than
+[2026-10-22 02:34:35] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_torch_inductor_for_iluvatar: backend '['iluvatar']' already supports target='cuda', no GPUTarget remap needed.
+INFO 10-22 02:34:35 [model.py:598] Resolved architecture: LlamaForCausalLM
+INFO 10-22 02:34:35 [model.py:1725] Using max model len 131072
+INFO 10-22 02:34:35 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=2048.
+INFO 10-22 02:34:35 [vllm.py:1006] Asynchronous scheduling is enabled.
+INFO 10-22 02:34:35 [kernel.py:276] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+BIV150_DECODE_LAUNCH_FIRST_SELECTED warps=2 stages=1
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/framework/20261021T183421Z-mapped-decode-gate/source/gate.py", line 207, in worker
+    derived.unified_attention(**captured, biv150_skip_single_query=True)
+  File "/workspace/experiments/minicpm-s2/framework/20261021T183421Z-mapped-decode-gate/source/candidate_attention.py", line 1098, in unified_attention
+    kernel_unified_attention[grid](
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 362, in compile
+    next_module = compile_ir(module, metadata)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/backends/iluvatar/compiler.py", line 481, in <lambda>
+    stages["ttgir"] = lambda src, metadata: self.make_ttgir(src, metadata, options, capability)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/backends/iluvatar/compiler.py", line 294, in make_ttgir
+    iluvatar.passes.ttgpuir.add_accelerate_matmul(pm, opt.use_sme)
+TypeError: add_accelerate_matmul(): incompatible function arguments. The following argument types are supported:
+    1. (arg0: triton._C.libtriton.ir.pass_manager, arg1: typing.SupportsInt) -> None
+
+Invoked with: <triton._C.libtriton.ir.pass_manager object at 0x7d19d40c6570>, 68954357763

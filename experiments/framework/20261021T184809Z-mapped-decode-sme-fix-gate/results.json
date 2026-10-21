@@ -1,0 +1,382 @@
+{
+  "status": "correctness_passed_single_layer_only",
+  "accuracy": "not evaluated",
+  "official_performance": "not evaluated",
+  "timing": false,
+  "timing_method": "optional first-case actual build+forward ABBA; pre-recorded Events; 32 calls/window; one final drain/window",
+  "cases": [
+    {
+      "case": "D29-nonprefix",
+      "lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2019,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "kv_len": 16384,
+      "correctness": {
+        "map_all_singletons_once": true,
+        "actual_writer_all_slots_exact": true,
+        "all_output_bits_equal_independent_oracle": true,
+        "prefill_bits_unchanged": true,
+        "skip_2d_leaves_singleton_sentinel": true,
+        "skip_2d_writes_every_prefill": true,
+        "padding_untouched": true,
+        "valid_output_finite": true,
+        "entire_kv_bits_unchanged": true,
+        "rng_unchanged": true,
+        "one_selected_forward": true,
+        "one_skip_and_one_mapped_dispatch": true,
+        "three_fp32_rows": true
+      },
+      "fp32_reference": [
+        {
+          "request": 0,
+          "token": 0,
+          "visible_kv": 16384,
+          "max_abs_diff": 0.00011841952800750732,
+          "passed": true
+        },
+        {
+          "request": 10,
+          "token": 10,
+          "visible_kv": 14366,
+          "max_abs_diff": 0.00025443360209465027,
+          "passed": true
+        },
+        {
+          "request": 10,
+          "token": 2028,
+          "visible_kv": 16384,
+          "max_abs_diff": 0.0002167336642742157,
+          "passed": true
+        }
+      ],
+      "original_c3_max_abs_difference": 0.000732421875,
+      "original_2d_max_abs_difference": 0.000732421875,
+      "next_decode": {
+        "mapped_plan_absent": true,
+        "bits_equal": true,
+        "entire_kv_matches_only_append": true,
+        "selected_unchanged": true
+      }
+    },
+    {
+      "case": "D1-tail",
+      "lengths": [
+        127,
+        1
+      ],
+      "kv_len": 16384,
+      "correctness": {
+        "map_all_singletons_once": true,
+        "actual_writer_all_slots_exact": true,
+        "all_output_bits_equal_independent_oracle": true,
+        "prefill_bits_unchanged": true,
+        "skip_2d_leaves_singleton_sentinel": true,
+        "skip_2d_writes_every_prefill": true,
+        "padding_untouched": true,
+        "valid_output_finite": true,
+        "entire_kv_bits_unchanged": true,
+        "rng_unchanged": true,
+        "one_selected_forward": true,
+        "one_skip_and_one_mapped_dispatch": true,
+        "three_fp32_rows": true
+      },
+      "fp32_reference": [
+        {
+          "request": 1,
+          "token": 127,
+          "visible_kv": 16384,
+          "max_abs_diff": 0.00012737512588500977,
+          "passed": true
+        },
+        {
+          "request": 0,
+          "token": 0,
+          "visible_kv": 16258,
+          "max_abs_diff": 0.0002975389361381531,
+          "passed": true
+        },
+        {
+          "request": 0,
+          "token": 126,
+          "visible_kv": 16384,
+          "max_abs_diff": 0.00019887834787368774,
+          "passed": true
+        }
+      ],
+      "original_c3_max_abs_difference": 0.00048828125,
+      "original_2d_max_abs_difference": 0.00048828125,
+      "next_decode": {
+        "mapped_plan_absent": true,
+        "bits_equal": true,
+        "entire_kv_matches_only_append": true,
+        "selected_unchanged": true
+      }
+    },
+    {
+      "case": "D1-middle",
+      "lengths": [
+        7,
+        1,
+        9
+      ],
+      "kv_len": 16384,
+      "correctness": {
+        "map_all_singletons_once": true,
+        "actual_writer_all_slots_exact": true,
+        "all_output_bits_equal_independent_oracle": true,
+        "prefill_bits_unchanged": true,
+        "skip_2d_leaves_singleton_sentinel": true,
+        "skip_2d_writes_every_prefill": true,
+        "padding_untouched": true,
+        "valid_output_finite": true,
+        "entire_kv_bits_unchanged": true,
+        "rng_unchanged": true,
+        "one_selected_forward": true,
+        "one_skip_and_one_mapped_dispatch": true,
+        "three_fp32_rows": true
+      },
+      "fp32_reference": [
+        {
+          "request": 1,
+          "token": 7,
+          "visible_kv": 16384,
+          "max_abs_diff": 0.00012950599193572998,
+          "passed": true
+        },
+        {
+          "request": 0,
+          "token": 0,
+          "visible_kv": 16378,
+          "max_abs_diff": 0.00030357763171195984,
+          "passed": true
+        },
+        {
+          "request": 0,
+          "token": 6,
+          "visible_kv": 16384,
+          "max_abs_diff": 0.00031432509422302246,
+          "passed": true
+        }
+      ],
+      "original_c3_max_abs_difference": 0.000244140625,
+      "original_2d_max_abs_difference": 0.000244140625,
+      "cross_stream": {
+        "registered": true,
+        "python_map_released": true,
+        "bits_equal": true
+      },
+      "capture_fallback": {
+        "no_mapped_selection": true,
+        "full_2d_bits_equal": true
+      },
+      "next_decode": {
+        "mapped_plan_absent": true,
+        "bits_equal": true,
+        "entire_kv_matches_only_append": true,
+        "selected_unchanged": true
+      }
+    },
+    {
+      "case": "D64-N65",
+      "lengths": [
+        1984,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "kv_len": 16384,
+      "correctness": {
+        "map_all_singletons_once": true,
+        "actual_writer_all_slots_exact": true,
+        "all_output_bits_equal_independent_oracle": true,
+        "prefill_bits_unchanged": true,
+        "skip_2d_leaves_singleton_sentinel": true,
+        "skip_2d_writes_every_prefill": true,
+        "padding_untouched": true,
+        "valid_output_finite": true,
+        "entire_kv_bits_unchanged": true,
+        "rng_unchanged": true,
+        "one_selected_forward": true,
+        "one_skip_and_one_mapped_dispatch": true,
+        "three_fp32_rows": true
+      },
+      "fp32_reference": [
+        {
+          "request": 1,
+          "token": 1984,
+          "visible_kv": 16384,
+          "max_abs_diff": 0.0001423470675945282,
+          "passed": true
+        },
+        {
+          "request": 0,
+          "token": 0,
+          "visible_kv": 14401,
+          "max_abs_diff": 0.00022801384329795837,
+          "passed": true
+        },
+        {
+          "request": 0,
+          "token": 1983,
+          "visible_kv": 16384,
+          "max_abs_diff": 0.000289037823677063,
+          "passed": true
+        }
+      ],
+      "original_c3_max_abs_difference": 0.000244140625,
+      "original_2d_max_abs_difference": 0.000244140625,
+      "next_decode": {
+        "mapped_plan_absent": true,
+        "bits_equal": true,
+        "entire_kv_matches_only_append": true,
+        "selected_unchanged": true
+      }
+    }
+  ],
+  "worker_command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/framework/20261021T184809Z-mapped-decode-sme-fix-gate/source/gate.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261021T184809Z-mapped-decode-sme-fix-gate",
+    "--model",
+    "/workspace/MiniCPM5-2B"
+  ],
+  "limitations": [
+    "Actual Builder/Impl/writer; synthetic BF16 inputs; no weights or runner execution.",
+    "New singleton 3D reduction can differ from original C3/2D; old accuracy is not inherited.",
+    "FP32 three-row tolerance is not whole-model accuracy; FIRST_SELECTED real_execute=0 is expected."
+  ],
+  "c2_install": {
+    "installed": true,
+    "num_warps": 2,
+    "num_stages": 1,
+    "scope": "audited BF16 MiniCPM 3D decode only"
+  },
+  "c3_install": {
+    "installed": true,
+    "scope": "BF16 MiniCPM natural-prefix mixed Attention only",
+    "ordinary_mixed_dummy_may_split": true,
+    "accuracy": "mixed 2D to 3D remains unverified"
+  },
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "runtime_stats": {
+    "plans": 5,
+    "forward_selected": 5,
+    "real_forward_selected": 0,
+    "forward_fallback": 4,
+    "skip_2d_dispatches": 5,
+    "mapped_3d_dispatches": 5,
+    "capture_fallback": 1
+  },
+  "original_backend_wrappers_restored": true,
+  "source_sha256": {
+    "gate.py": "ede4519424d467bb4f47f52cb57429c5e489ee2324070c482225cc0499b0dc2f",
+    "runtime.py": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+    "mixed.py": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+    "policy.py": "d085ad6dcc0fd5dc26188d3e0f5801b8e394dc07a79c05a376192ec9e1e95b4b",
+    "transform.py": "919e80abf5b95c55ea63aa8619fa3202cd78b0c4cc0e303df7b4197bf1898316",
+    "candidate_attention.py": "72713a90584bc6567706fb881188afa04335230afc13e021c10f862f88d054a1",
+    "validate_hidden_row_gather.py": "65cb8affd4ae08af877ccb4b4cfca6822eec5ba3f83770f39999ee677c546863",
+    "validate_mixed_decode.py": "b6275ee86f4fb24824091e72fccd774d174247975f8189d360400f333a20351f",
+    "bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+    "backend.py": "c524988a2223ec556bdb128a31c255075f0d07e7643e803b447975cd9c30a6b8",
+    "triton_attn.py": "1219c4d1820b56e99ef6686de8a49c8c5aa57707794bcabf3322023799a03605",
+    "triton_unified_attention.py": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f",
+    "triton_attention_helpers.py": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1",
+    "writer.py": "f18224e51162e37c14a2e2b3045bca55baf0b207b1d203ad6ee7d8ed417139eb",
+    "model-config.json": "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180"
+  }
+}

@@ -1,0 +1,20 @@
+--- 183421/candidate_attention.py
++++ revised/biv150_mapped_attention.py
+@@ -1163,7 +1163,7 @@
+         IS_3D=use_3d,
+         KV_QUANT_MODE=kv_quant_mode,
+         Q_IS_FP8=(q.dtype == current_platform.fp8_dtype()),
+-        decode_req_indices_ptr=biv150_decode_req_indices if biv150_mapped_decode else out,
++        decode_req_indices_ptr=biv150_decode_req_indices if biv150_mapped_decode else cu_seqlens_q,
+         MAPPED_DECODE=biv150_mapped_decode,
+         SKIP_SINGLE_QUERY=biv150_skip_single_query,
+         CHUNK_LOOKBACK=chunk_lookback,
+@@ -1193,7 +1193,7 @@
+             BLOCK_Q=BLOCK_Q,
+             NUM_SEGMENTS_PER_SEQ=num_par_softmax_segments,
+             USE_FP8=output_scale is not None,
+-            decode_req_indices_ptr=biv150_decode_req_indices if biv150_mapped_decode else out,
++            decode_req_indices_ptr=biv150_decode_req_indices if biv150_mapped_decode else cu_seqlens_q,
+             MAPPED_DECODE=biv150_mapped_decode,
+         )
+ 

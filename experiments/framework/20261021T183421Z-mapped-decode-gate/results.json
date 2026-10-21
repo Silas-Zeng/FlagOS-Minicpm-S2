@@ -1,0 +1,56 @@
+{
+  "status": "failed",
+  "accuracy": "not evaluated",
+  "official_performance": "not evaluated",
+  "timing": false,
+  "timing_method": "optional first-case actual build+forward ABBA; pre-recorded Events; 32 calls/window; one final drain/window",
+  "cases": [],
+  "worker_command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/framework/20261021T183421Z-mapped-decode-gate/source/gate.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261021T183421Z-mapped-decode-gate",
+    "--model",
+    "/workspace/MiniCPM5-2B"
+  ],
+  "limitations": [
+    "Actual Builder/Impl/writer; synthetic BF16 inputs; no weights or runner execution.",
+    "New singleton 3D reduction can differ from original C3/2D; old accuracy is not inherited.",
+    "FP32 three-row tolerance is not whole-model accuracy; FIRST_SELECTED real_execute=0 is expected."
+  ],
+  "c2_install": {
+    "installed": true,
+    "num_warps": 2,
+    "num_stages": 1,
+    "scope": "audited BF16 MiniCPM 3D decode only"
+  },
+  "c3_install": {
+    "installed": true,
+    "scope": "BF16 MiniCPM natural-prefix mixed Attention only",
+    "ordinary_mixed_dummy_may_split": true,
+    "accuracy": "mixed 2D to 3D remains unverified"
+  },
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "error": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/framework/20261021T183421Z-mapped-decode-gate/source/gate.py\", line 207, in worker\n    derived.unified_attention(**captured, biv150_skip_single_query=True)\n  File \"/workspace/experiments/minicpm-s2/framework/20261021T183421Z-mapped-decode-gate/source/candidate_attention.py\", line 1098, in unified_attention\n    kernel_unified_attention[grid](\n  File \"/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py\", line 412, in <lambda>\n    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)\n                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py\", line 765, in run\n    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py\", line 894, in _do_compile\n    kernel = self.compile(src, target=target, options=options.__dict__)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py\", line 362, in compile\n    next_module = compile_ir(module, metadata)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/triton/backends/iluvatar/compiler.py\", line 481, in <lambda>\n    stages[\"ttgir\"] = lambda src, metadata: self.make_ttgir(src, metadata, options, capability)\n                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/triton/backends/iluvatar/compiler.py\", line 294, in make_ttgir\n    iluvatar.passes.ttgpuir.add_accelerate_matmul(pm, opt.use_sme)\nTypeError: add_accelerate_matmul(): incompatible function arguments. The following argument types are supported:\n    1. (arg0: triton._C.libtriton.ir.pass_manager, arg1: typing.SupportsInt) -> None\n\nInvoked with: <triton._C.libtriton.ir.pass_manager object at 0x7d19d40c6570>, 68954357763\n",
+  "original_backend_wrappers_restored": true,
+  "source_sha256": {
+    "gate.py": "c2ded9b854608aedb15b6279d5c84195f0a0698b49117d2b05d155216b4e98bd",
+    "runtime.py": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+    "mixed.py": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+    "policy.py": "7bf4e1337b0afe7a425204a4424ff76e05ebd143feed9d00d809daf9c5d61d47",
+    "transform.py": "0433a8de0d1e42962d8c8c1ef671f2937107dfb5ae144447cd5f13df9b10811e",
+    "candidate_attention.py": "67a9830eaa976e79d9d21f5f34ec4bbfe0215d3082d6571d415c1c8f33a85f47",
+    "validate_hidden_row_gather.py": "65cb8affd4ae08af877ccb4b4cfca6822eec5ba3f83770f39999ee677c546863",
+    "validate_mixed_decode.py": "b6275ee86f4fb24824091e72fccd774d174247975f8189d360400f333a20351f",
+    "bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+    "backend.py": "c524988a2223ec556bdb128a31c255075f0d07e7643e803b447975cd9c30a6b8",
+    "triton_attn.py": "1219c4d1820b56e99ef6686de8a49c8c5aa57707794bcabf3322023799a03605",
+    "triton_unified_attention.py": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f",
+    "triton_attention_helpers.py": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1",
+    "writer.py": "f18224e51162e37c14a2e2b3045bca55baf0b207b1d203ad6ee7d8ed417139eb",
+    "model-config.json": "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180"
+  }
+}

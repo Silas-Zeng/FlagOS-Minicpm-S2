@@ -1,0 +1,47 @@
+{
+  "status": "184809 correctness and185023 single-layer timing device gates independently verified; service source prepared/reviewed; no service or model accuracy claim",
+  "assets": {
+    "scripts/remote/validate_mapped_decode.py": "ede4519424d467bb4f47f52cb57429c5e489ee2324070c482225cc0499b0dc2f",
+    "patches/framework/biv150_mapped_decode.py": "d085ad6dcc0fd5dc26188d3e0f5801b8e394dc07a79c05a376192ec9e1e95b4b",
+    "patches/framework/biv150_mapped_decode_source.py": "919e80abf5b95c55ea63aa8619fa3202cd78b0c4cc0e303df7b4197bf1898316",
+    "patches/framework/biv150_mapped_attention.py": "72713a90584bc6567706fb881188afa04335230afc13e021c10f862f88d054a1",
+    "scripts/remote/validate_hidden_row_gather.py": "65cb8affd4ae08af877ccb4b4cfca6822eec5ba3f83770f39999ee677c546863",
+    "scripts/remote/validate_mixed_decode.py": "b6275ee86f4fb24824091e72fccd774d174247975f8189d360400f333a20351f",
+    "scripts/remote/bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "scripts/remote/validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "scripts/remote/monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+    "analysis/source/c3-mapped-decode/check_source_contract.py": "57d4a866c386c6f2e365c3226c23d4abaacf119be4bfff3048894687063d1266"
+  },
+  "runner_transformed_sha256": "3566099b2f336f3e7ae768adeca5b0da169748324fec26fc00b150b26b246a73",
+  "limitations": [
+    "No accelerator imports or execution",
+    "Only shortest correctness device gate is authorized next; default no timing",
+    "Exact runtime/transform/derived pins are checked by the gate; helper bytes are archived per run",
+    "Independent source review does not prove Triton compilation/numerics/streams/model accuracy/performance"
+  ],
+  "independent_review": {
+    "owner": "hardware_innovation",
+    "runtime": "d085ad6dcc0fd5dc26188d3e0f5801b8e394dc07a79c05a376192ec9e1e95b4b",
+    "source": "919e80abf5b95c55ea63aa8619fa3202cd78b0c4cc0e303df7b4197bf1898316",
+    "derived": "72713a90584bc6567706fb881188afa04335230afc13e021c10f862f88d054a1",
+    "gate": "ede4519424d467bb4f47f52cb57429c5e489ee2324070c482225cc0499b0dc2f",
+    "conclusion": "Compared against archived183421 bytes; only two dummy-pointer expressions plus pins change. No blocker to shortest correctness retry. No GPU or suite run by reviewer."
+  },
+  "changes_from_initial": "Only two unused decode-map pointer dummy expressions out -> cu_seqlens_q; runtime derived hash and gate three pins updated. No use_sme override or model/compiler-default changes.",
+  "actual_sme_selector_source_sha256": "66a168ae959e719186771e66815e807f1e449e66c5283ef596ec3eb0e35cb775",
+  "initial_run": "20261021T183421Z-mapped-decode-gate; failed before first correctness case; raw unchanged",
+  "proof_assets": {
+    "analysis\\source\\c3-mapped-decode\\check_sme_operand_contract.py": "cff7be424f9967f200a52f64b7b939b291ae2eb9268ac2565b5a472d7df940d3",
+    "analysis\\source\\c3-mapped-decode\\sme-operand-contract.log": "6ee410ab56c09a766392be5233b6239e7612c00e46aa46036653ca10f94b04dc",
+    "analysis\\source\\c3-mapped-decode\\source-contract-sme-fix.log": "22c36a73f0b049ce1a6ab206894f53869e46a4adc04d603d84bf46cd62ecf400",
+    "analysis\\source\\c3-mapped-decode\\sme-fix-derived.diff": "ceaa696012e8e07d6a6f76035fb3b2b380bd7ec4a840418f76d4af17cf6b1599",
+    "analysis\\source\\c3-mapped-decode\\first-gate-compile-failure-review.json": "6c7e6c6b711c159cc23f08ac483e44b662f48b25184cc3f689c027557068e254"
+  },
+  "device_gate_review_sha256": "d1b3eab61ffd3bc08251068ffa034429a49d794b575cbcd9ba297e115489e751",
+  "service_preparer": {
+    "path": "scripts/remote/prepare_mapped_decode_source.py",
+    "sha256": "a41c3858ac5d19ffbb385d9ad075635b560fb272af2c2d6b5c490f04713d2459",
+    "cpu_report_sha256": "9bfc8005519c3ac1624fca2650ce73c5cc95facc4e2aa1ad453ed126282f4fdc",
+    "independent_review": "hardware_innovation read-only final review passed; no suite/GPU by reviewer"
+  }
+}

@@ -2,7 +2,7 @@
 
 本表全部实验/成绩均属天数BI-V150。队友负责沐曦－曦云C500；仅团队实验分析库按两平台归档，两个私有代码库共用，不要求平台拆分。不把本轮数据作C500或团队整体成绩，原始证据路径不移动。
 
-**用户于2026-10-21 16:40Z授权继续自主探索，覆盖此前冻结。** 大收益优先，小收益也用最短上卡门验证并保留，噪声标待确认，不设最低百分比；正确性失败不启用，但代码和负结果保存。所有设备任务仍由root单卡串行拥有。新门50–59均已封存；async对A1同KV单次+0.703657%，metadata对A2同KV单次+0.286723%，保留待确认不默认。181041 KV只观察门失败时terminal0，不实现drain；仅CPU研究更短期准入预算或有同步保障的KV保留，不擅自启动设备。
+**用户于2026-10-21 16:40Z授权继续自主探索，覆盖此前冻结。** 大收益优先，小收益也用最短上卡门验证并保留，噪声标待确认，不设最低百分比；正确性失败不启用，但代码和负结果保存。所有设备任务仍由root单卡串行拥有。新门50–63已封存；async/metadata各自同KV单次+0.703657%/+0.286723%保留，CTA第一服务pair描述+1.745903%但KV池差96、同物理32GiB，不称KV严格匹配或默认资格。181041 terminal0，不实现drain；root现选KV保存恢复成本门，复杂短期准入影子暂缓。本agent只CPU准备/审原件，不擅自设备。
 
 稳定原版官方`20261021T122607Z-original-baseline`已16:14:50.001906Z以exit0完成，8raw/2summary及225源SHA、最终bab2本地独立终审通过。原2–4轮分档totalTPS候选/原版4K1.933207729倍、16K3.166027317倍；初始DB不同、KV差96tokens，不合成总分或声称cache-matched因果稳定；新诊断不覆盖这两份正式原件。三个private协作仓库已由root完整上传核验：`Silas-Zeng/FlagOS-S2-vllm-plugin-FL`、`Silas-Zeng/FlagGems`、`Silas-Zeng/FlagOS-S2-Minicpm-throughput`。原公开fork保留，外部消息仍不由本agent发送。
 
@@ -69,6 +69,20 @@
 | 57 | 仅诊断，非正确性pass20261021T180033Z | 设备 | CTA guard分阶段positive CPU原位bits | 11源SHA/7phase/28basic文件全−15992=BF16−17且hash不变；advanced初始化即错12288、读后storage没变，C identity/offset24576正确；无timing/down，保留原173921失败，18:00:42Z idle |
 | 58 | 两shape门通过，正负信号均保留20261021T180646Z | 设备 | CTA正式positive basic guard门 | b216/06c7/11SHA/8phase每shape共64basic文件/输出输入RNG及post全过；gate-up32call wall省16.175816%/event16.332453%，down慢3.807269%/3.884804%；仅固定tile fixture，非E2E/accuracy，不同时默认；18:06:56Z idle |
 | 59 | 完成无回收机会20261021T181041Z | 设备 | KV实际失败/抢占/resume只观察长门 | 411SHA/a4de/initb3b7/e155/bc51/32成功0失败/524288in32768out/220.345997616s仅诊断/KV521840；35快照，末2112core2109schedule、1fail/preempt/resume/obs0；free0需要1页queue1但terminal/private0，不实现drain；cache2944/floor16702/gap13758仅prefix exposure非GPUwork，非全程；DB51619270三hash不变/CPU6/preempt0→1；18:17:30Z68/0/双栈闭无设备进程 |
+| 60 | 候选服务已实际命中20261021T182916Z | 设备 | 仅gate-up CTA group8服务 | 413源/5artifactSHA/7876/44fc/06c7；32成功0失败/524288in4096out/118.417526430s4462.042199total/KV521840/DB51619270不变；startup FIRST、首真实2048/1req step选42次，非全负载计数；与61描述TPS+1.745903%但KV差96，同物理32GiB；postidle，关停abort后EngineDeadError/forcekill保留，未默认/accuracy |
+| 61 | 干净对照已验20261021T183543Z | 设备 | 无probe SQL+C3 context16K | 410SHA/e155/bc51/原SERVER/seed；32/0同tokens/120.484981576s/KV521936，DB3hash不变/CPU6/32768MiB/postidle；候选池521840不同，描述pair不称KV matched；不拿coverage诊断比 |
+| 62 | 编译失败无case20261021T183421Z | 设备 | mapped非prefix decode首正确性门 | 17SHA/首derived skip2D JIT use_sme68954357763被add_accelerate_matmul binding拒绝；exit1/cases[]/无time，原wrappers恢复/18:34:44Z68/0/端口free；根因待actualcompiler审，未数学/性能通过，不启用 |
+| 63 | 唯一必要基线重复20261021T184244Z | 设备 | 核同容量波动范围，不刷KV | 410SHA/32-0同tokens/120.763262668s4375.370360total/KV521936/DB51619270三hash不变/CPU6/postidle；与61同KV耗时跨度0.23096745%仅观察，不估计噪声分布；候选KV差保留，不改参数/假buffer/无限刷新 |
+
+| 64 | 四case单层门通过20261021T184809Z | 设备 | mapped修编译选项传播的正确性门 | 17源SHA/四case13checks/整KV及独立oracle bits/FP32三行/nextdecode与crossstream-capture回退通过；非模型accuracy；无time/exit0/18:48:35Z idle |
+| 65 | 单层正信号保留20261021T185023Z | 设备 | mapped构造D29 timing | 同17SHA/四case；32callABBA wall14.344921375→12.435507453ms省13.310731%，event省12.762442%；D29/P2019是构造非服务实测几何，非模型/graph/accuracy；exit0/18:50:46Z idle |
+| 66 | 服务无正信号20261021T185627Z | 设备 | mapped真实服务短筛 | 独立414SHA/32-0/524288in4096out/121.790163836s4338.478440total/KV521840/DB三SHA51619270不变；Engine207423真实FIRST_SELECTED D15非全程；对183543描述TPS−1.071665%且KV不同，不能将层13.31%外推；CPU6/32GiB/post19:00:37Z idle，shutdown ERROR保留，未默认 |
+
+| 67 | 导入前失败20261021T191017Z | 设备 | 42层KV save/poison/restore首门 | 独立8SHA/d841/c95f/exit1/cases[]；source/copy.py遮蔽stdlib造成dataclasses循环，未初始化复制，无正确性/成本结论；19:11:31Z完整idle，原件不改；93eb仅改四档名引用，CPU真实source旧fail新pass+hardware审准，待重测 |
+
+| 68 | 重复正/首轮负均保留20261021T191131Z | 设备 | mapped同候选唯一重复 | 414SHA（413同首轮，仅包装时间/argv/output异）/32-0同tokens/117.028659571s4514.996599total/TTFT59836.117857ms/KV521840/DB3hash不变/CPU6/32GiB/idle；真实FIRST D15非全程；首轮121.790163836s并列不择优、不归cold或coverage；干净基线KV仍差96，未默认/accuracy |
+
+| 69 | 字节与事件门通过20261021T191545Z | 设备 | 42层672MiB每向KV copy四几何 | 独立8SHA/93eb/c95f/四case八pass×五checks与RNG全true，actual42views/guard/未选poison；normal42/336、packed1/8copy；roundtrip wall222.053105/235.270289/119.956194/120.716930ms单warm样本，hostquota/提交混杂未知，不推稳定DMA或E2E；构造非observed布局/无模型恢复protocol；19:18:05Z idle，旧失败保留 |
 
 ## 执行边界
 

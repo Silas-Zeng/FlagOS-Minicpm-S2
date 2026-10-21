@@ -469,4 +469,53 @@ registry现76数据行×16列、queue52项；新调度/KV研究见`analysis/2026
 
 180646使用b216正式门将oracle改为positive basic CPU完整bits/初值SHA，旧advanced仅旁证。11源SHA/两形状各8阶段共64basic文件、输出/finite/输入/RNG/计时后全通过，exit0清理。32call单ABBA gate-up wall1.4179341875→1.188571765625ms，省16.17581577%；event1.40435439348→1.17498886585ms，省16.33245345%。down wall0.735825265625→0.763840109375ms慢3.80726853%，event0.721999704838→0.750047981739ms慢3.88480448%。保留gate-up微测机会和down负结果，不能同时默认更改两形状，未证明E2E或模型accuracy。两run独立review JSON均在原run旁补充保存。
 
-KV只观察模块a4de与e043→b3b7独立init已获framework全文互审，无future访问/无调度变更；root已串行启动181041真实16K/1024/32请求门。已见first_checked eligible=true/batchqueue2，此时尚无完整结果，registry不得冒填性能或机会计数；研究主文已用actual Core27b替换旧缺源状态。
+KV只观察模块a4de与e043→b3b7独立init已获framework全文互审；181041真实16K/1024/32请求门现已完整独立验收，411源SHA/32成功0失败/524288in32768out/220.345997615717s仅诊断、KV521840；35原log快照匹配，末周期2112core/2109schedule、1fail/preempt/resume、obs0。free0需要1页、queue1但terminal/private0，所以**不实现完成输出drain**。resume cache2944/floor16702/gap13758仅prefix exposure，非实际GPU重算token/时间或全程计数；原metrics preempt0→1。DB前后实体三hash同51619270、CPU6及18:17:30.243359Z68/0/双栈闭无设备进程均核，补充review在run旁。registry现83数据行×16列（历史同run多phase保留）、queue59项，仅维护CSV/队列行尾统一LF，raw/source不动。
+
+后继CPU设计已落`analysis/2026-10-22-scheduler-kv-innovation.md`：短期准入需包含prefill债、FCFS进展与首完成后的峰值反证，不能把min剩余输出当保证；offload数据量16K672MiB，但真实copy带宽/worker同步及restore协议未知。当前无新策略代码/accuracy或预报收益。CTA gate-up-only服务44fc/source4ab/builder e007与root launcher已跨owner只读互审，严格热C0/当前指针/真实scope/capture和down回退；后续须REAL_SELECTED证明模型命中，不只dummy，root负责唯一设备任务。
+
+
+## 182916 CTA服务及两次干净基线：描述信号与容量边界
+
+三run完整本地独立stdlib终审，原SERVER/bc51/0813、16K/128/32req/c64/seed721201、CPU6/BI-V15032768MiB均同，32成功0失败/524288in4096out。CTA182916为118.417526429985s/4462.042199total/KV521840；干净183543为120.48498157598s/4385.476041total/KV521936；第二184244为120.763262667693s/4375.370360total/KV521936。三run的六份DB实体同516表19270行、physical1593/schemaa0a590/logical90e9未变，413/410/410源与5artifact SHA、postidle均核实。
+
+首对照描述TPS+1.745903%，但KV池差96token，不能称严格容量因果；同物理32GiB满足平台约束，潜在实现启动/容量成本未分离，不为凑容量改参数或假buffer。两基线同KV耗时跨度0.23096745%仅观察，非噪声分布。Engine201873首次REAL_SELECTED证明真实2048/1req单步42次新launch，不是全负载覆盖计数。down关闭。原32/0后SIGTERM/abort/forcekill期间EngineDeadError及警告保留，不能写无ERROR或抹掉日志。单次正信号留存待确认，未默认/新accuracy；不拿coverage诊断作性能基线。可复算 `analysis/source/mm-cta-service-pair/recompute.py`，结果 `analysis/2026-10-22-mm-cta-service-comparison.{json,md}`；三run旁independent-service-review.json。
+
+## mapped编译门到真实服务：层收益未转化
+
+183421首derived skip2D JIT的use_sme68954357763 binding失败，exit1/cases[]/无计时，17源已核，negative不改；后继只修编译选项传播并保留原件。184809 correctness与185023 timing均17源SHA/四case各13checks及nextdecode/crossstream/capture回退通过，非整模型accuracy。185023的32callABBA构造D29/P2019 wall14.344921375→12.435507453125ms省13.31073118%，event14.216219902039→12.401883125305ms省12.76244170%；D29/P2019是构造，不能说是实际服务逐步geometry或命中覆盖。
+
+185627真实服务完整414SHA/原SERVER/driver/seed/CPU6/32GiB及DB实体三hash同51619270核实，32成功0失败/524288in4096out/121.790163835976s/4338.478439947034total/TTFT62258.128146859235ms，KV521840/preempt0→0；Engine207423真实FIRST_SELECTED D15但首次marker非全程。相对183543描述TPS−1.07166475%，KV仍不同，不归因孤立算法；真实服务无正信号，未默认/新accuracy。post19:00:37.354668Z68MiB0双栈闭无GPU进程，shutdown错误分类保留。源/退出/DB/KV独立记录见run/independent-service-review.json；层13%不外推端到端。
+
+## 42层KV复制成本门：CPU准备已冻结，尚无设备结果
+
+实际184108的13份executor/worker/outputs/reshape等源完整核对，布局NHD `(blocks,2,16,2,128)`；normal/packed均由actual helper构造，不冒充已观测服务tensor。copy模块c95f、gate最终d841及一项CPU mapping合同已备妥并跨hardware owner互审；normal42/packed42×1run/8run、每方向672MiB，save event完成才毒化，restore event后consumer逐bit/guard/RNG。末delta只毒化内部页、不重置guard，SHA已同步并冻结；无SSH/GPU、无服务offload协议/accuracy。完整设计/命令/身份见 `analysis/2026-10-22-kv-page-copy-gate.md`。root下步按唯一设备串行队列执行，不能提前填结果。
+
+
+## 191017 KV门归档导入失败：非复制结果
+
+首个d841设备门在19:10:18Z exit1/cases[]，8源SHA独立核实；source/copy.py遮蔽stdlib copy，使dataclasses循环导入，尚未import torch或初始化copy，无byte/event正确性与成本结果。原worker traceback/failed results/8源和19:11:31.638525Z owner完整idle均封存，controller仅Z/worker退出，independent-gate-review.json已落；不是页复制算法失败。
+
+按root授权最小修四归档/hash/load字面量名为biv150_kv_page_copy.py；policyc95f不改，新gate93eb02c7…/launcherba3336…已hardware定向终审。真实source子目录独立Python进程旧名重现循环fail、新名成功加载stdlib copy与policy（无torch/numpy/vllm）；加载检查首次Windowsstderr编码收集失败，显式-Xutf8后必要核查完成，未重复mapping suite。新稿冻结，待root另run串行重测；不能提前填四case成功或带宽。
+
+
+## 191131 mapped必要重复：首负后正并列，不取最好
+
+原件全本地，独立核414源SHA：413文件同185627，仅innovation-source.json的时间/command/output不同；DB三hash实体/原SERVER/bc51/seed/CPU6/32GiB一致；32/0同524288in4096out，117.028659570962s/4514.996599440720total/TTFT59836.11785736866ms/KV521840/preempt0→0/完整postidle。Engine210483首次真实D15与首轮相同，但都非全负载计数。首轮121.790163835976s及本轮117.028659570962s均保留，不挑最好、不凭时间反推cold编译/coverage。干净对照KV521936不同，仍不能称严格容量matched或稳定因果，无新accuracy/默认。独立结果在run/systems-independent-service-review.json，framework owner另做机制与独立终审。初审全414相同断言触发，未写记录；逐项核仅包装字段差后修正，本agent无设备。ownedregistry92×16/queue68均LF。root下一唯一KV191545 PID211570已19:15:45Z启用93eb，此为owner回执，尚无本地完成原件。
+
+
+## 191545修正版KV门完成：四case正确，成本仅单样本
+
+`experiments/framework/20261021T191545Z-kv-page-copy-gate{,-control}` 已完整本地，包SHA **7b491c525759e3320ecac8cd385d31fd1f434784ade63eef16bb2ab02a554316**。独立仅读8源SHA与93eb/c95f/1219/a351固定身份一致，19:16:59.928412Z exit0；normal42/packed42各contiguous与fragmented8四case，各untimed/timed两pass，40项checks与4项RNG均true。保存/恢复全byte、两guard不重写、未选页poison、42 actual-factory view消费者全部通过；shape(1058,2,16,2,128)、normal stride0=8192/offset41=0、packed stride0=344064/offset41=335872符合源码，每方向704643072B，copy调用分别42/336/1/8。原191017导入失败及修复加载证据保留；不是隐藏失败后只挑通过。
+
+| 构造布局/页映射 | save wall ms | restore wall ms | roundtrip wall ms | save event ms | restore event ms |
+|---|---:|---:|---:|---:|---:|
+| normal42/contiguous | 25.946121 | 196.106984 | 222.053105 | 24.756731 | 26.488735 |
+| normal42/fragmented8 | 27.699296 | 207.570993 | 235.270289 | 25.073376 | 194.106018 |
+| packed42/contiguous | 24.943508 | 95.012686 | 119.956194 | 24.734741 | 26.496109 |
+| packed42/fragmented8 | 25.027936 | 95.688994 | 120.716930 | 24.747791 | 26.758972 |
+
+方向wall是host提交至事件同步返回，timing Event已预初始化，producer设置/poison/consumerclone/分配与CPUoracle窗外；保存事件完成后才读pinned/毒化，恢复事件后consumer才读取。每geometry仅一组warm成本，normal连续restore wall196ms/event26ms，而normal8run event194ms，host提交/调度混杂尚未分离，copy gate没有CPU quota或并行host工作负载记录。**不称稳定DMA带宽、packed因果加速或服务收益，不将event直接作纯硬件传输时间。** 各case显式host1432682496B、raw GPU728039424B；GPUallocated peak1456078848B含测试consumerclone，cgroup仅时点/20GiB限额非host峰值。
+
+owner19:18:05.738516Z后态单卡68MiB/0%、9031双栈闭/无GPU进程，owned退出或Z、8源无failures核实。全量tensor没有另存binary；本地独立检查冻结代码的完整oracle和原结果，不重新运行GPU。结果保存 `run/independent-gate-review.json` 和 `analysis/2026-10-22-kv-page-copy-result.json`；registry93数据行×16列/queue69均LF。
+
+这一门仍没有权重/真实runner tensor布局/Attention数学/请求allocator/跨进程恢复protocol/模型accuracy。后继服务入口若继续，须先证明actual executor与持有KV view的worker生命周期、save完成前不free、zero后restore且Attention前ack、host pinned强引用/epoch/cancel及失败回退；这些只是后继约束，**本批没有实现或运行**。181041 gap13758依旧只是exposure，不能把约0.12–0.24秒copywall替换成假定GPU重算节省；不能开启现成connector模式冒充实现。

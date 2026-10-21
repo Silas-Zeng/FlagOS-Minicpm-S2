@@ -2,7 +2,7 @@
 
 2026-10-22，hardware_innovation。用户已恢复持续优化，覆盖此前阶段性冻结，并明确小收益也要最短上卡实测、保留结果。本文只记录天数 BI-V150；沐曦－曦云 C500 由队友验证，不外推另一平台或团队总分。
 
-**当前状态：首次173921门的guard失败保留；180033诊断证明旧高级索引oracle在尚未JIT时已读值异常，而七阶段正数basic guard bits全正确未变。正式门已修为basic D2H CPU int16判据并完成互审，待root重新执行两shape；尚无timing或down结果。** 本 owner 无 SSH/GPU 或远端导入；root 是唯一 GPU owner。本候选没有改已安装 FlagGems、已验收 SQL+C3/default 或私有代码库工作树；prefix-mask 后续服务 pair 单独保留，不与 CTA 合并。
+**当前状态：首次173921门的guard失败保留；180033诊断证明旧高级索引oracle在尚未JIT时已读值异常。修正正式门180646两shape全部检查通过：gate-up单层wall快16.1758%，down慢3.8073%；只准备gate-up严格服务入口，尚未服务验证。** 本 owner 无 SSH/GPU 或远端导入；root 是唯一 GPU owner。本候选没有改已安装 FlagGems、已验收 SQL+C3/default 或私有代码库工作树；prefix-mask 后续服务 pair 单独保留，不与 CTA 合并。最新服务入口/真实选中要求见[独立服务说明](2026-10-22-mm-cta-group-service.md)。
 
 
 ## 最新设备失败与最短分阶段诊断
@@ -18,6 +18,8 @@ root 已执行 `framework/20261021T173921Z-mm-cta-group-gate`，原 gate 为4b44
 root已串行执行 `experiments/framework/20261021T180033Z-mm-cta-guard-diagnostic`，18:00:33.650193Z启动、18:00:42.910097Z结束、exit0，前后9031均空闲、可用32700MiB。本owner实读原件并核全部source SHA匹配：七阶段、两个storage的first/last basic异常数均0、SHA不变；原advanced在`after_full_initialization`尚无JIT时就已`matches_basic=False`、12288个异常，后续各阶段同样；advanced读取后basic storage未变，compiled C真对象与24576字节offset均正确。只证明该旧高级索引oracle异常，未定位Torch/FlagGems具体责任，不把诊断exit0当正式两shape正确性通过。原4b44失败与ee263诊断原件均保留。
 
 按root授权，正式门现为 `b216a49a02c90234f7cdfc12db990b2759771d5129169a237824fa9cddd12d91`。每shape在初始化、各JIT、各poison、各compiled热调用后与计时后，分别正数basic D2H读取完整CPU int16 bits，要求期望-17 bits全相同且SHA与实际初始化一致；初始化自身也必须全为期望bits。高级索引raw/原GPU predicate仅保留诊断，不决定pass；高级读后再次basic回读须未改storage。所有采集在32call计时窗外，两个shape/C0/kernel/预record ABBA不变。py_compile/--help通过，systems只读终审无阻断、未重跑suite/GPU；root待按原正式命令重跑，不追加`--guard-diagnostic`。
+
+随后root已完成180646正式重跑，exit0、两shape完整bits/finite/input/RNG、八阶段basic guard和计时后检查均true，本owner已实际读本地原件并核source SHA全匹配。gate-up wall1.4179341875→1.1885717656249999ms，Event1.4043543934822083→1.174988865852356ms；down wall0.735825265625→0.763840109375ms、Event0.7219997048377991→0.7500479817390442ms。down负结果保留、服务完全原路；仅gate-up进入独立服务准备，不外推两shape或E2E。前段“待重跑”是该门完成前历史状态，最新状态以本段和服务说明为准。
 
 ## 证据与固定参数
 
@@ -100,9 +102,11 @@ timeout --signal=TERM --kill-after=15s 380s \
 | down ABBA wall / Event 原始窗口 | 未执行 |
 | 首次 postflight / 是否进入服务短筛 | root 回执完整空闲32700MiB/68MiB/0%；不进入服务短筛 |
 | guard 诊断 / 逐阶段原值 | 180033已采集：basic七阶段全正确未变，advanced初始化即异常；诊断exit0不是正式正确性通过 |
-| 修正正式门的两shape / 原ABBA | b216已本地准备及互审；待root串行执行 |
+| 修正正式门的两shape / 原ABBA | 180646已exit0全部通过；gate-up快16.1758%、down慢3.8073%，只gate-up准备服务 |
 
 ## 独立小收益队列：prefix-mask
+
+**最新状态覆盖下述早期计划：**独立服务runtime7258/source464b/buildera4e已经本地准备、最必要CPU合同及framework交叉审阅完成，尚未上卡。准确文件身份、每PID/真实大query命中证明及先16K32req128out最短pair见 `analysis/2026-10-22-visible-prefix-service.md`。不与CTA或mapped叠加；下述“尚未实现”保留为当时历史，非当前状态。
 
 已有 policy87c6 / generated a6d / gate d3db 的121838设备门两 shape通过，单层 wall下降0.275858%、Event下降0.453959%。用户明确小收益也安排上卡，后续接 SQL+C3 的匹配热端到端 pair，不因小而跳过，也不与 CTA 混合。
 

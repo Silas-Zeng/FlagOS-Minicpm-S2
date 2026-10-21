@@ -1,0 +1,71 @@
+{
+  "started_utc": "2026-10-21T18:50:24.083607+00:00",
+  "pid": 206667,
+  "command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/validate_mapped_decode_sme_fix.py",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261021T185023Z-mapped-decode-sme-fix-timing",
+    "--runtime-path",
+    "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z/vllm_fl/patches/biv150_decode_launch_runtime.py",
+    "--mixed-path",
+    "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z/vllm_fl/patches/biv150_mixed_decode.py",
+    "--policy-path",
+    "/workspace/experiments/minicpm-s2/scripts/biv150_mapped_decode.py",
+    "--transform-path",
+    "/workspace/experiments/minicpm-s2/scripts/biv150_mapped_decode_source.py",
+    "--derived-path",
+    "/workspace/experiments/minicpm-s2/scripts/biv150_mapped_attention.py",
+    "--timing"
+  ],
+  "command_shell": "/usr/local/bin/python3 /workspace/experiments/minicpm-s2/scripts/validate_mapped_decode_sme_fix.py --run-dir /workspace/experiments/minicpm-s2/framework/20261021T185023Z-mapped-decode-sme-fix-timing --runtime-path /workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z/vllm_fl/patches/biv150_decode_launch_runtime.py --mixed-path /workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z/vllm_fl/patches/biv150_mixed_decode.py --policy-path /workspace/experiments/minicpm-s2/scripts/biv150_mapped_decode.py --transform-path /workspace/experiments/minicpm-s2/scripts/biv150_mapped_decode_source.py --derived-path /workspace/experiments/minicpm-s2/scripts/biv150_mapped_attention.py --timing",
+  "kind": "four actual-layer mapped-decode correctness cases; optional one ABBA; no weights/service/score",
+  "timing_loops": 32,
+  "timing_method": "optional first-case actual build+forward ABBA; pre-recorded Events; 32 calls/window; one final drain/window",
+  "environment": {
+    "PYTHONPATH": "/usr/local/lib/python3.12/site-packages",
+    "COREX_VISIBLE_DEVICES": "all"
+  },
+  "preflight": {
+    "checked_utc": "2026-10-21T18:50:24.090881+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "source_sha256": {
+    "gate.py": "ede4519424d467bb4f47f52cb57429c5e489ee2324070c482225cc0499b0dc2f",
+    "runtime.py": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+    "mixed.py": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+    "policy.py": "d085ad6dcc0fd5dc26188d3e0f5801b8e394dc07a79c05a376192ec9e1e95b4b",
+    "transform.py": "919e80abf5b95c55ea63aa8619fa3202cd78b0c4cc0e303df7b4197bf1898316",
+    "candidate_attention.py": "72713a90584bc6567706fb881188afa04335230afc13e021c10f862f88d054a1",
+    "validate_hidden_row_gather.py": "65cb8affd4ae08af877ccb4b4cfca6822eec5ba3f83770f39999ee677c546863",
+    "validate_mixed_decode.py": "b6275ee86f4fb24824091e72fccd774d174247975f8189d360400f333a20351f",
+    "bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a"
+  },
+  "packages": {
+    "torch": "2.10.0+corex.4.5.0",
+    "vllm": "0.24.0+empty",
+    "FlagGems": "unavailable",
+    "SQLAlchemy": "2.0.48"
+  },
+  "worker_command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/framework/20261021T185023Z-mapped-decode-sme-fix-timing/source/gate.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261021T185023Z-mapped-decode-sme-fix-timing",
+    "--model",
+    "/workspace/MiniCPM5-2B",
+    "--timing"
+  ],
+  "worker_pid": 206670,
+  "postflight": {
+    "checked_utc": "2026-10-21T18:50:45.936145+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "finished_utc": "2026-10-21T18:50:46.006097+00:00",
+  "exit_code": 0
+}
