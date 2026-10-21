@@ -1,110 +1,50 @@
-# Measurement log
+# 测量日志
 
-The primary timestamp is UTC. The parenthesized value is Asia/Shanghai
-(UTC+8), the timezone used for experiment planning.
+本页全部实验和成绩仅属天数BI-V150。沐曦－曦云C500由队友负责；实验分析库按平台归档，两个私有代码库共用，不把本轮数值作为C500或团队整体成绩。
 
-## 2026-10-21
+主时间戳为UTC，括号中是用于计划实验的Asia/Shanghai（UTC+8）。本页是2026-10-20至2026-10-21早期BI-V150实验的历史日志；当时“最终候选”不代表后来的SQL+C3。当前SQL+C3已验103/105和两档绝对官方结果，原版完整对照仍在途，不能把下面旧partial基线用于最终加速比。
 
-- `2026-10-20 16:11 UTC (2026-10-21 00:11 +08:00)`: SSH verified against the
-  FlagOS instance.
-- `16:12 UTC (00:12 +08:00)`: `ixsmi` verified one Iluvatar BI-V150 with
-  32,768 MiB memory.
-- `16:15 UTC (00:15 +08:00)`: environment snapshot written under
-  `/workspace/experiments/minicpm-s2/environment/20261020T161500Z`.
-- `16:16 UTC (00:16 +08:00)`: official service reached `/v1/models`; full decode CUDA graphs
-  captured; KV cache capacity reported as 521,936 tokens.
-- `16:17 UTC (00:17 +08:00)`: official smoke request returned a valid response.
-- `16:18 UTC (00:18 +08:00)`: unmodified official 4K/16K benchmark started in run directory
-  `/workspace/experiments/minicpm-s2/baseline/20261020T161824Z`.
-- `16:19 UTC (00:19 +08:00)`: GPU sampling began into the same run directory.
-- `16:23 UTC (00:23 +08:00)`: confirmed the official benchmark hard-codes four runs per case and
-  skips the first run when averaging.
-- `16:30 UTC (00:30 +08:00)`: 4K run 1 still active; GPU was approximately 99% compute busy,
-  28.7 GiB allocated, 50 C, with low GPU power draw relative to its cap.
-- `16:34 UTC (00:34 +08:00)`: 4K run 1 completed with 256 successful requests,
-  0 failures, `total tok/s=1702.13`, `output tok/s=340.43`,
-  `Mean TTFT=13664.92 ms`, and benchmark duration `770.05 s`.
-- `16:38 UTC (00:38 +08:00)`: container limits confirmed as 20 GiB memory and
-  a six-CPU platform allocation. The host exposes more CPUs and memory to the
-  container namespace; final reports should use the subscription limits, not
-  host totals.
-- `17:18 UTC (01:18 +08:00)`: 16K run 1 was active with 31 running requests,
-  33 waiting, and approximately 98.7% KV-cache usage. The 32 GiB device cannot
-  hold 64 simultaneous 16K contexts at the official 0.85 memory-utilization
-  setting.
-- `17:53 UTC (01:53 +08:00)`: the foreground SSH session reached its lifecycle
-  limit and hung up. The remote benchmark client received the hangup after
-  approximately 95 minutes. The vLLM service remained healthy, but the fourth
-  4K row and the in-progress 16K row were not written. This run is retained as
-  a failed/incomplete attempt and is not used for the final baseline.
-- `17:57 UTC (01:57 +08:00)`: the empty service was stopped, a fresh service
-  started with an empty KV cache, and the benchmark launcher was changed to
-  `setsid`/detached execution so it no longer depends on the SSH session.
-- `18:00 UTC (02:00 +08:00)`: clean rerun started as control run
-  `baseline-clean-20261020T175900Z`; its device output directory is
-  `/workspace/experiments/minicpm-s2/baseline/20261020T180049Z`.
-- `18:51 UTC (02:51 +08:00)`: all four clean 4K runs succeeded. The official
-  final-three average is `1875.62 total tok/s`, `375.12 output tok/s`,
-  `12313.75 ms` mean TTFT, and `699.05 s` duration. The final-three
-  coefficients of variation are 1.82%, 0.43%, and 1.15%, respectively.
-- `18:51 UTC (02:51 +08:00)`: the 16K case started in the same detached
-  runner.
-- `19:35 UTC (03:35 +08:00)`: 16K run 1 completed with 128 successful
-  requests, `858.09 total tok/s`, `50.48 output tok/s`,
-  `639267.43 ms` mean TTFT, and `2596.73 s` duration. The local throughput is
-  6.2% below the public page reference and TTFT is 6.7% higher.
-- 16K admitted roughly 30 requests at a time because the 32 GiB device reached
-  95%-99% KV-cache usage; client concurrency was 64.
-- `05:13 UTC (13:13 +08:00)`: histogram top-p microbenchmark completed. The
-  upstream top-p-only kernel was `6.39 ms`; the deterministic single-split
-  replacement was `0.459 ms`, with no dropped probability mass in the tested
-  distribution matrix.
-- `05:43 UTC (13:43 +08:00)`: generic Triton attention sweep found
-  `BM128/TILE64/8w/1s` for prefill, 7.1x faster than the default in both
-  chunked and full 16K shapes.
-- `06:08 UTC (14:08 +08:00)`: the source-patch path completed a 16K diagnostic
-  load at `4611.14 total tok/s` and `113.42 s` mean TTFT.
-- `07:06 UTC (15:06 +08:00)`: the exact organizer `math_500` Level 3 command
-  passed at `96.2%` with prefill attention and deterministic top-p enabled.
-- `08:53 UTC (16:53 +08:00)`: decode attention improved the isolated kernel
-  from `3.021` to `1.955 ms`, but the exact organizer accuracy run fell to
-  `83.8%` and average output length increased from about 3,345 to 10,996
-  tokens. Decode tuning was rejected and removed; the final candidate keeps the
-  96.2% prefill-attention plus deterministic top-p path.
-- `09:06 UTC (17:06 +08:00)`: two concurrent final smokes completed with zero
-  failures: 4K had 16/16 requests and 16K had 8/8.
-- Non-operator short screens rejected KV block size 64,
-  `max_num_batched_tokens=4096/8192`, disabled prefix caching, and forcing
-  sampler `torch.compile`. The default block 16 / batched-token 2048 /
-  prefix-cache-on / unwrapped sampler path remained best across the paired 4K
-  and 16K short loads.
-- A second sampler-compile run used the already-warm compile cache. It
-  remained non-competitive at 4K 3144.42 and 16K 3535.92 total tok/s, so the
-  first result was not only JIT overhead.
-- A fused top-p/Gumbel sampler reduced the isolated sampling tail from
-  `1.695` to `0.712 ms` with 0.022 TV distance in a sparse distribution test.
-  Its paired service short test was mixed (4K 3879.54, 16K 3983.53), so it was
-  preserved on branch `codex/biv150-fused-sampler` at commit `40c1f1e` and not
-  enabled by default.
+## 2026-10-20 UTC（北京时间2026-10-21）：初始基线历史
 
-## Initial observations
+- `2026-10-20 16:11 UTC (2026-10-21 00:11 +08:00)`：确认可通过SSH连接FlagOS实例。
+- `16:12 UTC (00:12 +08:00)`：`ixsmi`确认一张Iluvatar BI-V150，显存32,768 MiB。
+- `16:15 UTC (00:15 +08:00)`：环境快照写入`/workspace/experiments/minicpm-s2/environment/20261020T161500Z`。
+- `16:16 UTC (00:16 +08:00)`：官方服务到达`/v1/models`，完成full decode CUDA graph capture，KV容量报告521,936 tokens。
+- `16:17 UTC (00:17 +08:00)`：官方smoke请求返回有效响应。
+- `16:18 UTC (00:18 +08:00)`：未修改的官方4K/16K benchmark开始，目录`/workspace/experiments/minicpm-s2/baseline/20261020T161824Z`。
+- `16:19 UTC (00:19 +08:00)`：同一run目录开始GPU采样。
+- `16:23 UTC (00:23 +08:00)`：确认原benchmark每档固定4轮，平均时丢原首轮。
+- `16:30 UTC (00:30 +08:00)`：4K第1轮仍运行，GPU计算忙碌度约99%，分配28.7 GiB、温度50 C，功率相对上限偏低。
+- `16:34 UTC (00:34 +08:00)`：4K第1轮256请求成功、0失败，`total tok/s=1702.13`、`output tok/s=340.43`、`Mean TTFT=13664.92 ms`，时长`770.05 s`。
+- `16:38 UTC (00:38 +08:00)`：确认容器限制20 GiB及平台6核配额。命名空间可见更多宿主CPU/内存，最终报告用订阅限制而非宿主总量。
+- `17:18 UTC (01:18 +08:00)`：16K第1轮，31运行、33等待，KV使用率约98.7%。32 GiB设备在官方0.85显存比例下无法同时容纳64个16K上下文。
+- `17:53 UTC (01:53 +08:00)`：前台SSH会话生命周期到限并断开。benchmark客户端约95分钟后收到hangup，vLLM服务仍正常，但第4个4K行及在途16K行没有写入。此run作为失败/不完整记录保留，不用作最终基线。
+- `17:57 UTC (01:57 +08:00)`：空闲服务停止，重新启动空KV服务；launcher改用`setsid`脱离会话运行。
+- `18:00 UTC (02:00 +08:00)`：干净重跑`baseline-clean-20261020T175900Z`开始，设备目录`/workspace/experiments/minicpm-s2/baseline/20261020T180049Z`。
+- `18:51 UTC (02:51 +08:00)`：干净4K四轮成功；原末三轮均值`1875.62 total tok/s`、`375.12 output tok/s`、meanTTFT `12313.75 ms`、时长`699.05 s`。原记录相应末三轮变异系数为1.82%、0.43%、1.15%。
+- `18:51 UTC (02:51 +08:00)`：同一脱离会话runner开始16K。
+- `19:35 UTC (03:35 +08:00)`：16K第1轮128成功，`858.09 total tok/s`、`50.48 output tok/s`、meanTTFT `639267.43 ms`、时长`2596.73 s`。相对公开参考，本机吞吐低6.2%、TTFT高6.7%；不是同硬件严格对照。
+- 16K当时约每批准入30请求，32 GiB设备KV占用95%-99%；客户端并发设定仍64。
 
-- The container has one card, not two.
-- The visible accelerator reports 32,768 MiB rather than the 64 GB full-card
-  specification. The score comparison must retain this environment fact.
-- The official framework revision is correct even though the local checkout is
-  named `main`.
-- Full decode graph capture consumes a substantial portion of the 32 GiB card:
-  the running service holds about 28.7 GiB.
-- Baseline measurement duration is dominated by four repetitions per workload.
-- The first 4K run took 19.1% longer and delivered 16.1% lower total throughput
-  than the public page reference (`2028.01 total tok/s`, `646.31 s`). This is
-  one raw run and must not be presented as the official four-run baseline.
-- During the measured 4K workload, sampled GPU compute utilization was usually
-  93% to 100%, while board power was approximately 199 W to 211 W for the
-  32,768 MiB BI-V150 instance. This makes a pure idle/queueing explanation
-  unlikely and motivates kernel-level tracing.
-- At the start of the 16K workload, the scheduler admitted about 31 of 64
-  configured concurrent requests before reaching the KV-cache limit. This
-  explains part of the expected difference from the published full-card
-  reference and must be held constant in local A/B experiments.
+## 2026-10-21 UTC：早期优化历史
+
+- `05:13 UTC (13:13 +08:00)`：histogram top-p微基准完成；上游top-p-only为`6.39 ms`，确定性single-split替代为`0.459 ms`，所测分布矩阵没有丢弃概率质量。
+- `05:43 UTC (13:43 +08:00)`：generic Triton Attention扫描得到prefill `BM128/TILE64/8w/1s`，chunked与完整16K形状均比默认快7.1x；这是内核证据，不是整模型倍数。
+- `06:08 UTC (14:08 +08:00)`：源码补丁路径完成16K诊断，`4611.14 total tok/s`，meanTTFT `113.42 s`。
+- `07:06 UTC (15:06 +08:00)`：原主办方`math_500` Level 3命令以`96.2%`通过，当时启用prefill Attention及确定性top-p。
+- `08:53 UTC (16:53 +08:00)`：decode Attention孤立内核从`3.021`降至`1.955 ms`，但原准确率降至`83.8%`，平均输出从约3,345增长至10,996 tokens。该decode调优被拒绝并移除；当时保留96.2%的prefill+top-p路径，不能与后续已验SQL+C3混淆。
+- `09:06 UTC (17:06 +08:00)`：当时两组并发smoke零失败，4K为16/16请求、16K为8/8；这是历史记录，不是当前新增设备任务授权。
+- 非算子短筛否定KV block size 64、`max_num_batched_tokens=4096/8192`、禁prefix cache及强制sampler `torch.compile`。当时默认block16/batched-token2048/启用prefix/不包裹sampler路径，在匹配4K/16K短负载中最好。
+- 第二次sampler compile使用已暖编译缓存，仍不具竞争力：4K 3144.42、16K 3535.92 total tok/s，因此初轮慢不能仅归因JIT。
+- 融合top-p/Gumbel把孤立采样尾部从`1.695`降至`0.712 ms`，稀疏分布测试TV距离0.022；服务短对照表现混合（4K 3879.54、16K 3983.53），保存在`codex/biv150-fused-sampler`/提交`40c1f1e`，未默认启用。
+
+## 初始观察（历史，不能替代当前正式结果）
+
+- BI-V150容器只有一张卡，不是两张；这不代表团队只有一个硬件平台。
+- 可见显存32,768 MiB，不是完整卡规格64 GB，报告须保留这一环境差异。
+- 本地checkout分支名虽为`main`，当时提交属于官方比赛基点。
+- full decode graph capture占据32 GiB设备的明显部分，运行服务约占28.7 GiB。
+- 基线时长主要由每档4轮构成。
+- 初次4K第1轮比公开参考（`2028.01 total tok/s`、`646.31 s`）慢19.1%，吞吐低16.1%；只是一条原始记录，不能作为完整四轮官方基线。
+- 该4K负载采样GPU计算利用率通常93%至100%，板卡功率约199 W至211 W，设备为32,768 MiB BI-V150。这不支持只用idle/排队解释全部开销，当时因此开展内核剖析；当前不据此恢复探索。
+- 初始16K调度在64配置并发中准入约31请求即触KV限制。这解释与公开全卡参考的部分差异，本机A/B须控制容量条件。

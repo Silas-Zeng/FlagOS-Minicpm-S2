@@ -1,0 +1,97 @@
+{
+  "run_id": "20261021T105930Z-mixed-bucket-row-kv-gate",
+  "source_hashes_verified": 13,
+  "source_sha256": {
+    "gate.py": "65fcc4de41b62ede39c0ddee67ba44e2a328cb6712e3d23491fdf5061ed63b66",
+    "runtime.py": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+    "mixed.py": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+    "bucket.py": "d2620ff750beb3fab97f372d64a1ec0e5550ee133cc6ca33adb8ba3f43de4605",
+    "validate_mixed_decode.py": "b6275ee86f4fb24824091e72fccd774d174247975f8189d360400f333a20351f",
+    "bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+    "backend.py": "1219c4d1820b56e99ef6686de8a49c8c5aa57707794bcabf3322023799a03605",
+    "writer.py": "f18224e51162e37c14a2e2b3045bca55baf0b207b1d203ad6ee7d8ed417139eb",
+    "attention.py": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f",
+    "helpers.py": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1",
+    "model-config.json": "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180"
+  },
+  "started_utc": "2026-10-21T10:59:30.618055+00:00",
+  "finished_utc": "2026-10-21T10:59:45.512516+00:00",
+  "exit_code": 0,
+  "status": "passed_synthetic_row_kv_gate",
+  "accuracy": "not evaluated",
+  "performance": "not evaluated",
+  "independent_review": "PASS_SYNTHETIC_PADDING_ROW_KV_GATE",
+  "cases": [
+    {
+      "actual": 259,
+      "padded": 384,
+      "requests": 32,
+      "decode_prefix": 31,
+      "prefill_tokens": 228,
+      "status": "pass",
+      "attention": {
+        "valid_tokens": 259,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "kv_bitwise_equal": true,
+      "out_tail_stays_poisoned": true,
+      "next_decode": {
+        "valid_tokens": 32,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "next_kv_bitwise_equal": true,
+      "padding_only_rng_unchanged": true,
+      "next_unused_output_untouched": true
+    },
+    {
+      "actual": 952,
+      "padded": 1024,
+      "requests": 32,
+      "decode_prefix": 31,
+      "prefill_tokens": 921,
+      "status": "pass",
+      "attention": {
+        "valid_tokens": 952,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "kv_bitwise_equal": true,
+      "out_tail_stays_poisoned": true,
+      "next_decode": {
+        "valid_tokens": 32,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "next_kv_bitwise_equal": true,
+      "padding_only_rng_unchanged": true,
+      "next_unused_output_untouched": true
+    }
+  ],
+  "postflight": {
+    "utc": "2026-10-21T11:01:49.406136+00:00",
+    "port_9031_closed": true,
+    "memory_used_mib": 68.0,
+    "gpu_utilization_percent": 0.0,
+    "query": "68, 0\n"
+  },
+  "limitations": [
+    "Actual one-layer Builder/Impl/KV writer; synthetic QKV and a small padding harness.",
+    "Does not instantiate ModelRunnerFL or validate its full H2D/event lifecycle.",
+    "No full-model GEMM/hidden/logits/LM-head/sampler equivalence or accuracy claim.",
+    "Only the padding operations' RNG state is checked, not a real sampling invocation."
+  ],
+  "source_audit": {
+    "bucket_wrapper": "Harness using reviewed _wrap_runner; actual ModelRunnerFL not instantiated",
+    "attention": "actual one-layer Builder/Impl/writer with C2+C3",
+    "hidden_row_gather_candidate": "not imported or tested",
+    "sampling": "not invoked; only padding operation RNG state checked"
+  }
+}

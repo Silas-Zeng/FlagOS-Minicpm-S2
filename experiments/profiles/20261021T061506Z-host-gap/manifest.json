@@ -1,0 +1,57 @@
+{
+  "kind": "bounded host profile; not performance comparison or official score",
+  "started_utc": "2026-10-21T06:15:07.128266+00:00",
+  "server_command": [
+    "vllm",
+    "serve",
+    "/workspace/MiniCPM5-2B",
+    "--port",
+    "9031",
+    "--compilation-config",
+    "{\"cudagraph_mode\": \"FULL_DECODE_ONLY\"}",
+    "--served-model-name",
+    "minicpm",
+    "--gpu-memory-utilization",
+    "0.85",
+    "--max-model-len",
+    "131072"
+  ],
+  "source_dir": "/workspace/experiments/minicpm-s2/code/host-gap-20261021T061506Z",
+  "seed": 721101,
+  "cpu_before": {
+    "cpu.cfs_quota_us": "600000\n",
+    "cpu.cfs_period_us": "100000\n",
+    "cpu.stat": "nr_periods 381688\nnr_throttled 1196\nthrottled_time 4505752377733\n"
+  },
+  "smoke_only": false,
+  "smoke_repeats": 1,
+  "native_profile": false,
+  "host_profile": true,
+  "decode_screen": false,
+  "require_log_marker": "MINICPM_DECODE_GAP_INSTALLED",
+  "packages": {
+    "vllm": "0.24.0+empty",
+    "vllm-plugin-fl": "0.3.0rc0+g13eb9be69",
+    "torch": "2.10.0+corex.4.5.0",
+    "transformers": "5.14.1",
+    "flag-gems": "5.3.5"
+  },
+  "sha256": {
+    "/workspace/experiments/minicpm-s2/code/host-gap-20261021T061506Z/vllm_fl/worker/model_runner.py": "dfd532de4a0b0bdb286aed0f42b4d6f2c3b2c2dcf65634f895577144473b68b9",
+    "/workspace/experiments/minicpm-s2/code/host-gap-20261021T061506Z/vllm_fl/patches/biv150_runtime.py": "a0c09c51826e0b9e0e5c4f320e68451359db44001d56fd68e1e78de8dda2c9b4",
+    "/usr/local/lib/python3.12/site-packages/vllm/v1/worker/block_table.py": "b3a6649b968fba0b48c333d7ac96e65cc713a86133cc7eef0a8399f5339ec600",
+    "/workspace/vllm-plugin-FL/benchmarks/benchmark_throughput_serve.py": "0813eba574e9d1eb50c297c515baa426da1bcb61ce8c78a398b482f246005565",
+    "/usr/local/lib/python3.12/site-packages/vllm/v1/attention/ops/triton_unified_attention.py": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f",
+    "/usr/local/lib/python3.12/site-packages/vllm/v1/attention/ops/triton_attention_helpers.py": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1",
+    "/usr/local/lib/python3.12/site-packages/flag_gems/runtime/backend/_iluvatar/ops/mm.py": "4c2e23da2a6b65b89cbb8170967f14c5327d143e21137387f3907ccb4fcde090",
+    "/workspace/MiniCPM5-2B/config.json": "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180",
+    "/workspace/MiniCPM5-2B/generation_config.json": "9ac4f32e5f32358697a9f438a3ea89ef80e6ba786c72c49e932f9f21c122fdb1",
+    "/workspace/experiments/minicpm-s2/code/host-gap-20261021T061506Z/vllm_fl/patches/biv150_top_p_triton.py": "da77c411a88ad4ead072c99cdc4edb52b5bef5b8e5990b9cc8e04db08ed31ca9",
+    "/usr/local/lib/python3.12/site-packages/flag_gems/ops/index.py": "47a7108bcf8424a96651021703f8731f1866a0e2eff88a1ac647e574ccf7e61d",
+    "/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py": "414e8a3f74e2522e40659e7fccd84e301f4517220837a87af0311f050bbf3025",
+    "/usr/local/lib/python3.12/site-packages/flag_gems/utils/pointwise_dynamic.py": "6a4f88e227ed566de05729c0ab3ac89457e0cbdcdbea31b12319908f4ee33290"
+  },
+  "flaggems_revision": "4df52d9168ac55c1c1061cefb4638c570292d896",
+  "flaggems_status": "",
+  "plugin_base_revision": "d60b02367a852826f653165953f31b6dc696658e"
+}

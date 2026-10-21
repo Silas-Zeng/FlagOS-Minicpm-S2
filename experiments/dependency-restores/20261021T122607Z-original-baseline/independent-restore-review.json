@@ -1,0 +1,69 @@
+{
+  "record_id": "20261021T122607Z-original-baseline",
+  "status": "restored_record_independently_verified",
+  "verified_backup_and_helper_sha256": {
+    "before.py": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f",
+    "original-reference.py": "bab2c0b9f9a7793ca411796b48ebb4734433160e7e99eabf46ddb7f1c30cb6e0",
+    "retained-runtime.py": "a0c09c51826e0b9e0e5c4f320e68451359db44001d56fd68e1e78de8dda2c9b4",
+    "prepare_original_attention.py": "8b3337e06e4dc083b5f99cafd785c6d5a49b64c86a10d721d47c76c304c8eda6"
+  },
+  "three_backup_bytes_identity_verified": true,
+  "independent_reverse_equals_saved_a4_original": true,
+  "before_size": 41796,
+  "after_size": 41176,
+  "preflight": {
+    "utc": "2026-10-21T12:26:07.432605+00:00",
+    "port_9031_closed": true,
+    "command": [
+      "/usr/local/corex-4.5.0/bin/ixsmi",
+      "--query-gpu=memory.used,utilization.gpu",
+      "--format=csv,noheader,nounits"
+    ],
+    "query_raw": "68, 0\n",
+    "ixsmi_raw": "Timestamp    Wed Oct 21 20:26:07 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  34C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+  },
+  "pre_replace_idle": {
+    "utc": "2026-10-21T12:26:07.533529+00:00",
+    "port_9031_closed": true,
+    "command": [
+      "/usr/local/corex-4.5.0/bin/ixsmi",
+      "--query-gpu=memory.used,utilization.gpu",
+      "--format=csv,noheader,nounits"
+    ],
+    "query_raw": "68, 0\n",
+    "ixsmi_raw": "Timestamp    Wed Oct 21 20:26:07 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  35C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+  },
+  "postflight": {
+    "utc": "2026-10-21T12:26:07.632596+00:00",
+    "port_9031_closed": true,
+    "command": [
+      "/usr/local/corex-4.5.0/bin/ixsmi",
+      "--query-gpu=memory.used,utilization.gpu",
+      "--format=csv,noheader,nounits"
+    ],
+    "query_raw": "68, 0\n",
+    "ixsmi_raw": "Timestamp    Wed Oct 21 20:26:07 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  34C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+  },
+  "command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/prepare_original_attention.py",
+    "--attention",
+    "/usr/local/lib/python3.12/site-packages/vllm/v1/attention/ops/triton_unified_attention.py",
+    "--runtime",
+    "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z/vllm_fl/patches/biv150_runtime.py",
+    "--original-reference",
+    "/workspace/experiments/minicpm-s2/scripts/triton_unified_attention.py.orig",
+    "--apply",
+    "--record-dir",
+    "/workspace/experiments/minicpm-s2/dependency-restores/20261021T122607Z-original-baseline"
+  ],
+  "installed_sha256_as_recorded_by_exact_helper": "bab2c0b9f9a7793ca411796b48ebb4734433160e7e99eabf46ddb7f1c30cb6e0",
+  "original_stat": {
+    "mode": 33188,
+    "uid": 0,
+    "gid": 0,
+    "mtime_ns": 1792550009672311819
+  },
+  "limitation": "CPU record audit; live installed startupbab2 separately read by root12:29Z; this agent performed no SSH/installed mutation/importretained",
+  "official_owner_receipt": "122607 original13eb runner166637/benchmark167244/server166651;4K1of4/noBIVmarkers;rootactual+manifestbothbab2"
+}

@@ -1,0 +1,52 @@
+
+**** collection configuration ****
+        trace_cuda = true
+        trace_osrt = false
+        trace_nvtx = false
+        trace_cudnn = false
+        trace_cuinfer = false
+        trace_video = false
+        trace_power = false
+        trace_temperature = false
+        trace_raw_syscalls = false
+        trace_proc_kthread = false
+        trace_metric_sampling = false
+        trace_callstack = false
+        trace_mem = false
+        python-sampling = false
+        nic_metrics = false
+        event_sync = false
+        filter_processes = false
+        print_kernel_args = true
+        application command = vllm
+        application arguments = serve /workspace/MiniCPM5-2B --port 9031 --compilation-config {"cudagraph_mode": "FULL_DECODE_ONLY"} --served-model-name minicpm --gpu-memory-utilization 0.85 --max-model-len 131072
+Collecting data...
+INFO 10-21 12:08:58 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-21 12:08:58 [__init__.py:46] - fl -> vllm_fl:register
+INFO 10-21 12:08:58 [__init__.py:58] Loading plugin fl
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:728: DeprecationWarning: use_cuda_graph is deprecated; use benchmark_mode='replay' or benchmark_mode='event'
+  super().__init__(*args, **kwargs)
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:411: RuntimeWarning: active Triton backend does not provide a replay benchmarker; falling back to event timing
+  resolved_benchmark = resolve_benchmarker(
+INFO 10-21 12:09:05 [__init__.py:237] Platform plugin fl is activated
+WARNING 10-21 12:09:11 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+/usr/local/lib/python3.12/site-packages/torch/jit/_script.py:362: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+WARNING 10-21 12:09:12 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+WARNING 10-21 12:09:12 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+WARNING 10-21 12:09:12 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+[2026-10-21 12:09:12] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_sampler_compile_for_iluvatar: unwrapped topk_topp_sampler.compiled_random_sample
+[2026-10-21 12:09:12] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_sampler_compile_for_iluvatar: unwrapped logprobs.batched_count_greater_than
+[2026-10-21 12:09:12] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_torch_inductor_for_iluvatar: backend '['iluvatar']' already supports target='cuda', no GPUTarget remap needed.
+usage: vllm serve [model_tag] [options]
+vllm serve: error: argument --compilation-config/-cc: 1 validation error for CompilationConfig
+  Invalid JSON: EOF while parsing a value at line 1 column 18 [type=json_invalid, input_value='{"cudagraph_mode":', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid
+Error: /usr/local/bin/vllm exit with code = 2
+
+    Waiting for converting temporary file to /workspace/experiments/minicpm-s2/profiles/20261021T040856Z-native-decode/native-trace.json   [?25l.  
+    Waiting for filter small slices from file /workspace/experiments/minicpm-s2/profiles/20261021T040856Z-native-decode/native-trace.json
+    Waiting for inserting CUDA data from /tmp/101084/injectionDB.101112.sqlite ...
+
+Report file /workspace/experiments/minicpm-s2/profiles/20261021T040856Z-native-decode/native-trace.json saved.[?25h
+

@@ -1,0 +1,68 @@
+{
+  "started_utc": "2026-10-21T11:45:53.497320+00:00",
+  "pid": 160777,
+  "command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/validate_mixed_attention_overlap.py",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261021T114553Z-mixed-attention-overlap-gate",
+    "--timing-loops",
+    "64",
+    "--runtime-path",
+    "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z/vllm_fl/patches/biv150_decode_launch_runtime.py",
+    "--mixed-path",
+    "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z/vllm_fl/patches/biv150_mixed_decode.py",
+    "--overlap-path",
+    "/workspace/experiments/minicpm-s2/scripts/biv150_mixed_attention_overlap.py"
+  ],
+  "command_shell": "/usr/local/bin/python3 /workspace/experiments/minicpm-s2/scripts/validate_mixed_attention_overlap.py --run-dir /workspace/experiments/minicpm-s2/framework/20261021T114553Z-mixed-attention-overlap-gate --timing-loops 64 --runtime-path /workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z/vllm_fl/patches/biv150_decode_launch_runtime.py --mixed-path /workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z/vllm_fl/patches/biv150_mixed_decode.py --overlap-path /workspace/experiments/minicpm-s2/scripts/biv150_mixed_attention_overlap.py",
+  "kind": "one-layer actual mixed stream correctness/timing, no weights/service/score",
+  "timing_loops": 64,
+  "timing_method": "v2: Event construction before wall begin; record/submit/collect/final synchronize inside wall; one ABBA",
+  "environment": {
+    "VLLM_PLUGINS": "fl",
+    "PYTHONPATH": "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z",
+    "COREX_VISIBLE_DEVICES": "all"
+  },
+  "preflight": {
+    "checked_utc": "2026-10-21T11:45:53.504868+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "source_sha256": {
+    "gate.py": "ab1cd95e2f0582e1efa1deb1321887a041a88a068c655627360bb6eee4817eba",
+    "runtime.py": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+    "mixed.py": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+    "overlap.py": "93c3124ccab9311cb98f319d9f786f7aae571f9c1d976d1a9f1d623adca378db",
+    "validate_hidden_row_gather.py": "65cb8affd4ae08af877ccb4b4cfca6822eec5ba3f83770f39999ee677c546863",
+    "validate_mixed_decode.py": "b6275ee86f4fb24824091e72fccd774d174247975f8189d360400f333a20351f",
+    "bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a"
+  },
+  "packages": {
+    "torch": "2.10.0+corex.4.5.0",
+    "vllm": "0.24.0+empty",
+    "FlagGems": "unavailable",
+    "SQLAlchemy": "2.0.48"
+  },
+  "worker_command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/framework/20261021T114553Z-mixed-attention-overlap-gate/source/gate.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261021T114553Z-mixed-attention-overlap-gate",
+    "--model",
+    "/workspace/MiniCPM5-2B",
+    "--timing-loops",
+    "64"
+  ],
+  "worker_pid": 160780,
+  "postflight": {
+    "checked_utc": "2026-10-21T11:46:16.340314+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "finished_utc": "2026-10-21T11:46:16.409246+00:00",
+  "exit_code": 0
+}

@@ -1,61 +1,73 @@
-# Baseline and bottleneck analysis plan
+# 基线与瓶颈分析计划
 
-## Objective
+本文的基线、资源假设和已测数据仅属于**天数 BI-V150**。
+团队另一平台沐曦－曦云 C500 由队友负责，不能把本页方案或结果视为该平台的验证结论。
+双平台分工见 [README](../README.md)。
 
-Establish a reproducible single-card baseline before changing code, then
-identify bottlenecks that can contribute at least one percentage point to
-end-to-end throughput.
+本文是最初实验计划的历史记录，保留原负载、轮次和当时的筛选表述，不代表当前新增执行任务。
+用户后续明确要求：小而稳定的收益也保留，不设 1% 研发淘汰线；
+先做最短必要验证，只有剩余不确定性确有需要时才扩大验证。
+当前性能探索已冻结，在途官方基线只按其原 driver 和 manifest 完成收尾。
 
-## Official workloads
+## 目标
 
-| Name | `[input_len, output_len, concurrency, num_prompts]` |
+先建立可复现的单卡基线，再修改代码并识别瓶颈。
+早期计划以“可能给端到端吞吐贡献至少 1 个百分点”为筛选目标；
+这一数字是历史目标，不能用作现在淘汰小收益的固定门槛。
+
+## 官方负载
+
+| 名称 | `[input_len, output_len, concurrency, num_prompts]` |
 |---|---|
 | 4K | `[4096,1024,64,256]` |
 | 16K | `[16384,1024,64,128]` |
 
-The primary metric is `total tokens/s`. Mean TTFT and benchmark duration are
-secondary diagnostics.
+主要指标为 `total tokens/s`；平均 TTFT 和 benchmark 总耗时用于辅助诊断。
 
-The official script hard-codes `RUNS=4` and `SKIP_FIRST=1`. Each of the 4K and
-16K cases therefore executes four times, reports all four raw rows, and
-averages the final three rows into the summary. A full two-case baseline is
-expected to take several hours on BI-V150 even before profiling.
+官方脚本固定 `RUNS=4`、`SKIP_FIRST=1`。
+4K、16K 因此各执行四轮，保存全部四条原始行，再将最后三轮平均写入汇总。
+即使不计 profiling，BI-V150 完整两档基线也预计需要数小时。
 
-## Measurements
+## 测量步骤
 
-1. Freeze and record model, source, package, driver, environment, launch
-   command, and benchmark-script hashes.
-2. Run an HTTP smoke request before either performance case.
-3. Run the official benchmark without editing its script.
-4. Preserve the original summary CSV and complete service/benchmark logs.
-5. Repeat around the 1% decision boundary; never compare concurrent runs.
-6. Capture a short profiler window for 4K and 16K after the unprofiled
-   baseline completes.
+以下是原计划的步骤，不能据此向已冻结或在途官方实验追加操作：
 
-## Stage decomposition
+1. 冻结并记录模型、源码、软件包、driver、环境、启动命令和 benchmark 脚本哈希。
+2. 原计划在性能测试前发送 HTTP smoke 请求。正式实验是否发送 smoke，
+   必须以其冻结 driver 和实际 manifest 为准，不能为补做历史步骤而改变已记录负载或暖缓存状态。
+3. 运行未修改脚本的官方 benchmark。
+4. 保存原始汇总 CSV，以及完整服务和 benchmark 日志。
+5. 早期计划在 1% 判断边界附近重复验证，且不比较并发运行的结果；
+   现行要求是按实际波动做最短必要重复，没有固定 1% 淘汰线。
+6. 原计划在无 profiler 的基线完成后，为 4K、16K 各取一个短 profiling 窗口。
+   当前不因此启动新 profiling，已有 trace 与新授权任务分开记录。
 
-- request arrival and queue wait;
-- batch construction and scheduling;
-- prefill;
-- decode and per-output-token cost;
-- sampling and detokenization;
-- host/device synchronization and data movement;
-- idle gaps between batches.
+## 相位拆分
 
-## Kernel decomposition
+- 请求到达与排队；
+- batch 构建与调度；
+- prefill；
+- decode 与每输出 token 成本；
+- 采样与 detokenization；
+- 主机/设备同步及数据搬运；
+- batch 之间的空闲间隙。
 
-Record the operators representing at least 85% to 90% of cumulative device
-time, including invocation count, average duration, tensor shape, dtype,
-memory traffic, launches, and synchronization.
+## Kernel 拆分
 
-## Acceptance gate
+记录覆盖累计设备时间至少 85% 到 90% 的 operator，
+包括调用次数、平均耗时、tensor shape、dtype、内存流量、launch 和同步信息。
 
-An optimization remains a candidate only if it:
+## 接受门槛
 
-- preserves operator-level correctness and model behavior;
-- passes the official accuracy gate;
-- improves a scenario by more than the 1% ambiguity window;
-- does not regress the other workload beyond the confirmed tolerance;
-- is enabled through code under the fixed official launch arguments;
-- has an ablation showing that the measured gain comes from the claimed
-  mechanism.
+早期计划列出以下条件；其中“超过 1% 模糊窗口”仅记录当时的筛选设想：
+
+- 保持算子级正确性和模型行为；
+- 通过官方准确率验证；
+- 某场景改善超过当时设定的 1% 模糊窗口；
+- 另一负载不出现超出已确认容差的回退；
+- 通过代码启用，保持固定官方启动参数；
+- 有消融实验支持测得改善来自所声明的机制。
+
+现行研发流程按阶段判断：尚未完成最终官方准确率的实现仍可作为原型或待确认候选保留；
+低于波动范围的小信号标为待确认，稳定的小收益不因不足 1% 而删除。
+最终提交仍须通过官方准确率、性能复现与比赛门槛，不能用短诊断代替。

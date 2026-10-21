@@ -1,0 +1,103 @@
+{
+  "run_id": "20261021T121838Z-prefill-visible-prefix-gate",
+  "independent_source_hashes_verified": 15,
+  "cases": [
+    {
+      "case": "C3-P2019-KV16K",
+      "lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2019
+      ],
+      "kv_len": 16384,
+      "random_physical_pages": true,
+      "reused_old_prefix_blocks": 16,
+      "negative_padding_slots": 3,
+      "correctness": {
+        "all_output_bits_equal": true,
+        "valid_output_finite": true,
+        "padding_untouched": true,
+        "entire_kv_bits_unchanged": true,
+        "rng_unchanged": true,
+        "one_prefill_selected": true,
+        "c2_decode_fallback": true
+      }
+    },
+    {
+      "case": "Q2048-KV16K",
+      "lengths": [
+        2048
+      ],
+      "kv_len": 16384,
+      "random_physical_pages": true,
+      "reused_old_prefix_blocks": 0,
+      "negative_padding_slots": 3,
+      "correctness": {
+        "all_output_bits_equal": true,
+        "valid_output_finite": true,
+        "padding_untouched": true,
+        "entire_kv_bits_unchanged": true,
+        "rng_unchanged": true,
+        "one_prefill_selected": true,
+        "c2_decode_fallback": true
+      }
+    }
+  ],
+  "summary": {
+    "wall": {
+      "baseline_ms": 12.594359734375,
+      "candidate_ms": 12.559617124999999,
+      "fraction_saved": 0.002758584803654207
+    },
+    "event": {
+      "baseline_ms": 12.491010189056396,
+      "candidate_ms": 12.434306144714355,
+      "fraction_saved": 0.004539588350646051
+    }
+  },
+  "timing_loops": 32,
+  "timing_method": "one P2019 ABBA; pre-recorded Event pairs; record/submit/final sync inside wall; 32 calls/window",
+  "selected_launches": 68,
+  "fallback_launches": 67,
+  "original_proxy_restored": true,
+  "postflight": {
+    "utc": "2026-10-21T12:25:01.258460+00:00",
+    "port_9031_closed": true,
+    "memory_used_mib": 68,
+    "utilization_gpu_percent": 0,
+    "query_raw": "68, 0"
+  },
+  "limitations": [
+    "Actual backend/builder/KV writer, synthetic inputs, no weights or model runner.",
+    "Only P2019/KV16K is timed; Q2048/KV16K is correctness only.",
+    "No accuracy, graph-replay, serving or official-performance conclusion."
+  ],
+  "conclusion": "actual backend/builder/writer synthetic2cases bitsKVrngnegativepaddingNaN passed; onlyP2019timed smallwall0.275858percent/event0.453959percent singlelayer signal retain; no fullrunnergraphaccuracyserviceofficial gain"
+}

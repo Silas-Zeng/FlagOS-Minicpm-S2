@@ -1,24 +1,22 @@
-# Preliminary clean 16K baseline
+# 16K 独立基线初步记录
 
-Status: first clean repetition only. The official summary excludes this run.
+本地实测与源码适配仅覆盖天数 BI-V150。沐曦－曦云 C500 由队友负责，本文数据不外推到该平台或团队总分。
 
-| Metric | Local clean run 1 | Public TianShu reference | Difference |
+> 历史记录：以下仅为当时的首轮快照；最新正式结论以项目工作记录为准。
+
+状态：只有独立运行的第一轮，官方汇总排除此轮。
+
+| 指标 | 本地独立第 1 轮 | 公开 TianShu 参考值 | 差异 |
 |---|---:|---:|---:|
-| Successful requests | 128 | 128 | 0 |
-| Benchmark duration | 2596.73 s | 2434.82 s | +6.65% |
-| Total tok/s | 858.09 | 915.15 | -6.23% |
-| Output tok/s | 50.48 | 53.83 | -6.22% |
-| Mean TTFT | 639267.43 ms | 599262.03 ms | +6.68% |
-| Mean TPOT | 520.68 ms | not published | - |
+| 成功请求 | 128 | 128 | 0 |
+| benchmark 耗时 | 2596.73 s | 2434.82 s | +6.65% |
+| 总 tok/s | 858.09 | 915.15 | -6.23% |
+| 输出 tok/s | 50.48 | 53.83 | -6.22% |
+| 平均 TTFT | 639267.43 ms | 599262.03 ms | +6.68% |
+| 平均 TPOT | 520.68 ms | 未公开 | - |
 
-The local 16K total/output throughput is about 2.3 times lower than the clean
-4K baseline, while mean TPOT grows from 156.74 ms at 4K to 520.68 ms at 16K.
+本地 16K 的总吞吐/输出吞吐约比独立 4K 基线低 2.3 倍，平均 TPOT 从 4K 的 156.74 ms 增至 16K 的 520.68 ms。
 
-The first run admitted roughly 30-31 active requests despite client concurrency
-64. The remaining 33-34 requests waited for KV-cache capacity. This is a
-structural difference from the 4K workload and must remain fixed during local
-A/B experiments.
+首轮虽然客户端并发为 64，实际仅接纳约 30-31 条活动请求，其余 33-34 条等待 KV 缓存容量。这是与 4K 负载的结构性差别，本地 A/B 实验须保持该条件不变。
 
-This single result is not yet the official three-run baseline. It establishes
-that the largest observed end-to-end tail is in 16K TTFT and decode, not merely
-in generic queue setup.
+单轮结果还不是官方后三轮基线。它说明当时观察到的最大端到端尾部位于 16K TTFT 与解码，并非只有通用队列初始化。

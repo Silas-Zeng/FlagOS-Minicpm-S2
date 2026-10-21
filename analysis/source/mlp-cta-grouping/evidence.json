@@ -1,0 +1,389 @@
+{
+  "scope": "CPU source/old actual trace/immutable SQLite evidence; no current E2E timing attribution",
+  "trace": "experiments\\profiles\\b0-triton-16k-prefill\\prefill\\trace\\rank0.1792528309825622459.pt.trace.json.gz",
+  "trace_sha256": "1a7f511d2a0d30f6aa36e1f590cc11babaf788ae148fe83c42870f77943aa310",
+  "kernel_span_ms": 3757.450509033203,
+  "kernel_union_ms": 3720.346239013672,
+  "kernel_count": 948,
+  "kernel_groups": [
+    {
+      "kernel": "mm_kernel",
+      "input_shapes": [
+        [
+          2048,
+          2048
+        ],
+        [
+          2048,
+          2560
+        ],
+        [
+          2048,
+          2560
+        ]
+      ],
+      "grid": [
+        160,
+        1,
+        1
+      ],
+      "block": [
+        512,
+        1,
+        1
+      ],
+      "registers_per_thread": 97,
+      "shared_bytes": 49152,
+      "calls": 84,
+      "total_ms": 25.41281700000001
+    },
+    {
+      "kernel": "reshape_and_cache_kernel_flash",
+      "input_shapes": [
+        [
+          2048,
+          2,
+          128
+        ],
+        [
+          2048,
+          2,
+          128
+        ],
+        []
+      ],
+      "grid": [
+        2048,
+        1,
+        1
+      ],
+      "block": [
+        1024,
+        1,
+        1
+      ],
+      "registers_per_thread": 4,
+      "shared_bytes": 0,
+      "calls": 84,
+      "total_ms": 2.5421300000000007
+    },
+    {
+      "kernel": "mm_kernel",
+      "input_shapes": [
+        [
+          2048,
+          2048
+        ],
+        [
+          2048,
+          2048
+        ],
+        [
+          2048,
+          2048
+        ]
+      ],
+      "grid": [
+        128,
+        1,
+        1
+      ],
+      "block": [
+        512,
+        1,
+        1
+      ],
+      "registers_per_thread": 97,
+      "shared_bytes": 49152,
+      "calls": 84,
+      "total_ms": 20.519545000000008
+    },
+    {
+      "kernel": "mm_kernel",
+      "input_shapes": [
+        [
+          2048,
+          2048
+        ],
+        [
+          2048,
+          12288
+        ],
+        [
+          2048,
+          12288
+        ]
+      ],
+      "grid": [
+        384,
+        1,
+        1
+      ],
+      "block": [
+        1024,
+        1,
+        1
+      ],
+      "registers_per_thread": 97,
+      "shared_bytes": 65536,
+      "calls": 84,
+      "total_ms": 117.80483500000008
+    },
+    {
+      "kernel": "mm_kernel",
+      "input_shapes": [
+        [
+          2048,
+          6144
+        ],
+        [
+          6144,
+          2048
+        ],
+        [
+          2048,
+          2048
+        ]
+      ],
+      "grid": [
+        128,
+        1,
+        1
+      ],
+      "block": [
+        512,
+        1,
+        1
+      ],
+      "registers_per_thread": 97,
+      "shared_bytes": 49152,
+      "calls": 84,
+      "total_ms": 60.900605000000006
+    },
+    {
+      "kernel": "triton_poi_fused_3",
+      "input_shapes": [
+        [
+          2048,
+          2560
+        ],
+        [
+          2048
+        ],
+        [
+          131072,
+          128
+        ],
+        [
+          2048,
+          2,
+          128
+        ],
+        [
+          2048,
+          16,
+          128
+        ],
+        [],
+        []
+      ],
+      "grid": [
+        9216,
+        1,
+        1
+      ],
+      "block": [
+        256,
+        1,
+        1
+      ],
+      "registers_per_thread": 21,
+      "shared_bytes": 0,
+      "calls": 82,
+      "total_ms": 6.716336000000001
+    }
+  ],
+  "db_snapshot": "experiments\\framework\\20261021T115950Z-growth-v2-warm-repeat-context16k-long-control\\db-after\\snapshot.sqlite",
+  "db_sha256": "29fb47cbfdaa445875e8962dc1bc3f6eb36bffaee7006c2472d59947c5179074",
+  "best_table": "mm_kernel_7ea0a6df3012d3bc5475d21d5eb156a7-45eed7266d4cc0f7be44aaaa091bc3b1",
+  "best_rows": [
+    {
+      "key_0": 259,
+      "key_1": 2048,
+      "key_2": 6144,
+      "key_3": "torch.bfloat16",
+      "key_4": "torch.bfloat16",
+      "key_5": "torch.bfloat16",
+      "BLOCK_M": 128,
+      "BLOCK_N": 64,
+      "BLOCK_K": 32,
+      "SPLIT_K": 1,
+      "num_warps": 8,
+      "num_ctas": 1,
+      "num_stages": 1
+    },
+    {
+      "key_0": 259,
+      "key_1": 12288,
+      "key_2": 2048,
+      "key_3": "torch.bfloat16",
+      "key_4": "torch.bfloat16",
+      "key_5": "torch.bfloat16",
+      "BLOCK_M": 256,
+      "BLOCK_N": 128,
+      "BLOCK_K": 32,
+      "SPLIT_K": 1,
+      "num_warps": 8,
+      "num_ctas": 1,
+      "num_stages": 2
+    },
+    {
+      "key_0": 952,
+      "key_1": 2048,
+      "key_2": 6144,
+      "key_3": "torch.bfloat16",
+      "key_4": "torch.bfloat16",
+      "key_5": "torch.bfloat16",
+      "BLOCK_M": 256,
+      "BLOCK_N": 64,
+      "BLOCK_K": 32,
+      "SPLIT_K": 1,
+      "num_warps": 8,
+      "num_ctas": 1,
+      "num_stages": 2
+    },
+    {
+      "key_0": 952,
+      "key_1": 12288,
+      "key_2": 2048,
+      "key_3": "torch.bfloat16",
+      "key_4": "torch.bfloat16",
+      "key_5": "torch.bfloat16",
+      "BLOCK_M": 256,
+      "BLOCK_N": 256,
+      "BLOCK_K": 32,
+      "SPLIT_K": 1,
+      "num_warps": 16,
+      "num_ctas": 1,
+      "num_stages": 2
+    },
+    {
+      "key_0": 2048,
+      "key_1": 2048,
+      "key_2": 6144,
+      "key_3": "torch.bfloat16",
+      "key_4": "torch.bfloat16",
+      "key_5": "torch.bfloat16",
+      "BLOCK_M": 256,
+      "BLOCK_N": 128,
+      "BLOCK_K": 32,
+      "SPLIT_K": 1,
+      "num_warps": 8,
+      "num_ctas": 1,
+      "num_stages": 2
+    },
+    {
+      "key_0": 2048,
+      "key_1": 12288,
+      "key_2": 2048,
+      "key_3": "torch.bfloat16",
+      "key_4": "torch.bfloat16",
+      "key_5": "torch.bfloat16",
+      "BLOCK_M": 256,
+      "BLOCK_N": 256,
+      "BLOCK_K": 32,
+      "SPLIT_K": 1,
+      "num_warps": 16,
+      "num_ctas": 1,
+      "num_stages": 2
+    }
+  ],
+  "actual_mm_source_sha256": "4c2e23da2a6b65b89cbb8170967f14c5327d143e21137387f3907ccb4fcde090",
+  "mask_121838": {
+    "raw_read": true,
+    "source_hashes_verified": 15,
+    "source_hashes_all_match": true,
+    "correctness": [
+      {
+        "case": "C3-P2019-KV16K",
+        "lengths": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          2019
+        ],
+        "kv_len": 16384,
+        "random_physical_pages": true,
+        "reused_old_prefix_blocks": 16,
+        "negative_padding_slots": 3,
+        "correctness": {
+          "all_output_bits_equal": true,
+          "valid_output_finite": true,
+          "padding_untouched": true,
+          "entire_kv_bits_unchanged": true,
+          "rng_unchanged": true,
+          "one_prefill_selected": true,
+          "c2_decode_fallback": true
+        }
+      },
+      {
+        "case": "Q2048-KV16K",
+        "lengths": [
+          2048
+        ],
+        "kv_len": 16384,
+        "random_physical_pages": true,
+        "reused_old_prefix_blocks": 0,
+        "negative_padding_slots": 3,
+        "correctness": {
+          "all_output_bits_equal": true,
+          "valid_output_finite": true,
+          "padding_untouched": true,
+          "entire_kv_bits_unchanged": true,
+          "rng_unchanged": true,
+          "one_prefill_selected": true,
+          "c2_decode_fallback": true
+        }
+      }
+    ],
+    "timing_summary": {
+      "wall": {
+        "baseline_ms": 12.594359734375,
+        "candidate_ms": 12.559617124999999,
+        "fraction_saved": 0.002758584803654207
+      },
+      "event": {
+        "baseline_ms": 12.491010189056396,
+        "candidate_ms": 12.434306144714355,
+        "fraction_saved": 0.004539588350646051
+      }
+    },
+    "original_proxy_restored": true
+  }
+}

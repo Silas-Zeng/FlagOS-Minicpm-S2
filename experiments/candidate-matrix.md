@@ -1,43 +1,43 @@
-# Candidate experiment matrix
+# 候选实验矩阵
 
-Only one accelerator job may run at a time. Every performance comparison uses
-the same clean service launch arguments, warmup policy, input generator, and
-output length. The optimization must be enabled by code for final scoring; an
-environment variable is acceptable only for a diagnostic A/B.
+本表历史实验及成绩仅属天数BI-V150；沐曦－曦云C500由队友负责。实验分析库按平台归档，两个私有代码库共用；本轮数据不代表C500或团队整体成绩。
 
-## Gates
+本页是2026-10-21早期探索计划的历史记录，所有未开始项当前冻结。仅收尾既有在途官方基线与材料，不按旧表开启GPU实验。
 
-For each candidate:
+一张加速器同时只运行一个设备任务。对照须保持干净服务启动参数、warmup规则、输入生成方式和输出长度一致。最终优化由代码启用，环境变量仅供历史诊断A/B，不能代替提交实现。
 
-1. Start the model and complete the official smoke request.
-2. Compare a representative kernel output against the original implementation.
-3. Run a short paired 4K and 16K load.
-4. Compare repeated end-to-end results on the same device.
-5. Run the full official three-run average only after the short result is
-   positive and correctness is intact.
-6. Run `math_500` Level 3 before final selection.
+## 验证门槛（历史方法）
 
-## Matrix
+采用能否定坏候选的最短验证，剩余不确定性确有需要才扩大（用户于2026-10-21的指导）：
 
-| ID | Backend / change | Purpose | Status |
+1. 阅读源、不变量与必要CPU正确性。
+2. 与原实现比代表性设备输出，用隔离短微基准筛选机会。
+3. 有前景才在独立源副本接入、启动模型和官方smoke。
+4. 先短端到端匹配负载，再按必要程度同卡重复以区分噪声。
+5. 最终选择前过`math_500` Level 3和官方性能重复；诊断不是比赛成绩。
+
+以上不授权在当前冻结范围下启动未开始步骤。
+
+## 原始计划表
+
+状态是当时计划快照，不是当前设备归属。最新决定见[queue.md](queue.md)、[CURRENT_WORK.md](../CURRENT_WORK.md)，实测见[registry.csv](registry.csv)。
+
+| ID | 后端/改动 | 目的 | 当时状态 |
 |---|---|---|---|
-| B0 | Generic `TRITON_ATTN`, official clean service | Local baseline | running |
-| B1 | Profile of B0, 4K steady decode | Locate decode kernels and CPU gaps | pending |
-| B2 | Profile of B0, 16K prefill | Locate long-prefill kernels | pending |
-| A1 | Existing FlagGems FA2, default heuristic | Determine backend-level gain | pending |
-| A2 | FlagGems FA2, packed-GQA8 decode `BM=8/BN=32/w4/s3` | Remove masked half tile | prepared |
-| A3 | FlagGems FA2, vary stage/warp/block N | Tune BIV150 kernel | pending |
-| F1 | Conditional sampler compile restoration | Reduce per-token sampled host overhead | pending |
-| F2 | Iluvatar cache block size 64 or 128 | Reduce block-table/index overhead | pending |
-| F3 | RoPE plus KV-cache write fusion | Reduce decode launches and traffic | only if profile justifies |
-| F4 | Fused residual RMSNorm | Reduce norm/memory traffic | only if profile justifies |
+| B0 | generic `TRITON_ATTN`，官方干净服务 | 本机基线 | 当时运行中 |
+| B1 | B0的4K稳态decode剖析 | 定位decode内核与CPU间隙 | 当时待开始，现冻结 |
+| B2 | B0的16K prefill剖析 | 定位长prefill内核 | 当时待开始，现冻结 |
+| A1 | 已有FlagGems FA2，默认heuristic | 判断后端差异 | 当时待开始，现冻结 |
+| A2 | FlagGems FA2，packed-GQA8 decode `BM=8/BN=32/w4/s3` | 去掉被mask的半tile | 当时已准备，不据此恢复执行 |
+| A3 | FlagGems FA2，改变stage/warp/block N | 调优BIV150内核 | 当时待开始，现冻结 |
+| F1 | 条件恢复sampler compile | 降低每token采样主机开销 | 当时待开始，现冻结 |
+| F2 | Iluvatar cache block size 64或128 | 降低块表/索引开销 | 当时待开始，现冻结 |
+| F3 | RoPE与KV写入融合 | 降低decode launch/流量 | 当时仅在profile支持时考虑，现冻结 |
+| F4 | 融合residual RMSNorm | 降低norm/访存开销 | 当时仅在profile支持时考虑，现冻结 |
 
-## Interpretation
+## 解释边界
 
-- A backend switch by itself is not a final optimization. A2/A3 must provide a
-  real FlagGems kernel/config change and an ablation against A1.
-- Block-size and sampler changes are independent variables and must not be
-  combined until each has a result.
-- A candidate below the 1% ambiguity window is retained as a negative result,
-  not described as a win.
-- Results from profiling instrumentation are never mixed with timing runs.
+- 只切后端不构成优化；历史A2/A3必须有真实FlagGems内核/配置改动及相对A1的消融。
+- block-size和sampler是独立变量，分别有结果前不合并。
+- 小而可重复的收益也保留（用户于2026-10-21的指导）；内部没有1%舍弃门槛。低于实测波动的差值仍不确定，历史方法是最短必要匹配重复；官方要求另核，不能把1%当已确认精确规则。
+- profiler插桩结果不与纯性能计时混用。

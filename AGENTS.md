@@ -1,60 +1,53 @@
-# Team and experiment protocol
+# 团队协作与实验规范
 
-## Scope
+## 范围与仓库
 
-This repository records the FlagOS Season 2 Track 2 work for MiniCPM5-2B.
-Existing GitHub repositories are read-only references. Never push to or modify
-them. Publish only to a newly created repository dedicated to this experiment.
+项目记录 FlagOS 第二季赛道二 MiniCPM5-2B 的双平台工作：天数 BI-V150 由当前主智能体负责，沐曦－曦云 C500 由另一位队友负责。现有设备实测证据均属于 BI-V150，不能外推为 C500 或团队总成绩。
 
-## Device ownership
+官方上游与既有参考源码只读，不推送修改。用户已明确授权将本项目上传至自己的协作仓库，设置私有可见性、更新中文描述、将记录仓库命名为 `Silas-Zeng/FlagOS-S2-Minicpm-throughput`，并在提供用户名后邀请两位协作者。用户选择保留原公开 `Silas-Zeng/vllm-plugin-FL` fork，另建独立私有 `Silas-Zeng/FlagOS-S2-vllm-plugin-FL`；私有 `Silas-Zeng/FlagGems` 为第三个协作库。只向这些本实验专用仓库发布，不能删除原 fork 或丢弃历史。
 
-- The current FlagOS instance exposes one BI-V150 accelerator. Only one
-  GPU-active experiment may run at a time.
-- CPU-only source reading, test preparation, documentation, and log analysis
-  may proceed concurrently.
-- The owner of a running device job is responsible for its PID, output
-  directory, and clean shutdown.
-- Never start a second `vllm serve`, benchmark, profiler, or GPU microbenchmark
-  while port 9031 or the accelerator is active unless the experiment explicitly
-  requires both and has sufficient memory.
+仅实验记录库按 BI-V150 和 C500 分平台管理环境、分析、证据和报告。两个代码库由团队共用，不要求按平台拆分目录或分支；各平台仍须记录实际代码版本与验证结果。
 
-## Collaboration split
+## 设备归属
 
-- Framework/end-to-end owner: scheduling, execution graph, metadata, buffers,
-  host/device interaction, and official benchmark integrity.
-- Kernel/KV owner: operator implementations, Attention/KV access, fusion,
-  tiling, correctness tests, and kernel microbenchmarks.
-- Raw official measurements remain owned by the framework/end-to-end owner.
-- Every optimization patch is reviewed by the other owner before final
-  integration.
+2026-10-22 用户已恢复持续优化，覆盖此前阶段性冻结。优先根据硬件和输入特征探索调度、KV 等框架改动；小收益候选同样安排最短上卡实测并保留，不以预期收益百分比拒绝验证。已验收稳定候选与后续实验隔离，禁止覆盖原始证据。
 
-## Evidence requirements
+- 当前 FlagOS 实例仅有一张 BI-V150；同一时间只运行一个 GPU 活跃实验。
+- CPU 源码阅读、测试准备、文档和日志分析可并行。
+- 设备任务负责人记录 PID、输出目录并负责正常清理。
+- 端口 9031 或该加速卡忙时，不启动第二个服务、benchmark、profiler 或 GPU 微测；明确设计且显存足够的联合实验除外。
+- C500 的资源与任务由该平台负责人独立安排，不能套用 BI-V150 的连接、PID、环境和容量记录。
 
-- Every experiment has a unique UTC run ID and a directory under
-  `/workspace/experiments/minicpm-s2/`.
-- Preserve source revisions, environment fingerprint, exact commands, original
-  CSV/logs, GPU samples, failures, and the conclusion.
-- Never place profiler-enabled runs in the official performance baseline
-  directory.
-- Never compare two results produced with different launch arguments, source
-  revisions, device-memory sizes, or concurrent host workloads.
-- Record negative results. They are required for the experiment report and
-  prevent duplicated work.
+## 分工与互审
 
-## Competition compliance
+- 框架与端到端负责人：调度、执行图、元数据、缓冲区、主机设备交互及官方评测完整性。
+- 算子与 KV 负责人：Attention/KV 访问、融合、tiling、正确性和算子微测。
+- 官方原始测量由对应平台的端到端负责人维护。
+- 每个优化补丁最终集成前均由另一职责负责人审阅；涉及两平台的通用变更还需另一平台确认。
 
-- Use only MiniCPM5-2B.
-- Preserve the official benchmark script and serving arguments.
-- Do not enable quantization or speculation by changing hyperparameters.
-- A switched operator requires an actual implementation change; do not merely
-  route to an existing alternative.
-- Do not merge a newer framework branch for performance.
-- Final optimizations must be enabled by submitted code and pass the accuracy
-  and reproducibility gates.
+## 子智能体交接
 
-## Secret handling
+每个子任务持续维护 `docs/agent-work/<task-name>.md`，记录范围、精确源版本、产物及哈希、验证、失败、未解问题与下一步；最终结论也必须落盘。主负责人维护 `docs/agent-work-index.md` 并链接到 `CURRENT_WORK.md`。切换 API 后应能从文件恢复，不依赖聊天或存活的子进程；容量失败和重复探索也要记录。
 
-- Never commit SSH private keys, API keys, cookies, tokens, or raw credential
-  manager output.
-- Connection notes may contain the public gateway and username only when
-  necessary for reproducibility, but not private keys or passwords.
+## 证据要求
+
+- 每个实验使用唯一 UTC run ID，BI-V150 远端目录位于 `/workspace/experiments/minicpm-s2/`。
+- 保留源版本、环境指纹、精确命令、原始 CSV/日志、GPU 采样、失败与结论。
+- profiler 运行不得进入官方性能基线目录。
+- 对比须核对同一平台、官方参数、源码差异、物理显存及并行主机负载；DB/KV 不同必须明示，不能冒称完全匹配。
+- 负结果必须保留，避免重复试错。
+- 小收益可以保留，但不能把波动中的单次差异冒称稳定收益；优先最短必要验证。
+
+## 比赛合规
+
+- 仅使用 MiniCPM5-2B。
+- 保持官方 benchmark 脚本与服务参数。
+- 不通过修改超参数开启已有量化或推测解码。
+- 切换算子须有实际实现改动，不能只改路由调用现有替代实现。
+- 不为性能合并更新的框架分支。
+- 最终优化由提交代码实际启用，并通过准确率与复现门。
+- 两平台结果分别归档，最终计分依据主办方明确规则。
+
+## 凭据与文档
+
+不提交 SSH 私钥、API key、cookie、token 或凭据管理器原始输出。必要连接说明只能包含公共网关和用户名。项目维护文档使用中文，专有名词、路径、哈希与命令保持原样；原始证据与上游许可证不得为了中文化而改写。

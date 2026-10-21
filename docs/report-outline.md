@@ -1,64 +1,65 @@
-# Technical report outline
+# 技术报告提纲
 
-## 1. Task and constraints
+本提纲对应天数BI-V150工作。沐曦－曦云C500由队友独立记录；实验分析库按平台归档，两个私有代码库共用。报告中的本轮实测不得写作C500或团队整体成绩。
 
-- Model, framework revisions, accelerator, and fixed serving command.
-- 4K and 16K workloads; total-token throughput as the primary metric.
-- TTFT and `math_500` Level 3 gates.
-- Separation of public reference values from locally measured baselines.
+本页保留2026-10-21初版提纲的历史结构，不是恢复探索或新增验证的任务单。当前正文见[技术报告](technical-report.md)。性能探索冻结，原版完整结果等真实原件，不预填。
 
-## 2. Reproducible environment
+## 1. 任务与约束
 
-- Host and accelerator fingerprint.
-- Software and package versions.
-- Source commits, model hash, benchmark-script hash.
-- One-card versus two-card availability and the actual 32 GiB device partition.
-- Detached execution method and why foreground-session loss invalidated the
-  first run.
+- 模型、框架版本、加速器及固定服务命令。
+- 4K和16K负载，以total-token吞吐为主指标。
+- TTFT及`math_500` Level 3门槛。
+- 分开公开参考与本机实测基线。
 
-## 3. Baseline results
+## 2. 可复现环境
 
-- Four raw repetitions per workload and the official three-run average.
-- Throughput, TTFT, TPOT, duration, success rate, and run-to-run variation.
-- Per-run CUDA graph capture, KV-cache capacity, and peak memory.
-- Local baseline versus the public reference, without treating them as directly
-  interchangeable hardware states.
+- 主机与加速器指纹。
+- 软件及包版本。
+- 源提交、模型哈希、benchmark脚本哈希。
+- 实际单卡/双卡可用性及本实例32 GiB分区，不宣称已有双卡证据。
+- 脱离会话执行方式，以及首次前台会话丢失导致实验不完整的原因。
 
-## 4. Bottleneck analysis
+## 3. 基线结果
 
-- End-to-end engine timeline: mixed prefill/decode, decode-only, capacity wait,
-  and idle tail.
-- GPU utilization, memory, temperature, power, and clocks.
-- Prefill and decode operator/kernel rankings with cumulative shares.
-- Host/device gaps, synchronization, and small-kernel counts.
-- Amdahl ceiling for each candidate.
+- 每档4条原始记录及官方原第2–4轮均值。
+- 吞吐、TTFT、TPOT、时长、成功率与轮间变化。
+- 每次服务的CUDA graph capture、KV容量及显存峰值。
+- 本机基线与公开参考分别列出，不互换硬件状态。
 
-## 5. Optimization design
+## 4. 瓶颈分析
 
-- The flagged observation, causal evidence, and rejected alternatives.
-- Exact source change and the general property it improves.
-- Why the optimization is not merely routing to another pre-existing operator.
-- Numerical correctness argument and fallback behavior.
+- engine时间线：混合prefill/decode、纯decode、容量等待、空闲尾部。
+- GPU利用率、显存、温度、功率、频率。
+- prefill/decode算子及内核排名与累计占比。
+- 主机/设备间隙、同步、小内核数量。
+- 各候选的Amdahl上界。
 
-## 6. Ablation
+## 5. 优化设计
 
-- B0: original Triton attention.
-- A1: unmodified FlagGems FA2.
-- A2: tuned BI-V150 GQA8 kernel.
-- Optional independent changes for cache layout or sampler behavior.
-- Same-card, same-command comparisons with repeated measurements.
+- 触发优化的观察、因果证据与被否定方向。
+- 精确源改动及其改善的一般属性。
+- 解释真实实现改变，而非只路由到已有算子。
+- 数值正确性依据及回退。
 
-## 7. Final validation
+## 6. 消融
 
-- Official 4K and 16K results.
-- TTFT and throughput acceptance checks.
-- `math_500` Level 3 result.
-- Two-card reproducibility, where applicable.
-- Clean rebuild and reproduction instructions.
+- 历史B0：原generic Triton Attention。
+- 历史A1：未改的FlagGems FA2。
+- 历史A2：调优后的BI-V150 GQA8内核。
+- 历史计划的缓存布局/采样器独立变量，不授权当前新实验。
+- 同卡、同命令重复对照；已测SQL/C2/C3按真实源身份另列，不由旧计划推导成绩。
 
-## 8. Limitations and conclusion
+## 7. 最终验证
 
-- Public-threshold ambiguities.
-- Differences between this 32 GiB instance and other official partitions.
-- Negative results and rejected configurations.
-- Final contribution summary and applicability.
+- 官方4K与16K结果。
+- TTFT及吞吐条件；未知计分边界如实标注。
+- `math_500` Level 3结果，当前103/105已过95%门槛。
+- 双卡复现只在实际具备时讨论，本实例没有双卡证据。
+- 干净重建与复现说明。
+
+## 8. 限制与结论
+
+- 公开门槛的不完整性，不自创总体公式。
+- 本32 GiB实例与其他官方分区的差异。
+- 负结果与被否定配置。
+- 最终贡献及适用范围；初始DB不同，不称缓存完全匹配。

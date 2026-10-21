@@ -1,0 +1,23 @@
+INFO 10-21 11:51:57 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-21 11:51:57 [__init__.py:46] - fl -> vllm_fl:register
+INFO 10-21 11:51:57 [__init__.py:58] Loading plugin fl
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:728: DeprecationWarning: use_cuda_graph is deprecated; use benchmark_mode='replay' or benchmark_mode='event'
+  super().__init__(*args, **kwargs)
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:411: RuntimeWarning: active Triton backend does not provide a replay benchmarker; falling back to event timing
+  resolved_benchmark = resolve_benchmarker(
+INFO 10-21 11:52:03 [__init__.py:237] Platform plugin fl is activated
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_attention_dispatch.py", line 128, in main
+    manifest['sha256'] = {p.name: digest(p) for p in source.iterdir()}
+                                  ^^^^^^^^^
+  File "/workspace/experiments/minicpm-s2/scripts/bench_attention_dispatch.py", line 27, in digest
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+                          ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: '/workspace/experiments/minicpm-s2/framework/20261021T035155Z-attention-dispatch/source/__pycache__'
+

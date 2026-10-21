@@ -1,72 +1,59 @@
-# Preliminary 4K baseline analysis
+# 4K 基线初步分析
 
-Status: first warm-up run only. The official script skips this row when
-computing its summary, so it must not be presented as the final baseline.
+本地实测与源码适配仅覆盖天数 BI-V150。沐曦－曦云 C500 由队友负责，本文数据不外推到该平台或团队总分。
 
-## Result
+> 历史记录：以下状态、结果和计划均按当时证据保留；最新状态以项目工作记录为准。
 
-| Metric | Local run 1 | Published TianShu reference | Difference |
+状态：只有首轮预热结果。官方脚本计算汇总时跳过该行，不能将它作为最终基线。
+
+## 结果
+
+| 指标 | 本地第 1 轮 | 公开 TianShu 参考值 | 差异 |
 |---|---:|---:|---:|
-| Successful requests | 256 | 256 | 0 |
-| Benchmark duration | 770.05 s | 646.31 s | +19.15% |
-| Total tok/s | 1702.13 | 2028.01 | -16.07% |
-| Output tok/s | 340.43 | 405.60 | -16.07% |
-| Mean TTFT | 13,664.92 ms | 11,573.53 ms | +18.07% |
+| 成功请求 | 256 | 256 | 0 |
+| benchmark 耗时 | 770.05 s | 646.31 s | +19.15% |
+| 总 tok/s | 1702.13 | 2028.01 | -16.07% |
+| 输出 tok/s | 340.43 | 405.60 | -16.07% |
+| 平均 TTFT | 13,664.92 ms | 11,573.53 ms | +18.07% |
 
-The ratio between total and output throughput is approximately five, matching
-the 4:1 input-to-output token ratio of the official case. This confirms that
-`total tokens/s` includes both prompt and generated tokens.
+总吞吐与输出吞吐之比约为五，与官方档位 4:1 的输入输出 token 比例一致。这确认 `total tokens/s` 同时包含输入和生成 token。
 
-## Engine phases
+## 引擎阶段
 
-The service log was sampled once per 10 seconds. Within the first run:
+服务日志每 10 秒采样一次。首轮中：
 
-- 39 samples had prompt work, with mean prompt throughput 2688.44 tok/s.
-- 39 samples had only decode work, with mean generation throughput 531.50 tok/s.
-- Four workload waves were visible, corresponding to 256 prompts at client
-  concurrency 64.
-- The last decode tail lasted approximately 160 seconds while concurrency fell
-  toward zero, contributing materially to the low aggregate throughput.
+- 39 个采样包含输入处理，平均输入吞吐 2688.44 tok/s。
+- 39 个采样仅有解码，平均生成吞吐 531.50 tok/s。
+- 可见四个负载波次，对应客户端并发 64 下的 256 条输入。
+- 最后解码尾部约持续 160 秒，并发逐渐降至零，明显拉低总体吞吐。
 
-These samples demonstrate overlap between prompt processing and decode during
-the first part of each wave, followed by a decode-only tail. They are wall-clock
-categories, not additive GPU kernel times.
+这些采样说明每波前半段的输入处理与解码重叠，随后进入纯解码尾部。它们是墙钟时间分类，不能作为可相加的 GPU 内核时间。
 
-## GPU telemetry
+## GPU 遥测
 
-Across the first run and the beginning of the next run:
+覆盖首轮及下一轮开头的区间：
 
-- mean GPU utilization: 78.55%;
-- median GPU utilization: 98%;
-- mean allocated memory: 28,688 MiB of 32,768 MiB;
-- mean GPU power: 82.7 W, median 91 W;
-- mean board power: 194.4 W of a 350 W board cap;
-- temperature remained near 46-51 C.
+- 平均 GPU 利用率：78.55%；
+- GPU 利用率中位数：98%；
+- 平均已分配显存：28,688 MiB，总容量 32,768 MiB；
+- 平均 GPU 功耗：82.7 W，中位数 91 W；
+- 平均板卡功耗：194.4 W，整板上限 350 W；
+- 温度保持在约 46-51 C。
 
-The device is usually compute-busy during a wave, but the sub-100 W GPU draw at
-high reported utilization suggests serialized/tail work rather than saturation
-of the whole board. The 3.2 GiB free-memory margin limits aggressive cache
-expansion.
+每个波次中设备通常计算忙碌，但高利用率下 GPU 功耗仍低于 100 W，提示串行或尾部工作，而非整板饱和。剩余 3.2 GiB 显存限制了激进扩充缓存的空间。
 
-## Immediate hypotheses
+## 当时的直接假设
 
-1. Decode dominates per-request latency: the measured mean TPOT is 167.32 ms
-   before including the first token.
-2. TTFT has a severe tail: median is 3.38 s but p99 is 79.44 s. Scheduling,
-   chunked prefill, and wave formation need timeline inspection.
-3. The final 64-request wave has a long trailing decode period. Optimizing
-   decode kernels and reducing small-kernel/launch overhead should improve the
-   4K aggregate.
-4. The 16K case still needs its own trace; its 16:1 token ratio and long
-   sequence length are expected to shift the bottleneck toward prefill
-   attention.
+1. 解码主导单请求延迟：尚未计入首 token 时，实测平均 TPOT 为 167.32 ms。
+2. TTFT 长尾明显：中位数为 3.38 s，p99 达 79.44 s。须结合时间线检查调度、分块预填充和波次形成。
+3. 最后一波 64 条请求存在很长的解码尾部。优化解码内核及小内核/提交开销，有望改善 4K 总体表现。
+4. 16K 档仍需独立 trace；其 16:1 token 比例和长序列预期会把瓶颈移向预填充注意力。
 
-## Evidence
+## 证据
 
 - `experiments/20261020T161824Z/raw-runs-progress.csv`
 - `experiments/20261020T161824Z/server-progress.log`
 - `experiments/20261020T161824Z/engine-run1.csv`
 - `experiments/20261020T161824Z/gpu-progress.csv`
 
-The progress files are snapshots captured while the benchmark was still
-running. Final sealed copies will replace them after all four repetitions.
+这些进度文件是在 benchmark 仍运行时采集的快照；当时计划在四轮全部完成后以最终封存副本替换。

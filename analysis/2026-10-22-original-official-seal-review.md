@@ -1,0 +1,13 @@
+# 原版官方结束封存脚本独立审阅
+
+范围：仅本地CPU只读审阅`seal_original_official.py`，审阅版SHA256为`eb0c25681c3a73c544fe1d65d98d0ca082fe622653ec350353e95301d5f87f7a`。未执行脚本main、SSH、GPU命令或模型；只用stdlib AST解析及内存compile，无pyc输出。
+
+已核对实际原版manifest的225项键、原791 driver/common archive_sources、现有e9dc比较入口和最终取证清单。plugin对应隔离091033源；installed对应固定site-packages；模型config、dataset、官方benchmark和ROOT/scripts helpers均映射正确。源码核验逐项留archive/live失败清单与live实际路径/SHA；EngineCore硬编码166820与启动原件一致。
+
+脚本仅stdlib读取字节、查询ixsmi和端口；没有框架导入、服务启动、进程终止、数据库或Triton cache操作。只向新的source-review/postflight-full/postflight-sources写补充证据，存在时拒绝覆盖；不改原manifest/source/CSV。结果必须已真正completed/exit0，Attention拷贝须bab2，原版runtime模块/挂钩/marker须无。postflight字段满足既有比较入口。
+
+必要问题：完整ixsmi表虽保存，却尚未断言“No running processes found”。仅检查已知PID与memory<=68/util0，仍不足以在脚本层证明无未知设备进程。已建议root记录并断言`no_running_device_processes`，不需要新框架或设备测试。
+
+执行前置：必须等runner实际退出再单次封存。脚本在最终PID/idle断言前先保存受保护的新证据；过早运行留下部分补充文件后重跑会按保护规则拒绝覆盖。原791的monitor没有独立pid文件，但stop_owned_group内wait及result.monitor_final_returncode可作为既有退出证据；无需临时扩展进程扫描。
+
+以上意见已发root；最终实际版本与运行证据待root回传后再审。此文不是封存成功声明。

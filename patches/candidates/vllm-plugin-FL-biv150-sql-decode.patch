@@ -1,0 +1,172 @@
+diff --git a/vllm_fl/worker/model_runner.py b/vllm_fl/worker/model_runner.py
+--- a/vllm_fl/worker/model_runner.py
++++ b/vllm_fl/worker/model_runner.py
+@@ -7671,3 +7671,11 @@
+             "encoder_forward_secs": self.encoder_forward_secs,
+             "num_encoder_calls": self.num_encoder_calls,
+         }
++
++# Enable the submitted implementation without changing serving arguments.
++from vllm_fl.patches.biv150_sql_reflection import install as _biv150_sql_install
++_biv150_sql_install()
++# Isolated MiniCPM decode launch candidate; install before graph capture.
++if getattr(current_platform, "vendor_name", None) == "iluvatar":
++    from vllm_fl.patches.biv150_decode_launch_runtime import install as _install_decode_launch
++    print("BIV150_DECODE_LAUNCH_INSTALLED", _install_decode_launch(), flush=True)
+diff --git a/vllm_fl/patches/biv150_sql_reflection.py b/vllm_fl/patches/biv150_sql_reflection.py
+new file mode 100644
+--- /dev/null
++++ b/vllm_fl/patches/biv150_sql_reflection.py
+@@ -0,0 +1,64 @@
++"""Reflect one FlagGems SQLite configuration table per requested model.
++
++No database/config writes, persistent or negative cache, tuning changes, or
++device work. Install on the isolated Iluvatar plugin source before inference.
++Foreign-key dependency reflection keeps SQLAlchemy's original default.
++"""
++
++import functools
++import hashlib
++import importlib
++from pathlib import Path
++
++import sqlalchemy.ext.automap
++
++
++EXPECTED_SQL_SHA256 = "6dc19cb581d70154f14b95ed9112d682c6b5919b6cf3f8dea01a78a75ec0efd7"
++_MARKER = "_biv150_sql_targeted_reflection"
++
++
++def _targeted_builder(original):
++    @functools.wraps(original)
++    def build_sql_model_by_db(name, engine):
++        if engine.dialect.name != "sqlite":
++            return original(name, engine)
++        # A fresh base preserves the original per-call database/schema
++        # visibility and cannot mix models between engine instances.
++        base = sqlalchemy.ext.automap.automap_base()
++        base.prepare(
++            engine,
++            reflection_options={"only": lambda table_name, metadata: table_name == name},
++        )
++        # A predicate filters available tables. Unlike only=[name], a missing
++        # name remains None, allowing the original put_config creation path.
++        return base.classes.get(name)
++
++    setattr(build_sql_model_by_db, _MARKER, True)
++    return build_sql_model_by_db
++
++
++def install(*, module=None, vendor_name=None):
++    """Replace only the audited static reflection implementation, fail closed.
++
++    The optional dependency arguments make the real SQLAlchemy CPU gate
++    independent of importing FlagGems/vLLM and initializing their platforms.
++    Runtime callers use install() without overrides.
++    """
++    if vendor_name is None:
++        vendor_name = importlib.import_module("vllm.platforms").current_platform.vendor_name
++    if vendor_name != "iluvatar":
++        return {"installed": False, "reason": "non-iluvatar platform uses original reflection"}
++    if module is None:
++        module = importlib.import_module("flag_gems.utils.models.sql")
++    source = Path(module.__file__)
++    actual = hashlib.sha256(source.read_bytes()).hexdigest()
++    if actual != EXPECTED_SQL_SHA256:
++        raise RuntimeError(f"unaudited FlagGems SQL source: {source}: {actual}")
++    cls = module.SQLPersistantModel
++    original = cls.build_sql_model_by_db
++    if not getattr(original, _MARKER, False):
++        cls.build_sql_model_by_db = staticmethod(_targeted_builder(original))
++    print("BIV150_SQL_REFLECTION_INSTALLED sqlite_targeted_only=1", flush=True)
++    return {"installed": True, "scope": "FlagGems SQLite configuration table reflection",
++            "sql_sha256": actual, "model_cache_changed": False,
++            "missing_tables_cached": False, "database_rows_changed": False}
+diff --git a/vllm_fl/patches/biv150_decode_launch_runtime.py b/vllm_fl/patches/biv150_decode_launch_runtime.py
+new file mode 100644
+--- /dev/null
++++ b/vllm_fl/patches/biv150_decode_launch_runtime.py
+@@ -0,0 +1,83 @@
++"""Install the measured decode launch policy without editing installed sources.
++
++The Triton program, grid and reduction stay the pinned original. The proxy
++sets compiler launch options only for the audited MiniCPM BF16 3D shape.
++"""
++import hashlib
++import importlib
++from pathlib import Path
++
++
++EXPECTED = {
++    'vllm.v1.attention.ops.triton_unified_attention':
++        '54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f',
++    'vllm.v1.attention.ops.triton_attention_helpers':
++        '59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1',
++}
++
++
++class DecodeLaunch:
++    def __init__(self, original):
++        self.original = original
++        self.selected_launches = 0
++
++    def __getattr__(self, name):
++        return getattr(self.original, name)
++
++    def __getitem__(self, grid):
++        launch = self.original[grid]
++
++        def invoke(*args, **kwargs):
++            if (kwargs.get('IS_3D') is True and
++                    kwargs.get('HEAD_SIZE') == 128 and
++                    kwargs.get('num_query_heads') == 16 and
++                    kwargs.get('num_queries_per_kv') == 8 and
++                    kwargs.get('BLOCK_M') == 16 and
++                    kwargs.get('BLOCK_SIZE') == 16 and
++                    kwargs.get('TILE_SIZE') == 16 and
++                    kwargs.get('NUM_SEGMENTS_PER_SEQ') == 16 and
++                    str(getattr(kwargs.get('query_ptr'), 'dtype', None)) == 'torch.bfloat16' and
++                    not kwargs.get('USE_FP8') and
++                    not kwargs.get('Q_IS_FP8') and
++                    kwargs.get('KV_QUANT_MODE') == 0 and
++                    not kwargs.get('USE_TD') and
++                    not kwargs.get('USE_TD_QO') and
++                    kwargs.get('USE_CAUSAL') is True and
++                    kwargs.get('SLIDING_WINDOW') == 0 and
++                    not any(kwargs.get(name) for name in (
++                        'USE_ALIBI_SLOPES', 'USE_ALIBI_SQRT', 'USE_QQ_BIAS',
++                        'USE_SOFTCAP', 'USE_SINKS', 'USE_PER_SEQ_CAUSAL', 'USE_MM_PREFIX')) and
++                    kwargs.get('CHUNK_SIZE') == -1 and
++                    kwargs.get('CHUNK_LOOKBACK') == -1 and
++                    kwargs.get('num_warps', 4) == 4 and
++                    kwargs.get('num_stages', 3) == 3):
++                kwargs['num_warps'] = 2
++                kwargs['num_stages'] = 1
++                if self.selected_launches == 0:
++                    print('BIV150_DECODE_LAUNCH_FIRST_SELECTED warps=2 stages=1', flush=True)
++                self.selected_launches += 1
++            return launch(*args, **kwargs)
++
++        return invoke
++
++
++def install():
++    modules = {}
++    for name, expected in EXPECTED.items():
++        module = importlib.import_module(name)
++        actual = hashlib.sha256(Path(module.__file__).read_bytes()).hexdigest()
++        if actual != expected:
++            raise RuntimeError('unaudited attention source: ' + name + ' ' + actual)
++        modules[name] = module
++    attention = modules['vllm.v1.attention.ops.triton_unified_attention']
++    if attention.current_platform.vendor_name != 'iluvatar':
++        raise RuntimeError('decode launch policy requires iluvatar')
++    backend = importlib.import_module('vllm.v1.attention.backends.triton_attn')
++    if backend.unified_attention is not attention.unified_attention:
++        raise RuntimeError('attention backend does not use audited function')
++    if attention.unified_attention.__globals__ is not vars(attention):
++        raise RuntimeError('audited function does not resolve the target kernel global')
++    if not isinstance(attention.kernel_unified_attention, DecodeLaunch):
++        attention.kernel_unified_attention = DecodeLaunch(attention.kernel_unified_attention)
++    return {'installed': True, 'num_warps': 2, 'num_stages': 1,
++            'scope': 'audited BF16 MiniCPM 3D decode only'}

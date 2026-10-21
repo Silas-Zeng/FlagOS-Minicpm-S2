@@ -1,35 +1,35 @@
-# Official benchmark analysis
+# 官方 benchmark 分析
 
-Generated from the unmodified official summary/raw CSV files.
+本地实测与源码适配仅覆盖天数 BI-V150。沐曦－曦云 C500 由队友负责，本文数据不外推到该平台或团队总分。
 
-The official script uses `RUNS=4` and `SKIP_FIRST=1`; variation below is
-calculated from the final three raw runs.
+> 历史测量记录：以下保留当时的基线快照；最新正式结论以项目工作记录为准。
 
-## Summary
+由未修改的官方 summary/raw CSV 生成。
 
-| Case | Total tok/s | Output tok/s | Mean TTFT ms | Mean TPOT ms | Duration s |
+官方脚本采用 `RUNS=4` 和 `SKIP_FIRST=1`；以下波动统计来自最后三轮原始运行。
+
+## 汇总
+
+| 档位 | 总 tok/s | 输出 tok/s | 平均 TTFT ms | 平均 TPOT ms | 耗时 s |
 |---|---:|---:|---:|---:|---:|
 | 4096/1024 c64 | 1875.62 | 375.12 | 12313.75 | 156.74 | 699.05 |
 
-## Mean-request latency approximation
+## 平均请求延迟近似
 
-Estimated request latency is `Mean TTFT + (output_len - 1) * Mean TPOT`.
-This removes batch queuing from the denominator and is a diagnostic proxy,
-not a replacement for an engine timeline.
+请求延迟估算为 `Mean TTFT + (output_len - 1) * Mean TPOT`。它将批次排队从分母中剥离，是诊断近似值，不能替代引擎时间线。
 
-| Case | Estimated request ms | TTFT share | Decode share |
+| 档位 | 估算请求延迟 ms | TTFT 占比 | 解码占比 |
 |---|---:|---:|---:|
 | 4096/1024 c64 | 172658.77 | 7.13% | 92.87% |
 
-## Run-to-run variation
+## 轮间波动
 
-| Case | Valid runs | CV total tok/s | CV TTFT | CV TPOT |
+| 档位 | 有效轮数 | 总 tok/s 变异系数 | TTFT 变异系数 | TPOT 变异系数 |
 |---|---:|---:|---:|---:|
 | 4096/1024 c64 | 3 | 1.82% | 0.43% | 1.15% |
 
-## Interpretation limits
+## 解读限制
 
-- TTFT includes queuing and does not isolate prefill kernel time.
-- The latency approximation is based on mean values and does not model
-  continuous batching overlap.
-- Kernel-level conclusions require a separate profiler trace.
+- TTFT 包含排队，不能单独代表预填充内核耗时。
+- 延迟近似基于均值，未建模连续批处理的重叠。
+- 内核级结论需要单独的性能分析 trace。

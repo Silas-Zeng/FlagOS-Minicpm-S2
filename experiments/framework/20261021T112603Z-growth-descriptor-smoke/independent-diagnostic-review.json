@@ -1,0 +1,191 @@
+{
+  "run_id": "20261021T112603Z-growth-descriptor-smoke",
+  "independent_source_hashes_verified": 23,
+  "driver_sha256": "bc51ac2d9daf90205bde362f8384b1ac34238e7be932e9a6df7fc618d7350be9",
+  "seed": 721001,
+  "database": {
+    "before": {
+      "schema_sha256": "fadbec7bc86141f73590408a8715cb7c4eaaadc741e8f87e8e4dd724b794a3be",
+      "logical_content_sha256": "3fb6abadfdcdb78f8b2eb2f90c950aca80bb61fd2703856b5a81740375b80fa9",
+      "table_count": 501,
+      "row_count": 18789,
+      "snapshot_sha256": "e90b666d97547ef35ebc5e2a01d24d56a5d16a38d49fcb3908ddb7fc62cad342"
+    },
+    "after": {
+      "schema_sha256": "fadbec7bc86141f73590408a8715cb7c4eaaadc741e8f87e8e4dd724b794a3be",
+      "logical_content_sha256": "3fb6abadfdcdb78f8b2eb2f90c950aca80bb61fd2703856b5a81740375b80fa9",
+      "table_count": 501,
+      "row_count": 18789,
+      "snapshot_sha256": "e90b666d97547ef35ebc5e2a01d24d56a5d16a38d49fcb3908ddb7fc62cad342"
+    }
+  },
+  "database_same": true,
+  "postflight": {
+    "utc": "2026-10-21T11:32:08.170110+00:00",
+    "port_9031_closed": true,
+    "memory_used_mib": 68,
+    "utilization_gpu_percent": 0,
+    "query_raw": "68, 0"
+  },
+  "kv_capacity_tokens": 521936,
+  "constructor_diagnostic": {
+    "descriptors": {
+      "block_size": 16,
+      "coordinator_type": "vllm.v1.core.kv_cache_coordinator.UnitaryKVCacheCoordinator",
+      "group_count": 1,
+      "kv_spec": {
+        "attention_chunk_size": null,
+        "block_size": 16,
+        "dtype": "torch.bfloat16",
+        "head_size": 128,
+        "head_size_v": 128,
+        "non_causal": false,
+        "num_kv_heads": 2,
+        "sliding_window": null
+      },
+      "layer_count": 42,
+      "manager_type": "vllm.v1.core.kv_cache_manager.KVCacheManager",
+      "max_model_len": 131072,
+      "model_type": "vllm.config.model.ModelConfig",
+      "parallel_type": "vllm.config.parallel.ParallelConfig",
+      "policy_type": "vllm.v1.core.sched.request_queue.SchedulingPolicy",
+      "policy_value": "fcfs",
+      "scheduler_reserve_full_isl": true,
+      "scheduler_type": "vllm.v1.core.sched.async_scheduler.AsyncScheduler",
+      "spec_type": "vllm.v1.kv_cache_interface.FullAttentionSpec",
+      "use_v2_model_runner": true
+    },
+    "eligible": false,
+    "event": "GROWTH_CONSTRUCTOR_DESCRIPTORS",
+    "guards": [
+      {
+        "expression": "Path(str(model.model).rstrip('/\\\\')).name == 'MiniCPM5-2B'",
+        "passed": true
+      },
+      {
+        "expression": "str(model.dtype) == 'torch.bfloat16'",
+        "passed": true
+      },
+      {
+        "expression": "(text.hidden_size, text.num_hidden_layers, text.num_attention_heads, text.num_key_value_heads) == (2048, 42, 16, 2)",
+        "passed": true
+      },
+      {
+        "expression": "all((getattr(parallel, name, None) == 1 for name in ('tensor_parallel_size', 'pipeline_parallel_size', 'data_parallel_size', 'decode_context_parallel_size', 'prefill_context_parallel_size')))",
+        "passed": true
+      },
+      {
+        "expression": "not parallel.use_ubatching",
+        "passed": true
+      },
+      {
+        "expression": "config.speculative_config is None",
+        "passed": true
+      },
+      {
+        "expression": "config.lora_config is None",
+        "passed": true
+      },
+      {
+        "expression": "not config.cache_config.kv_sharing_fast_prefill",
+        "passed": true
+      },
+      {
+        "expression": "not scheduler.is_encoder_decoder",
+        "passed": true
+      },
+      {
+        "expression": "not scheduler.has_mamba_layers",
+        "passed": true
+      },
+      {
+        "expression": "not scheduler.use_v2_model_runner",
+        "passed": false
+      },
+      {
+        "expression": "scheduler.connector is None",
+        "passed": true
+      },
+      {
+        "expression": "scheduler.ec_connector is None",
+        "passed": true
+      },
+      {
+        "expression": "scheduler.scheduler_reserve_full_isl is True",
+        "passed": true
+      },
+      {
+        "expression": "scheduler.num_lookahead_tokens == 0",
+        "passed": true
+      },
+      {
+        "expression": "scheduler.policy.value == 'fcfs'",
+        "passed": true
+      },
+      {
+        "expression": "manager.max_model_len == scheduler.max_model_len",
+        "passed": true
+      },
+      {
+        "expression": "type(spec) is full_spec_cls",
+        "passed": true
+      },
+      {
+        "expression": "(spec.block_size, spec.num_kv_heads, spec.head_size, spec.head_size_v) == (16, 2, 128, 128)",
+        "passed": true
+      },
+      {
+        "expression": "str(spec.dtype) == 'torch.bfloat16'",
+        "passed": true
+      },
+      {
+        "expression": "spec.sliding_window is None",
+        "passed": true
+      },
+      {
+        "expression": "spec.attention_chunk_size is None",
+        "passed": true
+      },
+      {
+        "expression": "spec.non_causal is False",
+        "passed": true
+      },
+      {
+        "expression": "len(groups[0].layer_names) == 42",
+        "passed": true
+      },
+      {
+        "expression": "scheduler.block_size == 16",
+        "passed": true
+      },
+      {
+        "expression": "type(coordinator) is coordinator_cls",
+        "passed": true
+      },
+      {
+        "expression": "len(coordinator.single_type_managers) == 1",
+        "passed": true
+      },
+      {
+        "expression": "type(coordinator.single_type_managers[0]) is full_manager_cls",
+        "passed": true
+      },
+      {
+        "expression": "coordinator.single_type_managers[0]._max_admission_blocks_per_request is None",
+        "passed": true
+      }
+    ],
+    "pid": 156959,
+    "setup_errors": [],
+    "source_sha256": {
+      "diagnostic_module": "4a6eaefa0b40358307f48c586b9be7dc4a801f4b8eeeda752ff2db5275619b99",
+      "growth_runtime": "9245dd089a310620840a1c056544e66fb2dd0ea24f41ef8f0e4b22721bac7e49",
+      "vllm.v1.core.block_pool": "3fc5dfe0ab7ccc6206f6eb7886b2aad15384f92708e6b9f7e5ec7838b7379abe",
+      "vllm.v1.core.kv_cache_coordinator": "9dd0a647f671b859e3743fbf5ec84cd892fd5754022eef58c5b8c989a4cda97b",
+      "vllm.v1.core.kv_cache_manager": "2e91e77f84dfd9d4bed79f50392be72559207f54e845a3d3402baf88dc529320",
+      "vllm.v1.core.sched.scheduler": "df78076164fe02a63876d7690cefac810f1ba4d8fb58afc15e786c1608064090",
+      "vllm.v1.core.single_type_kv_cache_manager": "22e3677acf0e769461bdbf278df031d6e362c97aa1ba7b862c071b76d47d8914"
+    }
+  },
+  "conclusion": "unique failed V1 guard is actual builtin AsyncScheduler use_v2_model_runner=True; smoke seed721001; no performance measurement"
+}

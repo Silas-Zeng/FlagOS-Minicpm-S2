@@ -77,14 +77,14 @@ def valid_raw_rows(rows: list[dict[str, str]]) -> list[dict[str, float | int | s
 
     result: list[dict[str, float | int | str | None]] = []
     for group in by_case.values():
+        # Apply SKIP_FIRST to original positions, including a failed warmup.
         successes = [
             row
-            for row in group
+            for row in group[1:]
             if row.get("total_throughput") is not None
             and row.get("total_output_tokens") == row.get("decode_tokens") * row.get("num_prompts")
         ]
-        # The official script skips the first run and averages the remaining runs.
-        result.extend(successes[1:] if len(successes) > 1 else successes)
+        result.extend(successes)
     return result
 
 
@@ -105,8 +105,10 @@ def markdown(
         "",
         "Generated from the unmodified official summary/raw CSV files.",
         "",
-        "The official script uses `RUNS=4` and `SKIP_FIRST=1`; variation below is",
-        "calculated from the final three raw runs.",
+        "The official script uses `RUNS=4` and `SKIP_FIRST=1`; variation below uses",
+        "usable rows after removing each case's original first row. Fewer than",
+        "three retained rows is incomplete, not a complete official result.",
+        "This summary helper does not replace `run_official_gate.py` validation.",
         "",
         "## Summary",
         "",
@@ -145,7 +147,7 @@ def markdown(
             "",
             "## Run-to-run variation",
             "",
-            "| Case | Valid runs | CV total tok/s | CV TTFT | CV TPOT |",
+            "| Case | Usable retained rows | CV total tok/s | CV TTFT | CV TPOT |",
             "|---|---:|---:|---:|---:|",
         ]
     )
@@ -173,11 +175,17 @@ def markdown(
         cv_total = pct_variation(totals)
         cv_ttft = pct_variation(ttfts)
         cv_tpot = pct_variation(tpots)
+        def display_cv(value):
+            return "N/A" if value is None else f"{value:.2f}%"
         lines.append(
             f"| {row['prefill_tokens']}/{row['decode_tokens']} c{row['concurrency']} | "
             f"{len(matching)} | "
-            f"{cv_total:.2f}% | {cv_ttft:.2f}% | {cv_tpot:.2f}% |"
+            f"{display_cv(cv_total)} | {display_cv(cv_ttft)} | {display_cv(cv_tpot)} |"
         )
+        if len(matching) != 3:
+            lines.extend(["", f"Incomplete retained coverage for {row['prefill_tokens']}/"
+                          f"{row['decode_tokens']} c{row['concurrency']}: "
+                          f"expected 3 usable retained rows, found {len(matching)}.", ""])
 
     lines.extend(
         [

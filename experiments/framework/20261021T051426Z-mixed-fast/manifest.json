@@ -1,0 +1,80 @@
+{
+  "run_id_utc": "20261021T051426731191Z",
+  "started_utc": "2026-10-21T05:14:26.731214+00:00",
+  "pid": 110582,
+  "run_dir": "/workspace/experiments/minicpm-s2/framework/20261021T051426Z-mixed-fast",
+  "command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/bench_mixed_fast_decode.py",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261021T051426Z-mixed-fast",
+    "--transform-path",
+    "/workspace/experiments/minicpm-s2/code/biv150_decode_launch.py"
+  ],
+  "command_shell": "/usr/local/bin/python3 /workspace/experiments/minicpm-s2/scripts/bench_mixed_fast_decode.py --run-dir /workspace/experiments/minicpm-s2/framework/20261021T051426Z-mixed-fast --transform-path /workspace/experiments/minicpm-s2/code/biv150_decode_launch.py",
+  "python": "3.12.11 (main, Jul 31 2025, 06:45:11) [GCC 13.3.0]",
+  "platform": "Linux-5.4.0-148-generic-x86_64-with-glibc2.39",
+  "seed": 1234,
+  "kind": "single-layer optimistic mixed split; not accuracy, E2E or official score",
+  "control": "whole retained attention, original 2D prefill policy for the mixed batch",
+  "candidate": "decode prefix via isolated w2s1 source; prefill suffix via retained original function",
+  "timing": "eager CUDA events, 2 warmups and 5 samples per path; metadata normalization excluded",
+  "lock_path": "/workspace/experiments/minicpm-s2/framework-device.lock",
+  "shapes": [
+    {
+      "decode_requests": 63,
+      "prefill_tokens": 1985,
+      "kv_len": 4096
+    },
+    {
+      "decode_requests": 63,
+      "prefill_tokens": 127,
+      "kv_len": 4096
+    },
+    {
+      "decode_requests": 29,
+      "prefill_tokens": 2019,
+      "kv_len": 16384
+    },
+    {
+      "decode_requests": 29,
+      "prefill_tokens": 127,
+      "kv_len": 16384
+    }
+  ],
+  "environment": {
+    "PYTHONPATH": "/usr/local/lib/python3.12/site-packages"
+  },
+  "preflight": {
+    "checked_utc": "2026-10-21T05:14:26.740611+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "lock_acquired_utc": "2026-10-21T05:14:26.740622+00:00",
+  "source_sha256": {
+    "benchmark.py": "e91e8d2c5882122f22cb0059186737fad577a67f77796393ac2352b041ef60c1",
+    "transform.py": "b4f3698c2a1404d056f223d6ee0983dbd2f4c7be8d4677a93c18316132619708",
+    "bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+    "retained.py": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f",
+    "helpers.py": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1",
+    "decode_w2s1.py": "7dd7353f2a828981c30393803a619bd2a93542766e2cfa1cf8c9e3c558023de2"
+  },
+  "installed_sources": {
+    "attention": "/usr/local/lib/python3.12/site-packages/vllm/v1/attention/ops/triton_unified_attention.py",
+    "helpers": "/usr/local/lib/python3.12/site-packages/vllm/v1/attention/ops/triton_attention_helpers.py"
+  },
+  "packages": {
+    "torch": "2.10.0+corex.4.5.0",
+    "vllm": "0.24.0+empty",
+    "vllm-plugin-fl": "0.3.0rc0+g13eb9be69",
+    "triton": "distribution name unavailable",
+    "flag-gems": "5.3.5",
+    "flagtree": "0.6.2a3+iluvatar3.6"
+  },
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "monitor_pid": 110660,
+  "finished_utc": "2026-10-21T05:14:37.788604+00:00",
+  "exit_code": 0
+}

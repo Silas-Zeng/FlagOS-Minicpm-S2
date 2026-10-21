@@ -1,72 +1,56 @@
-# FlagOS S2 MiniCPM5-2B throughput optimization
+# FlagOS 第二季 MiniCPM5-2B 双平台协作
 
-This repository is the reproducible experiment record for the FlagOS Season 2,
-Track 2 task. It is intentionally separate from any existing source repository.
+本仓库是团队的实验记录与交接总入口，覆盖 **天数 BI-V150** 和 **沐曦－曦云 C500**。本实验库按平台分别维护环境、分析、验证结果和中文报告；框架和算子代码在另外两个团队共用代码库中协作。
 
-- Private experiment repository:
-  <https://github.com/Silas-Zeng/flagos-s2-minicpm-throughput>
-- Official task:
-  <https://flagos.io/race-detail-season2?id=539vlt2p&lang=cn>
+| 平台 | 负责人 | 当前证据与进度 | 入口 |
+|---|---|---|---|
+| 天数 BI-V150 | 本轮主智能体及对应团队成员 | SQL+C3 准确率 103/105；原版与候选官方两档均已完成并验收 | [BI-V150](platforms/iluvatar-bi-v150/README.md) |
+| 沐曦－曦云 C500 | 另一位队友 | 等待队友提交本平台的环境、代码版本和验证结果 | [C500](platforms/metax-c500/README.md) |
 
-## Current environment
+截至本次整理，仓库既有 `experiments/`、`analysis/` 中的设备实测数据均来自 BI-V150，历史路径保留。C500 后续资料放入自己的平台目录，并在实验记录中填写平台标识。跨平台数值分别报告；团队总分仅按主办方明确的公式计算。
 
-- Date established: 2026-10-21 (Asia/Shanghai)
-- Platform: Iluvatar BI-V150
-- Visible accelerator count: 1
-- Device memory: 32,768 MiB
-- Runtime: CoreX 4.5.0
-- Model: `/workspace/MiniCPM5-2B`
-- Framework: `/workspace/vllm-plugin-FL`
-- Operator library: `/workspace/FlagGems` at tag `v5.3.5`
+## 三个协作仓库
 
-The instance currently exposes one GPU. All device experiments therefore use a
-single experiment queue. Source analysis and test preparation can still run in
-parallel.
+- [FlagOS-S2-Minicpm-throughput](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput)：本仓库，保存实验记录、补丁、结果、中文报告和交接文档，已为私有。
+- [FlagOS-S2-vllm-plugin-FL](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL)：团队共用的框架代码库，独立私有副本，完整候选已上传并核验 410 项 Git 文件与模式。
+- [FlagGems](https://github.com/Silas-Zeng/FlagGems)：固定 `v5.3.5` 的团队共用算子库，私有，已上传并核验 4,769 项 Git 文件与模式。
 
-## Rules baseline
+两个代码库共用，不要求按平台拆分目录或分支。修改提交到我们自己的私有协作副本，官方上游只读；原公开 [vllm-plugin-FL fork](https://github.com/Silas-Zeng/vllm-plugin-FL) 按用户选择保留。两位协作者的邀请待用户名确认。每个平台的实测证据在本实验库分别记录，不能互相替代。
 
-- Use only MiniCPM5-2B.
-- Use `vllm-plugin-FL` branch `flagos-2026-s2` and FlagGems `v5.3.5`.
-- Keep the official `vllm serve` arguments unchanged.
-- Do not tune the benchmark script or use benchmark-specific shortcuts.
-- Do not enable pre-existing quantization or speculative decoding by changing
-  hyperparameters.
-- Every optimization reported in the final report must be present and enabled
-  in the submitted code.
-- `math_500` Level 3 accuracy must be at least 0.95.
-- Final ranking uses reproducibility by the organizers.
+## 接续工作
 
-## Layout
+切换 API 或加入协作时，先读 [CURRENT_WORK.md](CURRENT_WORK.md)、[协作规范](AGENTS.md) 和 [子智能体交接索引](docs/agent-work-index.md)。本轮官方对照已完成并作为稳定基点保存；用户已恢复持续优化，重点根据硬件与输入特点探索调度、KV 及执行框架。小收益候选也进入最短上卡实测并保留，新候选和已验收版本分别记录。
 
-- `docs/`: rules, environment records, experiment methodology.
-- `scripts/`: local and remote automation.
-- `experiments/`: baseline and optimization evidence.
-- `analysis/`: profiler summaries and bottleneck conclusions.
+- [团队交接](docs/team-github-handoff.md)
+- [BI-V150 技术报告](docs/technical-report.md)
+- [候选安装与复现](docs/candidate-usage.md)
+- [比赛规则核实](docs/official-verification.md)
+- [离线恢复说明](docs/offline-recovery.md)
 
-Raw device results are first written to
-`/workspace/experiments/minicpm-s2/` on the FlagOS instance and then summarized
-here. Large profiler traces should remain outside Git and be referenced by
-path, hash, and summary.
+## BI-V150 当前冻结候选
 
-## Current candidate
+在官方插件基点 `13eb9be69ecc5b5ca4f79c44e9ee40081eaa1bf0` 上一次应用 [完整 SQL+C3 补丁](patches/candidates/vllm-plugin-FL-biv150-sql-mixed-decode-full.patch)。SHA256 为 `4aba147aa0bd3ec8dd1c12b6ae94bf39537a4cbad449e68e2fcdbfbdc0f8def6`。它包括 SQLite 目标表反射、3D decode launch、mixed Attention 分流，以及已保留的 prefill 与确定性 top-p 实现。
 
-The selected implementation is a source patch for the official
-`vllm-plugin-FL` branch:
+已通过官方 Level 3 准确率 **103/105（98.0952%）**，请求与评估全部成功。按原官方脚本每档四轮、去掉首轮，完整对照如下：
 
-- [plugin patch](patches/vllm-plugin-FL-biv150-performance.patch)
-- [rejected A+B decode candidate](patches/candidates/vllm-plugin-FL-biv150-a-plus-b-rejected.patch)
-- [fused sampler candidate](patches/candidates/vllm-plugin-FL-biv150-fused-sampler.patch)
-- [installation and reproduction notes](docs/candidate-usage.md)
-- [kernel and diagnostic analysis](analysis/2026-10-21-attention-top-p-candidates.md)
+| 档位 | 原版 total tokens/s | 候选 total tokens/s | 本次吞吐比值 |
+|---|---:|---:|---:|
+| 4K / 1024 output | 1905.46 | 3683.65 | 1.9332×（+93.32%） |
+| 16K / 1024 output | 861.99 | 2729.07 | 3.1660×（+216.60%） |
 
-It adds a shape-gated BI-V150 launch policy for generic Triton prefill
-attention, plus a deterministic bounded-histogram top-p kernel. The candidate
-passed the exact organizer `math_500 Level 3` command at 96.2%. Final official
-4K/16K repetitions were stopped by user direction in favor of bounded short
-smokes; the repository therefore does not claim a complete official score.
+两组初始调优数据库不同；原版 KV 为 521840 tokens，候选为 521936 tokens。以上是本次官方协议下的分档描述性比较，不能称为缓存完全匹配的稳定因果增益，也不是比赛总分。完整限制与原件见 [中文技术报告](docs/technical-report.md) 和 [比较结果](analysis/2026-10-21-official-final-comparison.json)。全部成绩仅适用于 BI-V150。
 
-The non-operator route was screened before further kernel work. KV block 64,
-larger scheduler token batches, disabling prefix caching, and re-enabling
-compiled sampler code did not beat the defaults. Operator changes were retained
-only where profiling showed a dominant hotspot: generic prefill attention was
-93% of 16K prefill device time and top-p was 71.7% of visible 4K decode kernels.
+旧补丁、失败和未集成原型均保留。单层计时和安装标记不能代替端到端性能与准确率；提交候选的实际启用代码必须与报告对应。
+
+## 资料结构与比赛约束
+
+- `platforms/`：按硬件平台组织入口和队友新增材料。
+- `docs/`：中文规则、环境、方法、报告与交接文档。
+- `scripts/`：本地整理及远端实验脚本。
+- `experiments/`：已有 BI-V150 原始实验与注册表。
+- `analysis/`：已有 BI-V150 瓶颈分析、资料研究与负结果。
+- `patches/`：冻结候选及历史增量。
+
+仅使用 MiniCPM5-2B、比赛指定框架基点和 FlagGems `v5.3.5`，保持官方服务参数和评测脚本，不通过参数开启现有量化或推测解码，不为性能合并新框架分支。原始源码、日志、CSV、命令和许可证保留原文；本项目维护的说明使用自然中文，专有名词保持原名。
+
+大体积 SQLite、trace、完整工作 ZIP 和 Git 恢复 bundle 独立保存，不能仅靠 GitHub 的文本记录替代。任何设备操作前都要实时确认该平台的负责人、进程和显存状态。

@@ -1,0 +1,63 @@
+{
+  "status": "passed_synthetic_row_kv_gate",
+  "cases": [
+    {
+      "actual": 259,
+      "padded": 384,
+      "requests": 32,
+      "decode_prefix": 31,
+      "prefill_tokens": 228,
+      "status": "pass",
+      "attention": {
+        "valid_tokens": 259,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "kv_bitwise_equal": true,
+      "out_tail_stays_poisoned": true,
+      "next_decode": {
+        "valid_tokens": 32,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "next_kv_bitwise_equal": true,
+      "padding_only_rng_unchanged": true,
+      "next_unused_output_untouched": true
+    },
+    {
+      "actual": 952,
+      "padded": 1024,
+      "requests": 32,
+      "decode_prefix": 31,
+      "prefill_tokens": 921,
+      "status": "pass",
+      "attention": {
+        "valid_tokens": 952,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "kv_bitwise_equal": true,
+      "out_tail_stays_poisoned": true,
+      "next_decode": {
+        "valid_tokens": 32,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "next_kv_bitwise_equal": true,
+      "padding_only_rng_unchanged": true,
+      "next_unused_output_untouched": true
+    }
+  ],
+  "accuracy": "not evaluated",
+  "performance": "not evaluated",
+  "limitations": [
+    "Actual one-layer Builder/Impl/KV writer; synthetic QKV and a small padding harness.",
+    "Does not instantiate ModelRunnerFL or validate its full H2D/event lifecycle.",
+    "No full-model GEMM/hidden/logits/LM-head/sampler equivalence or accuracy claim.",
+    "Only the padding operations' RNG state is checked, not a real sampling invocation."
+  ]
+}

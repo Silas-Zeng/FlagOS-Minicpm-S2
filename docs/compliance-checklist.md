@@ -1,26 +1,26 @@
-# Competition compliance checklist
+# 比赛合规核对表
 
-Status values: `pending`, `verified`, or `not applicable`.
+平台范围：本表已验实验与成绩均属天数BI-V150；沐曦－曦云C500由队友负责。实验分析库按平台归档，两个私有代码库共用；本表不能替代C500的合规与复现核验。
 
-| Requirement | Evidence | Status |
+以下沿用2026-10-20/21归档规则，当前状态按已验原件更新。状态为“待核验”“已核验”或“暂不适用”；未知计分区间保持未知。
+
+| 要求 | 证据 | 状态 |
 |---|---|---|
-| Use MiniCPM5-2B only | local model config and safetensors hash | verified |
-| Use `vllm-plugin-FL` branch `flagos-2026-s2` | remote branch tip resolved to `13eb9be69`; source commit hashes recorded | verified at baseline |
-| Use FlagGems `v5.3.5` | tag resolves to `4df52d9168ac55c1c1061cefb4638c570292d896` | verified at baseline |
-| Keep official service arguments | command file in every baseline directory | verified at baseline |
-| Do not edit or tune official benchmark script | script hash `0813eba574e9d1eb50c297c515baa426da1bcb61ce8c78a398b482f246005565` | verified at baseline |
-| Do not change hyperparameters to enable quantization/speculation | official launch command unchanged; no quant/speculation path enabled | verified |
-| Do not switch operators without an implementation change | plugin commit `f47b853`; attention launch rewrite and new top-p Triton kernels | verified |
-| Do not merge the latest framework branch | fixed base commit and patch-only diff | verified |
-| Keep model behavior and output valid | exact official `math_500` Level 3 score of 96.2% | verified |
-| `math_500` Level 3 >= 0.95 | exact organizer command scored 96.2% on 105 samples with the retained prefill+top-p candidate | verified |
-| 4K and 16K performance greater than the 1% window | official benchmark CSV | pending |
-| Report strategies appear and are enabled in submitted code | code-to-report matrix | pending final |
-| Reproducible from a clean environment | clean setup transcript | pending final |
-| Submit `report.pdf`, `readme.md`, and source | release archive inspection | pending final |
-| FlagGems included when operator changes exist | release archive and diff | pending |
-| Awarded PR submitted within 3 working days | only after award | not applicable now |
+| 仅使用MiniCPM5-2B | 本地模型配置与safetensors哈希 | 已核验 |
+| 使用`vllm-plugin-FL`的`flagos-2026-s2`分支基点 | 远端分支当时解析为`13eb9be69`，完整源提交哈希已记录 | 原版基点已核验 |
+| 使用FlagGems `v5.3.5` | tag对应`4df52d9168ac55c1c1061cefb4638c570292d896` | 原版环境已核验 |
+| 保持官方服务参数 | 各正式目录保存真实命令 | 已核验的实验均保持 |
+| 不编辑或调优官方benchmark | 原脚本哈希`0813eba574e9d1eb50c297c515baa426da1bcb61ce8c78a398b482f246005565` | 已核验 |
+| 不通过超参数开启已有量化/推测解码 | 原启动命令不变，无quant/speculation路径 | 已核验 |
+| 不仅切换算子而不改实现 | 历史plugin提交`f47b853`包含Attention launch改写和新top-p Triton内核；当前SQL+C3另有精确源身份 | 已核验 |
+| 不合并更新框架分支以提速 | 固定原始基点，仅提交可审补丁差异 | 已核验 |
+| 模型行为与输出有效 | 历史保留prefill+top-p准确率96.2%；当前SQL+C3独立官方Level 3为103/105（98.0952%） | 当前候选已核验 |
+| `math_500` Level 3至少0.95（95%） | 历史105题方案96.2%；当前090505原件103/105通过，零请求错误、零token-cap截断 | 当前候选已通过 |
+| 核对4K/16K吞吐及TTFT要求 | 候选绝对值已验，原版完整对照仍在途；原网页1%窗口文字不完整，不当作已确认精确门槛 | 待完整对照及规则确认 |
+| 报告策略存在并由提交代码启用 | 代码/报告映射、完整4aba补丁及受测源身份 | 待最终核验 |
+| 干净环境可复现 | 团队独立复现与完整安装记录 | 待最终核验 |
+| 提交`report.pdf`、`readme.md`及源码 | 最终发布包检查 | 待最终核验 |
+| 有算子改动时包含FlagGems | 最终发布包与diff | 待核验 |
+| 获奖后3个工作日内提交PR | 历史记录条款，仅获奖后适用，具体以主办方确认为准 | 当前暂不适用 |
 
-The official page leaves the throughput lower/upper and TTFT interval text
-incomplete. Final acceptance gates must not claim more certainty than the
-official response provides.
+官方归档页面的吞吐上下界和TTFT区间仍不完整，最终验收不能比主办方信息更确定，也不能自行合成官方总分。103/105仅属于当前SQL+C3，不自动给其他原型背书。

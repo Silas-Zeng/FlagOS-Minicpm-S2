@@ -1,12 +1,13 @@
-# Analysis index
+# 分析索引
 
-This directory contains concise, audit-friendly summaries derived from raw
-artifacts stored under `/workspace/experiments/minicpm-s2/`.
+本地实测与源码适配仅覆盖天数 BI-V150。沐曦－曦云 C500 由队友负责，本文数据不外推到该平台或团队总分。
 
-Rules:
+本目录保存简洁、便于审计的分析摘要，依据的原始材料位于 `/workspace/experiments/minicpm-s2/`。
 
-- Link every conclusion to a run ID and raw log path.
-- Separate unprofiled performance measurements from profiler-enabled runs.
-- Never treat a single raw repetition as the official average.
-- Keep CPU and device timing separate because they overlap.
-- Record the experiment identifier, source revision, and profiler settings.
+记录规则：
+
+- 每项结论都关联实验编号和原始日志路径。
+- 将未启用性能分析器的性能测量与启用分析器的诊断运行分开。
+- 单次原始重复结果不能当作官方平均值。
+- CPU 与设备计时可能重叠，须分别记录。
+- 记录实验标识、源码版本和性能分析器设置。

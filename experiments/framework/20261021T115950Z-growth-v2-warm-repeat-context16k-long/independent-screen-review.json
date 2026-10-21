@@ -1,0 +1,57 @@
+{
+  "run_id": "20261021T115950Z-growth-v2-warm-repeat-context16k-long",
+  "independent_source_hashes_verified": 22,
+  "duration": 221.23383624106646,
+  "total_token_throughput": 2517.95118443368,
+  "mean_ttft_ms": 67130.2737761871,
+  "successes": 32,
+  "failures": 0,
+  "input_tokens": 524288,
+  "output_tokens": 32768,
+  "driver_sha256": "bc51ac2d9daf90205bde362f8384b1ac34238e7be932e9a6df7fc618d7350be9",
+  "kv_capacity_tokens": 521840,
+  "database": {
+    "before": {
+      "schema_sha256": "2d7d232ee4918b7ed4d854d009c8906aa229dd0460ba6534254ae00a520461bf",
+      "logical_content_sha256": "4c78431bbd93eb584672f3d57d3aa0e24f622cdab0203d587ea61db1323bc458",
+      "table_count": 512,
+      "row_count": 19130,
+      "snapshot_sha256": "29fb47cbfdaa445875e8962dc1bc3f6eb36bffaee7006c2472d59947c5179074"
+    },
+    "after": {
+      "schema_sha256": "2d7d232ee4918b7ed4d854d009c8906aa229dd0460ba6534254ae00a520461bf",
+      "logical_content_sha256": "4c78431bbd93eb584672f3d57d3aa0e24f622cdab0203d587ea61db1323bc458",
+      "table_count": 512,
+      "row_count": 19130,
+      "snapshot_sha256": "29fb47cbfdaa445875e8962dc1bc3f6eb36bffaee7006c2472d59947c5179074"
+    }
+  },
+  "postflight": {
+    "utc": "2026-10-21T12:18:37.889080+00:00",
+    "port_9031_closed": true,
+    "memory_used_mib": 68,
+    "utilization_gpu_percent": 0,
+    "query_raw": "68, 0"
+  },
+  "database_same": true,
+  "preemptions": {
+    "before": [
+      "vllm:num_preemptions_total{engine=\"0\",model_name=\"minicpm\"} 0.0"
+    ],
+    "after": [
+      "vllm:num_preemptions_total{engine=\"0\",model_name=\"minicpm\"} 0.0"
+    ]
+  },
+  "growth_marker_lines": [
+    "BIV150_GROWTH_ADMISSION_INSTALLED opt_in=1 revision=2 audited_builtin_v2=1 future_output_budget=1",
+    "(EngineCore pid=164138) BIV150_GROWTH_ADMISSION_INSTALLED opt_in=1 revision=2 audited_builtin_v2=1 future_output_budget=1",
+    "(EngineCore pid=164138) BIV150_GROWTH_ADMISSION_FIRST_CHECKED pid=164138 free_blocks=31589 future_blocks=1151",
+    "(EngineCore pid=164138) BIV150_GROWTH_ADMISSION_FIRST_DEFERRED free_blocks=2696 future_blocks=2722"
+  ],
+  "descriptive_difference_vs_114713": {
+    "throughput_fraction": -0.004448385003568589,
+    "mean_ttft_fraction": 0.07511098706812103,
+    "limitation": "control DB506 versus currentDB512; sameKV521840 but not strictidenticalDB comparison; no causal regression/gain estimate"
+  },
+  "conclusion": "actually checked/deferred andpreempt0to0; unchangedDB512 warm221.233836s showsno throughputsignal andmeanTTFTabout7.51percent higher; keepcode/evidence defaultoff no servingintegration orlargeaccuracy; crossDBconfoundremains"
+}

@@ -1,34 +1,31 @@
-# Bottleneck hypotheses and falsification tests
+# 瓶颈假设与证伪方法
 
-These are hypotheses, not conclusions. Each must be promoted or rejected using
-the listed measurement.
+本地实测与源码适配仅覆盖天数 BI-V150。沐曦－曦云 C500 由队友负责，本文数据不外推到该平台或团队总分。
 
-| Priority | Hypothesis | Required evidence | Falsifier |
+> 历史研究记录：保留当时的假设、计分理解和验证计划；最新状态以项目工作记录为准。
+
+以下均为假设，并非结论。每项都须根据列出的测量证据确认或否定。
+
+| 优先级 | 假设 | 所需证据 | 反证 |
 |---:|---|---|---|
-| H1 | Decode is limited by small-M linear kernels reading the 4.7 GiB model | Decode trace: BF16 GEMM is the dominant kernel group; observed SM/device utilization and cost remain poor as M varies from 1 to 64 | GEMM is a small time share, or its cost scales linearly with achieved arithmetic throughput |
-| H2 | Chunked prefill repeatedly displaces decode and creates long queues | Engine timeline shows alternating mixed/decode segments; TTFT tail and aggregate throughput respond to admission/chunk scheduling | Mixed and decode-only phases have the same per-token device efficiency |
-| H3 | Paged GQA Attention is a major 16K bottleneck | Decode trace: FlashAttention/KV kernels dominate; split-KV/tile sweep shows a material gain | Attention remains a small share after KV length grows |
-| H4 | Full decode graphs reduce launch overhead but host gaps remain | CPU/device trace shows long host gaps or synchronization between graph segments | Device timeline is continuously occupied during steady decode |
-| H5 | Normalization, activation, and rotary kernels add avoidable launches and memory traffic | Trace shows a material combined share with many small launches | Combined device time is below the 1% end-to-end scoring floor |
-| H6 | KV block size 16 and page-table formatting are suboptimal on BI-V150 | Compare block sizes and paged-attention tile parameters at fixed sequence lengths | No stable gain beyond run-to-run variance |
-| H7 | Prefix-cache bookkeeping costs more than its 0.2% observed hit rate on this random workload | Trace/benchmark A/B with an implementation-level bypass | No repeatable gain or the bypass harms realistic reuse |
-| H8 | Sampler compilation disablement creates a serial bottleneck | Decode trace and sampler microbenchmark | Sampler is negligible or its compiled path is slower/incorrect |
+| H1 | 解码受读取 4.7 GiB 模型的小 M 线性内核限制 | 解码 trace 中 BF16 GEMM 占主要内核耗时；M 从 1 变到 64 时，实测 SM/设备利用率和耗时仍不理想 | GEMM 时间占比很小，或其耗时符合实际算术吞吐的线性关系 |
+| H2 | 分块预填充反复挤占解码，造成长队列 | 引擎时间线显示 mixed/decode 段交替；TTFT 尾部及总体吞吐随准入/分块调度变化 | mixed 与纯解码阶段的每 token 设备效率相同 |
+| H3 | 分页 GQA Attention 是主要的 16K 瓶颈 | 解码 trace 中 FlashAttention/KV 内核占主导；split-KV/tile 扫描有明显收益 | KV 长度增加后，注意力耗时占比仍然很小 |
+| H4 | 完整解码图减少了提交开销，但主机空隙仍然存在 | CPU/设备 trace 显示图段之间有较长主机空隙或同步 | 稳态解码期间设备时间线持续忙碌 |
+| H5 | 归一化、激活及旋转位置编码增加了可避免的提交和访存 | trace 显示大量小内核，其合计占比明显 | 设备耗时合计低于端到端计分的 1% 门槛 |
+| H6 | KV 块大小 16 和页表格式不适合 BI-V150 | 固定序列长度，比较块大小和分页注意力 tile 参数 | 收益未稳定超出轮间波动 |
+| H7 | 该随机负载实测前缀命中率仅 0.2%，缓存记账成本超过收益 | 使用实现层旁路做 trace/benchmark A/B | 无可重复收益，或旁路损害实际复用 |
+| H8 | 禁用采样器编译造成串行瓶颈 | 解码 trace 和采样器微测 | 采样器耗时可忽略，或编译路径更慢/不正确 |
 
-## Decision model
+## 决策模型
 
-For a kernel or phase occupying fraction `f` of end-to-end time, an
-optimization of that phase by fraction `s` has an Amdahl upper bound of
-`f * s`. The competition gives no score to an end-to-end gain within 1%.
-Candidate work should therefore start with phases where a plausible 20% local
-gain can exceed the 1% global floor.
+若某内核或阶段占端到端时间的比例为 `f`，该阶段优化比例为 `s`，Amdahl 上界为 `f * s`。本历史记录认为比赛对 1% 以内的端到端增益不计分，因此当时优先选择局部有望改善 20%、且可超过总体 1% 门槛的阶段。
 
-## Minimum shape set
+## 最小形状集合
 
-- 4K prefill: aggregate approximately 28K to 32K query tokens.
-- 4K decode: 64 active sequences with KV length near 4K.
-- 16K prefill: aggregate approximately 28K to 32K query tokens.
-- 16K decode: the measured steady active count, with KV length near 16K.
+- 4K 预填充：累计约 28K 到 32K 查询 token。
+- 4K 解码：64 条活动序列，KV 长度接近 4K。
+- 16K 预填充：累计约 28K 到 32K 查询 token。
+- 16K 解码：以实测稳态活动数量为准，KV 长度接近 16K。
 
-All kernel comparisons must use BF16 inputs, 16 query heads, 2 KV heads, head
-dimension 128, and block size 16 unless the experiment explicitly studies a
-layout change.
+除非实验明确研究布局变化，所有内核比较均使用 BF16 输入、16 个查询头、2 个 KV 头、头维度 128、块大小 16。

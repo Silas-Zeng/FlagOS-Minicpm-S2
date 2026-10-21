@@ -1,0 +1,145 @@
+{
+  "status": "passed_synthetic_wrapper_gate",
+  "mixed_cases": [
+    {
+      "decode_requests": 63,
+      "prefill_tokens": 1985,
+      "kv_len": 4096,
+      "cross_stream": false,
+      "accuracy": "not evaluated",
+      "fast_decode_launches": 1,
+      "returned_output_alias": true,
+      "patched_vs_manual_entire_storage": {
+        "valid_tokens": 2051,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "whole2d_vs_split_decode": {
+        "valid_tokens": 63,
+        "bitwise_equal": false,
+        "finite": true,
+        "max_abs_diff": 0.001953125
+      },
+      "whole2d_vs_split_prefill": {
+        "valid_tokens": 1985,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "status": "pass_wrapper_gate"
+    },
+    {
+      "decode_requests": 63,
+      "prefill_tokens": 127,
+      "kv_len": 4096,
+      "cross_stream": true,
+      "accuracy": "not evaluated",
+      "fast_decode_launches": 1,
+      "consumer_registered": true,
+      "suffix_alive_while_plan_held": true,
+      "suffix_python_released_before_consumer_sync": true,
+      "allocator_churn_reused_suffix_address": false,
+      "returned_output_alias": true,
+      "patched_vs_manual_entire_storage": {
+        "valid_tokens": 193,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "whole2d_vs_split_decode": {
+        "valid_tokens": 63,
+        "bitwise_equal": false,
+        "finite": true,
+        "max_abs_diff": 0.00341796875
+      },
+      "whole2d_vs_split_prefill": {
+        "valid_tokens": 127,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "status": "pass_wrapper_gate"
+    },
+    {
+      "decode_requests": 29,
+      "prefill_tokens": 2019,
+      "kv_len": 16384,
+      "cross_stream": false,
+      "accuracy": "not evaluated",
+      "fast_decode_launches": 1,
+      "returned_output_alias": true,
+      "patched_vs_manual_entire_storage": {
+        "valid_tokens": 2051,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "whole2d_vs_split_decode": {
+        "valid_tokens": 29,
+        "bitwise_equal": false,
+        "finite": true,
+        "max_abs_diff": 0.00048828125
+      },
+      "whole2d_vs_split_prefill": {
+        "valid_tokens": 2019,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "status": "pass_wrapper_gate"
+    },
+    {
+      "decode_requests": 29,
+      "prefill_tokens": 127,
+      "kv_len": 16384,
+      "cross_stream": false,
+      "accuracy": "not evaluated",
+      "fast_decode_launches": 1,
+      "returned_output_alias": true,
+      "patched_vs_manual_entire_storage": {
+        "valid_tokens": 159,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "whole2d_vs_split_decode": {
+        "valid_tokens": 29,
+        "bitwise_equal": false,
+        "finite": true,
+        "max_abs_diff": 0.00048828125
+      },
+      "whole2d_vs_split_prefill": {
+        "valid_tokens": 127,
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs_diff": 0.0
+      },
+      "status": "pass_wrapper_gate"
+    }
+  ],
+  "accuracy": "not evaluated",
+  "limitations": [
+    "Synthetic one-layer random Q/K/V, actual Builder/Impl and VllmConfig; no model weights are loaded.",
+    "Manual split equality validates wrapper integration, not the numerical accuracy of 2D to 3D decode.",
+    "Cross-stream wait/registration/release and opportunistic allocator churn are checked, not all possible schedules.",
+    "No timings or official benchmark results are produced."
+  ],
+  "pure_decode": {
+    "no_split_plan": true,
+    "graph_replays": 1,
+    "eager": {
+      "valid_tokens": 11,
+      "bitwise_equal": true,
+      "finite": true,
+      "max_abs_diff": 0.0
+    },
+    "graph_replay": {
+      "valid_tokens": 11,
+      "bitwise_equal": true,
+      "finite": true,
+      "max_abs_diff": 0.0
+    },
+    "status": "pass"
+  }
+}

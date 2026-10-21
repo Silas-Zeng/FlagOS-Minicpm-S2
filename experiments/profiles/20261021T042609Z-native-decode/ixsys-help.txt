@@ -1,0 +1,161 @@
+
+usage: ixsys [<args>] [application] [<application args>]
+args:
+        -h, --help
+           Print this help message and exit.
+
+        -v, --version
+           Display the version info.
+
+        -o, --output <file>
+           Output trace filename.
+           The trace file with specified filename will always be overwritten.
+
+        -t, --trace <tracer>[,<tracer>...]
+           Select the API(s) to trace. Possible values are 'cuda', 'osrt', 'nvtx', 'cudnn', 'cuinfer', 'video', 'raw_syscalls', 'mem', 'power',
+               'temperature', 'cuda_api', 'cuda_device', 'cuda_memcpy', 'cuda_memset', 'cuda_kernel', 'cuda_memcpy_p2p', 'proc_kthread'.
+           Multiple APIs can be selected, separated by commas only (no spaces).
+           If 'raw_syscalls' is assigned, 'osrt' must be assigned too.
+           If 'proc_kthread' is assigned, 'osrt' must be assigned too.
+           If 'power' or 'temperature' is assigned,  at least one of the 'cuda', 'cuda_device', 'cuda_memcpy', 'cuda_memset', 'cuda_kernel',
+               'cuda_memcpy_p2p' must be assigned too.
+           To reduce trace file, only focus on some traces, 'cuda_api', 'cuda_device', 'cuda_memcpy', 'cuda_memset', 'cuda_kernel',
+               'cuda_memcpy_p2p' can be used instead of 'cuda'.
+               'cuda' includes 'cuda_api' and 'cuda_device',
+               'cuda_device' includes 'cuda_memcpy', 'cuda_memset', 'cuda_kernel', 'cuda_memcpy_p2p'.
+
+        -d, --deferred_trace <seconds>
+           Defer some seconds to trace. Possible values are in [1, 2^32 - 1].
+           -d 10 means starting trace 10 seconds after obeserved application start.
+
+        -l, --limited_trace <seconds>
+           Limit trace time. Possible values are in [1, 2^32 - 1].
+           -l 10 means stoping trace 10 seconds after trace start.
+
+        -f, --filter_ftrace_syscalls <microseconds>
+           Try to filter out ftrace syscalls which duration are less than setting minimum duration. This can reduce the size of trace file.
+           Possible values are in [0, 1000000]. Default value is 1000.
+           -f 0 means do not filter out.
+
+        -c, --callstack
+           Enable callstack with default params 'kernel:false' 'frequency:1000', note that sudo permission is required.
+            --kernel <true|false>
+               To choose whether include kernel frames for callstack.
+            --frequency <value>
+               The frequency of sampling frequency for callstack.
+               Minimum supported frequency is '1' (Hz).
+               Maximum supproted frequency is '10000' (Hz).
+               Default is '1000' (Hz).
+
+        --devices, TEXT
+            Change the scope of subsequent "cuda", "mem", "power", "temperature", "osrt", "nvtx", "cudnn", "cuinfer", "video", "raw_syscalls"
+            and "proc_kthread" options.
+            Allowed values:
+                all - change scope to all valid devices (default).
+                comma-separated physical device IDs - change scope to specified devices.
+            Note: The IDs is physical device IDs.
+
+        --profile-from-start, TEXT:{off,on}
+            Enable/disable profiling cuda data from the start of the application.
+            If 'profile-from-start' is set to disable profiling from start,  '-t cuda*' must be assigned too.
+            If it's disabled, the application can use {cu,cuda}Profiler{Start,Stop}
+            to turn on/off profiling. Allowed values:
+                on - enable profiling from start (default)
+                off - disable profiling from start
+
+        --gpu-metrics-device
+           Collect GPU Metrics from specified devices.
+           The option argument must be 'none' or one of GPU IDs reported by '--gpu-metrics-device help' switch.
+           Default is 'none'. System scope.
+
+        --gpu-metrics-frequency
+           Specify GPU Metrics sampling frequency.
+           Minimum supported frequency is '10' (Hz).
+           Maximum supported frequency is '200000' (Hz).
+           Default is '500'. System scope.
+           Note: Due to current hardware limitation, the sampling performance is poor. The default value is recommended
+
+        --gpu-metrics-set
+           Specify metric set for GPU Metrics sampling.
+           The option argument must be one of indices reported by '--gpu-metrics-set help' switch.
+           Default is the first metric set that supports selected GPU. System scope.
+           Users can customize by setting the IXSYS_USER_DEFINED_METRIC_SET environment variable.
+
+        --nic-metrics
+           Possible values are 'true' or 'false'.
+           Collect metrics from NIC/HCA devices.
+           Default is 'false'.
+
+        --event-sync
+           Possible values are 'true' or 'false'.
+           Collect synchronize information with cudaEventRecord and cudaStreamWaitEvent.
+           If 'event-sync' is set to true, gpu activities must be traced.
+           Default is 'false'.
+
+        --target-processes-filter TEXT
+            Set the comma separated expressions to filter which processes are profiled.
+                <process name> Set the process name to filter. Regex matched processes are profiled.
+
+        --print-kernel-args
+            Enable to display kernel names with its arguments.
+
+        --print-api-summary
+            Print a summary of CUDA runtime/driver API calls.
+            Must select the cuda_api to trace ('-t cuda_api' or '-t cuda').
+            All print-api/gpu-summary/trace can be used in combination.
+            Note: If only printing the profiling data without saving the trace, only 'profile-from-start', 'target-processes-filter'
+                  and 'demangling' can be set.
+
+        --print-api-trace
+            Print CUDA runtime/driver API trace.
+            Must select the cuda_api to trace ('-t cuda_api' or '-t cuda').
+            All print-api/gpu-summary/trace can be used in combination.
+            Note: If only printing the profiling data without saving the trace, only 'profile-from-start', 'target-processes-filter'
+                  and 'demangling' can be set.
+
+        --print-gpu-summary
+            Print a summary of the activities on the GPU (including CUDA kernels and memcpy's/memset's).
+            Must select the cuda_device to trace ('-t cuda_device' or '-t cuda').
+            All print-api/gpu-summary/trace can be used in combination.
+            Note: If only printing the profiling data without saving the trace, only 'profile-from-start', 'target-processes-filter'
+                  and 'demangling' can be set.
+
+        --print-gpu-trace
+            Print individual kernel invocations (including CUDA memcpy's/memset's) and sort them in chronological order.
+            Must select the cuda_device to trace ('-t cuda_device' or '-t cuda').
+            All print-api/gpu-summary/trace can be used in combination.
+            Note: If only printing the profiling data without saving the trace, only 'profile-from-start', 'target-processes-filter'
+                  and 'demangling' can be set.
+
+        --sessions-list
+            Display any existing profiling sessions.
+
+        --cuda-trace-scope, TEXT:{process-tree, system-wide}
+            Select 'process-tree' to trace CUDA activities for the target process and its child processes.
+            Select 'system-wide' to trace CUDA activities for all processes on the system. Note that only CUDA processes launched by the same user 
+            after the collection start will be traced.
+            Default is 'process-tree'.
+
+        --nccl-trace
+           Possible values are 'api', 'api-group', 'api-coll', 'api-p2p', 'rt', 'coll', 'p2p', 'kernel-launch',
+           'proxy-op', 'proxy-step' or 'all'.
+           Multiple options can be selected, separated by commas only (no spaces).
+           'api' includes 'api-group', 'api-coll' and 'api-p2p'.
+           'rt' includes 'coll', 'p2p' and 'kernel-launch'.
+
+        --demangling, TEXT:{off,on}
+           Turn on/off name demangling of function name. Allowed values:
+                on  - enable name demangling (default)
+                off - disable name demangling
+
+        --python-sampling
+            Sample Python backtrace, note that sudo permission is required.
+            Possible values are 'true' or 'false'.
+            Default is 'false'.
+
+        --python-sampling-frequency
+           Specify Python sampling frequency.
+           Minimum supported frequency is '1' (Hz).
+           Maximum supported frequency is '1000' (Hz).
+           Default is '1000' (Hz).
+

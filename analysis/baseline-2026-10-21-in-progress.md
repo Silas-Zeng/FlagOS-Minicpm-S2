@@ -1,89 +1,64 @@
-# BI-V150 official baseline: 2026-10-21
+# BI-V150 官方基线：2026-10-21
 
-Status: **in progress**. The official benchmark is still running the four
-repetitions required for each workload.
+本地实测与源码适配仅覆盖天数 BI-V150。沐曦－曦云 C500 由队友负责，本文数据不外推到该平台或团队总分。
 
-## Run identity
+> 历史进度快照：以下“进行中”和后续计划均指撰写时状态；最新状态以项目工作记录为准。
 
-- Device run directory:
+当时状态：**进行中**。官方 benchmark 仍在执行每档要求的四轮重复。
+
+## 运行身份
+
+- 设备运行目录：
   `/workspace/experiments/minicpm-s2/baseline/20261020T161824Z`
-- Started: `2026-10-20 16:18 UTC` (`2026-10-21 00:18 +08:00`)
-- vLLM plugin commit:
+- 启动时间：`2026-10-20 16:18 UTC`（`2026-10-21 00:18 +08:00`）
+- vLLM 插件提交：
   `13eb9be69ecc5b5ca4f79c44e9ee40081eaa1bf0`
-- FlagGems: `v5.3.5`, commit
+- FlagGems：`v5.3.5`，提交
   `4df52d9168ac55c1c1061cefb4638c570292d896`
-- Device: one Iluvatar BI-V150, 32,768 MiB visible memory
-- Workloads: official 4K `[4096,1024,64,256]` and 16K
+- 设备：一张 Iluvatar BI-V150，可见显存 32,768 MiB
+- 负载：官方 4K `[4096,1024,64,256]` 和 16K
   `[16384,1024,64,128]`
 
-## Completed raw results
+## 当时已完成的原始结果
 
-These values are raw repetitions, not the final three-run average.
+以下是逐轮原始结果，不能视作最终后三轮平均值。
 
-| Workload | Raw run | Successful | Failed | Total tok/s | Output tok/s | Mean TTFT ms | Duration s |
+| 负载 | 原始轮次 | 成功 | 失败 | 总 tok/s | 输出 tok/s | 平均 TTFT ms | 耗时 s |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | 4K | 1 | 256 | 0 | 1702.13 | 340.43 | 13664.92 | 770.05 |
-| 4K clean rerun | 1 | 256 | 0 | 1689.09 | 337.82 | 14266.14 | 775.99 |
-| 4K clean rerun | 2 | 256 | 0 | 1872.39 | 374.48 | 12388.91 | 700.03 |
-| 4K clean rerun | 3 | 256 | 0 | 1835.56 | 367.11 | 12275.53 | 714.07 |
-| 4K clean rerun | 4 | 256 | 0 | 1918.90 | 383.78 | 12276.81 | 683.06 |
-| 16K clean rerun | 1 | 128 | 0 | 858.09 | 50.48 | 639267.43 | 2596.73 |
+| 4K 独立重跑 | 1 | 256 | 0 | 1689.09 | 337.82 | 14266.14 | 775.99 |
+| 4K 独立重跑 | 2 | 256 | 0 | 1872.39 | 374.48 | 12388.91 | 700.03 |
+| 4K 独立重跑 | 3 | 256 | 0 | 1835.56 | 367.11 | 12275.53 | 714.07 |
+| 4K 独立重跑 | 4 | 256 | 0 | 1918.90 | 383.78 | 12276.81 | 683.06 |
+| 16K 独立重跑 | 1 | 128 | 0 | 858.09 | 50.48 | 639267.43 | 2596.73 |
 
-## Preliminary evidence
+## 初步证据
 
-- The first 4K raw run is 16.1% below the page's 4K reference throughput and
-  19.1% slower in wall time. This is not yet a scoring conclusion because the
-  first run is excluded from the official average and this platform exposes
-  32 GiB.
-- The second raw run is also 0 failures, with `1676.28 total tok/s`,
-  `335.26 output tok/s`, `12781.48 ms` Mean TTFT, and `781.92 s` duration.
-  The two runs differ by about 1.5% in total throughput.
-- The detached clean rerun uses a new server and output files. Its first two
-  runs are `1689.09` and `1872.39 total tok/s`, a difference of about 10.3%.
-  This confirms that same-machine repetitions, not the published reference
-  alone, are required to judge candidate changes.
-- `Mean TTFT` is 13.7 seconds, while `Median TTFT` is 3.38 seconds. The large
-  difference and `P99 TTFT` of 79.4 seconds show substantial queuing and
-  head-of-line effects under the synchronized burst of 256 prompts.
-- `Mean TPOT` is 167.32 ms. The aggregate generated-token rate corresponds to
-  roughly 5.3 decode steps per second at 64 active sequences.
-- GPU compute utilization samples are mostly 93% to 100%, so the current
-  evidence does not support a simple "GPU idle because the scheduler is
-  waiting" hypothesis. A torch trace is still required to separate memory,
-  instruction, small-kernel, and synchronization costs.
-- Board power samples are roughly 57% to 60% of the 350 W full-card cap. The
-  visible device is a 32 GiB instance, so this must be interpreted with the
-  actual partition policy.
+- 首轮 4K 原始吞吐比页面的 4K 参考值低 16.1%，总耗时长 19.1%。这尚不是计分结论：首轮不计入官方平均值，且本平台可见容量为 32 GiB。
+- 第二轮同样为 0 失败，结果为 `1676.28 total tok/s`、`335.26 output tok/s`、平均 TTFT `12781.48 ms`、耗时 `781.92 s`。两轮总吞吐相差约 1.5%。
+- 后台独立重跑使用新的服务和输出文件，其前两轮为 `1689.09` 和 `1872.39 total tok/s`，相差约 10.3%。这说明判断候选改动须依赖同机重复测量，不能只比较公开参考值。
+- `Mean TTFT` 为 13.7 秒，`Median TTFT` 为 3.38 秒；差距明显，且 `P99 TTFT` 达 79.4 秒，说明同步突发的 256 条输入存在较强排队与队头阻塞。
+- `Mean TPOT` 为 167.32 ms。按 64 条活动序列估算，总体生成速率约对应每秒 5.3 个解码步骤。
+- GPU 计算利用率采样多数为 93% 到 100%，现有证据不支持简单归因于“调度器等待造成 GPU 空闲”。仍需 torch trace 区分访存、指令、小内核及同步成本。
+- 板卡功耗采样约为 350 W 整板上限的 57% 到 60%。可见设备是 32 GiB 实例，必须结合实际分区策略解读。
 
-## Engine timeline snapshot
+## 引擎时间线快照
 
-The service-log snapshot collected during the first two 4K runs contains 198
-engine samples. Of these, 92 are pure-decode windows and 103 contain prompt
-work. Decode throughput normally rises to roughly 630-705 generated tok/s at
-64 running requests. When the scheduler admits a batch of new 4K prompts,
-decode throughput repeatedly drops to roughly 85-100 tok/s while prompt
-throughput reaches roughly 2.4-3.3k tok/s. This alternating pattern indicates
-that prefill admission materially interrupts active decode rather than being
-fully hidden behind it.
+前两轮 4K 期间的服务日志快照包含 198 个引擎采样，其中 92 个是纯解码窗口，103 个包含输入处理。在 64 条运行请求下，解码吞吐通常升至约 630-705 生成 tok/s；调度器接纳新一批 4K 输入时，解码吞吐反复降至约 85-100 tok/s，而输入吞吐达到约 2.4-3.3k tok/s。该交替模式说明，预填充准入会明显打断活动解码，并未被完全隐藏。
 
-GPU telemetry over the same broad interval contains 290 samples:
+同一宽时间区间的 GPU 遥测共有 290 个采样：
 
-- compute utilization: mean 82.7%, p50 98%, p99 100%;
-- board power: mean 186.8 W, p50 203 W, p99 214 W, maximum 215 W;
-- allocated memory: constant 28,688 MiB of 32,768 MiB;
-- active-GPU sample fraction: 85.2%.
+- 计算利用率：平均 82.7%，p50 98%，p99 100%；
+- 板卡功耗：平均 186.8 W，p50 203 W，p99 214 W，最高 215 W；
+- 已分配显存：恒为 28,688 MiB，总容量 32,768 MiB；
+- GPU 活跃采样比例：85.2%。
 
-The mean utilization includes model initialization, inter-run gaps, and
-tail-drain periods. The p50 and p99 therefore provide better evidence than the
-mean alone: while work is running, the GPU is usually busy but draws materially
-less than the full 350 W board limit.
+平均利用率包含模型初始化、轮间空隙和尾部排空。相比单看均值，p50 与 p99 更能说明运行中的 GPU 通常忙碌，但功耗明显低于整板 350 W 上限。
 
-## Next evidence required
+## 当时列出的后续取证
 
-1. Finish all four raw runs for both workloads.
-2. Import the original raw and summary CSV files plus service logs.
-3. Capture a profiler-enabled diagnostic run with the same model, dtype,
-   batch/token shapes, and official serving parameters.
-4. Produce separate prefill and decode kernel rankings.
-5. Measure candidate kernels against the original implementation before
-   changing the serving path.
+1. 完成两档负载各四轮原始测量。
+2. 取回原始 raw/summary CSV 和服务日志。
+3. 使用相同模型、dtype、batch/token 形状及官方服务参数，执行单独的性能分析诊断。
+4. 分别生成预填充和解码的内核耗时排名。
+5. 候选内核先与原实现比较，再改服务路径。
