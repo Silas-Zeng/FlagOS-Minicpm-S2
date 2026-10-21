@@ -55,6 +55,7 @@ The selected implementation is a source patch for the official
 
 - [plugin patch](patches/vllm-plugin-FL-biv150-performance.patch)
 - [rejected A+B decode candidate](patches/candidates/vllm-plugin-FL-biv150-a-plus-b-rejected.patch)
+- [fused sampler candidate](patches/candidates/vllm-plugin-FL-biv150-fused-sampler.patch)
 - [installation and reproduction notes](docs/candidate-usage.md)
 - [kernel and diagnostic analysis](analysis/2026-10-21-attention-top-p-candidates.md)
 

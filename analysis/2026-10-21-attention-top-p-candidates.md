@@ -177,6 +177,24 @@ The exact organizer command scored **96.2%** on all 105 Level 3 samples with
 the retained prefill-attention and deterministic top-p patch, starting from
 the submitted plugin source path. This exceeds the required 0.95 threshold.
 
+### Fused sampler candidate
+
+A separate candidate fuses the top-p threshold with Gumbel-Max sampling and
+reduces the complete sampling tail from `1.695 ms` to `0.712 ms` in a
+64-row microbenchmark (2.38x). The sparse-distribution TV distance was 0.022,
+and every sampled token remained inside the exact top-p support.
+
+The service-level short pair was mixed: 16K total throughput improved from
+3554.45 to 3983.53 tok/s, but 4K fell from 5045.59 to 3879.54 tok/s. It is
+therefore retained as an independent candidate, not enabled by default:
+
+```text
+branch: codex/biv150-fused-sampler
+commit: 40c1f1e
+```
+
+The candidate patch is a delta on top of the retained final patch.
+
 ## 4. Rejected or invalid measurements
 
 Non-operator settings were screened with the same pair of concurrent short

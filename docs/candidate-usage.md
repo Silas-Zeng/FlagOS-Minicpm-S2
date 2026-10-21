@@ -30,6 +30,11 @@ The rejected A+B candidate (adding the faster decode tile policy) is retained
 under `patches/candidates/` for comparison. It must not be used for the final
 submission because its organizer accuracy result was 83.8%.
 
+A fused top-p/Gumbel sampler is also retained as an independent candidate.
+Its isolated tail is 2.38x faster, but its service-level short pair improved
+16K while regressing 4K, so it is not enabled in the default patch. Its patch
+is a delta that must be applied after the final plugin patch.
+
 The attention policy only activates for:
 
 ```text

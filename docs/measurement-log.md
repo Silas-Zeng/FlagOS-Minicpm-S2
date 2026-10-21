@@ -81,6 +81,11 @@ The primary timestamp is UTC. The parenthesized value is Asia/Shanghai
 - A second sampler-compile run used the already-warm compile cache. It
   remained non-competitive at 4K 3144.42 and 16K 3535.92 total tok/s, so the
   first result was not only JIT overhead.
+- A fused top-p/Gumbel sampler reduced the isolated sampling tail from
+  `1.695` to `0.712 ms` with 0.022 TV distance in a sparse distribution test.
+  Its paired service short test was mixed (4K 3879.54, 16K 3983.53), so it was
+  preserved on branch `codex/biv150-fused-sampler` at commit `40c1f1e` and not
+  enabled by default.
 
 ## Initial observations
 

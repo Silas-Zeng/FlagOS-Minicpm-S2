@@ -1,0 +1,283 @@
+From 40c1f1e61b4a9d0f795c4cd1e8fa2016dd1f2120 Mon Sep 17 00:00:00 2001
+From: HR-zengzzz <hrzeng123456@gmail.com>
+Date: Wed, 21 Oct 2026 10:38:00 +0800
+Subject: [PATCH] experiment: fuse BI-V150 top-p and Gumbel sampling
+
+---
+ vllm_fl/patches/biv150_runtime.py      |  32 ++++-
+ vllm_fl/patches/biv150_top_p_triton.py | 169 ++++++++++++++++++++++++-
+ 2 files changed, 195 insertions(+), 6 deletions(-)
+
+diff --git a/vllm_fl/patches/biv150_runtime.py b/vllm_fl/patches/biv150_runtime.py
+index 1a1f4e6..a453780 100644
+--- a/vllm_fl/patches/biv150_runtime.py
++++ b/vllm_fl/patches/biv150_runtime.py
+@@ -61,7 +61,10 @@ def _patch_top_p_sampler() -> None:
+         from vllm.v1.sample.ops import topk_topp_sampler
+         from vllm.v1.sample.ops import topk_topp_triton
+ 
+-        from .biv150_top_p_triton import apply_top_p_hist_triton
++        from .biv150_top_p_triton import (
++            apply_top_p_hist_triton,
++            sample_top_p_hist_triton,
++        )
+ 
+         current = topk_topp_triton.apply_top_k_top_p_triton
+         if getattr(current, "_biv150_top_p_dispatch", False):
+@@ -91,6 +94,33 @@ def _patch_top_p_sampler() -> None:
+         apply_top_k_top_p_triton._biv150_top_p_dispatch = True
+         topk_topp_triton.apply_top_k_top_p_triton = apply_top_k_top_p_triton
+         topk_topp_sampler.apply_top_k_top_p_triton = apply_top_k_top_p_triton
++
++        sampler_cls = topk_topp_sampler.TopKTopPSampler
++        original_forward_native = sampler_cls.forward_native
++        if not getattr(original_forward_native, "_biv150_fused_sample", False):
++
++            def forward_native(self, logits, generators, k, p):
++                if (
++                    k is None
++                    and p is not None
++                    and not generators
++                    and not self.use_fp64_gumbel
++                    and self.logprobs_mode == "raw_logprobs"
++                    and logits.ndim == 2
++                    and logits.shape[1] == 130560
++                    and logits.dtype == torch.float32
++                ):
++                    if logits.stride(1) != 1:
++                        logits = logits.contiguous()
++                    return sample_top_p_hist_triton(
++                        logits, p.to(torch.float32)
++                    ), None
++                return original_forward_native(
++                    self, logits, generators, k, p
++                )
++
++            forward_native._biv150_fused_sample = True
++            sampler_cls.forward_native = forward_native
+         logger.info("Installed BI-V150 histogram top-p sampler")
+     except Exception as exc:
+         logger.warning("Failed to install BI-V150 top-p sampler: %s", exc)
+diff --git a/vllm_fl/patches/biv150_top_p_triton.py b/vllm_fl/patches/biv150_top_p_triton.py
+index 99b84ac..75c27f3 100644
+--- a/vllm_fl/patches/biv150_top_p_triton.py
++++ b/vllm_fl/patches/biv150_top_p_triton.py
+@@ -17,7 +17,9 @@ _NBINS = 256
+ _ZOOM_ROUNDS = 2
+ _LOGIT_RANGE = 20.0
+ _BLOCK = 4096
++_SAMPLE_SPLITS = 8
+ _CACHE: dict[tuple[torch.device, int, int], "_TopPWorkspace"] = {}
++_RNG_STEP = 0
+ 
+ 
+ @triton.jit
+@@ -227,6 +229,92 @@ def _apply_mask(
+         )
+ 
+ 
++@triton.jit
++def _sample_partial(
++    LOGITS,
++    MAX_ROW,
++    P,
++    TAU,
++    PART_VALUES,
++    PART_INDICES,
++    stride_row,
++    seed,
++    step,
++    VOCAB_SIZE: tl.constexpr,
++    NUM_SPLITS: tl.constexpr,
++    TILES_PER_SPLIT: tl.constexpr,
++    VOCAB_PADDED: tl.constexpr,
++    BLOCK: tl.constexpr,
++):
++    row = tl.program_id(0)
++    split = tl.program_id(1)
++    offs = tl.arange(0, BLOCK)
++    p = tl.load(P + row)
++    tau = tl.load(TAU + row)
++    row_max = tl.load(MAX_ROW + row)
++    start = split * TILES_PER_SPLIT * BLOCK
++    best = float("-inf")
++    best_idx = 0
++    row_seed = seed + row
++
++    for tile in range(TILES_PER_SPLIT):
++        idx = start + tile * BLOCK + offs
++        valid = idx < VOCAB_SIZE
++        values = tl.load(
++            LOGITS + row * stride_row + idx,
++            mask=valid,
++            other=float("-inf"),
++        )
++        if p >= 1.0:
++            keep = valid
++        elif p <= 0.0:
++            keep = valid & (values == row_max)
++        else:
++            keep = valid & (values >= tau)
++
++        uniform = tl.rand(
++            row_seed,
++            step * VOCAB_PADDED + idx.to(tl.int32),
++        )
++        uniform = tl.minimum(tl.maximum(uniform, 1e-20), 1.0 - 1e-7)
++        gumbel = -tl.log(-tl.log(uniform))
++        score = tl.where(keep, values + gumbel, float("-inf"))
++        tile_best = tl.max(score, axis=0)
++        tile_idx = tl.argmax(score, axis=0)
++        take = tile_best > best
++        best_idx = tl.where(take, start + tile * BLOCK + tile_idx, best_idx)
++        best = tl.maximum(best, tile_best)
++
++    tl.store(PART_VALUES + row * NUM_SPLITS + split, best)
++    tl.store(PART_INDICES + row * NUM_SPLITS + split, best_idx)
++
++
++@triton.jit
++def _sample_reduce(
++    PART_VALUES,
++    PART_INDICES,
++    OUT,
++    NUM_SPLITS: tl.constexpr,
++    MAX_SPLITS: tl.constexpr,
++):
++    row = tl.program_id(0)
++    offs = tl.arange(0, MAX_SPLITS)
++    active = offs < NUM_SPLITS
++    values = tl.load(
++        PART_VALUES + row * MAX_SPLITS + offs,
++        mask=active,
++        other=float("-inf"),
++    )
++    indices = tl.load(
++        PART_INDICES + row * MAX_SPLITS + offs,
++        mask=active,
++        other=0,
++    )
++    best_split = tl.argmax(values, axis=0)
++    token = tl.sum(tl.where(offs == best_split, indices, 0), axis=0)
++    tl.store(OUT + row, token)
++
++
+ class _TopPWorkspace:
+     def __init__(self, batch_size: int, vocab_size: int, device: torch.device):
+         self.batch_size = batch_size
+@@ -244,6 +332,24 @@ class _TopPWorkspace:
+         self.hi = torch.empty(batch_size, **fp32)
+         self.tau = torch.empty(batch_size, **fp32)
+         self.hist = torch.empty(batch_size, _NBINS, **fp32)
++        self.sample_tiles_per_split = triton.cdiv(
++            triton.cdiv(vocab_size, _BLOCK), _SAMPLE_SPLITS
++        )
++        self.sample_vocab_padded = (
++            self.sample_tiles_per_split * _SAMPLE_SPLITS * _BLOCK
++        )
++        self.part_values = torch.empty(
++            batch_size, _SAMPLE_SPLITS, **fp32
++        )
++        self.part_indices = torch.empty(
++            batch_size,
++            _SAMPLE_SPLITS,
++            device=device,
++            dtype=torch.int32,
++        )
++        self.sample_out = torch.empty(
++            batch_size, device=device, dtype=torch.int64
++        )
+ 
+ 
+ def _get_workspace(
+@@ -257,18 +363,16 @@ def _get_workspace(
+     return workspace
+ 
+ 
+-def apply_top_p_hist_triton(
++def _compute_top_p_tau(
+     logits: torch.Tensor,
+     p: torch.Tensor,
+-    mask_value: float = float("-inf"),
+-) -> torch.Tensor:
+-    """Apply top-p masking with three fixed histogram-refinement passes."""
++) -> tuple[_TopPWorkspace, int]:
+     assert logits.ndim == 2
+     assert logits.dtype == torch.float32
+     assert logits.stride(1) == 1
+     assert p.ndim == 1 and p.shape[0] == logits.shape[0]
+     if logits.shape[0] == 0:
+-        return logits
++        raise ValueError("empty logits")
+ 
+     batch_size, vocab_size = logits.shape
+     workspace = _get_workspace(batch_size, vocab_size, logits.device)
+@@ -328,6 +432,19 @@ def apply_top_p_hist_triton(
+             num_warps=1,
+         )
+ 
++    return workspace, vocab_size
++
++
++def apply_top_p_hist_triton(
++    logits: torch.Tensor,
++    p: torch.Tensor,
++    mask_value: float = float("-inf"),
++) -> torch.Tensor:
++    """Apply top-p masking with bounded histogram refinement."""
++    if logits.shape[0] == 0:
++        return logits
++    workspace, vocab_size = _compute_top_p_tau(logits, p)
++    grid = (logits.shape[0], _MAX_SPLITS)
+     _apply_mask[grid](
+         logits,
+         workspace.max_row,
+@@ -342,3 +459,45 @@ def apply_top_p_hist_triton(
+         num_warps=8,
+     )
+     return logits
++
++
++def sample_top_p_hist_triton(
++    logits: torch.Tensor,
++    p: torch.Tensor,
++    seed: int = 0,
++) -> torch.Tensor:
++    """Fuse top-p thresholding and Gumbel-Max sampling."""
++    global _RNG_STEP
++    if logits.shape[0] == 0:
++        return torch.empty(0, device=logits.device, dtype=torch.int64)
++
++    workspace, vocab_size = _compute_top_p_tau(logits, p)
++    grid = (logits.shape[0], _SAMPLE_SPLITS)
++    step = _RNG_STEP
++    _RNG_STEP += 1
++    _sample_partial[grid](
++        logits,
++        workspace.max_row,
++        p,
++        workspace.tau,
++        workspace.part_values,
++        workspace.part_indices,
++        logits.stride(0),
++        seed,
++        step,
++        VOCAB_SIZE=vocab_size,
++        NUM_SPLITS=_SAMPLE_SPLITS,
++        TILES_PER_SPLIT=workspace.sample_tiles_per_split,
++        VOCAB_PADDED=workspace.sample_vocab_padded,
++        BLOCK=_BLOCK,
++        num_warps=8,
++    )
++    _sample_reduce[(logits.shape[0],)](
++        workspace.part_values,
++        workspace.part_indices,
++        workspace.sample_out,
++        NUM_SPLITS=_SAMPLE_SPLITS,
++        MAX_SPLITS=_SAMPLE_SPLITS,
++        num_warps=1,
++    )
++    return workspace.sample_out
+-- 
+2.43.0
+
