@@ -1,0 +1,633 @@
+From e1d1d8bd343846db4292218662da5cbab6fe9f30 Mon Sep 17 00:00:00 2001
+From: HR-zengzzz <hrzeng123456@gmail.com>
+Date: Wed, 21 Oct 2026 06:06:34 +0800
+Subject: [PATCH] perf(iluvatar): tune MiniCPM5-2B attention and top-p
+
+---
+ vllm_fl/__init__.py                           |  22 ++
+ .../backends/vendor/iluvatar/iluvatar.py      |  23 ++
+ vllm_fl/patches/biv150_runtime.py             | 149 ++++++++
+ vllm_fl/patches/biv150_top_p_triton.py        | 344 ++++++++++++++++++
+ vllm_fl/platform.py                           |  11 +
+ 5 files changed, 549 insertions(+)
+ create mode 100644 vllm_fl/patches/biv150_runtime.py
+ create mode 100644 vllm_fl/patches/biv150_top_p_triton.py
+
+diff --git a/vllm_fl/__init__.py b/vllm_fl/__init__.py
+index 8754e32..9d4b97d 100644
+--- a/vllm_fl/__init__.py
++++ b/vllm_fl/__init__.py
+@@ -26,6 +26,27 @@ from . import version as version  # PyTorch-style: vllm_fl.version.git_version
+ logger = logging.getLogger(__name__)
+ 
+ 
++def _configure_experimental_cpu_threads():
++    """Apply an explicit CPU thread cap for reproducible experiments."""
++    requested = os.environ.get("VLLM_FL_CPU_THREADS")
++    if not requested:
++        return
++    try:
++        threads = int(requested)
++    except ValueError as exc:
++        raise ValueError("VLLM_FL_CPU_THREADS must be an integer") from exc
++    if threads <= 0:
++        raise ValueError("VLLM_FL_CPU_THREADS must be greater than zero")
++    import torch
++
++    torch.set_num_threads(threads)
++    try:
++        torch.set_num_interop_threads(threads)
++    except RuntimeError:
++        logger.debug("PyTorch inter-op thread count was already initialized")
++    logger.info("Set PyTorch CPU thread counts to %d", threads)
++
++
+ def __getattr__(name):
+     if name == "distributed":
+         import importlib
+@@ -97,6 +118,7 @@ def _patch_custom_ops():
+ 
+ def register():
+     """Register the FL platform."""
++    _configure_experimental_cpu_threads()
+     _patch_custom_ops()
+     _patch_flash_attn_import()
+     _patch_transformers_compat()
+diff --git a/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py b/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py
+index 0c7758e..1d65d7f 100644
+--- a/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py
++++ b/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py
+@@ -10,6 +10,7 @@ Iluvatar uses a CUDA-compatible architecture.
+ from __future__ import annotations
+ 
+ import logging
++import os
+ from typing import Optional, Union
+ 
+ import torch
+@@ -208,6 +209,15 @@ patch_triton_perf_model_for_iluvatar()
+ 
+ 
+ def patch_sampler_compile_for_iluvatar() -> None:
++    keep_compile = os.environ.get(
++        "VLLM_FL_ILUVATAR_KEEP_SAMPLER_COMPILE", "0"
++    ).lower() in ("1", "true", "yes")
++    if keep_compile:
++        logger.info(
++            "Keeping torch.compile on Iluvatar sampler ops for diagnostics"
++        )
++        return
++
+     # Disable torch.compile on vllm sampler ops for Iluvatar.
+     # flagtree triton only supports Iluvatar backend, not cuda target.
+     # TODO: Remove once flagtree triton supports cuda inductor target.
+@@ -235,6 +245,19 @@ def patch_sampler_compile_for_iluvatar() -> None:
+ patch_sampler_compile_for_iluvatar()
+ 
+ 
++def patch_biv150_minicpm_runtime() -> None:
++    """Install the submitted MiniCPM5-2B BI-V150 kernel launch policies."""
++    try:
++        from vllm_fl.patches.biv150_runtime import apply_biv150_runtime_patches
++
++        apply_biv150_runtime_patches()
++    except Exception as e:
++        logger.warning("Failed to patch BI-V150 MiniCPM runtime: %s", e)
++
++
++patch_biv150_minicpm_runtime()
++
++
+ def patch_torch_inductor_for_iluvatar() -> None:
+     """Patch torch._inductor GPUTarget to use the correct triton backend name.
+ 
+diff --git a/vllm_fl/patches/biv150_runtime.py b/vllm_fl/patches/biv150_runtime.py
+new file mode 100644
+index 0000000..d14f8f8
+--- /dev/null
++++ b/vllm_fl/patches/biv150_runtime.py
+@@ -0,0 +1,149 @@
++# Copyright (c) 2026 BAAI. All rights reserved.
++
++"""Shape-aware BI-V150 runtime patches for MiniCPM5-2B inference."""
++
++from __future__ import annotations
++
++import importlib
++import importlib.util
++import logging
++import pathlib
++import shutil
++import sys
++
++import torch
++
++logger = logging.getLogger(__name__)
++
++_ATTENTION_MODULE = "vllm.v1.attention.ops.triton_unified_attention"
++_ATTENTION_BACKEND_MODULE = "vllm.v1.attention.backends.triton_attn"
++_ATTENTION_MARKER = "# _biv150_minicpm_attention_patched"
++
++_LAUNCH_DEFAULTS = """    launch_num_warps: int | None = None
++    launch_num_stages: int | None = None
++"""
++
++_LAUNCH_TUNED = """    launch_num_warps: int | None = None
++    launch_num_stages: int | None = None
++
++    # MiniCPM5-2B: 16 query heads / 2 KV heads / head size 128.
++    # Use shape-aware prefill and decode tiles on BI-V150.
++    biv150_prefill_tile: int | None = None
++    biv150_decode_tile: int | None = None
++    if (
++        current_platform.vendor_name == "iluvatar"
++        and head_size == 128
++        and num_queries_per_kv == 8
++    ):
++        if max_seqlen_q > 1:
++            BLOCK_M = 128
++            BLOCK_Q = 16
++            biv150_prefill_tile = 64
++            launch_num_warps = 8
++            launch_num_stages = 1
++        else:
++            BLOCK_M = 16
++            BLOCK_Q = 2
++            biv150_decode_tile = 32
++            launch_num_warps = 4
++            launch_num_stages = 1
++"""
++
++_DECODE_TILE = """    TILE_SIZE_DECODE = _get_tile_size(
++        head_size, sliding_window_val, q.element_size(), is_prefill=False
++    )
++"""
++
++_DECODE_TILE_TUNED = """    TILE_SIZE_DECODE = _get_tile_size(
++        head_size, sliding_window_val, q.element_size(), is_prefill=False
++    )
++    if biv150_prefill_tile is not None:
++        TILE_SIZE_PREFILL = biv150_prefill_tile
++    if biv150_decode_tile is not None:
++        TILE_SIZE_DECODE = biv150_decode_tile
++"""
++
++
++def _patch_top_p_sampler() -> None:
++    """Use the bounded histogram top-p kernel for top-p-only sampling."""
++    try:
++        from vllm.v1.sample.ops import topk_topp_sampler
++        from vllm.v1.sample.ops import topk_topp_triton
++
++        from .biv150_top_p_triton import apply_top_p_hist_triton
++
++        current = topk_topp_triton.apply_top_k_top_p_triton
++        if getattr(current, "_biv150_top_p_dispatch", False):
++            return
++        original = current
++
++        def apply_top_k_top_p_triton(
++            logits,
++            k,
++            p,
++            mask_value: float = float("-inf"),
++        ):
++            if (
++                k is None
++                and p is not None
++                and logits.ndim == 2
++                and logits.shape[1] == 130560
++                and logits.dtype == torch.float32
++            ):
++                if logits.stride(1) != 1:
++                    logits = logits.contiguous()
++                return apply_top_p_hist_triton(
++                    logits, p.to(torch.float32), mask_value
++                )
++            return original(logits, k, p, mask_value)
++
++        apply_top_k_top_p_triton._biv150_top_p_dispatch = True
++        topk_topp_triton.apply_top_k_top_p_triton = apply_top_k_top_p_triton
++        topk_topp_sampler.apply_top_k_top_p_triton = apply_top_k_top_p_triton
++        logger.info("Installed BI-V150 histogram top-p sampler")
++    except Exception as exc:
++        logger.warning("Failed to install BI-V150 top-p sampler: %s", exc)
++
++
++def _patch_generic_attention() -> None:
++    """Patch the fixed vLLM 0.24 generic Triton attention launch policy.
++
++    The pinned vLLM source has no public launch-config hook. Patch the small
++    launch-policy section before workers import it, then refresh the imported
++    function reference in the TRITON_ATTN backend.
++    """
++    try:
++        spec = importlib.util.find_spec(_ATTENTION_MODULE)
++        if spec is None or spec.origin is None:
++            raise RuntimeError("generic Triton attention module not found")
++        path = pathlib.Path(spec.origin)
++        source = path.read_text(encoding="utf-8")
++        if _ATTENTION_MARKER not in source:
++            if source.count(_LAUNCH_DEFAULTS) != 1:
++                raise RuntimeError("unexpected launch-default block")
++            source = source.replace(_LAUNCH_DEFAULTS, _LAUNCH_TUNED, 1)
++            if source.count(_DECODE_TILE) != 1:
++                raise RuntimeError("unexpected decode-tile block")
++            source = source.replace(_DECODE_TILE, _DECODE_TILE_TUNED, 1)
++            source += f"\n{_ATTENTION_MARKER}\n"
++            path.write_text(source, encoding="utf-8")
++            pycache = path.parent / "__pycache__"
++            if pycache.exists():
++                shutil.rmtree(pycache, ignore_errors=True)
++
++        sys.modules.pop(_ATTENTION_MODULE, None)
++        attention = importlib.import_module(_ATTENTION_MODULE)
++        backend = importlib.import_module(_ATTENTION_BACKEND_MODULE)
++        backend.unified_attention = attention.unified_attention
++        logger.info(
++            "Installed BI-V150 MiniCPM attention policies "
++            "(prefill BM128/TILE64/8w/1s; decode BM16/TILE32/4w/1s)"
++        )
++    except Exception as exc:
++        logger.warning("Failed to install BI-V150 attention policy: %s", exc)
++
++
++def apply_biv150_runtime_patches() -> None:
++    """Install all idempotent runtime patches for the target device/model."""
++    _patch_top_p_sampler()
++    _patch_generic_attention()
+diff --git a/vllm_fl/patches/biv150_top_p_triton.py b/vllm_fl/patches/biv150_top_p_triton.py
+new file mode 100644
+index 0000000..99b84ac
+--- /dev/null
++++ b/vllm_fl/patches/biv150_top_p_triton.py
+@@ -0,0 +1,344 @@
++# SPDX-License-Identifier: Apache-2.0
++"""Bounded histogram-zoom top-p filtering for BI-V150.
++
++The fixed-work histogram refinement replaces the upstream top-p-only path's
++repeated full-vocabulary probability-sum bisection. It keeps the public
++``apply_top_k_top_p_triton`` interface and changes only the top-p-only branch.
++"""
++
++from __future__ import annotations
++
++import torch
++
++from vllm.triton_utils import tl, triton
++
++_MAX_SPLITS = 1
++_NBINS = 256
++_ZOOM_ROUNDS = 2
++_LOGIT_RANGE = 20.0
++_BLOCK = 4096
++_CACHE: dict[tuple[torch.device, int, int], "_TopPWorkspace"] = {}
++
++
++@triton.jit
++def _row_stats_partial(
++    LOGITS,
++    MAX_PART,
++    SUM_PART,
++    stride_row,
++    VOCAB_SIZE: tl.constexpr,
++    NUM_SPLITS: tl.constexpr,
++    MAX_SPLITS: tl.constexpr,
++    TILES_PER_SPLIT: tl.constexpr,
++    BLOCK: tl.constexpr,
++):
++    row = tl.program_id(0)
++    split = tl.program_id(1)
++    offs = tl.arange(0, BLOCK)
++    start = split * TILES_PER_SPLIT * BLOCK
++    row_max = float("-inf")
++    row_sum = 0.0
++    for tile in range(TILES_PER_SPLIT):
++        idx = start + tile * BLOCK + offs
++        values = tl.load(
++            LOGITS + row * stride_row + idx,
++            mask=idx < VOCAB_SIZE,
++            other=float("-inf"),
++        )
++        tile_max = tl.max(values, axis=0)
++        new_max = tl.maximum(row_max, tile_max)
++        safe_new_max = tl.where(new_max == float("-inf"), 0.0, new_max)
++        old_scale = tl.where(
++            row_max == float("-inf"),
++            0.0,
++            tl.exp(row_max - safe_new_max),
++        )
++        row_sum = row_sum * old_scale + tl.sum(
++            tl.exp(values - safe_new_max), axis=0
++        )
++        row_max = new_max
++    tl.store(MAX_PART + row * MAX_SPLITS + split, row_max)
++    tl.store(SUM_PART + row * MAX_SPLITS + split, row_sum)
++
++
++@triton.jit
++def _row_max_reduce(
++    MAX_PART,
++    SUM_PART,
++    MAX_ROW,
++    Z_ROW,
++    PREFIX_MASS,
++    LO,
++    HI,
++    NUM_SPLITS: tl.constexpr,
++    MAX_SPLITS: tl.constexpr,
++    RANGE: tl.constexpr,
++):
++    row = tl.program_id(0)
++    offs = tl.arange(0, MAX_SPLITS)
++    values = tl.load(
++        MAX_PART + row * MAX_SPLITS + offs,
++        mask=offs < NUM_SPLITS,
++        other=float("-inf"),
++    )
++    row_max = tl.max(values, axis=0)
++    safe_max = tl.where(row_max == float("-inf"), 0.0, row_max)
++    partial_sums = tl.load(
++        SUM_PART + row * MAX_SPLITS + offs,
++        mask=offs < NUM_SPLITS,
++        other=0.0,
++    )
++    row_sum = tl.sum(partial_sums * tl.exp(values - safe_max), axis=0)
++    has_finite = row_max != float("-inf")
++    tl.store(MAX_ROW + row, row_max)
++    tl.store(Z_ROW + row, row_sum)
++    tl.store(PREFIX_MASS + row, 0.0)
++    tl.store(LO + row, tl.where(has_finite, row_max - RANGE, 0.0))
++    tl.store(HI + row, tl.where(has_finite, row_max, 1.0))
++
++
++@triton.jit
++def _weighted_hist(
++    LOGITS,
++    MAX_ROW,
++    LO,
++    HI,
++    HIST,
++    stride_row,
++    VOCAB_SIZE: tl.constexpr,
++    NUM_SPLITS: tl.constexpr,
++    TILES_PER_SPLIT: tl.constexpr,
++    NBINS: tl.constexpr,
++    BLOCK: tl.constexpr,
++):
++    row = tl.program_id(0)
++    split = tl.program_id(1)
++    offs = tl.arange(0, BLOCK)
++    row_max = tl.load(MAX_ROW + row)
++    safe_max = tl.where(row_max == float("-inf"), 0.0, row_max)
++    lo = tl.load(LO + row)
++    hi = tl.load(HI + row)
++    scale = NBINS / (hi - lo)
++    start = split * TILES_PER_SPLIT * BLOCK
++    for tile in range(TILES_PER_SPLIT):
++        idx = start + tile * BLOCK + offs
++        valid = idx < VOCAB_SIZE
++        values = tl.load(
++            LOGITS + row * stride_row + idx,
++            mask=valid,
++            other=float("-inf"),
++        )
++        bins = ((values - lo) * scale).to(tl.int32)
++        bins = tl.minimum(tl.maximum(bins, 0), NBINS - 1)
++        weights = tl.exp(values - safe_max)
++        active = (
++            valid
++            & (row_max != float("-inf"))
++            & (values >= lo)
++            & (values <= hi)
++        )
++        tl.atomic_add(HIST + row * NBINS + bins, weights, mask=active)
++
++
++@triton.jit
++def _hist_walk(
++    HIST,
++    P,
++    Z_ROW,
++    PREFIX_MASS,
++    LO,
++    HI,
++    TAU,
++    NBINS: tl.constexpr,
++    FINAL: tl.constexpr,
++):
++    row = tl.program_id(0)
++    offs = tl.arange(0, NBINS)
++    reversed_mass = tl.load(HIST + row * NBINS + (NBINS - 1 - offs))
++    cumulative = tl.cumsum(reversed_mass, axis=0)
++    p = tl.load(P + row).to(tl.float32)
++    total_mass = tl.load(Z_ROW + row)
++    previous_mass = tl.load(PREFIX_MASS + row)
++
++    target = p * total_mass
++    reached = (previous_mass + cumulative) >= target
++    crossing = tl.argmax(reached.to(tl.int32), axis=0)
++    selected_prefix = tl.where(
++        crossing > 0,
++        tl.sum(
++            tl.where(offs == tl.maximum(crossing - 1, 0), cumulative, 0.0),
++            axis=0,
++        ),
++        0.0,
++    )
++    tl.store(PREFIX_MASS + row, previous_mass + selected_prefix)
++
++    bin_id = NBINS - 1 - crossing
++    lo = tl.load(LO + row)
++    hi = tl.load(HI + row)
++    width = (hi - lo) / NBINS
++    lower = lo + bin_id * width
++    upper = lower + width
++    if FINAL:
++        tl.store(TAU + row, lower)
++    else:
++        tl.store(LO + row, lower)
++        tl.store(HI + row, upper)
++
++
++@triton.jit
++def _apply_mask(
++    LOGITS,
++    MAX_ROW,
++    P,
++    TAU,
++    stride_row,
++    VOCAB_SIZE: tl.constexpr,
++    NUM_SPLITS: tl.constexpr,
++    TILES_PER_SPLIT: tl.constexpr,
++    MASK_VALUE: tl.constexpr,
++    BLOCK: tl.constexpr,
++):
++    row = tl.program_id(0)
++    split = tl.program_id(1)
++    offs = tl.arange(0, BLOCK)
++    p = tl.load(P + row)
++    tau = tl.load(TAU + row)
++    row_max = tl.load(MAX_ROW + row)
++    start = split * TILES_PER_SPLIT * BLOCK
++    for tile in range(TILES_PER_SPLIT):
++        idx = start + tile * BLOCK + offs
++        valid = idx < VOCAB_SIZE
++        values = tl.load(
++            LOGITS + row * stride_row + idx,
++            mask=valid,
++            other=float("-inf"),
++        )
++        if p >= 1.0:
++            keep = valid
++        elif p <= 0.0:
++            keep = valid & (values == row_max)
++        else:
++            keep = valid & (values >= tau)
++        tl.store(
++            LOGITS + row * stride_row + idx,
++            tl.where(keep, values, MASK_VALUE),
++            mask=valid,
++        )
++
++
++class _TopPWorkspace:
++    def __init__(self, batch_size: int, vocab_size: int, device: torch.device):
++        self.batch_size = batch_size
++        self.vocab_size = vocab_size
++        self.tiles_per_split = triton.cdiv(
++            triton.cdiv(vocab_size, _BLOCK), _MAX_SPLITS
++        )
++        fp32 = {"device": device, "dtype": torch.float32}
++        self.max_part = torch.empty(batch_size, _MAX_SPLITS, **fp32)
++        self.sum_part = torch.empty(batch_size, _MAX_SPLITS, **fp32)
++        self.max_row = torch.empty(batch_size, **fp32)
++        self.z_row = torch.empty(batch_size, **fp32)
++        self.prefix_mass = torch.empty(batch_size, **fp32)
++        self.lo = torch.empty(batch_size, **fp32)
++        self.hi = torch.empty(batch_size, **fp32)
++        self.tau = torch.empty(batch_size, **fp32)
++        self.hist = torch.empty(batch_size, _NBINS, **fp32)
++
++
++def _get_workspace(
++    batch_size: int, vocab_size: int, device: torch.device
++) -> _TopPWorkspace:
++    key = (device, batch_size, vocab_size)
++    workspace = _CACHE.get(key)
++    if workspace is None:
++        workspace = _TopPWorkspace(batch_size, vocab_size, device)
++        _CACHE[key] = workspace
++    return workspace
++
++
++def apply_top_p_hist_triton(
++    logits: torch.Tensor,
++    p: torch.Tensor,
++    mask_value: float = float("-inf"),
++) -> torch.Tensor:
++    """Apply top-p masking with three fixed histogram-refinement passes."""
++    assert logits.ndim == 2
++    assert logits.dtype == torch.float32
++    assert logits.stride(1) == 1
++    assert p.ndim == 1 and p.shape[0] == logits.shape[0]
++    if logits.shape[0] == 0:
++        return logits
++
++    batch_size, vocab_size = logits.shape
++    workspace = _get_workspace(batch_size, vocab_size, logits.device)
++    grid = (batch_size, _MAX_SPLITS)
++
++    _row_stats_partial[grid](
++        logits,
++        workspace.max_part,
++        workspace.sum_part,
++        logits.stride(0),
++        VOCAB_SIZE=vocab_size,
++        NUM_SPLITS=_MAX_SPLITS,
++        MAX_SPLITS=_MAX_SPLITS,
++        TILES_PER_SPLIT=workspace.tiles_per_split,
++        BLOCK=_BLOCK,
++        num_warps=8,
++    )
++    _row_max_reduce[(batch_size,)](
++        workspace.max_part,
++        workspace.sum_part,
++        workspace.max_row,
++        workspace.z_row,
++        workspace.prefix_mass,
++        workspace.lo,
++        workspace.hi,
++        NUM_SPLITS=_MAX_SPLITS,
++        MAX_SPLITS=_MAX_SPLITS,
++        RANGE=_LOGIT_RANGE,
++        num_warps=1,
++    )
++    for round_no in range(_ZOOM_ROUNDS, 0, -1):
++        workspace.hist.zero_()
++        _weighted_hist[grid](
++            logits,
++            workspace.max_row,
++            workspace.lo,
++            workspace.hi,
++            workspace.hist,
++            logits.stride(0),
++            VOCAB_SIZE=vocab_size,
++            NUM_SPLITS=_MAX_SPLITS,
++            TILES_PER_SPLIT=workspace.tiles_per_split,
++            NBINS=_NBINS,
++            BLOCK=_BLOCK,
++            num_warps=8,
++        )
++        _hist_walk[(batch_size,)](
++            workspace.hist,
++            p,
++            workspace.z_row,
++            workspace.prefix_mass,
++            workspace.lo,
++            workspace.hi,
++            workspace.tau,
++            NBINS=_NBINS,
++            FINAL=round_no == 1,
++            num_warps=1,
++        )
++
++    _apply_mask[grid](
++        logits,
++        workspace.max_row,
++        p,
++        workspace.tau,
++        logits.stride(0),
++        VOCAB_SIZE=vocab_size,
++        NUM_SPLITS=_MAX_SPLITS,
++        TILES_PER_SPLIT=workspace.tiles_per_split,
++        MASK_VALUE=mask_value,
++        BLOCK=_BLOCK,
++        num_warps=8,
++    )
++    return logits
+diff --git a/vllm_fl/platform.py b/vllm_fl/platform.py
+index 86bd70b..f8ad019 100644
+--- a/vllm_fl/platform.py
++++ b/vllm_fl/platform.py
+@@ -189,6 +189,17 @@ class PlatformFL(Platform):
+             elif cls.device_type == "musa":
+                 cache_config.block_size = 64
+                 logger.info("Setting kv cache block size to 64 for MUSA.")
++            elif cls.vendor_name == "iluvatar":
++                block_size = int(os.environ.get("VLLM_FL_ILUVATAR_BLOCK_SIZE", "16"))
++                if block_size not in (16, 32, 64, 128):
++                    raise ValueError(
++                        "VLLM_FL_ILUVATAR_BLOCK_SIZE must be one of 16, 32, 64, 128"
++                    )
++                cache_config.block_size = block_size
++                logger.info(
++                    "Setting kv cache block size to %d for Iluvatar.",
++                    block_size,
++                )
+             else:
+                 cache_config.block_size = 16
+         if cls.device_type == "npu":
+-- 
+2.43.0
+

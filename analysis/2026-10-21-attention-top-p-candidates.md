@@ -1,7 +1,9 @@
 # BI-V150 MiniCPM5-2B: generic attention and top-p candidates
 
-Status: candidate kernels pass microbenchmarks and end-to-end smoke tests.
-Final official repetitions and `math_500` Level 3 remain pending.
+Status: candidate passes microbenchmarks, end-to-end smoke tests, and the
+official `math_500` Level 3 gate. Full official performance repetitions were
+stopped by user direction after short validation had established the retained
+direction.
 
 All measurements in this note use the one visible BI-V150 on the rented
 instance. GPU jobs were serialized.
@@ -110,7 +112,7 @@ reference launch is `3.91e-3`.
 
 Best candidate: 7.12x faster at batch 8.
 
-### Decode
+### Decode experiment (rejected)
 
 The real decode path uses 3D segmented softmax. For MiniCPM's GQA factor 8
 and two KV heads, the launch threshold selects the 3D kernel at batch 64.
@@ -122,7 +124,14 @@ and two KV heads, the launch threshold selects the 3D kernel at batch 64.
 
 The 16K decode candidate's maximum BF16 output difference is `1.46e-3`.
 
-The selected policies are limited to:
+This kernel-level gain was not accepted end to end. The exact organizer
+`math_500 Level 3` run fell to **83.8%** and average output length increased
+from about 3,345 to 10,996 tokens. The decode launch policy is therefore not in
+the final default patch. It remains available as
+`patches/candidates/vllm-plugin-FL-biv150-a-plus-b-rejected.patch` for A/B
+comparison.
+
+The selected prefill policy is limited to:
 
 ```text
 vendor == iluvatar
@@ -130,7 +139,7 @@ head_size == 128
 num_queries_per_kv == 8
 ```
 
-Prefill selects the wide configuration; decode selects the 3D-specific policy.
+Decode remains on the upstream policy.
 
 ## 3. End-to-end candidate results
 
@@ -164,13 +173,32 @@ were used, so this is a paired diagnostic rather than an official score.
 
 ### Accuracy
 
-The exact organizer command first scored 96.2% on all 105 Level 3 samples
-with the prefill-attention and deterministic top-p patch, starting from the
-submitted plugin source path. A second full run with decode attention enabled
-is the final accuracy gate because decode changes tensor-core tile boundaries.
+The exact organizer command scored **96.2%** on all 105 Level 3 samples with
+the retained prefill-attention and deterministic top-p patch, starting from
+the submitted plugin source path. This exceeds the required 0.95 threshold.
 
 ## 4. Rejected or invalid measurements
 
+Non-operator settings were screened with the same pair of concurrent short
+smokes: 4K with 16 requests and 16 output tokens, and 16K with 8 requests and
+8 output tokens. These absolute numbers are integration measurements, not
+official throughput scores, but each candidate is directly paired with the
+default service.
+
+| Setting | 4K tok/s | 16K tok/s | Decision |
+|---|---:|---:|---|
+| Default: block16, batched tokens 2048, prefix cache on | 5045.59 | 3554.45 | reference |
+| KV block size 64 | 3154.38 | 3400.29 | reject |
+| `max_num_batched_tokens=4096` | 1192.89 | 1628.14 | reject |
+| `max_num_batched_tokens=8192` | 887.23 | 1729.07 | reject |
+| Prefix cache disabled | 3170.73 | 3329.03 | reject |
+
+- The larger KV block has worse short-test throughput on both shapes.
+- Raising the scheduler token cap to 8192 causes a severe regression with the
+  two mixed concurrent clients; the device's 16-SM capacity makes the default
+  2,048-token chunk more effective.
+- The random benchmark reports 0% prefix-cache hits, but disabling the cache
+  still performed worse in the paired smoke, so it remains enabled.
 - An initial `math_500` run used zero temperature, a 2,048-token limit, and
   `/v1` instead of the organizer's explicit chat-completions endpoint. It
   produced 72.4%, but is retained only as a protocol-mismatch record and is not

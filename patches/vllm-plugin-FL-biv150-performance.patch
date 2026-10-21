@@ -1,4 +1,4 @@
-From e1d1d8bd343846db4292218662da5cbab6fe9f30 Mon Sep 17 00:00:00 2001
+From d60b02367a852826f653165953f31b6dc696658e Mon Sep 17 00:00:00 2001
 From: HR-zengzzz <hrzeng123456@gmail.com>
 Date: Wed, 21 Oct 2026 06:06:34 +0800
 Subject: [PATCH] perf(iluvatar): tune MiniCPM5-2B attention and top-p
@@ -6,10 +6,10 @@ Subject: [PATCH] perf(iluvatar): tune MiniCPM5-2B attention and top-p
 ---
  vllm_fl/__init__.py                           |  22 ++
  .../backends/vendor/iluvatar/iluvatar.py      |  23 ++
- vllm_fl/patches/biv150_runtime.py             | 149 ++++++++
+ vllm_fl/patches/biv150_runtime.py             | 140 +++++++
  vllm_fl/patches/biv150_top_p_triton.py        | 344 ++++++++++++++++++
- vllm_fl/platform.py                           |  11 +
- 5 files changed, 549 insertions(+)
+ vllm_fl/platform.py                           |  47 +++
+ 5 files changed, 576 insertions(+)
  create mode 100644 vllm_fl/patches/biv150_runtime.py
  create mode 100644 vllm_fl/patches/biv150_top_p_triton.py
 
@@ -103,10 +103,10 @@ index 0c7758e..1d65d7f 100644
  
 diff --git a/vllm_fl/patches/biv150_runtime.py b/vllm_fl/patches/biv150_runtime.py
 new file mode 100644
-index 0000000..d14f8f8
+index 0000000..1a1f4e6
 --- /dev/null
 +++ b/vllm_fl/patches/biv150_runtime.py
-@@ -0,0 +1,149 @@
+@@ -0,0 +1,140 @@
 +# Copyright (c) 2026 BAAI. All rights reserved.
 +
 +"""Shape-aware BI-V150 runtime patches for MiniCPM5-2B inference."""
@@ -126,7 +126,7 @@ index 0000000..d14f8f8
 +
 +_ATTENTION_MODULE = "vllm.v1.attention.ops.triton_unified_attention"
 +_ATTENTION_BACKEND_MODULE = "vllm.v1.attention.backends.triton_attn"
-+_ATTENTION_MARKER = "# _biv150_minicpm_attention_patched"
++_ATTENTION_MARKER = "# _biv150_minicpm_attention_patched_v2"
 +
 +_LAUNCH_DEFAULTS = """    launch_num_warps: int | None = None
 +    launch_num_stages: int | None = None
@@ -135,27 +135,20 @@ index 0000000..d14f8f8
 +_LAUNCH_TUNED = """    launch_num_warps: int | None = None
 +    launch_num_stages: int | None = None
 +
-+    # MiniCPM5-2B: 16 query heads / 2 KV heads / head size 128.
-+    # Use shape-aware prefill and decode tiles on BI-V150.
++    # MiniCPM5-2B prefill: 16 query heads / 2 KV heads / head size 128.
++    # Wider query and KV tiles amortize paged-KV address generation on BI-V150.
 +    biv150_prefill_tile: int | None = None
-+    biv150_decode_tile: int | None = None
 +    if (
 +        current_platform.vendor_name == "iluvatar"
 +        and head_size == 128
 +        and num_queries_per_kv == 8
++        and max_seqlen_q > 1
 +    ):
-+        if max_seqlen_q > 1:
-+            BLOCK_M = 128
-+            BLOCK_Q = 16
-+            biv150_prefill_tile = 64
-+            launch_num_warps = 8
-+            launch_num_stages = 1
-+        else:
-+            BLOCK_M = 16
-+            BLOCK_Q = 2
-+            biv150_decode_tile = 32
-+            launch_num_warps = 4
-+            launch_num_stages = 1
++        BLOCK_M = 128
++        BLOCK_Q = 16
++        biv150_prefill_tile = 64
++        launch_num_warps = 8
++        launch_num_stages = 1
 +"""
 +
 +_DECODE_TILE = """    TILE_SIZE_DECODE = _get_tile_size(
@@ -168,8 +161,6 @@ index 0000000..d14f8f8
 +    )
 +    if biv150_prefill_tile is not None:
 +        TILE_SIZE_PREFILL = biv150_prefill_tile
-+    if biv150_decode_tile is not None:
-+        TILE_SIZE_DECODE = biv150_decode_tile
 +"""
 +
 +
@@ -245,8 +236,8 @@ index 0000000..d14f8f8
 +        backend = importlib.import_module(_ATTENTION_BACKEND_MODULE)
 +        backend.unified_attention = attention.unified_attention
 +        logger.info(
-+            "Installed BI-V150 MiniCPM attention policies "
-+            "(prefill BM128/TILE64/8w/1s; decode BM16/TILE32/4w/1s)"
++            "Installed BI-V150 MiniCPM prefill attention policy "
++            "(BM128/TILE64/8w/1s)"
 +        )
 +    except Exception as exc:
 +        logger.warning("Failed to install BI-V150 attention policy: %s", exc)
@@ -607,23 +598,66 @@ index 0000000..99b84ac
 +    )
 +    return logits
 diff --git a/vllm_fl/platform.py b/vllm_fl/platform.py
-index 86bd70b..f8ad019 100644
+index 86bd70b..72c8180 100644
 --- a/vllm_fl/platform.py
 +++ b/vllm_fl/platform.py
-@@ -189,6 +189,17 @@ class PlatformFL(Platform):
+@@ -180,6 +180,48 @@ class PlatformFL(Platform):
+         parallel_config.worker_cls = "vllm_fl.worker.worker.WorkerFL"
+ 
+         cache_config = vllm_config.cache_config
++        iluvatar_max_batched_tokens = os.environ.get(
++            "VLLM_FL_ILUVATAR_MAX_NUM_BATCHED_TOKENS"
++        )
++        scheduler_config = vllm_config.scheduler_config
++        if (
++            scheduler_config
++            and cls.vendor_name == "iluvatar"
++            and iluvatar_max_batched_tokens is not None
++        ):
++            max_batched_tokens = int(iluvatar_max_batched_tokens)
++            if max_batched_tokens < (scheduler_config.max_num_seqs or 1):
++                raise ValueError(
++                    "VLLM_FL_ILUVATAR_MAX_NUM_BATCHED_TOKENS must be at least "
++                    "max_num_seqs"
++                )
++            scheduler_config.max_num_batched_tokens = max_batched_tokens
++            logger.info(
++                "Overriding max_num_batched_tokens to %d for Iluvatar.",
++                max_batched_tokens,
++            )
++        disable_prefix_cache = os.environ.get(
++            "VLLM_FL_ILUVATAR_DISABLE_PREFIX_CACHE", "0"
++        ).lower() in ("1", "true", "yes")
++        if cache_config and cls.vendor_name == "iluvatar" and disable_prefix_cache:
++            cache_config.enable_prefix_caching = False
++            logger.info("Disabled prefix caching for Iluvatar.")
++        iluvatar_block_size = os.environ.get("VLLM_FL_ILUVATAR_BLOCK_SIZE")
++        if (
++            cache_config
++            and cls.vendor_name == "iluvatar"
++            and iluvatar_block_size is not None
++        ):
++            block_size = int(iluvatar_block_size)
++            if block_size not in (16, 32, 64, 128):
++                raise ValueError(
++                    "VLLM_FL_ILUVATAR_BLOCK_SIZE must be one of 16, 32, 64, 128"
++                )
++            cache_config.block_size = block_size
++            logger.info(
++                "Overriding kv cache block size to %d for Iluvatar.",
++                block_size,
++            )
+         if cache_config and cache_config.block_size is None:
+             # Ascend NPU requires block_size to be a multiple of 128
+             # CUDA can use smaller block sizes like 16
+@@ -189,6 +231,11 @@ class PlatformFL(Platform):
              elif cls.device_type == "musa":
                  cache_config.block_size = 64
                  logger.info("Setting kv cache block size to 64 for MUSA.")
 +            elif cls.vendor_name == "iluvatar":
-+                block_size = int(os.environ.get("VLLM_FL_ILUVATAR_BLOCK_SIZE", "16"))
-+                if block_size not in (16, 32, 64, 128):
-+                    raise ValueError(
-+                        "VLLM_FL_ILUVATAR_BLOCK_SIZE must be one of 16, 32, 64, 128"
-+                    )
-+                cache_config.block_size = block_size
++                cache_config.block_size = 16
 +                logger.info(
-+                    "Setting kv cache block size to %d for Iluvatar.",
-+                    block_size,
++                    "Setting kv cache block size to 16 for Iluvatar.",
 +                )
              else:
                  cache_config.block_size = 16

@@ -66,9 +66,17 @@ The primary timestamp is UTC. The parenthesized value is Asia/Shanghai
   load at `4611.14 total tok/s` and `113.42 s` mean TTFT.
 - `07:06 UTC (15:06 +08:00)`: the exact organizer `math_500` Level 3 command
   passed at `96.2%` with prefill attention and deterministic top-p enabled.
-- `07:12 UTC (15:12 +08:00)`: final decode attention was added after a
-  `3.021 -> 1.955 ms` improvement at batch 30 and 16K KV. A second full
-  organizer accuracy run started to gate the final policy.
+- `08:53 UTC (16:53 +08:00)`: decode attention improved the isolated kernel
+  from `3.021` to `1.955 ms`, but the exact organizer accuracy run fell to
+  `83.8%` and average output length increased from about 3,345 to 10,996
+  tokens. Decode tuning was rejected and removed; the final candidate keeps the
+  96.2% prefill-attention plus deterministic top-p path.
+- `09:06 UTC (17:06 +08:00)`: two concurrent final smokes completed with zero
+  failures: 4K had 16/16 requests and 16K had 8/8.
+- Non-operator short screens rejected KV block size 64,
+  `max_num_batched_tokens=4096/8192`, and disabled prefix caching. The default
+  block 16 / batched-token 2048 / prefix-cache-on policy remained best across
+  the paired 4K and 16K short loads.
 
 ## Initial observations
 

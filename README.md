@@ -47,3 +47,19 @@ Raw device results are first written to
 `/workspace/experiments/minicpm-s2/` on the FlagOS instance and then summarized
 here. Large profiler traces should remain outside Git and be referenced by
 path, hash, and summary.
+
+## Current candidate
+
+The selected implementation is a source patch for the official
+`vllm-plugin-FL` branch:
+
+- [plugin patch](patches/vllm-plugin-FL-biv150-performance.patch)
+- [rejected A+B decode candidate](patches/candidates/vllm-plugin-FL-biv150-a-plus-b-rejected.patch)
+- [installation and reproduction notes](docs/candidate-usage.md)
+- [kernel and diagnostic analysis](analysis/2026-10-21-attention-top-p-candidates.md)
+
+It adds a shape-gated BI-V150 launch policy for generic Triton prefill
+attention, plus a deterministic bounded-histogram top-p kernel. The candidate
+passed the exact organizer `math_500 Level 3` command at 96.2%. Final official
+4K/16K repetitions were stopped by user direction in favor of bounded short
+smokes; the repository therefore does not claim a complete official score.
