@@ -542,3 +542,27 @@ Engine/worker217577同一key、serial1–4、命令回显/真实completed+succes
 
 
 202526后继唯一排序候选已CPU准备并双职责终审：protocol **0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86**，旧a1b字节保历史，worker31cc/事务616/c95f/footer未变；只对完整、ref1/unhash/numcached0、未bind/publish的实际req_to_blocks同list原地升序，重新derive dest统一ZERO/RESTORE/新payload，guard外旧路。1项CPU映射合同0.001s通过，去helper+单call精确逆回a1b；研究见analysis/2026-10-22-kv-private-page-order.md。旧1044页集合升序66run只是CPU推导，actual worker31cc ZERO同样按plan.runs合并，因此ZERO/RESTORE/回读对旧集合均可43848→2772调用；初稿误称ZERO固定逐页已按root源反证纠正，代码和原件未变。未来free归还物理序会变化；新服务尚待root唯一门实际ordered marker/42byteeq/runner及原消费，不混454早退/截断，不预报收益。registry95/queue72均LF。
+
+## 204159目的页排序真实激活：1044→66run，协议诊断通过
+
+上一段是候选交付时快照；新 `20261021T204159Z-kv-page-order-context16k-long` 已20:47:11.313241Z exit0，包SHA **588886979857dc1eab16dcfa8ed8b8a76751741f3b21825cfa62fa8219872336**。独立本地验416源/原SERVER/bc51/seed/CPU6/BI-V15032768MiB、DB实体前后518表19337行三SHA均同d935/a5ca/a180、源post未变及20:47:45.919662Z68MiB0双栈闭无GPU进程。原32成功0失败、524288in32768out、KV521936/preempt0→1；227.54834548803046s/2448.0775670122475total/TTFT62799.9383899587ms仅VERIFY诊断绝对值，**不与202526增长DB诊断比收益**。
+
+Engine/worker219639完整12事件同key/serial1–4：SAVE16704tokens/718405632B后原free，暂态保HOST454skip，PRIVATE_PAGES_ORDERED实际1044页同set/对象/list从1044run变66，再ZERO/RESTORE；RPC目的页ID全量独立重算升序且唯一、相邻66run。ZERO/RESTORE/诊断回读各2772调用、42层718405632B全byte相等，SAVE仍1008copy；随后publish/drop/runner六项检查全true、原output处理8token。saved/restored/published各1、rollback0，host释放成功。现在66/2772是本run设备原件事实，非仅旧集合推导；但没有不回读性能/完整模型accuracy，future free/LRU顺序与单victim覆盖限制不变。原shutdown错误保留。详 `analysis/source/kv-transaction/204159-independent-review.json`、更新的私有页研究；registry96数据×16/queue72均LF。
+
+容量必要下界早退下一方向只完成源码研究 `analysis/2026-10-22-kv-restore-capacity-fast-reject.md`，未改0e/runtime/测试或设备。FullAttention no-owned下F<P能安全判失败，水位仅取源保证非负、不猜实际值；关键反例是延后digest可能延迟失效host释放，故未来最小快路还须closed-input/nonresumable/Request源身份与长度失效等守卫，其他走旧路。454总skip无逐次free/hash计数，不能说全部可省CPU或已证收益，不混本次页排序原件。
+
+## 205219不回读stable基点完成；67e4容量候选仅CPU准备
+
+`20261021T205219Z-kv-pair-stable-context16k-long` 完整本地，包 **3ac6fc894e72d8ba4d0f96aa5e48c25d07e442f23d909f7d2f121c8e902700d3**。独立410源/stable080656/e155/bc51/原SERVER/seed/CPU6/32GiB、0协议marker、DB前后51819337三SHA同d935/a5ca/a180实体复算；32-0同524288in32768out，220.40704781701788s/2527.3964944282015total/TTFT62508.42458468105ms/KV521936/preempt0→1，VERIFY回读未启。20:57:56.258707Z410源post无变/68MiB0/9031双栈closed无GPU进程，退出错误分类保留，审计 `analysis/source/kv-transaction/205219-independent-review.json`。wrapper11917检查DB起点的候选205819仍在途；root已实际观察candidate KV521840与base521936失配，不先报gain/严格容量matched，不改参数凑容量。
+
+root后来接受容量早退最小实现，覆盖上一段“只研究”状态，但**只在新文件** `patches/framework/candidates/biv150_kv_capacity_protocol.py` 67e4，不动canonical0e或在途pair。Request06b1实际类/源码及原方法file守卫仅控制快路，失败走旧协议；nonresumable/no streaming、长度即时失效、noowned/cached无或0/R整页maxlen内/F<P才defer+fast_rejects，F=P及其它原tokens/digest/history/allocator保持。唯一CPU合同e9c/1test0.021s过，去新增完整bytes逆回0e，framework/hardware均终审，无新设备或性能证据。具体反例/验证在早退研究和capacity-cpu-check.json。
+
+独立新builder `prepare_kv_capacity_source.py` a79b69d8… / launcher `launch_kv_capacity.sh` 0ae8ced5… 已按root请求准备并送最终包装审。新asset容量文件67e4只映射新隔离source canonical协议名，base080656/init791c/worker31cc/tx616/c95f不变，新kv-capacity标签VERIFY1；compile+heredoc/diff通过，旧4c8/8d7完全不变，没有整copy/旧suite/设备，尚未启动。registry97数据×16/queue74均LF，不将0e已测迁移为67e4结果。
+
+## 205819不回读候选完成：KV+DB双失配，保留结果但不报gain
+
+`20261021T205819Z-kv-pair-page-order-context16k-long` 于21:03:25.435830Z exit0，包 **5e0873334997c59899d9dad5653d80529729eb508b8ce7c93e74587311b86e82**。独立416源/0e、原SERVER/bc51/seed/packages/installed-source与基点同，CPU6/物理32768MiB；32-0同524288in32768out，220.92108358303085s/2521.515787290788total/TTFT62648.45590684854ms。候选KV521840，基点521936；DB before51819337三SHA确等baseafter，但候选after51919340，实体 `89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605` /schema `29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078` /logical `71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29` 全实体复算。**容量及DB双失配，不报吞吐收益或严格matched，不通过补stable/改参数凑容量抹除这轮状态。** 原始绝对数值和不利可比性均保留。
+
+真实链仍完整，但本轮不同于204159：Engine222629，R16688/1043页/717717504B，SAVE966copy，首defer free1039/prefix1043/request_tokens16704/reserveTrue/pending0/placeholders0，final skips462；PRIVATE1043→66run，ZERO/RESTORE各2772调用，completed/successful；publish/drop/runner六checks和原output16token消费通过。VERIFY0，extra_pinned0/diagnostic_verify_requested=False，**没有verification/readback字段，不能套用前诊断全byte回读或8token/1044页**。saved/restored/published各1、rollback0、preempt0→1。21:03:56.715618Z416源post不变、68MiB0/9031双栈closed无GPU进程，controller为Z；本run未命中ERROR，原shutdown日志保留，与205219的ERROR分开记录。完整审计 `analysis/source/kv-transaction/205819-independent-review.json`；baseline派生review已更新pair完成双失配状态，未改raw。
+
+容量67e4/e9c唯一CPU合同及a79b/0ae包装已两职责/root终审接受，**保持独立冻结、不上传执行**，没有迁移本轮0e证据。registry98数据×16/queue75均LF，研究/中文交接齐。按root一致归档要求，本批收尾后暂停文件写入，goal仍持续；解锁后再按root后继顺序推进，不自行设备/推送。

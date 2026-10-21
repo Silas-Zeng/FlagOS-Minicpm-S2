@@ -88,3 +88,13 @@ root新builder **ac18b84dfc2e9435c6984f05ddc084d24458d2b158003df29ec9fedc641b642
 20:31:52.483652Z postflight为68MiB/0%、9031双栈关闭、无GPU进程、416 live无失败；controller217396仅Z/PPid1。该run原server.log无ERROR/EngineDeadError检索命中，不改变首轮确有shutdown错误的记录。结论仅为**一次实际抢占的恢复/全字节回读/状态围栏和原consumer通过**，不继承103/105、不证明所有事务情形或整模型准确率，不默认集成。
 
 后继只由systems负责私有目的页逻辑映射升序候选，worker31cc/txn616保持冻结。排序必须在私有分配后、bind/ZERO/RESTORE/publish之前改变同一真实owned Block list，再让copy与payload共同使用新映射；只排序RPC页号会错。未来free顺序可改变，不能冒称后续allocator轨迹完全不变。
+
+## 204159私有目的页排序门：2772次提交与全字节回读已通过
+
+`experiments/framework/20261021T204159Z-kv-page-order-context16k-long{,-control}` 原件封存后，本owner只运行已准备的 [`review_private_order_protocol.py`](source/kv-worker/review_private_order_protocol.py) **6ef1ee60a75584416c98fbdc2f2110f26967398d12ecda4b8a3c733fe05abf3b** 一次，2.6s exit0；结果 [`private-order-protocol-review.json`](source/kv-worker/private-order-protocol-review.json) **2a3eee0e8b1c498d53c56e6341b244cadcfca83117e0ae3b84f44ecddf4c4bb0**。416 source逐SHA、0e2115/31cc/616/c95/791c/e155、4c8 builder/8d7 launcher、原bc51/服务参数/seed/VERIFY1与live/post均过；source清单SHA `98a72844e77eee9e07d6c70050003bd121bb61404c507189dd663a320651f240`，包装manifest SHA `3b1343aba960abe70b59bc2979a4b7a16a5defac5d8506161852614f862cc5a7`。
+
+实际worker219639保存16704token/1044页/718405632B，SAVE仍24段/1008calls。`PRIVATE_PAGES_ORDERED`记录真实owned list/对象/页集合守恒及1044→66段；从ZERO/RESTORE相同且升序的目的页列表独立复算确为66段。ZERO、RESTORE与诊断回读各 **2772 calls**，42层718405632B整字节回读通过；随后runner六项全true、原update消费8个scheduled token、host释放、preempt0→1。完整old目的序未另输出，oldrun和对象守恒仍依赖精确pin helper的检查/日志，不伪称raw可独立重建原1044页次序。
+
+32/0、524288in/32768out、CPU6/32GiB、KV521936；**227.54834548803046s/2448.0775670122475总tok/s/TTFT62799.9383899587ms仅诊断值**。本轮DB518表19337行的实体/schema/logical三SHA均前后不变，分别为d9351095…/a5ca71a5…/a180ecc5…，已重算完整值见JSON。不能据诊断回读开销和前轮DB变化不同，直接宣称比202526快或已获稳定E2E收益。
+
+20:47:11.313241Z exit0，20:47:45.919662Z post为68MiB/0%、9031双栈闭、无GPU、416live无失败。原server shutdown有AsyncLLM/EngineDeadError行，完整保留，不能写全程无ERROR或改exit0。该门解除单次真实页重映射的字节/状态/consumer缺口，不替代整模型accuracy；worker31cc/txn616未改。下一性能阶段使用独立启动器 [`launch_kv_pair_screen.py`](../scripts/remote/launch_kv_pair_screen.py) 关闭VERIFY，并要求共同DB/容量/参数及独立结果验收。

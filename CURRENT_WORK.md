@@ -1,5 +1,39 @@
 # 当前工作与 API 切换交接
 
+## 本阶段独立审计收口（2026-10-21 21:10 UTC）
+
+- 205219/205819完整审计已完成，结论为KV与DB双失配，不能归因吞吐收益；205819本run未命中ERROR行，原shutdown日志保留，与205219有ERROR区别。新增DB实际为新index表1行、既有benchmark表2→4行，共3行。registry98数据行×16列、queue75项，三角色中文交接均收口。
+- 当前无GPU任务；三agent仅为一致归档暂时停写，持续优化goal仍active。下一操作：先读[本阶段交接](analysis/2026-10-22-kv-framework-milestone.md)，按冻结67e4/a79b/0ae上传新asset/新包装并执行唯一capacity VERIFY1门；须实际fast_rejects>0、完整恢复/回读/原消费者，未命中或失败也保留。其后基于最新DB/KV再安排最短VERIFY0对照，不沿用失配pair声称收益。
+- 两本地共享代码库工作树干净：plugin HEAD37661d2d2cf811ef8093436fa17c424dfd63b25d、FlagGems HEAD6ddb4c4cd12790cfc7b1203bdca2ed7a131f7dd6；本阶段无远端代码推送或PR。实验数据、研究及独立候选正在制作新的专用实验库检查点和完整离线包，完成身份将另附，旧ZIP不代表最新。
+
+## VERIFY0候选完成，双失配原件保存中（2026-10-21 21:06 UTC）
+
+- 205819页序候选已21:03:25.435830Z exit0，32成功/0失败、524288输入/32768输出，220.921083583秒、2521.515787TPS、TTFT62648.455907ms；416源/live/control、后态68MiB/0%、无GPU进程及9031双栈关闭通过。当前无GPU作业。全原件已本地，tgz `5e0873334997c59899d9dad5653d80529729eb508b8ce7c93e74587311b86e82`。
+- 本轮真实R16688/1043页/717717504B，SAVE966calls，排序1043→66，ZERO/RESTORE各2772calls；462次defer后恢复发布，DROP释放host，runner六项全真、原输出消费16tokens。VERIFY0未执行回读，不能把204159的全字节证明说成本轮又做了一次，也不沿用其R16704/1044页/8tokens。
+- KV521840与基线521936失配；DB又从518表19337行变为519表19340行，after physical `89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605`、schema `29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078`、logical `71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29`。两重条件变化使本pair不可归因；不报告吞吐收益，不做新accuracy/默认集成。
+- 原计划补一轮stable是在读到DB变化之前作出；现在单补无法补救旧候选的DB起点，因此先封存阶段，把必要新基线留给后继统一起点。下一步优先独立capacity67e4真实激活/字节/消费者门，再以实际最新DB/KV安排最短不回读对照；不无限追匹配容量、不调比赛参数。
+- capacity builder `a79b69d81115dd17ba77e09f5de690cda6a9cb5288f0c200f1868ee2f5d86eee`、launcher `0ae8ced5c97f2460a97ac046eb808d47aa84915e80867e12c219d3dad457a32b` 已root/hardware最终审，输入新asset映到隔离canonical名字，原参数/VERIFY1；尚未上传或上卡。三agent正在完成本轮独立审计后临时停写供统一发布/ZIP；持续优化goal不结束。
+
+## 配对容量失配，后验限制已明确（2026-10-21 21:03 UTC）
+
+- 205819候选仍在途，实际启动KV为521840，比205219基线521936少96 tokens/6 blocks（全42层约3.94MiB）。服务参数、DB起点和物理32GiB相同仍不足以称有效性能pair。204159同source的VERIFY1诊断为521936；历史也有两种容量，但当前没有直接显存profile分项证明原因，不归因为新协议/VERIFY/并发或冷编译。
+- 当前正常完成，原件全保；不改util、KV显式大小或比赛参数凑容量。候选性能结果尚未读取时，预先决定最多补一轮同11917/原参数stable复核，保留全部测量。只有实际DB/KV/CPU/参数匹配的对照才评估描述性差异；不无限重跑直到获得想要的容量或成绩。
+- 新capacity独立候选67e4c07566ee3e52f84d6a96a494b8976d858420dadd5f833e66c3291e32fb73已获framework/hardware定向审阅，唯一CPU合同1test/0.021秒通过、精确逆回0e证明。当前仅本地；systems准备独立source builder/VERIFY1包装，不修改当前0e和旧包装，尚无该候选GPU证据。
+
+## 配对基线完成，KV候选在途（2026-10-21 20:58 UTC）
+
+- `20261021T205219Z-kv-pair-stable-context16k-long` 已20:57:23.397901Z exit0，32成功/0失败、524288输入/32768输出，220.407047817秒、2527.396494TPS、TTFT62508.424585ms。410源/live/control一致、KV521936、DB518表19337行三SHA前后同d935/a5ca/a180，后态68MiB/0%、无GPU进程且9031双栈关闭。全原件已本地，tgz `3ac6fc894e72d8ba4d0f96aa5e48c25d07e442f23d909f7d2f121c8e902700d3`；framework独立验收中。
+- 11917启动器重算baselinebefore==after==candidatebefore后，唯一GPU启动 `20261021T205819Z-kv-pair-page-order-context16k-long`，runner PID `222435`，复用204159受测source416/protocol0e2115，其余冻结；VERIFY=0、原bc51/服务/contextlong/seed721201。候选尚无结果，不与VERIFY1诊断时间比较。
+- 已完成3b8d1fc检查点在20:54:52.575314Z发布到私有实验库，远端main `f0fcb3ca9642d3847f8b02115b856da3068aa351`，tree `8c3eb28c7e4987fee73fc24e142f441ec90633a9`，12,300项全核验。边界见 `docs/github-kv-page-order-publication-20261022.json`；本轮配对原件、后续agent记录/新候选和该回执仍需下一检查点。两个代码库无push/PR。
+- systems获授权仅在新的 `patches/framework/candidates/biv150_kv_capacity_protocol.py` 准备容量必要条件早退；framework/hardware互审。当前0e、worker31cc、tx616、copyc95f和两个配对包装不动，新候选不能继承设备验证。省ZERO及跨层布局仍只研究。
+
+## 关闭诊断回读的配对基线已上卡（2026-10-21 20:52 UTC）
+
+- 唯一GPU作业 `20261021T205219Z-kv-pair-stable-context16k-long`，runner PID `221074`，冻结080656 stable源码410份；原bc51/context-long/seed721201及服务参数，VERIFY=0。尚无本轮结果。基线结束并封存后，只有baseline DBbefore==after且candidate DBbefore三SHA全部相同时才启动候选；实际KV/CPU/命中和candidate DBafter还需后验。
+- 新独立包装 `scripts/remote/launch_kv_pair_screen.py` SHA `11917a047c3c3f5fadebca3898b5720224e075e3ca93bb610c258a4ef70776ad` 已root/hardware审阅，固定080656与204159 source及完整清单，未改bc51、0e2115或旧包装。没有添加无关CPU suite。
+- 204159独立整体验收与页几何复核通过。其shutdown有AsyncLLM/EngineDeadError日志，原件保留；32/0、exit0和空闲后态不等于无告警。页排序前完整页表未另出，排序前1044段/对象守恒依赖固定helper断言和marker，排序后66段由实际ZERO/RESTORE完整目的表独立复算。
+- 完成原件与阶段说明已本地提交 `3b8d1fc62cabbf7310a041edf71b9af1c3a9ed94`，tree `8c3eb28c7e4987fee73fc24e142f441ec90633a9`，12,300项，正在发布实验库；随后配对包装、部分agent后续记录及本在途条目仍待后继检查点。raw日志的原始空白/换行不为git whitespace检查而改写。
+
 ## 私有恢复页映射已通过真实恢复门（2026-10-21 20:49 UTC）
 
 - `20261021T204159Z-kv-page-order-context16k-long` 已于20:47:11.313241Z exit0，32成功/0失败，524288输入/32768输出，KV521936。416份source/live/control一致；退出后68MiB/0%、无GPU进程、9031双栈关闭。当前无GPU作业，root仍为唯一设备owner。

@@ -48,3 +48,13 @@ root授权systems仅实现**分配后、未绑定/未发布的私有目的页逻
 systems最终protocol **0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86** 已实核，旧a1b副本SHA吻合。实际diff仅新增 `_order_private_pages` 与owned校验后/bind前一条调用；上述list身份/numcached0/生命周期/完整唯一对象集和ID/ref/hash守卫均实现，原地sort后重导destination，guard外False继续旧unsorted路径。history、454次暂态路径、worker31cc/transaction616/copyc95和init footer不变。未见进入新隔离最短恢复诊断的阻断，已回root/作者。
 
 唯一CPU合同 `tests/test_biv150_kv_private_order.py` **29deff8d51fcf6f7f7811aacc84a3ac6f9d431c3e08879a80b39206d178522b5** 与 `analysis/source/kv-transaction/private-order-cpu-check.json` 已只读全文核对。作者实际1test/0.001s通过，本owner未重跑；真实CPU Transaction接受新映射、host逻辑行与新表对应、旧ID副本/history/对象ID对应不变，错alias/cached/shared/hash/pending/bound/published/duplicate均回旧序。去helper及单call精确逆回a1b的记录保留。这个4页构造不证明真实1044页合为66段，也不证明GPU完成。新run仍须实际marker、全42层回读、runner整表和原consumer，之后才讨论性能/accuracy。
+
+## 独立容量必要下界候选67e4最终只读审阅
+
+仅审 `patches/framework/candidates/biv150_kv_capacity_protocol.py` **67e4c07566ee3e52f84d6a96a494b8976d858420dadd5f833e66c3291e32fb73** 与canonical0e的最小diff，没有修改作者或受测代码、没有执行测试/框架/GPU。实际仅sys import、可选Request源/类缓存、两helper、原_try_restore复制/hash前的调用和fast_rejects计数。须将文件安装映射到**新隔离** `vllm_fl/patches/biv150_kv_protocol.py`，不是直接以candidates子包import（相对依赖属于原patch package）。当前0e/31cc/616/c95/footer与pairwrapper未变。
+
+未发现进入新隔离最短诊断的框架/生命周期阻断。Request额外guard可选且失败只禁快捷路径，不使旧协议全局no-op：exact06b1文件、真实Request类/原init/append/num_tokens的filename与unwrap；仅resumableFalse、streaming_queueNone。actual06b1普通append只追加；df780 streaming会截断，故后者必须保旧digest。原对象/epoch/status/finished/pending/placeholder先检查，长度<=R即使容量不足仍按失效DROP；普通append有效前缀在F<P时不需重复hash，真正分配前仍走完整digest。
+
+必要下界限定原scope的单FullAttention/无skip、没有owned/cached为None或整型0、R16整页且不超maxlen。**F<P**才fast defer并保HOST继续原FCFS；**F==P**及F>P只走旧完整copy/hash/history/allocator，保水位/full-sequence-fit等真实约束。没有宣称F>=P可准入，没有提前DROP、park、改变future/FIFO或普通output消费。
+
+作者唯一合同 `tests/test_biv150_kv_capacity_protocol.py` **e9c57108e0e0c859ea512a6be8b851cfee78a3a8b48e0e0c5a6da43681379730** 与 `analysis/source/kv-transaction/capacity-cpu-check.json` 已全文读/核SHA：采用actual06b1 Request/Status AST定义而不import框架/运行init，F=P−1不触token迭代/hash/history/allocator、输出0持host/原普通work才drop，F=P/owned/cached/streaming/queuedinput/overmax/源错缺失原路，身份/取消/epoch/长度即时释放。作者1test0.021s通过，本owner未重跑。CPU证明不是actual fast_rejects选中或收益；须后继独立真实门观察该计数及完整恢复/consumer，不混205219/205819现pair。

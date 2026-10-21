@@ -1,5 +1,17 @@
 # 有界单victim KV保存/恢复协议：实际接口与调用顺序
 
+## 本批最新：不回读0e配对双失配；67e4独立冻结，暂停写入归档
+
+205219 stable KV521936/DB51819337不变，对205819 0e KV521840/DB51819337→51919340；同原参数/物理32GiB/CPU6/初始DB并不足以严格归因，不报gain。205819实际R16688/1043页/717717504B，PRIVATE1043→66、ZERO/RESTORE各2772、runner6checks和原16token消费通过；VERIFY0无回读，不能套204159的R16704/1044页/8token和全byte诊断。两份本地审计/registry98×16/queue75和阶段报告齐，原件不改。
+
+下一capacity67e4只在candidates新文件，当前canonical仍0e；唯一CPU合同/Request类源guard及新buildera79b/launcher0ae已两职责/root终审接受，冻结不上传执行。study/cpu-check/wrapper-check存全部精确pin和反例，没有该候选新设备结果。按root要求本批暂停文件写入以一致归档，持续goal未取消，待明确解锁后继续。
+
+## 最新实测：204159私有页排序链路通过
+
+`20261021T204159Z-kv-page-order-context16k-long` 于20:47:11.313241Z exit0，0e2115/31cc/616/c95f冻结。12事件实际PRIVATE1044→66run；同key正确的ZERO/RESTORE及42层718405632B回读各2772调用、byteequal true，publish/drop/runner六检查与原output8token消费通过。独立416源、32-0同524288in32768out、CPU6/32768MiB/KV521936、DB前后51819337三SHA同d935/a5ca/a180实体复算及20:47:45.919662Z68MiB0/双栈closed通过。完整原件审计在 `analysis/source/kv-transaction/204159-independent-review.json`，细节见私有页研究顶部。
+
+227.54834548803046s/2448.0775670122475total是VERIFY1诊断绝对值，不能与202526增长DB轮计算收益或冒充完整accuracy。容量F<P早退只写中文研究 `analysis/2026-10-22-kv-restore-capacity-fast-reject.md`，没有改受测source或运行新门；重点边界为no-owned FullAttention、原FCFS/allocator保留，以及digest延迟可能改变host失效释放时机，不能只讲容量数学忽略生命周期。registry96×16/queue72均LF。
+
 ## 最新实测：202526单victim恢复链路通过，未评估性能
 
 实际run目录 `experiments/framework/20261021T202526Z-kv-retain-context16k-long{,-control}`，20:30:51.274086Z exit0，a1b691/事务616/worker31cc/e155冻结，原SERVER/bc51/16K1024out/32req/c64/seed721201/VERIFY1。独立416源SHA、CPU6/32GiB、DB实体复算和后态已保存 `analysis/source/kv-transaction/202526-independent-review.json`；raw32成功0失败、524288in32768out、240.92993535706773s/KV521936/preempt0→1。下面200957首门及“未恢复”是历史反例，不能覆盖本轮真实恢复，也不能用新原因回填旧run。

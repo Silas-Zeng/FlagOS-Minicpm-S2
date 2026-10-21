@@ -1,3 +1,41 @@
+## 本批最终：205819已审完，98×16/queue75；暂停文件写入供一致归档
+
+root明确要求完成本批审计/文档/交接后暂停文件写入，等待解除；**goal仍持续，不是取消或暂停goal**。本agent已完成本节全部记录，从最终回执后不再写文件，不SSH/GPU/上传执行/代码库推送或新增任务。root负责阶段私有实验库发布/ZIP，新候选冻结。
+
+205819实际目录experiments/framework/20261021T205819Z-kv-pair-page-order-context16k-long{,-control}，21:03:25.435830Z exit0，包5e0873334997c59899d9dad5653d80529729eb508b8ce7c93e74587311b86e82。独立416源/0e/e155/bc51/原SERVER/seed/packages/installed-source与205219同、CPU6/物理32768MiB、32成功0失败/524288in32768out、220.92108358303085s/2521.515787290788total/TTFT62648.45590684854ms。**KV521840 vs base521936差96，DBbefore51819337三SHA等baseafter，但candidateafter51919340，KV+DB双失配，不报gain/严格matched**；不补stable或改参数消除历史失配。
+
+candidate after三SHA实体复算physical89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605/schema29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078/logical71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29。21:03:56.715618Z416源post无变、68MiB0%、9031双栈closed/无GPU进程，controller为Z；本run未命中ERROR，但原shutdown日志保留，与205219存在ERROR分别记录。baseline独立review的pending状态已更新为双失配完成，raw不改；205819-independent-review.json全链/DB/源/后态齐。
+
+真实本轮链不同于204159：Engine222629，R16688/1043页/717717504B，SAVE966copy→原free→首allocationNone free1039/P1043/known16704/reserveTrue/pending0/placeholder0→462skip保HOST→PRIVATE1043→66run→ZERO/RESTORE各2772真正ACK→publish/drop→runner六checks全true→原output16tokens消费。serial1–4/key回显及host释放核实。VERIFY0/extra_pinned0/diagnostic_requestedFalse，没有verification/readback字段，不假称本轮全byte回读，也不套1044页/8token。前次204159诊断回读证据仍独立保留，当前不回读并未带来可归因性能结论。
+
+容量独立候选**67e4c07566ee3e52f84d6a96a494b8976d858420dadd5f833e66c3291e32fb73**、唯一test e9c57108e0e0c859ea512a6be8b851cfee78a3a8b48e0e0c5a6da43681379730（1test0.021s）、new builder **a79b69d81115dd17ba77e09f5de690cda6a9cb5288f0c200f1868ee2f5d86eee**、launcher **0ae8ced5c97f2460a97ac046eb808d47aa84915e80867e12c219d3dad457a32b**，framework/hardware/runtime终审及root全文diff接受齐，最后无修改请求。新asset只映新隔离source canonical名，旧canonical0e/worker31cc/tx616/c95f/旧4c8/8d7/initfooter完全未变；包装仅compile/heredoc/diff，没有整copy/suite/shell/GPU。**冻结不上传执行，不能迁移0e实测为67e4激活/性能/accuracy证据**。cpu-check/wrapper-check/早退研究及前缀失效生命周期反例全部存盘。
+
+最终改动范围：独立capacity候选/唯一CPU合同、独立prepare/launch新文件、旧0e字节副本、capacity两JSON、205219/205819独立审计、owned registry98数据行×16/queue75（均LF）、中文早退/私有页/协议/阶段报告和本handoff。原官方/稳定成绩/所有raw与旧源、root README/CURRENT、两个代码库均未改/推送。下一API先读本节和root最新CURRENT，待解除写锁再按root后继任务继续，不重新开始或把历史“在途/待审”当现状。
+
+## 最新交付：独立capacity67e4及新a79b/0ae8包装，未碰0e在途pair
+
+root读早退研究后授权最小独立实现，canonical `patches/framework/biv150_kv_protocol.py` 始终0e2115不改。新 `patches/framework/candidates/biv150_kv_capacity_protocol.py` **67e4c07566ee3e52f84d6a96a494b8976d858420dadd5f833e66c3291e32fb73**，安装仅映回新隔离source的canonical模块名，不直接candidates子包import。旧0e精确保analysis/source/kv-transaction/biv150_kv_protocol.0e2115.py；worker31cc/tx616/c95f/initfooter及旧4c8/8d7包装不变。
+
+只增stdlib sys/可选Request类缓存、两个helper、hash前1call、fast_rejects计数，完整逆回0e。Request从已加载sys.modules取真实类，核06b1完整源/模块类名/类identity及原init/append/numtokens无wrapper+原filename，异常或缺源仅禁快路、不fatal或import框架。严格nonresumable/streamingNone，cheap长度<=R先DROP；noowned/cached无或int0/R16且maxlen内/F<P才保HOSTdefer，F=P/guard外旧完整路。原取消/身份/epoch/pending等先行，原FCFS和真正分配前hash/allocator保持；不猜水位、不放宽准入。
+
+唯一新test e9c57108e0e0c859ea512a6be8b851cfee78a3a8b48e0e0c5a6da43681379730、1test0.021s通过，actual Request/Status AST（无torch/框架依赖import、未跑init）使源guard实际执行；F<P不触tokens/hash/history/allocator，F=P及owned/cached/streaming/输入queue/超max/缺源或坏源走旧链，cancel/identity/epoch/length即时释放，原output0持HOST/ordinary plan才DROP。capacity-cpu-check.json保存SHA/命令/逆bytes；framework/hardware最终只读审均无阻断，没重跑旧suite/GPU。**67e4没有服务激活/性能/accuracy结果，不能继承0e成绩**。
+
+按root新授权新增scripts/remote/prepare_kv_capacity_source.py **a79b69d81115dd17ba77e09f5de690cda6a9cb5288f0c200f1868ee2f5d86eee**、launch_kv_capacity.sh **0ae8ced5c97f2460a97ac046eb808d47aa84915e80867e12c219d3dad457a32b**。只将ROOT/scripts/biv150_kv_capacity_protocol.py输入67e4映射新source的canonical协议名，manifest记inputmap；base080656/init791c/e155/31cc/616/c95f相同。新kv-capacity标签VERIFY1、原bc51 command逐字不变，purpose需fast_rejects>0及完整回读/消费，前置/DB/source清理旧路。capacity-wrapper-check.json只compile Python/heredoc/静态pin+diff，没执行shell/整copy/suite/设备；已送hardware/root最后包装审，目前无新runtime修改请求，待回执后冻结全pins。
+
+root当前GPU仍唯一205819页序性能candidate runner222435/VERIFY0，**不是67e4**。其基点205219已本地独立核410source/DB51819337三SHA不变/CPU6/32GiB/原raw32-0、220.40704781701788s/2527.3964944282015total/TTFT62508.42458468105ms/KV521936/preempt0→1；20:57:56.258707Z idle/sourcepost过，205219-independent-review.json已存。root实查205819 KV521840失配，无完整candidate原件前不结论，后验不得称严格同容量gain、不改参数凑容量。registry97数据×16/queue74均LF；阶段报告/早退研究/本hand已更新，主README/CURRENT/代码库推送均未碰。后继设备顺序仅root决定。
+
+## 最新：204159排序恢复已实测通过；容量早退仅中文研究，未改代码
+
+root最新后继设备回执：唯一 `205219-kv-pair-stable-context16k-long` runner221074、stable080656、VERIFY0、原bc51/seed，当前仅基线已启，candidate尚未启；wrapper11917要求baseline DB前后不变且candidate起点相同，未齐原件不判断性能，不增已完成registry。root已保存本地3b8d1fc并发布私有实验库，新文档可能归下一检查点，两个代码库不push。
+
+2026-10-22，systems_innovation全程本地CPU，无SSH/GPU；root设备/发布owner。实际 `experiments/framework/20261021T204159Z-kv-page-order-context16k-long{,-control}` 20:47:11.313241Z exit0，包588886979857dc1eab16dcfa8ed8b8a76751741f3b21825cfa62fa8219872336。独立本地416source SHA/0e2115与31cc/616/c95f/原SERVER-bc51/seed/CPU6/32768MiB、DBbeforeafter518表19337行三SHA同d9351095…/a5ca71a5…/a180ecc5…实体复算、post源无变通过。原32成功0失败/524288in32768out，227.54834548803046s/2448.0775670122475total/TTFT62799.9383899587ms，KV521936/preempt0→1，仅VERIFY1诊断绝对值，不与202526增长DB轮算收益。
+
+Engine/worker219639真实12事件完整：SAVE R16704/718405632B1008copy→原free→454skip持HOST→PRIVATE同1044页集合/对象/实际list从1044run变66→ZERO/RESTORE→42层全718405632B回读相等→publish/drop→runner六checks全true→原output8token消费。独立按完整RPC目的页ID重算升序/唯一/66run，ZERO/RESTORE/verify各2772调用，serial1–4命令回显/真正completed+successful一致、host最终释放，rollback0。现在66run/2772是此run实际原件，非旧集合推导；模型accuracy/不回读性能/取消错误多抢占仍未设备全面覆盖，future free/LRU次序可能变。20:47:45.919662Z68MiB0/双栈9031closed无GPU进程，controller Z及shutdown错误原样分类。机器审计analysis/source/kv-transaction/204159-independent-review.json保存；中文私有页研究/协议研究/framework-experiments/registry96数据×16/queue72均LF已更新，历史原件和行不覆盖。
+
+root在页排序进行中授权的下一CPU研究已落analysis/2026-10-22-kv-restore-capacity-fast-reject.md，**未实现/未测试/未设备，0e冻结SHA未改**。精确切口在原身份/pending等检查后、listtokens/digest/historytuple之前。FullAttention、R整页且<=maxlen、computed0/no-owned/无local输入下F<R16必None；remove_skipped继承0无free副作用，watermark源assert非负但不猜实际值，F>=P仍须完整digest/actualallocator/原FCFS。已有owned/window/local/cap边界走旧路，不允许早退冒充准入。
+
+关键反例已写：把digest延后会延迟同对象prefix失效发现、延迟host slot释放。actual Request06b1普通append只追加，df7801179 streaming会del旧token；未来最小快捷路径必须Request源/实际类身份、nonresumable+streaming_queueNone，cheap长度不足仍先DROP，identity/attempt/finish/cancel先行，其它请求走旧路；现在该guard实际字段没有单独观测，不能新guard使整个协议静默no-op。454总skip仅首free/reason有证，454*16704=7583616只是可能CPU迭代上界，不是次数/耗时测量，不能声称454全可省或节流已证。未来若root选实现只1个定向CPU合同/命中计数及原恢复链路，不重COPY/DTO。本文以下“待设备/在途”均为历史，以本节真实完成状态为准。
+
 ## 最新交付：私有目的Block排序0e2115冻结，待root独立新设备门
 
 root授权的唯一新候选已实现，不混454次CPU早退/prefix截断。canonical `patches/framework/biv150_kv_protocol.py` SHA **0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86**；旧a1b全字节在analysis/source/kv-transaction/biv150_kv_protocol.a1b691.py。只有新_order_private_pages helper和owned校验后/bind前1call，完整去除精确逆回a1b；worker31cc/txn616/copyc95f/initfooter/defer/普通FCFS都不变，定稿后未再改runtime。

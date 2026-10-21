@@ -1,5 +1,13 @@
 # 私有KV恢复页排序：只改分配后、发布前的真实映射
 
+## 204159真实服务诊断完成
+
+`experiments/framework/20261021T204159Z-kv-page-order-context16k-long{,-control}` 于20:47:11.313241Z exit0，包 **588886979857dc1eab16dcfa8ed8b8a76751741f3b21825cfa62fa8219872336**。独立416源SHA/0e2115及冻结worker31cc/事务616/c95f、原SERVER/bc51/seed、CPU6/物理32768MiB、原raw32-0同524288in32768out与后态通过。完整12事件见 `analysis/source/kv-transaction/204159-independent-review.json`，没有重新上卡或重复CPU门。
+
+Engine/worker219639真实PRIVATE_PAGES_ORDERED：1044页、同页集合/Block对象/list、host逻辑序不变，run1044→66；完整ZERO/RESTORE命令页ID实际升序、唯一1044，独立相邻检查重算66run，ZERO/RESTORE/诊断回读均42×66=2772次，718405632B全42层byteequal。SAVE仍1008copy；saved/restored/published各1，restore_skips454、rollback0。原FIFO后恢复、publish/drop、runner六项状态及原output8token消费均通过。这里66run/2772现在是**本run实测**，不再仅旧集合推导。
+
+DB前后518表19337行实体/schema/逻辑三SHA一致d9351095…/a5ca71a5…/a180ecc5…，KV521936/preempt0→1。20:47:45.919662Z source416无变化、68MiB0%、双栈9031闭/无GPU进程，controller Z和shutdown错误保留。227.54834548803046s/2448.0775670122475total/TTFT62799.9383899587ms只是VERIFY1原始绝对值；**不与202526的增长DB诊断计算收益**，没有不回读性能门或完整accuracy。future free/LRU变化、单victim覆盖边界仍在；容量必要下界早退只研究，未混入这份source。
+
 2026-10-22，systems_innovation实现，framework/hardware独立只读审阅，root唯一GPU owner。本候选依据BI-V150真实normal42布局和202526已激活的单victim恢复，不覆盖稳定成绩、原a1b源码或证据。不改参数、模型、量化/推测、框架版本或worker传输实现。
 
 ## 实测依据与可减少的工作
@@ -32,6 +40,11 @@ exact manager2e91:580→coordinator9dd0:346返回nonempty `single.req_to_blocks[
 
 唯一新CPU合同 `tests/test_biv150_kv_private_order.py`（SHA **29deff8d51fcf6f7f7811aacc84a3ac6f9d431c3e08879a80b39206d178522b5**）1项/0.001s通过：真实CPU事务绑定异序fresh集合，构造host逻辑行在新表中读取仍顺序一致；同list/对象/ID/ref/hash/history/旧ID副本不变；错别名、cached/shared/hashed/pending/已bind或publish/重复页均不排序。没有框架/设备导入，没有重复旧copy/DTO/defer套件。`analysis/source/kv-transaction/private-order-cpu-check.json`保存命令/SHA及精确逆变换；首次逆校验因多一个空行断言失败，修检查脚本后精确，runtime未改。CPU四页映射不等真实1044页设备证明。
 
-framework已核实际list/cache/runner别名并审冻结0e2115与CPU合同；hardware负责目的页几何和最终定向审阅。root下一唯一新隔离服务门保持原long参数与VERIFY1，至少必须得到实际PRIVATE_PAGES_ORDERED、同key正确的ZERO/RESTORE/42层回读、发布与runner六check及原output消费、32/0/tokens、源/DB/KV/清理齐全。没有marker或guard回退只算未激活，不能声称排序生效。尚无该候选新GPU结果，不作性能归因，不混prefix截断或454次CPU下界早退。
+framework已核实际list/cache/runner别名并审冻结0e2115与CPU合同；hardware负责目的页几何和最终定向审阅。交付时定义的root唯一新隔离服务门保持原long参数与VERIFY1，至少必须得到实际PRIVATE_PAGES_ORDERED、同key正确的ZERO/RESTORE/42层回读、发布与runner六check及原output消费、32/0/tokens、源/DB/KV/清理齐全。没有marker或guard回退只算未激活，不能声称排序生效。该门现已完成，见顶部204159；仍不作性能归因，不混prefix截断或454次CPU下界早退。
 
 最终更正：初稿及本agent消息误称ZERO固定逐页不减少，root按actual worker31cc反证后已逐源复读并纠正；ZERO也按make_plan.runs合并。仅改叙述，protocol0e2115/worker31cc/事务616/c95f及全部原证据未变。双职责最终终审均无阻断，root负责唯一新设备门。
+
+
+## 不回读配对已完成，但不能归因收益
+
+205219 stable 32-0/220.40704781701788s/KV521936/DB51819337不变，205819同0e源码32-0/220.92108358303085s/KV521840/DB51819337→51919340；参数/物理32GiB/CPU6与初始DB虽相同，KV+DB双失配，不能报gain。205819实际R16688/1043页/717717504B、SAVE966copy、排序1043→66、ZERO/RESTORE各2772、462skip、runner6check/原16token消费通过；VERIFY0没有回读，不套204159的1044页/8token/全byte诊断。独立原件审计205219-independent-review.json、205819-independent-review.json已保存，原始绝对值/失配与退出日志保留。容量67e4另是冻结CPU候选，未混入此轮，不能继承排序实测资格。

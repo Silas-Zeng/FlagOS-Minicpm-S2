@@ -626,3 +626,61 @@ root完整run/control已本地，包58888697…。本owner只核实际control0e/
 SAVE1008不变；ZERO/RESTORE/readback均2772，718405632B全42层回读passedTrue、doneACK，6runnerchecks全True、原8token消费、DROP hostfalse。调用减少已实证，不是理论预测，仍不等GPU实际launch trace/阶段延迟。32/0、227.548345488秒/2448.077567TPS为VERIFY1诊断，root回执本轮DB518/19337三SHA不变，旧202526基点516→518有变；不跨轮报TPS收益、不把93.678%说成吞吐、无accuracy继承。方案文档追加真实状态，四件冻结不动。
 
 root新CPU研究已先查旧fullreserve115950/terminal181041反证，未重做。候选收敛为“完整私有页H2D将覆盖全部bytes时，明确整页覆盖状态而消除显式ZERO阶段”，root同意先独立设计，不伪ZEROACK、不与当前页序performance pair混入，不新代码/上卡。PyTorch2.10官方copy_/empty/synchronize/Event与actual7e3c、31cc、c95f/writer依赖继续审；framework配对wrapper优先互审，等待最终SHA。
+
+### 页序成对wrapper11917最终只读审通过
+
+完整读c7baa初稿后，root指出baseline自身DB变化不能作共同起点，framework最终只加baseline before==after三SHA并记录目的证据。最终 `scripts/remote/launch_kv_pair_screen.py` SHA **11917a047c3c3f5fadebca3898b5720224e075e3ca93bb610c258a4ef70776ad**，内存逆去该增量SHA精确重建c7baa56a，无其它改动。本人一次临时逆校验脚本误用了含中文的bytes字面量、SyntaxError；改纯Unicode字符串逆换后完成，未改wrapper/主流程或原件。
+
+独立实算204159 control固定source清单98a72844→innovation-source3b1343ab→stable410/candidate416、preparer4c8a信任链全符。wrapper只导pin纯stdlib源/SQLite辅助；冻结源live/control完整SHA/内部filealias规则、锁内双栈+68/0空闲、DBbefore；原bc51/contextlong/seed721201/原Serve/VERIFY0，拒继承profiler变量。匹配模式要求本wrapper正常stable/源live后态通过、baseline before==after三SHA且新candidate before==该after；否则不启动，不假共同cache。
+
+准备锁释放后由原driver重新持同锁，root仍唯一deviceowner。测后candidate DBafter/fullpost、KV容量、CPU、参数/installed源与实际SAVE/RESTORE/PRIVATE命中由root/framework封存独立核；INSTALLED不够，DB同也不等所有编译cache热。已回root/framework无阻断；我未运行wrapper或重复suite/GPU。root回执唯一GPU现205219 stable/runner221074、VERIFY0，candidate须等这轮封存匹配；不追加设备请求。204159专项JSON0cafbe已完成且真实几何和诊断收益限制已落对应计划文档。
+
+### 新KV框架方向：完整覆盖时省ZERO，仅独立设计
+
+按root授权新增中文 `analysis/2026-10-22-kv-full-overwrite-no-zero-plan.md`，未实现/未改冻结0e/31cc/616/c95f，绝不混当前页序pair。已读旧full-outputreserve115950负与terminal181041无机会，没重做；systems做454defer必要下界早退、framework做pairwrapper，方向不冲突。
+
+actual7e3c needszero仅has_mamba，MiniCPM FullAttentionFalse，原df780不drain/e155不zero，不能把本项目新增ZERO说成本模型原生强制。c95f raw uint8每页16384B全覆盖、42normal独立storage/整16token页/host源真D2HACK后不变/无consumer之前，全copy成功后初值不再可观察。204159仍有2772zero_calls和685.125MiB写入可尝试消除，只有工作量潜力，缺时间，不称大收益已成立。
+
+浏览PyTorch2.10官方copy_/empty/synchronize/Event正文，URL见方案；空内存非零保证/异步提交非完成是反例，只作API语义不外推CoreX引擎。actual1219/f182 writer按slot有效位置写、负slot跳过，不能靠后继writer兜底旧prefix；RESTORE自己的deviceproducer fence必须保留，不能删ZERO顺带丢新目的页旧writer依赖。排partialR/head/dim/bytes、Mamba/shared/alias/未知layout/旧内容需保留；R之外普通partialtail不属于这次完整覆盖证明。
+
+设计建议显式RESTORE_FULL新操作从ALLOCATED→真实RESTORE_DONE，worker在SAVED状态先真绑定新目的map/owner/key/serial/storage，再原fence/H2D/done/可选回读；不能假ZEROACK或把phase直接改ZERO_DONE。partial失败即不publish，真settle后原free私有回滚R0，不settle保全部引用failclosed；预算、FCFS、token、RNG调用不改但accuracy仍独立。下一步等当前pair/归档后root决定是否实现和必要真实门，本owner无新GPU请求。
+
+framework已全文只读省ZERO设计6c4f版，无数学/生命周期设计阻断；仍要求实现时全R×42 plan、host强引用/不可改、异pages/签名和取消epoch再次审。已补方案末尾，仅设计不授权新代码/设备。root当前唯一GPU205219 baseline在途，页序candidate等其封存匹配，不混省ZERO。
+
+### 新授权容量早退的必要下界预审（等待作者产物）
+
+root已让systems在独立candidates路径实现最小便宜早退，不改0e；framework审Request生命周期，本owner审硬件/allocator必要性。仅源码证明：strict单FullAttention，R=16P、computed0且无owned页、本次external R/no local-computed输入时，22e external分配需P个不同块；3fc5 get_new_blocks只从freequeue取，故F<P必不能成功。F>=P不保证成功，fullISL/末token/watermark/reserve还可拒；不作为放宽准入或改FCFS。单组页跨42层，P不能乘42或用显存MiB代替；ref0 cache本在F中不重复加回。
+
+早退若延后token digest，只能保HOST/预算并走原调度，不能恢复或publish；条件满足后仍要原digest/allocator，normalwork/terminal/epoch等释放边界保留。已发root/systems此证明，尚无作者最终路径/SHA，不能预批候选或称设备已省454次。无新套件/运行代码/设备；等新差异只读审。
+
+systems初稿已到 `patches/framework/candidates/biv150_kv_capacity_protocol.py` SHA67e4c07566ee3e52f84d6a96a494b8976d858420dadd5f833e66c3291e32fb73；旧0e归档SHA精确，canonical仍0e不改。本人完整只读diff：只加可选Request06b1类/源/三个method身份guard、非resumable/streamingNone、O1长度先失效、无owned/cachedNone或int0/R整页不超maxlen/F<P早退、fast_rejects；guard外/F>=P保原digest/history/allocator。读取actual06b1确定num_tokens为len(_all_token_ids)，ConstantList all_token_ids同底层，append只追加；framework负责更全生命周期审。
+
+allocator侧初审无阻断：实际22e FullAttention skip0，无owned且explicit externalR/no-local-hits使至少P新页必需，3fc5 freequeue count F就是可取块数（含ref0可evict cache，不另加）。完整ISL可能要P+1/水位等，所以条件仅拒不可能，不保证通过。未取回整个环境的反射修改不冒称支持；Request类未loaded/hash或方法不符只禁快路，不import框架/阻断旧协议。尚待owner唯一必要合同/最终pin，本owner不预批最终版本、不重复套件或GPU。
+
+### 独立容量候选67e4最终allocator侧定向审通过
+
+runtime最终仍 **67e4c07566ee3e52f84d6a96a494b8976d858420dadd5f833e66c3291e32fb73**，独立candidates路径；本人实际逆去新增sys/global Request guard/两个helper/唯一call/计数字段后，SHA逐byte精确回归档0e2115；canonical0e不改。实际唯一新 `tests/test_biv150_kv_capacity_protocol.py` SHA **e9c57108e0e0c859ea512a6be8b851cfee78a3a8b48e0e0c5a6da43681379730** 全文只读，owner回执1test0.021s通过，本owner不重跑。它exec actual06b1 Request/Status AST及源file守卫，检查F<P不触token复制/hash/history/allocator、F==P/owned/cached/stream/source异常均原链、identity/cancel/epoch/长度立即DROP以及原FCFS真实ordinary-work后清host，不模拟GPU。
+
+严格必要下界推导：R=16P、computed0、无owned，local-computed输入为空且FullAttention skipped=0；external分配必须取得P个不同新块，或原完整ISL gate先以至少P（可能P+1等）检查。F是真实freequeue长度，ref0 cached页已在其中；所以F<P不能完成这次原请求，早退只省本来必败前的O(R) token复制/digest和O(A)历史tuple等准备。F>=P不放行、不保证成功，仍原hash/allocator；未知Request/stream/页状态也全部回旧链。P是单组跨42层的1044类逻辑页计数，不是42×P层页数，不读NVML/MiB作容量替代。
+
+Request前缀摘要并非删除：仅容量不足且严格immutable输入范围延迟检查，HOST资源继续计预算；一旦条件足够仍原digest核验，或原FCFS发普通work/finish/epoch失效照旧DROP。当前无设备证据证明省了454次（旧run只有restore_skips总数），不报速度。allocator侧终审无阻断已发root/sys，framework负责Request生命周期另侧终审；运行代码没有本owner修改。
+
+root最新回执205219 baseline已完成本地，VERIFY0/32/0、DB51819337三SHA不变、KV521936、410source/空闲后态；独立11917匹配门已启动唯一205819 page-order/runner222435。尚无本owner收到的候选结果，不比较VERIFY1诊断，不混容量或省ZERO。root新跨层布局研究备忘仅后继未实现，不另扩本owner工作。等待最终pair及归档写锁；所有本轮研究/审查已持久化，无新设备请求。
+
+最终 `analysis/source/kv-transaction/capacity-cpu-check.json` 已读、67e4/e9c5/0e/31cc/616/c95f pins全符，明示future安装须复制到**新隔离source的vllm_fl/patches/biv150_kv_protocol.py**，不能直接作为candidates子包启用（相对依赖应在原patches包）。当前尚无容量builder/launcher或新设备激活证明，后续需root单独授权/包装并互审，不覆盖0e或冒充现pair已包含该候选。
+
+### capacity新包装终审完成，未执行
+
+systems获root后继授权准备新 `prepare_kv_capacity_source.py` SHA **a79b69d81115dd17ba77e09f5de690cda6a9cb5288f0c200f1868ee2f5d86eee**、`launch_kv_capacity.sh` SHA **0ae8ced5c97f2460a97ac046eb808d47aa84915e80867e12c219d3dad457a32b**。本人全文与旧4c8ae1/8d7bdd定向diff审，无阻断：新输入basename67e4只映射到全新source canonical协议名，五asset/核心/init791c、stdAST/compile/fullcopy哈希沿旧规则、manifest记录输入map；原0e资产/旧包装不改。新variant/路径/purpose fast_rejects>0，bc51原contextlong/seed721201/VERIFY1命令逐字不变，root唯一owner空闲串行。
+
+实读capacity-wrapper-check.json仅compile/diff、无fullcopy/suite/shell/GPU，未重复执行。实际必须fast_rejects>0及SAVE/ZERO/RESTORE字节回读/runner/consumer同事务才认激活；安装不算。已给root/sys最终回执，无代码修改请求；本轮设备没有它，下一轮才由root决定上卡。
+
+### 205819实际页图/VERIFY0与六块容量未知专项终审完成
+
+完整run/control已本地，包5e087333…。本owner实际核四件0e/31cc/616/c95f，新增 `analysis/source/kv-transaction/205819-page-order-hardware-review.json` SHA **05905a3589997903e09425b1aebcef57c9d310a906a30f1e3c49dc03be332090**，保serverlog1e31c258、原命令/ACK/全66段及三启动source/log。此次R16688/1043页/717717504B=684.46875MiB，SAVE23段×42=966calls；PRIVATE1043→66，实际升序三大232..1027(796)、30959..30995(37)、31000..31146(147)+63单，ZERO/RESTORE同图2772calls。6runnerchecks/原16token消费/DROP释放通过。VERIFY0除了command env0，三ACK均diagnosticFalse/extraPin0、RESTORE无回读字段，不冒充本轮bitwise；此前1044/1008/8token诊断不能照抄。
+
+root回执32/0、220.921083583秒/TPS2521.515787，KV521840、DB51819337→51919340；基线205219 KV521936、DB不变。完整source/DBtable归framework验收，我只专项，不报pair收益或退化、不拿VERIFY1代对照。研究计划已追加事实和限制。
+
+新中文 `analysis/2026-10-22-kv-capacity-variance-audit.md` 保存原因审计：三control worker同a8de、platform同e6f231，util0.85/32GiB/原参数相同；六块×688128=4128768B=3.9375MiB仅KV池差额，不当某profile项恰差该值。启动三log只有最终KVsize，缺init/requested/nonTorch/peak/weights/实际available与取整余数，连INFO可用KV内存缺失原因也未知；没有直接因果来源。按固定PlatformFL is_cuda仅nvidia，iluvatar使该worker显式graphestimate分支不走（仅局部源推论，不排一切间接图影响）；VERIFY只SAVE时读且在sizing后，没env0直接前置分配差异证据。绝不猜cache/4MiBchunk/NCCL/其它进程，亦不改util/固定KV/假buffer凑容量。root若仅一次原参数stable复核仍须全留原件，不挑最好。
+
+**本批所有专项/设计/互审已完成，按root要求现在暂停本owner文件写入，供一致发布与ZIP；等root明确解锁再写。** 当前root回执无GPU；本owner无SSH/GPU/新tests/共享库写入。省ZERO仍设计、容量67e4+新包装只CPU准备，未混现页序pair、无新accuracy或性能成绩。下一API先读本节/专项JSON和对应报告恢复，不能从旧“在途/尚无包装”历史覆盖当前事实。

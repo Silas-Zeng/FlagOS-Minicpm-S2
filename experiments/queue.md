@@ -2,7 +2,7 @@
 
 本表全部实验/成绩均属天数BI-V150。队友负责沐曦－曦云C500；仅团队实验分析库按两平台归档，两个私有代码库共用，不要求平台拆分。不把本轮数据作C500或团队整体成绩，原始证据路径不移动。
 
-**用户于2026-10-21 16:40Z授权继续自主探索，覆盖此前冻结。** 大收益优先，小收益也用最短上卡门验证并保留，噪声标待确认，不设最低百分比；正确性失败不启用，但代码和负结果保存。所有设备任务仍由root单卡串行拥有。新门50–63已封存；async/metadata各自同KV单次+0.703657%/+0.286723%保留，CTA第一服务pair描述+1.745903%但KV池差96、同物理32GiB，不称KV严格匹配或默认资格。181041 terminal0，不实现drain；root现选KV保存恢复成本门，复杂短期准入影子暂缓。本agent只CPU准备/审原件，不擅自设备。
+**用户于2026-10-21 16:40Z授权继续自主探索，覆盖此前冻结。** 大收益优先，小收益也用最短上卡门验证并保留，噪声标待确认，不设最低百分比；正确性失败不启用，但代码和负结果保存。所有设备任务仍由root单卡串行拥有。新门50–63已封存；async/metadata各自同KV单次+0.703657%/+0.286723%保留，CTA第一服务pair描述+1.745903%但KV池差96、同物理32GiB，不称KV严格匹配或默认资格。181041 terminal0，不实现drain；后继单victim保存/恢复及私有页排序已诊断通过，0e不回读205219/205819配对KV+DB双失配，不报收益。独立capacity67e4及a79b/0ae包装仅CPU双终审/root接受，冻结未执行；本批暂停文件写入供root一致归档，goal继续待解锁。本agent不擅自设备。
 
 稳定原版官方`20261021T122607Z-original-baseline`已16:14:50.001906Z以exit0完成，8raw/2summary及225源SHA、最终bab2本地独立终审通过。原2–4轮分档totalTPS候选/原版4K1.933207729倍、16K3.166027317倍；初始DB不同、KV差96tokens，不合成总分或声称cache-matched因果稳定；新诊断不覆盖这两份正式原件。三个private协作仓库已由root完整上传核验：`Silas-Zeng/FlagOS-S2-vllm-plugin-FL`、`Silas-Zeng/FlagGems`、`Silas-Zeng/FlagOS-S2-Minicpm-throughput`。原公开fork保留，外部消息仍不由本agent发送。
 
@@ -85,7 +85,10 @@
 | 69 | 字节与事件门通过20261021T191545Z | 设备 | 42层672MiB每向KV copy四几何 | 独立8SHA/93eb/c95f/四case八pass×五checks与RNG全true，actual42views/guard/未选poison；normal42/336、packed1/8copy；roundtrip wall222.053105/235.270289/119.956194/120.716930ms单warm样本，hostquota/提交混杂未知，不推稳定DMA或E2E；构造非observed布局/无模型恢复protocol；19:18:05Z idle，旧失败保留 |
 | 70 | 已完成，仅SAVE/free | 设备协议诊断 | 200957单victim KV保存恢复v1 | 独立416源/DB三SHA/CPU6/32GiB/idle；32-0，SAVE R16704/718405632B完成后原free，再DROP；skip1但无ZERO/RESTORE/回读/消费，旧日志不区分原因，不报收益；旧50375原字节保留。 |
 | 71 | 已完成，单victim协议诊断 | 设备 | 202526暂态保留a1b691 | 416源/32-0；SAVE/free→454skip保HOST→ZERO/RESTORE全42层byteequal→PUBLISH/DROP→runner六checks/原output8tokens；DB51619270→51819337、VERIFY1/240.929935s不报性能，非完整accuracy；后态idle通过，200957未知原因不回填。 |
-| 72 | CPU准备/待最短独立门 | CPU | 私有目的Block排序0e2115 | 仅未bind/publish的实际owned list严格guard后原地升序；host逻辑顺序/history/worker31cc/txn616/c95f不变，未来free顺序可变；1项CPU合同过/精确逆回a1b，双职责终审；旧1044页集合推导66run非新服务实测，不混454早退/截断。 |
+| 72 | 已完成，单victim排序协议诊断 | 设备 | 204159私有目的Block排序0e2115 | 实际PRIVATE1044→66run；ZERO/RESTORE/42层回读各2772调用/718405632Bpass，publish/drop/runner六check/原8token消费；32-0、51819337三SHA不变、416源/idle过；227.548345s为VERIFY诊断，不与202526增长DB算收益，不混454早退/截断。 |
+| 73 | 已完成，配对双失配 | 设备基点 | 205219不回读stable长负载基点 | 410源/32-0/220.407047817s/KV521936/DB51819337三SHA不变/idle；wrapper11917，205819候选已完成且KV521840/DB增长双失配，不报gain/严格容量matched。 |
+| 74 | 独立CPU/包装终审，冻结未执行 | CPU | 容量必要下界67e4 | 与canonical0e隔离；真实Request06b1非streaming/noowned/R整页maxlen内/F<P才拒，F=P及guard外旧hash+allocator；1项CPU合同0.021s过，两职责终审/新a79b builder和0ae8 launcher compile/diff过并root接受；canonical0e未改，不能移植0e实测为本候选结果。 |
+| 75 | 已完成，KV+DB双失配 | 设备 | 205819不回读0e页序候选 | 32-0/220.921083583s，R16688/1043页/PRIVATE66run/ZERO-RESTORE各2772/原16token消费，无回读；KV521840对基点521936、DB51819337→51919340，不报gain；416源/idle通过。 |
 
 ## 执行边界
 

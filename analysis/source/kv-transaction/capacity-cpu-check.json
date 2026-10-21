@@ -1,0 +1,42 @@
+{
+  "kind": "独立容量快拒候选的唯一CPU合同；未改canonical0e/worker/tx/在途pair",
+  "candidate_install_mapping": "安装到新的隔离vllm_fl/patches/biv150_kv_protocol.py，不能作为candidates子包直接启用",
+  "command": [
+    "python",
+    "-X",
+    "utf8",
+    "tests/test_biv150_kv_capacity_protocol.py"
+  ],
+  "tests": 1,
+  "passed": true,
+  "observed_duration_s": 0.021,
+  "inverse_to_canonical_0e_bytes_exact": true,
+  "delta": [
+    "stdlib sys import及可选Request源/类缓存",
+    "两个快捷路径helper",
+    "原try_restore完整hash之前一条if调用",
+    "原state计数仅新增fast_rejects"
+  ],
+  "actual_request_ast_source_sha256": "06b1c6ad3cc0223c2036b4a2e317868fa4988391b4b024bc5e5f54672b7d2c80",
+  "checks": [
+    "F=P-1重复不触tokens/listcopy、digest、historytuple、allocator，HOST保持并累计fast_rejects",
+    "原output无work保留、普通work准入后DROP，原FCFS调用/返回对象保持",
+    "F=P/owned/cached/streaming/queuedinput/overmax/request源不符或缺失走旧完整路径",
+    "身份/取消/epoch/长度不足先DROP且不触上述昂贵操作",
+    "Request/RequestStatus使用已审AST定义；未import实际框架依赖或调用init，无torch/numpy/vllm根模块"
+  ],
+  "asset_sha256": {
+    "patches/framework/candidates/biv150_kv_capacity_protocol.py": "67e4c07566ee3e52f84d6a96a494b8976d858420dadd5f833e66c3291e32fb73",
+    "patches/framework/biv150_kv_protocol.py": "0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86",
+    "tests/test_biv150_kv_capacity_protocol.py": "e9c57108e0e0c859ea512a6be8b851cfee78a3a8b48e0e0c5a6da43681379730",
+    "patches/framework/biv150_kv_worker.py": "31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf",
+    "patches/framework/biv150_kv_transaction.py": "616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13",
+    "patches/framework/biv150_kv_page_copy.py": "c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c"
+  },
+  "limitations": [
+    "没有新设备激活/收益或模型accuracy；不混205219/0e性能pair",
+    "普通非streaming追加只读prefix范围；其它request源/类guard失败不启快捷路径但继续旧协议",
+    "只容量必要下界，不根据F>=P判断准入，不猜实际watermark"
+  ],
+  "device_ran": false
+}

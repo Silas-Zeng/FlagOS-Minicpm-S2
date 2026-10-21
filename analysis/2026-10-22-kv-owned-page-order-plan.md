@@ -83,3 +83,9 @@ PRIVATE_PAGES_ORDERED只记录CPU前后段数/身份守恒，明确host逻辑内
 SAVE仍1008calls；ZERO2772、RESTORE2772、42层诊断回读2772，均与42×66相等。实际submitted/transferred/readback718405632B，verify_performed/passed=True，真实done ACK成功；后继6个runner检查全True，原8个scheduled token输出消费，DROP成功且hostheld=False。故“通过私有页映射消除反向枚举造成的提交碎片”已获真实命中/全字节/消费证据；无额外GPU staging或新算子。
 
 服务32/0、227.54834548803046秒、2448.0775670122475TPS只是VERIFY1诊断。root回执本轮DB518/19337三SHA不变；旧202526从516/19270扩展后才到该DB，且两轮都含首次诊断/回读，不能将两个elapsed相减报收益。本轮没有独立阶段wall/event；93.67816%是提交次数减少，绝不是TPS提升或DMA时间比例。全模型accuracy仍未测，不继承稳定SQL+C3成绩。root后继匹配wrapper另审，当前冻结四件不改。
+
+## 205819 VERIFY0后继：实际路径通过，未形成归因pair
+
+完整原件已本地。专项 [JSON](source/kv-transaction/205819-page-order-hardware-review.json) SHA `05905a3589997903e09425b1aebcef57c9d310a906a30f1e3c49dc03be332090` 核实际0e/31cc/616/c95f、SAVE16688/1043页/717717504B/966calls；PRIVATE1043→66，命令实算三大段796/37/147页+63单页、ZERO/RESTORE2772、6runnerchecks/原16token消费、DROP释放。control环境0及实际ACK verifyFalse/extraPin0、无回读字段证明本轮未跑诊断回读，不当bitwise新门。
+
+本轮32/0、220.921083583秒是原始服务结果，但KV521840不同于205219 stable的521936，且DB518/19337→519/19340。比较不成立，不报收益或退化百分比；完整专项 [容量来源审计](2026-10-22-kv-capacity-variance-audit.md) 记录六块3.9375MiB池差、实际profile数值缺失、原因未知。不能以参数相同/两轮DB启动相同就说容量或编译状态相同，不改util/固定KV来凑条件。

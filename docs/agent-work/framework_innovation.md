@@ -642,3 +642,61 @@ root于204159启动唯一GPU/runner219462，protocol0e2115/builder4c8/launcher8d
 新脚本精确pin本次5资产/init/runner/包装，等待完整run/control后逐416source、原argv/seed/VERIFY1、DB三hash实算、post/live与后态；从新raw实际R/页数/目的序计算runs，核PRIVATE_PAGES_ORDERED old/newruns和守恒布尔、ZERO/RESTORE/回读calls=实际newruns×42、相同目的表、全字节/6runnercheck/原consumer。没有硬编码66段、454次、16704token或DB不变。old完整目的序未单独raw输出，报告将明确oldrun/对象集合守恒来自精确pin helper日志，不伪称已从原序ID独立复算。无新设备/合同测试/运行时代码变更。
 
 下一条：root发完整204159原件后仅运行该只读审阅一次，有失败先定位原件/契约而非改诊断结果。当前只等待；关闭VERIFY后的同DB/KV/参数短对照属root后续性能阶段，不能用当前诊断elapsed替代。
+
+### 204159已完整独立验收：真实66段/2772calls与全byte/consumer通过
+
+root封存204159完整原件后，本owner运行既有准备脚本 **6ef1ee60a75584416c98fbdc2f2110f26967398d12ecda4b8a3c733fe05abf3b** 一次，2.6s exit0，结果 `analysis/source/kv-worker/private-order-protocol-review.json` **2a3eee0e8b1c498d53c56e6341b244cadcfca83117e0ae3b84f44ecddf4c4bb0**。416source逐SHA/4c8builder/8d7launcher/0eprotocol/31ccworker/616txn/c95copy/791cinit/e155runner、原bc51/Serve/contextlong/seed/VERIFY1、live/post54c均通过。固定source清单98a72844e77eee9e07d6c70050003bd121bb61404c507189dd663a320651f240、innovation包3b1343aba960abe70b59bc2979a4b7a16a5defac5d8506161852614f862cc5a7。
+
+actual219639保存R16704/1044页/718405632B/24段1008calls；排序marker1044→66，目的升序列表独立复算66、ZERO/RESTORE同目的，ZERO/RESTORE/回读各2772calls，42层718405632B全bytepass。runner6checks全true/原consumer8tokens/host释放/preempt0→1/restore_skips454。原old完整目的序未raw另出，oldruns/对象集合守恒仅以被pin helper检查/日志证明，明确不冒充逐ID独立重建。32/0、CPU6/32GiB/KV521936；DB518表19337行、三SHA前后同d935/a5ca/a180，实际重算。227.548345488s/2448.077567TPS/TTFT62799.938390ms只诊断，不与旧run外推收益。
+
+finish20:47:11.313241Z exit0、post20:47:45.919662Z68/0/双栈闭无GPU、416live无失败；原shutdown AsyncLLM/EngineDeadError保留，不改exit0或称全程无ERROR。完整结果已即时回root并补 [`worker实现说明`](../../analysis/2026-10-22-kv-worker-implementation.md)。没有新accuracy或默认合并，当前受测worker/txn/protocol冻结。
+
+### 新独立VERIFY0成对wrapper准备完成，等待hardware最后只读审
+
+root授权新包装，不改8d7/0e。新增 `scripts/remote/launch_kv_pair_screen.py` 当前 **11917a047c3c3f5fadebca3898b5720224e075e3ca93bb610c258a4ef70776ad**，说明 [`analysis/2026-10-22-kv-pair-screen.md`](../../analysis/2026-10-22-kv-pair-screen.md)。固定080656 stable410与204159候选416，两树身份由已固定98a728 source清单/3b134包→stable input全树信任链锁定，原bc51/contextlong/seed/Serve/marker、全control/source/命令、准备锁+idle双栈、VERIFY0，不重新builder/导入框架/启动远端。
+
+--match-baseline-control可选分支只收本wrapper stable正常结束+全source/live/idle seal；root review指出仅candidatebefore=baselineafter不足，已补**重算baselinebefore==baselineafter三SHA**，否则直接拒绝候选启动，再核candidatebefore==after。旧c7baa草稿从未执行已被当前11917替代。DBbefore实际快照，DBafter/fullpost仍root既有封存，不造新流程。KV/CPU/参数/cache边界明确运行后独立审，不将SQLite同等于所有cache全热。
+
+只本地compile/help过，唯一小修后compile再过；没有CPU模拟suite/远端执行/GPU。最终SHA已传hardware/root只读审，尚未以包装就绪冒称pair完成。下一条回应必要小修或冻结给root；设备排程/命令由root独占，本owner没有后台资源、共享代码库改动/push。
+
+### pairwrapper11917已双owner终审冻结，root唯一205219 stable在途
+
+hardware已全文只读审最终 **11917a047c3c3f5fadebca3898b5720224e075e3ca93bb610c258a4ef70776ad** 无阻断，实际本地重算reference98a728→package3b134→stable410/candidate416/preparer4c8信任链一致，末次baselinebefore/after guard已核；没有执行wrapper主流程、重跑suite或GPU。本owner不再改wrapper，不扩测试/流程。root已审并上传精确11917，启动唯一 `20261021T205219Z-kv-pair-stable-context16k-long` / runner221074、冻结080656/VERIFY0/原bc51/seed721201；当前在途无结果，须其正常结束seal后才可启动三SHA匹配candidate。
+
+204159独立验收、诊断与性能边界均已写worker说明与本handoff；pairwrapper说明已更新最终审阅/在途状态。root正同步实验库固定3b8d1fc/12300项，其中本轮后续doc/wrapper可能未含；不能冒称该Git提交已有全部最新内容，root后继checkpoint处理。两个共享代码库无push。本人没有设备/后台任务。下一操作只有收到性能原件再独立验收，不能用204159诊断值替代VERIFY0结果或提前宣称pair收益。
+
+### 205219在途时新任务：只读容量早退候选/省ZERO设计，不改受测链路
+
+root批准systems独立实现 `candidates/biv150_kv_capacity_protocol.py`，本owner已主动协调只读互审，等其最小diff/最终SHA/唯一CPU合同；当前尚无该文件可审，不写作者文件/不扩测试。性能原件到齐优先验收。已读 `analysis/2026-10-22-kv-restore-capacity-fast-reject.md` 与actual Request06b1/single22e/df780：普通append_output_token_ids仅append/extend，streaming scheduler明确截断_all_token_ids，所以快捷路径必须exact Request源/真实类、resumableFalse/streaming_queueNone，保身份/取消/长度即时失效；无owned/无skip/privateR、F<P只能必要失败，**F==P必须走原digest/allocator**，不能提前DROP/park/FCFS改序。未产生新runtime/设备证据。
+
+hardware另请只读 `analysis/2026-10-22-kv-full-overwrite-no-zero-plan.md`（6c4f4e06…）已全文审，无完整覆盖/生命周期设计阻断，反馈已发：显式RESTORE_FULL真操作/ACK从ALLOCATED，不伪ZERO；原ZERO的destination绑定必须搬到新SAVED入口，保真实producer device fence/event/可选byte核验、partial失败不发布/未settle保全部strongref/settle后private回滚，R之外suffix不作完整覆盖主张。该方向仅设计，不能在31cc删zero_一行冒称实现/把它混入现pair。本owner无新测试/SSH/GPU；root将归档时按其写锁等待。
+
+### 205219 stable VERIFY0已完整独立验收；205819启动KV容量失配
+
+205219完整原件到齐后，本owner新增复用只读 `analysis/source/kv-worker/review_pair_screen.py` 初版 **1b2434ed50d52824bda0d8d6a254c792b0f46bd71a9a0ea545fa9ea4a78b71b5**，stable分支实际exit0，结果 `pair-stable-review.json` **1f223b259be1354c00c22f902eb3978480818bdfc2d3d520f3dc61f90d65061b**。完整410source/固定98→3b→input树、11917/bc51/原argv/seed/VERIFY0、source/live/post54c均过；基线无协议事件，不套VERIFY1必须回读的旧门。
+
+32/0、524288in32768out、CPU6/32GiB、KV521936/preempt0→1、DB518表19337行三SHA前后同d935/a5ca/a180已重算；220.40704781701788s/2527.3964944282015TPS/TTFT62508.42458468105ms。finish20:57:23.397901Z exit0，post20:57:56.258707Z68/0/双栈闭/无GPU/410live无失败；shutdown AsyncLLM/EngineDeadError保存，controller仅Z。即时回root通过，未改原件或运行设备。
+
+root随后启动唯一205819 page-order/runner222435、source204159、VERIFY0；尚在途但实际日志KV521840，较baseline少96。**不能有效pair归因**，不能用诊断227秒替代或改原服务参数凑容量。初版脚本逐byte保 `review_pair_screen.initial_1b2434.py`；当前 **b8fdacf075b7db086554faca144d2a10d8d440d57022f0fda6cf8384058eb40b** 只改候选分支为独立run验收+matched capacity布尔/status，不因失配抛assert丢整个raw，不提前产成功。语法过，候选分支未执行。中文pair说明已追加完整基线/容量失配与未归因边界。
+
+### capacity67e4定向最终互审已回root/作者
+
+实际新增文件在 **patches/framework/candidates/biv150_kv_capacity_protocol.py**（早期简称candidates路径不应误用），最终 **67e4c07566ee3e52f84d6a96a494b8976d858420dadd5f833e66c3291e32fb73**。canonical0e/31cc/616/c95/当前包装逐SHA未改。只读最小diff与唯一合同 `tests/test_biv150_kv_capacity_protocol.py` **e9c57108e0e0c859ea512a6be8b851cfee78a3a8b48e0e0c5a6da43681379730**/JSON，无最短新隔离诊断框架或生命周期阻断，已即时回root/作者。安装仅映射到新vllm_fl/patches/biv150_kv_protocol.py，不能以candidates子包直接import原相对依赖。
+
+exact06b1 Request源/真实类/原方法可选guard失败只禁快路，非resumable/streaming_queueNone保证普通append稳定；先保身份/epoch/status/pending/长度失效原围栏。noowned/cachedNone或int0、R整16页<=maxlen，F<P只保HOST defer原FCFS；F==P仍原完整hash/tuple/allocator，不擅自准入/提前DROP。actual AST Request/Status合同作者1test0.021s通过，我全文只读未重跑；fast_rejects实际服务命中/收益尚无。说明落事务review，下一步等待parent后继独立源门；当前pair原件优先，不混新候选。
+
+本人仅原件只读审阅/脚本和中文文档，无SSH/GPU/模型导入、共享代码库修改/push。root唯一设备仍205819，下一条完整原件到齐跑VERIFY0候选审，准确报告容量失配、DB/源/后态，不先解释掉负或正结果。
+
+### 205819完整VERIFY0独立验收已完成：服务链通过、KV/DB双失配不归因
+
+root取回完整205819 run/control（tgz5e0873334997c59899d9dad5653d80529729eb508b8ce7c93e74587311b86e82）后，本owner只补VERIFY0审阅的DB变化分类与表明细，没有unchanged硬assert。最终脚本 `analysis/source/kv-worker/review_pair_screen.py` **6f05112436465a891a41e07fd97e6944f81413757b46d55cbc111a825e1639b5** 实际page-order分支一次4.4s exit0，结果 `pair-page-order-review.json` **dea87425c140d98656d72ef712865a86bc4a26e12ad8d20de24d044a9d39dbce**。baseline初版1b2434及结果1f223b原样保留，无重跑baseline或设备。
+
+完整416source/固定204159全树、11917/bc51/原argv/seed/VERIFY0、source/live416/post54c、32/0/524288in32768out通过。actual222629 SAVE R16688/1043页/717717504B/966calls；原1043→66段marker和真实升序目的表、ZERO/RESTORE同表且各2772calls；ACK diagnostic_requestedFalse/extrapin0/无回读，不能伪报本轮字节验证True。runner6checks全true/原consumer16tokens/host释放、restore_skips462/preempt0→1。准确率仍待，不能把204159 byte证据算本轮accuracy。
+
+实际CPU6/32GiB，候选KV521840 **≠** baseline521936；220.92108358303085s/2521.515787290788TPS/TTFT62648.45590685ms只保存原值。双方DB起点与baseline前后同518/19337，但候选after **519/19340**，三SHA实重算实体89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605/schema29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078/logical71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29。新增表9a237…1行，既有c19f…benchmark表2→4，共+3；不是新表独占3行。JSON `valid_for_e2e_pair_attribution=False` 两原因分别KV容量与候选运行中DB变化，完整服务通过不等成对收益有效，不算/归因收益，不拿诊断227秒替代。
+
+finish21:03:25.435830Z exit0，post21:03:56.715618Z68/0/双栈闭/无GPU/416live无失败、owned controller仅Z；本run无ERROR/EngineDeadError检索命中，baseline shutdown错误保留。已即时回root精确事件/表行变化，说明 [`analysis/2026-10-22-kv-pair-screen.md`](../../analysis/2026-10-22-kv-pair-screen.md) 更新完整平行原值/失配边界。单补stable不能追溯修复本组不同测量期间DB，不改参数强凑；root先阶段封存发布/ZIP，后继必要新baseline最多一轮由其决定。
+
+### 本批文件收口，暂停写入供root一致归档
+
+本owner已完成当前JSON、中文文档与本handoff。**从此条起暂停文件写入，等待root明确解除归档写锁；持续探索goal未取消。** 当前wrapper11917、canonical0e/31cc/616/c95与capacity独立67e4全部不改；capacity只local互审/无设备，省ZERO只设计。没有本人SSH/GPU/模型导入/后台任务或共享代码库push。下一条待root解锁再接后续具体任务，不能因归档自行加新探索/测试/设备或把本组失配抹掉。

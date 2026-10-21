@@ -1,0 +1,102 @@
+{
+  "kind": "0e不回读配对的stable基点独立读证据；候选未齐不算收益",
+  "evidence": {
+    "run_id": "20261021T205219Z-kv-pair-stable-context16k-long",
+    "started_utc": "2026-10-21T20:52:20.875512+00:00",
+    "finished_utc": "2026-10-21T20:57:23.397901+00:00",
+    "raw_sha256": "4834901c3dd961c10ff7bd86f560e646bf6e1c998c8f40397117e2436cc8e795",
+    "source_count_verified": 410,
+    "worker_sha256": "e155a16669e69b7eb7aff370dbcbcf225a4f593fa42b2399722e96999b53a1f1",
+    "completed": 32,
+    "failed": 0,
+    "input_tokens": 524288,
+    "output_tokens": 32768,
+    "duration_s": 220.40704781701788,
+    "total_tokens_per_s": 2527.3964944282015,
+    "mean_ttft_ms": 62508.42458468105,
+    "kv_tokens": 521936,
+    "database": {
+      "before": {
+        "snapshot_sha256": "d93510959a35313ec5331067cca3c496f817e96375ee398e52fb3cc1cbf6741d",
+        "schema_sha256": "a5ca71a552e35c3465fdfb85c1f74691a9e455aace1640ab5cafbddb22460d65",
+        "logical_content_sha256": "a180ecc5d609bf746af4c3a9a04d013c4fc6251b864d06317ce1faaf9da010f8",
+        "table_count": 518,
+        "row_count": 19337
+      },
+      "after": {
+        "snapshot_sha256": "d93510959a35313ec5331067cca3c496f817e96375ee398e52fb3cc1cbf6741d",
+        "schema_sha256": "a5ca71a552e35c3465fdfb85c1f74691a9e455aace1640ab5cafbddb22460d65",
+        "logical_content_sha256": "a180ecc5d609bf746af4c3a9a04d013c4fc6251b864d06317ce1faaf9da010f8",
+        "table_count": 518,
+        "row_count": 19337
+      }
+    },
+    "preemptions": {
+      "before": 0.0,
+      "after": 1.0
+    },
+    "cpu_quota_cores": 6,
+    "physical_memory_mib": 32768,
+    "postflight_idle_verified": true,
+    "postflight_utc": "2026-10-21T20:57:56.258707+00:00",
+    "errors_before_shutdown": [],
+    "errors_during_shutdown": [
+      "(APIServer pid=221087) ERROR 10-22 04:57:20 [async_llm.py:704] AsyncLLM output_handler failed.",
+      "(APIServer pid=221087) ERROR 10-22 04:57:20 [async_llm.py:704] Traceback (most recent call last):",
+      "(APIServer pid=221087) ERROR 10-22 04:57:20 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/async_llm.py\", line 660, in output_handler",
+      "(APIServer pid=221087) ERROR 10-22 04:57:20 [async_llm.py:704]     outputs = await engine_core.get_output_async()",
+      "(APIServer pid=221087) ERROR 10-22 04:57:20 [async_llm.py:704]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "(APIServer pid=221087) ERROR 10-22 04:57:20 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/core_client.py\", line 1061, in get_output_async",
+      "(APIServer pid=221087) ERROR 10-22 04:57:20 [async_llm.py:704]     raise self._format_exception(outputs) from None",
+      "(APIServer pid=221087) ERROR 10-22 04:57:20 [async_llm.py:704] vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause."
+    ],
+    "shutdown_forcekill_lines": [
+      "(APIServer pid=221087) WARNING 10-22 04:57:20 [utils.py:620] [shutdown] Process manager: force killing remaining processes count=1"
+    ]
+  },
+  "purpose": {
+    "kind": "成对短测准备；非官方成绩，仅候选源码差异允许，不能据安装marker判真实命中",
+    "variant": "stable",
+    "wrapper_sha256": "11917a047c3c3f5fadebca3898b5720224e075e3ca93bb610c258a4ef70776ad",
+    "source": "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z",
+    "reference_control": "/workspace/experiments/minicpm-s2/framework/20261021T204159Z-kv-page-order-context16k-long-control",
+    "reference_source_manifest_sha256": "98a72844e77eee9e07d6c70050003bd121bb61404c507189dd663a320651f240",
+    "source_count": 410,
+    "preflight": {
+      "query": "68, 0\n",
+      "ixsmi": "Timestamp    Thu Oct 22 04:52:19 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  32C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+    },
+    "db_before": {
+      "snapshot_sha256": "d93510959a35313ec5331067cca3c496f817e96375ee398e52fb3cc1cbf6741d",
+      "schema_sha256": "a5ca71a552e35c3465fdfb85c1f74691a9e455aace1640ab5cafbddb22460d65",
+      "logical_content_sha256": "a180ecc5d609bf746af4c3a9a04d013c4fc6251b864d06317ce1faaf9da010f8",
+      "table_count": 518,
+      "row_count": 19337
+    },
+    "matching_baseline_after": null,
+    "restore_byte_readback_enabled": false,
+    "command": [
+      "/usr/local/bin/python3",
+      "/workspace/experiments/minicpm-s2/scripts/run_framework_screen.py",
+      "/workspace/experiments/minicpm-s2/framework/20261021T205219Z-kv-pair-stable-context16k-long",
+      "--source-dir",
+      "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z",
+      "--context-long-screen",
+      "--seed",
+      "721201",
+      "--require-log-marker",
+      "BIV150_SQL_REFLECTION_INSTALLED"
+    ],
+    "limits": [
+      "VERIFY=0；不包含诊断回读，但原protocol稀疏日志保留。",
+      "DB相同不等于所有编译cache全热；KV容量/CPU/参数仍须run后独立核对。",
+      "准备锁释放后原bc51重新取锁；root仍须唯一设备owner，未改原driver。",
+      "运行后DBafter/live/fullpost由root既有封存步骤收取，不在本包装新增流程。"
+    ]
+  },
+  "source_count": 410,
+  "protocol_marker_absent": true,
+  "package_sha256_owner": "3ac6fc894e72d8ba4d0f96aa5e48c25d07e442f23d909f7d2f121c8e902700d3",
+  "candidate_205819_pending": false,
+  "candidate_205819_completed_with_kv_db_mismatch": true
+}

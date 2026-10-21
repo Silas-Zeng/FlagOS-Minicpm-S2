@@ -6,6 +6,9 @@
 
 2026-10-22 最新入口：
 
+- [KV框架本阶段交接](2026-10-22-kv-framework-milestone.md)：真实恢复、私有页排序、VERIFY0双失配和已准备的后继容量候选。
+- [页序候选不回读配对](2026-10-22-kv-pair-screen.md)：固定源、DB共同起点和真实命中条件；在途状态读CURRENT。
+- [恢复容量必要下界早退](2026-10-22-kv-restore-capacity-fast-reject.md)、[完整覆盖省ZERO](2026-10-22-kv-full-overwrite-no-zero-plan.md)、[KV布局与传输研究](2026-10-22-kv-layout-transfer-research.md)：后继独立候选或设计，不继承已测版本结果。
 - [实际KV布局与执行器](2026-10-22-kv-runtime-descriptor.md)：195012最短上卡与独立验收，normal42、UniProc和队列证据。
 - [单请求KV保存恢复协议](2026-10-22-kv-transaction-protocol.md)、[worker实现](2026-10-22-kv-worker-implementation.md)、[独立审阅](2026-10-22-kv-transaction-independent-review.md)：真实事务接入、失败回滚与验证边界，最新设备状态读CURRENT。
 - [KV硬件预算与一手资料](2026-10-22-kv-save-restore-hardware-evidence.md)：20GiB主机限制、1GiB单slot、真实完成依赖与历史记账小候选。
