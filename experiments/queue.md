@@ -4,7 +4,7 @@
 
 **用户于2026-10-21 16:40Z授权继续自主探索，覆盖此前冻结。** 大收益优先，小收益也用最短上卡门验证并保留，噪声标待确认，不设最低百分比；正确性失败不启用，但代码和负结果保存。所有设备任务仍由root单卡串行拥有。新门50–63已封存；async/metadata各自同KV单次+0.703657%/+0.286723%保留，CTA第一服务pair描述+1.745903%但KV池差96、同物理32GiB，不称KV严格匹配或默认资格。181041 terminal0，不实现drain；后继单victim保存/恢复及私有页排序已诊断通过，0e不回读205219/205819配对KV+DB双失配，不报收益。归档写锁已解除，capacity212106真实462快拒及42层回读/原16token消费通过；FULL三独立副本及唯一CPU合同已双终审，新包装仅静态检查且hardware终审无阻断，FULL214400已由2071实际验收pass，真实FULL/0ZERO/42回读/原消费完成，仅VERIFY1诊断。213016基点KV521936、已完成213616候选KV521840容量失配；双方DB前后51919340同，FULL214400已真实验收通过；后继由root串行；不混VERIFY诊断收益。本agent不擅自设备。
 
-本批215849/220122两次startup已独立验收，全部实际内存分项相同、KV均521936，未复现历史6块，不报gain/倒补原因。**完成本批记录后暂时停止文件写入，供root一致发布/ZIP；goal仍active，等root解除后继续，当前不追加盲目boot或设备任务。**
+本批215849/220122两次startup已独立验收，全部实际内存分项相同、KV均521936，未复现历史6块，不报gain/倒补原因。**root已完成一致发布/ZIP并解除写锁；现准备capacity-vs-FULL共同6a/VERIFY0新包装，尚未运行，不追加盲目boot。设备仍root单卡串行。**
 
 稳定原版官方`20261021T122607Z-original-baseline`已16:14:50.001906Z以exit0完成，8raw/2summary及225源SHA、最终bab2本地独立终审通过。原2–4轮分档totalTPS候选/原版4K1.933207729倍、16K3.166027317倍；初始DB不同、KV差96tokens，不合成总分或声称cache-matched因果稳定；新诊断不覆盖这两份正式原件。三个private协作仓库已由root完整上传核验：`Silas-Zeng/FlagOS-S2-vllm-plugin-FL`、`Silas-Zeng/FlagGems`、`Silas-Zeng/FlagOS-S2-Minicpm-throughput`。原公开fork保留，外部消息仍不由本agent发送。
 
@@ -101,6 +101,10 @@
 | 79 | 已完成，启动标量诊断 | 设备 | 215849同6a stable smoke | 412全源/原bc51 smoke-only-VERIFY0/8in32out完整；PID231345实际profile1/原int→PARENT真list/三hook恢复，全部内存标量完整，KV521936；DB51919340三SHA同/post22:01:02.902726Z68/0/闭/source过，ERROR空但forcekill WARN保留；不报性能/不回填6块原因。 |
 
 | 80 | 已完成，两启动分项相同 | 设备 | 220122同6a capacity smoke | 418全源/原innovation5bef字节保持/原bc51 smoke-only-VERIFY0/8in32out完整；PID231998实际profile1/PARENT真list/三hook恢复；内存分项与215849同、KV均521936，未复现旧6块；DB51919340三SHA同/post22:03:14.114658Z68/0/闭/源过，ERROR空/WARN保留，无gain或历史因果。 |
+
+| 81 | 首pair完成，小信号保留待一次复核 | 设备 | 222731capacity→223613FULL，共同6a VERIFY0 | 两侧418/KV521840/内存非时间项/CPU6/32GiB/DB51919340三hash/实际pageIDs和R16688几何/fast462/consumer16均同；218.818909→218.384834s，FULL TPS+0.198765756%、耗时-0.198371462%、TTFT-0.215245394%；0ZERO，VERIFY0无回读；唯一c0全审+独立原字段+hardware页专项，保留单次小信号非稳定收益/纯ZERO时间/accuracy。 |
+
+| 82 | A2已在途，B2待 | 设备 | 唯一必要A2/B2复核，同冻结源码和参数 | root已启224411-capacity runner236809/同418/fc937-d768/6a/VERIFY0；本agent接管新原件唯一c0执行，framework专注新victim观察。只此一组，无论正负或DB/KV等失配都结束该性能重复，不追容量、不改参数、不取最好值；当前未知A2/B2结果，不能提前并入均值。 |
 
 ## 执行边界
 

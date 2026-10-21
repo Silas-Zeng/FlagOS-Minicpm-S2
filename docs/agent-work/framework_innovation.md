@@ -788,3 +788,37 @@ root授权定向终审的 `scripts/remote/prepare_kv_memory_observer_source.py` 
 两样本除timestamp和profile_time外，全部已记录内存分项逐项一致：requested29205777612.8B、weights5101233152B、peak_activation656424960B、non_torch1000341504B、nonKV6757999616B、available22447777996.8B、graph估计0，init/before/after快照容量字段同；实际KV均521936。历史521840与521936的96token（6页）差异**未复现、原因仍未定位**。观察器虽未新增GPU采样/同步/分配，额外Python包装/元数据读取/日志的扰动未被独立量化；两次smoke不能证明所有长负载启动稳定或无观察效应，也不能归因原历史差异。未来将同observer用于双方VERIFY0性能起点同时记录分项只是计划，**尚未执行**。
 
 本轮无SSH/GPU/新实现/套件/受测文件修改，已向root回报；完成本条后按root要求暂时停止文件写入供一致发布ZIP，goal继续active，等root解除/下一任务。
+
+### 解锁后只读研究接续：victim选择与恢复长尾，未实现；共同observer性能审计准备中
+
+root已解除ZIP221629写锁。新中文 analysis/2026-10-22-preemption-victim-tail-review.md SHA **722aec0ed9cf17d1364222abbf671bc82e65c7ada379b411eeab4275f489254b** 保存actual df780失败后pop尾部/原PRIORITY撤销当前已scheduled项的精确挂点、FULL214400真实R/454次等待边界、输入长度逐请求分布仍缺证、条件makespan公式与反证。唯一后继是首次RUNNING allocate真实None后/原victim选择前一次CPU描述符快照（全running进展/合法max/placeholder/当前及queued scheduled span/owned私有页），**只有设计，无模块/设备门/收益**。保最早可能释放者与避免恢复长尾相互制约，不硬选中部/固定行号，也不复做growth/terminal。改变victim就是改变原FCFS抢占优先级，不能声称全策略FCFS不变；原WAITING FIFO及真实协议/async撤销必须保留，accuracy不继承。
+
+只读查看PagedAttention/TRAIL/CacheOPT/Microsoft Research一手页面后只引用其策略/指标边界；CacheOPT偏选long remaining/low cost和TRAIL限制near-complete抢占是重要反证，非本机换victim收益证明。未访问远端设备/模型。
+
+下一计划 analysis/2026-10-22-kv-next-valid-performance-pair.md 已读；systems独占新prepare_kv_observed_pair_source.py/launch_kv_observed_pair_screen.py，准备capacity67e/31cc/616与FULL1aff/5d9a/84be各完整416reference，附同6a最后footer→39fb/418，旧innovation字节不改/独立memorymanifest。本人已对齐原bc51long/seed721201/VERIFY0、真实DETERMINE+profile1/3restored、各实际协议chain/动态R/geometries/runner/consumer、source/live/DB/KV后验；等待新包装定稿pins后定向互审并准备一个实际run只读验收入口，不硬套旧416或VERIFY1回读。本批研究未改任何受测资产/新增GPU或套件。
+
+### 共同6a的capacity/FULL两包装及实际验收入口最终冻结；222731在途
+
+新builder `scripts/remote/prepare_kv_observed_pair_source.py` **fc937baf735e5694ce9d75c99c200e43b26524b9c24db09ed6939fc408ca2467** 与launcher `scripts/remote/launch_kv_observed_pair_screen.py` **d768860b8f9d9491b6ea473ab1e0219cfb9a04351806e0cd67685b95fcdf981e** 已本人全文/实核终审无阻断并回root/systems；未执行新copy/旧suite/设备。两已审416reference、三个canonical资产、旧innovation字节分别固定，只有同6a最后append→39fb/新418与独立manifest；原bc51long/seed721201/VERIFY0、真实DETERMINE门和前件exit0/post418/observer真实receipt/DB before=after=newbefore成立。草稿重复INPUT/OUTPUT常量问题作者已修，最终AST/全文确认唯一标量，不把草稿当运行失败。
+
+本人新增实际验收入口 `scripts/review_kv_observed_pair_run.py` **a5b7e2418a431c9e2e4907490f5f8605c94d8fe622066211448466741f545ee3**，仅compile及固定2071通用raw函数416→418挂点语法检查通过；hardware已全文只读终审无阻断，未执行inspect/未生成新run通过JSON。复用固定2071→81f2原long/全source/live/DB实体/物理内存/CPU/后态验证，但不调用其VERIFY1门。新部分核两完整416reference→418集合/原init完整footer/同6a自然loaded身份+profile1/原int/父list值与3hook恢复，capacity4ACK或FULL3ACK/动态R/源目的runs/42倍calls/host/runner6/原consumer，严格VERIFY0无回读。无旧454/66/R或verification=True硬编码。
+
+实际调用：`python -X utf8 scripts/review_kv_observed_pair_run.py capacity <真实runID> --output <全新capacity-review.json>`；FULL同入口 `full <真实runID> --output <全新full-review.json> --capacity-review <该capacity-review.json>`。FULL后验比较DB四端三hash/实际KV/启动分项（排timestamp与profile_time）/SERVER/packages/installed/CPU/物理显存。任一失配仍保存已完成服务审计但描述增益为null，R/几何/等待/consumer差异单列；匹配也只单次描述总差，不是纯ZERO计时/稳定因果/accuracy/官方分数。输出exclusive，缺原件返回pending不造成功。
+
+root已真实启动唯一 `20261021T222731Z-kv-observed-pair-capacity-context16k-long` /runner233765/source同stamp；当前**尚无完整原件/实际审计结果**。下一操作等rootseal取回后仅实际运行上述capacity审计，原件验毕才FULL启动匹配，不能把计划列完成。本人无SSH/GPU/后台资源或共享代码库push。
+
+### victim后继仍只具体方案，未实现观察器
+
+analysis/2026-10-22-preemption-victim-tail-review.md 已补hardware反证和精确接入，最终SHA **a0c771ebc5d7f33ce273cba6a2890a18ba1088eec751f5eaf227c665bb326237**（替代前稿722a）。在exact df780 RUNNING原allocate实际None/正常break之后、原victim pop之前只插一个callback，直传当前budget/index/num_scheduled_tokens；Core ContextVar提供只读旧queue，不frame/GC/额外allocator或cache查询。只稳定e043/e155隔离/不叠当前pair；自然loaded exact源和原方法、一次尝试/错误原路/原return/异常/finally全部要守。页只统计ref1非null唯一物理数；安全R及1GiB cap/更大SAVE成本独列，进展高不等于更合适受害者。**当前没有新模块/builder/CPU合同/设备门，只有可审具体方案**，按root允许的方案范围收口，不伪ready实现。
+
+### 222731共同observer容量对照实际验收完成；本地解析器首次失败已保留
+
+root封存 `20261021T222731Z-kv-observed-pair-capacity-context16k-long{,-control}` 到本地后，本owner按要求首次执行冻结a5b7入口exit1，**未写成功报告**。原因是审计器对被pin的6a `EXPECTED_LOADED` 字典整做literal_eval，而其值引用两个顶层字符串EXPECTED_WORKER/EXPECTED_IO；不是设备/协议失败。旧入口逐byte保 `analysis/source/kv-memory-observer/review_kv_observed_pair_run.a5b7e241.py`（SHA仍a5b7e241），失败记录 `222731-audit-first-attempt.json`。仅审计新增白名单两Name的静态字符串解析/改一个调用，无observer/framework导入；新入口 **c0c80dcf81b2fc0727f06b43d166a61ad042916ee300511243c2aae42cb14c00** compile通过，对同原件必要重跑一次1.83s exit0。运行资产/原件未改，也未重复其他suite。
+
+实际报告 `analysis/source/kv-memory-observer/222731-capacity-review.json` **ece929aef6d788658b7482ff5d22052cea7694cf5aa4e24f664e207327646f27**：418完整source/39fb/同6a/原bc51long/seed/VERIFY0/各fixed reference与source/live身份通过。Engine233942真实profile1、原int22443583692/父list同值、三hook恢复；KV **521840**。原峰激活656424960B/weights5101233152B不变，non_torch1004535808B、available22443583692.8B；较之前两smoke差4MiB的机制由hardware另审，本人不猜因果、不把启动smoke等同长轮。
+
+实际SAVE→ZERO→RESTORE→DROP serial1..4，R16688/P1043/717717504B，源23runs/SAVE966，目的66runs/ZERO与RESTORE各2772；页排序真实1043→66、原runner6项true/consumer16/host释放。首defer capacity_lower_bound/free1039<P1043，fast/skip462；本轮VERIFY0无额外回读，先前212106 VERIFY1证据单列，不继承本轮verification_passed。
+
+32/0，524288in32768out，**218.81890873378143s/2545.7397773504263total tok/s/TTFT62472.47070692538ms**，raw SHA9a6dffcd612d1d746933532ffc0453d48a04c298911a9ae3b40d056e73c61baf。DB519/19340实体三SHA前后同89743b/29d740/71ac19，CPU6/物理32768MiB，preempt0→1；finish22:32:35.393293Z，post22:33:26.459826Z68/0/双栈闭/无GPU进程/source无失败，测前ERROR空，shutdown EngineDeadError/forcekill WARN原样保留。当前只有capacity一侧完成，不计算FULL收益。
+
+已即时回root无阻断并可启动匹配FULL，systems收到报告登记（不重跑入口）；hardware获新c0小delta只读审任务。下一条等新FULL完整原件，再用**同c0入口** `full <真实runID> --output <新full-review.json> --capacity-review analysis/source/kv-memory-observer/222731-capacity-review.json` 实际验收。原受测fc937/d768、31cc/67e/616/6a均未改，本owner无SSH/GPU/后台进程/共享库push。

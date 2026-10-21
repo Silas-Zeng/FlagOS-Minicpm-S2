@@ -98,3 +98,7 @@ PID、源目录/variant及相应代码路径当然不同，不能把上述限定
 结论只到：**同一观察器下这两个启动没有复现旧6块差异，历史直接来源仍未知。** 不因相同结果而归因观察器、FULL/VERIFY、缓存，也不补造旧中间值；各一次启动不能排除罕见变化或观察扰动。按root明确决定，不无限追加startup样本。下一步仅计划把同一观察器纳入原参数VERIFY0对照，以实际负载同时携带启动分项，仍需容量/DB/CPU/源/参数共同条件；本阶段没有实现该下一包装或运行新实验。
 
 本阶段原件/中文/JSON已完成，现暂停本owner文件写入供root一致发布/ZIP；目标仍active，这只是保存窗口。没有新研究、GPU或SSH。
+
+## 222731补充：首次取得4MiB分项差的真实原件
+
+前两次startup未复现差异是上述历史事实，不改写。新222731原参数长轮已在同6a观察器下实际记录nonTorch估计差额+4194304B、nonKV同增、原intreturn同减，KV521936→521840；Torch reserved/peak、weights、peakIncrease/graph不变。profile前后nonTorch增量仍60817408B，4MiB在before_profile已存在；公式传播可证，具体分配/进程来源及其它历史轮仍未知。独立全文、原件SHA/11项非时间差、商余数及验收失败保留见 [222731专项报告](2026-10-22-kv-memory-four-mib-observation.md) 与JSON `source/kv-memory-observer/222731-four-mib-review.json`（de35192db67a72681663f984e472e40e128d0a681fea730928ab0dff96de0574）。没有新GPU/参数修改或重复完整门。

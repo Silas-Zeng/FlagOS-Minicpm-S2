@@ -1,0 +1,83 @@
+{
+  "kind": "共同启动观察器capacity/FULL VERIFY0短测，非官方计分",
+  "variant": "full",
+  "wrapper_sha256": "d768860b8f9d9491b6ea473ab1e0219cfb9a04351806e0cd67685b95fcdf981e",
+  "source": "/workspace/experiments/minicpm-s2/code/kv-observed-pair-full-20261021T223613Z",
+  "base": "/workspace/experiments/minicpm-s2/code/kv-full-restore-20261021T214400Z",
+  "source_count": 418,
+  "reference": {
+    "control": "20261021T214400Z-kv-full-restore-context16k-long-control",
+    "base": "kv-full-restore-20261021T214400Z",
+    "source_manifest": "a67c717f5e1f7ab5e2240dc9cd8623c02a91aa2b2958b9ee0bf206c791183829",
+    "innovation_manifest": "93375c426c9fb0b4d5abdb869ba94a8fab0a01ce1863ab0e1bd9785f586827fe",
+    "protocol": "1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8",
+    "transaction": "84be2242656e6ae0a30d65c803c2ae5076e836e0d1b6686731c4197a85b21883",
+    "worker": "5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477"
+  },
+  "builder_sha256": "fc937baf735e5694ce9d75c99c200e43b26524b9c24db09ed6939fc408ca2467",
+  "observer_sha256": "6a772a741ac96ac1f9d7ef7c8cff7578117bbdc8cc97258afaeec88e1c5b436c",
+  "preflight": {
+    "query": "68, 0\n",
+    "ixsmi": "Timestamp    Thu Oct 22 06:36:13 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  30C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+  },
+  "db_before": {
+    "snapshot_sha256": "89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605",
+    "schema_sha256": "29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078",
+    "logical_content_sha256": "71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29",
+    "table_count": 519,
+    "row_count": 19340
+  },
+  "matching_capacity_after": {
+    "control": "/workspace/experiments/minicpm-s2/framework/20261021T222731Z-kv-observed-pair-capacity-context16k-long-control",
+    "before": {
+      "snapshot_sha256": "89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605",
+      "schema_sha256": "29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078",
+      "logical_content_sha256": "71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29",
+      "table_count": 519,
+      "row_count": 19340
+    },
+    "after": {
+      "snapshot_sha256": "89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605",
+      "schema_sha256": "29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078",
+      "logical_content_sha256": "71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29",
+      "table_count": 519,
+      "row_count": 19340
+    },
+    "same_three_hashes": true,
+    "startup_observer": {
+      "pid": 233942,
+      "original_int_return": 22443583692,
+      "profile_context_calls": 1,
+      "restored": {
+        "parent_method": true,
+        "profiling_context": true,
+        "worker_method": true
+      }
+    }
+  },
+  "restore_byte_readback_enabled": false,
+  "command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/run_framework_screen.py",
+    "/workspace/experiments/minicpm-s2/framework/20261021T223613Z-kv-observed-pair-full-context16k-long",
+    "--source-dir",
+    "/workspace/experiments/minicpm-s2/code/kv-observed-pair-full-20261021T223613Z",
+    "--context-long-screen",
+    "--seed",
+    "721201",
+    "--require-log-marker",
+    "\"event\": \"DETERMINE_RETURN\""
+  ],
+  "required_evidence": [
+    "同PID实际profile1/原int与父list/三hook恢复及完整内存标量",
+    "双方实际KV/CPU/物理显存/DB/host工作后验",
+    "capacity实际SAVE-ZERO-RESTORE-DROP；FULL实际SAVE-FULL-DROP且0ZERO",
+    "动态R/页与run/copy几何/fast/host释放/runner/原consumer"
+  ],
+  "limits": [
+    "VERIFY0无回读，不继承旧VERIFY1标记。",
+    "同observer仍有共同stdout/CPU扰动，不能称完全无扰动。",
+    "不同R/恢复机会或DB/KV失配保留，不能把总差归因独立ZERO阶段。",
+    "准备锁释放后原bc51重取；root串行且既有seal收after/live/post，不自动启动第二job。"
+  ]
+}

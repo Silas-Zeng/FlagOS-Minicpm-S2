@@ -756,3 +756,57 @@ root第二完整run/control已本地，包b2bab46a…。本owner实际核capacit
 结论：两次启动未复现6块容量差，历史直接原因仍未知。当前logger rootWARNING30只解释当次标准INFO/DEBUG过滤，不倒补旧现场；不因同数值归因observer/FULL/VERIFY/cache，不无限补启动样本。root下一计划把同observer纳入原参数VERIFY0对照以携带启动分项，尚未新增该包装/实验。本阶段对应中文观察器说明/容量审计已更新，受测runtime与原件不改。
 
 **按root最新要求，本owner到此暂停文件写入，供一致发布/ZIP；目标仍active，仅为保存窗口。** 没有新研究、实验、SSH或GPU；后继待root明确解锁与新任务，不因旧“在途/无设备”历史段落重启已完成工作。
+
+
+### 归档解锁后：仅研究原物理 APC 前缀复用，KVPR 的 GQA2 反证
+
+root确认221629 ZIP完成后解除写锁，继续授权CPU研究及新共同观察器pair互审；没有恢复SSH/GPU权限，也未改受测runtime。新增中文 `analysis/2026-10-22-kv-surviving-prefix-reuse-plan.md` 与 `analysis/source/kv-surviving-prefix/geometry-evidence.json`（SHA **ff61858eac6eacf18a4ebdab60ff83494e95fed14346775d413cc5854fc74250**）。唯一后继机制是恢复前复用同victim仍存活且有原内容来源证明的APC物理前缀，只复制缺失后缀；目前只研究，没有实现、观察器或新测试，当前capacity/FULL pair不加计数器。
+
+actual2e91/22e/9dd/3fc5已逐路径核源码：native allocator能先touch local再分external；当前1aff在native lookup前强分完整R，随后要求allprivate/unhashed。214400原SAVE206行与FULL215行数组重新计算交集218 ID、初始190 sourceID出现在destset，124.6875MiB/18.1992%只说明几何机会，**不等于H190有效缓存**；期间evict/重分配/同hash重算仍未知。严格未来proof需原hash/refcount/分配代际或真实完整42层回读，不拿ID/hash代替bitwise。ref0命中H会touch少free H、external少H，容量仍P，不能绕F<P早退；shared-ref>0不在首版。若真H为0或开销大，收敛，不做扫描。旧fragment-aware截短R方向与本方向不同、均未实现。
+
+primary来源完整保存于研究doc：vLLM0.24官方APC设计、ACL2025 KVPR原PDF。KVPR Eq6假设MHA输入hidden与每K/V同宽；我们实际BF16 hidden2048每层4096B/token、2KVheads×128的K+V仅1024B/token，42层activation存取为KV四倍。替代比例f的H2D字节为C(1+3f)，额外投影/位置处理未计；R16704全层hidden需2873622528B/2.67627GiB，现1GiBslot与已有快照无此hidden。不能套论文吞吐，也不否定另种checkpoint/已驻GPU情形；当前不实现。
+
+systems正准备新的 `prepare_kv_observed_pair_source.py` / `launch_kv_observed_pair_screen.py`，接续仅定向互审：capacity212106/FULL214400完整416原树、共同6a observer→418、FULL init791c已被原6a允许、不改受测6a字典/旧innovation；VERIFY0/原参数/DBbefore=after匹配/实际profile与KV后验。尚未收到最终资产，无新设备结果。
+
+
+### capacity/FULL共同启动观察器VERIFY0包装：最终定向交叉审无阻断
+
+最终builder `scripts/remote/prepare_kv_observed_pair_source.py` SHA **fc937baf735e5694ce9d75c99c200e43b26524b9c24db09ed6939fc408ca2467**；launcher `scripts/remote/launch_kv_observed_pair_screen.py` SHA **d768860b8f9d9491b6ea473ab1e0219cfb9a04351806e0cd67685b95fcdf981e**。已全文只读与原be934/0ab设计差异审，实读final没有后续delta，未发现阻断root最短串行设备对照的问题。
+
+本owner独算原21210673e5/5bef、214400a67c/93375 manifest/innovation SHA、416条及三角色pin全真；两init均原791c，确由同6a原允许字典精确append→39fb，不给FULL另改观察器身份。builder完整source_files前后校验，保旧innovation原字节，新目录416→418，只新observer/manifest和原init末尾；worker a8de/runner e155与各自三协议模块不改。两run均原bc51 context-long/seed721201/服务参数与VERIFY0，不继承旧VERIFY1回读。
+
+FULL必须用本launcher已完成capacity的control，同wrapper/完整418源/exit0/fullpost/双栈idle/owned PID停止与真实profile1、同PID父list、三hook恢复；DB实际重算before==after==FULL before三SHA，否则不启动。准备独占flock+idle后释放锁让原bc51重取，不自动起第二job。root另外从真实215849/220122日志运行抽出的observer_receipt通过，本owner未重复相同兼容检查或copy/CPU套件/设备。作者静态 `analysis/source/kv-memory-observer/observed-pair-wrapper-check.json`已只读，没有新增运行代码。
+
+回执发root/systems。启动实际DETERMINE/profile值、KV容量、CPU、R/几何、真实SAVE-ZERO-RESTORE或SAVE-FULL、host释放/runner/消费者与最终DB仍需每run后验；共同观察器也有共同stdout/CPU扰动，不称无扰动。不同恢复机会/R或KV/DB失配不能把总差归因ZERO阶段。APC前缀新研究不混本pair。
+
+
+### 共同observer原件验收入口与victim只读方案交叉审
+
+` scripts/review_kv_observed_pair_run.py` 最终 **a5b7e2418a431c9e2e4907490f5f8605c94d8fe622066211448466741f545ee3** 已全文只读终审，无当前阻断；实际核其依赖2071bff3原脚本和inspect_raw单个416→418切口，保81f2原long validator，不调用旧FULL VERIFY1 inspect。418完整源集合/原footer/六a、两reference/pin/原SERVER/seed/VERIFY0、实际同PIDprofile1/加载身份/三恢复、动态R/容量4ACK或FULL3ACK、无诊断回读/几何/host释放/runner六检查/后继原consumer均有独立判定。compare逐项记录DB全链/KV/启动分项/原args/packages/CPU/显存匹配；失配保完成结果且收益字段null，匹配也仅描述总差，几何/等待差异单列，不归因独立ZERO。已回framework/root；本owner未运行raw/兼容合同或套件。
+
+未来victim只读设计 `analysis/2026-10-22-preemption-victim-tail-review.md` **722aec0ed9cf17d1364222abbf671bc82e65c7ada379b411eeab4275f489254b** 全文审，无当前设计阻断。首次actual allocateNone、原victim选择前CPU快照必要，尚无实现或具体阈值；明确不能从聚合输入总数/请求ID猜每条长度和进展，尾部长等待与保护最早释放者存在冲突。硬件补充已发作者：实际可释放应数ref1非null blocks而非owned总数/不能乘42；不同victim真实R×43008还须1GiBslot可容纳，否则SAVE/重算成本路径不同。保原PRIORITY撤销语义、pending/FIFO/随机状态与新accuracy边界，赞同只有唯一快照先判可否定，不先造完整scheduler。
+
+APC研究最后仅澄清容量公式是恢复R前缀下界，不是包括full-sequence/watermark/new-token的整体充分准入条件。新研究/runtime/当前pair未混，仍无任何本owner设备操作。
+
+
+### 222731四MiB启动分项专项已独立通过，具体分配根因仍未知
+
+root取回完整222731 capacity长轮后，本owner只跑一次独立内存原件核算，不运行framework全门/新suite。首轮静态取6a EXPECTED_LOADED采用literal_eval，因dict两Name引用ValueError且没有通过文件；同一问题framework独立发现并保旧a5b/first-attempt。随后本owner显式四loaded源SHA核完三份原log，JSON `analysis/source/kv-memory-observer/222731-four-mib-review.json` SHA **de35192db67a72681663f984e472e40e128d0a681fea730928ab0dff96de0574**，中文 `analysis/2026-10-22-kv-memory-four-mib-observation.md`。没有把失败当设备错误；先前只读审遗漏Name引用已向root说明。
+
+222731 Engine233942第91/92行单次DETERMINE/PARENT、profile1、原int22443583692→父list、三hook恢复全真，6a/39fb/a8de/e155与自然loaded四源身份已实核。原log025144e6…/source-mapc9f240d9…；root包8ded4126…。比215849/220122，11项非时间差仅预期nonTorch residual/NonKV/available-return与before/after cuda/free的±4194304链；init/beforecreate、Torch reserved/peak、weights/peakIncrease/graph和logger不变。所有snapshot/worker原公式实算成立。profile阶段自身nonTorch增量三轮仍60817408B，因此4MiB在before_profile前已存在；只定位阶段/估计项，不定位具体库/进程allocation。
+
+原returned22447777996→22443583692，/688128商32621→32615，对应KV521936→521840；6块4128768B、额外65536B使余354508→288972。installed池floor源码未新取得，记算术一致，不冒称新内部采样。nonTorch是(total−free)−Torch memory_reserved残差，绝不直接当某allocator分配trace。不能回填所有旧521840/归因long开关、protocol、VERIFY或cache。418源后态/68/0/双栈关闭子集独核，DB51919340三SHA同为root封存回执；完整链/性能由framework负责。原observer/variance报告只追加新状态，不重写前两轮未复现历史。
+
+framework修正版validator **c0c80dcf81b2fc0727f06b43d166a61ad042916ee300511243c2aae42cb14c00** 对旧a5b只新增loaded_sources白名单解析EXPECTED_WORKER/IO、未知Name/非str拒绝、一调用替换。已只读精确diff终审无阻断回root/framework，未重跑其raw/套件，原runtime/source未改。下一FULL仍root唯一GPU/同观察器后验，不追加盲目startup或改KV参数。
+
+
+### 后继victim纯观察互审职责（当前尚无待审首稿）
+
+root在223613 FULL唯一GPU在途时正式授权framework实现默认关闭首次RUNNING allocation失败CPU快照，本owner为互审owner，不另写runtime/test。已核actual df780522–564与txn616 plan_snapshot79–98：安全R按issued减真实queued SchedulerOutput scheduled spans、再受lenknown−1上界取16整页；R<16/queue未知不能报eligible，placeholder不可替代queued。当前schedule已scheduled但尚未issued的locals不应再重复扣，单列更清楚。实际完整R须有对应逻辑页覆盖/非null；可释放容量只数ref1非null唯一物理block，不乘42。R×43008≤1GiB只是payload静态cap，不证明实际pinned内存/1GiBheadroom可用。读失败必须只记未观测、原pop/preempt/返回异常与CoreContextVar finally照旧，不改当前pair。上述审点已发framework/root；本条时新模块/builder尚未落首稿，等待作者给pin后只读审。
+
+
+### 223613 FULL启动/无ZERO/同页几何专项完成
+
+root完整223613原件到齐后，本owner只核新FULL与222731的必要差异，不重跑framework c0全门/旧suite，不算性能。新增 `analysis/source/kv-memory-observer/223613-full-memory-transfer-review.json` SHA **9f319d02d09a906916eca753862b4c90b8ea27062e5bef07d94418360f7272ca**，四MiB报告末尾追加本轮。FULL logd27de1b9…/source-map2748cb69…。Engine235489第91/92行单profile1/PARENT原list/三hook恢复成立，selected非时间profile/snapshot/worker/derived/logger/返回值与222731完全同、四loaded源同、KV同521840。更早两smoke无4MiB偏移、这两个long有偏移是观察事实，不归因long标志/allocator或回填历史。
+
+真实命令链SAVE→RESTORE_FULL→DROP，无ZERO；真ACK zero_stageFalse/zero_calls0/fullcoverage/destinationbound，R16688/P1043/717717504B，SAVE23run966、目的66run2772。已独立逐数组比较，两轮实际SAVE源与RESTORE目的page_ids也完全相同，不只段数匹配。VERIFY0不回读，不能声称本轮42字节验证或accuracy。root/完整门负责DB/CPU/完整后态/总性能，本专项不把调用下降换吞吐。已回root，当前仍等待framework victim只观察模块首稿互审，无新runtime/SSH/GPU/额外套件。

@@ -1,0 +1,63 @@
+{
+  "kind": "首组共同6a capacity/FULL VERIFY0单次小信号，保留待唯一必要A2/B2复核",
+  "capacity_review_sha256": "ece929aef6d788658b7482ff5d22052cea7694cf5aa4e24f664e207327646f27",
+  "FULL_review_sha256": "4fb9b2caa35e77ed4b3267bcdc30a3a5d5963cc2f498d0dab5b1920129b909ab",
+  "capacity": {
+    "run_id": "20261021T222731Z-kv-observed-pair-capacity-context16k-long",
+    "duration_s": 218.81890873378143,
+    "total_tokens_per_s": 2545.7397773504263,
+    "mean_ttft_ms": 62472.47070692538,
+    "kv_tokens": 521840
+  },
+  "full": {
+    "run_id": "20261021T223613Z-kv-observed-pair-full-context16k-long",
+    "duration_s": 218.3848344660364,
+    "total_tokens_per_s": 2550.799836270839,
+    "mean_ttft_ms": 62338.00159151724,
+    "kv_tokens": 521840
+  },
+  "descriptive_metrics": {
+    "TPS_ratio": 1.0019876575624234,
+    "TPS_change_percent": 0.19876575624233617,
+    "duration_change_percent": -0.1983714617063148,
+    "duration_saved_s": 0.434074267745018,
+    "TTFT_change_percent": -0.21524539350935568
+  },
+  "matched_dimensions": {
+    "SERVER_shape_seed_packages_installed": true,
+    "CPU6_physical32GiB": true,
+    "KV521840": true,
+    "four_DB_snapshot_fingerprints": true,
+    "observer_non_time_memory_components": true,
+    "R_pages_runs_copy_and_fast_consumer_counts": true,
+    "same_actual_page_ids_hardware_specialty": {
+      "path": "analysis\\source\\kv-memory-observer\\223613-full-memory-transfer-review.json",
+      "sha256": "9f319d02d09a906916eca753862b4c90b8ea27062e5bef07d94418360f7272ca",
+      "owner_conclusion": "实际SAVE source page_ids及restore destination page_ids逐项相同，不只R/66run；本agent不重跑该数组专项。"
+    }
+  },
+  "actual_mode_difference": {
+    "capacity_commands": [
+      "SAVE",
+      "ZERO",
+      "RESTORE",
+      "DROP"
+    ],
+    "full_commands": [
+      "SAVE",
+      "RESTORE_FULL",
+      "DROP"
+    ],
+    "capacity_zero_calls": 2772,
+    "full_zero_calls": 0,
+    "VERIFY0_readback": false
+  },
+  "gain_status": "仅首组测得约+0.1988%TPS，未证稳定；不淘汰小信号、不取最好值。",
+  "root_next_decision_before_repeat_results": "仅一组A2/B2必要复核，无论正负或失配即结束该性能重复；A2 224411 runner236809已在途，runtime/builder/launcher冻结。",
+  "limits": [
+    "顺序A1→B1单样本，不随机/多轮统计，0.43秒差可受噪声/host与Triton等缓存影响。",
+    "同DB不等于所有缓存/host工作严格同，共同observer仍有stdout/CPU扰动。",
+    "总差是两模式整体，含FULL能力与覆盖检查，不能当独立ZERO阶段计时。",
+    "VERIFY0本轮无字节回读；旧各自VERIFY1门单列，完整accuracy/官方/默认资格未新增。"
+  ]
+}

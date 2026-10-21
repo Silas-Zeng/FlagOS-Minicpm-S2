@@ -1,5 +1,44 @@
 # 当前工作与 API 切换交接
 
+## 首组可比对照保留0.20%小正信号，进行唯一一组复核（2026-10-21 22:44 UTC）
+
+- 223613 FULL已exit0/32-0，218.3848344660364秒、2550.799836270839总tok/s、TTFT62338.00159151724ms；原件已本地，tgz `12ab2569ba15acfca31ad3a3ec9bafab6af8e3c0a42cfbc97c870dc5ac73046e`，418源/DB51919340三SHA/CPU6/32GiB/22:42:01.143516Z idle通过。c0唯一实审报告223613-full-review.json SHA4fb9b2caa35e77ed4b3267bcdc30a3a5d5963cc2f498d0dab5b1920129b909ab。
+- 相对222731 capacity，KV均521840，启动非时间内存分项、原SERVER/包/installed、DB四端三SHA、R16688/1043页/717717504B/源23段966call/目的66段2772call/fast462/consumer16均同；hardware另证SAVE与restore页数组逐项同。FULL实际SAVE→RESTORE_FULL→DROP，0ZERO/完整覆盖，VERIFY0无回读。shutdown警告按原件保留。
+- 单次描述TPS +0.1987657562%、耗时省0.1983714617%（0.434074267745秒）、TTFT−0.2152453935%；这是小正信号，非稳定因果/独立ZERO计时/新accuracy，全部保留。为确认小幅差是否波动，决定仅一组A2/B2必要复核，正负或容量/DB失配均记录并结束该轮重复，不追启动样本、不调参数凑容量。
+- 当前唯一GPU A2 `20261021T224411Z-kv-observed-pair-capacity-context16k-long`，runner236809，新source `code/kv-observed-pair-capacity-20261021T224411Z`，同fc937/d768/冻结capacity+共同6a→418/VERIFY0/原负载。systems负责后继唯一c0实际验收，framework同时实现全新首次缺页请求进展只观察模块、hardware互审，不混入本pair。最新远端/ZIP仍不包含该阶段新原件，后续统一发布。
+
+## capacity真实性能门已过，FULL对照正在上卡（2026-10-21 22:36 UTC）
+
+- 222731已exit0/32成功0失败，218.818908733781秒、2545.73977735总tok/s；KV521840，DB前后519表19340行三SHA89743b/29d740/71ac全同，418源/原bc51-SERVER/CPU6/32GiB/22:33:26.459826Z完整idle过。实际R16688/1043页/717717504B、SAVE966、目的66段、ZERO和RESTORE各2772、fast462/原consumer16/六checks/host释放；VERIFY0无回读。shutdown ERROR/WARN原样保留。
+- 原件已本地，tgz `8ded4126824d40bac5869cbb254238b9de9dbcceaa67907a7e73b926030f991b`；实际audit报告 `analysis/source/kv-memory-observer/222731-capacity-review.json` SHAece929aef6d788658b7482ff5d22052cea7694cf5aa4e24f664e207327646f27。首次a5b审计因AST literal不能解析6a中两个常量名而失败，原入口及失败记录保留；唯一c0c80dcf静态解析修复经hardware小delta审，必要重跑通过，runtime与原件未改。
+- 当前唯一GPU `20261021T223613Z-kv-observed-pair-full-context16k-long`，runner235307，新source `code/kv-observed-pair-full-20261021T223613Z`。同fc937/d768创建冻结214400+共同6a→418/init39fb，VERIFY0；launcher已核capacity完整前件、原profile1/三hook恢复、before=after=新before三DB SHA，然后原bc51/contextlong/seed/服务启动。
+- FULL实际启动分项/KV、完整SAVE→FULL→DROP、真实R/消费及性能均待，不能提前归因收益。新阶段原件尚未在e1e4740a或221629ZIP中，持续goal active。
+
+## 本轮首次观察到容量差的具体内存分项（2026-10-21 22:30 UTC，在途）
+
+- 222731仍为唯一GPU作业，实际EngineCore233942、KV521840。root只读实际DETERMINE_RETURN：init/before_create同215849/220122旧样本；before_profile与after_profile的nonTorch/cuda字节均比旧样本高4,194,304（4MiB），torch reserved/peak、weights5101233152与peakIncrease656424960相同。
+- 本轮nonTorchIncrease1004535808、nonKV6762193920、原int返回22443583692；旧启动样本分别1000341504/6757999616/22447777996。差异已能定位到既有profile的nonTorch组成、且在before_profile时存在；具体分配者/原因仍未知，不能把它回填到全部历史run。完整原件待退出封存，hardware独立复算随后进行。
+- 当前未结束、没有性能结果；不调util/预算/占位buffer凑容量。后继FULL同观察器继续实际后验，失配如实保留。
+
+## 同观察器的capacity性能对照已上卡（2026-10-21 22:27 UTC）
+
+- 当前唯一GPU作业 `20261021T222731Z-kv-observed-pair-capacity-context16k-long`，runner PID233765，新source `code/kv-observed-pair-capacity-20261021T222731Z`。两新remote路径先确认不存在，再上传逐SHA核；builder fc937baf/launcher d768860b经三方定向审与最短静态映射检查，旧包装与受测原件不改。
+- 冻结212106 capacity416树附同6a启动观察器→418/init39fb，原bc51/contextlong/seed721201/服务参数，VERIFY0。启动观测与真实SAVE→ZERO→RESTORE→DROP、R/页数/原消费者/DB/KV等均待实际后验，不能继承旧VERIFY1或预报收益。
+- 完成封存后仅在本启动器capacity before=after=FULL before三DB SHA相同、profile1/三hook恢复及完整后态通过时，串行启动冻结214400 FULL同观察器。两模式整体对照，不能从总差单独归因ZERO阶段，容量/行为失配原样保留。
+- 三agent继续并行CPU：framework实际验收及首次缺页请求进展观察设计；systems包装/登记；hardware互审及KVPR/GQA反证、GPU存活前缀复用研究。两个新研究报告已本地，未进入当前pair。最新e1e4740a/221629ZIP不含本段及新包装/后继原件；goal active。
+
+## 六轮完整离线包已验证，接续可比性能对照（2026-10-21 22:18 UTC）
+
+- 新完整包 `output/handoff/minicpm-s2-work-20261021T221629Z.zip`：417,218,318字节、39,743文件与2个symlink，CRC通过；SHA256 `ceb5878fd5ed865e9a2aeff3c72e5dee879bb1014dcd317faf02424b716bdafd`。覆盖本地HEAD `605f701ac16ab4d3cb5524d382c2ed1d7937cc4c`时工作树，包括六轮原件/子智能体记录、SQLite/tgz及Git恢复数据，发布回执在包内。
+- 新Git bundle已验证完整历史：`recovery/git/experiment-kv-capacity-full-20261022.bundle`，13,061,090字节，SHA256 `7543e116789eee6da003bdee2f8a64fe132d586b75ced5332bead1998dd27806`。四仓库状态见git-state-manifest。精确ZIP回执 `docs/kv-capacity-full-archive-receipt-20261022.json`及本条是包外完成说明，后续工作须另存。
+- 最新远端仍e1e4740a/70f27e8f/15,983项；两共享代码库无推送/PR。22:17:51Z实查设备68MiB/0%无GPU进程，随后socket核9031双栈闭，cgroup v1 CPU6/host20GiB；首次只读探测ss不存在及cgroup v2路径不存在，不影响原件，已改用真实v1读取。
+- 持续goal active；一致归档写锁解除，同三agent继续本地研究/新包装，root独占SSH/GPU。下一执行按 `analysis/2026-10-22-kv-next-valid-performance-pair.md`，先审全新capacity/FULL共同观察器VERIFY0包装，不改既有源、不重复旧VERIFY1门。
+
+## 六轮证据已全量发布（2026-10-21 22:15 UTC）
+
+- 固定本地 `692d68063c9b17440d1ef3e08ec8aae60bfda9e2` 已发布至专用私有实验库，远端main `e1e4740a1945bbdb595414e28f0e60ec796a66e6`，tree `70f27e8f71afd880d83e1eb047d71b3d6193bce1`，15,983项逐路径/模式/blob核验通过。本阶段六run、原件/三方审计/独立候选/负结果及下一性能pair计划已包含；不宣称可归因吞吐收益或新accuracy。
+- 精确发布回执见 `docs/github-kv-capacity-full-publication-20261022.json`。本回执及本完成条目随后写入，不递归冒称包含在该远端tree；忽略的SQLite/tgz/Git恢复数据另纳完整离线包，正在制作。三agent仍临时停写供一致保存，GPU空闲、goal active；两共享代码库无推送/PR。
+
 ## 本阶段六轮与三方审计已收口（2026-10-21 22:08 UTC）
 
 - 全部六个新run原件、完整源/命令/DB/后态、正负结果和子智能体工作已本地保存；registry104行×16列、queue80项。两startup仅shutdown WARN，无ERROR；FULL和部分long轮shutdown ERROR按各原件单独保留。三agent现已完成本阶段工作并暂停文件写入供一致保存，持续goal active、当前GPU空闲。

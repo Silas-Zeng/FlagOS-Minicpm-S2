@@ -61,3 +61,7 @@ root批准单次纯标量观察器及未来两个最短原参数启动，详细 
 后续两个观察器启动已完成：215849 stable与220122 capacity均KV521936；本owner独立比较全部profile字节组成、worker值、4snapshot非时间字段、derived和原返回/logger，完全相同，仅profile_time与timestamp变化。详见 [两启动专项JSON](source/kv-memory-observer/startup-pair-review.json) SHA `0fc5509022de9d376996f11fcc8342800fc04c1410e11097a2ad9c1c4fff794a`。weights5101233152、nonTorch1000341504、peak656424960、nonKV6757999616、requested29205777612.8、available22447777996.8→原int22447777996，graph0，两轮均一致；所有hook实际恢复成功。
 
 因此本次**未复现六块差异**，没有贡献项变化可用于定位历史来源。当前INFO/DEBUG缺失有当次root WARNING30继承链支持，仍不能倒补旧轮logger现场或字节值。root决定不追加startup样本，下一计划将同一观察器纳入原参数VERIFY0对照；本阶段只保存，不变更源/参数或扩大实验。历史原因仍未知。
+
+## 新证据：222731原公式分项首次解释本次六块差（历史不回填）
+
+222731完整原件已实际观察到相对215849/220122原nonTorch估计分项+4MiB，原nonKV+4MiB/intreturn−4MiB，实际KV521840。原before_profile与after_profile都多同4MiB，profile阶段增量不变；weights/peakIncrease/Torch reserved/graph均旧值。原返回整除688128商32621→32615、余354508→288972，与六块4128768B+额外65536B一致。它把本次差异定位到原残差估计项，尚不是具体allocator/进程分配trace，不能解释所有旧失配。完整三原log独立复核与边界见 [222731专项报告](2026-10-22-kv-memory-four-mib-observation.md)；本owner不重复framework全门、无SSH/GPU/改容量参数。
