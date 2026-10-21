@@ -6,6 +6,9 @@
 
 2026-10-22 最新入口：
 
+- [实际KV布局与执行器](2026-10-22-kv-runtime-descriptor.md)：195012最短上卡与独立验收，normal42、UniProc和队列证据。
+- [单请求KV保存恢复协议](2026-10-22-kv-transaction-protocol.md)、[worker实现](2026-10-22-kv-worker-implementation.md)、[独立审阅](2026-10-22-kv-transaction-independent-review.md)：真实事务接入、失败回滚与验证边界，最新设备状态读CURRENT。
+- [KV硬件预算与一手资料](2026-10-22-kv-save-restore-hardware-evidence.md)：20GiB主机限制、1GiB单slot、真实完成依赖与历史记账小候选。
 - [硬件与输入驱动的框架探索阶段记录](2026-10-22-framework-milestone.md)：本批决策、正负结果和下一项工作。
 - [调度与 KV 创新](2026-10-22-scheduler-kv-innovation.md)：真实缺页证据、否定方向和保存恢复状态机。
 - [KV 页复制门](2026-10-22-kv-page-copy-gate.md)：四种布局/页映射的上卡正确性与成本。

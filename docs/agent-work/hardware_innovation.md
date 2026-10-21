@@ -550,3 +550,29 @@ root仅本地分支codex/kv-save-restore（基70d04）新增c95f模块和实验�
 systems独立CPU事务初稿2656及测试a993全文已读，后继当前 `patches/framework/biv150_kv_transaction.py` SHA `aeea9ff44274f6b0a982861e3d14dcb3100ccaa64ea230184dba79b3cf52f791`、必要合同 `49753260c91151c3e9bc9323f45a699935adbc0117ef5cb85a71ea8357b28ae7` 只增fresh-zero split helper，内存移去精确重建2656。Key(session/req/incarnation/attempt)+HostSlot全生命周期serial拒旧ACK，完整Operation页/bytes/epoch校验，cancel在真实settled前不放在途资源，ZERO→RESTORE→publish、发布后不私有rollback均无当前CPU接口阻断。我未重跑suite或GPU。
 
 actual schedule先running分配523、waiting874，末1047才drain全zero集合，因此helper只保原before顺序、仅本事务独占dest尾段，真实zero ACK后才应用，避免drain别人的fresh页/后续zero擦恢复内容，必要且保守。适配器仍必须让SAVE ACK的producer fence覆盖所有将整体free旧页的在途写，不仅保存prefix bytes；旧frame原update成功后restore，实际source/privatefree成功才commit；新slot重建需新session/保持serial。当前无allocator/RPC/服务入口，CPU审通过不等GPU ACK真实或生产协议成立。关键边界已发送root和systems，研究文档一起保留。
+
+### 195012后转实际adapter，预算采用固定护栏而非调参
+
+root回执195012 descriptor已完成、原件在framework目录，framework负责完整独立验收，要求本owner不重复已证normal42，转助审actualadapter和预算。本人只读 `kv-descriptors` 两JSON中的cgroup用于预算：worker usage4373532672B、Core usage4636340224B、limit21474836480B，CPU quota600000/period100000。启动快照不是峰值；不把metadata当copy完成。research文档相应把旧“尚无原件”明确标成当时历史，未代做全原件布局结论。
+
+给root和systems的可执行初版建议为：单victim/单slot，1GiB **pinned payload** cap，不改模型或比赛启动参数。页688128B→cap最多1560整页/24960token，余262144B不凑跨页。当前aeea接口先用真实issued−全部queued scheduled与known−1/真实页数求完整R，B=R*43008，超cap原路；目标16K+1024out最大714MiB，本批无须新cap搜索或通用partial-R API，不谎改输入证据。动态门按实际limit-current，初版可另留固定1GiB headroom guard：lazy分配前H≥B+guard、后H≥guard；若预分pool已计current不要双减。读失败、预算已占/不足或分配失败submit前fallback；pending/cancel至真ACK仍占slot。此guard仅保守拒绝阈值，不称已测服务峰值/生产OOM保证，不扫描最佳值；CPU maps等其它内存也不假称被payload cap约束。
+
+平台is_cuda_alike=False只反对把上游native开关当已可用路径；**不否定本项目c95f自行实现且191545已GPU证明的copy**，这一边界已写中文研究。原report包括确切一手URL、20GiB无法全镜像20.90579GiB GPU KV、事件ACK/释放/恢复/采样和当前observer/CPU事务互审。此阶段继续只CPU，无新genericproof、无GPU请求，待systems具体adapter代码做所有权定向审。
+
+### actual FullAttention 纠正、worker与调度协议只读互审
+
+root新取actual7e3c接口确认needs_kv_cache_zeroing仅has_mamba，本模型False。此前文档的“原新页zero后restore”和aeea helper建议只属当时设计，被本节覆盖；不修改历史原件。原df7801046–1049不drain，manager22e列表为累计历史，不能当pendingzero；e155有zero分支不等真实执行。已告systems原草稿eligible要求True会永不激活，当前已改False、显式worker ZERO、不改历史列表。
+
+本owner实际核SHA并全文只读审 `biv150_kv_worker.py` **31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf**、`biv150_kv_protocol.py` **592d383c9dc9d87a631ad0dd94ac53d0339e6252400e9bca717f46e1999fac60**、`biv150_kv_transaction.py` **616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13**。后继如改pin需只审delta，不能沿用这三件身份。没有本人运行CPU suite/设备，没有改作者代码或官方参数。
+
+worker SAVE前整个device同步，覆盖将被原preempt整体free的全部已提交旧writer；strict实际UniProc在non_block RPC内先run_method再造future，无其它后台模型提交器的外推。slot/raw/pinned/event/单层核验buffer保持强引用，未settle failclosed，stale/异key不改当前slot；DROP nbytes0/pages[]与adapter匹配。显式私有页ZERO→同映射RESTORE，各真实event完成才ACK；诊断env1首个成功RESTORE42层逐页D2H/CPUuint8全字节核后ACK，单层buffer额外计预算，默认无核验，不称所有后继均已核验。
+
+adapter default-off/exact-source、内存单waiting切口，不改installed；实际R来自issued减真实queued spans并保留末token。SAVEACK后原preempt一次，原FIFO/update成功后清各旧frame；private ref1/unhashed+本次append尾段证明，needsFalse下完全不drain/修改历史list。ZERO/RESTOREACK后暂设R，原schedule无work时原free并回滚0，有work才原cached-resume转换/发布/drop；已发布不私有回滚。592完整ACKJSON及原_update_states后cached/generator对象、输出tokens/fullblocks/CPU R检查是必要启用证据，不是准确率或全局RNG分配证明。未见最短诊断服务阻断，已发root和systems；仍待实际事务/恢复/accuracy，不能继承103/105。
+
+**最终末次pin覆盖上段592历史：protocol `50375e899acbdcee15d3cdec2ecd77875fb355c56ccbfa663271509982ddc19a`，txn616040、worker31cc均不变。** 唯一delta为reserve_full_isl硬True→type(...) is bool，实际内存逆向精确重建592d全SHA；真实值原样传allocator，False下后继原分配失败/no-work有未发布回滚，算法不依赖True。定向终审无阻断已明确回复root，未改运行代码/重复suite。已只读owner最终adapter CPU JSON（actual f281 DTO、完整V2→cached/源切口逆回/defaultFalse/50375-616 pins）及worker31cc CPU JSON（DROP/预算/异epoch/无框架导入），不把CPU合同当GPU完成。root准备唯一context-long+VERIFY1实际诊断；本owner仅等待原件独立审，不预报恢复或吞吐成功。
+
+### 历史new_block_ids小候选：仅记队列，不抢当前主线
+
+按root任务查已归档actual与plugin的全部直接命名消费者：22e init75、extend276/309、take312–316；free383–410/默认new_step535无清理。2e91 take605–610只汇总，reset_prefix_cache不清；df7801046–1049唯一已归档原调用且当前False不走。CachedRequestData/runner/connector utils同名字段属另一对象；本轮协议新增读取历史作尾段证明。未取回的完整vLLM/反射访问不冒称穷尽。
+
+历史长度随累计分配A增长，页释放复用仍追加，不受物理pool32621限制，且单manager跨42层不乘42。无重算32×(16K+128)条件估33024项，64位槽位约258KiB+list预留，非实测len/RSS；追加已有block_id的int引用，不误按每项另造int估。长期服务无固定上限；当前协议tuple/前缀证明还增加O(A)扫描，仅少数恢复发生。详细证据、反例、条件上界与未来最短稀疏观测入口已追加 `analysis/2026-10-22-kv-save-restore-hardware-evidence.md`。尚无新实现/默认修改/GPU，不能直接clear破坏当前协议尾段证据；root允许后续有限小收益候选，本轮优先worker/protocol。

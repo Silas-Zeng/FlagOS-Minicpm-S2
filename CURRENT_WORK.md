@@ -1,5 +1,27 @@
 # 当前工作与 API 切换交接
 
+## 首轮真实保存完成，恢复机会丢失已保留（2026-10-21 20:16 UTC）
+
+- `20261021T200957Z-kv-protocol-context16k-long` 于20:15:05.000451Z正常exit0，32成功/0失败，524288输入/32768输出。开启恢复逐字节核验，221.117800504秒仅属协议诊断，不能用作性能收益。当前GPU作业已结束，后态68MiB/0%、无设备进程、9031双栈关闭；root仍为唯一设备owner。
+- 真实SAVE完成16704 tokens、1044页、718405632字节（685.125MiB），42层×24物理连续段=1008次copy；完成确认后释放旧页。随后发生DROP，restore_skips=1；未执行ZERO/RESTORE、恢复后逐字节回读或恢复消费者检查。只证明保存与保守回退通过，不能声称恢复机制已通过。
+- 日志没有具体skip reason，不能把原因断言为容量或pending frame。代码审查发现：暂态pending/placeholder/capacity拒绝即丢host副本，会失去后续恢复机会。systems先保存受测50375原件，再准备最小新候选：暂态保留副本，原FCFS照常；原输出实际调度该请求普通重算或请求终止/身份失效时释放。worker31cc和transaction616冻结，framework/hardware互审，尚未启动下一GPU验证。
+- 全部run/control已本地归档，包SHA256 `6b2abf4554bfdd3e2fc705a4b8d4a5555a033d764d17b35782296977821e253d`；416份归档/线上源码一致，DB516表19270行的physical/schema/logical SHA前后相同，Attention54c未变。独立验收见 `analysis/source/kv-worker/first-protocol-review.json`。shutdown的AsyncLLM/EngineDeadError与semaphore warning原样保留，不隐去。
+- 本批新结果尚未包含19:59的GitHub检查点或193403离线包；下一检查点持续同步实验分析库，两个共享代码库仍只改本地。
+
+## 第一轮真实抢占保存恢复在途（2026-10-21 20:10 UTC）
+
+- root唯一GPU作业 `20261021T200957Z-kv-protocol-context16k-long`，runner PID `215427`，隔离source `code/kv-protocol-20261021T200957Z`。原bc51 driver/原服务参数/16K输入、1024输出、32请求、并发64、seed721201；开启 `BIV150_KV_VERIFY_RESTORE=1`，首成功恢复42层全字节回读，只作协议诊断，不能比较吞吐。尚无实际保存恢复结果。
+- 最终三模块已交叉审：protocol `50375e899acbdcee15d3cdec2ecd77875fb355c56ccbfa663271509982ddc19a`、transaction `616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13`、worker `31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf`。复用a4de纯scope及c95f copy，不安装旧probe。真实new_block_ids历史复用、DROP0byte接口、reserve_full_isl bool原值传递都已纠正。
+- builder `89191b57542e8c2e44eb03b8ebee876f083f3e399e1085149ff0b6a36b49fa42`、launcher `e738b736829172a6cbd525cd0d5e5f9dc343a21e0ffe8bcf1c113bbe4a5db47c` 终审通过；唯一CPU真copy410→416，仅init791c+5模块，base/runner不变。worker最小命令/预算合同与transaction/实际DTO接入合同通过，均不代表GPU协议已通过。
+- 真实门须同一事务SAVE确认后free、ZERO→RESTORE完成与逐字节回读、RUNNER_RESUME_STATE_CHECKED和原输出处理后的RESUME_OUTPUT_PROCESSED均成立；无触发或失败均原样保留。所有在途代码/记录尚未包含19:59远端检查点，也不在193403全ZIP中。
+
+## 协议实现中的关键纠正与发布（2026-10-21 20:00 UTC）
+
+- 当前无GPU任务，worker与调度协议均在本地CPU实现/互审，尚未上卡。root核实际kv_cache_interface SHA `7e3c220998267190a622e216b2b125306807cf8be3ec1e9a8e84fe6e7a293003`：needs_kv_cache_zeroing只取has_mamba_layers，本MiniCPM FullAttention为False。不能要求True作为可执行条件，也不能把“runner有zero调用源码”说成本模型实际会执行清零。
+- actual单管理器22e仍对FullAttention累计new_block_ids，但df780只在needs=True时drain；故before列表可能含历史复用ID。此前“before与新目的页不能相交”的判断不成立。systems修正为真实当前私有页/refcnt/unhashed/本次append尾段证明；framework worker显式清零自己的目的页并等待完成。历史原件不改，旧研究中有关必然zero的推断由本纠正覆盖。
+- 私有实验库已发布本地 `02c8e4a51082805c1369c40a9f8f416d733f921a`：远端main `ef4e51b228e7e4472b743fe7afb226d4d800cba9`，完整tree `3a48d5699f3d94f88ff90ccd694e412dc2e8a5b2`，10,892项逐路径/模式/blob SHA全核验；只包含已完成195012/194147观察与当时中文记录。后续KV协议WIP与本回执未包含。
+- 本地共享plugin分支37661另已备份 `recovery/git/plugin-kv-local-20261022.bundle`，完整历史verify通过，SHA `3680d4fd0eccb39f17370feaa9b4ba7616ef6ffb7de770de19e0af3012e6ccbf`；无代码库远端推送/PR。发布和覆盖边界详见 `docs/github-kv-descriptor-publication-20261022.json`。
+
 ## 实际KV与执行器观察已完成（2026-10-21 19:52 UTC）
 
 - `20261021T195012Z-kv-runtime-descriptor-smoke` 于19:51:12.927434Z exit0；唯一smoke请求完成，非性能或accuracy门。412份source/live/control核验、DB516/19270三SHA不变、postflight68MiB/0%、无GPU进程、9031双栈关闭、所有owned进程退出/Z通过。当前无活跃GPU任务。

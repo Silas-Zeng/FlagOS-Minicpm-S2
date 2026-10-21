@@ -522,3 +522,37 @@ root解除上批归档写锁，授权继续CPU-only实现一次性runtime descri
 冻结自查发现exact e155只有uniform分支创建cross_layers_kv_cache属性；normal可能缺项，之前data.get把缺属性误写observed_none。已在root上传前hold旧fdf2/14a，仅改该字段三路：缺属性unobserved_missing_attribute、实际None observed_none、存在Tensor原descriptor，未改hook/计算。runtime最终 **0c892ad02fbfe663d3f7c8f668cdd000c0c1fc7860ff915db8bce5949cae0667**，builder仅asset pin更新最终 **936c9260724f97b02dc1e69da2f4f0da7cdfaf7fdcb0e8ab866c26d9c028c59e**，init90fe/runnere155完全不变。上条fdf2/14a为过渡历史，不再上传执行。
 
 hardware已定向逆换此单块精确回fdf2并独立终审通过，已发root：无新hook/API/计算，不扩suite。CPU合同只加一条缺属性断言，原合同必要末次1.73s exit0；脚本最终 **445cc886d5506537051dc3caa006d544c9858ef985a4f11c7a7c912b56f5a73a**，结果 **f0771d57a090466499bd48996636c41d198f1f3fe3abfd78618a40c98f0d189f**，scratch `tmp/patch-check/kv-runtime-descriptor-20261021T194709782780Z`。中文说明表与字段边界已同步最终版本。root可按原命令最短smoke；本owner不再改代码/加字段或运行设备。后续须真实worker42/core事件，不仅INSTALLED；当前没有服务布局、save/restore或accuracy新证明。
+
+### 195012真实布局已独立验收；事实纠正与事务互审已落盘
+
+root完成195012 smoke后本owner运行新只读 `analysis/source/kv-runtime-descriptor/review_actual_smoke.py` **8695c1791ab0ee0f4eb1096fea26779de4c6300a8cfeac33b80ea7fc010e18c5**，exit0；结果actual-smoke-review.json **be3f889f2227777f7eb623116ba77bfaf298011e98bf4f8c4bf33ac62421ac16**。412source全SHA/936cpreparer/0c89observer/90feinit/e155runner/bc51原smoke参数/live412/post54c一致；1请求8in32out非性能/accuracy。pid213942实际CoreProc→UniProc→WorkerWrapperBase→WorkerFL→ModelRunnerFL，worker/runner对象id与Core直接引用相同；AsyncScheduler/queue2。42层/flat42均BF16/cuda0、shape[32621,2,16,2,128]/stride[8192,4096,256,128,1]/offset0，42独立storage各534462464B=normal42，KV521936，cross actualNone/shared{}。
+
+DB before/after实体/schema/logical同516表19270行；CPU6/32768MiB；cgroup20GiB限制，worker/core两个时点约4.37/4.64GB不是峰值或pinned保证。post19:51:39.482845Z68MiB0%/9031双栈闭/无GPU进程/412live fail[]，controller213760Z/PPid1。原smoke/events未改。支持继续独立CPU协议实现，不证明传输完成或恢复语义。
+
+hardware纠正源码事实：e155 __init__:587已显式cross_layers_kv_cache=None；本owner此前仅沿uniform赋值检索，误称正常路径可能缺属性，现明确撤回。0c89 missing/None/Tensor三分是未知/部分对象保守处理，不是已证生产bug。中文说明及该纠正已同步；observer/builder冻结原字节未改。文档错误`--run-id`已改实际bc51 positional run_dir，root真实launcher本来就正确。
+
+KV事务独立CPU审阅已落 `analysis/2026-10-22-kv-transaction-independent-review.md`，未改systems文件/运行其suite。关键反例已发：V2只把New移cached仍会因_make_cached_request_data仅notV2补all_token_ids而在e155异步resume KeyError；必须成套copy真实token列表/numoutputs/fullblockreplace/resumedset并保CachedState/RNG对象。pendingframe只在原Core FIFO→abort处理→update成功后按epoch释放，不动queued payload。FullAttention needszero=False，new_block_ids有历史ID，不可把before当活跃zero队列或drain；systems已接受按实际私有/追加尾证明调整。原streaming已有state保generator，但清output；原discard对非None generator退offset4，全局RNG变化仍需accuracy。
+
+### root正式授权worker传输实现；31cc首稿正在跨owner终审
+
+root确认本owner独占 `patches/framework/biv150_kv_worker.py`，systems独占scheduler/Core/transaction/transform；只CPU本地，不SSH/GPU。当前worker **31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf**：无install/框架topimport，显式rpc(wrapper,command)；actual normal42/e155/a8de/7da+受测c95f copy精确guard，SAVE匹配worker请求原prefix blockIDs，单1GiB payload+1GiB headroom guard/分配前后cgroup。device-wide producer fence→D2H→真实event ACK；ZERO仅本事务私有目标raw narrow.zero_（原Mamba helper/no-op不可用）；RESTORE同ZERO映射后H2D/event ACK，不能settle时保host/raw/event强引用返回completedFalse。stale/异epoch不改现slot，DROP支持实际0bytes/空pages、owner/key/serial/settled校验。
+
+root要求的真字节证据：仅诊断env BIV150_KV_VERIFY_RESTORE=1，SAVE预算额外一个layer pinned校验buf；首个成功RESTORE后42层只读目标页D2H复用该buf、逐层eventsync+CPU uint8equal对原savedhost，全部通过才ACK，失败不publish；核验后释放buf/后续不重复，默认off无回读。完整ACK含readback/zero/copy字节与次数/预算信息，已要求systems._rpc记录原JSON而不只Receipt。此诊断不能用于性能窗口。
+
+唯一最小CPU合同 `analysis/source/kv-worker/check_cpu_contract.py` 0.35s exit0，结果cpu-contract.json：命令/预算、0byteDROP、异epoch不污染slot、纯stdlibimport/compile；不模拟Tensor/GPU，不扩suite。hardware已收到当前全文审阅，root/作者已收到接口与SHA；尚未冻结、无真实设备协议门。下一条：回应跨owner必要修复/冻结worker后交systems集成独立源，由root最短实际抢占诊断；本owner不动其文件、无设备任务。
+
+### worker31cc已全文终审冻结，root包装预审通过
+
+hardware已全文审最终 **31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf** 无阻断，确认包含_VERIFIED_ONCE；不重跑suite/GPU。runtime现冻结，root/systems均收到唯一rpc接口、DROP0bytes兼容、ACK完整日志要求和依赖c95f。唯一CPU合同脚本 **81b7b106f5f1c1ca5facce6e3d411bd528da3a92bb33d24fe5077d850dc8b94e**，结果 **a82786e055e6b8f770e46aaae3be52646f62704ec991ae93739e1cf814bc81d7**。实现/完整状态/预算/诊断开关/下一门说明落 [`analysis/2026-10-22-kv-worker-implementation.md`](../../analysis/2026-10-22-kv-worker-implementation.md)。无实际KV事务设备结果，不继承copy门或accuracy。
+
+root已独占新prepare_kv_protocol_source.py/launch_kv_protocol.sh，本owner全文预审无逻辑阻断：8core/5BIV exact、helper0ecf、新目录、5asset AST compile/literal init append、只init+5module/fullSHA、无runtimeimports；原bc51/positionalrun/seed/Serve/idle/双栈/driverflock保留，ENV1与purpose/command记录。当前UNREVIEWED三pin/init/launcherpreparerpin会拒绝运行，待systems最终SHA由root填+一次CPUcopy。非阻断建议只补内部filealias解引用清单；owner已拒外部/目录link且fullbytes验证，本owner未改root文件或执行脚本。
+
+下一操作：等待systems最终adapter/transaction给出后只读互审V2payload/FIFO/私有fresh页与完整workerACK日志；root负责最后包装、唯一真实contextlong诊断及封存。observer0c89/builder936c与worker31cc都保持冻结。本owner没有SSH/GPU/后台任务/共享代码库修改或push。
+
+### root最终包装已定向终审，等待真实事务门原件
+
+root最后包装builder **89191b57542e8c2e44eb03b8ebee876f083f3e399e1085149ff0b6a36b49fa42**、launcher **e738b736829172a6cbd525cd0d5e5f9dc343a21e0ffe8bcf1c113bbe4a5db47c** 已本owner实核SHA和最后小delta，无最短真实诊断包装阻断。五asset逐SHA吻合probea4de/copyc95f/transaction **616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13**/protocol **50375e899acbdcee15d3cdec2ecd77875fb355c56ccbfa663271509982ddc19a**/worker31cc；纯AST读取footer+原e043 bytes独立重算init **791c38c20a648f4868e56e24efdae7351671960462232defb85997738f41a2b8**，没有执行任何candidateimport。
+
+相对已全文预审只有pins和aliases_dereferenced（与observer同块）；owner0ecf先验内部regularfile，外部/目录link仍拒，原8core/5BIV集合/新目录/只init+5module/全copySHA未改。launcher仅填builderpin，bc51/ENV1/positional run_dir/原seed/服务参数/负载/idle/双栈/driver锁全部保持。root唯一CPU package-check.json已读：410→416、6changes/base+runner不变/noimports，与最终pin一致；本owner未重跑copy/suite/GPU。已即时回root可唯一owner串行真实门，中文worker说明追加最终状态，旧UNREVIEWED只是历史。
+
+当前observer0c89/builder936c、worker31cc与父方最终包装均冻结；下一条只等实际事务SAVE/free/ZERO/RESTORE全字节回读与后继consumer原件，再做独立证据验收。不把CPU ACK链/包装通过当GPU恢复、accuracy或吞吐通过。本owner没有在途设备或后台任务。

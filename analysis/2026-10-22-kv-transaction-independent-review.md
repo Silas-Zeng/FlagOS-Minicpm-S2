@@ -1,0 +1,15 @@
+# KV事务CPU独立审阅：V2恢复、FIFO与fresh zero边界
+
+framework_innovation，2026-10-22。仅读systems的`patches/framework/biv150_kv_transaction.py`与实际df780/27b/e155/22e/2e91源码，不修改作者文件、不运行其测试或GPU。首读aeea9ff、后读新增rollback_unpublished的fae49192版本；作者仍在接入，以下是挂点约束，不将纯CPU事务称为完整服务协议。
+
+事务本身只产生Operation与消费外部Receipt；pending-frame集合、slot单调serial/epoch、save完成前禁free、zero→restore→publish以及未发布私有页rollback的状态边界合理。Receipt.completed仍须worker真实事件/settle，不能由CPU阶段、future.done或placeholder伪造。当前无安装/框架导入，不能以它已通过合同推断真实resume已正确。
+
+最关键的具体反例与建议已发systems/root：
+
+1. **V2搬到cached列表还不够。** df780约1013把resumed移到NewRequestData并带_all_token_ids。e155已有req会进_update_streaming_request，清output_token_ids并将此前输出当prompt；其已有generator对象仍保留，不能误说必然重建generator，只有requests中无旧state的新分支才创建/seed generator。专用恢复应保留原CachedRequestState及原prompt/output边界；从new移除后成套补resumed_req_ids、完整替换block_ids、computed R、output数量及all_token_ids。**df780 _make_cached_request_data:1259仅在not use_v2时自动补all_token_ids，而e155:1451异步恢复num_output>0会直接索引它；只复用该builder会KeyError。** 必须为本次恢复显式补真实已确认token列表拷贝，不能引用后续会变的Request list。
+2. **pending frame必须按实际原输出消费围栏。** Core27b:590 FIFO pop，595取future，603先处理abort，604–607原update_from_output返回之后，才可按snapshot epoch通知frame_processed；不能以device fence或future.ready代替CPU消费。不要修改仍在batch_queue中的SchedulerOutput/new/cached数据或提前消费其中一个请求；req ID复用、取消或原update失败都不能放行恢复。原payload及位置/RNG归属保持。
+3. **不要drain其它RUNNING的zero。** 22e.new_block_ids是跨本schedule累计list，原df780在输出末尾整体take。split_fresh_zero_ids(before,after,private_pages)只移除此次独占追加尾段、保before原序是正确方向；同页回收再分配或别名不满足前提须原路。2e91明确num_external>0时num_new_tokens=0合法，可先只分R前缀页，避免原new suffix页混入restore集合。原后续allocation失败必须在publish前rollback私有页和tentative computed；一旦发出工作不可静默回退。
+4. **原zero helper可能空操作。** e155 _zero_block_ids只有存在_kv_block_zeroer才调用；plugin WorkerFL未见stock worker的_init_kv_zero_meta流程，不能无检查调用后ACK成功。root已同意worker独立对实际normal42、本次private页的raw uint8 narrow(run).zero_，真实event完成后再restore，不改默认runner/不触其它页。
+5. **RNG边界要诚实。** e155 bookkeeping:3703–3709对discard行的非None generator回退offset4；恢复必须保原generator对象/已消费状态，不多调用采样或改行。默认非seeded请求用全局随机流，减少recompute可能减少原丢弃采样，不能从bytewise KV一致推出逐token同基线。worker拷贝不调用RNG；端到端新路径仍需独立accuracy，不继承103/105。
+
+实际195012已独立证实UniProc/WorkerFL/ModelRunnerFL同pid、normal42/42独立storage与queue2，解除“静态类不等实际对象”的缺口。剩余worker传输/真ACK/字节核验和scheduler专用payload仍由双方分工实现，交叉互审后才由root最短实际门验证；不扩大CPU模拟框架。

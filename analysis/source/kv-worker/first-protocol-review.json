@@ -1,0 +1,83 @@
+{
+  "status": "verified_save_and_drop_only_no_restore",
+  "run": "20261021T200957Z-kv-protocol-context16k-long",
+  "source_count_rehashed": 416,
+  "source_manifest_sha256": "910dd6ae11e6b07aa28cc3443dce790f85a7fca3589ebbc28905603f7c823079",
+  "manifest_sha256": "7e3ed7409da629fc5b7cb140dc9fde95ebc507c98c922edef7ffb144b9483ff2",
+  "raw_sha256": "ea111c6e9e8634f1b6ae224c740b4789aa6f7f918f7e2026402da847e968400b",
+  "server_log_sha256": "5a532c9f2129a7cc8c9cfacf1d891c4524196a254cb2c8266065ac7f822254f1",
+  "saved_prefix_tokens": 16704,
+  "save_bytes": 718405632,
+  "logical_pages": 1044,
+  "physical_runs": 24,
+  "copy_calls": 1008,
+  "saved_then_source_free_recorded": true,
+  "drop_host_released": true,
+  "restore_skip_count_at_drop": 1,
+  "no_zero_restore_verification_or_consumer_events": true,
+  "save_memory_observations": {
+    "memory_before": {
+      "headroom_bytes": 15878356992,
+      "limit_bytes": 21474836480,
+      "used_bytes": 5596479488
+    },
+    "memory_after_pin": {
+      "headroom_bytes": 14429618176,
+      "limit_bytes": 21474836480,
+      "used_bytes": 7045218304
+    },
+    "host_payload_bytes": 718405632,
+    "diagnostic_extra_pinned_bytes": 17104896
+  },
+  "database": {
+    "before": {
+      "snapshot_sha256": "1593d60cda1b2ed9a70df9fc4cebe3217e863f9fcb428000dea19fe21c8d6352",
+      "schema_sha256": "a0a590080bc570c73c1a25337faa1097038bcc6d755fe379a29066aefff7c5b2",
+      "logical_content_sha256": "90e9a86870767253d7a2f43483f9ddd431f577d9da6516f3a6bac555478a9ade",
+      "table_count": 516,
+      "row_count": 19270
+    },
+    "after": {
+      "snapshot_sha256": "1593d60cda1b2ed9a70df9fc4cebe3217e863f9fcb428000dea19fe21c8d6352",
+      "schema_sha256": "a0a590080bc570c73c1a25337faa1097038bcc6d755fe379a29066aefff7c5b2",
+      "logical_content_sha256": "90e9a86870767253d7a2f43483f9ddd431f577d9da6516f3a6bac555478a9ade",
+      "table_count": 516,
+      "row_count": 19270
+    }
+  },
+  "database_unchanged": true,
+  "cpu_quota": 6,
+  "physical_memory_mib": 32768,
+  "kv_tokens": 521936,
+  "preemptions": {
+    "before": 0.0,
+    "after": 1.0
+  },
+  "completed": 32,
+  "failed": 0,
+  "tokens": [
+    524288,
+    32768
+  ],
+  "diagnostic_duration_s": 221.1178005039692,
+  "diagnostic_total_tps": 2519.2725268176705,
+  "diagnostic_ttft_ms": 62550.40631070733,
+  "postflight_utc": "2026-10-21T20:15:43.088172+00:00",
+  "idle_verified": true,
+  "shutdown_error_lines": [
+    "(APIServer pid=215440) ERROR 10-22 04:15:01 [async_llm.py:704] AsyncLLM output_handler failed.",
+    "(APIServer pid=215440) ERROR 10-22 04:15:01 [async_llm.py:704] Traceback (most recent call last):",
+    "(APIServer pid=215440) ERROR 10-22 04:15:01 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/async_llm.py\", line 660, in output_handler",
+    "(APIServer pid=215440) ERROR 10-22 04:15:01 [async_llm.py:704]     outputs = await engine_core.get_output_async()",
+    "(APIServer pid=215440) ERROR 10-22 04:15:01 [async_llm.py:704]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "(APIServer pid=215440) ERROR 10-22 04:15:01 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/core_client.py\", line 1061, in get_output_async",
+    "(APIServer pid=215440) ERROR 10-22 04:15:01 [async_llm.py:704]     raise self._format_exception(outputs) from None",
+    "(APIServer pid=215440) ERROR 10-22 04:15:01 [async_llm.py:704] vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause."
+  ],
+  "rejection_cause": "仅知restore_skips1：冻结代码复合precheck或external-prefix allocation None，日志不能继续区分。",
+  "limits": [
+    "真实SAVE提交/完成与原free已记录，不是实际恢复/回读/consumer通过。",
+    "临时拒绝直接DROP会丢失后续机会；先保留旧负例，不能反推未记录guard值。",
+    "诊断含ENV1/日志/copy，不作为性能结论；无新accuracy或默认合并。"
+  ]
+}

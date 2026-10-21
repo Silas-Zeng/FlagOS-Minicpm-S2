@@ -26,7 +26,7 @@ runtime默认`install(enabled=False)`不导入框架。隔离init才显式True�
 
 ## JSON字段与边界
 
-`worker-kv-<pid>-<serial>.json`包含：实际worker/runner类，配置group/block size/KV heads/head size/dtype，42层直接`static_forward_context[layer].kv_cache`视图、runner平面kv_caches逐项shape/stride/dtype/device/storage offset/element size/logical bytes/storage bytes/alias group，以及cross_layers实际descriptor、实际None的observed_none或缺属性的unobserved_missing_attribute。exact e155仅uniform分支赋该属性，正常分支缺项不能误写成已观察None；最终0c892已作此三路纠正。列表索引不推断layer顺序；layer映射只来自实际直接属性。alias根据同pid的device/storage基指针/storage bytes分组，指针仅作内部key，不输出为可跨进程比较的地址。另存已观察的shared层映射、kernel block sizes/num_blocks及cgroup限额/时点；时点不是内存峰值或可分配保证。
+`worker-kv-<pid>-<serial>.json`包含：实际worker/runner类，配置group/block size/KV heads/head size/dtype，42层直接`static_forward_context[layer].kv_cache`视图、runner平面kv_caches逐项shape/stride/dtype/device/storage offset/element size/logical bytes/storage bytes/alias group，以及cross_layers实际descriptor、实际None的observed_none或缺属性的unobserved_missing_attribute。**源码事实纠正：exact e155构造函数587已初始化该属性为None；此前仅检索uniform赋值而称正常路径可能缺属性不准确，撤回该说法。** 最终0c892三分只为未知/部分对象保守区分，不改已有布局行为。列表索引不推断layer顺序；layer映射只来自实际直接属性。alias根据同pid的device/storage基指针/storage bytes分组，指针仅作内部key，不输出为可跨进程比较的地址。另存已观察的shared层映射、kernel block sizes/num_blocks及cgroup限额/时点；时点不是内存峰值或可分配保证。
 
 `core-objects-<pid>-<serial>.json`记录实际engine/executor/可直接访问wrapper、worker、runner、scheduler类，queue size/async属性及cgroup；没有同进程worker引用就明确unobserved，不为补字段发RPC。所有文件`O_EXCL`创建、不覆盖旧原件；输出失败另打印WRITE_ERROR。弱引用once集合不持有cache存储。
 
@@ -54,3 +54,15 @@ python3 "$ROOT/scripts/run_framework_screen.py" \
 ```
 
 **INSTALLED仅作预检，不当完成。** 退出封存后需有`worker-kv` status=`observed_complete`且42层/42平面tensor完整、实际shape/stride/offset/alias可读，以及`core-objects` phase=`first_engine_step_after_constructor`/actual executor。schema错误、partial、REJECTED、ERROR或没有事件必须原样保留并判观察未完成；不把smoke1请求时间作吞吐。照旧核driver/source/live/DB/CPU/请求与GPU idle。若成功才由systems/root继续审安全KV事务；本批不实现协议、不加额外GPU成本门。
+
+## 195012实际smoke：normal42与本地UniProc对象已独立验收
+
+root唯一设备run `experiments/framework/20261021T195012Z-kv-runtime-descriptor-smoke{,-control}`，19:51:12.927Z exit0。本owner执行纯只读 [`review_actual_smoke.py`](source/kv-runtime-descriptor/review_actual_smoke.py) **8695c1791ab0ee0f4eb1096fea26779de4c6300a8cfeac33b80ea7fc010e18c5** exit0，结果 [`actual-smoke-review.json`](source/kv-runtime-descriptor/actual-smoke-review.json) **be3f889f2227777f7eb623116ba77bfaf298011e98bf4f8c4bf33ac62421ac16**。
+
+412份归档source逐项SHA、preparer936c、observer0c89、init90fe、原runner e155、原bc51 driver/原SERVER/seed721201与live412均通过；完整包装只改init+加module。smoke实际一请求8输入/32输出，无错误response；不是吞吐/accuracy。六源安装guard通过，原post installed54c未变。
+
+worker与core事件实际同pid213942，worker/runner对象id完全一致。actual链为`EngineCoreProc→UniProcExecutor→WorkerWrapperBase→WorkerFL→ModelRunnerFL`，scheduler实际`AsyncScheduler`、async=True、batch_queue_size=2。42层与runner平面42项均为BF16/cuda:0、shape `[32621,2,16,2,128]`、stride `[8192,4096,256,128,1]`、offset0；各独立storage534462464B，共22447423488B，**actual normal42，不能拿packed42成本当生产路径**。block_size16/32621blocks=521936tokens，cross_layers actual observed_none、shared映射空。当前stream仍未观察，本门没有copy/restore事务。
+
+before/after SQLite实体/schema/logical均相同（516表19270行、1593d60c/a0a590/90e9a868），CPU6/物理32768MiB。cgroup v1限20GiB，worker时点usage4373532672B、core时点4636340224B，仅时点不是pinned余量或峰值保证。post19:51:39.482845Z 68MiB0%、9031双栈闭、无GPU进程、412live source无失败；controller213760 Z/PPid1不持设备。完整raw和event未改，支持后续**独立**KV事务适配继续CPU准备，不构成恢复或accuracy通过。
+
+文档命令已据实际bc51 parser纠正为positional `run_dir`，旧`--run-id`不存在；root真实launcher本来就正确，未影响本次运行或任何冻结代码。

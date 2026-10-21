@@ -1,5 +1,27 @@
 # systems_innovation 子智能体交接
 
+## 最新接续：归档锁解除，实际normal42单victim协议已实现待首门
+
+root最新owner回执：唯一实际协议门200957已启动，runner215427，三资产50375/616/31cc、builder8919/launchere738冻结，原context-long+VERIFY1；模型启动中，尚无实际SAVE/RESTORE完成证据。root已将CURRENT记录真实PID/source/参数。本agent具体序/重大needsFalse纠正/CPU合同/最终互审已全部落盘，**现在只读等待原件，不额外改运行源码/候选**；不把旧“未启动”作为现状态，也不将owner启动回执当独立成功。
+
+root已解除上一批写锁；本agent继续CPU实现，仍绝对无SSH/GPU/上游推送。195012实际descriptor证同PID213942 UniProc/Wrapper/WorkerFL/ModelRunnerFL、Async queue2、normal42 unique storage shape[32621,2,16,2,128]/BF16/stride8192-offset0；stream unobserved。旧“暂停写入”仅上一批历史。
+
+新增本人文件 `patches/framework/biv150_kv_transaction.py` **616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13**，独立CPU事务/有限单slot/epoch+全slot单调op serial、ACK-free/旧frame/zero-before-restore/取消settle/未发布rollback与发布后禁止private回滚。必要单合同 `tests/test_biv150_kv_transaction.py` 最新SHA见cpu-check，按新增真实反例必要复跑、均通过；没有GPU或大模拟框架。
+
+实际adapter `patches/framework/biv150_kv_protocol.py` **50375e899acbdcee15d3cdec2ecd77875fb355c56ccbfa663271509982ddc19a**，默认installFalse/e043 general init append；只内存编译exactdf780 schedule插waiting672一调用，原installed文件不写。Core_context+preempt原free前worker真实ACK、原FIFO update后消费旧frames、privateexternalR+ZERO/RESTOREACK后tentativeR、原有效调度完整cached-resume/all_token_ids适配后才publish/drop。无work/失败可未发布rollback；发布后不fallback，无法settle failclosed。R由真实issued−queued scheduled和knownlen−1取16完整页，cap1GiB/单victim而非写死16K，不park/重排/采样。
+
+必须保留的纠正：kvinterface7e3c needs_kv_cache_zeroing=has_mamba，FullAttention实际False；22e仍append新页但scheduler不drain，new_block_ids是历史，允许已释放ID复用。旧e6c硬True/拒历史交叠稿无效；现scope False、fresh尾段仅作本次分配证明，完全不take/drain/改历史list，worker显式本次prefix目的页zero_。helper `pending_zero=False`与private ref1/unhashed/页数共同证明，不能把before当活跃待zero。
+
+194147新actual通信源码d75c serial/7da workerbase逐SHA已核；callable collective_rpc收到wrapper再unwrap.worker，同进程不传tensor。worker文件由framework独占 `biv150_kv_worker.py` **31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf**，hardware已全文审。依赖还需a4de pure scope helper（不install probe）与c95f copy。root独占prepare/launcher/最短GPU，已给三pins，未重复包装。
+
+hardware已审adapter592d/txn616无最短诊断阻断；5037仅最后reserve_full_isl硬True→接受真实bool，原值传原allocator且有rollback，hardware已逆换唯一行精确重建592d并最终定向确认无阻断。完整ACK(含诊断verify/copy/内存)稀疏JSON持久；actualrunner `_update_states`只对本事务核cached/generator/outputtokens/computed/fullblocks/CPUcomputed，原FIFO输出后再记processed，不额外GPU同步或采样。existing streaming分支仍保generator对象，风险是clearoutput；不误称必重建RNG。
+
+中文具体事务接口/15源/精确10步/CPU证据/首门markers/失败回退/资源边界全落 `analysis/2026-10-22-kv-transaction-protocol.md`。adapter最必要CPU合同使用actual f281输出DTO验证V2字段/all_token_ids/cacheprop/publish-close、waiting插入逐byte逆回+compile、initexactappend/defaultFalse，无torch/numpy/vllm导入，见adapter-cpu-check.json。**协议尚未安装/上卡**；195012仅观察、191545仅构造复制，不提前填成功或性能。registry现93行/queue69保持，不新增伪设备行。
+
+本轮回执原文：实际normal42单victimCore/scheduler事务adapter已实现并给root三资产pins，worker并行完成，CPU必要合同/精确source-cut通过，hardware最后一行delta已精确逆换终审无阻断。代码未安装、无GPU/性能结论；首门必须真实save/free→FIFO drain→zero/restore+42层回读→cached runner状态→原输出消费，完整原件后才登记结果。
+
+## 上一批归档快照（以下暂停/等待语句按最新小节覆盖）
+
 更新时间：2026-10-22（Asia/Shanghai；原始实验以UTC为准）。
 
 ## 当前接续：KV复制成本门已跨owner审定；服务证据已更新

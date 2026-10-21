@@ -85,7 +85,7 @@ PagedAttention共享页使“保存请求所有page”和“能释放这些page�
 
 Core actual27b在110加载general plugin，221才绑定step_fn，故类方法wrapper时序成立；WorkerFL initialize_from_config原调用成功返回后观察，原异常先透传。默认install(False)不导入框架，只新隔离init显式True且需本次目录；只plain Tensor元信息，无值访问、GPU同步、current_stream查询、RPC或调度修改，内部storage pointer仅用于本PID别名键不输出。独立读过owner CPU合同和213→215完整copy证据，未重跑suite；缺字段/写失败仅诊断原路，不当布局通过。
 
-root launcher `scripts/remote/launch_kv_runtime_descriptor.sh` SHA `78414492a1b053b1c88ce1f9e461bd66b0b053da33009f2cdb362a40fcab4a84` 也已全文只读审：pin0c89/936c/helper0ecf/driverbc51/snapshot0f2a，双栈/68,0预检、原driver锁、正确positional run_dir、原smoke-only/seed721201、全新source/control及DBbefore均合理。只记录本次env目录，INSTALLED仍只是预检，封存后需worker42和core两个实际JSON。最终已通知root可排最短观察，**本轮尚未收到实际descriptor结果**，不能写真实normal/packed/executor结论。
+root launcher `scripts/remote/launch_kv_runtime_descriptor.sh` SHA `78414492a1b053b1c88ce1f9e461bd66b0b053da33009f2cdb362a40fcab4a84` 也已全文只读审：pin0c89/936c/helper0ecf/driverbc51/snapshot0f2a，双栈/68,0预检、原driver锁、正确positional run_dir、原smoke-only/seed721201、全新source/control及DBbefore均合理。只记录本次env目录，INSTALLED仍只是预检，封存后需worker42和core两个实际JSON。该代码终审时尚无实际结果；**随后195012原件已到本地，由framework负责完整独立验收，root已回执normal42成立**。本owner不重复布局审计，只取两份cgroup记录用于下一节预算，不能把CPU合同当该实际观测的来源。
 
 ## 单victim CPU事务互审边界
 
@@ -94,3 +94,58 @@ root launcher `scripts/remote/launch_kv_runtime_descriptor.sh` SHA `78414492a1b0
 新增pure-CPU fresh-zero split逆移后精确回前版2656。实际scheduler先给running分配新页，后处理waiting，最后1047才drain全zero集合；因此helper只允许原before顺序不变、本事务独占dest是after尾段，返回保留段和owned段，真实zero ACK后才应用，避免消耗别的running页或稍后再zero已恢复页。尚无任何allocator/RPC/安装入口或服务接入。
 
 CPU接口无当前阻断不等于GPU协议成立。未来适配器仍必须保证SAVE ACK的producer fence覆盖**所有将整体free旧页的在途写**，不能仅证明保存前缀bytes完成；原frame正常处理、实际free成功后再commit。slot serial若重建需新session身份，不能同session/Key重置后假称旧ACK安全。这些接入事实由真实descriptor/协议适配决定，本轮不代填或扩大实现。
+
+## 195012之后可直接采用的单victim预算护栏
+
+root要求评估1GiB静态cap，并明确这只是运行时资源预算，不修改比赛服务参数。两份实际descriptor的cgroup字段为：worker阶段usage4373532672B、Core首次step前usage4636340224B、limit21474836480B、quota600000/period100000。该时刻余量充分，但都是启动快照，不是长输出host峰值；不能由此宣称OOM永远不会发生。
+
+初版可使用以下固定、非扫描规则：
+
+1. `PAYLOAD_CAP=1GiB`，只有一个HostSlot和一个在途事务。cap只计pinned KV payload，不能把CPU描述对象/其它服务内存也说成被此cap硬性限制。按每页688128B，最多1560完整页/24960token，尚有262144B余数，不跨页凑满1GiB。
+2. **当前接口先按真实issued、全部queued SchedulerOutput scheduled数、known IDs与实际页求R，再检查 `B=R*43008 <= cap`，超cap直接原recompute。** 不为适应cap伪造issued或改真实token数。目标16K+1024out最多714MiB，本次不需要新增截断R的通用API；partial cache选择以后若需要必须显式记录，而非在输入证据中暗改。
+3. 动态拒绝条件用实际cgroup的limit−current；首次可把额外headroom guard也固定为1GiB，lazy分配前需余量≥B+guard，分配后再确认余量≥guard。预分配pool已经计入current时不重复扣减。读失败、slot已占、余量不足或CPU分配失败，在copy submit前回原路；该1GiB guard是保守实验拒绝阈值，**不是测得的峰值或生产OOM保证**，不搜索其最佳值。
+4. save/restore pending及取消后未ACK期间始终占slot和payload预算，不因CPU请求已结束就提前释放；无额外golden或全GPU镜像。allocator、pinned分配及ACK归属由实际adapter处理，状态机不冒充物理内存已经分配。
+
+normal42已证实后，c95f自行实现的narrow.copy_路径已有191545 GPU字节证据；上游native平台guard不匹配**不能反过来否定该独立实现**。现在应助审实际adapter的producer/zero/free/publish边界，下一步不是再扫布局或现成offload参数。所有建议仅内部cache事务护栏，原模型、输入/输出、位置、采样、官方SERVER与benchmark脚本保持原样。
+
+## 实际 FullAttention 清零语义纠正及协议代码互审
+
+本节覆盖前文关于“本模型会原生清零新页”以及 aeea 接口尚未接入的历史描述，不改历史原件。actual `kv_cache_interface.py` SHA `7e3c220998267190a622e216b2b125306807cf8be3ec1e9a8e84fe6e7a293003` 的 `needs_kv_cache_zeroing` 仅返回 `has_mamba_layers`。MiniCPM 当前单 FullAttention 组为 False；df780 的1046–1049不调用 `take_new_block_ids()`，e155 的1215仅在输出字段非空时执行 `_zero_block_ids`，源码存在这个分支并不证明此模型会进入。新恢复页必须由本项目 worker 显式清零并等待真实完成，不能借用未执行的原分支作围栏。
+
+只读完整审阅的本轮版本为：
+
+| 文件 | SHA256 | 本次审阅边界 |
+|---|---|---|
+| `patches/framework/biv150_kv_worker.py` | `31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf` | 实际 normal42 页复制、清零、事件 ACK、强引用与可选回读 |
+| `patches/framework/biv150_kv_protocol.py` | `50375e899acbdcee15d3cdec2ecd77875fb355c56ccbfa663271509982ddc19a` | 原调度切口、私有分配、取消/回滚与 cached-resume 发布 |
+| `patches/framework/biv150_kv_transaction.py` | `616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13` | 事务 epoch/serial、未发布回滚、历史页号可复用的尾段证明 |
+
+worker 只经显式 RPC 启用，无默认安装或顶层框架导入。严格锁 a8de/e155/7da/c95f 和已观测的 BI-V150 16SM normal42 连续 BF16 布局；不适配 packed/shared、其它模型或另一平台。SAVE 在整个 device 已提交工作完成后才读旧页，围栏覆盖原抢占整体释放页的所有已提交 writer，不只覆盖保存的前缀。UniProc 的 `non_block` 源码实际先执行 `run_method` 才包装 future，因此本范围中不另有后台 Python worker 在 fence 后继续提交旧 writer；此结论不可外推 MP/Ray。
+
+slot 保持 raw KV、pinned host、核验 buffer 和 event 的强引用。ZERO 只清本事务私有目的 raw 页；RESTORE 必须是同一目标映射。每阶段 event record/synchronize 真正完成才返回 completed ACK；异常尝试 device settle，无法证明完成就保持引用并返回 completed=False，adapter fail closed，不释放或发布。旧 epoch/陈旧 serial 不污染现 slot；DROP 支持 nbytes0/pages[]，检查 owner、epoch 和 settled 后才放 host。
+
+诊断环境 `BIV150_KV_VERIFY_RESTORE=1` 额外 pin 单层 buffer，首个成功 RESTORE 对42层目的页逐层 D2H、event 同步、CPU uint8 全字节比较后才 ACK。单层 buffer 重用，非整池 golden；1GiB payload cap 外另计它及1GiB动态 guard。核验失败不发布；默认未启用且不读取 KV 值。`_VERIFIED_ONCE` 只说明本进程首次成功恢复经过此核验，不代表后续每次都核验。
+
+adapter default-off，只在隔离 init 追加安装；exact 源码 guard 后内存编译原 schedule 的唯一 waiting 切口，不写 installed 文件。原 SAVE ACK 后仍只执行一次原 `_preempt_request`；旧队列输出按原 FIFO/update 成功后才消费相应 frame 身份。恢复分配使用实际 external-computed R、delay_cache_blocks、单组 ref1/unhashed 私有页及本次追加尾段证明，不 take/drain 或修改历史 `new_block_ids`。ZERO→RESTORE 真 ACK 后暂设 R，原 schedule 若未发出该请求工作则原 free 并回滚0；有实际新 payload 才转换为原 cached-resume、发布并 DROP。发布后的页回归原 scheduler 所有权，不再当私有页回滚。
+
+历史592d已额外保留完整 command/worker response JSON（含核验和内存字段）；原 e155 `_update_states` 返回后、Attention 前核同一 cached-state/generator 对象、输出 token、完整块替换与 CPU computed R，随后原 FIFO 输出处理也有标记。最终50375仅把 `scheduler_reserve_full_isl is True` 改为必须是 Python bool；实际字节逆换唯一一行，SHA精确回592d。恢复分配仍原样传真实 bool，False 时后继原分配无work有未发布回滚，不依赖硬True。由此避免未知实际配置导致静默未命中，未改资源预留行为。
+
+以上为诊断证据，既不读取 generator 状态，也不证明全局 RNG 到各请求的抽样分配等价。补丁本身无采样/RNG调用、无新排序或比赛参数变化；准确率与真实恢复仍必须实测。已只读owner `analysis/source/kv-transaction/adapter-cpu-check.json`（实际f281 DTO、V2→cached完整字段/原切口逆回/默认关闭、pins50375/616）及 `analysis/source/kv-worker/cpu-contract.json`（pins31cc，header/预算/DROP/异epoch/无框架导入）。本 owner 未重跑 CPU suite、未运行设备，当前只读代码未见阻断最短诊断服务的问题，不能写成 GPU 协议已通过；root负责唯一设备context-long+VERIFY1门及完整原件。
+
+## 后续小候选：未消费的历史页号记账（仅排队）
+
+按 root 指示，仅查消费者与上界，不改默认、不新增设备门，也不打断当前 KV 协议。搜索范围是已取回 actual `experiments/source-audits`、`analysis/source` 与本地 plugin 的 Python 源；它们不是完整远端 vLLM 仓库，不能声称穷尽未取回的外部模块或反射访问。
+
+已确认同一历史列表的链路为：
+
+1. actual22e `SingleTypeKVCacheManager.__init__:75` 建 `self.new_block_ids=[]`；外部已计算页分配276、普通新页分配309对 FullAttention 等 exact spec 追加实际 `b.block_id`。
+2. 同文件312–316 `take_new_block_ids` 返回原列表并换成空列表。383–410的 pop/free 只管理 request 块与池；535–537默认 `new_step_starts` 不做事。没有随请求释放删除历史页号。
+3. actual2e91 `KVCacheManager.take_new_block_ids:605–610` 汇总各 single manager；`reset_prefix_cache` 只重置 block pool/cache stats，也不清历史列表。
+4. actualdf780 `schedule:1046–1049` 是本地已归档原实现中唯一实际调用者，受 `needs_kv_cache_zeroing` 控制；当前 False 不 drain。实际7e3c接口决定该条件。
+5. e155/上游 runner、`CachedRequestData`、connector utils 的同名 `new_block_ids` 是每请求调度 payload；`new_block_ids_to_zero` 又是另一个输出字段。不能因名字相同把它们算成 manager 历史列表消费者。当前新协议会读历史列表建立本次追加尾段证明，这是新增消费者，不是原服务已消费的证据。
+
+因此列表长度随累计真实分配次数 A 增长，没有“最多物理池32621项”的上界：同一物理页释放后重用仍再次追加；一组跨42层，只记一次，不乘42。无重算/无新协议、每请求页只分配一次时，32请求×(16K+128out)的条件估计为 `32×ceil(16512/16)=33024` 项，另需加 smoke/warmup；不是对任何 run 实际列表长度的观测。多轮服务、抢占重算和协议私有分配会继续增加；有限任务可按各次分配事件求和，长期服务则无请求数无关的固定上限。
+
+追加的是已有 KVCacheBlock 的 Python int 引用，不是每次额外构造 int。64位进程中仅槽位约 `8A` 字节，再加 Python list 对象/容量预留，33024项槽位约258KiB；未测 RSS/容量，不按“每项36字节”或宿主泄漏速率夸大。普通 extend 的累计 host 工作为 O(A)；当前协议 `tuple(before)` 及完整前缀证明还会在少数恢复尝试读 O(A) 历史，必须与原实现成本区分。
+
+值得保留的后续方向是 exact needs-zero=False、已确认无其它消费者时关闭或分段控制这份未使用记账；尚未选择实现。不能当前直接 clear：本轮协议正依赖追加尾段审计，未知外部消费者未穷尽。下一轮若授权，只先补真实列表长度/累计分配及 host 成本的稀疏证据，再作一个范围严格、可原路回退的小候选并由 root 上卡。当前未实现、未测收益、未改源码；小收益也保留。
