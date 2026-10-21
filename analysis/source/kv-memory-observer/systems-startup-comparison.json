@@ -1,0 +1,80 @@
+{
+  "kind": "两次实际启动标量相等，未复现历史6块；非性能pair/无因果倒推",
+  "stable": {
+    "review": "215849-independent-review.json",
+    "review_sha256": "8164fb2845d3bd00d63706c6e5ba6e9740815200c22612576910c12a910776cc",
+    "pid": 231345,
+    "source_count": 412,
+    "kv_tokens": 521936
+  },
+  "capacity": {
+    "review": "220122-independent-review.json",
+    "review_sha256": "ec40d7649cbec086bf1c8c2068b1b9c56002b85da17f9a3b12a77ec2fe150701",
+    "pid": 231998,
+    "source_count": 418,
+    "kv_tokens": 521936
+  },
+  "actual_memory_scalars_equal": true,
+  "actual_memory_scalars": {
+    "worker_fields": {
+      "available_kv_cache_memory_bytes": 22447777996.8,
+      "cudagraph_memory_estimate": 0,
+      "non_torch_memory": 1000341504,
+      "peak_activation_memory": 656424960,
+      "requested_memory": 29205777612.8
+    },
+    "profile": {
+      "non_kv_cache_memory": 6757999616,
+      "non_torch_increase": 1000341504,
+      "torch_peak_increase": 656424960,
+      "weights_memory": 5101233152
+    },
+    "init_snapshot": {
+      "cuda_memory": 153092096,
+      "free_memory": 34206646272,
+      "non_torch_memory": 153092096,
+      "torch_memory": 0,
+      "torch_peak": 0,
+      "total_memory": 34359738368
+    },
+    "before_create": {
+      "cuda_memory": 153092096,
+      "free_memory": 34206646272,
+      "non_torch_memory": 153092096,
+      "torch_memory": 0,
+      "torch_peak": 0,
+      "total_memory": 34359738368
+    },
+    "before_profile": {
+      "cuda_memory": 6318718976,
+      "free_memory": 28041019392,
+      "non_torch_memory": 1092616192,
+      "torch_memory": 5226102784,
+      "torch_peak": 5118105088,
+      "total_memory": 34359738368
+    },
+    "after_profile": {
+      "cuda_memory": 6654263296,
+      "free_memory": 27705475072,
+      "non_torch_memory": 1153433600,
+      "torch_memory": 5500829696,
+      "torch_peak": 5774530048,
+      "total_memory": 34359738368
+    }
+  },
+  "original_worker_int_return": 22447777996,
+  "time_fields_compared": false,
+  "DB_both_runs_before_after_equal": true,
+  "historical6block_cause": "unresolved_not_reproduced_in_these2boots",
+  "performance_calculated": false,
+  "limits": [
+    "仅本次两个startup，不能补写历史213016/213616的内存分项或解释其KV差。",
+    "timestamp/profile_time属不同启动时间，不把它们相同或不同作内存/性能结论。",
+    "重构字段与原已有采样区分；observer没有新增GPU采样或更改容量。",
+    "硬件owner另审原内存公式/INFO抑制与rootWARN，不从两次相等推出长期稳定或实现零成本。"
+  ],
+  "package_sha256_owner": {
+    "stable": "f9e37bd5b7f02d9d39fcad7291a27727e26efff7840ecf8c579f5eac10842044",
+    "capacity": "b2bab46a3cda84b0654354e7848af52b40711061d61992690bc233b01f6ff290"
+  }
+}

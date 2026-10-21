@@ -1,3 +1,73 @@
+## 本阶段最终交接：两startup独立验收完成，registry104/queue80；暂时停写供root一致发布ZIP
+
+root要求在本批审计/中文/registry收尾后暂停文件写入，**goal仍active，不是停止目标或性能探索冻结**；从最终回执后本agent不再写文件/新增方案实现/设备/SSH/上传/推送，等root解除。当前root通知GPU空闲，后继最短VERIFY0可共用同observer记录真实启动分项，不追加盲目boot样本。root计划统一专用实验库发布ZIP；原README/CURRENT/所有raw和冻结运行资产未改。
+
+215849 stable412及220122 capacity418均已用仅本地stdlib入口analysis/source/kv-memory-observer/review_smoke.py实跑exit0/pass（不是suite），入口SHA8508b2fef60425981808eb9755a0063c75dc2046e440bd32f7d2452217d5eb9e。分别保存215849-independent-review.json SHA8164fb2845d3bd00d63706c6e5ba6e9740815200c22612576910c12a910776cc、220122-independent-review.json SHAec40d7649cbec086bf1c8c2068b1b9c56002b85da17f9a3b12a77ec2fe150701。完整源map/固定builder0ab0-launch5bdb-observer6a/helper/原a8de-e155/原init只末尾append/原innovation5bef字节保持、bc51原SERVER/smoke-only/seed721201/VERIFY0、原8in32out/32tokenIDs/logprobs/finishlength、DB实体/CPU6/32GiB/后态都已验。
+
+实际PID231345/231998，各自唯一DETERMINE_RETURN与PARENT_RETURN同PID、profile_context_calls1、原worker int22447777996→父真list[同值]、三hook restoredTrue，所有内存原标量完整，无REJECTED/NOT_ACTIVATED/OBSERVATION_INCOMPLETE；API/Core多ARM各自保留，不能拿ARM代激活。stable21:59:48.409778Z/cap22:02:21.679911Z exit0；post22:01:02.902726Z/22:03:14.114658Z，全源无变/68MiB0/双栈closed/无GPU进程。ERROR在测前及shutdown均空，只有原forcekill WARN，不能泛称本两run有EngineDeadError。
+
+两次实际memory分项（排除timestamp/profile_time）全相同，KV均521936：requested29205777612.8B、weights5101233152B、torch peak increase656424960B、nonTorch increase1000341504B、nonKV6757999616B、graph estimate0、available22447777996.8B；均DBbeforeafter51919340三SHA897/29d/71ac实体复算相同。systems-startup-comparison.json保存完整相等矩阵/原int返回/package owner SHA：stablef9e37bd5b7f02d9d39fcad7291a27727e26efff7840ecf8c579f5eac10842044、capacityb2bab46a3cda84b0654354e7848af52b40711061d61992690bc233b01f6ff290。**只说明本次未复现旧6块差，不补写213016/213616历史分项/原因，不报gain/accuracy/实现零成本或长期稳定。** hardware另审logger/rootWARN与公式，本agent只核实际数据完整与相等；没有新GPU采样/重复profiling调用。
+
+registry104数据×16/queue80均LF，新增两真实startup行，所有旧registry字节前缀保留；阶段报告/中文memory-observer-packaging研究/ownhand齐。FULL214400真实VERIFY1通过和213616容量失配结论不变；下方“startup准备/在途/未设备”都是历史，以本节实际完成和暂时停写状态为准。此段复制本批最终回执，下一API直接接续root最新CURRENT，不重跑已做工作。
+
+## 最新CPU交付准备：同6a观察器的stable/capacity最短启动包装；无新设备结果
+
+root授权两独立startup smoke包装，本人已完成新 `prepare_kv_memory_observer_source.py` **0ab0ce3ab3d8cde4a8e725d9fdfd3e62726fcf95613fbc1e55b850b3e48a9029** 和 `launch_kv_memory_observer_smoke.sh` **5bdb67afe573d9ffc803e40bafcaee2e7e7fd85e8b831bb94137516e85c060fd**（stable|capacity）。同一hardware observer6a772a741ac96ac1f9d7ef7c8cff7578117bbdc8cc97258afaeec88e1c5b436c、既有合同0bec/owner1test0.002s，不重复测试。builder固定212106-control的73e5完整source-map与5bef innovation，导出完整stable410/capacity416原树身份并逐项验证；只在完整原init/footer末尾精确append→00e8/39fb，新增同module及独立memory-observer-source.json，新source412/418，原innovation字节/a8de/e155/67e4/616/31cc/c95f均不改。
+
+原bc51 --smoke-only/seed721201/VERIFY0，不跑220秒long/不改SERVER。require真实JSON DETERMINE_RETURN，purpose需同PID profile1/完整raw标量/PARENT原list/三hook恢复，不把ARM/REJECTED/NOT_ACTIVATED当数据成功。独立run/source/control/DB/source/commands由新包装留存，root既有seal收after/live/post；设备只root两次串行，非性能pair，不报6块差原因/收益。
+
+只有compile/heredoc/pin/读取两原init推导，无整copy/shell/suite/SSH/GPU；source/kv-memory-observer/wrapper-check.json及中文analysis/2026-10-22-kv-memory-observer-packaging.md已存，queue79准备项，registry102保持仅真实已验设备。root/hardware/framework均已全文只读终审最终0ab0/5bdb无运行阻断，最后回执已落wrapper-check；两代码冻结，自交付后没有继续修改，审者无重复copy/suite/设备。root阶段本地commit356220已含observer6a、当时未含WIP两包装，后继统一commit/publish/ZIP；本agent不操作共享代码库/推送。根README/CURRENT和raw不改。收到实际两smoke原件后再独立审计登记，不能提前造启动内存数值。下节FULL214400真实通过仍有效，但不能替代本启动观察门。
+
+## 最新真实通过：214400 FULL已运行2071独立验收；0ZERO/42bytes/原consumer8
+
+root已取回214400全run/control，本agent实际执行固定2071入口，exit0/pass；JSON analysis/source/kv-transaction/214400-independent-review.json SHA **aa16dc31f430230db6c1c0ed69f55b88b3d036b3822bf59e2b9a8ddd9d97ea45**，未修改该程序产物。原件包owner SHA21ae6e302795fba5d6b09b6597d26cd0e58d95c3805cffe079ded2934ca981ea。此前“FULL在途/无原件/2071只语法”是历史，当前以真实审计结果为准；入口及81f2依赖已由framework全文只读终审无阻断，审者没有重复执行套件。
+
+独立416源/1aff84be5d9a/c95f/e155/init791c/原080656/b4e63947/bc51-SERVER-seed721201/CPU6/32768MiB，原32-0同524288in32768out，21:49:12.117141Z exit0。226.79482778999954s/2456.2112171085555TPS/TTFT62775.54467374284ms仅VERIFY1诊断绝对值，KV521936/preempt0→1，DBbeforeafter51919340三SHA897/29d/71ac实体复算同；21:49:38.171431Z416源post无变、68MiB0/双栈closed无GPU进程。测前ERROR空，raw完成后shutdown EngineDeadError及forcekill WARN原样分类保留。
+
+实际RPC恰SAVE1→RESTORE_FULL2→DROP3，无ZERO/旧RESTORE。R16704/P1044/718405632B，SAVE源24run/1008copy，目的66run/FULL2772copy和42层全byte回读2772copy相等；真ACK caps/full_coverage/destination_bound/zero_stageFalse/zero_calls0/完整bytes均通过。fast454、host持有到DROP释放，SAVE-free/排序/FULL/publish/drop/runner六checks/原output**8token**消费次序完整；不是213616 R16688/P1043/16token。动态2071入口真实通过，未写死几何或伪ZERO receipt。
+
+registry102数据×16/queue78均LF，新增214400仅诊断，旧行前缀完整保留；阶段报告/FULL中文研究/入口准备JSON后继回执更新，所有raw/官方/README/CURRENT及运行资产未改。**VERIFY1含回读，不作性能收益/与213616 VERIFY0比较，不证明完整accuracy/异常取消多victim或默认资格，不从省写字节推导TPS。** root通知当前设备空闲，只有root决定下一门；本agent不启动设备/SSH/上传/推送。当前任务收尾落盘，等root后继性能/来源指令，不重新开始。
+
+## 最新：213616完整审计/登记已完成；FULL214400在途，待原件才执行2071
+
+按root接续任务，仅本地CPU独立复算213616：416源完全等212106/67e4+616+31cc/e155/bc51，SERVER/packages/installed/seed同213016，CPU6/32GiB/raw32-0同524288/32768；218.9170063282363s/2544.599021077285TPS/TTFT62573.5605845548ms。双方DB51919340三SHA897/29d/71ac前后实体复算相同，候选DBafter已齐；KV521840 vs base521936差96/6blocks仍失配，结果前判定保留，**不报因果收益、不补stable/改参数凑容量**。机器审计source/kv-transaction/213616-independent-review.json（包49e79345ccc94f442c3ab46277691dfa0101882d4914ff7d5737f1782cc26d4d）及基点派生状态更新，未碰原件。
+
+真实SAVE→ZERO→RESTORE→DROP serial1–4，R16688/P1043/717717504B，source23runs/SAVE966copy、PRIVATE66run/ZERO与RESTORE各2772；fast462、首free1039<P1043、HOST保留，runner六checks/原output16token消费、host释放均核。VERIFY0/extra0/diagnosticFalse，没有回读，不能移植212106 VERIFY1或新FULL证明。21:41:59.079650Z416源post无变/68MiB0/双栈closed无GPU进程；测前ERROR空，raw完成后shutdown EngineDeadError/forcekill WARN原样分类。registry101数据×16/queue78均LF，旧行仅更新213016待项完成，其余旧字节前缀保留；阶段报告/容量研究已中文同步。
+
+当前root唯一GPU214400-kv-full-restore-context16k-long runner229261/source code/kv-full-restore-20261021T214400Z；固定b4e/63947/1aff84be5d9a、VERIFY1原bc51。尚无FULL完成原件；2071入口只语法准备/送审，不预写通过、不对当前旧链执行FULL入口。收到root完整原件才执行2071/登记。本人不SSH/GPU/上传/修改任何运行源或旧包装。本文下方213616在途/DBafter待为历史，按本节更新。
+
+## 最新CPU准备：FULL验收入口2071，尚无新FULL实际审计结果
+
+按root新任务新增 `scripts/review_kv_full_restore_run.py` **2071bff34cdcd469294b406966ad86a0941d556b1d1e9ddd62dc87f927caf55b**。复用固定81f2现有stdlib审计定义，不重复大validator；仅long适配和DB变化如实报告，再固定b4e/6394/三新asset/080656/init/e155/原bc51 AST SERVER。严格实际SAVE/FULL/DROP三个ACK、serial1/2/3、无ZERO或旧RESTORE、key/pid/页/bytes回显、caps/fullcoverage/noZERO/42回读、私有排序/原runner6/实际原消费、host持有释放、fast累计。R/P/runs/copycalls/consumer动态读取，不写死1043/1044/66/16。缺原件pending/exit2或失败exit1不产生通过文件，成功才exclusive x输出，不覆盖raw或旧审计。
+
+只compile/stdlib AST/pin检查，未执行inspect或新CPU/GPU套件、没有合成ACK/结果；full-restore-review-entry-check.json及中文FULL研究用法已更新。已送framework只读审最短阻断，root运行完成/下载后才审/registry。当前设备仍按上一节root213616容量候选，KV已失配、DBafter待，不因新入口预判FULL通过或性能。三新runtime和b4e/6394包装完全未改。本节复制最终准备回执供下一API接续。
+
+## 最新在途纠正：213616容量已失配，候选DBafter/最终raw仍待
+
+root已在结果前实查：213616容量VERIFY0候选KV521840，213016 stable521936，差96token/6blocks。pair容量失配已确定，不补stable凑容量、不看TPS再挑结论；candidateafter DB/最终raw仍未齐，不能先说DB不变或双失配。213016审计/registry现行/queue77/阶段报告已同步该owner实查，候选未提前登记完成。正常结束后保留本轮，root后继先FULL真实VERIFY1门；本agent保持CPU-only，包装b4e/6394与三资产未改。本文下节“未预判KV”是收到这条实查前的历史，当前以此为准。
+
+## 最新状态补充：213016基点已独立审完；213616在途，FULL包装已接受未执行
+
+root新回执后的本地CPU收尾已完成：213016独立410源/原SERVER-bc51-packages-seed及stable080656字节/DB实体/后态均通过。32-0、524288in32768out、220.5050202300772s/2526.2735488686926total/TTFT62602.81379344815ms/KV521936/preempt0→1，DB51919340三SHA897/29d/71ac前后不变；21:35:42.054721Z68MiB0/双栈closed无GPU进程/sourcepost无变。测前ERROR空，但本run raw完成后shutdown EngineDeadError/forcekill WARN存在，已精确分类保留，与212106无ERROR分开。包5b45a043eb5e6c85ab144270fe21cce560b3f3dfa355352cbb0840c51966de6e，213016-independent-review.json已存。registry100数据×16/queue77均LF，旧registry字段/字节前缀保持。
+
+当前root唯一设备213616-kv-capacity-pair-capacity-context16k-long runner227753，参考212106/67e4、VERIFY0；不是FULL。候选未齐原件，不预判KV/DB终态/性能收益。root及hardware对新FULL b4e builder/63947 launcher均最终接受，无静默改稿，尚未上传/执行。当前CPU任务/212106登记/新FULL接口和包装均收尾落盘，只等root后继原件；无SSH/GPU/上传/推送/新增套件或在途源码改动。下节213016在途等为收到上条回执前历史。
+
+## 最新接续：写锁已解除；212106真实快拒验收，FULL三副本/新包装已终审，尚未上卡
+
+2026-10-22。root已解除归档写锁，本agent接续原工作，**不是当前暂停写/目标结束**。以下旧“暂停归档/67e4未执行/205819在途”等段落保留为历史，本节覆盖其当前状态。root最新设备为唯一213016-kv-capacity-pair-stable runner226353；其后先容量VERIFY0候选，再由root决定FULL门。本agent始终CPU-only，无SSH/GPU/上传/推送或修改在途源。
+
+212106原件 `experiments/framework/20261021T212106Z-kv-capacity-context16k-long{,-control}` 已21:26:17.768468Z exit0；包8e04b0b6301c724741759d3a2926e17726b011448ec28b8a14a7ac2ce50af537/source-manifest73e5d880f5a92f528618ffda71677c2b56c4b49ae582258dc0946ff20809a436。独立416源码/原bc51-SERVER-seed/CPU6/32768MiB/DB实体复算/source-post/idle已验：32-0、524288in32768out、227.19113439507782s/2451.9266629097337total/TTFT62762.77446313179ms/KV521840/preempt0→1，DBbeforeafter51919340三SHA同89743b20/29d740d5/71ac1989。21:27:50.103577Z68MiB0/9031双栈闭/无GPU进程，ERROR两类皆空，forcekill WARN原样保留。`212106-independent-review.json`全证据已存。
+
+真实fast_rejects462、首capacity_lower_bound free1039<P1043/pending0/placeholder0、R16688/717717504B。该计数证明快路后hash-history-allocator未执行，但不能换算CPU时间/吞吐收益。PRIVATE1043→66run，真实ZERO/RESTORE/42层回读各2772调用全bytepass，publish/drop/runner六checks/原output16token消费成功。**仍是ZERO→RESTORE，不能当新FULL证明；VERIFY1不与205819 VERIFY0或历史双失配轮报gain。** registry已99数据×16、queue76，LF且旧registry字节前缀完全保持；容量研究/阶段报告更新，root README/CURRENT/原raw未改。
+
+新独立FULL三文件已冻结：transaction84be2242656e6ae0a30d65c803c2ae5076e836e0d1b6686731c4197a85b21883（本人）、protocol1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8（本人，累计67e4）、worker5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477（framework）。真ALLOCATED→RESTORE_FULL_PENDING→真同operation ACK→RESTORE_DONE；不构造ZERO阶段/receipt。SAVE真ACK携normal42完整页caps，adapter私有页proof和worker完整覆盖Plan双验，缺资格仅提交前旧ZERO；FULL提交后失败settle回滚、不降级，成功缺coverage/destbound/noZERO证明在Receipt前failclosed。producer device围栏/H2D Event/VERIFY回读/原runner与采样路径保留。旧canonical0e、67e4/31cc/616/c95f字节全未变。
+
+唯一联合tests/test_biv150_kv_full_restore.py 0035b97f5331083001409871165a66e364c3c1a8f956182e2080d53520e65a54，1项0.002s过；actual parser/plan元数据+实际adapter/txn ACK stub覆盖资格/fallback/pending/stale/失败/cancel，**没有执行worker GPU RPC/copy/Event，不是设备完成或byte证明**。full-restore-cpu-check.json保存各SHA、protocol逆回67e4/txn逆回616，没重旧COPY/DTOsuite。framework/hardware/root三方最终只读终审无最短VERIFY1门阻断。
+
+root授权并允许沿旧sh最小差异后，本人新增 `scripts/remote/prepare_kv_full_restore_source.py` **b4e04e504e0ffda195913a267ca39b87562c73f30bb71e8dbf304392de0ebbd3** 和 `launch_kv_full_restore.sh` **63947c7fc1c7bc423ceb41d99fb50bcd5b5560442609d76e597ccd5c5fd52bfe**。三newasset映回新source canonical模块、080656/init791c/e155/bc51/context-long/seed721201/VERIFY1不变；只新label/目的/pins，拒旧目录/原件覆盖。Python+heredoc compile/pin/diff检查，无shell/整copy/suite/设备，`full-restore-wrapper-check.json`含全diff/审阅metadata。hardware已实核最终两SHA及全文diff，终审无阻断并回root。两新包装定稿后不再改。
+
+中文完整接口/序/能力proof/失败释放/最短后继门在 `analysis/2026-10-22-kv-restore-full-transaction.md`。待root新门需actual FULL ACK、zero_calls0且无ZERO RPC、42层byteeq、runner6/原消费以及源DB/KV/CPU/idle；fallback旧链则只算FULL未激活。当前无FULL上传/运行/性能/完整accuracy证据，不能把212106或CPU ACK移植过去。后继只等root配对结果/单卡排程，不自行新增设备或改包装。最终回执内容已落本节，供下一API接续。
+
 ## 本批最终：205819已审完，98×16/queue75；暂停文件写入供一致归档
 
 root明确要求完成本批审计/文档/交接后暂停文件写入，等待解除；**goal仍持续，不是取消或暂停goal**。本agent已完成本节全部记录，从最终回执后不再写文件，不SSH/GPU/上传执行/代码库推送或新增任务。root负责阶段私有实验库发布/ZIP，新候选冻结。

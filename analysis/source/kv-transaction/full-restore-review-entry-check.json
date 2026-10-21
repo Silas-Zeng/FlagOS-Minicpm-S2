@@ -1,0 +1,40 @@
+{
+  "kind": "FULL独立验收入口准备，仅静态compile，未执行inspect/run，无合成结果",
+  "script": "scripts/review_kv_full_restore_run.py",
+  "sha256": "2071bff34cdcd469294b406966ad86a0941d556b1d1e9ddd62dc87f927caf55b",
+  "stdlib_imports": [
+    "argparse",
+    "ast",
+    "hashlib",
+    "json",
+    "pathlib",
+    "re",
+    "sys"
+  ],
+  "reused_audit": "analysis/source/mm-cta-service-pair/recompute.py",
+  "reused_audit_sha256": "81f227fb4c4eca992024fc0d7cebb6416f3ffda054d8e9a536d35040011122bd",
+  "fixed_builder_sha256": "b4e04e504e0ffda195913a267ca39b87562c73f30bb71e8dbf304392de0ebbd3",
+  "fixed_launcher_sha256": "63947c7fc1c7bc423ceb41d99fb50bcd5b5560442609d76e597ccd5c5fd52bfe",
+  "checks_prepared": [
+    "本入口只审context-long的32请求原raw，不混两档4轮official计分门。",
+    "复用已验416源/原bc51&benchmarkSHA/CPU6/32GiB/exit/post清理/DB实体复算；原DB相等assert只改为如实报告相等或变化。",
+    "固定三新资产+copy/probe/init/080656/builder/launcher；原serve从封存bc51 AST取SERVER精确比较。",
+    "仅真SAVE→RESTORE_FULL→DROP，serial1/2/3，无ZERO或旧RESTORE回退；key/pid/bytes/pages echo全核。",
+    "R/页数/连续run/copycalls/byte数/consumer正整数由actual事件计算，不硬编码1043/1044/66/16。",
+    "完整SAVEcaps/fullcoverage/noZERO/42回读/host持有与DROP释放/阶段次序/runner6/原消费/fast累计。"
+  ],
+  "usage": "python -X utf8 scripts/review_kv_full_restore_run.py <actual-full-run-id> --output analysis/source/kv-transaction/<actual-id>-independent-review.json",
+  "output_policy": "只有全部通过才以exclusive x新建输出；缺原件status pending_missing_evidence exit2，不写通过文件；校验失败not_passed exit1。",
+  "executed_candidate_or_gpu": false,
+  "actual_run_reviewed": false,
+  "framework_readonly_final_review_accepted": true,
+  "subsequent_actual_review": {
+    "run_id": "20261021T214400Z-kv-full-restore-context16k-long",
+    "command_exit_code": 0,
+    "status": "passed_full_restore_verify1_diagnostic",
+    "output": "analysis/source/kv-transaction/214400-independent-review.json",
+    "output_sha256": "aa16dc31f430230db6c1c0ed69f55b88b3d036b3822bf59e2b9a8ddd9d97ea45",
+    "original_validator_sha256_unchanged": true,
+    "limits": "本项为后继实际审计回执，原准备阶段没有执行inspect；当前VERIFY1不计算gain。"
+  }
+}

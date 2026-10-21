@@ -1,0 +1,37 @@
+{
+  "kind": "RESTORE_FULL唯一联合CPU状态/元数据/adapter合同，非GPU/真实事件/模型证明",
+  "command": [
+    "python",
+    "-X",
+    "utf8",
+    "tests/test_biv150_kv_full_restore.py"
+  ],
+  "tests": 1,
+  "passed": true,
+  "observed_duration_s": 0.002,
+  "base_protocol_sha256": "67e4c07566ee3e52f84d6a96a494b8976d858420dadd5f833e66c3291e32fb73",
+  "base_transaction_sha256": "616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13",
+  "protocol_inverse_to_67e_bytes_exact": true,
+  "transaction_inverse_to_616_bytes_exact": true,
+  "changed_protocol_functions": [
+    "_rpc",
+    "_try_restore"
+  ],
+  "new_protocol_helper": "_full_restore_ready",
+  "checks": [
+    "实际worker command parser接受FULL，覆盖plan接受42层整页；少一层/host alias/重复页/已绑定拒绝",
+    "真实事务ALLOCATED→RESTORE_FULL_PENDING→同operation真Receipt成功归RESTORE_DONE，无ZERO提交/伪Receipt",
+    "实际adapter在SAVE capability和私有proof齐时选FULL，caps缺失执行旧ZERO→RESTORE",
+    "stub RPC验证FULL提交后不能publish/free，陈旧Receipt拒绝；success缺覆盖证明failclosed",
+    "settled失败真实private free后DROP；未settled禁止释放/回退；FULL期间cancel真ACK后沿CANCELLED回滚",
+    "原prefix/请求/模型/worker旧文件不变，无torch/numpy/vllm导入"
+  ],
+  "asset_sha256": {
+    "patches/framework/candidates/biv150_kv_full_restore_protocol.py": "1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8",
+    "patches/framework/candidates/biv150_kv_full_restore_transaction.py": "84be2242656e6ae0a30d65c803c2ae5076e836e0d1b6686731c4197a85b21883",
+    "patches/framework/candidates/biv150_kv_full_restore_worker.py": "5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477",
+    "tests/test_biv150_kv_full_restore.py": "0035b97f5331083001409871165a66e364c3c1a8f956182e2080d53520e65a54"
+  },
+  "scope": "worker TensorDescriptor/transport是CPU元数据与ACK stub，不执行GPU/copy/event，不能作设备字节/完成证明。没有新builder/上传/设备或重复旧COPY/DTO套件。",
+  "device_ran": false
+}

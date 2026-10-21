@@ -1,6 +1,18 @@
 # KV恢复容量必要下界：独立快拒候选
 
-## 最新：仅独立候选已实现，canonical0e与在途pair未改
+## 最新配对：213016/213616均结束，DB同但KV失配
+
+213616 VERIFY0候选已独立416源/raw/DB/实际协议/后态验收：32-0、218.9170063282363s/2544.599021077285total/TTFT62573.5605845548ms，fast462/R16688/717717504B/66run/runner六checks/原16token消费，旧ZERO/RESTORE各2772；本轮无回读。基点213016为220.5050202300772s/2526.2735488686926total、KV521936，候选KV521840差96/6blocks，失配在结果前记录，**不归因收益、不补stable凑容量**。双方DB51919340三SHA897/29d/71ac前后同；DBafter现已齐，不再待。21:41:59.079650Z source416/idle通过，测前ERROR空，raw后shutdown错误/WARN原样留存。213616-independent-review.json与阶段报告详述，不把绝对耗时差当稳定收益。当前root新FULL214400在途待原件，不能迁移本轮旧ZERO链证明。
+
+## 既有实测：212106快拒462次，完整恢复诊断通过
+
+此前“尚未执行/待归档解除”段落为当时历史。root已执行独立67e4/a79b/0ae的 `20261021T212106Z-kv-capacity-context16k-long`，21:26:17.768468Z exit0。独立审计416源/原bc51、SERVER、seed721201/CPU6/物理32768MiB；原32成功0失败、524288in32768out、KV521840、preempt0→1。包8e04b0b6301c724741759d3a2926e17726b011448ec28b8a14a7ac2ce50af537，机器审计在source/kv-transaction/212106-independent-review.json。
+
+真实fast_rejects462，首条capacity_lower_bound为free1039<P1043/pending0/placeholder0，保HOST；R16688/717717504B。受测helper的计数明确这些快拒没有到其后的tokens/digest/history/allocator链，仍不能推算CPU耗时或吞吐贡献。随后PRIVATE1043→66run、ZERO/RESTORE/42层回读各2772调用，全717717504B byteequal；publish/drop/runner六checks/原output16token消费通过。DBbeforeafter519表19340行、实体/schema/逻辑三SHA同89743b20/29d740d5/71ac1989。21:27:50.103577Z416源post无变，68MiB0/9031双栈闭/无GPU进程；无ERROR，forcekill WARN原样保留。
+
+227.19113439507782s/2451.9266629097337total/TTFT62762.77446313179ms是VERIFY1诊断绝对值，不与205819 VERIFY0/历史双失配轮算收益。该次仍执行真实ZERO，不能当新RESTORE_FULL的设备证明；完整accuracy/异常取消和多victim覆盖未新增。root后继213016容量性能stable正在串行，未齐原件不预报结论，协议67e4与在途资产冻结不变。
+
+## 历史：仅独立候选已实现，canonical0e与当时在途pair未改
 
 root读完下述研究后授权最小实现。新文件 `patches/framework/candidates/biv150_kv_capacity_protocol.py` SHA **67e4c07566ee3e52f84d6a96a494b8976d858420dadd5f833e66c3291e32fb73**，安装时必须映射到**新的隔离source**的`vllm_fl/patches/biv150_kv_protocol.py`；不能直接作为candidates子包启用，也不能覆盖当前canonical0e或在途配对source。历史0e全字节另存 `analysis/source/kv-transaction/biv150_kv_protocol.0e2115.py`。worker31cc、事务616、c95f、init footer、builder/launcher及官方命令均未改。
 

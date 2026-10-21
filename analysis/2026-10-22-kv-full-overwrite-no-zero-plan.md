@@ -71,3 +71,31 @@ HOST_RESIDENT → 私有ALLOCATED且完整覆盖证明成立
 当前没有新实现/合同执行/设备结果。所有硬件事实仅本实例；20GiB host预算和原1GiB slot/guard均保持，不把该方向包装成扩大容量或已减少重算。
 
 framework已全文只读复核本设计，无完整覆盖/生命周期设计阻断；特别确认显式新操作、迁移目的绑定、保RESTORE自己的device fence、强引用/失败回滚均不能漏。该审阅不授权实现、不证明设备正确；如后续实现，仍逐项审全R×42 uint8 plan、host immutable/strongref、绑定后异pages/签名和cancel/epoch，R外suffix不冒称已恢复。当前先完成页序pair与归档，仍无代码。
+
+## 归档后新增授权：独立实现与CPU终审，仍无设备结果
+
+上文“尚未授权实现/仍无代码”是此前设计阶段历史。归档解锁后root已授权新独立副本，不修改212106受测容量源或canonical31cc/616/0e：
+
+| 新文件（均在patches/framework/candidates/） | 最终SHA256 |
+| --- | --- |
+| biv150_kv_full_restore_worker.py | 5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477 |
+| biv150_kv_full_restore_transaction.py | 84be2242656e6ae0a30d65c803c2ae5076e836e0d1b6686731c4197a85b21883 |
+| biv150_kv_full_restore_protocol.py | 1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8 |
+
+已完整只读三者及冻结基点差异，终审未见当前最短真实VERIFY1门阻断。worker实际normal42布局/精确raw边界、42份整R pinned uint8 host/唯一storage、c95f PagePlan一一对应及全页字节数决定完整覆盖资格，不能只信客户端bool。SAVE完成后五项descriptor仅供提交前选择；adapter还核私有list别名/numcached0/整R×42bytes/未发布事务状态，缺资格走旧ZERO。FULL先在SAVED入口强持目的映射/fullplan并置BOUND，再执行自身devicewide producer fence/H2D/event/可选42层回读。事务从ALLOCATED提交新operation，只真实成功Receipt到RESTORE_DONE，无伪ZERO阶段。
+
+FULL提交后不再降级旧路径：缺覆盖证明或未settle保持inflight/私有页/host，不free或publish；settled失败原free私有页后DROP；cancel同样等待真实ACK再回滚。完整copy成功后的资格不等于半写失败可见，原fence与强引用从源码保留，尚未在新模式下设备证明。
+
+systems唯一联合 `tests/test_biv150_kv_full_restore.py` SHA `0035b97f5331083001409871165a66e364c3c1a8f956182e2080d53520e65a54`，owner回执1test/0.002s通过，记录 `source/kv-transaction/full-restore-cpu-check.json`。本owner全文只读，未重跑。它调用实际worker parser/coverage helper和c95f Plan，但TensorDescriptor与RPC完成值为CPU stub；不执行worker.rpc设备分支，不验证真实fence/event/字节，也不冒称新模式已过accuracy。当前没有新builder/设备结果；后继必须独立source、真实RESTORE_FULL ACK、zero_stage_executed=False/zero_calls0、42层全bytes及原消费者，再单独讨论性能。
+
+后续独立包装已由systems准备并经本owner只读终审：`scripts/remote/prepare_kv_full_restore_source.py` SHA `b4e04e504e0ffda195913a267ca39b87562c73f30bb71e8dbf304392de0ebbd3`、`scripts/remote/launch_kv_full_restore.sh` SHA `63947c7fc1c7bc423ceb41d99fb50bcd5b5560442609d76e597ccd5c5fd52bfe`。三个新输入映射到全新source的canonical txn/proto/worker，保相对导入；原080656/e155/init791c/driverbc51/contextlong/seed721201/VERIFY1保留，旧包装/受测源不覆盖。静态差异只有三pin/输入alias/新身份与purpose，未见最短设备门包装阻断。owner仅compile/静态diff，双方均未执行该shell/fullcopy/设备；此前“没有builder”为写入时历史。最终仍须root串行执行后按真实同一事务验收。
+
+## 214400真实FULL设备机制已通过，仍不作收益
+
+root唯一设备任务 `20261021T214400Z-kv-full-restore-context16k-long` 已结束，完整原件本地。包SHA `21ae6e302795fba5d6b09b6597d26cd0e58d95c3805cffe079ded2934ca981ea`。本owner独立核actual三件1aff/84be/5d9a与c95f，新增 [214400专项JSON](source/kv-transaction/214400-full-restore-hardware-review.json)，SHA `dd11ee70abb4f371951c6341eec123b34536f166ceba8d8044eb93055dd55450`；server.log SHA `6f3a0eec9f4599cc53be7c987e6038a7edde61738b50c7dda598c068fbfa2f91`。
+
+本轮R16704/1044页/718405632B；SAVE24段×42=1008copy。真实目的升序唯一66段，三大段237..1027（791页）、30959..30995（37页）、31000..31152（153页）加63单页；FULL和42层回读各2772copy。SAVE真实ACK含normal42完整descriptor，FULL ACK明确destination_bound/full_coverage=True、full_coverage_bytes与submitted/transferred/verification_bytes均718405632B、verification_passed=True。
+
+实际同key只有SAVE1→RESTORE_FULL2→DROP3，**无ZERO RPC**，zero_stage_executed=False、zero_calls=0；结合固定实际FULL分支，这证明本协议省ZERO模式真的执行，不是CPU假Receipt。它不等于profile证明模型全局没有其它zero类kernel。首早退1030<1044、fast454，原Attention前6checks全True，原输出update后消费8token，DROP释放host。不能沿用212106的1043页/consumer16。
+
+32/0、226.79482778999954s/TPS2456.2112171085555是VERIFY1诊断。KV521936，root完整源416/post68/0/双栈closed、DB519/19340前三SHA相同。没有阶段时间或匹配VERIFY0服务，不能把少2772次清零/一次RPC换成TPS百分比；完整比赛accuracy/复现仍另验。不同额外protocol源又出现521936，也不解释旧六块差异，下一步只观察原profile标量。

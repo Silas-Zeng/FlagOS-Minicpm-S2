@@ -1,0 +1,217 @@
+{
+  "kind": "同6a观察器两次原参数启动标量比较，非性能/历史原因证明",
+  "runs": {
+    "stable": {
+      "run_id": "20261021T215849Z-kv-memory-stable-smoke",
+      "source_sha256": {
+        "server.log": "66241222c8c3553c16d22187d27036406fb4c143daa583b733fd6276f56414f5",
+        "source_manifest": "f0dfb675130f4334e22213494efb88fc77dc8d227bb7a9bd00917f3eb6404cf1"
+      },
+      "kv_log": [
+        "(EngineCore pid=231345) INFO 10-22 05:59:34 [kv_cache_utils.py:2146] GPU KV cache size: 521,936 tokens"
+      ],
+      "postflight": {
+        "query": "68, 0",
+        "ports_closed": {
+          "127.0.0.1": true,
+          "::1": true
+        },
+        "source_count": 412,
+        "source_failures": []
+      },
+      "armed_pids": [
+        231177,
+        231345
+      ]
+    },
+    "capacity": {
+      "run_id": "20261021T220122Z-kv-memory-capacity-smoke",
+      "source_sha256": {
+        "server.log": "9caa6aa1510891f7cc3ff3f03f40067ccfdf343410042161154a96fd70545ef4",
+        "source_manifest": "6254fa1f1c483f249af4f002bf6d090f8df02821e33fd583f4dcc7112f50b770"
+      },
+      "kv_log": [
+        "(EngineCore pid=231998) INFO 10-22 06:02:08 [kv_cache_utils.py:2146] GPU KV cache size: 521,936 tokens"
+      ],
+      "postflight": {
+        "query": "68, 0",
+        "ports_closed": {
+          "127.0.0.1": true,
+          "::1": true
+        },
+        "source_count": 418,
+        "source_failures": []
+      },
+      "armed_pids": [
+        231828,
+        231998
+      ]
+    }
+  },
+  "observer_sha256": "6a772a741ac96ac1f9d7ef7c8cff7578117bbdc8cc97258afaeec88e1c5b436c",
+  "observed_pids": {
+    "stable": 231345,
+    "capacity": 231998
+  },
+  "byte_scalar_and_snapshot_values_equal": true,
+  "all_value_differences": [
+    {
+      "path": "profile.profile_time",
+      "stable": 6.896814823150635,
+      "capacity": 6.929859638214111
+    },
+    {
+      "path": "init_snapshot.timestamp",
+      "stable": 1792619962.814654,
+      "capacity": 1792620116.2365854
+    },
+    {
+      "path": "before_create.timestamp",
+      "stable": 1792619962.814654,
+      "capacity": 1792620116.2365854
+    },
+    {
+      "path": "before_profile.timestamp",
+      "stable": 1792619967.6792378,
+      "capacity": 1792620121.1481433
+    },
+    {
+      "path": "after_profile.timestamp",
+      "stable": 1792619974.5760527,
+      "capacity": 1792620128.078003
+    }
+  ],
+  "difference_scope": "仅所列profile/snapshot/worker/derived/返回/logger字段；完整run的PID、源目录/variant及代码路径当然不同，不假称整个原件只变timestamp。",
+  "identical_values_excluding_time": {
+    "worker_fields": {
+      "available_kv_cache_memory_bytes": 22447777996.8,
+      "cudagraph_memory_estimate": 0,
+      "non_torch_memory": 1000341504,
+      "peak_activation_memory": 656424960,
+      "requested_memory": 29205777612.8
+    },
+    "derived": {
+      "graph_deduction_reconstructed": 0.0,
+      "profile_torch_peak_reconstructed": 5774530048
+    },
+    "returned": 22447777996,
+    "parent_returned": [
+      22447777996
+    ],
+    "logger_before": {
+      "chain": [
+        {
+          "disabled": false,
+          "filters": [],
+          "handlers": [],
+          "level": 0,
+          "name": "vllm_fl.worker.worker",
+          "propagate": true
+        },
+        {
+          "disabled": false,
+          "filters": [],
+          "handlers": [],
+          "level": 0,
+          "name": "vllm_fl",
+          "propagate": true
+        },
+        {
+          "disabled": false,
+          "filters": [],
+          "handlers": [
+            {
+              "class": "logging.StreamHandler",
+              "filters": [],
+              "level": 0
+            }
+          ],
+          "level": 30,
+          "name": "root",
+          "propagate": true
+        }
+      ],
+      "effective_level_derived": 30,
+      "filters_executed": false,
+      "info_once_function": [],
+      "log_configuration_changed": false,
+      "manager_disable": 0
+    },
+    "logger_after": {
+      "chain": [
+        {
+          "disabled": false,
+          "filters": [],
+          "handlers": [],
+          "level": 0,
+          "name": "vllm_fl.worker.worker",
+          "propagate": true
+        },
+        {
+          "disabled": false,
+          "filters": [],
+          "handlers": [],
+          "level": 0,
+          "name": "vllm_fl",
+          "propagate": true
+        },
+        {
+          "disabled": false,
+          "filters": [],
+          "handlers": [
+            {
+              "class": "logging.StreamHandler",
+              "filters": [],
+              "level": 0
+            }
+          ],
+          "level": 30,
+          "name": "root",
+          "propagate": true
+        }
+      ],
+      "effective_level_derived": 30,
+      "filters_executed": false,
+      "info_once_function": [],
+      "log_configuration_changed": false,
+      "manager_disable": 0
+    }
+  },
+  "shared_profile_excluding_time": {
+    "non_kv_cache_memory": 6757999616,
+    "non_torch_increase": 1000341504,
+    "torch_peak_increase": 656424960,
+    "weights_memory": 5101233152
+  },
+  "kv_tokens": {
+    "stable": 521936,
+    "capacity": 521936
+  },
+  "pool_arithmetic": {
+    "model_block_bytes": 688128,
+    "logical_blocks": 32621,
+    "pool_payload_bytes": 22447423488,
+    "returned_int": 22447777996,
+    "slack_bytes": 354508,
+    "actual_config_floor_source_observed": false
+  },
+  "mechanism_pass": {
+    "same_observer_asset": true,
+    "each_profile_context1": true,
+    "each_true_parent_return_and_all3_restore": true,
+    "known_loaded_source_hashes_equal": true,
+    "logger_chain_unchanged_root_WARNING30": true
+  },
+  "root_db_report": "两轮均519/19340前后三SHA相同",
+  "conclusion": "两次仅启动未复现6块容量差；当前所有profile字节项、snapshot非时间字段/returned与KV池一致。历史六块差直接来源仍未知，不能倒补或归因observe/full/verify/cache。",
+  "next_plan_root": "不追加startup样本；后继把同观察器带入原参数VERIFY0成对对照，记录启动项与真实负载，仍需完整匹配条件。",
+  "limitations": [
+    "仅各一次启动，不排除罕见波动或观察扰动",
+    "没有具体分配调用trace，不由相同数字证明所有runtime行为相同",
+    "启动profile_time不同不是性能成绩",
+    "ARMED API进程不等模型测量，实际证据只Engine PID",
+    "当前loggerWARNING支持本次INFO缺失，不代表旧轮logger现场已记录"
+  ],
+  "causal_or_performance_gain_claimed": false,
+  "this_agent_gpu_or_new_suite": false
+}

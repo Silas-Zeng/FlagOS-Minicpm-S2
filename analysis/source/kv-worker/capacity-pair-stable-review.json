@@ -1,0 +1,67 @@
+{
+  "status": "verified_verify0_stable_screen",
+  "run": "20261021T213016Z-kv-capacity-pair-stable-context16k-long",
+  "variant": "stable",
+  "source_count_rehashed": 410,
+  "source_sha256": "cd506fa2ed386df5961a188702a512351829cca59b684f2d47897e57e298c676",
+  "raw_sha256": "1f33da1faf4fa831e2f6297d93bbf56ae3e5cc7bb024e7625fe552a0bb75c136",
+  "server_log_sha256": "978360eacf715633025630ce7d278a04f7302e5bc044f93b85df4d87782f9d37",
+  "wrapper_sha256": "be934c108131fd754aea2468a555ad5852068a6a3d734a7df6aafbb7633ca93e",
+  "verification_performed": false,
+  "completed": 32,
+  "failed": 0,
+  "tokens": [
+    524288,
+    32768
+  ],
+  "cpu_quota": 6,
+  "physical_memory_mib": 32768,
+  "kv_tokens": 521936,
+  "preemptions": {
+    "before": 0.0,
+    "after": 1.0
+  },
+  "database": {
+    "before": {
+      "snapshot_sha256": "89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605",
+      "schema_sha256": "29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078",
+      "logical_content_sha256": "71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29",
+      "table_count": 519,
+      "row_count": 19340
+    },
+    "after": {
+      "snapshot_sha256": "89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605",
+      "schema_sha256": "29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078",
+      "logical_content_sha256": "71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29",
+      "table_count": 519,
+      "row_count": 19340
+    }
+  },
+  "database_unchanged": true,
+  "database_new_tables": [],
+  "database_existing_changed_tables": [],
+  "protocol": null,
+  "paired_conditions": null,
+  "duration_s": 220.5050202300772,
+  "total_tps": 2526.2735488686926,
+  "mean_ttft_ms": 62602.81379344815,
+  "finished_utc": "2026-10-21T21:35:21.547752+00:00",
+  "postflight_utc": "2026-10-21T21:35:42.054721+00:00",
+  "idle_verified": true,
+  "shutdown_error_lines": [
+    "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704] AsyncLLM output_handler failed.",
+    "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704] Traceback (most recent call last):",
+    "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/async_llm.py\", line 660, in output_handler",
+    "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704]     outputs = await engine_core.get_output_async()",
+    "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/core_client.py\", line 1061, in get_output_async",
+    "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704]     raise self._format_exception(outputs) from None",
+    "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704] vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause."
+  ],
+  "limits": [
+    "VERIFY0性能短测不做本轮字节回读，既有212106 VERIFY1证据单列，不能硬要求True或伪造核验。",
+    "服务完成与成对可归因分开：KV容量不同或候选运行中DB改变则valid_for_e2e_pair_attribution=False；双方初始DB相同仍不消除此混杂。",
+    "不修改参数硬凑容量、不用诊断227秒比较；单补一条stable也不能追溯修复本组不同测量期间的DB。",
+    "即便全部匹配，单次pair也不证明稳定收益、编译cache全热或新accuracy；非官方成绩。"
+  ]
+}

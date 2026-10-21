@@ -2,7 +2,9 @@
 
 本表全部实验/成绩均属天数BI-V150。队友负责沐曦－曦云C500；仅团队实验分析库按两平台归档，两个私有代码库共用，不要求平台拆分。不把本轮数据作C500或团队整体成绩，原始证据路径不移动。
 
-**用户于2026-10-21 16:40Z授权继续自主探索，覆盖此前冻结。** 大收益优先，小收益也用最短上卡门验证并保留，噪声标待确认，不设最低百分比；正确性失败不启用，但代码和负结果保存。所有设备任务仍由root单卡串行拥有。新门50–63已封存；async/metadata各自同KV单次+0.703657%/+0.286723%保留，CTA第一服务pair描述+1.745903%但KV池差96、同物理32GiB，不称KV严格匹配或默认资格。181041 terminal0，不实现drain；后继单victim保存/恢复及私有页排序已诊断通过，0e不回读205219/205819配对KV+DB双失配，不报收益。独立capacity67e4及a79b/0ae包装仅CPU双终审/root接受，冻结未执行；本批暂停文件写入供root一致归档，goal继续待解锁。本agent不擅自设备。
+**用户于2026-10-21 16:40Z授权继续自主探索，覆盖此前冻结。** 大收益优先，小收益也用最短上卡门验证并保留，噪声标待确认，不设最低百分比；正确性失败不启用，但代码和负结果保存。所有设备任务仍由root单卡串行拥有。新门50–63已封存；async/metadata各自同KV单次+0.703657%/+0.286723%保留，CTA第一服务pair描述+1.745903%但KV池差96、同物理32GiB，不称KV严格匹配或默认资格。181041 terminal0，不实现drain；后继单victim保存/恢复及私有页排序已诊断通过，0e不回读205219/205819配对KV+DB双失配，不报收益。归档写锁已解除，capacity212106真实462快拒及42层回读/原16token消费通过；FULL三独立副本及唯一CPU合同已双终审，新包装仅静态检查且hardware终审无阻断，FULL214400已由2071实际验收pass，真实FULL/0ZERO/42回读/原消费完成，仅VERIFY1诊断。213016基点KV521936、已完成213616候选KV521840容量失配；双方DB前后51919340同，FULL214400已真实验收通过；后继由root串行；不混VERIFY诊断收益。本agent不擅自设备。
+
+本批215849/220122两次startup已独立验收，全部实际内存分项相同、KV均521936，未复现历史6块，不报gain/倒补原因。**完成本批记录后暂时停止文件写入，供root一致发布/ZIP；goal仍active，等root解除后继续，当前不追加盲目boot或设备任务。**
 
 稳定原版官方`20261021T122607Z-original-baseline`已16:14:50.001906Z以exit0完成，8raw/2summary及225源SHA、最终bab2本地独立终审通过。原2–4轮分档totalTPS候选/原版4K1.933207729倍、16K3.166027317倍；初始DB不同、KV差96tokens，不合成总分或声称cache-matched因果稳定；新诊断不覆盖这两份正式原件。三个private协作仓库已由root完整上传核验：`Silas-Zeng/FlagOS-S2-vllm-plugin-FL`、`Silas-Zeng/FlagGems`、`Silas-Zeng/FlagOS-S2-Minicpm-throughput`。原公开fork保留，外部消息仍不由本agent发送。
 
@@ -87,8 +89,18 @@
 | 71 | 已完成，单victim协议诊断 | 设备 | 202526暂态保留a1b691 | 416源/32-0；SAVE/free→454skip保HOST→ZERO/RESTORE全42层byteequal→PUBLISH/DROP→runner六checks/原output8tokens；DB51619270→51819337、VERIFY1/240.929935s不报性能，非完整accuracy；后态idle通过，200957未知原因不回填。 |
 | 72 | 已完成，单victim排序协议诊断 | 设备 | 204159私有目的Block排序0e2115 | 实际PRIVATE1044→66run；ZERO/RESTORE/42层回读各2772调用/718405632Bpass，publish/drop/runner六check/原8token消费；32-0、51819337三SHA不变、416源/idle过；227.548345s为VERIFY诊断，不与202526增长DB算收益，不混454早退/截断。 |
 | 73 | 已完成，配对双失配 | 设备基点 | 205219不回读stable长负载基点 | 410源/32-0/220.407047817s/KV521936/DB51819337三SHA不变/idle；wrapper11917，205819候选已完成且KV521840/DB增长双失配，不报gain/严格容量matched。 |
-| 74 | 独立CPU/包装终审，冻结未执行 | CPU | 容量必要下界67e4 | 与canonical0e隔离；真实Request06b1非streaming/noowned/R整页maxlen内/F<P才拒，F=P及guard外旧hash+allocator；1项CPU合同0.021s过，两职责终审/新a79b builder和0ae8 launcher compile/diff过并root接受；canonical0e未改，不能移植0e实测为本候选结果。 |
+| 74 | 已完成，容量快拒诊断 | 设备 | 212106容量必要下界67e4 | 实际fast462/首1039<P1043，R16688/717717504B/66run；ZERO/RESTORE/42层回读各2772，全byte/runner六checks/原16token消费通过；32-0、DB51919340三SHA同、416源/idle，无ERROR但forcekill WARN保留；227.191134s仅VERIFY1诊断，不是FULL证据或吞吐收益。 |
 | 75 | 已完成，KV+DB双失配 | 设备 | 205819不回读0e页序候选 | 32-0/220.921083583s，R16688/1043页/PRIVATE66run/ZERO-RESTORE各2772/原16token消费，无回读；KV521840对基点521936、DB51819337→51919340，不报gain；416源/idle通过。 |
+
+| 76 | 已完成，真实FULL诊断通过 | 设备 | 214400显式RESTORE_FULL事务 | 2071实际exit0/pass；416源/固定1aff84be5d9a与b4e63947/原bc51-SERVER-seed，32-0；SAVE→FULL→DROP serial123、0ZERO，R16704/P1044/718405632B、SAVE1008/FULL与42回读各2772全bytespass；zero_calls0/fast454/host释放/runner六checks/原consumer8，DB51919340三SHA同/KV521936/idle；226.794828s仅VERIFY1诊断，不报性能/完整accuracy。 |
+
+| 77 | 配对完成，DB同/KV失配 | 设备基点 | 213016容量性能stable VERIFY0 | 独立410源/原SERVER-bc51/32-0/220.505020230s/KV521936/DB51919340三SHA前后同/CPU6/32GiB/idle；raw完成后shutdown ERROR/WARN分类保留；213616候选完整验收，KV521840对base521936差96失配、双方DB前后51919340同，不补stable凑容量/不归因gain。 |
+
+| 78 | 已完成，DB同但KV失配 | 设备 | 213616容量VERIFY0候选 | 独立416源/32-0/218.917006328s/KV521840 vs base521936；双方DB51919340三SHA前后同；实际fast462/R16688/717717504B/66run/旧ZERO-RESTORE各2772/host释放/runner六checks/原16token消费，无回读；source/idle过，raw后shutdown错误分类保留，不归因性能/不套FULL证据。 |
+
+| 79 | 已完成，启动标量诊断 | 设备 | 215849同6a stable smoke | 412全源/原bc51 smoke-only-VERIFY0/8in32out完整；PID231345实际profile1/原int→PARENT真list/三hook恢复，全部内存标量完整，KV521936；DB51919340三SHA同/post22:01:02.902726Z68/0/闭/source过，ERROR空但forcekill WARN保留；不报性能/不回填6块原因。 |
+
+| 80 | 已完成，两启动分项相同 | 设备 | 220122同6a capacity smoke | 418全源/原innovation5bef字节保持/原bc51 smoke-only-VERIFY0/8in32out完整；PID231998实际profile1/PARENT真list/三hook恢复；内存分项与215849同、KV均521936，未复现旧6块；DB51919340三SHA同/post22:03:14.114658Z68/0/闭/源过，ERROR空/WARN保留，无gain或历史因果。 |
 
 ## 执行边界
 

@@ -1,0 +1,81 @@
+{
+  "kind": "213016容量VERIFY0配对stable基点独立CPU审计，候选在途不算gain",
+  "evidence": {
+    "run_id": "20261021T213016Z-kv-capacity-pair-stable-context16k-long",
+    "started_utc": "2026-10-21T21:30:18.827999+00:00",
+    "finished_utc": "2026-10-21T21:35:21.547752+00:00",
+    "raw_sha256": "1f33da1faf4fa831e2f6297d93bbf56ae3e5cc7bb024e7625fe552a0bb75c136",
+    "source_count_verified": 410,
+    "worker_sha256": "e155a16669e69b7eb7aff370dbcbcf225a4f593fa42b2399722e96999b53a1f1",
+    "completed": 32,
+    "failed": 0,
+    "input_tokens": 524288,
+    "output_tokens": 32768,
+    "duration_s": 220.5050202300772,
+    "total_tokens_per_s": 2526.2735488686926,
+    "mean_ttft_ms": 62602.81379344815,
+    "kv_tokens": 521936,
+    "database": {
+      "before": {
+        "snapshot_sha256": "89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605",
+        "schema_sha256": "29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078",
+        "logical_content_sha256": "71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29",
+        "table_count": 519,
+        "row_count": 19340
+      },
+      "after": {
+        "snapshot_sha256": "89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605",
+        "schema_sha256": "29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078",
+        "logical_content_sha256": "71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29",
+        "table_count": 519,
+        "row_count": 19340
+      }
+    },
+    "preemptions": {
+      "before": 0.0,
+      "after": 1.0
+    },
+    "cpu_quota_cores": 6,
+    "physical_memory_mib": 32768,
+    "postflight_idle_verified": true,
+    "postflight_utc": "2026-10-21T21:35:42.054721+00:00",
+    "errors_before_shutdown": [],
+    "errors_during_shutdown": [
+      "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704] AsyncLLM output_handler failed.",
+      "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704] Traceback (most recent call last):",
+      "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/async_llm.py\", line 660, in output_handler",
+      "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704]     outputs = await engine_core.get_output_async()",
+      "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/core_client.py\", line 1061, in get_output_async",
+      "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704]     raise self._format_exception(outputs) from None",
+      "(APIServer pid=226366) ERROR 10-22 05:35:18 [async_llm.py:704] vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause."
+    ],
+    "shutdown_forcekill_lines": [
+      "(APIServer pid=226366) WARNING 10-22 05:35:18 [utils.py:620] [shutdown] Process manager: force killing remaining processes count=1"
+    ]
+  },
+  "checks": {
+    "all410_archive_post_sha": true,
+    "stable080656_sources_equal_prior205219": true,
+    "original_SERVER_packages_seed_equal_prior205219": true,
+    "no_protocol_install_marker": true,
+    "DB51919340_same_recomputed": true,
+    "CPU6_32GiB_KV521936": true
+  },
+  "package_sha256_owner": "5b45a043eb5e6c85ab144270fe21cce560b3f3dfa355352cbb0840c51966de6e",
+  "pair_status": "213616原件已独立验收；双方DB51919340三SHA前后同，KV521840对521936失配，不归因收益/不补stable。",
+  "limits": [
+    "这是原bc51短筛基点，不是两档4轮官方。",
+    "仅物理32GiB/CPU6/原参数及本runKV已验；候选完成仍须独立核DB/KV/source等。",
+    "controller Z及shutdown错误按本run原日志分类；不删退出原件。"
+  ],
+  "candidate_inflight_owner_observation": {
+    "run_id": "20261021T213616Z-kv-capacity-pair-capacity-context16k-long",
+    "kv_tokens": 521840,
+    "baseline_kv_tokens": 521936,
+    "kv_matched": false,
+    "candidate_completed": true,
+    "database_after": "complete_same51919340"
+  },
+  "candidate_review": "analysis/source/kv-transaction/213616-independent-review.json"
+}

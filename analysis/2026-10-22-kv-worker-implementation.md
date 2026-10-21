@@ -98,3 +98,13 @@ root新builder **ac18b84dfc2e9435c6984f05ddc084d24458d2b158003df29ec9fedc641b642
 32/0、524288in/32768out、CPU6/32GiB、KV521936；**227.54834548803046s/2448.0775670122475总tok/s/TTFT62799.9383899587ms仅诊断值**。本轮DB518表19337行的实体/schema/logical三SHA均前后不变，分别为d9351095…/a5ca71a5…/a180ecc5…，已重算完整值见JSON。不能据诊断回读开销和前轮DB变化不同，直接宣称比202526快或已获稳定E2E收益。
 
 20:47:11.313241Z exit0，20:47:45.919662Z post为68MiB/0%、9031双栈闭、无GPU、416live无失败。原server shutdown有AsyncLLM/EngineDeadError行，完整保留，不能写全程无ERROR或改exit0。该门解除单次真实页重映射的字节/状态/consumer缺口，不替代整模型accuracy；worker31cc/txn616未改。下一性能阶段使用独立启动器 [`launch_kv_pair_screen.py`](../scripts/remote/launch_kv_pair_screen.py) 关闭VERIFY，并要求共同DB/容量/参数及独立结果验收。
+
+## 212106容量快拒实际门已独立通过
+
+[`review_capacity_protocol.py`](source/kv-worker/review_capacity_protocol.py) **7d59fa3b4f1af71be751009df0364de9ac7ffcb826e3dcf35819263f0cc25141** 在完整 `20261021T212106Z-kv-capacity-context16k-long{,-control}` 上实际运行一次，2.4s exit0，结果 [`capacity-20261021T212106Z-kv-capacity-context16k-long-review.json`](source/kv-worker/capacity-20261021T212106Z-kv-capacity-context16k-long-review.json) **f2499bcfe835d770c5b98e4ebcc0b25c7f872565da928c56cfcc2d0c87a0fdab**。416 source逐SHA、capacity67e4/a79b builder/0ae launcher/31cc worker/616事务/c95 copy/791c init/e155 runner与原bc51/argv/seed/VERIFY1、live/post54c均核，未修改原件或重跑设备。source清单SHA73e5d880f5a92f528618ffda71677c2b56c4b49ae582258dc0946ff20809a436，包SHA8e04b0b6301c724741759d3a2926e17726b011448ec28b8a14a7ac2ce50af537。
+
+actual worker224969，**fast_rejects462**，首条reason `capacity_lower_bound`，F1039＜P1043、pending0/placeholder0/full-fitTrue、request_tokens16704、budget2018。后续仍真实分配/排序/恢复，不绕过原allocator。R16688/1043页/717717504B，SAVE23段966calls，目的66段，ZERO/RESTORE/诊断回读各2772calls；42层整字节回读通过、六runner检查全true、原consumer16tokens、host释放，restore_skips462/preempt0→1。Request专用guard通过由实际fast计数与固定helper间接证实，不冒称本run另有live Request源码快照。462不是GPU恢复失败次数，也没有逐次free日志或所省CPU时间测量。
+
+32/0、524288in/32768out、CPU6/32GiB、KV521840。DB本轮before/after均519表19340行，实体/schema/logical三SHA重算相同89743b20…/29d740d5…/71ac1989…，完整值见JSON；不抄旧518/19337。**227.19113439507782s/2451.9266629097337总tok/s/TTFT62762.77446313179ms仅VERIFY1诊断**，不能与此前失配VERIFY0或旧诊断归因收益。finish21:26:17.768468Z exit0，post21:27:50.103577Z68MiB0%、9031双栈闭/无GPU进程、416live无失败，owned controller仅Z；本run日志无ERROR/EngineDeadError命中。只证明本次快拒激活/恢复正确链，不是新accuracy/默认合并。
+
+后继RESTORE_FULL是另一独立worker/事务/协议三件候选；31cc在本容量门仍完全未变，不能用此次回读宣称未执行的新FULL路径已过。

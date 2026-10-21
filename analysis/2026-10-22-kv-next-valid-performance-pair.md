@@ -1,0 +1,24 @@
+# 下一次可比性能对照的接续方案
+
+此文件是本阶段完成后的下一步计划，尚未执行新的性能pair。先读CURRENT顶端核实际设备归属，再读本阶段六run原件；不得把本计划登记成完成。
+
+## 比较一个明确改动
+
+选择冻结capacity67e4/worker31cc/transaction616与FULL1aff/worker5d9a/transaction84be，二者均已有独立VERIFY1真实恢复、全42层字节和原消费者证据。两边使用同一启动观察器6a772a，VERIFY0；原bc51 context-long、seed721201及原服务参数保持。这样问题是“取消完整恢复中的ZERO是否改善总耗时”，不再把累计KV协议与无协议stable的全部差异混成单项收益。
+
+- capacity完整reference：212106 control/source manifest `73e5d880f5a92f528618ffda71677c2b56c4b49ae582258dc0946ff20809a436`，原innovation manifest `5bef5daf33f8d4ed31f4d146106ff2eb23f5a05f317c256f544a07332a6f872d`。
+- FULL完整reference：214400 control/source manifest `a67c717f5e1f7ab5e2240dc9cd8623c02a91aa2b2958b9ee0bf206c791183829`，原innovation manifest `93375c426c9fb0b4d5abdb869ba94a8fab0a01ce1863ab0e1bd9785f586827fe`。
+- 两原树都是416文件、init791c。追加相同观察器后的init均应为 `39fb96f474c4bacc79ba4cdc1ae27ce877f9dd654825c792dc8446ac620b08e0`；原worker/runner/协议字节与旧innovation文件不改，新manifest单独记录完整最终418树。
+- 既有0ab0 builder仅支持stable/capacity，不能直接拿它冒称支持FULL。必须准备独立新builder/launcher，固定两完整输入清单，互审后再上传新路径；不修改受测0ab0/5bdb/11917/be934c或旧run。
+
+## 最短必要门
+
+不重复已有COPY/DTO/完整事务CPU suite或VERIFY1长轮。新包装只做必要语法/精确映射审查；root独占BI-V150，串行一次capacity对照和一次FULL候选，原件全过程保留。不要人为改变util、显式KV大小、假占位buffer或服务参数凑容量。
+
+需要实际同一观察器profile1/原返回/三个hook恢复，启动KV容量、物理显存/CPU配额、原参数、DBbefore/after以及并发host工作一致。每侧源码身份分别固定，仅比较约定改动。观察器没有新增设备采样/计时API，但stdout和CPU路径仍有观察扰动；两边共同使用，不将其称为完全无扰动。所有此类短测继续放framework，不能放官方baseline目录。
+
+capacity须实际SAVE→ZERO→RESTORE→DROP；FULL须实际SAVE→RESTORE_FULL→DROP且0ZERO，真实R/页几何/消费者/fast次数分别解析，不硬编码两轮必然相同。VERIFY0本轮不回读，不要求伪造verification_passed；之前各自VERIFY1证据单列。若实际保存前缀/恢复机会不同，明确列出这个行为差异，不能把所有总时间差强归因单个清零阶段。
+
+DB或容量失配时先报告真实分项，不在没有新证据时继续追样本。215849与220122启动样本内存项完全一致且KV均521936，只说明差异本次没复现；它们不能证明未来两长轮一定匹配，也不能替代未来的后验。
+
+无最低收益门槛：小正差也保留，按噪声与代价做必要复核；负结果同样保存。只有准备纳入默认时再进行新accuracy/官方复现门。稳定SQL+C3此前accuracy不自动继承给KV协议，三个实验候选不直接推到共享代码仓。

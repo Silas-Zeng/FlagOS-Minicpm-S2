@@ -51,3 +51,13 @@ MemorySnapshot84–130以Torch mem_get_info、memory_reserved、allocated peak�
 205219与205819容量不同，且候选DB运行中改变，两轮不满足归因pair条件。保留全部32/0和原始时长，不给“页序提升/退化百分比”，不拿204159的227秒VERIFY1诊断替换对照，不挑最好。DB共同起点门只保证启动前指纹条件，不能保证启动后无调参或容量相同。
 
 root若选择仅一次原参数stable复核寻共同容量，仍须新run/完整原件、DB/容量/CPU/源与实际协议命中全部重核；没有共同条件就记录无法配对，不能修改util、限制KV或加假buffer凑容量。以后若有必要的原值诊断，应只在具体批准的新run保存实际profile项，不改当前冻结候选或开启额外GPU工作。本owner本批到此完成写入后暂停，等待root一致发布/ZIP及解锁。
+
+## 后续事实与已批准的最短标量诊断
+
+归档写锁已解除。root回执213016 stable再次521936、213616 capacity再次521840；214400 FULL完整原件则直接记录521936（server.log SHA6f3a0eec…）。FULL三件是新额外protocol模块，VERIFY1真实整页恢复通过，故“只要多protocol模块必定固定少6块”没有事实支持；仍不能归因FULL、VERIFY或缓存，更不能补造旧profile值。214400诊断不是共同容量性能pair。
+
+root批准单次纯标量观察器及未来两个最短原参数启动，详细 [观察器说明](2026-10-22-kv-memory-startup-observer.md)。最终observer6a772a、唯一合同0bec，已获framework只读终审。它不提前import WorkerFL，在自然已加载父Executor显存入口接入已创建worker，原父RPC只一次；用原CM现成result读取snapshot/nonTorch/peak/available，finally恢复三hook。无新增GPU采样/同步/MemorySnapshot，原返回/异常不变，derived单列。当前仍无该观察器设备结果；原因保持未知。
+
+后续两个观察器启动已完成：215849 stable与220122 capacity均KV521936；本owner独立比较全部profile字节组成、worker值、4snapshot非时间字段、derived和原返回/logger，完全相同，仅profile_time与timestamp变化。详见 [两启动专项JSON](source/kv-memory-observer/startup-pair-review.json) SHA `0fc5509022de9d376996f11fcc8342800fc04c1410e11097a2ad9c1c4fff794a`。weights5101233152、nonTorch1000341504、peak656424960、nonKV6757999616、requested29205777612.8、available22447777996.8→原int22447777996，graph0，两轮均一致；所有hook实际恢复成功。
+
+因此本次**未复现六块差异**，没有贡献项变化可用于定位历史来源。当前INFO/DEBUG缺失有当次root WARNING30继承链支持，仍不能倒补旧轮logger现场或字节值。root决定不追加startup样本，下一计划将同一观察器纳入原参数VERIFY0对照；本阶段只保存，不变更源/参数或扩大实验。历史原因仍未知。

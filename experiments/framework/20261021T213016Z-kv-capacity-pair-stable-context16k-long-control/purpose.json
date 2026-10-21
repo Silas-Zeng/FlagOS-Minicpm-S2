@@ -1,0 +1,40 @@
+{
+  "kind": "成对短测准备；非官方成绩，仅候选源码差异允许，不能据安装marker判真实命中",
+  "variant": "stable",
+  "wrapper_sha256": "be934c108131fd754aea2468a555ad5852068a6a3d734a7df6aafbb7633ca93e",
+  "source": "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z",
+  "reference_control": "/workspace/experiments/minicpm-s2/framework/20261021T212106Z-kv-capacity-context16k-long-control",
+  "reference_source_manifest_sha256": "73e5d880f5a92f528618ffda71677c2b56c4b49ae582258dc0946ff20809a436",
+  "source_count": 410,
+  "preflight": {
+    "query": "68, 0\n",
+    "ixsmi": "Timestamp    Thu Oct 22 05:30:17 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  31C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+  },
+  "db_before": {
+    "snapshot_sha256": "89743b20d842c8f6067f6e1b917dec0f9f9b4eae19d93e3ebf02e168f4aea605",
+    "schema_sha256": "29d740d5351d1372df2bb6317a651c70b682d2d855b51e717afd576cfe78c078",
+    "logical_content_sha256": "71ac19899ea28dda8cb94b517a8f598c487bbd19f392a9b285ff5ab660355c29",
+    "table_count": 519,
+    "row_count": 19340
+  },
+  "matching_baseline_after": null,
+  "restore_byte_readback_enabled": false,
+  "command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/run_framework_screen.py",
+    "/workspace/experiments/minicpm-s2/framework/20261021T213016Z-kv-capacity-pair-stable-context16k-long",
+    "--source-dir",
+    "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z",
+    "--context-long-screen",
+    "--seed",
+    "721201",
+    "--require-log-marker",
+    "BIV150_SQL_REFLECTION_INSTALLED"
+  ],
+  "limits": [
+    "VERIFY=0；不包含诊断回读，但原protocol稀疏日志保留。",
+    "DB相同不等于所有编译cache全热；KV容量/CPU/参数仍须run后独立核对。",
+    "准备锁释放后原bc51重新取锁；root仍须唯一设备owner，未改原driver。",
+    "运行后DBafter/live/fullpost由root既有封存步骤收取，不在本包装新增流程。"
+  ]
+}

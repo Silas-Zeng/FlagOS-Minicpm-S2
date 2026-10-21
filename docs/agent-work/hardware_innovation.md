@@ -684,3 +684,75 @@ root回执32/0、220.921083583秒/TPS2521.515787，KV521840、DB51819337→51919
 新中文 `analysis/2026-10-22-kv-capacity-variance-audit.md` 保存原因审计：三control worker同a8de、platform同e6f231，util0.85/32GiB/原参数相同；六块×688128=4128768B=3.9375MiB仅KV池差额，不当某profile项恰差该值。启动三log只有最终KVsize，缺init/requested/nonTorch/peak/weights/实际available与取整余数，连INFO可用KV内存缺失原因也未知；没有直接因果来源。按固定PlatformFL is_cuda仅nvidia，iluvatar使该worker显式graphestimate分支不走（仅局部源推论，不排一切间接图影响）；VERIFY只SAVE时读且在sizing后，没env0直接前置分配差异证据。绝不猜cache/4MiBchunk/NCCL/其它进程，亦不改util/固定KV/假buffer凑容量。root若仅一次原参数stable复核仍须全留原件，不挑最好。
 
 **本批所有专项/设计/互审已完成，按root要求现在暂停本owner文件写入，供一致发布与ZIP；等root明确解锁再写。** 当前root回执无GPU；本owner无SSH/GPU/新tests/共享库写入。省ZERO仍设计、容量67e4+新包装只CPU准备，未混现页序pair、无新accuracy或性能成绩。下一API先读本节/专项JSON和对应报告恢复，不能从旧“在途/尚无包装”历史覆盖当前事实。
+
+### 归档后新轮：capacity实际机制与显式RESTORE_FULL交叉审
+
+root已明确解除上节归档写锁。212106容量独立真实门已由root唯一设备owner启动，runner224783，隔离source `kv-capacity-20261021T212106Z`，固定67e4/a79b/0ae及VERIFY1；本owner尚未收到完整原件，不预称fast_reject命中、恢复成功或性能。待本地run/control到齐，只独立核实际容量必要下界分支、原分配回退、完整恢复ACK/消费与诊断身份，不重复owner完整源/DB套件，不进行SSH/GPU。
+
+root另授权后继RESTORE_FULL独立副本实现，framework负责worker从31cc、systems负责事务从616和adapter从67e4，本owner交叉审三者。所有受测canonical与当前capacity源冻结，暂不新builder/设备，仅双方一项必要联合CPU合同。旧省ZERO文档“尚未授权实现”是此前历史状态；当前只有新独立副本被授权，仍没有新设备结果。
+
+已全文只读worker初稿 `patches/framework/candidates/biv150_kv_full_restore_worker.py` SHA **5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477** 及冻结c95f。初审无当前覆盖/同步阻断：FULL资格由worker实际normal42/raw layout、42份整R pinned uint8 host、精确storage边界/唯一层storage及PagePlan全页一一对应验证，不仅信任客户端bool。SAVED入口先强持destination/fullplan并置BOUND，之后保原自身devicewide producer fence→H2D→真实event→可选42层回读。accepted后的异常进入FAILED并真settle，不能半写后降级执行旧ZERO/RESTORE；未settle保持host/raw/event/map引用。原ZERO/RESTORE路径保留。SAVE的五项capability仅用于提交前选择，不能当已执行FULL或完成凭据。
+
+已将此初审发root/framework，等待systems事务/adapter初稿、唯一联合合同及最终三pin后定向终审；本owner未重跑suite、未改任何runtime、未请求新GPU。完整覆盖与性能收益仍须未来独立真实门，不能从省2772次zero_calls推算TPS。
+
+### 212106容量实际机制专项验收与VERIFY0包装终审完成
+
+完整run/control已本地，root包8e04b0b6、清单73e5d880。本owner实际核67e4/31cc/616/c95f和原log，新增中文 `analysis/2026-10-22-kv-capacity-mechanism-result.md` 与 `analysis/source/kv-transaction/212106-capacity-hardware-review.json`，后者SHA **e96487e14917020bceaef83e9467eab03e41c93e02816ea17360783a863b2a4f**。server.log SHA16d041a2，首capacity_lower_bound F1039<P1043；实际fast_rejects462==restore_skips462，未逐次记录F，不推广首读数。受测源码唯一增量证明462次严格快捷拒绝，不能变成CPU毫秒/TPS。
+
+本轮R16688/1043页/717717504B，SAVE23段/966calls；真实目的升序66段=796/37/147三大段+63单页，ZERO/RESTORE同图各2772，VERIFY1全42层717717504B/2772回读通过。原Attention前6checks全True、原输出后16token消费、DROP完成hostfalse。真实ACK四命令serial1..4及key/页/bytes逐项核对；原件从未含新FULL，不能混用。32/0、227.191134395s/TPS2451.926663为诊断，不报收益；KV521840、post68/0/双栈closed/416源零失败。完整DB/源后态归root/framework，六块容量profile原因仍未知。
+
+root新 `launch_kv_capacity_pair_screen.py` SHA **be934c108131fd754aea2468a555ad5852068a6a3d734a7df6aafbb7633ca93e** 已只读终审无阻断。只有reference212106/manifest73e5/protocol67e4/buildera79b/variant和输出名替换，内存逆换逐byte精确回11917。独算73e5→innovation包5bef5daf→stable410/candidate416完整链；原DBbefore==after三SHA及候选before匹配门/锁/bc51/VERIFY0不变。已发root可串行先baseline，本owner没有执行或新增suite/GPU；这是stable对累计capacity候选，不能单独归因早退，未来容量匹配仍待实际。
+
+### RESTORE_FULL三方最终静态终审通过，CPU合同身份明确
+
+最终实读SHA：新worker **5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477**；新txn **84be2242656e6ae0a30d65c803c2ae5076e836e0d1b6686731c4197a85b21883**；新adapter **1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8**。均在独立candidates文件，原受测67e4/31cc/616/0e无改。已完整读相对基点diff与实际helper/状态实现，终审无当前最短真实VERIFY1门阻断，回执已发root/systems/framework。
+
+覆盖资格由worker真实normal42/raw完整layout+42份整R pinned uint8 host/storage+全页PagePlan独立验证，非客户端bool。adapter只真实SAVE完成ACK取descriptor并核私有list/numcached0/未发布R×42bytes后选FULL，缺资格旧ZERO；txnALLOCATED→RESTORE_FULL_PENDING→真实同operation/bytes Receipt→RESTORE_DONE。workerSAVED入口先绑定map/BOUND再保原自身devicewide fence/H2D/event/回读，accepted后任何失败FAILED并真settle，不能半写后回旧路。缺proof/未settle保inflight与强引用不free不publish，settled失败原privatefree+DROP，cancel等真ACK后回滚；fullsuccess明确未ZERO/0calls/coverage/destbound。
+
+唯一联合test **0035b97f5331083001409871165a66e364c3c1a8f956182e2080d53520e65a54** 及 `analysis/source/kv-transaction/full-restore-cpu-check.json` 全文只读，owner回执1test0.002s，本owner未重跑。合同调用实际parser/coverage helper/c95f Plan与proto/txn，但TensorDescriptor和RPC为CPU stub，不执行worker.rpc设备事件/字节，不能把它称真fence证明；本owner源码审只确认依赖保留。设计报告追加当前独立实现状态，旧未实现历史不改。目前没有FULL新builder/上卡/accuracy/吞吐结论；root后继独立门须真实FULL ACK、零ZERO、全42回读与消费者，不混当前容量VERIFY0 pair。
+
+### FULL独立包装终审与一条调度硬件反证
+
+root继续授权本owner只读审新包装。最终 builder **b4e04e504e0ffda195913a267ca39b87562c73f30bb71e8dbf304392de0ebbd3**、launcher **63947c7fc1c7bc423ceb41d99fb50bcd5b5560442609d76e597ccd5c5fd52bfe** 实读hash、全文与a79b/0ae diff，未见当前阻断，已发root/systems。三个独立full_restore输入84be/1aff/5d9a只映到全新source的canonical transaction/protocol/worker，原相对导入可解；helper0ecf/080656/e155/init791c/完整copy校验/新目录拒覆盖沿原规则。driverbc51/contextlong/seed721201/VERIFY1命令逐字相同，purpose必须同一事务SAVE capability→FULL真ACK/noZERO/0zero_calls/42字节回读/runner/consumer。旧0e/67e4/31cc/616与包装未改，当前213016 stable唯一GPU；本owner未运行shell/fullcopy/suite/GPU。上节“无builder”为此前历史，现仅CPU包装已准备，仍无FULL设备结论。
+
+root另要一条硬件约束供framework研究prefill/decode节奏。新增中文 `analysis/2026-10-22-prefill-cadence-hardware-constraint.md`，只读primary Sarathi-Serve作者v3/USENIX与vLLM0.24官方文档，交叉actual54c/59d9/df780/C3。核心反证：54c已经BQ16独立querytile；若新chunk起点16对齐，ctx+localqpos守恒，helper longestprefix/loop_hi同原query分区，不能把Attention逻辑KV tile数按chunk数倍增，也不能把GPU实际HBM流量当已知。真正可能新增forward/metadata/MLP权重与CPU提交；16SM/6CPU配额、FULL_DECODE_ONLY和C3原分离Attention路径均不能套A100“小chunk decode免费”。无新策略/测试/扫描或设备请求。
+
+framework owner正在做唯一精确整数tileloop模型，本owner明确未重复枚举；其指出M原2048若向下对齐反变2017..2048、增加MM shape diversity且BM256八tile未消失，留由其精确模型审计，不伪称本owner算过。primary检索曾arXiv v4404、旧本地报告路径误记，随后找到v3与真实文件，不改代码/原件。本文只提供成本反证，不承诺调度收益或恢复旧growth/terminal/overlap方向。
+
+### 214400真实RESTORE_FULL专项独立验收通过
+
+完整run/control已本地，包21ae6e30…。本owner独立实际核canonical三新pin1aff/84be/5d9a及c95f；新增 `analysis/source/kv-transaction/214400-full-restore-hardware-review.json` SHA **dd11ee70abb4f371951c6341eec123b34536f166ceba8d8044eb93055dd55450**，原log6f3a0eec/清单a67c717f/结果82428bec。R本次16704/1044页/718405632B，SAVE24段/1008calls；目的升序66段=791/37/153三大段+63单，FULL/42层回读各2772，覆盖/实际bytes/全部uint8回读True。
+
+实际同key命令仅SAVE1→RESTORE_FULL2→DROP3，无ZERO RPC；真FULL ACK zero_stageFalse/zero_calls0/destbound/fullcoveragebytes齐，源码分支与真实完成/回读共同证明新模式已执行，不称全局模型无zero类kernel。首F1030<P1044、fast454，6runnerchecks全真，原消费8token，DROP hostfalse。32/0、226.79482779s/TPS2456.2112仅VERIFY1诊断；KV521936、root源416/DB51919340三SHA同/idle后态已报，不推省写TPS或accuracy。对应设计报告追加真实状态，旧“未上卡”段落为历史。
+
+### 六块差异观察器：最终6a772a，单次原调用后恢复，无设备结果
+
+root新授权追213016 stable521936对213616 capacity521840，再记录214400 FULL521936反例；所有profile组成仍未知。先发明确设计后获批准实现，初稿b092在general install直接import WorkerFL有提前加载风险，自查后未部署并按root同意收紧。最终 `patches/framework/biv150_kv_memory_observer.py` SHA **6a772a741ac96ac1f9d7ef7c8cff7578117bbdc8cc97258afaeec88e1c5b436c**；无主动framework/设备import，sys.modules-only自然已加载父abstract4190武装，实际UniProc4625/Wrapper7da/已创建WorkerFL a8de/io6d8全验证后，在原RPC一次内临时包worker和CM。原返回list同对象/异常、managed包装、CM with抑制语义保持；finally worker/CM/父三处按identity恢复。缺资格NOT_ACTIVATED仍原调用一次，不干预调度/分配/池大小。
+
+只持原CM现成profile_result的CPU snapshot/标量；无新Snapshot/CUDA/allocator/stats/sync/settrace，stdout sparseJSON记录原wrapper/__wrapped__/limitedcallchain与logger现态，不改logging或dump环境。原peak样本/graph扣减由已有值重构时明确derived；profile缺失unobserved，不填0。已查Core283→Executor146→UniProc→run_method503→Wrapper334→WorkerFL495完整链，以及init snapshot在分布式后、profile_run含dummy forward/sampler，未猜6块因果。
+
+唯一 `tests/test_biv150_kv_memory_observer.py` SHA **0becd99b5de8c98926538a9e174ebe68b31476c3079a5c4703eea40f8dcd33d5** 最终1test0.002s。root要求生命周期收紧后更新同一合同，非新增suite；覆盖父/worker各一次、原list identity、同exception、原CM suppression、缺加载fallback、3hook finally恢复。CPU stub非真实WorkerFL/GPU。`analysis/source/kv-memory-observer/cpu-check.json` SHA **137d77ce9d4128f4f1d8471af39e49e3c59d0f2167388cfb1f26cf158928cb5e** 保存语法/禁用调用扫描/两init精确append。framework全文终审6a/0bec无阻断且未重跑，已可冻结。
+
+新中文 `analysis/2026-10-22-kv-memory-startup-observer.md` 给精确接入：同asset分别附新隔离stable410/cap416，不动旧树；完整e043b→00e8def0、完整791c→39fb96f4，必须最后append观察footer，保SQL/C2/C3/协议顺序。新observer manifest另存完整final源/原基点，旧innovation-source原字节仅历史。root后继已授权systems准备两个只启动/smoke的包装，我已交fullSHA/签名/约束，待产物只读审，不自建远端builder/部署。ARMED不等完成，须同PID真DETERMINE_RETURN/profile_context1/原值齐/PARENT_RETURN三个restored真；新诊断仍可能有观察扰动，不反填旧因果，不改util或KV凑容量。本owner无SSH/GPU，当前无observer设备结果。
+
+最终两个observer包装已实读hash/全文终审无阻断：builder **0ab0ce3ab3d8cde4a8e725d9fdfd3e62726fcf95613fbc1e55b850b3e48a9029**；launcher **5bdb67afe573d9ffc803e40bafcaee2e7e7fd85e8b831bb94137516e85c060fd**，参数stable/capacity。73e5/5bef完整输入链410/416→新412/418，只有init精确append与同6a observer，旧innovation保字节且新manifest记完整final图；原worker/runner/protocol/sourceguard都不动。原bc51 SERVER/seed721201/--smoke-only/VERIFY0命令，require真实DETERMINE_RETURN子串，purpose需samePID/profile1/原值齐/PARENT原list/3restored真。source/helper/asset pins与新目录拒覆盖齐。
+
+owner wrapper-check仅compile/heredoc/两init与pins，双方未运行shell/fullcopy/suite/GPU。已回root/systems最终无阻断，仍需root另一职责审后串行实际启动及验收；不能把ARMED或两次未来诊断数值倒补旧因果。当前本owner受托实现/两包装审查与214400专项全部已留中文/JSON，等待root后继实际原件，不新增研究/设备。
+
+### 215849 stable首次启动原值/恢复验收完成
+
+root完整原件已本地，包f9e37bd5…。本owner独立核新412源a8de/e155/observer6a/init00e8，Engine231345唯一真DETERMINE/PARENT同PID、profile1、原int22447777996与父list单元素一致、三hook restored全True，无reject/incomplete。API231177仅ARMED正常，不当另一测量。新增 `analysis/source/kv-memory-observer/215849-stable-review.json` SHA **1ce267ebd0224f1f7d9f8f2b5a57ad9755f71e184c9b0d96cf0c57846cbedb0b**，log66241222/清单f0dfb675，报告已追加中文。
+
+实际weights5101233152+nonTorch1000341504+peak656424960=nonKV6757999616；requested29205777612.8−nonKV=available22447777996.8→原int正确，graph0，nonTorch snapshot差一致。root WARNING30，worker/vllm_fl NOTSET无handler而propagate，前后不变，解释当前标准INFO/DEBUG静默；info_once链未解析、旧轮级别未观测，绝不倒补旧原因。derived peak5774530048仍仅重构。
+
+最终KV521936/32621块；原返回除688128整数商32621，减池payload余354508B，仅算术一致不当实际floor实现已审。root后态412/68/0/双栈closed、DB51919340三SHA同。第一样本不能推六块因果或性能；root当前唯一220122 capacity startup，待其完整原件再比。本owner不SSH/GPU/新suite，observer全部原源与运行资产冻结。
+
+### 220122第二样本/跨样本最终验收，进入保存窗口
+
+root第二完整run/control已本地，包b2bab46a…。本owner实际核capacity原67e4/31cc/616/c95f、同observer6a/init39fb和a8de/e155，Engine231998唯一DETERMINE/PARENT同PID、profile1、原list/3restore全True，无reject/incomplete；418源/post68/0/双栈closed、DBroot回执51919340三SHA同。新增 `analysis/source/kv-memory-observer/220122-capacity-review.json` SHA **708079b2fdf6a9aec20ec2a5f99f8dd63d21336e6fbb4c214e5102e127de67e6**，log9caa6aa1/清单6254fa1f。
+
+跨样本 `analysis/source/kv-memory-observer/startup-pair-review.json` SHA **0fc5509022de9d376996f11fcc8342800fc04c1410e11097a2ad9c1c4fff794a** 已保存精确递归比较：profile全部字节项、worker字段、4snapshot非时间值、derived、原返回/list及logger全部相同，KV也均521936；差异仅此范围内profile_time6.896814823→6.929859638与4timestamp。PID/源目录/variant及其路径不同是当然元数据，未假称整run只变时间。两份sourceguard actualloaded SHA相同，父/worker/CM三hook恢复与原公式都过；profile_time不是性能成绩。
+
+结论：两次启动未复现6块容量差，历史直接原因仍未知。当前logger rootWARNING30只解释当次标准INFO/DEBUG过滤，不倒补旧现场；不因同数值归因observer/FULL/VERIFY/cache，不无限补启动样本。root下一计划把同observer纳入原参数VERIFY0对照以携带启动分项，尚未新增该包装/实验。本阶段对应中文观察器说明/容量审计已更新，受测runtime与原件不改。
+
+**按root最新要求，本owner到此暂停文件写入，供一致发布/ZIP；目标仍active，仅为保存窗口。** 没有新研究、实验、SSH或GPU；后继待root明确解锁与新任务，不因旧“在途/无设备”历史段落重启已完成工作。

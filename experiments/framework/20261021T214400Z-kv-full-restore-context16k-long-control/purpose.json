@@ -1,0 +1,33 @@
+{
+  "kind": "single victim KV RESTORE_FULL real transaction diagnostic; not performance or accuracy",
+  "variant": "single-victim-kv-full-restore",
+  "preceding_protocol_run": "20261021T212106Z-kv-capacity-context16k-long",
+  "candidate_input_assets": [
+    "biv150_kv_full_restore_protocol.py",
+    "biv150_kv_full_restore_transaction.py",
+    "biv150_kv_full_restore_worker.py"
+  ],
+  "installed_modules": [
+    "vllm_fl/patches/biv150_kv_protocol.py",
+    "vllm_fl/patches/biv150_kv_transaction.py",
+    "vllm_fl/patches/biv150_kv_worker.py"
+  ],
+  "source": "/workspace/experiments/minicpm-s2/code/kv-full-restore-20261021T214400Z",
+  "base": "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z",
+  "preflight_gpu": "68, 0\n",
+  "ixsmi": "Timestamp    Thu Oct 22 05:44:00 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  30C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n",
+  "preceding_layout_run": "20261021T195012Z-kv-runtime-descriptor-smoke",
+  "preceding_page_copy_gate": "20261021T191545Z-kv-page-copy-gate",
+  "restore_byte_readback_enabled": true,
+  "required_evidence": [
+    "successful SAVE and source free",
+    "SAVE capability descriptor for complete normal42 pages",
+    "PRIVATE_PAGES_ORDERED with actual run counts",
+    "real RESTORE_FULL completed ACK with full_coverage and destination_bound",
+    "zero_stage_executed false and zero_calls 0 and no ZERO RPC on selected transaction",
+    "restore all42 whole-byte readback passed",
+    "RUNNER_RESUME_STATE_CHECKED",
+    "RESUME_OUTPUT_PROCESSED"
+  ],
+  "all_events_must_match_transaction": true
+}
