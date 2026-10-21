@@ -2,9 +2,9 @@
 
 本表全部实验/成绩均属天数BI-V150。队友负责沐曦－曦云C500；仅团队实验分析库按两平台归档，两个私有代码库共用，不要求平台拆分。不把本轮数据作C500或团队整体成绩，原始证据路径不移动。
 
-**按用户要求冻结所有新增性能探索。** 所有未开始项均冻结，旧“待开始”“CPU/设备”或历史partial不授权重启。原版官方`20261021T122607Z-original-baseline`已于2026-10-21 16:14:50.001906Z以exit0完成，8raw/2summary及225源SHA、最终bab2本地独立终审通过。原2–4轮分档totalTPS候选/原版为4K1.933207729倍、16K3.166027317倍；初始DB不同、KV差96tokens，不合成总分或声称cache-matched因果稳定。现无新增设备任务；此前14:47Z/15:35Z进度仅为历史。
+**用户于2026-10-21 16:40Z授权继续自主探索，覆盖此前冻结。** 大收益优先，小收益也用最短上卡门验证并保留，噪声标待确认，不设最低百分比；正确性失败不启用，但代码和负结果保存。所有设备任务仍由root单卡串行拥有。新门50–59均已封存；async对A1同KV单次+0.703657%，metadata对A2同KV单次+0.286723%，保留待确认不默认。181041 KV只观察门失败时terminal0，不实现drain；仅CPU研究更短期准入预算或有同步保障的KV保留，不擅自启动设备。
 
-只完成既有CPU材料、最终必要审计/比较及registry/report更新；不集成原型、不改默认、不加GPU/accuracy、不扫描或重跑准备smoke。GitHub上传现已获用户授权，由root负责；三个协作仓库均为private：`Silas-Zeng/FlagOS-S2-vllm-plugin-FL`、`Silas-Zeng/FlagGems`、`Silas-Zeng/FlagOS-S2-Minicpm-throughput`。原公开fork保留，不把新上传授权当作恢复性能探索；外部消息仍不由本agent发送。
+稳定原版官方`20261021T122607Z-original-baseline`已16:14:50.001906Z以exit0完成，8raw/2summary及225源SHA、最终bab2本地独立终审通过。原2–4轮分档totalTPS候选/原版4K1.933207729倍、16K3.166027317倍；初始DB不同、KV差96tokens，不合成总分或声称cache-matched因果稳定；新诊断不覆盖这两份正式原件。三个private协作仓库已由root完整上传核验：`Silas-Zeng/FlagOS-S2-vllm-plugin-FL`、`Silas-Zeng/FlagGems`、`Silas-Zeng/FlagOS-S2-Minicpm-throughput`。原公开fork保留，外部消息仍不由本agent发送。
 
 下表按历史证据记录，不是待执行任务单。标为设备的任务必须单卡串行；旧阶段“待测”在后续行解决时，以后续证据及CURRENT为准。
 
@@ -59,11 +59,21 @@
 | 47 | 完整独立warm审计，不集成20261021T115950Z | 设备 | growthV2同16K长输出必要warm重复 | 22源SHA/EngineCore164138 CHECKED+DEFERRED2696free2722future；221.233836s/2517.951184 total/32成功/TTFT67130.273776ms；KV521840/preempt0→0；DB512/19130三hash不变；对114713无吞吐信号/TTFT+7.51%，跨DB506→512边界保留；默认关/不大accuracy；12:18:37Z清理 |
 | 48 | 完整独立终审通过，保留退出警告20261021T122607Z | 设备 | 原13eb两档各四轮官方基线 | 8raw/2summary原均值门过；4K1905.46total/687.94s、16K861.99/2584.99s；225archive/captured-liveSHA全同、原446f/Attentionbab2/无retained；CPU6/32768MiB；KV521840；DB512/19130→516/19270；16:14:50Z exit0cleanup空，16:17:27Z68/0/双栈端口闭无GPU进程；runner166637仅Z/PPid1导致首次seal末/proc断言失败，原记录与独立说明保留；原2-4轮比率见页首，不捏造总分 |
 | 49 | 单层门独立通过20261021T121838Z | 设备 | actual2D full-visible prefix省mask | 15源SHA/两case bitsKVrng/随机页/3负slot+NaN padding/1prefill及C2回退全过；originalproxy恢复；仅P2019计时32calls ABBA：wall12.594359734→12.559617125ms省0.275858%，event12.491010189→12.434306145ms省0.453959%；保留小层信号，非graph/fullrunner/服务/accuracy；12:25:01Z清理 |
+| 50 | 完成并独立验收20261021T173003Z | 设备 | SQL+C3实际自然前缀/plan覆盖计数诊断 | plugin411 SHA/e155→a39a/coverage29137/bc51核实；32/0、524288in4096out/120.483993s，KV521936，DB516/19270三hash不变/preempt0→0/CPU6；最后周期384calls/305metadata/250mixed/3000single-query decode请求步/2241prefix及plan/759outside，77unsupported单列、零计数错误；非全程非forward；17:38:31Z68/0/双栈闭无GPU进程，runner仅Z；不作性能结论 |
+| 51 | guard拒绝，原因待诊断20261021T173921Z | 设备 | 固定MLP tile仅改CTA枚举 | 11源SHA/06c7policy/4b44gate/原4c2e核实；仅gate-up2048/12288/2048实际执行，bits/finite/inputs/RNG true但guard_rows false，exit1；无timing/down，保留负面，不启用，也不先判kernel越界或guard误报；17:39:31Z68/0/端口空闲无GPU进程 |
+| 52 | 实际方法门独立通过20261021T174115Z | 设备 | 复用CPU positions/seq metadata | 10源SHA/b124/0e9615/0096/e155→50493核实；decode62/M259/M952/M2048/纯prefill2048五fixture各11checks全true，连续event+固定地址graph消费通过/selected75/RNG timing不变；32call方法wallABBA0.712748078→0.656465406ms省7.896573%约56.283us，只是方法门，非E2E/accuracy；17:41:34Z exit0/68/0/无GPU进程 |
+| 53 | 完成独立审计20261021T174402Z | 设备 | A1 SQL+C3短基线 | 39.410040799s/6859.571686total；64/0、262144in8192out；KV521840/DB51619270三hash不变/preempt0→0/CPU6；410源SHA/原bc51/serve/seed；供async配对，不跨容量归因；完整idle |
+| 54 | 单次小信号保留20261021T174741Z | 设备 | async token独立短服务 | 39.134667002s/6907.839537total，FIRST_SELECTED/411SHA；同A1 KV521840和DB；TPS+0.70365693%、TTFT−0.86563824%；64/0同tokens/idle，非稳定因果/未集成新accuracy |
+| 55 | 单次小信号保留20261021T175049Z | 设备 | CPUmetadata独立短服务 | 39.073248478s/6918.697844total，FIRST_SELECTED/411SHA；同后继A2 KV521936和DB；TPS+0.28672344%、TTFT+0.23443063%；64/0同tokens/idle，不能对A1报0.86%严格收益；未默认 |
+| 56 | 完成独立审计20261021T175441Z | 设备 | A2 SQL+C3容量匹配短基线 | 39.185280642s/6898.917031total；KV521936匹配metadata，410SHA/DB三hash不变/CPU6/64-0同tokens/preempt0→0/idle；A1/A2容量不同，时间变化不是matched漂移 |
+| 57 | 仅诊断，非正确性pass20261021T180033Z | 设备 | CTA guard分阶段positive CPU原位bits | 11源SHA/7phase/28basic文件全−15992=BF16−17且hash不变；advanced初始化即错12288、读后storage没变，C identity/offset24576正确；无timing/down，保留原173921失败，18:00:42Z idle |
+| 58 | 两shape门通过，正负信号均保留20261021T180646Z | 设备 | CTA正式positive basic guard门 | b216/06c7/11SHA/8phase每shape共64basic文件/输出输入RNG及post全过；gate-up32call wall省16.175816%/event16.332453%，down慢3.807269%/3.884804%；仅固定tile fixture，非E2E/accuracy，不同时默认；18:06:56Z idle |
+| 59 | 完成无回收机会20261021T181041Z | 设备 | KV实际失败/抢占/resume只观察长门 | 411SHA/a4de/initb3b7/e155/bc51/32成功0失败/524288in32768out/220.345997616s仅诊断/KV521840；35快照，末2112core2109schedule、1fail/preempt/resume/obs0；free0需要1页queue1但terminal/private0，不实现drain；cache2944/floor16702/gap13758仅prefix exposure非GPUwork，非全程；DB51619270三hash不变/CPU6/preempt0→1；18:17:30Z68/0/双栈闭无设备进程 |
 
 ## 执行边界
 
-- 原13eb基线122607已完整结束，root12:26:07Z实际恢复54c41796B→bab241176B、启动及封存后bab2均核实。未清SQLite/Tritoncache；初始DB与候选不同必须保留。仅隔离091033插件不足以证明原版，live/source依赖身份不可省略。不得将本次冻结解除或因结果再启设备实验。
+- 原13eb基线122607已完整结束，root12:26:07Z实际恢复54c41796B→bab241176B、启动及封存后bab2均核实。未清SQLite/Tritoncache；初始DB与候选不同必须保留。仅隔离091033插件不足以证明原版，live/source依赖身份不可省略。16:40Z继续探索授权覆盖旧冻结；新增设备实验由root另行排程，不改既有正式原件。
 - 既有基线benchmark退出、CSV/日志封存后才由owner清理服务。历史`stop_managed_server.sh`是已有流程记录，不是在途停止指令。
-- 历史流程在新GPU前调用`check_ready_for_experiment.sh`；当前所有未开始GPU项冻结，不据此启动。
+- 新GPU前保留空闲/同锁/源码身份检查，仅root按最新授权串行启动；本agent只CPU，不因研究或旧待测行自行上卡。
 - 含profiler的服务参数仅作诊断，不能混入正式计时。
 - 单次或profiler结果不能写成稳定收益，不能捏造比赛总分。

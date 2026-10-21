@@ -1,5 +1,32 @@
 # 当前工作与 API 切换交接
 
+## 实时状态（2026-10-21 18:19 UTC / 北京时间 10-22 02:19）
+
+- 用户最新有效指令是继续自主探索：优先硬件/输入驱动的调度、KV 与框架优化；小收益也上卡测、保留。下方冻结/归档仅是上一阶段历史快照。
+- 当前无GPU活跃作业；root是唯一设备owner。最新KV诊断 `20261021T181041Z-kv-completion-context16k-long` 已18:15:45Z exit0，32成功0失败、524288in/32768out，220.345998s仅诊断。全run/control本地，包SHA214e822db3ff4b4585f8bf5c5726820e0754084bc76e3a45ec082acf3c278369；postflight通过空闲。
+- 该KV诊断实际eligible、batch_queue容量2；35快照末2112core/2109schedule，1次RUNNING缺页（free0/required1）和抢占、1次恢复，terminal_pending/private均0，不支持本轮先消费终止输出策略。恢复cache_hit2944、processed_prefix_floor16702、gap_exposure13758，零观测错误；周期不是完整全量、exposure不等于实测GPU重算。后续CPU研究短期准入余量及抢占KV保留/host搬运成本与安全挂点，不重复full-outputreserve旧路线。
+- framework正最小实现mapped Attention（保持request/采样行，CPU map→3D地址、compact scratch、reducer写回原行、2D跳过single），已有611形状CPU地址proof并交叉审；尚无新GPUkernel正确性/服务/accuracy。hardware准备仅gate-up严格service入口（只匹配已证形状/C0），不启用down。两者未完成代码不作收益承诺。
+- CTA修后正式门 `20261021T180646Z-mm-cta-group-cpu-guard-gate` 已exit0：gate-up/down逐位输出、basic CPUguard、输入/RNG以及timing后复核全过。gate-up wall1.417934→1.188572ms（单形状省16.18%），down0.735825→0.763840ms（慢3.81%）负结果保留；仅准备gate-up严格service入口，尚无E2E/accuracy。全原件本地，包SHA998d0d2d9749fe13b86b8dc6ed72e6d4ebc4ce998c817d3e35c6412766272cf7。
+- 第二基线 `20261021T175441Z-baseline-decode4k` 已exit0，39.185280642s，64/0、262144in/8192out，KV521936匹配metadata；全原件本地，包SHAe01f8ce217d6e0680cf386920bc27bb3681b1b2b5bcb72c7b2567027ec7fd5e1。metadata对应约0.29%单轮吞吐正信号，尚非稳定收益，不启用默认。
+- CTA分阶段诊断180033：7阶段basic首尾行全部int16正确且不变；高级负索引读取在尚未执行JIT的初始化阶段就错。compiled C的offset/identity正确。说明原guard oracle异常，不证明所有shape正确或具体库根因；旧173921失败原件保留，hardware正改为basic正索引CPU位比较后重跑。全原件含.i16已本地，包SHA1812222d05c5091ce070049f0c67b364962c1d66dd92dc31c42f3cd85b90af5a。
+- 同基点基线 `20261021T174402Z-baseline-decode4k` 已exit0，39.4100408秒/64成功0失败，262144in/8192out；全原件本地包SHA623376e61b479ddf66cb28944bba11b230fd63c101248143d1e57310012b29ae。完成后封存/idle再启动async。
+- 关键适用性：actual bench不设置temperature，不默认greedy；模型generation_config为sampling/temperature1/topp0.95。纯greedy重排不会覆盖官方常态，不排大GPU验证；应保外部请求和采样行，通过Attention内部索引解决C3遗漏。
+- async短服务 `20261021T174741Z-async-token-decode4k` 已exit0且FIRST_SELECTED实际命中，64/0、262144in/8192out，39.134667s，KV521840与39.410041s基线一致；小信号待独立DB/源码审与必要重复，不称稳定收益。完整原件本地，包SHA0f4b4f16453723b2c5e183b3ed1477d76037ade150196dbc59c4f7fc305881ea；退出后空闲再跑metadata。
+- metadata短服务 `20261021T175049Z-cpu-metadata-decode4k` 已exit0、FIRST_SELECTED真实命中，64/0和262144/8192完整，39.073248s；但KV521936，比首基线/async521840多96，尚不可归因或称严格匹配收益。全原件本地，包SHA26bce102d0c0dac845396ee5e12ffa5320c2f2448ebeb47d2be6f3d7a0e3de9a。当前补一轮baseline检查漂移/容量。
+- CPUmetadata门 `20261021T174115Z-cpu-metadata-gate` 已19秒exit0，5形状全部11字段正确、连续原event与固定图consumer正确、selected75、RNG不变；method wall0.712748→0.656465ms只属单方法信号。全原件本地，包SHA8f0c82a85b756c17ef3a186331ef38dedd886dce7afc9d644b011eca657009c8。后态68MiB/0%无GPU进程，尚无服务收益或新accuracy。
+- C3 覆盖诊断 `20261021T173003Z-c3-coverage-context16k` 已 exit0、17:33:27Z结束，完整411源码/live/归档核对通过，后态68MiB/0%、9031双栈关闭、无GPU进程。全run/control已本地，包SHA `8dbc833d83c4095d3482a9be6b155230786abbf720bc502c1ebc1c1ff8d5121a`。末周期384calls：250 mixed steps、3000 single-query、2241前缀、759前缀外；77 padding/unsupported另列。周期非全量、plan不是forward证明，诊断耗时不作增益。
+- CTA group8 最短门 `20261021T173921Z-mm-cta-group-gate` 已 exit1：gate-up输出逐位/finite、输入及RNG通过，但guard rows检查失败，尚无性能结果。全部失败原件本地保存，后态68MiB/0%、无GPU进程。hardware正定位，不能忽略guard或提前集成。
+- 精确 EngineCore、KV coordinator、single-type manager 已取回 `experiments/source-audits/20261021T173831Z-engine-core/`（manifest与原字节）；systems据此研究“先处理已终止输出以回收KV”的机会计数。framework据真实C3遗漏研究安全batch重排；hardware准备prefix-mask服务短pair。三者CPU并行，无上卡权限。
+- 已互审 async token 小收益组合用root `biv150_async_token_update_sql_mixed_source.py` cfd378（生成f0d0 runner，runtime1bb85）；旧12case真实方法证明可复用，待同基点服务pair。framework另存同功能adapter是重复探索，非新的优化。
+- 稳定SQL+C3、官方证据和三个私有协作库不覆盖。新阶段研究尚未同步到GitHub/旧ZIP；交接以本地本节、各agent handoff及新run原件为准。启动下一GPU前必须核实本次exit及真实设备/端口空闲。
+## 上一阶段已保存（2026-10-22 01:10，北京时间）
+
+三个私有库的完整 tree 均已上传核验。本实验库远端 main 为 `9e5eb51ea70e45c599e995a8f6f03fc97e50bd88`，tree `c0896fd2296c58d67d0a36a6ca59ad69bed5a757`，4,460 项文件/模式；对应本地稳定提交 `b12512e11733b77677c8a7e3022d243f8d496152`，tree 相同。具体发布回执在 `docs/github-publication-20261022.json`，不是向官方上游提交。
+
+4 页中文正式 PDF 已逐页检查，路径 `output/pdf/report.pdf`。完整稳定阶段工作包 `output/handoff/minicpm-s2-work-20261021T170812Z.zip`，215,805,781 bytes，SHA256 `301ed347ef4ffce795ed1348be1182f1fbf367226166c04c145deb8544670ab4`；含 24,679 个文件和 2 个真实 symlink，CRC 通过，外部 manifest/summary 同目录。包内保留原始 SQLite、失败、源码、五份 Git bundle 及四库状态；不含凭据或 `.git/config`。新恢复的优化另增记录，不覆盖这份稳定快照。
+
+精确调度/KV/C3 依赖源码已于 17:08:54Z 只读取回 `experiments/source-audits/20261021T170854Z-scheduler-kv-c3/`，九个文件全带路径、SHA、mode、mtime。此时卡 68 MiB / 0%，Attention 仍原 bab2，冻结 SQL+C3 的 e155/a129 不变；没有新GPU任务。三位子智能体已解除归档写锁，继续最短候选准备和互审。下方重复“正在同步/归档”的文字属于较早快照。
+
 ## 用户恢复持续优化（2026-10-22 00:40 起，北京时间，最新有效指令）
 
 用户明确要求“不断探索优化”“小收益也要上卡测也要保留”，并强调根据硬件特性、输入特点创新调度、KV 等框架机制。这覆盖下面的阶段性冻结。已完成的 SQL+C3 官方对照作为稳定基点，原始证据和受测实现不覆盖；继续以性能提升为主，优先框架层及大收益机会，也为小收益候选安排最短上卡实测，不设收益百分比淘汰线。正确性失败不启用，代码与负结果照样保存；噪声中的信号标待确认。验证仍先最短必要门，必要时才扩大，保持官方模型/参数/评测脚本。

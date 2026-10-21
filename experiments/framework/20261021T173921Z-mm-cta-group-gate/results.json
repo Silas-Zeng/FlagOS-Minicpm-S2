@@ -1,0 +1,201 @@
+{
+  "status": "failed",
+  "phase": "correctness:gate-up",
+  "cases": [
+    {
+      "case": "gate-up",
+      "baseline": {
+        "M": 2048,
+        "N": 12288,
+        "K": 2048,
+        "a_stride": [
+          2048,
+          1
+        ],
+        "b_stride": [
+          1,
+          2048
+        ],
+        "out_stride": [
+          12288,
+          1
+        ],
+        "config": {
+          "BLOCK_M": 256,
+          "BLOCK_N": 256,
+          "BLOCK_K": 32,
+          "SPLIT_K": 1,
+          "num_warps": 16,
+          "num_stages": 2,
+          "num_ctas": 1
+        },
+        "GROUP_M": 8,
+        "grid": [
+          384,
+          1,
+          1
+        ],
+        "grouped": false,
+        "compiled_hash": "3639b8c97b8a4342970c3964dbabb29a1242f519fa9ad59761253a59d4346b5a",
+        "registers": 97,
+        "spills": 0,
+        "shared_bytes": 65536
+      },
+      "candidate": {
+        "M": 2048,
+        "N": 12288,
+        "K": 2048,
+        "a_stride": [
+          2048,
+          1
+        ],
+        "b_stride": [
+          1,
+          2048
+        ],
+        "out_stride": [
+          12288,
+          1
+        ],
+        "config": {
+          "BLOCK_M": 256,
+          "BLOCK_N": 256,
+          "BLOCK_K": 32,
+          "SPLIT_K": 1,
+          "num_warps": 16,
+          "num_stages": 2,
+          "num_ctas": 1
+        },
+        "GROUP_M": 8,
+        "grid": [
+          384,
+          1,
+          1
+        ],
+        "grouped": true,
+        "compiled_hash": "08afb5451fca98d698022dd9770db694d9e3786dbf3e4215e1a660a8b8e8305f",
+        "registers": 97,
+        "spills": 0,
+        "shared_bytes": 65536
+      },
+      "correctness": {
+        "all_output_bits_equal": true,
+        "valid_output_finite": true,
+        "guard_rows_untouched": false,
+        "inputs_unchanged": true,
+        "rng_unchanged": true
+      }
+    }
+  ],
+  "worker_command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/framework/20261021T173921Z-mm-cta-group-gate/source/gate.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261021T173921Z-mm-cta-group-gate"
+  ],
+  "worker_command_shell": "/usr/local/bin/python3 /workspace/experiments/minicpm-s2/framework/20261021T173921Z-mm-cta-group-gate/source/gate.py --worker --run-dir /workspace/experiments/minicpm-s2/framework/20261021T173921Z-mm-cta-group-gate",
+  "timing_loops": 32,
+  "timing_method": "per shape one ABBA; 32 compiled-kernel launches/window; Event pairs pre-recorded; record/submit/final sync inside wall",
+  "accuracy": "not evaluated",
+  "official_performance": "not evaluated",
+  "limitations": [
+    "Synthetic BF16 inputs and weight layouts, no model weights or runner.",
+    "Only two M2048 shapes; no other M/config coverage or graph capture.",
+    "No autotuner; original JIT body with explicit audited C0 values.",
+    "Single ABBA signals are not end-to-end or stable-gain evidence."
+  ],
+  "cpu_mapping": [
+    {
+      "M": 2048,
+      "N": 12288,
+      "BLOCK_M": 256,
+      "BLOCK_N": 256,
+      "row_tiles": 8,
+      "column_tiles": 48,
+      "tiles": 384,
+      "partial_M": false,
+      "partial_N": false,
+      "bijection": true
+    },
+    {
+      "M": 2048,
+      "N": 2048,
+      "BLOCK_M": 256,
+      "BLOCK_N": 128,
+      "row_tiles": 8,
+      "column_tiles": 16,
+      "tiles": 128,
+      "partial_M": false,
+      "partial_N": false,
+      "bijection": true
+    },
+    {
+      "M": 2049,
+      "N": 12301,
+      "BLOCK_M": 256,
+      "BLOCK_N": 256,
+      "row_tiles": 9,
+      "column_tiles": 49,
+      "tiles": 441,
+      "partial_M": true,
+      "partial_N": true,
+      "bijection": true
+    },
+    {
+      "M": 2305,
+      "N": 2051,
+      "BLOCK_M": 256,
+      "BLOCK_N": 128,
+      "row_tiles": 10,
+      "column_tiles": 17,
+      "tiles": 170,
+      "partial_M": true,
+      "partial_N": true,
+      "bijection": true
+    },
+    {
+      "M": 4097,
+      "N": 513,
+      "BLOCK_M": 256,
+      "BLOCK_N": 128,
+      "row_tiles": 17,
+      "column_tiles": 5,
+      "tiles": 85,
+      "partial_M": true,
+      "partial_N": true,
+      "bijection": true
+    },
+    {
+      "M": 17,
+      "N": 129,
+      "BLOCK_M": 256,
+      "BLOCK_N": 128,
+      "row_tiles": 1,
+      "column_tiles": 2,
+      "tiles": 2,
+      "partial_M": true,
+      "partial_N": true,
+      "bijection": true
+    }
+  ],
+  "runtime_versions": {
+    "torch": "2.10.0",
+    "triton": "3.6.0"
+  },
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "error": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/framework/20261021T173921Z-mm-cta-group-gate/source/gate.py\", line 153, in worker\n    raise AssertionError(\"fixed-mm correctness failed: \" + repr(case[\"correctness\"]))\nAssertionError: fixed-mm correctness failed: {'all_output_bits_equal': True, 'valid_output_finite': True, 'guard_rows_untouched': False, 'inputs_unchanged': True, 'rng_unchanged': True}\n",
+  "source_sha256": {
+    "gate.py": "4b44b930aad534301c1545d5748a6dae2a85e2345d7a446185a46d5082d71cd9",
+    "policy.py": "06c7cd9216907886e7d66a81d4fd5d9f78edef9daac2380ca263ce8c1770b8e1",
+    "mm_original.py": "4c2e23da2a6b65b89cbb8170967f14c5327d143e21137387f3907ccb4fcde090",
+    "model-config.json": "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+    "installed_mm.py": "4c2e23da2a6b65b89cbb8170967f14c5327d143e21137387f3907ccb4fcde090",
+    "libentry.py": "414e8a3f74e2522e40659e7fccd84e301f4517220837a87af0311f050bbf3025",
+    "triton-init.py": "df3092178f70be89b50d22905cedae5bac414cc38677053616fc56802c91af30",
+    "mm_baseline.py": "73d5cf8f080fa53ab17023b228d0215fcf71efc6a17ee9b7294e194c38f61faa",
+    "mm_group8.py": "30d0f046071fc4cf122d43af0d087259abc082ad10ec36f69b73ad6a22b343ab"
+  }
+}

@@ -367,3 +367,45 @@ root授权本owner仅更新 docs/technical-report.md、docs/official-comparison.
 封存真实状态写入：原benchmark 16:14:45.731362Z/driver16:14:50.001906Z完成，benchmark/server返回0、cleanup_errors[]、monitor−15；9031IPv4/6闭、无GPU进程、68MiB0%，server/benchmark/EngineCore退出。runner166637已Z/PPid1未reap，不持设备；首次seal仅末/proc缺席assert失败，失败与独立说明保留不改driver/raw。两server日志shutdown清理剩余1进程警告保留，不写完全无告警。
 
 最短文档静态核对已过：最终JSON SHA/status/cases和source/KV数核实；三文全部本地Markdown目标存在，code fences成对，关键分档数字/比例/边界齐全；全文检索只剩明确历史pending，无当前“原版仍在途”。未修改实验、raw、代码、运行时、补丁、README、CURRENT或GitHub引用，无SSH/GPU/modelimport/新性能验证。下一动作仅root生成PDF/commit/同步实验库与最终归档，本owner三文现在冻结，不再探索或修改。
+
+## 用户重新授权后的框架探索（2026-10-21T16:40Z起）
+
+用户明确“不断探索优化”并要求“小收益也要上卡测也要保留”，覆盖先前性能探索冻结；历史冻结记录保留不删除。root归档写锁现已解除，本owner可写独立analysis/patch/gate与本handoff，但不SSH/GPU、不改stable080656/full4aba/default。root刚取回9份精确安装源码于 experiments/source-audits/20261021T170854Z-scheduler-kv-c3/，归档当时GPU68MiB0%、Attentionbab2，e155/a129未变。本轮先完成actual基类/condense/reorder审计；无覆盖保证才做低侵入C3真实step聚合（plan不冒称forward执行），同时准备CPUmetadata直接复用候选与真实方法最短门。已有async-token整数融合保留小收益上卡队列，不重做已过12case门，不拿修SQL前13.4s当剩余预算。所有新实测仍限天数BI-V150；共用代码库/分析库分平台边界保持。
+
+### 重新探索首个重大结论与coverage冻结（本地CPU）
+
+已逐段读actual c524父类、f137reorderhelper、de1econdense/长度字段、4e4cCpuGpuBuffer，并核1219/e155/a129：父thresholdNone/构造不初始化，Triton不调用_init_reorder，runner最终None，因此helper不执行；condense仅尾填洞，不保证decode-first。helper四区即使启用也不是无条件all-query1前置。真实服务遗漏数量仍未知，D29/P2019不能代替命中分布。actual computed CPU NumPy=cpuTensor.numpy视图，补齐CPUmetadata等价关键源。
+
+新analysis已落 `analysis/2026-10-22-c3-coverage-and-metadata.md`（仍随本轮实现推进更新）；包含actual源SHA、证据边界、coverage最短诊断、CPUmetadata与async-token两候选计划。coverage独立模块 `patches/framework/biv150_c3_coverage.py` **29137c16ceb1d811b6b29b28782e2dcdf3463fce154917b16871d3157f7466b3** 已冻结供root上传；exacte155追加footer生成runner **a39a894a67771e724fc198ea1c3720d1504806cc3d07723a2e3f36fe4d6e6675**。stdlib导入不载torch、compile、精确append逆回、扰动/二次transform拒绝通过；3个CPUoffsetfixture分类/共享layer不重复/多build去重/capture排除通过。systems独立审无阻断。仅observe原metadata返回后的CPUoffsets和plan，不包装forward/不改请求或GPU值/无GPU同步；ctx finally保原返回异常。每64exec+first+atexit cumulative，始终workload_complete=false，plan_is_forward_execution=false。root拟16K32req128out --context-screen真实诊断，必须EngineCore快照metadata_steps>0，计时不是基线，本owner未上卡。
+
+CPUmetadata draftruntime **0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f**、transform **0096cdac2c63544b5e3e62766168dc3df22f6ab63c09231bf9c6e93abaf29835**、变换runner **50493fb68b194ed935650a3a743d2f56696d7379b702f4d7717eecac0325a9de** 已写。exacte155保原计算为fallback，scope nospec/text/单并行/async原event/无未知feature；两个H2D用已有CPUpositions/optimisticseq，保原GPU地址、computed原copy、host镜像、slot/采样路径。systems只读审未发现阻断，特别要求连续换host值+按原event调用/消费测试不要每步强sync掩race。模块导入不载torch、compile/精确反变换/source拒绝已过；真实方法GPU门正准备，尚无GPU正确性或收益。
+
+### CPUmetadata四件冻结、真实coverage回执与重复adapter纠正
+
+systems全文终审runtime0e9615/source0096/gateb124与actual5method/Buffer，未发现执行或生命周期阻断；原event内再写CPU、连续4步无逐步强sync、defaultstream H2D→graphcopy→clone正确，固定GPU地址不换，32call hostwall含event与最终drain，controller/sourceguard/独占child/清理边界明确。最终四件已发root冻结：runtime **0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f**；source **0096cdac2c63544b5e3e62766168dc3df22f6ab63c09231bf9c6e93abaf29835**；变换runner **50493fb68b194ed935650a3a743d2f56696d7379b702f4d7717eecac0325a9de**；gate **b1240720b588dae25d92cc1c173d64c1ea5f6e34fcdcab5dd0156407ebbcb757**。本地7assetSHA/5actualAST抽取/compile/逆回/扰动拒绝/help/no torch-numpy import过；本owner未GPU，root可在现job清理后串行最短门，尚无正确性/性能通过。
+
+root实际coverage run173003已exit0，17:33:27Z fullpost68/0；本owner已实读本地coverage-snapshots.json SHA **f51c9981156d4fcaa1122030e719b8727d9428bc3d370e89a8bccf75d8747554**。最后周期384calls/305metadata/250mixed，Dsingle=Ddecode3000、prefix=planned2241、outside759=25.3%；77padding_or_unsupported单列，无观察错误/多build。它是未完整观察前缀、非forward计数，首1req8tokens来自既有driver smoke，总exec计数不能冒称纯主负载；不改原统计、不作性能基线。初次256回执739/2434只作较早快照，最终正文已用384原件。真实遗漏支持新分区设计，不等于25.3%E2E可省。
+
+本owner另写 `biv150_async_token_update_c3_source.py` SHA123d7f1d34404ae2f7069800de70cbd8f88c490377a97c8aab4daf45b08d013c，证明e155 startswith原446f、_prepare_input_ids全文字节相同SHA7dc35754、ORIGINAL/REPLACEMENT不变、变换f0d0可精确逆回。但root同时已有canonical `biv150_async_token_update_sql_mixed_source.py` **cfd378a494c0ccbb5aece861527cdf59ccd148afbe53ac229a09bb43162bdb6f**，hardware已审、生成同f0d0。现明确本owner123d是重复准备，只保留交接、不作为新候选，统一root cfd版；不再实现或重复12case门。原1bb runtime/e5a旧adapter未改。
+
+root新委派真实请求重排candidate。本owner已定位关键RNG边界：actual swap_states正确搬request/KV/采样参数/generator，但全局随机噪声仍按物理行分配，不能只交换就说每request RNG相同。首版拟strict all_greedy才稳定分区，random/mixed sampler原路，不改温度/参数/采样；actual e155先_may_reorder再refresh再按新req_ids构造scheduled数组，prev_req映射按ID查旧sample rows。接着准备actual swap_states CPU逆序/乱序/async请求映射合同，hardware已预留独立审。没有直接上卡、没有改稳定candidate；当前root唯一GPU为CTA173921。
+
+### greedy路线反证已闭合；mapped Attention只到CPU设计
+
+root取回174453精确bench源（serve b09e85eed6f5f7a9075b40a19fc1dd8e94a1c449665c2c6510f349e0409e77b7、endpoint5fd4b66d9ac6a88a278c2b7d65dcd17b8a9424279859ade14bddb69e342a312d、sampler1a2f18ddc91c89f3744ab5a93624be056bf20b7a8b2e6e13d0236182718a2253），本owner实际读原件：temperature默认None，非None才进extra_body，endpoint无temp默认；official/diagnostic无override，归档modelgeneration temp1/top_p.95。coverage173003 server.log96还明示模型这两个参数覆盖默认，clientNamespace temperatureNone+警告不再默认greedy。因此greedy状态交换仅可能命中driver smoke，不能作为官方吞吐候选。root已明确取消greedy专用GPU队列，本owner未为它继续写runtime/服务补丁/上卡，不改温度让其启用；策略边界存analysis第5节。随机路径仍保request/RNG物理行。
+
+CPUmetadata174115已由root实卡执行19秒exit0，本文作者独立复算10份归档sourceSHA、读results **50b631e28c83ea1861624bc51b2d23222470444ee5ed9bc99790add2ba15b99d**：5形状全部字段/slot/ID/镜像/固定地址true，连续4步换host值+原event+graphconsumer通过、selected75。方法wall0.712748078125→0.65646540625ms，少56.282672us/7.8966%，仅fixture输入准备方法，非E2E。root已进入同来源服务短pair（baseline174402）；本owner没有服务结果，四件源码仍冻结不改。
+
+按root建议，新的真实缺口路线改为Attention内request-index map，设计已写analysis第6节。没有新GPUkernel/runtime/安装器/服务。三种地址严格分离：compact d→map读取request r→cu读取原token t；r仅seq/table，t仅Q/output，d用于三份scratch全部读写（尤其54c :596输出及:608store_scalars、reducer686）。BM16/GQA8的第二无效queryslot继续mask，scratch向量d+query_pos而非改全局query_offset；首版TD/未知feature回退。2D先原resolve/invalidCTAreturn再skip querylen1，map必须含全部single-query唯一一次，避免漏写/双写。外部token/request/sampler/RNG/整批GEMM/KV写不动。一次mapH2D≤256B，42层无Q gather/scatter；若原C3 impl实际选中prefix计划步，源代码三launch→三launch，但原coverage只测plan，不能把248/250当真实launch占比（曾在消息中措辞过强已立即纠正并告root/hardware）。prefix0额外两launch，early-returnCTAs仍有调度/整数成本，收益未知。
+
+新增唯一CPU地址proof `analysis/source/c3-mapped-decode/check_address_contract.py` **4c4fe093f2f7e4b2c38c4025d404ce8931d1cb1c84f4a044c87afbdd89dd4a0c** 已过：锁54c/59d9，11定向+600随机/逆序，2D原virtualCTA覆盖、skip与mapped输出不交不漏、map唯一、compact上界、N256/D64、pure/自然prefix/D65回退。纯整数数学模型，非Triton模拟，不证明FP/stream/compiler/performance。hardware已只读actual地址给同一风险清单，正等最终文档/proof交叉审；没有要求或执行GPU。下一步root/hardware对设计取舍后才决定最小真正kernel实现/门，先别把它计作完成候选或收益。
+
+### root授权下一阶段最小mapped实现（进行中）
+
+root已接受上述direct request-index设计，委派本owner继续独立runtime/54c源码变换/e155元数据安装/短单层gate，hardware交叉审。当前开始实现准备，不做请求重排，不GPU、不改稳定SQL+C3。三个行号/compact scratch/2D skip/真实N对D/C2显式w2s1边界继续硬约束；纯decode/未知feature原路，默认不开。门至少非prefix D、D1尾/中、D64、长KV及后继decode，oracle为原2D覆盖后用同配置原C2 compact3D回填，并保原C3差异说明；地址CPUproof不当GPU正确性，正信号后仍要独立accuracy。此条为开始状态，新的runtime/变换/gate尚未落盘。systems另请求我独立审其KV只观察probe(a4de3a...)，会按owner互审规则仅只读，避免阻塞root已有设备队列。
+
+### mapped 首稿已落盘，尚待真实单层门
+
+当前最新实际状态：已写 `patches/framework/biv150_mapped_decode_source.py` **0433a8de0d1e42962d8c8c1ef671f2937107dfb5ae144447cd5f13df9b10811e**，由实际54c/59d9精确变换生成 `patches/framework/biv150_mapped_attention.py` **67a9830eaa976e79d9d21f5f34ec4bbfe0215d3082d6571d415c1c8f33a85f47**；exacte155仅追加footer生成runner **3566099b2f336f3e7ae768adeca5b0da169748324fec26fc00b150b26b246a73**。运行时初稿 `patches/framework/biv150_mapped_decode.py` **32f40e78afe63e4066e93d966eb8ec24fd9b146dde485e2d32b5483d08048827** 已写，后续仍会收紧guard，不是可提交冻结版。三件syntax通过，runtime纯stdlib导入不加载torch；没有执行GPU或模型导入。hardware已逐挂点只读审source0433，未发现d/r/t、compact scratch、2D skip和launch明显阻断；派生身份与runtime/gate还在收口，不能据此报设备正确性。下一条操作：收紧runtime严格回退与安装顺序，写最短真实Builder/Impl单层门并交互审；稳定SQL+C3/default未改。
+
+systems 的 `biv150_kv_completion_probe.py` **a4de3abea10b333aeb73d3c3ab49f82c91510c89cc8f9210c531f666feefb2c6** 已完成本owner只读互审并发回root/作者：original allocate先调用且仅RUNNING返回None观察；get_num_blocks_to_allocate/free只读，不future.done/result/wait；preempt/resume按真实对象epoch，ID重用清理，ctx finally复原；无干预阻断。terminal仅容量假说、processed floor非GPU完成、gap exposure非真实重算量、周期/weakref不完整边界保留；未重跑作者测试、未改其文件。

@@ -2,7 +2,43 @@
 
 更新时间：2026-10-22（Asia/Shanghai；详细实验时间以原始 UTC 为准）。
 
-## 最新用户冻结范围：停止新增探索，完成已开始事项后交接
+## 当前接续：KV只观察门与小收益独立对照
+
+root仍唯一GPU owner，本agentCPU-only。用户已恢复持续优化；三私库此前上传授权有效，旧冻结/未授权条目仅历史。本轮新增`patches/framework/biv150_kv_completion_probe.py` SHA **a4de3abea10b333aeb73d3c3ab49f82c91510c89cc8f9210c531f666feefb2c6**，默认关闭、只stdlib、8actual源码exact SHA/严格单卡FullAttention/V2范围；独立init e043 append→**b3b7e2e8d9064c47ac09422741f18c9a3f7079946bc3306a9ccae393d554ca7c**。只观察实际RUNNING allocate None后的少量KV/终止输出容量机会及preempt→成功resume前缀gap；不调用future.done/result/wait、不改调度/请求/RNG。gap明确是保守prefix exposure，非已完成GPU重算；容量可覆盖也不代表future ready。研究更新`analysis/2026-10-22-scheduler-kv-innovation.md`，actual Core27b/94387bytes和coordinator9dd0/single22e已按manifest独立核对，早先“core未取回”过期。
+
+唯一必要CPU合同`tests/test_biv150_kv_completion_probe.py`通过1项/0.001s（源码03566786…），检查无future访问、original恰好一次/返回/异常及observer失败不改变调用；compile、8源身份、stdlib import与e043 exact append/扰动/重复拒绝另只做CPU核查，`analysis/source/kv-completion-probe/cpu-check.json`。首次辅助核查误用manifest字典为列表失败，已按两实际schema纠正后通过，原合同无需重跑。framework已全文只读互审无不干预阻断，root随后串行上卡181041；本agent没有GPU/框架import/稳定源码修改。
+
+CTA门增量只读快审：ee263和b216均已交叉审。实际180033原件11SHA/28basic文件逐int16复算7phase全−15992=BF16−17.0且hash恒定、advanced初始化就12288错；诊断非correctpass、无timing/down。后继180646 b216正式两shape11SHA/64basic文件/8phase/输出输入RNG/post通过，gate-up wall省16.17581577%/event16.33245345%；down慢3.80726853%/3.88480448%。仅fixedtile fixture非E2E/accuracy，不同时默认两shape；旧173921及diag原件不改。两run旁已保存独立review JSON，CPU-only没有重跑GPU/suite。
+
+四run短筛已独立审并保存`analysis/2026-10-22-small-framework-comparison.{json,md}`与`analysis/source/small-framework-pairs/recompute.py`（stdlib stdout可复算）。A1 39.41004079859704s/KV521840；async 39.13466700166464s/KV521840，TPS+0.7036569314%、TTFT−0.8656382386%；metadata 39.07324847811833s/KV521936；A2 39.185280642006546s/KV521936，metadata对A2 TPS+0.2867234444%、TTFT+0.2344306304%。410/411全部源SHA/installed身份/原SERVER/driverbench/loadseed/CPU6/32GiB/八DB实体三hash同51619270/preempt0→0/idle已核，真实FIRST_SELECTED命中；仅各runner+runtime两差。单次小信号保留待确认，不final集成/新accuracy；A1/A2容量不同，时间变化不能称matched漂移，metadata不对A1报0.86%严格收益。
+
+181041 KV只观察长门完整独立终审：411源SHA/a4de/initb3b7/e155/bc51、32/0/524288in32768out/220.345997615717s仅诊断、KV521840；35原probe JSON与封存逐项一致、EngineCore199565 eligible/batchqueue2、末周期2112core/2109schedule、1fail/preempt/resume、obs0；实际失败free0需1页queue1却terminal/private0，不支持完成输出回收，**不实现drain**。resume cache2944/floor16702/gap13758仅prefix exposure，非已完成GPUwork/时间或全程计数。DB实体前后51619270三hash同、CPU6/preemptmetrics0→1、18:17:30.243359Z68MiB0%双栈闭无GPU进程，owned退出或Z；`run/independent-diagnostic-review.json`已保存。
+
+owned registry现83数据行×16列、queue59项（历史同run多phase原行保留，不去重stable）；新增6门+181041均已落，root要求仅registry/queue维护文件统一LF，CSV字段归一前后相等已核，不改原件。辅助写registry时首次唯一run断言被既存三组历史多phase重复触发，未写文件；已改只对新增ID防重复，保留历史。下一操作只CPU设计：短期至最早完成准入余量、KV保留/host offload的反证与安全跨进程切口；不盲写策略、不启动设备，等hardware gate-up runtime互审。
+
+## 历史17:30Z前快照：16:40Z恢复授权，root唯一设备owner
+
+用户已解除先前性能探索冻结，要求继续按硬件和输入特征探究调度/KV/框架，大收益优先，小收益也要最短上卡验证并保留。root三私库完整上传归档后解除本地写锁；本agent只做CPU研究/实现互审和记录，不能自行SSH/GPU。稳定候选、官方原件与准确率不覆盖，新研究不能冒充已获性能或默认资格。
+
+当时研究落`analysis/2026-10-22-scheduler-kv-innovation.md`：九actual源SHA/长度已读核；当时core.py尚未归档、没有设备成绩。**这是17:30Z前历史，现actual Core27b已取回且181041诊断已完成，以上最新小节覆盖此段。** 计数证明当前失败时没有terminal待回收，策略不实现。小信号不设阈值，噪声及负结果保存。
+
+当前唯一设备owner回执：root已启动`framework/20261021T173003Z-c3-coverage-context16k`、runner191100、source c3-coverage-173003，coverage29137/e155→a39a与bc51原SERVER/context-screen16K32req128out/c64/seed721201，启动前68MiB0%/9031空闲；这是计数诊断不是性能基线，尚无完整原件结果。已新增registry一行（共74数据行×16列，utc_start待真实manifest）、queue50，未覆盖既有官方。
+
+已明确纠正前次回报：D29/P2019是单层构造fixture，不能写成服务实测形状；区间prompt吞吐也不能推出逐步C3命中/图覆盖。preempted computed置零但旧KV hash/suffix释放/自prefix重命中仍在，preemptions6不等于6×16K重算；growth无收益的这一机制解释只是源码推断，待成功resume实际cache-hit计数核实。naive resident-skip还发现V2 cached payload与e155 runner重加入all_token_ids/placeholder风险，不能直接continue。
+
+同轮交叉互审（仅只读、不跑作者suite）：coverage29137c16保原execute decorator/metadata结果与异常，ContextVar finally、CPUoffsets/plan创建分母与不完整快照边界无阻断；必须真实EngineCore快照metadata_steps>0，不能只INSTALL。cpu_metadata0e9615/source0096的三privateGPU缓冲在actual e155中无替换范围外consumer，CPUpositions/optimisticseq与原整数算术一致，原computedGPUcopy和prepare event保护保留；请求门含连续host改值+原event生命周期。CTA06c7/gateefe5的局部u/末组h、固定C0/math、26全参数热接口逐项对actual LibEntry1777，输出view/guardrows/RNG/ABBA/controller定向清理及is_file归档无阻断；待hardware pin EXPECTED_POLICY及最终gateSHA，不把草稿当已上卡结果。
+
+CTA最终微小delta已只读确认：policy06c7未变，gate `4b44b930aad534301c1545d5748a6dae2a85e2345d7a446185a46d5082d71cd9`只定policy pin，并在首次JIT后/compiled热launch前将有效out设NaN，避免错误使用首JIT结果；guard行未改，finite门会拒绝无实际写入的hot launcher。无新增阻断，已回hardware/root；未执行设备门或重跑suite。
+
+本轮最终回执：调度/KV新策略与最短计数门已落盘，暂不改调度，先确认真实“终止输出待回收”机会及实际重算量。C3计数、CPU metadata、CTA源码互审无当前阻断，CTA最终gate4b44可由root当前诊断结束清理后串行排测。173003仅登记进行中诊断，registry74×16/queue50，未覆盖稳定官方原件；本agent无SSH/GPU、未重复作者suite，暂无新性能收益。
+
+CPUmetadata实际方法门终审：`scripts/remote/validate_cpu_metadata.py` SHAb1240720b588dae25d92cc1c173d64c1ea5f6e34fcdcab5dd0156407ebbcb757已全文只读审，结合actual五方法、CpuGpuBuffer原zeros初始化及BlockTable接口，无当前执行阻断。连续四次configure位于原prepare event保护内，不逐步sync；H2D→固定地址graphconsumer→clone同流有序，最后总sync和非陈旧断言验证staging复用。七asset guard、完整GPU/CPU镜像/pointer、fallback和32call wallABBA/RNG、唯一child/锁/300s/定向清理合理；未替作者执行suite/GPU，已发root可冻结。重复async adapter123d按作者/root指示不再扩大审或接入，统一root已审cfd版本。
+
+173003、173921、174115原件现均已本地独立验收并登记，registry76×16、queue52，原两份官方原件不动。173003的411 plugin SHA/32成功0失败/524288in4096out及DB516/19270三hash不变/清理已核；末周期384calls、305metadata、250mixed，3000single-query decode请求步中2241prefix-plan/759outside，77unsupported单列，无错误，非全程/forward。Attention启动前bab2→post54c是retained启动写回，阶段分开。173921只gate-up bits/finite/inputs/RNG true但guard false，exit1/无time/down未跑，不启用，原因待诊断。174115五fixture×11checks/Eventgraph/pointer全true、selected75；方法wall0.712748078→0.656465406ms省7.89657294%、56.283us，仅fixture门非E2E/accuracy。三份独立review JSON均落run，详细见framework-experiments末节。
+
+actual EngineCore已取回：`experiments/source-audits/20261021T173831Z-engine-core/source/vllm/v1/engine/core.py` SHA27b23827a86fd488f1f7cc9a2722fe76d284087ca7cfefef5a30c5e74f21bc71；core/coordinator/single_type与manifest字节核实后用于设计。519–581确先填batch_queue，590–607再FIFO消费并update/free；step_fn在__init__:221缓存bound method，须general plugin hook在110加载时安装。root要求observer只接近alloc失败读cheap CPU状态，不future.result/wait，先只观察；当前正CPU准备，未改调度/启动设备。后续async/metadata独立shortpair待三份完整原件统一比较，不即时登记每在途。
+
+## 历史冻结范围：已被16:40Z用户继续探索授权覆盖
 
 用户已明确停止新增探索。以下范围覆盖后文历史任务和探索建议：
 

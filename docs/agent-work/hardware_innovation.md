@@ -331,3 +331,82 @@ root 回执已完成两个 private main 的 API 上传与核验：FlagGems main 
 - docs/offline-recovery.md，SHA256 44f8d7ba9675faff70bdb2b55f3e1f08a70c6a9a3742402103867ad6d8140a6a：说明 local/remote commit 差异、上游历史保留范围、先恢复 shallow 再 unbundle 的步骤，以及 unbundle 不自动安装 refs；保留旧参考浅库的恢复证据，明确 root bundle 最终更新由主负责人负责。
 
 一次初始 PowerShell 只读查询未给 HEAD^{tree} 加引号而被当 ScriptBlock，已改用 subprocess 参数数组后正确读取，不是设备或实验失败。整个任务无网络 push、SSH、GPU、远端导入，没有生成最终 ZIP。root 仍需在最终提交完成后刷新 root bundle 并重跑状态保存；本 owner 已完成新增两库 bundle 与验证，不恢复性能探索。
+
+
+## 2026-10-22 恢复探索：MM group8 及独立小收益队列
+
+用户最新授权持续探索优化，并明确小收益也要最短上卡实测、保留结果，覆盖此前阶段性冻结。root 先要求归档写锁期间全只读；本 owner 已遵守，没有在锁内写文件或运行设备。归档锁现已解除，root 授权本地准备固定 tile MLP CTA group8 候选及最短 GPU gate，设备仍只能由 root 串行执行；本 owner 没有 SSH/GPU、远端模块导入或 GitHub 修改权限。
+
+只读阶段新增核实：已验收 SQL+C3 092944 的 actual mm source pin 仍为4c2e23da…；其 database-before/snapshot.sqlite SHA dc6a07db6d31ab210aede0ae92dce0378440729e7c91a0183c269111b3c0ad5e、database-after/snapshot.sqlite SHA e90b666d97547ef35ebc5e2a01d24d56a5d16a38d49fcb3908ddb7fc62cad342，按 mode=ro&immutable=1 只读核到 best 表7ea0…两 M2048 配置完全相同：gate-up BM256/BN256/BK32/w16/s2/SK1，down BM256/BN128/BK32/w8/s2/SK1。未把 benchmark rows 当 best rows；没有用旧 trace 的占比外推 SQL+C3 当前服务占比。actual libentry SHA414e8a3f74e2522e40659e7fccd84e301f4517220837a87af0311f050bbf3025 与固定协作库一致，:1682 entry miss 才进入 tuner，:1742 热命中直接 compiled kernel，反对泛称“每层仍重复SQL”的新假设。
+
+资料重新实际打开：Triton 官方 https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html 说明 program reordering 的L2复用机制与正确末组局部取模；固定官方源码 https://github.com/flagos-ai/FlagGems/blob/v5.3.5/src/flag_gems/runtime/backend/_iluvatar/ops/mm.py 中 grouped mapping 仍被注释。FlagTree https://github.com/flagos-ai/FlagTree/blob/main/third_party/iluvatar/backend/compiler.py 仅作 warp64/编译机制一手参考，不升级当前编译器，也不外推其新硬件特性。此方向未实测，A缓存竞争/已compute-bound/CTA物理调度均可导致负结果。
+
+root本轮授权文件：patches/framework/biv150_mm_cta_group.py、scripts/remote/validate_mm_cta_group.py、analysis/2026-10-22-mm-cta-group.md。只改变两种真实投影 M2048 的 CTA 枚举，固定全部已有 tile/warp/stage/SK1/FP32acc/K遍历；先做必要末组 CPU coverage，再由 root 排两shape逐位/输入/RNG门与一次32call预record ABBA。不改已安装FlagGems，不autotune，不与 prefix-mask 混合。
+
+独立小收益队列仍保留 prefix-mask policy87c6/generateda6d/gated3db 已有两shape设备通过、局部wall0.275858%/event0.453959%信号。后续服务 pair 拟在隔离SQL→C2→C3 runner footer之后安装proxy，必须在capture前、每PID独立派生路径且幂等，避免create(xb)多进程文件冲突；必须有实际selected>0证明生效。相同热DB/KV/shape/seed的warm16K32req1024out最短pair由root另排，不因小跳过，不与CTA合并；落噪声也保留为未确认，不冒称E2E收益或继承准确率。此服务installer尚未写，本轮优先准备CTA门。
+
+
+### async-token 接续 SQL+C3 的独立包装快审
+
+root 在 CTA 准备期间委派只读审 patches/framework/biv150_async_token_update_sql_mixed_source.py。我实际仅用 stdlib 比较源码/AST，没有导入其 Torch/Triton runtime、没有新设备门或修改 root 文件。新 transformer SHA cfd378a494c0ccbb5aece861527cdf59ccd148afbe53ac229a09bb43162bdb6f；ORIGINAL/REPLACEMENT 与旧 transformer 逐 byte 相同，runtime 仍为受测 1bb85e31c7b3fefa81414a54b04a1f0b6cf949c0876f87149956c821bb483adc。
+
+e155 runner 确实以旧 446f12c0… runner 为完整原始前缀，新增 SQL/C2/C3 footer 不改变 ID seam。旧、新变换前的 _prepare_input_ids AST 完全同一；旧、新变换后的该方法 AST 也同一；逆向移除替换和新增 import 后完整 bytes 精确回 e155。新输出 f0d0bada4222038b69ed139d804622e27acd6aa4e19a37ff089b0ca35f393f41，旧输出 ce1860c89760c851c2f6b3bb4c35dd334e01e7927844c5460ec35f407633fdbc，语法通过。C3 的 Attention metadata/forward 包装未改变 _prepare_input_ids producer/consumer 或原 stream 保护。
+
+独立结论：无新增审阅阻断，同意复用063353的12case整数逐位门作为该seam证据，不重跑同一微门，root可排匹配4K64req128out最短服务pair并核FIRST_SELECTED/selected计数。该局部门不是新SQL+C3+async整模型accuracy通过，父基点103/105不自动覆盖新增实现；有服务正信号后再决定必要最终准确率。已将此边界发送root，没有替root上卡或改文件。
+
+
+### MM CTA group8 本地候选与最短门已完成，等待 root 上卡
+
+实际实现仅新文件，不修改已安装/固定 FlagGems 或已验收 SQL+C3。最终产物：
+
+| 文件 | SHA256 |
+|---|---|
+| patches/framework/biv150_mm_cta_group.py | 06c7cd9216907886e7d66a81d4fd5d9f78edef9daac2380ca263ce8c1770b8e1 |
+| scripts/remote/validate_mm_cta_group.py | 4b44b930aad534301c1545d5748a6dae2a85e2345d7a446185a46d5082d71cd9 |
+| analysis/2026-10-22-mm-cta-group.md | 766c07c6d704521f1affff3a3bfb05ddc519e0537af64e9ab1b6ab73afbd7995 |
+| analysis/source/mm-cta-group/cpu-check.json | 3172fa8087a2ca37a6b9c98c4209780e2155f226b942d23c48e24a807689b5c7 |
+
+运行时 pin official actual mm4c2e，全文件拒绝漂移，精确提取原 @triton.jit mm_kernel；baseline的JIT AST与原件一致，candidate仅换整数PID块。派生baseline SHA73d5cf8f080fa53ab17023b228d0215fcf71efc6a17ee9b7294e194c38f61faa；group8 SHA30d0f046071fc4cf122d43af0d087259abc082ad10ec36f69b73ad6a22b343ab。没有把旧注释全局pid取模直接启用，使用组内u和实际末组h；全部K循环、FP32acc、tl.dot、BF16、precision/fast_accum及launch C0不变，固定SPLIT_K1。
+
+严格scope仅M2048、gate-up N12288/K2048（BM256 BN256 BK32 w16 s2）和down N2048/K6144（BM256 BN128 BK32 w8 s2），同GPU BF16与真实linear转置weight stride(1,K)，A和out连续、storage分离，设备BI-V150/16SM。非匹配直接拒绝，不调用替代后端，不构造通用算子框架；服务集成没有实现。
+
+必要CPU合同已实际执行一次、保留cpu-check.json：baseline函数AST对原件相同，grouped逆换唯一mapping bytes完整回baseline，原源码扰动拒绝，派生源码compile过；6个coverage用例覆盖实际R8、末组R9/R10/R17及partialM/N、R1，tile一一覆盖。CPU合同没有导入Torch/Triton。runtime/gate py_compile、--help与最终policy pin比较过。没有GPU数据或已执行设备失败，设备结果表保持未执行，不把数学证明当GPU bitwise。
+
+GPU门只两形状、每形状一次32call预record Event的ABBA，不扫tile或autotune。首JIT编译在窗外，热launcher复用actual LibEntry3.6:1777的CompiledKernel[grid](*all26args)；门同时pin actual libentry414e/Tritoninit df309与模型config596，保存原源码与编译资源。初次JIT后poison有效out为NaN再真实热launch，完整输出int16 bits/finite、两边guard row、整A/weight输入、CPU/CUDA RNG前后比较。原始wall/Event窗口与计时后正确性均保存；失败记录phase/traceback。单层合成信号不等于服务或accuracy，小/零/负也保留，落噪声待确认不按百分比丢弃。
+
+控制器CPU-only、唯一framework-device.lock，沿用9031双栈/ixsmi单卡>=30000MiB空闲检查，只有自己child拥有CUDA，300秒timeout与owned process group清理，原日志/命令/source/GPU采样/prepostflight落唯一UTC run。source hash只遍历regularfile，避开此前__pycache__目录错误。门需要既有validate_block_table_candidate.py与monitor_gpu.sh，exact命令在analysis文档。未写新launcher、未加载模型权重/runner，禁止本owner执行设备命令。
+
+systems_innovation独立全文快审06c7+门草稿：固定C0/源算术/末组、26参数interface、transpose layout、guard/RNG/inputs、预record计时与单child清理均无当前阻断。随后实际核最终4b44门的两项delta（pin06c7、首JIT后有效out.fill_NaN）也无阻断，不新增suite或设备验证。该回执可用于进入root最短设备门，不等于GPU通过。此最终状态与原件SHA已发root，root173003 coverage作业期间绝不并发设备。
+
+独立prefix-mask服务pair计划继续保存于同analysis最后一节，未与CTA混合，也未实现其服务installer。用户已明确小收益也上卡并保留；root另排匹配热端到端pair，必须实际selected证明命中，有新代码不能继承父基点accuracy。
+
+
+### CTA 173921 真实失败保留与最短 guard 诊断
+
+root已上卡173921，policy06c7/gate4b44；本owner读本地experiments/framework/20261021T173921Z-mm-cta-group-gate/results.json及worker.log，独立核11source SHA全匹配。gate-up all_output_bits_equal/valid_output_finite/inputs_unchanged/rng_unchanged均true，guard_rows_untouched为false；exit1停在correctness，无timing/down。两compiled kernel均97regs/0spills/shared65536，baseline hash3639b8c9…、grouped08afb545…；不能把局部bits相等当门通过。root完整postflight已idle32700free/68MiB/0%。原run/source/gate4b44和所有失败原件未改。
+
+原guard唯一判据是storage[[0,-1]]高级索引加GPU比较，baseline/candidate未分开保存原值。源码静态写范围仅有效M行；若热C完全丢storageoffset，最后有效out应仍NaN、finite应false，这与实录不合，但不排除真实越界。高级index负数读、GPU比较或out.fill_NaN的view偏移均只能列待证伪解释，不可直接归咎基础库或删guard。
+
+root授权准备最短分阶段诊断。当前scripts/remote/validate_mm_cta_group.py SHA ee263763948421193fc7a323a13ca20e184d7ef074812ac5486f5eee5fe60213新增--guard-diagnostic；policy06c7/数学/原normal guard不变。仅gate-up、无timing/down；分别保存full初始化/各JIT/各out poison/各compiled后，两个storage的正数basic row0/last全量CPU int16原值.i16及SHA、异常数、头尾值，并保留旧advanced raw/GPU predicate/CPU比较和读是否改storage。记录out指针/基址/offset字节、闭包真正all_args[2] C对象；阶段变化相对真实初始化bits比较。诊断status明确not_a_correctness_pass，完成exit0不等于数学成功。pycompile/help过，交systems快审；本owner没有上卡/远端导入。
+
+analysis/2026-10-22-mm-cta-group.md已前置本失败与诊断边界，旧实现说明仍作为历史，prefix-mask准备暂被此问题打断但原任务保留；root另在跑metadata/async独立服务pair，无人授权我GPU。
+
+root已独立读完ee263诊断增量，回执positive basic D2H、CPU bits、完整guard bytes、compiled_C指针、保留旧advanced对照及非pass状态无当前阻断；仍等待systems独立回执，文件未再改。analysis结果表已按173921实际失败更新，避免旧“待执行”占位掩盖已经发生的失败；新诊断仍明确未执行。
+
+随后systems_innovation独立只读快审ee263回执无阻断，并已直接发root：正数basic0/last行完整CPU int16 bits/SHA为oracle，advanced仅旁证且再次basic回读检查storage；view offset与闭包all_args[2]真C对象identity齐备，七阶段、gate-up-only/no timing/down与非pass状态边界正确。没有重复suite/GPU。本owner据此将最终ee263交root独占设备队列；不重写旧4b44失败或提前声明诊断通过。
+
+root随后实际执行180033最短诊断，原件和control均已本地保存。本owner实读results与manifest并重核全部source SHA：status为guard_diagnostic_complete_not_a_correctness_pass，18:00:33.650193Z→18:00:42.910097Z、exit0、前后9031free/32700MiB free。七phase两storage的basic first/last异常数全0且SHA不变；advanced在初始化尚未JIT时已经matches_basic=false、12288异常，各阶段一致，advanced读取后basic storage仍未变。compiled_C为原out对象，offset12288 BF16元素/24576字节均真。仅证实旧高级索引oracle读值异常，不能定位Torch/FlagGems具体责任；保留173921原失败、不改写成通过，也没有down/timing数据。
+
+root授权修正式门oracle，当前scripts/remote/validate_mm_cta_group.py SHA b216a49a02c90234f7cdfc12db990b2759771d5129169a237824fa9cddd12d91；policy仍06c7，不改两个派生kernel/C0/math/shape/32call预recordABBA。复用完整guard_snapshot，新增纯CPU metadata判据：positive basic row0/last全int16必须期望-17 bits相同且SHA等实际初始化，初始化本身也需正确；advanced raw/GPU predicate仅诊断，advanced读取后CPU basic回读仍须storage不变。每shape初始化/各JIT/poison/hot后即时检查，计时后再查，所有采集在窗口外。仅py_compile/--help通过；systems已只读审b216无阻断并直接发root，没有新suite/GPU。root可按原正式命令串行重跑两shape，不加--guard-diagnostic；本owner不执行设备。
+
+### mapped singleton decode 设计的只读交叉意见
+
+framework owner 暂停strict-greedy重排设备队列：actual benchmark不传temperature，MiniCPM generation_config为temperature1/top_p0.95，因此官方random会fallback，不能用修改采样参数制造性能命中。其新mapped设计尚未kernel实现，本owner仅读actual54c统一源码并发CPU地址审阅，不替owner实现或上卡。
+
+actual :287–355/:596–620/:686–745支持区分三种行号：req_idx=map[d]仅用于seq_lens/block_table/按请求feature；真实token t=cu[req]用于Q与最终out；compact d用于三份segment scratch。BM16/GQA8下query_pos=offs_m//8仍有第二个无效token，scratch需使用d+query_pos且保留query_mask0，不能把query_offset0全局改成d以免破坏Q/因果位置/store；:608 store_segm_reduce_scalars同样必须接compact向量。Reducer读scratch=d、写out=t。建议MAPPED仅IS_3D、所有USE_TD/TD_QO等未知feature回原路；2D先保持原resolve和virtualCTA earlyreturn，再跳过querylen1，map必须覆盖每个singleton恰一次以免漏写/双写；map/cu需producer readiness与record_stream生命周期保护。
+
+关键验证边界已指出：原C3非prefix singleton原本走2D，新mapped改3D即改变浮点归约顺序，已有C3准确率不能自动继承。地址门宜先对相同3D配置的serial split oracle逐位，若服务正信号再必要整模型accuracy。既有coverage只证明原plan，不证明impl guard或实际launch；不得把planned prefix比例当真实launch覆盖。等其设计文档/数学coverage产物后再只读终审，未新增实现或测试。
+
+随后实际读framework设计文档1124f5b34e65791feb43f0d6049fcc4d0d4e86386c3c313cf6960cc3a87f471c第5–6节与proof4c4fe093f2f7e4b2c38c4025d404ce8931d1cb1c84f4a044c87afbdd89dd4a0c，核哈希一致、没有重跑suite。proof按actual cu//BQ+req虚拟起点和upperbound grid/earlyreturn检查集合，map唯一含全部singleton，2D/mapped不交不漏、scratch上界及N/D边界数学无阻断；它是整数模型，不是Triton执行证明。派生JIT不自动继承原C2代理，必须显式BM16/T16/w2s1/S16、旧FIRST_SELECTED不能作新路径证据，文档已加入。仍建议正式handoff补map pinned H2D strongref、producer→forward stream wait/record_stream、跨步复用与capture/未知feature/KVsharing回退，已发owner/root，未修改其文件。
+
+prefix-mask服务准备仍无runtime/transformer写入，root要求先集中CTA guard。已把只读挂点审计与最短pair方案补入analysis/2026-10-22-mm-cta-group.md最后一节：exact e155 init481–968不load/capture，worker473构造/484load/745capture，适合原init返回后且footer已SQL/C2/C3安装时装独立proxy；每PID新目录避免create(xb)冲突，真实单请求scheduled≥128加selected增量才证大query省mask，不能拿smoke或总M证明。热DB/实际C0/KV匹配、不同seed预热真实形状、原16K32req1024out服务pair、所有小/噪声结果保留边界均已落盘。没有开始分散的新实现或GPU。

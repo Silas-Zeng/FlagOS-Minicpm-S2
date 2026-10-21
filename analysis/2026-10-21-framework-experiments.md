@@ -2,7 +2,7 @@
 
 本轮按“优先大收益，小而稳定的收益也保留；先最短必要验证”推进。设备实验由唯一 device owner 串行执行；本记录作者只阅读本地证据。以下全部数据仅属天数BI-V150，沐曦－曦云C500由队友负责。官方服务参数和benchmark文件未修改，SQL+C2与SQL+C3分别以101/105、103/105通过独立math_500 Level 3门槛。原13eb与SQL+C3完整官方两档现均完成并独立终审，原第2–4轮均值的分档吞吐比为4K **1.933207729倍**、16K **3.166027317倍**；初始DB不同、KV差96tokens，不称cache-matched因果稳定收益，不合成官方总分。短诊断、metadata gate和单层计时不混入正式结果。
 
-最新状态：原版122607于2026-10-21 **16:14:50.001906Z**由原driver以exit0完成，8raw/2summary原件本地终审通过；archive/live225项与最终Attention bab2一致，fullpost68MiB/0%/9031双栈闭/无GPU进程。runner166637为已退出的Z/PPid1，首次seal末/proc不存在断言失败与独立说明保留；不能写成封存首次完全成功。性能探索冻结，无新GPU任务；既有growth/hidden/bucket无可归因正收益，overlap及省mask小单层信号保留，不接服务。下述running/等待段均为历史，最终原件和限制见末节。
+最新状态：原版122607于2026-10-21 **16:14:50.001906Z**由原driver以exit0完成，8raw/2summary原件本地终审通过；archive/live225项与最终Attention bab2一致，fullpost68MiB/0%/9031双栈闭/无GPU进程。runner166637为已退出的Z/PPid1，首次seal末/proc不存在断言失败与独立说明保留。用户16:40Z授权继续自主探索，root仍唯一GPUowner；新增173003 C3覆盖诊断、173921 CTA拒绝门及174115 CPUmetadata通过门均已独立审计，后两者都不能当服务性能。growth/hidden/bucket既有边界不变。下述running/等待/冻结段均为历史，最终原件和新研究见末节。
 
 ## B0/C1：集成可运行，不能认定端到端加速
 
@@ -448,3 +448,25 @@ root在12:26:07Z实际执行helper8b3337，record完整镜像及 [独立恢复�
 退出与警告：原driver exit0/benchmark0/server0、cleanup_errors=[]，monitor正常停止为−15；16:17:27.184712Z完整postflight为68MiB/0%、9031 IPv4/IPv6均关闭、ixsmi无设备进程，server/benchmark/EngineCore均不在proc。runner166637仍有proc条目，但独立实际status为Z（zombie）、PPid1，表示已退出而容器PID1未回收；首次seal仅末尾“proc必须不存在”断言失败，原记录和补充`postflight-process-review.json`均保存，没有改写原结果。双方server.log结束时均有同一条“force killing remaining processes count=1”警告；原版无ERROR或Traceback，不能将此写成“没有任何警告”，也不将该警告改标官方benchmark失败。
 
 本次仅更新registry已有122607/092944行，仍73数据行×16列，queue仍49项；所有未开始性能探索继续冻结。
+
+## 用户继续探索后的最短门：覆盖缺口、CTA拒绝及CPUmetadata
+
+上述“冻结”是16:40Z前的历史状态。用户随后明确继续以硬件和输入特点探索框架、调度/KV，小收益也上卡保留，不设最低百分比；root单卡串行，稳定官方原件不覆盖。
+
+173003 C3计数诊断已独立核plugin完整411项SHA、e155精确append到a39a、coverage29137及bc51 driver。32成功/0失败、524288输入/4096输出，120.483993092s仅作负载完成记录；KV521936，DB前后516表19270行实体physical/schema/logical全相同，preempt0→0，CPU6。原server.log八个JSON与封存snapshots完全一致；最后周期384 execute calls中305个受支持metadata步、250 mixed，累计3000个single-query decode **请求步观测**，2241在自然前缀且建plan、759在前缀外（所观察请求步的25.3%），另77 padding/unsupported单列，execute/observation错误0。**这不是独立请求数、全负载覆盖率或forward执行计数。** D29/P2019仍只是旧单层构造，不能用此统计倒推出某个真实精确几何。17:38:31.137125Z完整清理68MiB/0%/双栈端口闭/无GPU进程；runner为Z/PPid1，server/EngineCore退出。startup manifest记录的Attention bab2随后由retained按提交逻辑写回54c，postflight实际字节已核；原13eb正式基线此前单独封存，不能混淆两个阶段。
+
+173921 CTA门独立核11项源SHA及06c7/4b44/原4c2e。只执行首个gate-up M2048/N12288/K2048：baseline与candidate的输出bits、finite、输入、RNG均true，但guard_rows_untouched=false，因此exit1；没有timing，down尚未执行。当前**正确性门拒绝，不启用**，也没有足够证据在kernel越界与guard检查误报之间下结论；原negative全部保留，待最短分阶段正索引CPU原字节诊断。17:39:31结束时68MiB/0%/9031空闲、无设备进程。
+
+174115 CPUmetadata实际方法门独立核10项源SHA及b124/0e9615/0096/e155→50493。AST抽出的actual五方法及真实CpuGpuBuffer/BlockTable在五个fixture（decode62、M259、M952、M2048、纯prefill2048）各11项检查全true；连续四次host改值在原prepare event内，固定GPU地址graph consumer及非陈旧检查通过，selected75，strictscope回退与计时RNG检查通过。32call完整方法wall ABBA复算0.712748078125→0.65646540625ms，省7.89657294%、约56.282671875微秒/调用。**这是方法fixture小信号，未测模型/E2E/accuracy，不将7.9%写作服务收益。** 17:41:34 exit0，post表68MiB/0%、端口空闲、无GPU进程。各run补充独立review JSON已保存。
+
+registry现76数据行×16列、queue52项；新调度/KV研究见`analysis/2026-10-22-scheduler-kv-innovation.md`，继续优先小计数门，不复用旧growth的性能假设。
+
+## 两项小收益服务短筛及CTA守卫诊断收口（2026-10-22）
+
+完整四run本地独立审计与可复算数据见`analysis/2026-10-22-small-framework-comparison.{json,md}`。A1 baseline174402/async174741同KV521840，39.4100407986→39.1346670017s，TPS+0.7036569314%、TTFT−0.8656382386%；metadata175049/A2 baseline175441同KV521936，39.0732484781对39.1852806420s，TPS+0.2867234444%、TTFT+0.2344306304%。四次均64/0、262144in8192out，原SERVER/bc51/0813/seed721201/CPU6/32GiB/包与installed源一致；410/411完整源码SHA核实，源差严格只有runner及各新增runtime。八份实体DB三hash同516表19270行且不变，preempt全0→0，实际FIRST_SELECTED命中，postflight68/0/双栈闭/无GPU进程。保留两项单次小正信号待确认，不集成/不冒称新accuracy或正式成绩；A1/A2容量不同，其时间变化不是严格matched漂移，metadata对A1约0.86%不能归因。
+
+180033独立复算11源SHA、28份basic守卫文件：7阶段均−15992即BF16−17.0，hash不变、advanced读取未改storage；advanced初始化尚无JIT就有12288异常，真C identity/24576byte offset正常。它定位旧guard读法问题，status明确`not_a_correctness_pass`，无timing/down。旧173921失败原件不改。
+
+180646使用b216正式门将oracle改为positive basic CPU完整bits/初值SHA，旧advanced仅旁证。11源SHA/两形状各8阶段共64basic文件、输出/finite/输入/RNG/计时后全通过，exit0清理。32call单ABBA gate-up wall1.4179341875→1.188571765625ms，省16.17581577%；event1.40435439348→1.17498886585ms，省16.33245345%。down wall0.735825265625→0.763840109375ms慢3.80726853%，event0.721999704838→0.750047981739ms慢3.88480448%。保留gate-up微测机会和down负结果，不能同时默认更改两形状，未证明E2E或模型accuracy。两run独立review JSON均在原run旁补充保存。
+
+KV只观察模块a4de与e043→b3b7独立init已获framework全文互审，无future访问/无调度变更；root已串行启动181041真实16K/1024/32请求门。已见first_checked eligible=true/batchqueue2，此时尚无完整结果，registry不得冒填性能或机会计数；研究主文已用actual Core27b替换旧缺源状态。

@@ -120,8 +120,16 @@ def main():
     assert current == state['parent'], 'main 在同步期间发生变化，禁止覆盖'
     save()
 
+    # 同一私有仓库已有的 blob 可直接复用，避免每轮重新上传全部源码副本。
+    # 仍创建和核对完整目标 tree；不依赖路径相同，也不跳过最终字节/模式验收。
+    parent_commit = api('GET', 'git/commits/' + state['parent'])
+    parent_tree = api('GET', 'git/trees/' + parent_commit['tree']['sha'] + '?recursive=1')
+    assert parent_tree.get('truncated') is False, '远端父 tree 不完整，禁止猜测已存在对象'
+    existing_blobs = {entry['sha'] for entry in parent_tree['tree'] if entry['type'] == 'blob'}
+    print('reuse remote blobs ' + str(len(existing_blobs & objects.keys())), flush=True)
+
     for oid, obj in objects.items():
-        if obj['text'] is None and oid not in state['blobs']:
+        if obj['text'] is None and oid not in state['blobs'] and oid not in existing_blobs:
             blob = api('POST', 'git/blobs', {'content': base64.b64encode(obj['bytes']).decode(), 'encoding': 'base64'})
             assert blob['sha'] == oid
             state['blobs'][oid] = oid
@@ -132,7 +140,7 @@ def main():
         for entry in entries[start:]:
             element = dict(entry)
             obj = objects.get(entry['sha'])
-            if obj is not None and obj['text'] is not None:
+            if obj is not None and obj['text'] is not None and entry['sha'] not in existing_blobs:
                 element.pop('sha')
                 element['content'] = obj['text']
             length = len(json.dumps(element, ensure_ascii=True))
