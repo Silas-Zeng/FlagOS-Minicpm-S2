@@ -502,3 +502,23 @@ post19:00:37.354668Z 68MiB0%/9031双栈闭/无GPU进程；runner207242Z/PPid1不
 本批下一框架CPU研究已落 [`analysis/2026-10-22-next-framework-priority.md`](../../analysis/2026-10-22-next-framework-priority.md) **c9539e2d16361358a4c1582dc656865cd4f5e0f41e415c5cd917cf54b9fe4170**。已读actual184108 scheduler/core/UniProc及旧closeout/memory/prefillgraph/host证据；优先接systems既有“抢占KV保存/恢复”后继，先一次真实executor/worker/KV descriptor，再审save-ack-before-free、zero-after-restore-before-consume、epoch/cancel/shared页与RNG/输出协议。**非新实现或已证大收益**；191545构造成本约0.12–0.24s只读作者已落盘结论，未独立重跑/冒称生产layout或纯DMA。fullreserve/terminal-drain已否定，不重做；13758只是gap exposure而非GPU重算。备选Attention compiled-handle/step recipe只列精确JIT737–790和C3挂点，缺剩余CPU预算不称大收益，未写候选/设备门。async/CPUmetadata小信号、mapped正负、prefix负结果继续保留。
 
 **本批结束，按root要求现在暂停所有文件写入**，供checkpoint/私有实验库同步/完整离线包。未SSH、未GPU、未改任何runtime/builder/launcher/稳定源/default，也未新增模型导入或网络操作。下一条可执行操作由root统一授权：先只观察实际executor与42层KV描述符/host余量；若无法证明安全事务或可避免重算预算即降级，不继续铺实现。当前无本owner在途设备或后台任务。
+
+### root已解锁：实际KV描述符观察器开始实现
+
+root解除上批归档写锁，授权继续CPU-only实现一次性runtime descriptor observer及独立source preparer；原e155/080656、原参数，默认关闭。已开始读actual184108的Core/UniProc/GPUWorker与plugin worker继承，准备在实际KV初始化完成后读42层shape/stride/dtype/device/storage offset/alias，以及Core构造后实际可访问executor/worker对象；不读取KV值、不GPU同步、不分配大buffer、不更改调度/数值/原返回。此条是开始状态，新模块/包装尚未写，source链确认后再定最窄挂点；最终交hardware只读互审，root唯一owner以原driver smoke-only最短加载/一请求验证。本owner不SSH/GPU/共享代码库push。
+
+### KV runtime descriptor最短实现与包装完成，待独立终审/真实smoke
+
+重要时序已证实并经root接受：actual Core构造中109–110才load_general，所以不包装ctor猜当前对象；221绑定step_fn之前general footer已装类step/step_with_batch_queue，首step前只观察一次，phase明确first_engine_step_after_constructor。WorkerFL677–694原initialize_from_config成功返回后一次，避开runner profile_run minimal KV；原返回/原异常透传，诊断失败不改变结果。新取actualworker_base7da443确认self.worker直接引用与代理getattr区别，Core只读实际__dict__链，不RPC/GC/frame/代理getattr。
+
+独立runtime `patches/framework/biv150_kv_runtime_descriptor.py` **fdf2c812edda098ce42c21915e2b9e912901bf681d02cf59a2bb7a236d559576**，builder `scripts/remote/prepare_kv_runtime_descriptor_source.py` **14a206e3416322d24bca9e3f989e071d79ddfcfab310c234325079c260ef03aa**，新init90fe0b381fd53ec5273c623d91b806a0fc21f5b84165beba0b015a1e07d53e74；runner保持e155。runtime默认off；六实际源SHA+方法身份+exact init/footer/vendor守卫。只读42层/runner平面KV/crosslayers的CPU metadata/storagealias，current_stream显式unobserved、不调用设备API；JSON O_EXCL唯一文件、指针仅内部alias key，缺项partial/unobserved。包装复用0ecf，8core+5BIV精确、只新copy改init+加module、不叠候选、AST读literal不执行runtime。
+
+最小CPU合同 `analysis/source/kv-runtime-descriptor/check_cpu_contract.py` **8c4da05b45e123912f05474e2d5b797dfc8545d56da3d1a3a6fcb7e9b4bb4372** 实际exit0/末次1.73s；结果cpu-contract.json **7805ddad16e79b542ca43b8361040e417fbe9764d02fe741b7feadac9dd9e707**。actualWorker方法AST fake依赖证明原ensure/init/后置observe顺序、return/异常/once/失败原路；42packed metadataalias、精确append/拒二次、213→215全copy/base不变/existingoutput拒绝、compile/noTorchvLLMimport通过。故意缺配置fake负例ERROR是预期；不模拟设备，不扩大suite。scratch tmp/patch-check/kv-runtime-descriptor-20261021T194410802945Z保留。
+
+中文实现/边界/精确命令已写 [`analysis/2026-10-22-kv-runtime-descriptor.md`](../../analysis/2026-10-22-kv-runtime-descriptor.md)。已发hardware终审最终runtime/builder两项SHA；此前3cf版本已全文审无阻断，最终只加新actualworker_base pin与stream unobserved/对应builderpin。root已收到launcher所需env `BIV150_KV_DESCRIPTOR_DIR=<unique ROOT/framework/run>/kv-descriptors`、原bc51 driver smoke-only/seed721201与预检marker BIV150_KV_RUNTIME_DESCRIPTOR_INSTALLED。退出必须另核完整worker-kv42/42+core-objects，不能把安装当完成；缺项/错误保留。**下一条只等hardware终审/root唯一owner真实smoke；当前未上卡，代码先冻结，不新增字段/取证或协议实现。** 没有SSH/GPU/installed稳定源/共享代码库修改或push。
+
+### observer最终缺项纠正已互审；0c892/936c才是可上卡版本
+
+冻结自查发现exact e155只有uniform分支创建cross_layers_kv_cache属性；normal可能缺项，之前data.get把缺属性误写observed_none。已在root上传前hold旧fdf2/14a，仅改该字段三路：缺属性unobserved_missing_attribute、实际None observed_none、存在Tensor原descriptor，未改hook/计算。runtime最终 **0c892ad02fbfe663d3f7c8f668cdd000c0c1fc7860ff915db8bce5949cae0667**，builder仅asset pin更新最终 **936c9260724f97b02dc1e69da2f4f0da7cdfaf7fdcb0e8ab866c26d9c028c59e**，init90fe/runnere155完全不变。上条fdf2/14a为过渡历史，不再上传执行。
+
+hardware已定向逆换此单块精确回fdf2并独立终审通过，已发root：无新hook/API/计算，不扩suite。CPU合同只加一条缺属性断言，原合同必要末次1.73s exit0；脚本最终 **445cc886d5506537051dc3caa006d544c9858ef985a4f11c7a7c912b56f5a73a**，结果 **f0771d57a090466499bd48996636c41d198f1f3fe3abfd78618a40c98f0d189f**，scratch `tmp/patch-check/kv-runtime-descriptor-20261021T194709782780Z`。中文说明表与字段边界已同步最终版本。root可按原命令最短smoke；本owner不再改代码/加字段或运行设备。后续须真实worker42/core事件，不仅INSTALLED；当前没有服务布局、save/restore或accuracy新证明。

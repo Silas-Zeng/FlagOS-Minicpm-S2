@@ -1,5 +1,34 @@
 # 当前工作与 API 切换交接
 
+## 实际KV与执行器观察已完成（2026-10-21 19:52 UTC）
+
+- `20261021T195012Z-kv-runtime-descriptor-smoke` 于19:51:12.927434Z exit0；唯一smoke请求完成，非性能或accuracy门。412份source/live/control核验、DB516/19270三SHA不变、postflight68MiB/0%、无GPU进程、9031双栈关闭、所有owned进程退出/Z通过。当前无活跃GPU任务。
+- 真实worker事件observed_complete：42层/42tensor/42独立storage，BF16 cuda:0，每层shape `[32621,2,16,2,128]`、stride `[8192,4096,256,128,1]`、offset0；32621×16=521936 KV token，cross_layers实际observed_none。实际Core事件为同PID213942的UniProcExecutor→WorkerWrapperBase→WorkerFL→ModelRunnerFL，AsyncScheduler、async=True、queue2。框架agent独立验收中，不能由此声称恢复协议或吞吐已成立。
+- 全部run/control已本地 `experiments/framework/20261021T195012Z-kv-runtime-descriptor-smoke{,-control}`；原tgz位于tmp，SHA `0019f7beda23f26cfec9a3382c7e205d16cfb701947bf0162c3428ceb06c5be5`。observer源码不再修改。
+- 下一步systems实现exact单victim调度/事务adapter，framework在验收后协作worker保存/zero/恢复，hardware交叉审；全为本地CPU。准备好后root仅排真实抢占所需最短服务门，保持原服务参数与请求语义。1个host slot的预算依据实际有效前缀，拒绝时保原重算，不整池镜像。
+
+## 当前执行状态（2026-10-21 19:50 UTC）
+
+- root唯一GPU作业 `20261021T195012Z-kv-runtime-descriptor-smoke`，runner PID `213760`；隔离source `code/kv-runtime-descriptor-20261021T195012Z`，run/control在远端 `framework/`。只跑原driver的smoke-only/seed721201，原服务参数；不作性能或accuracy门。启动前19:49:38Z卡68MiB/0%、无进程、9031双栈关闭。尚无实际布局结果。
+- observer `0c892ad02fbfe663d3f7c8f668cdd000c0c1fc7860ff915db8bce5949cae0667`、builder `936c9260724f97b02dc1e69da2f4f0da7cdfaf7fdcb0e8ab866c26d9c028c59e`、launcher `78414492a1b053b1c88ce1f9e461bd66b0b053da33009f2cdb362a40fcab4a84` 已hardware交叉审阅；仅init追加90fe及观察模块，runner保持e155。INSTALLED仅预检，退出后还需worker42层/42tensor完整descriptor与实际Core/executor事件。
+- 共享plugin本地新分支 `codex/kv-save-restore` 已提交 `37661d2d2cf811ef8093436fa17c424dfd63b25d`，仅加入已测c95f KV页copy模块及中文说明，没有默认启用或实际调度协议。无远端推送/PR；FlagGems本地不变。193403完整包不含本轮新增工作，不能称其覆盖当前状态。
+- 新只读实际源码包 `experiments/source-audits/20261021T194147Z-kv-protocol-transport` 已本地，tgz SHA `d9124df09054f0f7cbebff0e15e5e560d83d075ed1c2160ad45e80f09ab4de48`。systems继续实际save/restore事务接口；hardware研究host预算和完成依赖；framework待真实descriptor独立验收。三者CPU-only，禁止另起GPU作业。
+
+## 持续目标已恢复推进（2026-10-21 19:37 UTC）
+
+- 上一goal轮属于实际进展：完成新的上卡结果、实现/独立审计、私有实验库发布及完整归档。持续目标仍active，不把阶段归档视为优化完成。已解除三位agent的归档写锁。
+- 最新用户约束：两个共享代码库先仅本地更改，后续通过PR协作；当前不向它们推送或创建远端PR。实验记录库持续更新方法、失败与原件。算子不优先，小收益保留；最短必要验证先行。
+- 19:37:05Z 实查卡68MiB/0%、无GPU进程、9031双栈关闭；稳定runner e155和installed Attention54c未漂移。两个本地共享代码库工作树干净。当前没有设备作业，root唯一owner。
+- framework 实现一次真实KV/executor descriptor observer及隔离包装，拟用原driver的smoke-only最短门，不先跑220秒负载；只读CPU元信息，不读tensor值、不GPU同步、不改调度。systems推进实际save-ack-free/restore-before-publish协议接口和必要CPU事务合同；hardware查一手硬件/异步传输资料并审observer。三者仅CPU，待互审后由root串行上卡。
+
+## 最新保存与接续状态（2026-10-21 19:35 UTC / 北京时间10-22 03:35）
+
+- 本批所有设备任务完成，最新后态68MiB/0%、无GPU进程、9031双栈关闭。三位agent完整结论已落盘；为一致归档暂停写入，用户继续探索授权有效。后续先读 [阶段记录](analysis/2026-10-22-framework-milestone.md) 与 [下一框架优先项](analysis/2026-10-22-next-framework-priority.md)，优先真实KV布局/executor证据及安全抢占保存恢复协议，尚未实现该生产协议。
+- 本批实验数据检查点 `98f208fd6f37e4f1f654b3a492174f65e430512e` 已发布至私有实验库。远端main `6e97e87b568eb0f8c9765f852e139c1bc070c1f6`，完整tree `e88738bfc30ff12848e366f0b9e5904934ed2139`，10,431项逐路径/模式/blob SHA核验通过。一次HTTP401后独立只读认证正常，同revision/state续传成功；没有改凭据或强推。详见 [发布回执](docs/github-framework-kv-publication-20261022.json)。本回执和发布后的状态说明另存本地后续提交，不假称已在上述远端tree中。
+- 两个共享私有代码库仍为上一已验收版本，新候选没有合入默认实现。GitHub保留受版本控制的源码/原件/中文报告；SQLite、tgz、Git bundle及其它忽略原件由本地完整工作包保留，不能称GitHub独自包含所有原件。
+- 完整离线包已验证：`output/handoff/minicpm-s2-work-20261021T193403Z.zip`，321,741,926字节，32,019文件与2个symlink，CRC通过，SHA256 `938ce8226d53e2dfe2fa2ecac4720ac166ee54f0413d6af884b948f9dd6e51fa`；同目录有完整manifest和summary。包覆盖本地提交 `153dd144bb9a9b926b291bfb68b5eac51c2250b9` 时全部工作与忽略原件，含最终发布回执；本条归档完成说明是随后追加的包外回执，避免递归自包含。旧170812 ZIP只覆盖旧阶段，勿混用。
+- Git恢复包 `recovery/git/experiment-framework-kv-20261022.bundle` 已verify为完整历史，HEAD153dd，SHA256 `8e17332beaf69af79199e2804535bd6282c3fb9f065de24e4ee45d58f633eba5`。四本地仓库的精确Git状态、旧/新bundle清单及哈希另见 `recovery/git/git-state-manifest.json`；没有保存凭据或.git/config。
+
 ## 当前执行状态（2026-10-21 19:19 UTC，覆盖下方历史快照）
 
 - 本批 GPU 作业全部完成，当前无活跃作业。最后191545后态已核68MiB/0%、无GPU进程、9031双栈关闭；root仍为唯一设备owner。快速接续见 [硬件与输入驱动的框架探索阶段记录](analysis/2026-10-22-framework-milestone.md)。

@@ -520,3 +520,33 @@ root已完成修正版93eb/c95f的 `20261021T191545Z-kv-page-copy-gate`，19:16:
 新增中文 `analysis/2026-10-22-kv-page-copy-timing-review.md` 与独立 `analysis/source/kv-page-copy/191545-cost-review.json` 保存全部数值、源/原件SHA、窗口可知/未知与归档恢复入口。结论为构造byte/event复制门通过、成本单样本且归因未知、真实服务layout/allocator/取消/restore协议未测；不新写runtime或追加GPU。
 
 **本批完成后按root要求暂停本owner文件写入。** 当前prefix190206负结果已保留、KV191017失败/93eb修正/191545成功和计时限制均持久化。root可进行checkpoint、私有实验库同步与完整离线包；下一API先读本节及对应analysis恢复，不恢复新实验或文件编辑，直至root/用户另行授权。本owner无设备PID/SSH/GPU/远端模型导入/GitHub写入。
+
+### 归档锁解除后的KV一手研究与实例预算
+
+root已明确解除上一节写锁，继续用户持续探索goal；本轮仍只CPU/公开一手资料/审阅，无SSH/GPU/远端模型导入或共享repo写入。新增中文 `analysis/2026-10-22-kv-save-restore-hardware-evidence.md`，包含逐事实来源、反例、actual源码、host预算、事件先后与最短descriptor→单事务路线。
+
+实际查询天数官方 https://developer.iluvatar.com/ 及其文档中心，找到门户/指南目录但本次未取得CoreX pinned/stream/event API正文，不断言不存在，不用NVIDIA语义补成CoreX保证。实际读PyTorch pinned/non_blocking教程 https://docs.pytorch.org/tutorials/intermediate/pinmem_nonblock.html ，其中pinned源异步H2D后改写、D2H未完成即CPU读均是反例；CUDA API同步说明 https://docs.nvidia.com/cuda/archive/13.1.0/cuda-runtime-api/api-sync-behavior.html 仅作Async也可阻塞的设计参考，不推CoreX引擎数量。真实支持证据仍是191545单例byte/event门，不称稳定带宽或硬件并行。
+
+vLLM官方 https://vllm.ai/blog/2026-01-08-kv-offloading-connector 的H100/500GB/8CPU结果不能外推；其preemption/race修复是有用反例。公开v0.24 worker源码 https://github.com/vllm-project/vllm/blob/v0.24.0/vllm/distributed/kv_transfer/kv_connector/v1/offloading/worker.py 和cpu/gpu_worker.py 明确compute依赖、store延到nextstep/jobs_to_flush、完成回报和资源持有，但不等本机安装实现。PR https://github.com/vllm-project/vllm/pull/29870 修被抢占旧store处理，不能只保存bytes后修改computed绕过allocator。PagedAttention论文 https://arxiv.org/html/2309.06180v1 第4.5与共享/COW语义作设计依据，不沿用早期scheduler策略或其他硬件收益。
+
+actual184108 manifest报告PCIe16GT/s×16/NUMA0、host cgroup20GiB、当时usage2267643904B；不是整板64GiB/宿主500GB、独占链路或服务峰值。MiniCPM BF16真实42层×2KV×2heads×128×2=43008B/token，逻辑16token页全层688128B；16K672MiB，16K+1024out714MiB，KV521936总payload22447423488B=20.905792236328125GiB，**超过整个20GiB host限制**。故不能按官方通用指南全GPU KV镜像到CPU，应只极少victim slot、预留硬预算/在途和取消引用、动态余量不足原recompute；既有fixture成本不是事务可靠上下界，也不拿13758 exposure×token速度造收益。
+
+进一步实证反例：本地稳定platform.py与183543归档同SHA `e6f231af2c90f93116ebed7a8a2ce640bcc2d4c31ba5fde2e0fa0cbd8236ea36`，81–89对iluvatar明确is_cuda_alike=False；公开v0.24 CPUOffloadingSpec要求CUDA-alike/XPU。不能由torch设备名cuda推现成native支持，亦不声称未取回的本机offload实现已测试失败；不启现成后端或改官方服务参数来代替实现。
+
+actual scheduler df780761:1116先free、1120computed0；deferfree默认False且仅connector+多inflight消费者开启，现无connector不能借该fence。worker mixin无kvtransfer即uniformFalse，不能把packed门推真实layout；e155新页zero后才可restore。研究提出保存producer→D2H→真实ACK→free，实际新页分配→原zero→H2D→消费者等待/真实ACK→发布，资源/epoch强持有；缺budget可原路，但提交后取消需settle再回收，发布后不静默retry。CPUquota及真实布局/通道是先决证据，最短先descriptor smoke，不重跑copy四几何或扫新参数。
+
+### actual KV descriptor三阶段独立审阅与launcher终审
+
+framework初稿runtime3cf13981和builder已全文只读审：defaultinstall(False)不导框架，只隔离general-init footer显式True且需run目录；_dict直接对象链不RPC/proxy getattr，plain Tensor只shape/stride/dtype/device/storageoffset/nbytes/内部alias pointer，不读值、不GPU sync/stream查询/大buffer分配/调度改变。WorkerFL原initialize_from_config成功返回后一次观察；Core实际27b:110先load_general_plugins、:221才绑定step_fn，类step/step_with_batch_queue包装时序成立。保原return/异常，WeakSet once，观测失败仅诊断不截原执行；INSTALLED不等worker42/coreJSON成功。owner必要CPU合同源码/result已读，actual Worker方法AST ensure→init→observe/return/异常、once/失败原路、42fakealias、213→215完整copy/base不变/双transform与已有output拒绝覆盖必要范围，我未重跑suite。
+
+历史已审fdf2c812 runtime/14a206 builder只加actual worker_base SHA7da443和current_stream明确unobserved；内存逆去两行精确回3cf。随后root协调hold旧pin，当前最终runtime `0c892ad02fbfe663d3f7c8f668cdd000c0c1fc7860ff915db8bce5949cae0667`、builder `936c9260724f97b02dc1e69da2f4f0da7cdfaf7fdcb0e8ab866c26d9c028c59e`；派生init `90fe0b381fd53ec5273c623d91b806a0fc21f5b84165beba0b015a1e07d53e74`不变。最新仅missing/None/Tensor三分支，内存逆换块精确回fdf2无其它delta，无当前阻断；合同finalpin对应。**事实更正已告两owner：exact e155 __init__:587/588已初始化cross_layers/backend=None，三分是未知对象的保守说明，不是已证normal缺attr。**
+
+root `scripts/remote/launch_kv_runtime_descriptor.sh` SHA `78414492a1b053b1c88ce1f9e461bd66b0b053da33009f2cdb362a40fcab4a84` 全文终审无阻断：pin0c89/936c/helper0ecf/driverbc51/snapshot0f2a，原080656新副本/source/control/DBbefore、双栈/68,0预检+原driverflock，正确positional run_dir、原smoke-only/seed721201；env仅run/kv-descriptors。INSTALLED仅预检，purpose要求封存后worker42 complete/core firststep两个JSON；不报性能/accuracy。均已发root可唯一设备串行；**尚未收到本轮actual观测原件**，不写真实normal/packed/Executor结论。
+
+### 私有插件本地三文件抽查与CPU事务接口互审
+
+root仅本地分支codex/kv-save-restore（基70d04）新增c95f模块和实验文档、README历史身份说明，未push。本人只读核新增copy模块SHAexact `c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c`，文档191545/4case×2pass/每向672MiB/包7b491c/四roundtrip/计时限制/未protocol或C500均与原件一致；README区分5c14稳定历史tree及新分支，不冒称新增工具已默认启用，未改原入口。本owner未修改该repo、无重复测试。
+
+systems独立CPU事务初稿2656及测试a993全文已读，后继当前 `patches/framework/biv150_kv_transaction.py` SHA `aeea9ff44274f6b0a982861e3d14dcb3100ccaa64ea230184dba79b3cf52f791`、必要合同 `49753260c91151c3e9bc9323f45a699935adbc0117ef5cb85a71ea8357b28ae7` 只增fresh-zero split helper，内存移去精确重建2656。Key(session/req/incarnation/attempt)+HostSlot全生命周期serial拒旧ACK，完整Operation页/bytes/epoch校验，cancel在真实settled前不放在途资源，ZERO→RESTORE→publish、发布后不私有rollback均无当前CPU接口阻断。我未重跑suite或GPU。
+
+actual schedule先running分配523、waiting874，末1047才drain全zero集合，因此helper只保原before顺序、仅本事务独占dest尾段，真实zero ACK后才应用，避免drain别人的fresh页/后续zero擦恢复内容，必要且保守。适配器仍必须让SAVE ACK的producer fence覆盖所有将整体free旧页的在途写，不仅保存prefix bytes；旧frame原update成功后restore，实际source/privatefree成功才commit；新slot重建需新session/保持serial。当前无allocator/RPC/服务入口，CPU审通过不等GPU ACK真实或生产协议成立。关键边界已发送root和systems，研究文档一起保留。

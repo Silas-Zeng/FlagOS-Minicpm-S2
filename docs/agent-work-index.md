@@ -6,6 +6,12 @@
 
 ## 当前团队
 
+**当前阶段（2026-10-22 03:56，北京时间）：** 持续优化已恢复，旧阶段归档锁已解除。root串行完成195012真实KV/executor最短smoke，framework独立验收通过，设备已空闲。实际为42层独立normal KV、UniProcExecutor、AsyncScheduler/queue2，完整证据见[运行时布局观察](../analysis/2026-10-22-kv-runtime-descriptor.md)。framework现实现独立worker保存/清零/恢复模块，systems实现单victim事务和调度/V2 resume适配，hardware独立审接口及硬件预算；三者仅CPU，后续唯一GPU门仍由root负责。两个共享代码库先本地更改，实验记录库继续发布；既有小收益、负结果不删除。
+
+**最新完成状态（2026-10-22 03:26，北京时间）：** 本批所有设备作业已完成且空闲后态通过；三位 agent 的实现、复核、负结果与下一操作都已落盘，并暂停写入供统一归档。mapped 首轮121.79秒/复核117.03秒并列保留，KV容量差与稳定性限制不省略；prefix 首次服务负结果保留；KV修正版四case byte/event门通过，但生产恢复协议尚未实现。原件及审计已提交本地 `98f208fd6f37e4f1f654b3a492174f65e430512e`，tree `e88738bfc30ff12848e366f0b9e5904934ed2139`，10,431项；远端发布和离线包最终身份见 CURRENT 顶端及发布回执。
+
+快速读 [阶段记录](../analysis/2026-10-22-framework-milestone.md)，再读 [下一框架优先项](../analysis/2026-10-22-next-framework-priority.md)。恢复时先核实际设备状态，下一切口为运行时 KV 布局/executor 证据与安全抢占恢复协议；用户持续探索授权有效，本批暂停写入仅为一致归档，不是用户取消探索。
+
 **最新阶段（2026-10-22 03:14，北京时间）：** root 按单卡串行完成 mapped 正确性/单层计时、真实服务及 prefix 真实服务；两项首次服务均为负信号，原件保留，未集成。mapped 原代码一次复核在途，KV 页复制门因归档 `copy.py` 遮蔽标准库在加载阶段失败，最小重命名已完成双人互审，等待串行重试。当前 PID 读 CURRENT 顶端。framework 继续实际输入/16SM 下的下一调度与执行方向分析；hardware 独立审 prefix 和 KV 包装；systems 维护 KV 实现、记录及独立实验审计。已有 d756 本地检查点/bundle，最新工作尚未全部同步 GitHub；不能把29ad远端或旧ZIP称为本轮全量。
 
 新增入口：[mapped 与真实覆盖](../analysis/2026-10-22-c3-coverage-and-metadata.md)、[prefix 服务](../analysis/2026-10-22-visible-prefix-service.md)、[KV 页复制门](../analysis/2026-10-22-kv-page-copy-gate.md)、[调度/KV 状态机研究](../analysis/2026-10-22-scheduler-kv-innovation.md)。
