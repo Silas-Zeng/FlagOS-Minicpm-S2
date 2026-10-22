@@ -33,4 +33,11 @@
 - 重新生成团队视图时，除新增登记外，既有页面只出现同一目录内原件链接的顺序变化（本机目录列举顺序不同），没有内容改动。
 - 接续：实验脚本、逐轮日志与探针 CSV 在 BI-V150 实例 `/workspace/experiments/minicpm-s2/`，经 bundle 同步到 Mac `repos/minicpm-s2-cjj`。设备队列（单卡串行）：W8A8 三 kernel 链的两轮端到端对照 → 正向才跑官方 Level-3 → 之后回到 decode 每步算术（P 的 fp32→bf16、accumulator rescale、dot 形状）与 4K 残余热点。
 
+## 算子线下一阶段（2026-10-23 凌晨，设计稿，未上卡）
+
+- decode attention 在最优段数下实测 **512 / 510 GB/s**（553 GB/s 锚点的 92–93%），bf16 地板 26 ms/step、当前 27.5 ms，再快只能少读页。
+- 已排除：循环流水线（慢 21–35%）、`evict_first`（无差别）、固定 Δ 单遍 V-skip（不触发且慢 3–6%）。设备在 03:00 之后由另一 agent 使用，本轮未再占卡。
+- 唯一还够量级的路线是 **Quest 式页选择**（论文自述端到端 1.74×；本机按 f=0.5 推算 TPOT 60.35→46.6，约 +29%），拟采用"上一步页分数 + 边缘页保留"的简化形态，内存约 7 MB、不进 torch.compile 图内。设计与闸门见 [docs/operator-page-selection-design-biv150.md](docs/operator-page-selection-design-biv150.md)。
+- 前置闸门（必须先做，25 分钟）：解码只保留"首 32 token + 最近 W token"跑一次官方 Level-3，若 ≥0.965 才投入页选择，若 <0.95 则整条稀疏线放弃。序列槽复用导致的"首步脏分数"是已知风险点。
+
 [完整旧交接原文](archive/ai/CURRENT_WORK-before-team-rebuild-20261022.md)保留，旧文中的相对路径以项目根目录为基准；它是历史，当前安排以本页为准。
