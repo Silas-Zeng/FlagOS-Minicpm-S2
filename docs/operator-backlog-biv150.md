@@ -110,3 +110,49 @@
 | 8 | G/E 复核：图捕获尺寸命中、孤儿进程、KV 一致性 | 20 min | 全绿 | 修流程 |
 
 若第 1 步失败，算子侧结论固定为"现有约束下已到顶"，可交付内容即 main 上的 decode kernel（+31.2% / +23.3%）；后续只剩 H1/H2 多天项目。
+
+## 外部调研新增候选（第二轮，I 系）
+
+### I. 先做的两个"决策性测量"（零代码或只读）
+
+- **I1 混合步图内 profile**（30 min，需卡）：抓当前 4K/16K 真实的 mixed step，把 TPOT 拆成 decode attention / prefill attention / prefill GEMM / host gap。依据：lever-matrix 与既有 profile（纯 decode 时 attention 83%、GEMM 13.7%）。**若 prefill attention 占比显著，则下一页选择优先级要下调、prefill 2D kernel 优先级上调。**
+- **I2 16K 的 prefill attention 占比核算**（由 I1 得出，或用现有算子计时推算）：团队内核单层 44.7 ms × 42 层 ≈ 1.9 s/序列，而 GEMM 约 0.72 s/序列（按 96 TF/s）→ 推断 attention 占 prefill 计算 ~70%。若成立，**16K 的最大杠杆是重写 prefill 2D kernel（当前 24.6 TF/s，峰值 96）**，而不是 decode 稀疏。
+
+### J. 容量与调度（新证据：16K 30 running / 34 waiting、0 次抢占；4K 64–68 running、0 等待）
+
+- **J1 抢占假设已证伪**：外部推断"45 GB 需求 vs 22 GB → 抢占重算"与日志不符（`preempt` 计数为 0）。容量限制表现为排队，不是重算。归档为负。
+- **J2 准入限流（为快完成请求预留 block）** — 待测/框架侧：仅在存在抢占时有意义，按 J1 暂缓。
+- **J3 KV CPU offload 替代重算（PreemptOffloadConnector）** — 待测/多天：单条 16K 请求 KV 约 700 MB，cgroup 内存 20 GiB 下最多放 ~28 条；且 connector 在 CoreX 上未验证。收益依赖 J1（无抢占则无收益）→ 暂缓。
+- **J4 `max_num_batched_tokens` 代码侧默认提高（8192→16384/32768）** — 待测/**合规灰色**（改基线默认值）；外部经验 4K +3~8%、16K +5~15%（推断）。需你拍板是否触碰。
+- **J5 prefill budget 与 decode 解耦 + chunk 128 对齐** — 待测：避免 4K 被切成 1984+1984+128 这类尾块；推断 +1~3%。同属调度参数，需合规确认。
+- **J6 跨轮 prefix KV 保留（MRU/scan-resistant 淘汰）** — 待测/**合规风险最高**：官方多轮同 prompt，客户端 FIFO 让 LRU 只留尾部，实测命中率 0.0–0.3%；改成保留首波 prompt 的 KV 可让第 2 轮起命中，推断 4K +10~25%。**本质是利用 benchmark 的多轮重复，建议先向组委会确认再考虑。**
+
+### K. 执行 / 编译 / 主机侧
+
+- **K1 确认 CUDA Graph 真的在回放**（外部 issue #539 提到 BI-V150 `capture_begin` 返回 `ixErrorNotSupported`）— 待测/零成本：日志已见 "Capturing CUDA graphs (decode, FULL) 35/35"，但需 profile 确认 replay 生效。若实际降级为 eager，回收可达 +10~30%。**优先级等同 I1。**
+- **K2 热路径绕开 FlagGems Python wrapper**（外部复盘：Python wrapper 端到端 −20.05%，C++ wrapper +11%）— 待测：prefill 是 eager，逐层 4 个 flag_gems 调用的 Python 开销不进图；decode 已被图捕获。预期 5~15%（若 CPU 成为瓶颈）。验证：一次 prefill-only profile 看 host gap。
+- **K3 `async_scheduling` 默认开启** — 待测/**合规灰色**（调度参数默认值）：外部经验 +3~8%，Iluvatar 未验证。
+- **K4 CPU 线程数匹配 cgroup（6）与 gc.freeze** — 待测/低风险：主要是降 TPOT 离群（曾见某轮 +20% 的离群），0~2%。
+- **K5 4096/8192 batch 复测** — 待测：旧负结果早于 prefill attention TILE64 修复，重测 0~3%。
+
+### L. KV / 布局（补充）
+
+- **L1 block_size 32** — 待测/**合规灰色**：decode 变 64 token/步、循环与 rescale 减半、prefill TILE64 跨 2 页；推断 decode attention 513→540~553 GB/s（+3~6%），且需确认寄存器/共享内存不退化。
+- **L2 HND 布局** — 已在 A 组记为待测/成本中（需同步改写路径）。
+- **L3 释放 untied embedding/lm_head** — 不可行（模型需要）。
+
+### M. 论文侧补充（可直接映射的 kernel 结构）
+
+- **M1 XQA 形态（8 个共头 Q head 入同一 CTA、KV 单次入 SMEM、persistent）** — 与我现有 ROWS=8 打包等价，但强调"KV 只出 HBM 一次 + persistent 循环"；待测：把我的 kernel 改成 persistent（一个 program 连续处理多个序列），省每 program 的固定开销。预期 ≤3%。
+- **M2 FlashInfer 的 batch 自适应 tile 与均衡 split-K** — 我的段数规则已接近最优；待测：按 batch 选 tile（BN 64/128）而非固定。
+- **M3 FlashDecoding++ 的统一 max + 双缓冲** — 已近顶（A9/A10 已测负），标注为低优先级。
+- **M4 Tactic 的 K 聚类打分** — 若要压页选择的打分开销（A1 每步对 320 页打分），可用 1–2 个质心代替逐页、逐维 max；仅在 A1 落地后考虑。
+- **M5 反例归档**：FA3/FlashMLA 的 TMA/warpgroup 在该 Triton 后端不可 lower；MagicPIG 依赖 CPU 混算（违禁）；Ada-KV/Razor 在只有 2 个 KV 头时几乎无收益。
+
+### 修订后的优先级
+
+1. **I1 + K1（各 30 分钟，决策性）**：先确认 prefill attention 真实占比与图回放是否生效。
+2. 若 I2 成立（prefill attention ≈70% 计算）→ **重写 prefill 2D kernel 优先于页选择**（当前 24.6 TF/s vs 96 峰值，2–3× 空间；16K 端到端可能 +30~60%）。
+3. 若 prefill attention 占比不高 → 回到 A2 探针 + A1 页选择。
+4. J4/J5/K3/L1 属"调度/配置默认值"类，收益 3~15% 但**合规灰色，需拍板**。
+5. J6 跨轮 prefix 复用收益最大但**合规风险最高，未确认前不占卡**。
