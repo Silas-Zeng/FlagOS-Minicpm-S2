@@ -1,0 +1,116 @@
+{
+  "status": "accepted_for_short_root_owned_verify1_gate_not_device_or_accuracy_proved",
+  "scope": "仅本实例天数BI-V150/MiniCPM5-2B；独立进展victim候选，CPU只读互审。",
+  "reviewed_files_sha256": {
+    "patches/framework/candidates/biv150_kv_progress_victim_protocol.py": "72942f1f0c284069492b8ee7e1ca1348743e3b9ee49e7da05b8cf9024ac610ef",
+    "tests/test_biv150_kv_progress_victim.py": "b5a71507c742d49f34087035e50f6bd42667a847dc8ad71cb1921cd28333868f",
+    "analysis/source/preemption-snapshot/progress-victim-cpu-check.json": "838546644dd1c11db64eccf6b9bb1e8384abd34e65fa8ad93422c6c5d888f137",
+    "patches/framework/candidates/biv150_kv_full_restore_protocol.py": "1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8",
+    "patches/framework/candidates/biv150_kv_full_restore_worker.py": "5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477",
+    "patches/framework/candidates/biv150_kv_full_restore_transaction.py": "84be2242656e6ae0a30d65c803c2ae5076e836e0d1b6686731c4197a85b21883",
+    "scripts/remote/prepare_kv_progress_victim_source.py": "bbb49a069698d45dc0d4cd39c22d1e7254667ab5264da25b6cf98993b961f1e5",
+    "scripts/remote/launch_kv_progress_victim_screen.py": "1f8a2f144ec43d21349398a31f268c174ca6de12996024539ec622679fafb996",
+    "analysis/source/preemption-snapshot/progress-victim-wrapper-check.json": "7e19da52b59ae827b14a77539cfb6ced5b158a080b1e5f9c07b8077fb25d96eb",
+    "scripts/review_kv_progress_victim_run.py": "b7ff996b5c94f85f4f9e3c8245ad30d568de8500a91a37c44a84f8710f04a2a1"
+  },
+  "review_method": "全文阅读新selector/transform/install、原FULL与actual df780522–580挂点、唯一新合同与作者结果；静态逐函数源码比较；未运行合同/旧观测/全raw/设备。",
+  "existing_function_comparison": {
+    "unchanged_exact": [
+      "transform_init",
+      "_emit",
+      "_rpc",
+      "_drop",
+      "_discard_host",
+      "_defer_restore",
+      "_rollback",
+      "_order_private_pages",
+      "_capacity_request_class",
+      "_capacity_fast_reject",
+      "_full_restore_ready",
+      "_try_restore",
+      "_commit_resume",
+      "_wrap_preempt",
+      "_wrap_update",
+      "_wrap_schedule",
+      "_wrap_runner_states"
+    ],
+    "changed": [
+      "_wrap_core",
+      "install"
+    ],
+    "added": [
+      "_transform_progress_schedule",
+      "_progress_victim_index",
+      "_progress_victim_plan"
+    ],
+    "removed": []
+  },
+  "accepted_reasons": [
+    "精确87a原schedule仅waiting恢复及FCFS None后pop两处变换，可逐byte逆回；不改PRIORITY分支、不排序整个running。",
+    "原None/FCFS分支进入，空victim/HostSlot keyNone与used0之外原tail；进入计划前设置一次attempt，即使元数据/emit异常也不第二次选择。",
+    "候选原index>failed、对象不在三份当前schedule容器；同对象仍为scheduler.requests[rid]、actual Request且RUNNING；排failed/原tail与保护集合。",
+    "queued只读真实SchedulerOutput字段，不读Future；R扣真实queued spans且保known-1，不用placeholder或本schedule重复扣除。",
+    "ref1非null唯一页可含hashed以计算释放量；逻辑prefix可保存资格不冒称成功，原恢复目的仍fresh/unhashed/完整42层proof及真ACK。",
+    "worker5d9a与txn84be SHA不变，17原FULL函数全byte不变；hostslot/源free/排队消费/全覆盖FULL/失败settle等语义均继承。",
+    "异常在helper返回之后才原pop/preempt，唯一实际innerwhile合同核同原异常对象/context；随后容量仍不足则原tail，可多次原路抢占。"
+  ],
+  "author_contract_not_rerun": {
+    "tests": 1,
+    "reported_seconds": 0.092,
+    "exit_code": 0,
+    "actual_request_ast": true,
+    "actual_innerwhile_ast": true,
+    "full_two_cut_reverse": true,
+    "not_device_rpc_or_event_or_accuracy_proof": true
+  },
+  "specific_limits": [
+    "候选会改变victim与公平性，不承诺全局随机采样输出不变，不继承旧accuracy。",
+    "模块沿用“不重排请求”旧措辞只理解为未排序整个running；不等于victim/FCFS公平不变，已发作者非阻断提示。",
+    "DECISION先emit后增selected计数，选中时该事件selectedcounter0正常；实际selected字段与后续RPC计数1联合解读。",
+    "空slot/已有victim外层guard不消耗attempt；真正进入计划的尝试最多一次，元数据错误则本次原tail且不重选。",
+    "static1GiB不证明主机余量，释放页差/confirmed差不换时间；实际选中、SAVE/FULL/42bytes/consumer待root单次VERIFY1。"
+  ],
+  "blocking_findings": [],
+  "wrapper_review": {
+    "status": "accepted_final_no_blocking_findings",
+    "builder_sha256": "bbb49a069698d45dc0d4cd39c22d1e7254667ab5264da25b6cf98993b961f1e5",
+    "launcher_sha256": "1f8a2f144ec43d21349398a31f268c174ca6de12996024539ec622679fafb996",
+    "three_pin_literals_only_vs_reviewed_drafts": true,
+    "reverse_to_reviewed_draft_sha256": {
+      "builder": "40d519a1fa06e229e32248c617bb86ee2c67044ac8dfba0532f2a51ca0cb0edb",
+      "launcher": "87230e9e5c8846c65c178c5819f96ae05a08f4c268fadf4b2600d9dac65eb17d"
+    },
+    "reference": "214400 exact416 a67c/93375",
+    "only_changes": "canonical协议替换72942+progress-victim-source.json→417；旧innovation只作基点、原init791c/5d9a/84be/e155/c95f不变。",
+    "launch": "原bc51/contextlong/seed721201/SERVER，VERIFY1，准备锁/双idle/DBbefore/control与完整源固定；marker仅预检。",
+    "not_executed_by_reviewer": [
+      "prepare",
+      "whole source copy",
+      "shell/launcher",
+      "suite",
+      "device"
+    ]
+  },
+  "no_gpu_ssh_or_runtime_mutation": true,
+  "performance_gain_claim": null,
+  "posterior_validator_review": {
+    "sha256": "b7ff996b5c94f85f4f9e3c8245ad30d568de8500a91a37c44a84f8710f04a2a1",
+    "status": "read_only_accepted_not_executed",
+    "points": [
+      "2071通用raw仅416→417；原FULL events到return的合同体抽离，只有log读取替换，无悬空局部。",
+      "完整417map/基点旧innovation/动态选择、同真实SAVE rid-R-bytes与真42byte/消费门。",
+      "一次主动选择不冒称原preempt总数1，实际delta>=1；不继承旧R/indices或准确率。"
+    ],
+    "actual_raw_review_or_pass_artifact_created": false,
+    "initial_reviewed_sha256": "f43b7c9703ba2349a4681ee0f545cfd62422ce551f68fc0ed01e67e1e18ad8bb",
+    "before_actual_execution_fix": {
+      "only_delta": "远端run argv[2]比较由宿主Path派生改固定POSIX字符串/workspace/experiments/minicpm-s2/framework/+name。",
+      "reason": "Windows Path会产生反斜杠，旧静态终审遗漏这一跨平台问题；原f43未执行inspect。",
+      "preserved_old": "analysis/source/preemption-snapshot/review_kv_progress_victim_run.f43b7c97.py",
+      "proof": "analysis/source/preemption-snapshot/progress-victim-review-path-check.json",
+      "proof_sha256": "51804289f63211952fa9b8347bfacf1bf7e8624ae036c250d217f5224927ffeb",
+      "runtime_or_wrapper_changed": false,
+      "reviewer_inspect_or_suite_run": false
+    }
+  }
+}

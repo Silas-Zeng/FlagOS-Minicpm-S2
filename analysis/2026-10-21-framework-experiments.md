@@ -669,3 +669,84 @@ root已串行启动225501 FULL/runner238456，match完整A2 224411 control；run
 framework唯一6eb45实际验收pass，230548-review.json SHA06c16d26e8eee184269d46d09f488da5b63867f90e57900eaaf1484c23ae53e4；本agent只读报告/精确df780-pool-single源，未重跑入口/raw全审。32-0/413/220.41899300506338s仅诊断/KV521936/DB51919340三SHA同，23:11:57.075293Zsource-live/68-0/双栈闭通过；测前ERROR空，shutdown ERROR/WARN原样保留。实际Engine240315 completeTrue，首次失败31running prompt均16384/output327..569，free0/exact派生需1/failed index1/旧queued1；index0为最小remaining455且本轮已排1token，tailindex30 output327/rem697/1045私有页中1044hashed。29个排除protected/failed且可释放够页的结构候选含原tail，不是评分或已选新策略。该31请求prompt同长是本次快照实值，不由aggregate倒推全部32。
 
 新中文2026-10-22-victim-scheduling-minimal-route.md精确核PRIORITY已scheduled撤销/返预算/映射清理、按移除前index处理前方skip未scheduled反例、原free/prepend/preempted列表/本轮禁waiting与queuedFIFO；不改policy参数、不碰运行源。最强反证：保护minremaining当前已被原tail策略满足，可能零变化；free后hashed页留APC，need1或先消耗无hash页，不可把owned全算重算；改变victim无FCFS公平/逐token等价保证，单快照无makespan预测。未选评分或实现controller，旧reserve/terminaldrain不重做。registry109×16/queue83均LF，后继动作仅root决定；本批记录齐后暂时停写供统一publish/ZIP，goal持续。
+
+
+## 归档后唯一进展victim候选：独立417包装已审，真实结果待
+
+root完成232735完整归档后解锁，新候选从214400完整FULL416 a67c/93375仅替canonical协议为framework72942，worker5d9a/txn84be/init791c/e155/c95f不变，原innovation只作基点，新progress-victim-source.json给当前417身份。新builderbbb49a069698d45dc0d4cd39c22d1e7254667ab5264da25b6cf98993b961f1e5、launcher1f8a2f144ec43d21349398a31f268c174ca6de12996024539ec622679fafb996均三方审无设备门阻断。作者唯一b5a71507 CPU合同1test0.092s通过，本agent不重跑；只compile/AST唯一常量/完整reference映射/唯一差异静态核，不执行prepare/copy/旧suite。queue84记录已审候选，registry仍109等真实设备原件。
+
+launcher同锁双idle/DBbefore/完整control-source/原bc51long-seed721201-SERVER/VERIFY1，安装仅预检，不叠6a/c6、不先smoke或性能pair。新实际后验b7ff复用2071 raw417及原FULL合同体，要求真different-tail/同对象SAVE-FULL-DROP42byte/runner消费者、原preempt数等动态证据。旧f43有Windows Path(remotePOSIX)路径比较必拒，被framework部署前发现并仅一处修复；旧稿完整保留且未执行inspect/raw，修复记录51804289…，不改运行资产。当前run身份与结果待root，不能冒称选择或恢复通过。
+
+
+唯一进展victim设备启动回执（2026-10-22 01:53 UTC）：20261022T015315Z-kv-progress-victim-context16k-long runner250079/Engine250261，新source code/kv-progress-victim-20261022T015315Z；root实核417构建/DBbefore/双idle，实际KV521936。benchmark在途、回执时无decision，当前没有选择/恢复/完成结果。queue84更新，registry109保持；冻结72942/bbb49/1f8及原worker/txn/参数，等完整原件后本agent唯一b7ff验收，不先重跑旧suite/不SSH或GPU。
+
+
+## 015315不同tail进展选择与FULL真实机制门通过；DB增长不作性能
+
+本agent唯一b7ff实际验收exit0/pass，015315-progress-victim-review.json SHAf776f89ba579fcdc8bc24ecd6cfd10da1547ae2cb5faa75b9b15fdea2aa225fa；执行receipt保存唯一命令，旧f43未执行，未重跑suite或设备。真实Engine250261/28候选，仅一次主动选择，selected原index2/output552/rem472不同于tail30/output327，未scheduled/非failed/minremaining455和maxconfirmed569集合受保护。所选rid完成SAVE-FULL-DROP serial123，R16928/P1058/728039424B/source37run-SAVE1554/目的65-FULL与全42回读2730/全部bytepass/0ZERO/fast454/runner6/consumer9/host释放，原metrics preempt0→1。
+
+417源/72942-bbb49-1f8/原init791c-worker5d9a-txn84be-e155-c95f、原bc51-SERVER-long-seed721201/VERIFY1，无6a/c6；32-0/524288in32768out、238.5769370230846s/2334.9113579494883total/TTFT63043.00184814201ms仅绝对诊断。CPU6/32GiB/KV521936；DB51919340三SHA89729d71ac→52319474三SHAdc2c7646/0dc7a465/c05d7e31(+4表134行)，不可用旧轮报gain。01:59:22.547218Z417 source/live/68-0/双栈闭通过，ERROR测前与shutdown皆空、forcekill WARN留。
+
+中文2026-10-22-progress-victim-015315-result.md与registry110×16/queue84/ownhandoff保存。用户最新覆盖立即GitHub催促为“先进行实验，等会自己来”，暂不发布/PR且不为发布停写；root尚未push/PR。机制pass不继承新accuracy/公平或性能资格，后续最短VERIFY0包装等root正式指令，不自动新跑/改运行资产。
+
+
+## 首个进展选择性能A/B：共同418环境门与动态行为分列，A020721在途
+
+root正式启动A 20261022T020721Z-kv-progress-pair-full-context16k-long runner252046/source kv-progress-pair-full-20261022T020721Z；framework新builder6ffb/launcher1aaf，完整共同FULL416起点+同6a/39fb+新progress-pair-source.json成418，原FULL1aff对进展72942、worker5d9a/txn84be/e155不变，原bc51long/seed/SERVER/VERIFY0。当前A完整原件/KV/DBafter与B结果待，不沿用机制诊断耗时或旧pair。
+
+本agent只写scripts/review_kv_progress_pair_run.py 3f1dc20431272e424d7348e977a68bd1972e8ae0db3b414d51515913d15ad07f，复用固定c0 raw418/同observer/FULL VERIFY0合同helpers而不调用旧pair。动态B真一次differenttail/同rid-R-bytes恢复，A无progress字段；环境DB四端三SHA/KV/非时间启动分项/原args包installed/CPU物理/约定code差才给比率，R/页/段/copy/fast/consumer/preempt作为策略变化逐侧记录、不硬相等。只compile/AST/依赖hash/实际416映射规划418，静态check881ca55e…；root与hardware全文静态终审无当前阻断，没有common/inspect/旧run/假ACK/suite执行。中文2026-10-22-progress-victim-performance-validation.md与ownhandoff已留下一API命令；queue85在途，registry110不增预断行，等root原件后唯一实际入口。
+
+
+## 020721原FULL性能A唯一3f1验收通过，B待
+
+root取回完整原件后本agent唯一执行3f1 full，020721-full-review.json SHAbe286a95749b39cf6ed8089f7c2f27295d34a35f1fffb8eec4a3d2532068ced9，exit0/pass，无旧suite或设备重跑。418/原FULL1aff-5d9a-84be-e155/共同6a39fb/6ffb-1aaf/bc51原SERVER-long-seed721201/VERIFY0；32-0/524288in32768out，218.39959823712707s/2550.627402689529total/TTFT62408.937510466785ms。KV521936/CPU6/32GiB/preempt0→1，DB52319474三SHAdc2c7646-0dc7a465-c05d7e31前后同；actualPID252228/profile1/原int22447777996→父真list/三恢复，nonTorch1000341504/available22447777996.8。原FULL无decision，SAVE-FULL-DROP R16704/P1044/718405632B/SAVE24段1008/目的66段2772/0ZERO/fast454/consumer8/runner6/host释放，VERIFY0无回读。02:13:19.255413Z全源/live/68-0双栈闭通过，ERROR测前shutdown空/WARN留。
+
+registry111/queue85和中文2026-10-22-progress-victim-performance-first-pair.md已记A实测；root在必要前件门后接B，当前没有B结果/匹配/比率，不混015315诊断或旧pair。后继B真实ID完整原件到后由本agent唯一3f1 progress引用本A报告，环境严格门与策略动态行为分层保留；不提前要求R等相同，不产假通过。
+
+
+B正式在途回执：root已核A020721 before=after=Bbefore三DB SHA/完整前件，启动20261022T021658Z-kv-progress-pair-progress-context16k-long runner253641，新source kv-progress-pair-progress-20261022T021658Z、原6ffb/1aaf/418/VERIFY0。当前B完整结果待，不预填KV匹配/选择或收益；queue85更新，registry111不增假行。B原件齐后本agent唯一3f1 progress引用020721报告，不新增方向/设备/发布或改冻结资产。
+
+
+## B021658唯一验收通过但KV/启动分项失配：首个victim性能对照结束，收益null
+
+本agent唯一3f1 progress引用A be286a95实际exit0，021658-progress-review.json SHA90f3c896fdb8537e5cb317b823f1b7410b492acd5e1e5bbfbb830dddbd981c99。B32-0/524288in32768out/218.51338428491727s/2549.299219464107TPS/TTFT62356.0446958727ms仅绝对值；KV521840 vs A521936、nonTorch1004535808 vs1000341504（+4MiB）/available22443583692.8 vs22447777996.8，原因未证不归因。DB四端52319474三SHAdc2c7646-0dc7a465-c05d7e31/原args包installed/CPU6-32GiB/source约定差均同，但环境两门false，三收益字段全部null，不拿raw时差当gain或盲复跑。
+
+B实际Engine253818，9候选，failedindex20/selected21-output392-rem632 vs tail30-output319，保护minremaining463/maxconfirmed561；真一次选择，同selected rid SAVE-FULL-DROP，R16768/P1048/721158144B/source26段1092copy/目的66段FULL2772/0ZERO/fast462/runner6/consumer9/host释放，原preempt0→1，VERIFY0无回读。不能套015315的index2/R16928或要求与A的R16704/consumer8相等。418源live/post02:22:42.575452Z68-0双栈closed通过，测前及shutdown ERROR空/WARN留。
+
+比较JSON b346349c…、唯一执行receipt91ce6a15…与中文2026-10-22-progress-victim-performance-first-pair.md已收口，registry112×16/queue85均LF，旧未涉及CSV行逐byte不改。root明确本首对结束、不追加盲复跑/第三run、不追容量；策略机制保留，性能尚未判定/无新accuracy或公平资格，下一另定，不发布/PR或改冻结资产。
+
+
+## 后继86：2D SAVE独立API门仅CPU准备
+
+root在36510ed6 checkpoint后授权新outer，scripts/remote/launch_kv_pitched_copy_gate.py冻结3ffe8efe…，素材planner818e/SDK桥0a4d/gatec8c0及实际ABI030314原件。CPU只AST/compile+八pin核对，无旧suite/复制/设备；registry112不增加假行，queue86为待实际门。外层单锁双idle、实际g++原输出/soSHA/ldd/readelf、一个device-worker、300秒超时定向清理、DB前后/source/post/完整seal索引；root串行远端执行并取回run/control。
+
+本门一层两真实SAVE数组保全部逻辑KV字节，非0stream/API事件/guards/RNG先验后才首case8call ABBA。计时只比较原c95f与C batch加2D组合，不能分离2D贡献或当42层服务/E2E。当前无实际编译或设备结果，详细输入pin/CLI/失败取证边界见analysis/2026-10-22-kv-pitched-copy-gate-wrapper.md；前一进展victim性能pair失配null结论不变。
+
+
+## 86实际完成：032653单层2D SAVE字节/流门通过，wall波动不报稳定收益
+
+本agent唯一实际本地证据验收eff32911通过，86seal+7源/outer3ffe与c8c0-818e-0a4d/c95f、实际SDK编译so9e33/ABI及mappedlibd39d、两case18checks+计后5/RNG/独立CPU payloadSHA/DB实体三SHA和后态均核。015315真实页序构造R16928-P1058/17334272B，37→11calls(2linear9pitched)；021658构造R16768-P1048/17170432B，26→6(2linear4pitched)，全部逻辑页与KV字节保留、fallback0，非0同流event完成后验证host，两端16KiBoffset/正数guard/source全不变。
+
+首case8call ABBA wall7.415286/0.672265/0.681895/1.454229ms、event0.652492/0.628267/0.628109/0.652680ms，仅原c95f与C batch+2D组合单层信号，基线wall波动大，不报稳定wall收益或独立2D/42层服务/E2E。CPUquota6/Torchthreads56/20GiB与v1cpu.stat均观察非峰值，worker memory{}非零用量证据；不能已证实某窗节流。DB52319474三SHAdc2c-0dc7-c05d前后同，03:27:06.831936Z68-0双栈闭/source-post无变。首本地helper相对URI失败保留后绝对路径续审，非设备失败/无重测试。详analysis/2026-10-22-kv-pitched-copy-032653-result.md，registry113/queue86实际完成。本批按root指令暂停写供checkpoint，不开新GPU，goal持续。
+
+
+## 87实际完成：035754三路64call/API字节与v1逐窗观察
+
+唯一系统原件验收9d0bcd7b通过，86seal/7source/实际SDK编译so9e33/ABI-mappedlibd39d/非0流/DB实体和后态完整。两实际SAVE页序一层构造分别原37→B37线性→C11(2线性9二维)，原26→B26线性→C6(2线性4二维)；B fallback9/4是受控PAGE拆段非真实pitch不足，C真实maxpitch下fallback0。两case30checks+计后7+RNG/CPU完整payloadSHA均通过。首case64call A/B/C/C/B/A wall0.682748/0.655124/0.631449/0.631231/0.654983/0.689953ms，event原件另存；六窗v1 nr_throttled/throttled_time增量0，CPU6/56线程不变，仅本次局部信号不倒推032653波动/不证稳定E2E。DB52319474三SHAdc2c-0dc7-c05d同，03:58:09.177091Z68-0双栈闭/source无变，registry114/queue87收口。系统中文独占analysis/2026-10-22-kv-pitched-threeway-035754-system.md，不覆盖hardware专项。后继仅SAVE worker独立部署待精确接口/互审，不混本API门作42层服务结论。
+
+
+## 88实际完成：042225新SAVE与原FULL各42层字节证明通过
+
+唯一实际后验d7213a76通过；420完整source/live/cd3d-df6a/a662worker+818e0a4dSO9e33/原1aff84be791ce155/原bc51SERVER-longseed721201VERIFY1均核。实际R16688-P1043-717717504B，23源连续run→5segments每层，SAVE210=168linear+42pitched/fallback0，actualstream0合法；原event成功ACK后源free前旧c95f42层对照966calls全bytepass。随后原FULL66run×42=2772与独立42层恢复回读2772全bytepass，0ZERO/serial123/同key/发布DROP/host释放/runner6/原consumer16/fast462/原preempt0→1完整。
+
+32-0/524288in32768out/230.82578303012997s仅双回读诊断，不报收益；KV521840/CPU6/32GiB，DB52319474三SHAdc2c-0dc7-c05d前后同，04:29:03.163250Z source/live/installed54c/68-0双栈闭全过，测前与shutdown ERROR空/WARN留。maps字典未入ACK，仅冻结guard+SAVE成功证明代码已过，非直接映射实录；完整accuracy/全局RNG/取消多victim资格未由本门证明。独占系统报告analysis/2026-10-22-kv-pitched-save-042225-system.md，registry115/queue88完成。用户明确确定收益不自动大测试，本必要真实正确性已完成，不自动大官方或重复长pair，后继root决定。
+
+
+## 89实际完成：045818 Event三route门
+
+唯一系统审计b21fb342过61seal/source2/DB/post，24trial144checks和RNG全true、early0；generic/typeddefault/typedblocking等待线程CPU均约9.44ms，无typedblocking下降信号。首C wall偏低与threadCPU/wall差异保留，不报gain；六窗节流增量0，DB52319474三SHAdc2c-0dc7-c05d同，04:58:26Z68-0双栈闭/source不变。实际报告analysis/2026-10-22-event-wait-045818-system.md；registry116/queue89完成。首本地CPUstat schema键修正非设备失败，未重设备。用户仅授权完成手头native差异门后维护GitHub，冻结新研究/自动服务/大测试。
+
+
+## 90最后手头门：051336 native SDK flags3完成性通过，无等待CPU下降
+
+唯一系统实审365e6760通过85seal/source5/实际SDK编译so1376/mapsd39/DB/post；24trial144checks/RNG/settledclose均true、early0，无failureowner全卡同步救场。直接Corex flags3两窗threadCPU9.4344/9.4364ms≈wall9.4194/9.4210ms，没有CPU下降信号，不接服务/不猜驱动实现。DB52319474三SHA同，05:13:44Z68-0双栈闭/source不变；首次SCP未退出的文件锁仅收集时序，完整exit0解包后全核，非设备失败。registry117/queue90，短报告analysis/2026-10-22-native-event-wait-051336-system.md。按用户最后要求，设备手头全部结束，转GitHub/方法PR文档维护，不新研究/设备/自动服务/大测试。

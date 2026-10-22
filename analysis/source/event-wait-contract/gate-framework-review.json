@@ -1,0 +1,30 @@
+{
+  "status": "static_cross_owner_review_no_blocker_for_single_event_API_gate",
+  "scope": "仅CPU源码/小diff/hash/AST审阅；没有执行新旧套件、包装或设备",
+  "sha256": {
+    "scripts/remote/validate_event_wait_gate.py": "67090baad306b95679717a0f4b3e97d7a16abc9815317d3c885102ccac1d32ae",
+    "scripts/remote/launch_event_wait_gate.py": "32a0751bc3fdc1f4f8e787c2fc729fadfc55eba6b8ce8d50c30fd72c05bcac2e",
+    "outer_unpinned_draft": "ba5b60eb3fd6a490d397c30f37d0ea02725a43b5ae318fec42e77ff858502b53",
+    "parent_outer": "b2c65963f621f83b0d093353e7135b3434d4c49bb9402c05bb2a3363aa6f5a88",
+    "actual_source_contract": "41ba9a3bcc40ef826ac9fa350be134aa66a86a4e3cab4aa5c9234624c3bfe5eb"
+  },
+  "final_outer_only_pin_inverse_exact_to_draft": true,
+  "reviewed": [
+    "A generic默认、B typed默认、C typedblocking，保持同一非0stream及相同32MiB连续8次D2H工作量",
+    "GPU源/host/独立source-readback/全部event与fixture在相关首次异步前强持",
+    "仅被测event.synchronize纳入wall/threadCPU/processCPU三clock，submission/earlyquery/poison/校验另列",
+    "同步返回后testevent/endquery和host全uint8 minmax/双guard先检查，之后才另source回读，额外同步不补成正确性pass",
+    "全部allocation/事件惰性record与warmup在六窗外，A/B/C/C/B/A每窗4trial；v1cpu.stat覆盖四trial所有活动，明确非纯wait节流",
+    "固定原56Torch线程/6CPU额度不设置或适配；实际单BI-V150/16SM和loaded libcudart d39校验",
+    "成功无全device同步掩盖等待，失败才settle；未settle保全引用至进程退出，不重试",
+    "外层删所有KV编译/桥/素材，仅新gate+actual契约，missingcpp不假补绑定；单锁/双idle/DB/唯一child300s/定向清理/post/flush后seal保持",
+    "最终outer单pin逆换得到ba5b原SHA，gate worker-only CLI与外层参数相符"
+  ],
+  "limits": [
+    "静态回执不表示实际typed blocking有效、缓存开关已知或会睡眠",
+    "单Event API门只回答完成与等待CPU行为，不证明e155758/314服务暴露时间或E2E收益",
+    "threadCPU/processCPU与v1节流累计不互相替代；wall收益需真实窗口判断",
+    "不改e155输出/输入事件、当前KV候选或原服务参数，不自动长pair/大官方"
+  ],
+  "next": "root唯一串行运行一次67090/32a0，封存完整run/control后以实际结果保留通过、无效或负结果"
+}

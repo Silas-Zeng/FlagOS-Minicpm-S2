@@ -1,0 +1,810 @@
+{
+  "started_utc": "2026-10-22T05:13:38.056933+00:00",
+  "pid": 266288,
+  "command": "/usr/local/bin/python /workspace/experiments/minicpm-s2/framework/20261022T051336Z-native-event-wait-gate/source/gate.py --device-worker --output-dir /workspace/experiments/minicpm-s2/framework/20261022T051336Z-native-event-wait-gate --source-dir /workspace/experiments/minicpm-s2/framework/20261022T051336Z-native-event-wait-gate/source --bridge-sha256 1376f0e8cd8e6f988b15b6389fa07448df1cc842ec40d88245c9941862f508bf",
+  "kind": "BI-V150 native Corex Event A/B/C/C/B/A wait gate, no model/service",
+  "source_sha256": {
+    "gate.py": "7bac3901b6ddeafb5518a473733c2486deab9d561441a6a729a92782c8e57aba",
+    "biv150_native_blocking_event.py": "327e8aff211f33fd9f7fe0bd841b330e4205a5c0677e7a5e9b7c28ce0fec7365",
+    "bridge.cpp": "ee01eb013f054fe5ebcd057794bdce9b57a977c6f3745de77e48d4411f0b31d7",
+    "event-wait-contract.json": "41ba9a3bcc40ef826ac9fa350be134aa66a86a4e3cab4aa5c9234624c3bfe5eb",
+    "bridge.so": "1376f0e8cd8e6f988b15b6389fa07448df1cc842ec40d88245c9941862f508bf"
+  },
+  "payload_bytes": 33554432,
+  "copies_per_trial": 8,
+  "trials_per_window": 4,
+  "routes": {
+    "A": "torch.Event()",
+    "B": "torch.cuda.Event(blocking=True)",
+    "C": "NativeEvent(Corex BlockingSync|DisableTiming)"
+  },
+  "bridge_sha256": "1376f0e8cd8e6f988b15b6389fa07448df1cc842ec40d88245c9941862f508bf",
+  "torch": "2.10.0",
+  "platform": "Linux-5.4.0-148-generic-x86_64-with-glibc2.39",
+  "torch_CPU_threads": 56,
+  "device": {
+    "name": "Iluvatar BI-V150",
+    "SM": 16,
+    "total_memory": 34359738368
+  },
+  "actual_loaded_libcudart": {
+    "/usr/local/corex-4.5.0/lib64/libcudart.so.10.2.89": "d39d579627d19ddb903855ebc4859661579633a7ecc4d1ad51866d79296ba527"
+  },
+  "explicit_nondefault_stream_handle": 94126074508576,
+  "actual_loaded_libcudart_after_bridge": {
+    "/usr/local/corex-4.5.0/lib64/libcudart.so.10.2.89": "d39d579627d19ddb903855ebc4859661579633a7ecc4d1ad51866d79296ba527"
+  },
+  "native_event_creation_flags": 3,
+  "native_event_bridge_sha256": "1376f0e8cd8e6f988b15b6389fa07448df1cc842ec40d88245c9941862f508bf",
+  "event_types": {
+    "A": "torch.Event",
+    "B": "torch.cuda.streams.Event",
+    "C": "biv150_native_event_gate.NativeEvent"
+  },
+  "setup_wall_ns": 1927939591,
+  "setup_scope": "含Torch导入/设备/RNG/库身份/全部buffer及事件惰性初始化/单次源回读，不计入wait",
+  "timing": {
+    "method": "固定A/B/C/C/B/A，每窗4trial，每trial连续8次32MiB D2H",
+    "wait_scope": "仅被测event.synchronize及读取时钟开销；submit/query/poison/全字节验证均排除",
+    "cpu_stat_scope": "每窗外v1计数覆盖该窗四trial的等待及窗内计时外poison/验证，不等同纯wait节流",
+    "batches": [
+      {
+        "label": "A",
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798007\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798007,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:39.985608+00:00"
+        },
+        "trials": [
+          {
+            "wait_wall_ns": 9416917,
+            "wait_thread_CPU_ns": 9436126,
+            "wait_process_CPU_ns": 9430004,
+            "D2H_device_event_ms": 9.412134170532227,
+            "submission_wall_ns_excluded": 172861,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9421020,
+            "wait_thread_CPU_ns": 9437422,
+            "wait_process_CPU_ns": 9433492,
+            "D2H_device_event_ms": 9.412930488586426,
+            "submission_wall_ns_excluded": 130849,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9422050,
+            "wait_thread_CPU_ns": 9437387,
+            "wait_process_CPU_ns": 9468674,
+            "D2H_device_event_ms": 9.412369728088379,
+            "submission_wall_ns_excluded": 123396,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9420147,
+            "wait_thread_CPU_ns": 9436439,
+            "wait_process_CPU_ns": 9448610,
+            "D2H_device_event_ms": 9.412711143493652,
+            "submission_wall_ns_excluded": 118456,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          }
+        ],
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798008\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798008,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:40.082390+00:00"
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "complete_before_wait_count": 0,
+        "wait_wall_ns_mean": 9420033.5,
+        "wait_thread_CPU_ns_mean": 9436843.5,
+        "wait_process_CPU_ns_mean": 9445195.0,
+        "D2H_device_event_ms_mean": 9.412536382675171
+      },
+      {
+        "label": "B",
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798008\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798008,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:40.082533+00:00"
+        },
+        "trials": [
+          {
+            "wait_wall_ns": 9418965,
+            "wait_thread_CPU_ns": 9435014,
+            "wait_process_CPU_ns": 9431634,
+            "D2H_device_event_ms": 9.412199974060059,
+            "submission_wall_ns_excluded": 158662,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9422444,
+            "wait_thread_CPU_ns": 9437276,
+            "wait_process_CPU_ns": 9453259,
+            "D2H_device_event_ms": 9.412542343139648,
+            "submission_wall_ns_excluded": 133067,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9426628,
+            "wait_thread_CPU_ns": 9441067,
+            "wait_process_CPU_ns": 9458913,
+            "D2H_device_event_ms": 9.412376403808594,
+            "submission_wall_ns_excluded": 129967,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 11339293,
+            "wait_thread_CPU_ns": 11364563,
+            "wait_process_CPU_ns": 11385509,
+            "D2H_device_event_ms": 9.412307739257812,
+            "submission_wall_ns_excluded": 125777,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          }
+        ],
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798009\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798009,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:40.181053+00:00"
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "complete_before_wait_count": 0,
+        "wait_wall_ns_mean": 9901832.5,
+        "wait_thread_CPU_ns_mean": 9919480.0,
+        "wait_process_CPU_ns_mean": 9932328.75,
+        "D2H_device_event_ms_mean": 9.412356615066528
+      },
+      {
+        "label": "C",
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798009\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798009,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:40.181228+00:00"
+        },
+        "trials": [
+          {
+            "wait_wall_ns": 9414507,
+            "wait_thread_CPU_ns": 9429208,
+            "wait_process_CPU_ns": 9587942,
+            "D2H_device_event_ms": 9.412369728088379,
+            "submission_wall_ns_excluded": 218152,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9421312,
+            "wait_thread_CPU_ns": 9435734,
+            "wait_process_CPU_ns": 9451233,
+            "D2H_device_event_ms": 9.412116050720215,
+            "submission_wall_ns_excluded": 145551,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9421246,
+            "wait_thread_CPU_ns": 9437002,
+            "wait_process_CPU_ns": 9452976,
+            "D2H_device_event_ms": 9.41252326965332,
+            "submission_wall_ns_excluded": 129249,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9420499,
+            "wait_thread_CPU_ns": 9435685,
+            "wait_process_CPU_ns": 9447285,
+            "D2H_device_event_ms": 9.412546157836914,
+            "submission_wall_ns_excluded": 134143,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          }
+        ],
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798010\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798010,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:40.277199+00:00"
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "complete_before_wait_count": 0,
+        "wait_wall_ns_mean": 9419391.0,
+        "wait_thread_CPU_ns_mean": 9434407.25,
+        "wait_process_CPU_ns_mean": 9484859.0,
+        "D2H_device_event_ms_mean": 9.412388801574707
+      },
+      {
+        "label": "C",
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798010\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798010,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:40.277367+00:00"
+        },
+        "trials": [
+          {
+            "wait_wall_ns": 9420994,
+            "wait_thread_CPU_ns": 9437414,
+            "wait_process_CPU_ns": 9474543,
+            "D2H_device_event_ms": 9.412711143493652,
+            "submission_wall_ns_excluded": 159658,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9422563,
+            "wait_thread_CPU_ns": 9437688,
+            "wait_process_CPU_ns": 9468786,
+            "D2H_device_event_ms": 9.412307739257812,
+            "submission_wall_ns_excluded": 127443,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9420703,
+            "wait_thread_CPU_ns": 9435549,
+            "wait_process_CPU_ns": 9432798,
+            "D2H_device_event_ms": 9.413653373718262,
+            "submission_wall_ns_excluded": 132151,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9419813,
+            "wait_thread_CPU_ns": 9435069,
+            "wait_process_CPU_ns": 9431883,
+            "D2H_device_event_ms": 9.41241455078125,
+            "submission_wall_ns_excluded": 126752,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          }
+        ],
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798011\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798011,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:40.373490+00:00"
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "complete_before_wait_count": 0,
+        "wait_wall_ns_mean": 9421018.25,
+        "wait_thread_CPU_ns_mean": 9436430.0,
+        "wait_process_CPU_ns_mean": 9452002.5,
+        "D2H_device_event_ms_mean": 9.412771701812744
+      },
+      {
+        "label": "B",
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798011\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798011,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:40.373644+00:00"
+        },
+        "trials": [
+          {
+            "wait_wall_ns": 9422942,
+            "wait_thread_CPU_ns": 9438571,
+            "wait_process_CPU_ns": 9475630,
+            "D2H_device_event_ms": 9.412542343139648,
+            "submission_wall_ns_excluded": 152721,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9422845,
+            "wait_thread_CPU_ns": 9438338,
+            "wait_process_CPU_ns": 9469257,
+            "D2H_device_event_ms": 9.412219047546387,
+            "submission_wall_ns_excluded": 124970,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9422843,
+            "wait_thread_CPU_ns": 9437760,
+            "wait_process_CPU_ns": 9469041,
+            "D2H_device_event_ms": 9.41266918182373,
+            "submission_wall_ns_excluded": 121888,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9422245,
+            "wait_thread_CPU_ns": 9437286,
+            "wait_process_CPU_ns": 9453478,
+            "D2H_device_event_ms": 9.412477493286133,
+            "submission_wall_ns_excluded": 117737,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          }
+        ],
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798012\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798012,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:40.469393+00:00"
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "complete_before_wait_count": 0,
+        "wait_wall_ns_mean": 9422718.75,
+        "wait_thread_CPU_ns_mean": 9437988.75,
+        "wait_process_CPU_ns_mean": 9466851.5,
+        "D2H_device_event_ms_mean": 9.412477016448975
+      },
+      {
+        "label": "A",
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798012\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798012,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:40.469545+00:00"
+        },
+        "trials": [
+          {
+            "wait_wall_ns": 9421097,
+            "wait_thread_CPU_ns": 9436789,
+            "wait_process_CPU_ns": 9453008,
+            "D2H_device_event_ms": 9.412116050720215,
+            "submission_wall_ns_excluded": 151810,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9421811,
+            "wait_thread_CPU_ns": 9436566,
+            "wait_process_CPU_ns": 9467322,
+            "D2H_device_event_ms": 9.412453651428223,
+            "submission_wall_ns_excluded": 119181,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9423293,
+            "wait_thread_CPU_ns": 9437953,
+            "wait_process_CPU_ns": 9470834,
+            "D2H_device_event_ms": 9.412542343139648,
+            "submission_wall_ns_excluded": 117996,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          },
+          {
+            "wait_wall_ns": 9422273,
+            "wait_thread_CPU_ns": 9436756,
+            "wait_process_CPU_ns": 9465916,
+            "D2H_device_event_ms": 9.41260814666748,
+            "submission_wall_ns_excluded": 114336,
+            "complete_before_wait": false,
+            "copies": 8,
+            "submitted_bytes": 268435456,
+            "checks": {
+              "tested_event_complete": true,
+              "timing_end_complete": true,
+              "host_all_bytes_0x5a": true,
+              "host_first_guard": true,
+              "host_last_guard": true,
+              "source_all_bytes_unchanged": true
+            }
+          }
+        ],
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 798013\nnr_throttled 3825\nthrottled_time 15553157608292",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 798013,
+            "nr_throttled": 3825,
+            "throttled_time": 15553157608292
+          },
+          "recorded_utc": "2026-10-22T05:13:40.565213+00:00"
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "complete_before_wait_count": 0,
+        "wait_wall_ns_mean": 9422118.5,
+        "wait_thread_CPU_ns_mean": 9437016.0,
+        "wait_process_CPU_ns_mean": 9464270.0,
+        "D2H_device_event_ms_mean": 9.412430047988892
+      }
+    ]
+  },
+  "RNG_unchanged": {
+    "CPU": true,
+    "GPU": true
+  },
+  "performance_gain_claim": null,
+  "limits": [
+    "仅实际Corex事件行为/完成性，不是模型prepare_inputs_event的暴露时间或服务收益。",
+    "CPU下降与wall不回退需读真实镜像窗口；不假设typed或direct blocking生效。",
+    "v1 throttled_time是累计节流ns，不作为wall损失；不改线程/额度/参数。"
+  ],
+  "cleanup": {
+    "device_settled": true,
+    "native_event_closed": true,
+    "failure_owner_device_sync_completed": false,
+    "retained_until_process_exit_if_unsettled": false,
+    "no_retry_after_submission_failure": true
+  },
+  "status": "pass",
+  "finished_utc": "2026-10-22T05:13:40.629727+00:00"
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "status": "local_pr_draft_not_published",
+  "method": "kv-contiguous-copy",
+  "title_zh": "KV连续页合并复制工具",
+  "target_repository": "Silas-Zeng/FlagOS-S2-vllm-plugin-FL",
+  "base": {
+    "branch": "main",
+    "local_history_commit": "70d04f38382e900949ddeb34d2ac75aacdc93af4",
+    "tree_sha1": "82e37f8f263eeb09563a4790359ec95a0de1ca17",
+    "published_commit": "d5e2e3a54b48dcb1b50f575d2420979591fb3e1c",
+    "published_tree_sha1": "82e37f8f263eeb09563a4790359ec95a0de1ca17",
+    "provenance_zh": "本次只读核本地main commit/tree；published身份来自root已核发布回执，没有联网重新读取remote。两commit历史不同但tree相同。"
+  },
+  "dependencies": {
+    "required_prs": [],
+    "independent_of": [
+      "kv-pitched-copy"
+    ],
+    "merge_order_zh": "共同main基点，任意先后；不存在代码依赖，不虚构叠加顺序。"
+  },
+  "files": [
+    {
+      "repo_path": "docs/kv-contiguous-copy.md",
+      "artifact_path": "files/docs/kv-contiguous-copy.md",
+      "change": "add",
+      "mode": "100644",
+      "sha256": "2bf45944ebbf8e78a9317726dce21cc7baca8e5a27016d9452657f35be075057",
+      "git_blob_sha1": "2462857ab39be1b1cea4dedb7a3f581b46283afb",
+      "bytes": 4542,
+      "base_blob": null,
+      "base_mode": null,
+      "base_path_status": "目标在固定main tree中不存在",
+      "source": {
+        "kind": "本次独立中文使用说明",
+        "byte_identical_code_required": false
+      }
+    },
+    {
+      "repo_path": "vllm_fl/patches/biv150_kv_page_copy.py",
+      "artifact_path": "files/vllm_fl/patches/biv150_kv_page_copy.py",
+      "change": "add",
+      "mode": "100644",
+      "sha256": "c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c",
+      "git_blob_sha1": "2c6623c63924a9985f26edd928d4669e5a475c22",
+      "bytes": 3589,
+      "base_blob": null,
+      "base_mode": null,
+      "base_path_status": "目标在固定main tree中不存在",
+      "source": {
+        "repository": "FlagOS-S2-Minicpm-throughput",
+        "path": "patches/framework/biv150_kv_page_copy.py",
+        "absolute_path": "C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/patches/framework/biv150_kv_page_copy.py",
+        "sha256": "c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c",
+        "byte_identical": true
+      }
+    }
+  ],
+  "pr_description": {
+    "path": "PR.md",
+    "sha256": "4b1606830eb3869c809c5a66131fb01e76036d1c1a92fb3c55891a0dcee1b89d"
+  },
+  "source_evidence": [
+    {
+      "repository": "FlagOS-S2-Minicpm-throughput",
+      "path": "experiments/framework/20261021T191545Z-kv-page-copy-gate/results.json",
+      "absolute_path": "C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/experiments/framework/20261021T191545Z-kv-page-copy-gate/results.json",
+      "sha256": "868b7dd97c42fa402aeed4de8ce290cf5c561a15cd0fc855de2a14817b419a8a",
+      "use_zh": "引用已存在原件/独立验收；本次未重跑validator或设备"
+    },
+    {
+      "repository": "FlagOS-S2-Minicpm-throughput",
+      "path": "experiments/framework/20261021T191545Z-kv-page-copy-gate/independent-gate-review.json",
+      "absolute_path": "C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/experiments/framework/20261021T191545Z-kv-page-copy-gate/independent-gate-review.json",
+      "sha256": "22fbbd220971f5932f3628de604c60f67b771fa4b0cf174fa850316af4ecfeb1",
+      "use_zh": "引用已存在原件/独立验收；本次未重跑validator或设备"
+    },
+    {
+      "repository": "FlagOS-S2-Minicpm-throughput",
+      "path": "analysis/2026-10-22-kv-page-copy-result.json",
+      "absolute_path": "C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/analysis/2026-10-22-kv-page-copy-result.json",
+      "sha256": "22fbbd220971f5932f3628de604c60f67b771fa4b0cf174fa850316af4ecfeb1",
+      "use_zh": "引用已存在原件/独立验收；本次未重跑validator或设备"
+    }
+  ],
+  "copy_scope_zh": "从旧本地37661d仅复用逐字相同c95f工具；不包含旧README或kv-save-restore-experiment.md。",
+  "validation": {
+    "code_bytes_match_frozen_sources": true,
+    "target_paths_all_absent_at_base": true,
+    "python_syntax_compile": "通过；compile(bytes)无导入/无pycache",
+    "new_cpu_or_device_tests_run": false,
+    "new_runtime_or_build_system_changes": false,
+    "dependency_check": {
+      "PR2_python_imports": [
+        "dataclasses"
+      ],
+      "imports_other_pr_module": false
+    },
+    "uncovered_or_caller_responsibilities_zh": [
+      "工具不提供生产完成事件/资源生命周期/页所有权/请求取消或事务ACK；调用方另行保证。",
+      "没有服务吞吐提升或完整模型准确率声明；inactive工具PR不等同默认服务集成。",
+      "仅BI-V150设备证据；C500/其它平台未验证。"
+    ]
+  },
+  "not_included": [
+    "README.md",
+    "vllm_fl/__init__.py",
+    "setup.py",
+    ".so二进制",
+    "完整KV worker/事务/调度或默认安装hook",
+    "失败Event候选/实验原日志"
+  ],
+  "rollback_zh": "只删除本PR新增文件；没有默认入口或运行参数需要还原。后继调用方若合入，须先撤调用方再删工具。",
+  "workspace_read_only_check": {
+    "collaboration_HEAD": "37661d2d2cf811ef8093436fa17c424dfd63b25d",
+    "collaboration_status": "",
+    "checkout_or_index_mutated_by_this_task": false,
+    "network_or_remote_actions": false
+  },
+  "historical_reuse": {
+    "commit": "37661d2d2cf811ef8093436fa17c424dfd63b25d",
+    "path": "vllm_fl/patches/biv150_kv_page_copy.py",
+    "git_blob_sha1": "2c6623c63924a9985f26edd928d4669e5a475c22",
+    "only_tool_reused_not_old_README": true
+  }
+}

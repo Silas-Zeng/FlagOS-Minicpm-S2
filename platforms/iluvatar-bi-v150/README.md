@@ -8,3 +8,5 @@
 - [原始实验注册表](../../experiments/registry.csv)、[完整分析](../../analysis/2026-10-21-framework-experiments.md)、[当前设备状态](../../CURRENT_WORK.md)。
 
 原始证据继续使用既有目录，不移动、不重写。任何后续新实验均明确记录平台为 `iluvatar-bi-v150`，并先核实设备占用。原版已正常结束，结果作为稳定基点保存；用户已恢复后续框架探索，小收益也纳入最短上卡验证。
+
+2026-10-22 本轮探索已按用户安排收口并转 GitHub 维护。最新完整42层 KV 验证见 [042225报告](../../analysis/2026-10-22-kv-pitched-save-042225-system.md)；Event短测按无CPU等待收益记录，未接入服务。新增方法通过独立草稿 PR 交团队审阅，主分支已有 SQL+C3 仍作为已验基点；各方法的组合检查和合并说明见 [协作安排](../../docs/pr-collaboration-plan.md)。

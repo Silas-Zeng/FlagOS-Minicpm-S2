@@ -1,5 +1,28 @@
 # 子智能体工作与 API 接续索引
 
+**当前收尾（2026-10-22 13:40，北京时间）：** 045818及051336 Event门均已完成，正确性通过但没有等待CPU收益，原件/负结论/registry117与queue90全部保存；不再启动新GPU或研究。framework完成CPU metadata与async token两份受测源码及中文PR包，hardware完成连续/二维KV工具两份包与完整tree独立核验，systems完成双向组合冲突定位及最小解决。root已创建四个中文Draft PR #1—#4，均未合并；详细链接和精确身份见[协作安排](pr-collaboration-plan.md)、[创建回执](pr-preparation/publication-receipt.json)和[组合说明](pr-preparation/combination-review.md)。三名agent均保留独占handoff，本轮进入实验仓库发布收尾；不能从下方历史条目重复旧任务。
+
+
+**当前分工（2026-10-22 12:52，北京时间）：** 主线由root依据实际瓶颈选择，社区改法优先、论文作启发，单卡串行测试与CPU资料/实现并行。035754及042225已完成。044741纯CPU实际源码取证41ba9a3b和缓存补件e55d45a4发现blocking可能被Corex事件缓存分支丢弃；旧profile输入准备等待仅8.08µs/步，不直接据此排服务。当前hardware写最短三路Event设备门、systems写复用outer、framework互审actual契约及gate；root负责唯一SSH/GPU，尚未启动新门。CURRENT记录主线、具体源身份及后续真实状态；各owner继续独占handoff，暂不GitHub写入。
+
+**真实42层收口（2026-10-22 12:40，北京时间）：** 042225完整通过，systems唯一实际审计d7213a76、registry115/queue88已完成；原件tgz711da3fc本地齐。新SAVE42层210次提交、源free前966次c95f全字节对照、原FULL及回读各2772次、consumer16/32-0与清理均过，230.83秒仅诊断。root已纠正single_victim含义：限制单并发host slot，DROP后可复用，当前短轮一次SAVE不等于每Engine总次数上限。framework五项近期论文81388594已完成；hardware正在收口社区实现四项，优先blocking device Event对6CPU的适配，systems只准备最小CPU源码取证，暂无新GPU任务或新运行候选。后继不自动大测；所有适配反证、前稿与审阅均保留。
+
+**当前阶段（2026-10-22 12:22，北京时间）：** root唯一GPU已启动042225真实42层SAVE/FULL门，runner262136，cd3d/df6a/a662+818e/0a4d/9e33、实际420源，具体生命周期见CURRENT。systems独占该轮完整后验，framework/hardware已完成worker及包装交叉审，转用户新授权的近期论文和开源社区机制研究，独占`recent-papers-framework-research.md`/`community-framework-research.md`；只CPU/web、无新runtime或GPU。用户明确“确定收益可以不用大测试”，必要当前42层正确性后不自动大官方或重复长pair。035754系统/硬件报告已分别完成，不重复微门。
+
+**当前阶段（2026-10-22 12:04，北京时间）：** 035754唯一三路短门exit0、全byte/RNG/后态通过且原件已本地；六个64call窗口均未记录节流，wall原c95f约0.683–0.690ms、C-linear约0.655ms、C2D约0.631ms。systems独占实际完整验收与登记、hardware独占计时解释，不重复整套审计。framework开始从原5d9a独立副本仅换SAVE并加VERIFY1源释放前42层独立回读，hardware随后审delta，systems准备沿FULL416的独立420源/原long包装；root唯一SSH/GPU，当前无GPU任务。暂不push/PR；精准源身份及下一操作读CURRENT顶端，各owner继续中文独占报告与handoff。
+
+**032653收尾（2026-10-22 11:49，北京时间）：** systems唯一实审eff329通过，registry113/queue86实际完成；综合报告为`analysis/2026-10-22-kv-pitched-copy-032653-result.md`（a6b88bf2），hardware专项及下一64call固定三路方案为`analysis/2026-10-22-kv-pitched-copy-032653-hardware.md`（7f93aab5）。报告重名曾覆盖正文，已将硬件原稿按原SHA完整恢复至独占路径，原件/JSON不变。framework的574515e9给后继真实42层VERIFY1合并门边界；当前无新worker/新GPU，全部owner已停写供本地检查点。
+
+**当前结果（2026-10-22 11:32，北京时间）：** root已完成唯一032653短设备门，两实际页序完整byte/offset guard/输入/RNG/显式stream通过，实际每层37→11与26→6提交，编译so9e33ecbf、原件tgz2ba3856f本地齐。单层event约0.6526→0.6282ms，wall基线7.415/1.454ms波动，不能作稳定收益或E2E；整门CPU56线程/6quota、54/134period节流仅为整体观察。systems唯一实审/登记，hardware专项解释与最短后继建议，framework只读SAVE接入边界，当前无GPU或新worker。详细设备状态与下一决策见CURRENT。
+
+**当前阶段（2026-10-22 11:03，北京时间）：** 上一完整阶段已固定本地36510ed6，无GitHub写入。唯一后继为保全部KV的正等差二维SAVE复制：framework新独立planner/头文件编译桥，hardware最短一层实际数组字节/stream/guard和小ABBA门，systems包装单卡生命周期。root保存真实ABI原件030314，并独占SSH/GPU；当前尚无新GPU任务或收益。暂不接worker/服务、不叠新victim、不重跑旧三轮。各agent继续写中文handoff，具体源与设备状态以CURRENT为准。
+
+**当前阶段（2026-10-22 10:45，北京时间）：** 015315/020721/021658三轮全部结束，registry112/queue85，当前GPU空闲。framework完成真实机制和共同418包装，并保存短前缀/WAITING容量反证；systems完成每轮唯一实际验收及中文分层记录，A/B容量失配收益null；hardware独立核三轮真实几何/内存分项，目前研究保完整KV的等差页二维复制。root另存真实DB变化、5秒资源窗口及Corex实际导出/ABI声明原件。下一不追容量、不重跑三轮、不先做WAITING纯观察，先判断二维复制的最短可证伪门。用户暂由自己稍后处理GitHub，故本阶段仅本地保存，无push/PR；精确最新检查点见CURRENT。
+
+**最新结果（2026-10-22 10:06，北京时间）：** 015315已完整通过单次进展选择/FULL42层字节/原消费者门，systems唯一b7ff报告f776f89b，framework与hardware分别独立读取实际核心链和几何；registry110/queue84。动态R16928/1058页、SAVE37段、FULL65段、原消费9个scheduled token；DB新增4表134行，238.58秒仅诊断。root补真实SQLite差异，硬件专项发现源末34页仅3.21%字节却占91.89%SAVE调用，为后续研究依据。当前准备原FULL与新策略共同6a的首个VERIFY0性能对照，未有性能收益。用户最新要求先做实验、稍后自行处理GitHub，当前暂不推送/PR，继续中文本地留痕。
+
+**当前阶段（2026-10-22 09:58，北京时间）：** 新单次进展victim已由framework实现为72942独立FULL副本、唯一CPU合同通过，hardware跨职责审阅，systems准备bbb49/1f8独立417源包装及b7ff后验入口。root唯一GPU运行015315，已实际选中confirmed552/R16928请求，原tail为327，SAVE及恢复发布已出现，最终消费者/32-0/全源DB后态仍待；不提前宣称机制全部通过或收益。后继性能建议见[最短对照](../analysis/2026-10-22-progress-victim-performance-plan.md)。三agent中间稿/Windows路径审计修订/源身份/研究边界已各自落盘；最新发布仍c20ce8f0、完整ZIP仍232735，尚不含本阶段。精确设备状态以CURRENT顶端及真实原件为准。
+
 **当前收口（2026-10-22 07:16，北京时间）：** 共同观察器的两组capacity/FULL配对及独立抢占快照共五轮已全部结束。两组TPS小正信号约0.1988%/0.0603%分层保存，不跨KV均值，不继续重复；230548由framework唯一6eb45实审通过，真实31running/进度327–569/free0需1。hardware独立读真实页/请求与候选边界，systems登记109/83并保存实际输入生成源码及非tail撤销语义，三agent全部结果/中间失败/旧未部署版本/最短后继设计均留痕。新victim策略尚未实现，观察耗时不是收益。root独占设备当前空闲，正统一发布与完整ZIP；各agent临时停写为一致检查点，持续goal有效。精确最新远端/ZIP身份和覆盖以CURRENT顶端完成回执为准。
 
 **当前阶段（2026-10-22 07:00，北京时间）：** 首组共同6a观察器capacity/FULL可比KV521840，单次TPS约+0.20%，原件/中文分析已发布专用实验库111910c8。仅进行一组复核：A2 KV521936完整通过，B2在途，独立组内比较、不跨容量混均值；完成后结束本项重复。framework负责新首次分配失败的全running快照及后验审计，hardware独立核硬件/进度解释和代码生命周期，systems负责唯一c0实审/分层登记及真实输入生成源码。root独占SSH/GPU，源码仓不推送。新快照尚未部署：互审发现general plugin可能早于AsyncScheduler自然加载，正在最小延迟到首次Core step验证，旧d38/429/78e仅未部署记录。完整最新状态/发布与ZIP精确边界以CURRENT顶端为准，下面为保留历史。

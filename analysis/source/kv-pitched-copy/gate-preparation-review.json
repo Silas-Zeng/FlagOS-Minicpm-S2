@@ -1,0 +1,49 @@
+{
+  "kind": "单层设备门本地准备与硬件owner只读交叉审，非设备结果",
+  "created_utc": "2026-10-22T03:27:29.967174+00:00",
+  "sha256": {
+    "scripts/remote/validate_kv_pitched_copy.py": "c8c0f64e7293634a28949f4338800298b43d32daa7cbd866e64dcd59833d7dc6",
+    "scripts/remote/launch_kv_pitched_copy_gate.py": "3ffe8efe643a5c280a85217299bcb0adb6349c66f499659d2de9b5167dcce7da",
+    "patches/framework/candidates/biv150_kv_pitched_copy.py": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd",
+    "patches/framework/candidates/biv150_kv_pitched_bridge.cpp": "0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44",
+    "tests/test_biv150_kv_pitched_copy.py": "1d470f21163c71de62e2bcc25f4aaa1c0c2954f391fcc99287a9828fb0d3554d",
+    "analysis/source/kv-pitched-copy/planner-cpu-check.json": "1ec3bd2f93e91a4951f0ddb714f1feab63f030022fea09f8265bfc1fc319c1d9",
+    "analysis/2026-10-22-kv-pitched-copy-gate.md": "80c00d047c0c4da0612578f149c37b192206f5f4d76fe653a614e09a70a8ab13"
+  },
+  "gate_CPU_checks": {
+    "compile_source": "pass",
+    "runpy_import_without_torch": "pass",
+    "help": "exit0",
+    "planner_contract_rerun_by_hardware_owner": false,
+    "SDK_compilation_or_CDLL_or_GPU": false
+  },
+  "runtime_cpp_review": {
+    "full_source_read": true,
+    "scope": "actual SDK typed API; descriptor72; full prevalidation; maxpitch fallback before submit; one native batch; no ACK until caller event; strong tensor refs",
+    "blocking_findings": [],
+    "planner_contract_read_only": "1test0.013s owner exit0, not native correctness"
+  },
+  "outer_review": {
+    "full_source_read": true,
+    "actual_sha256": "3ffe8efe643a5c280a85217299bcb0adb6349c66f499659d2de9b5167dcce7da",
+    "last_change_only_three_pins_reverse_sha256": "c130e2281570d71176e7678e3cefc4fa52bc63d744c192011f004ac894586321",
+    "lock": "one outer flock, no gate lock",
+    "lifecycle": "double idle, SDK compile and link identity, single300s process group, targeted cleanup, DBpost/sourcefullhash/seal",
+    "blocking_findings": []
+  },
+  "interpretation": [
+    "C batch + 2D combined candidate, cannot attribute all timing to 2D",
+    "c95f counts copy_ calls; candidate counts successful native API submissions; neither is DMA descriptor count",
+    "plan and ctypes descriptor prep excluded and separately reported; submit checks plus same-stream completion included",
+    "all device outcomes pending root sole GPU owner",
+    "no worker/service integration/accuracy/E2E claim"
+  ],
+  "framework_gate_cross_review": {
+    "gate_sha256": "c8c0f64e7293634a28949f4338800298b43d32daa7cbd866e64dcd59833d7dc6",
+    "received_utc": "2026-10-22T03:28:29.912832+00:00",
+    "full_source_read": true,
+    "blocking_findings": [],
+    "no_execution": true,
+    "coverage": "same nonzero stream producer/nativehandle/event before c95f; CPU page+offset oracle/full bytes/source and guards; lifetime and partial error; two cases then 8call ABBA; prepare separately reported"
+  }
+}

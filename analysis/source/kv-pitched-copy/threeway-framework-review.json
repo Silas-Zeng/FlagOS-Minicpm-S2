@@ -1,0 +1,29 @@
+{
+  "status": "static_cross_owner_review_no_blocker_for_single_threeway_gate",
+  "scope": "本owner仅只读diff/源hash及外层三行逆换，无设备或SDK编译，无新旧合同/suite执行",
+  "sha256": {
+    "scripts/remote/validate_kv_pitched_threeway.py": "9b16aec69ecc6e2bf59de7fd0f323ae543a1a32eda15486aa294e2f49c645dd9",
+    "scripts/remote/launch_kv_pitched_threeway_gate.py": "b2c65963f621f83b0d093353e7135b3434d4c49bb9402c05bb2a3363aa6f5a88",
+    "parent_gate": "c8c0f64e7293634a28949f4338800298b43d32daa7cbd866e64dcd59833d7dc6",
+    "parent_outer": "3ffe8efe643a5c280a85217299bcb0adb6349c66f499659d2de9b5167dcce7da",
+    "runtime_unchanged": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd",
+    "cpp_unchanged": "0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44"
+  },
+  "outer_three_line_reverse_byte_exact": true,
+  "reviewed": [
+    "两实际map新增独立C-linear pinned host与PreparedSave，首异步提交前同fixture强持",
+    "C-linear仅prepare(max_pitch=PAGE)受控展开，Bridge仍查询真实maxpitch；不是设备能力不足实证或SDK错误后fallback",
+    "新增37/26个linear且0pitched计数与独立CPU页offset/c95f全字节/双guard比较，原C2D紧接同流producer的验证顺序保持",
+    "唯一首case64call A/B/C/C/B/A，三路预热和全部event提前record/sync；三路post byte/guard/source检查齐",
+    "每窗v1cpu.stat/quota/period读取分别在wall开始前和end.synchronize+wall结束后，process_time_ns另列；不设置线程/额度或加sleep",
+    "原非0流/nativehandle一致、完成event、异常全device settle/不settle保引用及禁止重试均保留",
+    "外层仅gate文件名和固定pin、两处run后缀三行变化；反向恢复与3ffe逐byte相同，原单锁/ABI编译/bridgeSHA/唯一child/清理与封存不变"
+  ],
+  "limits": [
+    "尚无本门实际结果；只有root可唯一串行运行，不能预写通过或收益",
+    "A/B为Torch方法与C batch组合控制，B/C为同桥linear与2D组合，不当纯DMA或42层/E2E收益",
+    "累计节流计数与process CPU时间不换算为精确wall损失；有波动或节流保留不确定，不自动重复",
+    "本轮不实现worker，不修改既有运行资产或R/victim/服务参数"
+  ],
+  "next": "root部署9b16/b2c6并仅运行一次固定64call三路门，封存后由指定owner实际审计"
+}

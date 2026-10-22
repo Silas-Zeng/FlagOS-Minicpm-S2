@@ -4,9 +4,11 @@
 
 **用户于2026-10-21 16:40Z授权继续自主探索，覆盖此前冻结。** 大收益优先，小收益也用最短上卡门验证并保留，噪声标待确认，不设最低百分比；正确性失败不启用，但代码和负结果保存。所有设备任务仍由root单卡串行拥有。新门50–63已封存；async/metadata各自同KV单次+0.703657%/+0.286723%保留，CTA第一服务pair描述+1.745903%但KV池差96、同物理32GiB，不称KV严格匹配或默认资格。181041 terminal0，不实现drain；后继单victim保存/恢复及私有页排序已诊断通过，0e不回读205219/205819配对KV+DB双失配，不报收益。归档写锁已解除，capacity212106真实462快拒及42层回读/原16token消费通过；FULL三独立副本及唯一CPU合同已双终审，新包装仅静态检查且hardware终审无阻断，FULL214400已由2071实际验收pass，真实FULL/0ZERO/42回读/原消费完成，仅VERIFY1诊断。213016基点KV521936、已完成213616候选KV521840容量失配；双方DB前后51919340同，FULL214400已真实验收通过；后继由root串行；不混VERIFY诊断收益。本agent不擅自设备。
 
-本批215849/220122两次startup已独立验收，全部实际内存分项相同、KV均521936，未复现历史6块，不报gain/倒补原因。**root已完成一致发布/ZIP并解除写锁；现准备capacity-vs-FULL共同6a/VERIFY0新包装，尚未运行，不追加盲目boot。设备仍root单卡串行。**
+本批215849/220122两次startup已独立验收，全部实际内存分项相同、KV均521936，未复现历史6块，不报gain/倒补原因。后继共同6a两组VERIFY0已完整结束（81/82），小TPS信号分别+0.1988%/+0.0603%分层保留，本项不再重复；230548真实snapshot已完成（83）。**root完成232735一致ZIP并解锁，当前唯一新候选为84进展victim/FULL一次VERIFY1机制门：015315机制已真实通过，DB增长不报gain；已授权首个同6a/VERIFY0性能A/B见85，A原FULL在途；不叠c6/新timer、不自动增加smoke或重复pair。设备仍root单卡串行。**
 
 稳定原版官方`20261021T122607Z-original-baseline`已16:14:50.001906Z以exit0完成，8raw/2summary及225源SHA、最终bab2本地独立终审通过。原2–4轮分档totalTPS候选/原版4K1.933207729倍、16K3.166027317倍；初始DB不同、KV差96tokens，不合成总分或声称cache-matched因果稳定；新诊断不覆盖这两份正式原件。三个private协作仓库已由root完整上传核验：`Silas-Zeng/FlagOS-S2-vllm-plugin-FL`、`Silas-Zeng/FlagGems`、`Silas-Zeng/FlagOS-S2-Minicpm-throughput`。原公开fork保留，外部消息仍不由本agent发送。
+
+**最新2026-10-22：85的A/B已完整收口，KV/启动项失配，收益null且不追加盲复跑。后继86的032653实际独立API门已完整验收：两case字节/流/guard/RNG通过，wall波动不能报稳定收益；原件与编译/DB/后态齐，不启动服务。**
 
 下表按历史证据记录，不是待执行任务单。标为设备的任务必须单卡串行；旧阶段“待测”在后续行解决时，以后续证据及CURRENT为准。
 
@@ -107,6 +109,20 @@
 | 82 | A2/B2已完整验收，本项重复结束 | 设备 | 唯一必要A2/B2复核，同冻结源码和参数 | 224411 capacity e52a→225501 FULL 62b0，本agent各唯一c0 pass；两侧418/KV521936/启动分项/DB四端51919340三hash/原args与环境/R16704-P1044-718405632B-SAVE1008-目的66-fast454-consumer8同，218.847904625→218.716006502s，TPS+0.060305656%/耗时省0.060269311%（0.131898123s）/TTFT+0.207191537%。FULL2772/0ZERO/真ACK/runner6/host释放，VERIFY0无回读，post23:01:06Z源与idle过/ERROR空/WARN留。首组521840分开不混均值；小正TPS与TTFT负向均保留，按预定结束重复，不追容量不择最好，非稳定因果/accuracy。 |
 
 | 83 | 首次真实snapshot已完整验收，无新策略 | 设备 | 230548抢占瞬间CPU只观察 | framework唯一6eb45/06c16d26全审，本agent只读登记；413/32-0/220.418993s仅诊断/KV521936/DB51919340三SHA同/后态23:11:57Z68-0双栈闭。Engine240315真实completeTrue：31running prompt16384/output327..569/free0派生需1/queued1，最小remaining455为已scheduled index0，原tail327/rem697/1045私有页中1044hashed。结构候选含原tail，不选评分/不改victim，不把free等同全前缀重算，不承诺FCFS公平或收益；shutdown ERROR/WARN保留。后继只留中文最小路线，root决定controller/设备。 |
+
+| 84 | 机制真实通过，DB增长不报gain | 设备 | 015315唯一进展victim/FULL VERIFY1门 | 唯一b7ff全审f776f89b；真实28候选选原index2/output552不同于tail30/output327，单次主动替换/原preempt0→1；SAVE-FULL-DROP同rid，R16928/P1058/728039424B/SAVE37run1554/目的65/FULL与42回读2730/0ZERO/fast454/runner6/consumer9/host释放。417/live/32-0/238.576937023s仅诊断/KV521936/CPU6/32GiB；DB51919340→52319474(+4表134行)，三SHA全变不报性能，01:59:22Z68-0双栈闭/ERROR空/WARN留。下一性能包装等root正式指令，不自动重复；最新用户暂不发布/PR，不为发布停写。 |
+
+| 85 | A/B完整完成，KV与启动项失配，收益null | 设备 | 首个FULL1aff/进展72942共同6a VERIFY0性能A/B | A020721 218.399598237s/KV521936；B021658唯一3f1/90f3c896 pass，218.513384285s/KV521840，nonTorch+4MiB但不归因。两侧418/32-0/原args环境/DB四端52319474三SHAdc2c-0dc7-c05d同，environment_matchfalse，TPS/duration/TTFT收益均null。B实际9候选选index21/output392不同tail30/output319、failed20；R16768-P1048/SAVE26段1092/目的66-FULL2772/0ZERO/fast462/consumer9/host释放，无回读，原preempt0→1，02:22:42Z源live/idle过/ERROR空/WARN留。动态策略行为允许不同，本首对结束不追加盲复跑/第三run，不追容量、不算raw时差gain，后续等root决定。 |
+
+| 86 | 已完成，真实API字节通过，wall不稳定 | 独立API设备门 | 032653单层两真实SAVE页序，C batch与正pitch | 唯一原件审计eff32911：86seal/7源/实际SDK编译so9e33及mappedlibd39d；两map18checks+计后5+RNG/独立CPU payloadSHA全过，37→11和26→6calls（全部原KV字节保留）。首case8call ABBA wall基线7.4153/1.4542 vs候选0.6723/0.6819ms，event基线约0.6525 vs候选约0.6282ms，仅组合单层信号；不报稳定wall收益/独立2D贡献/42层服务/E2E。DB52319474三SHA同，CPU6/56Torch线程/host20GiB观察非峰值；03:27:06Z68-0双栈闭/source不变。registry113，首本地Path URI修正留痕非设备失败，不重跑。 |
+
+| 87 | 已完成，三路真实字节通过且六窗无节流增长 | 独立API设备门 | 035754唯一64call c95f/C-linear/C2D镜像门 | 实际系统审计9d0bcd7b：86seal/7源/编译so9e33/ABI及maps/同非0流/DB和后态全过，两map30checks+计后7+RNG/CPU payloadSHA同。A37/26、B37/26linear（受控fallback9/4）、C11/6调用；首case64call A/B/C/C/B/A wall0.682748/0.655124/0.631449/0.631231/0.654983/0.689953ms，event及逐窗v1原值另存，六窗nr_throttled/throttled_time增量0；不追溯032653原因、不报稳定服务/E2E。CPU6/56线程不改、DB52319474三SHA同、03:58:09Z68-0双栈闭/源不变。registry114，本门不自动重复。 |
+
+| 88 | 已完成，真实SAVE与FULL两组42层字节通过 | 真实服务机制门 | 042225新SAVE a662接入原FULL420树 | 唯一后验d7213a76：420/cd3d-df6a/a662-818e-0a4d-SO9e33/原1aff84be791ce155与原bc51long VERIFY1均核。实际R16688-P1043-717717504B/23run→5segments每层，SAVE210=168linear+42pitched（旧966），源free前42c95f966calls全bytespass；原FULL66run2772及独立42回读2772pass，0ZERO/serial123/DROP/runner6/原consumer16/fast462/host释放。32-0/230.825783s仅诊断/KV521840/CPU6/32GiB/DB52319474三SHA同，04:29:03Z68-0双栈闭/源live过，ERROR空/WARN留；registry115，不报收益/accuracy，不自动大官方或重复长pair。 |
+
+| 89 | 已完成，Event完成性通过，typedblocking无CPU下降信号 | 独立API门 | 045818 generic/typed/typedblocking ABCCBA | 唯一系统审计b21fb342：61seal/source2/实际源pin/DB及post过；24trial×6=144checks/RNGtrue、early0。每trial8次32MiB，wait-threadCPU三路均约9.44ms，typedblocking未见下降；首C wall较低伴threadCPU/wall异常原样留，不报gain。六窗节流增量0，DB52319474三SHA同/04:58:26Z68-0双栈闭/源码不变。registry116，下一仅已授权nativeSDK差异门，完成手头即转GitHub维护，不新服务/大测试。 |
+
+| 90 | 最后手头门已完成，native无CPU下降，不接服务 | 独立API门 | 051336 generic/typedblocking/directCorexblocking | 唯一系统审计365e6760：85seal/source5/actualSDK编译so1376/flags3/mapsd39、24trial144checks/RNG/settled-close全部过；native threadCPU两窗9.4344/9.4364ms≈wall9.4194/9.4210ms，无低CPU证据。early0、六窗节流增量0，DB52319474三SHA同/05:13:44Z68-0双栈闭/源码不变。首次SCP未退出时文件锁仅收集时序，完整exit0解包后全核，非设备失败。registry117，按用户完成手头后只维护GitHub/方法PR，不新实验/服务/大测试。 |
 
 ## 执行边界
 

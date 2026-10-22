@@ -1,5 +1,159 @@
 # 当前工作与 API 切换交接
 
+## 四个中文 Draft PR 已创建，完成实验后转 GitHub 协作（2026-10-22 05:40 UTC）
+
+当前按用户最新安排完成手头工作并维护 GitHub，不启动新研究、服务或 GPU 实验。最后原生 Event 门 `20261022T051336Z-native-event-wait-gate` 已于05:13:44Z结束；24 trial 的144项检查和 RNG 通过，但原生 BlockingSync 也没有降低等待 CPU，停止该路线。全部 run/control/tgz、85项封存校验与唯一系统验收已保存；registry117、queue90完成。最后封存后态为68MiB/0%、无GPU进程、9031双栈关闭。
+
+框架专用私有库已建立四项独立中文 Draft PR：[CPU metadata #1](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/1)、[async token #2](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/2)、[连续页复制 #3](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/3)、[二维 SAVE #4](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/4)。共同 base 为 `d5e2e3a54b48dcb1b50f575d2420979591fb3e1c`；四棵远端 tree 均与本地预期逐字节相符，尚未合并。完整 branch/head/tree、中文正文和创建回执在 `docs/pr-preparation/publication-receipt.json`。
+
+两个 CPU 方法实做双向合并，仅同位置两条 helper import 冲突；同时保留后，两方法体逐字节等于各自受测版本，逆撤可精确回单方法或基线。解决补丁与命令见 `docs/pr-preparation/combination-review.md`。这是静态组合证据，组合性能与准确率未验证。两项 KV 工具无代码依赖，可任意顺序评审；默认服务未接入。
+
+当前 main 是此前一次包含多个优化的完整源码快照，不是多个方法 PR 已合并；详见 `docs/current-version-composition.md`。本轮不重复提交 main 已有方法，不为负收益 Event 或没有新代码的 FlagGems 制造 PR。实验库按 BI-V150 / C500 分平台，代码库按方法协作。PR、我们新增的 README 和文档保持中文，英文专有名词保留。
+
+三名子智能体的交接、失败记录、精确源码、原始数据和组合材料均已落盘。本轮实验库完整发布由 root 收尾，最终发布身份见 `docs/github-publications/20261022-pr-maintenance.json`；下方是保留的历史状态，不应据此重启已经结束的实验。
+
+
+## Event首轮已上卡收口，准备原生标志短对照（2026-10-22 05:05 UTC）
+
+- 既有KV两轮与研究已固定本地提交 `962600300614ea044b239da1be3f192e7ce059ec`；当前无GitHub写入。新增Event门 `20261022T045818Z-event-wait-gate` 04:58:18Z启动，controller265271/worker265278，04:58:26Z exit0；24trial全部完成/字节/guard/source/RNG通过，source不变，DB与后态由systems做唯一实际终审登记。
+- 被测A generic default / B typed default / C typed blocking的thread CPU均约9.44ms，普通wall约9.43ms；六窗无CPU节流增长，所有wait前query皆未完成。C首窗第1trial wall6.476919ms但threadCPU9.482466ms，其余接近9.43ms；此单点时钟范围异常不作加速。**typed blocking在此实际安装与负载没有减少等待CPU，不接入服务、不排服务长pair。** 原件详列计时范围，不把设备复制完成变快归因blocking。
+- 全run/control/tgz本地齐，tgz1843997B SHA `30da2ff8c5d0b82fb43e7c8cdba1767a4e5f6d0562d650fa9565fde1af70a148`；远端/本地61seal项完全一致。首次本地JSON读取遗漏encoding导致GBK解码异常，改用UTF-8后通过；不改原件、不重跑设备。04:58:26Z后态68MiB/0%、无GPU进程、9031双栈关闭。
+- 为直接区分Torch事件缓存与Corex实际能力，下一只准备一个有机制差异的短对照：A generic default / B typed blocking / C以实际SDK创建BlockingSync|DisableTiming的原生Event，仍原6窗24trial。framework写最小C ABI桥+adapter，hardware最小fork gate并互审，systems收本轮后复用编译outer，root唯一SSH/GPU。只改独立门，不服务、不绕IPC、不关闭全局缓存；原生flag仍无CPU收益即结束这条路线，不继续重复样本。
+
+## 主线与单卡安排（2026-10-22 04:52 UTC）
+
+- 用户明确：社区实现优先，论文只作启发；由root围绕本站实际瓶颈保持优化主线，合理安排卡做测试和比较。当前主线是CPU/设备交互、KV搬运与调度浪费；先可归属证据，再最小实现和最短设备对照，保留大小收益及失败。资料查阅与代码准备在CPU并行，GPU实验只串行；不为保持卡忙而重复无信息量的测试，不自动追加大测。
+- 035754三路复制门与042225真实42层SAVE/FULL均完成，registry115/queue88已收口、全原件本地齐。SAVE实现a662保留，VERIFY1服务时间不作性能收益；slot单并发可复用的纠正见下。当前正在准备下一Event短门，尚未启动新GPU作业。
+- 社区四项报告已完成：`analysis/2026-10-22-community-framework-research.md` SHA `1c06e223d06e6ff4e3c7e50d5df13bd635a8c618b1eeaf717d894679f4727971`；五项论文报告SHA81388594保留为启发和反证。当前不扩新调度/特化候选。
+- 已执行一次纯CPU实际Event取证：`experiments/source-audits/20261022T044741Z-event-wait-contract/result.json` SHA `41ba9a3bcc40ef826ac9fa350be134aa66a86a4e3cab4aa5c9234624c3bfe5eb`，补件`cache-supplement.json` SHA `e55d45a4a9a61358f06e36bcd5e92ed0e3c955355b47a3171a7d416619fc4fc2`，均远端/本地一致。缺两个Python binding cpp及缓存cpp，不能当语义通过。实际Corex Torch缓存分支`acquire(bool timing)`未传blocking，是否实际启用及等待CPU收益仍需设备证据。
+- hardware重新核旧061506 caller：输入准备事件8次仅64.628µs，输出事件8次157.091821ms；旧SQL长开销可能掩盖当前等待，但不支持直接为758改法排服务。root改为最短独立三路Event实测：A generic default / B typed default / C typed blocking，A/B/C/C/B/A同负载比较thread/process CPU、wall、event完成和全部字节。hardware写gate，systems复用单卡outer，framework互审，root唯一SSH/GPU；当前只准备，不将旧等待时间冒作忙等或新收益。
+- 本轮继续本地中文记录和Git检查点，按用户最新安排暂不push/PR。下方条目是历史阶段，当前状态以本节和后续实际原件为准。
+
+## 真实42层完整门已通过，转社区框架研究（2026-10-22 04:34 UTC）
+
+- `042225-kv-pitched-save-context16k-long`已exit0，04:27:41.433901Z结束；32成功/0失败，230.82578303013秒只属VERIFY1诊断，KV521840。唯一systems实际审计 `analysis/source/kv-pitched-copy/042225-system-review.json` SHA `d7213a76ff17d4a9fe46e031b2fe52ca8dfd72cf9e57e499f25fed7d3b3ad334` 通过，registry115/queue88收口中。
+- 真实R16688/1043页/717717504B；SAVE原23连续runs→5segments每层，42层实际210调用=168线性+42二维，无pitch回退。实际服务stream0；SAVE完成且源free前，原c95f966次回读全部42层字节对新host通过；随后同对象原FULL66目的run/2772次复制及2772次独立回读全部通过，0ZERO，serial1/2/3，DROP释放host、runner六项、原消费者16个scheduled tokens通过。未继承旧accuracy，未将诊断耗时当净收益。
+- 420源/control/live及installed54c不变，CPU6/32GiB，DB523表19474行三SHA dc2c/0dc7/c05d前后同；04:29:03.163250Z后态68MiB/0%、无GPU进程、9031双栈关闭。全原件已本地，tgz2616151B，SHA `711da3fc175f85f0678f56dbf3ae266d27af9757ce281e804834776ec6b08ab2`，在`experiments/framework/`永久保留；当前无GPU任务，不自动追加大测。
+- **复用范围纠正：** 原FULL1aff `_drop`会令`state["victim"]=None`，其`_wrap_preempt`没有每Engine总SAVE次数限制；single_victim指同时一个host slot。已测32请求短轮只有一次SAVE，不应写成“每Engine只能SAVE一次”。72942限制的是主动victim替换尝试。更长多批负载可复用槽位、累计复制改善是机制推论，尚未实测；原源与运行结果无需修订。
+- framework已保存5项近期论文及作者代码研究`analysis/2026-10-22-recent-papers-framework-research.md`（81388594…），包含最新2026-10-20 SIC v3及P-PAS实际2048端点/原patch边界。hardware社区报告正在收口，优先发现actual e155的事件等待与6CPU配额、以及54c的num_seqs编译特化两条可迁移方向。root倾向下一只核Corex真实blocking device Event语义及最短成本门，不叠新调度或kernel特化；当前尚未实现新候选。
+
+## 真实42层SAVE唯一上卡在途（2026-10-22 04:22 UTC）
+
+- 已启动 `20261022T042225Z-kv-pitched-save-context16k-long`，runner PID262136，source `/workspace/experiments/minicpm-s2/code/kv-pitched-save-20261022T042225Z`；root独占SSH/GPU和清理责任。新builder `cd3d5c2874f487f8115329d573cb5202f893ab46c89cf31764e9757decaf0209` / launcher `df6a4c9e095bb25900e54c22adf56b0d1674b6a57c1b9476b55977a826a7b819` / worker `a662e478d20884c5b1d65e0ee3d270a62453d88166b28e092dcaf3b35a3df854` 已三owner静态互审与远端SHA/语法核；原runtime818e/cpp0a4d/已编译SO9e33保持。实际FULL416→420构建及双idle/DB-before门通过，等待真实SAVE与结束原件。
+- 原1aff协议/84be事务/init791c/e155、bc51 context-long/seed721201/原SERVER不变，VERIFY1；不叠72942或6a。此轮补SAVE源free前42层c95f独立字节对照，再走原FULL42层回读/consumer/DROP，属于必要正确性而非性能或准确率结果。禁止并发GPU或自动追加大测；后继按用户最新最短验证尺度决定。
+- systems负责当前唯一完整后验/registry及queue88在途。用户又明确要求更多最新社区与论文研究：hardware转独占`analysis/2026-10-22-community-framework-research.md`，framework转独占`analysis/2026-10-22-recent-papers-framework-research.md`，均只web/CPU、不改runtime、不碰GPU，要求一手来源/日期、适配与最短可证伪方案，框架层优先。
+- 035754已完成systems唯一全审9d0bcd7b、hardware专项e521ecff，registry114/queue87收口。新worker首稿4f1唯一CPU合同0.122s/exit0，终版a662仅将同库映射去重后hash一次，旧稿与真实测试身份留档；最终小delta已终审，未重复套件。源与本地报告均保留，GitHub仍按用户安排暂不推送。
+
+## 最新验证尺度（用户2026-10-22继续指导）
+
+用户问“小测试收益一点点，大测试收益很多是否可能”，随后明确：**“确定的收益可以不用大测试，你把握好。”** 短测试能证明的局部收益按其范围保留，不为每个小改动自动排完整官方大测或重复长pair。调度、KV容量门槛、抢占重算和高并发等待可能只在代表性负载触发，因此不能仅因孤立微门收益小而淘汰；反过来，也不能把局部加速直接声称整轮收益。扩大验证仅用于短测无法覆盖的机制、结果矛盾或最终提交门槛。当前a662 SAVE接入的真实42层VERIFY1是必要正确性门，继续完成；其后先判断最短可比成本证据，不自动排大测试。
+
+研究依据：[vLLM官方优化说明](https://docs.vllm.ai/en/stable/configuration/optimization/)于本轮读取，说明KV不足导致抢占重算、prefill/decode混批影响利用率、CPU调度不足影响吞吐。上述“小改动跨负载门槛可能放大收益”是机制推论，未声称本站已有此幅度收益；本文引用仅指导研究，不修改冻结框架、官方脚本或服务参数。当前二维SAVE不减少KV容量、已测32请求轮实际只有一次SAVE，其端到端收益预期较小，仍保留实测小收益和完整成本证据。single_victim是单并发host slot且可复用，并非每Engine总次数限制，详见上方纠正。
+
+## 三路短门已完成，进入真实42层SAVE接入（2026-10-22 04:04 UTC）
+
+- 唯一新GPU门 `20261022T035754Z-kv-pitched-threeway-gate` 已exit0；controller260580/worker260602，03:58:09.190532Z结束。两真实页序各15项完整byte/offset guard/source/计数检查、计时后7项及CPU/GPU RNG全通过；source不变，DB523表19474行三SHA前后同，03:58:09Z空闲后态68MiB/0%/无GPU进程/9031双栈关闭。当前无GPU作业。
+- 固定64call A/B/C/C/B/A的wall依次0.6827483885、0.6551237966、0.6314494240、0.6312305632、0.6549833852、0.6899530563ms；六窗nr_throttled和throttled_time增量均0。C同桥二维比B同桥线性有小正信号，单层/重复提交不等于42层SAVE或E2E；plan、descriptor与首次库加载不在微计时内，真实接入须计其完整成本。B控制性max_pitch=PAGE导致的拆段不表示真实硬件能力失败。
+- 全部run/control和tgz已本地；tgz1862094B，SHA `fa80a90332005eda7cc77862c82c85876a27ee9e10692456409b7abf909b4bbd`，远端/本地86个seal项逐byte核过。SCP退出0后才解包。systems正在唯一全证据审计及registry/queue收口；hardware独占035754计时专项，报告名均含owner避免覆盖。
+- 下一直接从5d9a独立副本实现SAVE接入，不再重复微门：原FULL1aff/txn84be及其他传输保留，PreparedSave/Bridge由slot强持且首次真实SAVE才加载；VERIFY1源释放前复用原单层verify_buffer逐层以c95f核42层SAVE，再做原FULL恢复回读及真实消费。framework实施，hardware审delta，systems从已验证FULL416包装构造独立420源与原long一次VERIFY1；root唯一SSH/GPU。当前该新worker/部署仍在准备，尚未上卡，不继承旧accuracy或声称端到端收益。
+- 用户最新安排暂由自己处理GitHub；继续本地中文证据与检查点，当前不push/PR，旧远端c20ce8f0与232735完整ZIP均不覆盖此阶段。
+
+## 继续唯一三路短对照（2026-10-22 03:54 UTC）
+
+- 上一goal turn为实质进展：新ABI/桥实现、032653上卡全字节门和全部原件已保存在干净提交 `2746e01b79192d35f72f7d720a3d79d7b03dd6b7`。本轮不重做旧实验，03:53:30Z远端实查上一exit0、BI-V150 68MiB/0%/无GPU进程、9031双栈关闭。
+- hardware独占新`validate_kv_pitched_threeway.py`及`analysis/2026-10-22-kv-pitched-threeway-hardware.md`；systems独占小fork `launch_kv_pitched_threeway_gate.py`及`analysis/2026-10-22-kv-pitched-threeway-system.md`；framework只审相对c8c0/3ffe的delta，不重复旧CPU合同。runtime818e/C桥0a4d保留，root唯一SSH/GPU。当前尚未启动新设备任务，方案固定64call A/B/C/C/B/A与逐窗v1 cpu.stat，不扩展验证框架。
+- 继续遵循用户最新暂缓GitHub/PR的安排；本轮先实验与中文本地留痕。不得把已有完整目标误缩为仅完成短门，也不将阶段检查点标goal complete。
+
+## 本轮已完整验收；从三路短计时继续（2026-10-22 03:40 UTC）
+
+- 032653唯一实审 `analysis/source/kv-pitched-copy/032653-gate-review.json` SHA `eff32911b14287b0caa255b83f984f3f77b61c789366a9789172afd4363b7f6d` 通过：86原件seal、7源、实际SDK编译/so/加载库、DB实体、非0流、两case全部byte/guard/source与RNG、清理均齐。审计首次相对Path转URI失败仅本地修正，未重跑设备或改原件。
+- 系统综合验收入口 `analysis/2026-10-22-kv-pitched-copy-032653-result.md`（a6b88bf2…）；硬件专项及详细下一方案独占 `analysis/2026-10-22-kv-pitched-copy-032653-hardware.md`（7f93aab5…），专项JSON为e577a7f3。两agent曾误用同一正文路径，现硬件稿逐byte恢复原SHA到独占路径，系统稿与原数据不变，记录完整。三owner的源码、门、交叉审与接入边界均在`docs/agent-work/`索引。当前无GPU作业、无新服务worker；下一唯一64call三路门的固定顺序、CPU窗口观察和结束条件见硬件专项文末，避免下一API重复探索。
+- 本地Git检查点保存此阶段全部实现、ABI原件、编译SO与tgz、结果及agent记录；以本文件所在最新提交为准，可用`git log -1`核对。当前没有GitHub/PR或新完整ZIP发布；36510ed6是本阶段开始前已完成三轮A/B资料的检查点。持续目标仍active。
+
+## 下一唯一实验已定，先固定本轮检查点（2026-10-22 03:38 UTC）
+
+- 已采纳hardware最短后继：同818e/0a4d，仅一次固定64call的A/B/C/C/B/A镜像窗口，A原c95f、B同桥C-linear（prepare的max_pitch=16384，提交前拆单页）、C同桥C2D；每窗外采实际v1 cpu.stat及原值/差值，准备成本另记。保持原56线程/6CPU和SDK/stream，不做参数扫描；wall继续波动或节流时保“不确定”，不自动追样本。补新增Clinear字节检查，其余冻结机制沿用；目前没有此后继脚本或新设备作业。
+- 若值得继续，42层资格与一次原long VERIFY1真实事务合并：仅独立FULL1aff/5d9a副本的SAVE改实现，SAVE完成后、源页释放前用已预算单层verify_buffer逐层原c95f回读源并与新host全字节比较，全部通过才SAVED；再走原FULL回读与consumer。原FULL验证只证明host→dest，不能替代SAVE正确性。slot须强持PreparedSave/bridge至真实settle，原fence/完成/失败路径不动。详见`analysis/2026-10-22-kv-pitched-save-worker-boundary.md`；不另造22GiB合成42池门，尚未写新worker。
+- 当前GPU空闲，本轮runtime、真实ABI、编译SO、两map字节/短计时原件与三owner结论将一起固定本地Git。最新外部仍旧c20ce8f0、完整ZIP仍232735；本轮无push/PR，用户稍后自行处理协作。持续goal active，检查点不表示目标完成。
+
+## 二维复制短门完成，保留真实正信号与计时波动（2026-10-22 03:32 UTC）
+
+- `032653-kv-pitched-copy-gate`已exit0，controller258685/worker258707，03:27:06.844419Z结束；实际编译SO SHA `9e33ecbf9cf57f52469db6b1d509a600cd1a8eeafe78a54095e88dc474c71fc0`。真实设备MaxPitch2147483647，非0流94118921500112、实际加载lib d39d身份成立，两组全字节/原c95f/offset双guard/完整源/RNG检查均通过。每层1058页实际37→11(2线性+9二维)，1048页26→6(2+4)，无pitch回退。
+- 只首组8call ABBA：baseline wall7.415286498/1.454228535ms，candidate0.672264665/0.681895239ms；同流event baseline0.652491808/0.652679801ms，candidate0.628266811/0.628109097ms。保留组合单层正信号，不平均不稳定wall后报倍数，不当42层SAVE/E2E。计划/descriptor准备另记；目前未服务集成。
+- 原outer环境显示Torch CPU线程56、quota6，整门134个period中54节流；这包含setup/比较/编译等，不定位具体计时窗，累计throttled_time不能作墙钟损失。下一由hardware给最短去混淆建议，framework只读SAVE接入边界，systems负责唯一原件验收/登记，不重跑旧门。
+- DB523表19474行三SHA前后dc2c/0dc7/c05d完全同，source全程一致，结束后68MiB/0%/无GPU进程/9031双栈关闭。全部86个seal项远端及本地逐SHA通过，tgz `2ba3856fef63566c8a372818a2ae60e21c999d8022465d8d29ad13a7de99c55c`（1860443B）已本地，当前无GPU作业。首次本地读取发生在scp写入未结束，被文件锁拒绝；scp退出0后再读/解包/核验全部通过，原件不变，非设备失败。
+
+## 独立二维复制短门已启动（2026-10-22 03:27 UTC）
+
+- 当前唯一设备实验 `20261022T032653Z-kv-pitched-copy-gate`，controller PID258685，root负责生命周期。远端run/control均在`/workspace/experiments/minicpm-s2/framework/`；outer先编译及双idle，再启动唯一device child，最终worker PID和完整结果待原件。
+- 固定新runtime `818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd`、C桥 `0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44`、gate `c8c0f64e7293634a28949f4338800298b43d32daa7cbd866e64dcd59833d7dc6`、outer `3ffe8efe643a5c280a85217299bcb0adb6349c66f499659d2de9b5167dcce7da`。root+三agent定向互审通过，唯一CPU planner合同1test/0.013s通过；六上传素材SHA/语法均核对。
+- 仅一层两真实SAVE数组/完整源与host字节/offset双guard/非默认同stream门；两组都过才首组8call ABBA。实际组合为C内batch提交+正等差二维API，planner/descriptor准备另记，不能单归因2D，更不能当42层SAVE或E2E/accuracy。尚未有设备通过/收益结论，未改worker或服务。GitHub仍按用户安排暂不写入。
+
+## 完整KV二维SAVE复制进入最短设备门准备（2026-10-22 03:03 UTC）
+
+- 上一阶段三轮、A/B容量失配、短前缀/WAITING反证、完整二维几何和三agent记录已固定本地检查点 `36510ed6d06df36f194f8ea194abf3bdca2e8e74`。不再重跑旧门；没有push/PR或更新旧ZIP。
+- 当前没有GPU作业。后继只做独立二维SAVE复制候选与最短一层字节/提交成本门，不改worker、不与进展victim策略叠加，不启动完整服务。framework负责新plan+实际Corex头编译的C桥，hardware负责非默认stream/完整byte/guard门，systems负责单卡生命周期包装，root唯一SSH/GPU。
+- 只读ABI原件新增 `experiments/source-audits/20261022T030314Z-memcpy2d-abi`，result SHA `f9c348a60fa34469377fda671d2d57a42c108fca2554fd59963b6b7033ffb576`，脚本 `6de7944a0e0f5593d9ed66a8af0eb2cf23b147bf39cba8d2e4204e69399ed53a`。实际D2H枚举2、ixStream_t结构指针、Linux IXRTAPI空、Torch stream转c_void_p，以及ix API导出/编译器均保原片段与文件SHA；未加载库或调用设备。实际pitch上限与正确性仍待设备门。远端无rg，改为Python读取，不影响设备。
+
+## 三轮已结束；下一检查完整KV的二维复制合并（2026-10-22 02:45 UTC）
+
+- 015315 VERIFY1及首个VERIFY0对照A020721/B021658全部正常结束、原件本地齐，当前无GPU活跃作业。B为32成功0失败、218.51338428491727秒、2549.299219464107总tok/s；唯一3f1实际报告021658-progress-review.json SHA90f3c896fdb8537e5cb317b823f1b7410b492acd5e1e5bbfbb830dddbd981c99。tgzc6989051d9caa8e2dac548e88e85b155fab1d95c0bbacc32f4523eea97e46176，418源/live、DB523/19474三SHA不变、02:22:42Z空闲后态通过。registry112/queue85。
+- A/B的KV521936/521840及启动非Torch残差4MiB失配，三项收益字段均null，不报正负收益、不继续追容量。B真9候选中选index21/confirmed392（failed20、tail319），同rid R16768/1048页/721158144B、SAVE26段1092、FULL66段2772、0ZERO、fast462、原consumer9、无回读；不能套015315的index2/R16928。机制实现保留但不进默认或继承accuracy。
+- 完成碎片截短及WAITING准入反证：短R不绕过完整known序列1059页的准入；free1044塞新16K仅剩20页，可能承受不了30条继续decode。暂不实现截短/skiphead，也不另排纯WAITING观察长轮。详情见fragment-prefix-015315-interface-review及waiting-head-runway-evidence-plan。两轮原资源窗口GPUutil中位95–96%、极少CPU节流仅为5秒采样观察，不证明关键路径。
+- 下一唯一候选方向为**保留全部安全前缀与原逻辑页序，按正等差页段合并二维异步复制**，先只研究SAVE提交，不改变调度/R或引入重算。hardware正在落实际几何和一手契约；目前没有新runtime或GPU门。root纯CPU已核Corex4.5实际libcudart d39d5796有cudaMemcpy2DAsync/_ptsz导出，及ix头文件声明/映射，原件为source-audits/023826（SHA2334a167）与024142（SHAe29cd7a7）。导出不等于设备可用，仍需类型/stream/pitch/错误与完成语义及最短真实字节门。没有载入库、torch或调用GPU API。
+- 用户最新要求先做实验、稍后自行操作GitHub；本阶段无push/PR。完整新资料都在本地，最新外部仍c20ce8f0、完整ZIP仍232735，均不包含此阶段。e16b783是前一局部检查点，包含015315与包装；A/B、后继反证与CPU导出原件的最终本地检查点随后记录。持续goal active，不能标完成；下一从本段继续，不重跑旧三轮。
+
+## B组容量失配已在性能结果前确认（2026-10-22 02:19 UTC）
+
+- B021658仍是唯一GPU作业，Engine253818实际KV521840，A020721为521936；此首pair不可归因性能收益，已在耗时结果前明示。继续正常完成并保存原值，不改参数/恢复DB/重复启动追容量。
+- root只读两轮原DETERMINE_RETURN：init/before_create相同，B before_profile及after_profile的nonTorch/cuda残差均比A高4,194,304B，torch reserved/peak/weights均同；nonKV为6762193920对6757999616，原返回22443583692对22447777996。现有观察只定位到原profile分项，具体分配者仍未知，不归因新协议或allocator。待B完整封存由hardware独立核。
+- systems冻结3f1验收入口会保留真实环境失配与null收益，实际选中对象/R/恢复/消费者单独记录；不套015315的R或把无回读结果冒称新accuracy。
+
+## A组验收通过，B组正在上卡（2026-10-22 02:17 UTC）
+
+- A020721已exit0/32-0，218.39959823712707秒、2550.627402689529总tok/s、TTFT62408.937510466785ms；实际KV521936，DB523表19474行三SHA dc2c/0dc7/c05d前后同、同PIDprofile1/原返回/三hook恢复、418源/live/02:13:19Z idle通过。原FULL实际R16704/P1044/SAVE1008/目的66段2772/fast454/consumer8，无ZERO/回读/新decision。唯一3f1实审报告020721-full-review.json SHAbe286a95749b39cf6ed8089f7c2f27295d34a35f1fffb8eec4a3d2532068ced9；tgz73ca1a3d3ecf93d81c155041eaa4db3932a58fa234278565676580fe66472a2f本地齐。
+- 当前唯一GPU为 `20261022T021658Z-kv-progress-pair-progress-context16k-long`，runner253641，新source `code/kv-progress-pair-progress-20261022T021658Z`。原6ffb/1aaf共同418包装、72942/6a/39fb、VERIFY0/原bc51参数；启动器实际核A已封存/完整源/observer及A before=after=B before三DB SHA后启动。B容量分项/真正选择恢复/耗时/DBafter仍待，不提前宣称匹配或收益。
+- 新本地检查点e16b783已保存015315完成门与两包装；此后新增A原件/报告、碎片前缀反证及当前B在途记录继续本地保存。用户最新安排暂不推GitHub/PR，无外部写。缩短prefix可能减少源调用，但full_sequence_must_fit仍需完整已知容量的反证已落专文，未混入本pair。
+
+## 首个性能对照A组上卡（2026-10-22 02:07 UTC）
+
+- 当前唯一GPU作业 `20261022T020721Z-kv-progress-pair-full-context16k-long`，runner252046；source `code/kv-progress-pair-full-20261022T020721Z`。新builder6ffb9da3/launcher1aaf35e1经framework/hardware/root全文审与最短静态映射核，远端两路径先确认不存在，上传核SHA/compile后启动。
+- 共同214400 FULL416基点加同6a观察器/39fb init与新progress-pair-source manifest成418；A保持1aff，后继B才替换72942。双方原worker5d9a/txn84be/e155、bc51/contextlong/seed/SERVER不变，VERIFY0。A实际全源/DB/启动分项/KV及FULL链结果待；A完整封存且DB前后等于B测前才串行启动B，无自动重跑。
+- 015315机制证据已完整本地，新增root只读DB变化报告及hardware实际碎片几何。当前继续实验；用户最新暂由自己稍后处理GitHub/PR，故本阶段未对外推送，最新远端和ZIP仍不覆盖新阶段。
+
+## 新调度机制已通过，转首个性能对照（2026-10-22 02:02 UTC）
+
+- 015315已exit0，32成功0失败、524288输入/32768输出；完整417源/live/原参数/CPU6/32GiB/KV521936与01:59:22Z空闲后态通过，tgz `38c096b9b254ee9846364912503d197897f5357db357422813368adca493794b` 已本地。systems唯一b7ff实际审计通过，报告 `analysis/source/preemption-snapshot/015315-progress-victim-review.json` SHA `f776f89ba579fcdc8bc24ecd6cfd10da1547ae2cb5faa75b9b15fdea2aa225fa`。
+- 真28候选中选择原index2/confirmed552（原tail index30/327），同对象SAVE→FULL→DROP、R16928/1058页/728039424B成立。SAVE37段1554调用，目的65段/FULL及全42层回读各2730调用，0ZERO；fast454、原consumer9及runner六检查、host释放通过。原preempt0→1，02:02目前无GPU作业。
+- 238.576937023秒只属VERIFY1机制诊断；DB由519表19340行增至523表19474行（after SHA dc2c7646/0dc7a465/c05d7e31），不能与旧性能轮归因比较。下一首个A/B按 `analysis/2026-10-22-progress-victim-performance-plan.md`：原FULL1aff与72942共同6a/各418源/VERIFY0/原long，新数据库实际起点、同容量分项与DB门，策略R/consumer变化据实保留。framework新包装、hardware互审、systems唯一实际后验；不重复旧门或盲目追容量。
+- 用户先催实验库同步与持续代码PR，随后明确“先进行你的实验和想法，等会儿我自己来”。当前遵循最新要求，暂不发GitHub/PR，继续实验及本地留痕；刚才仅检查仓库/工具，尚未推送或创建PR。最新远端仍c20ce8f0，旧232735ZIP不含本阶段。后续恢复协作须遵循用户新的安排，不能把旧“仅本地”当永久禁止PR。
+
+## 单次进展调度候选正在上卡（2026-10-22 01:53 UTC）
+
+- 当前唯一GPU作业为 `20261022T015315Z-kv-progress-victim-context16k-long`，runner PID250079，root负责生命周期；source `code/kv-progress-victim-20261022T015315Z`。通过三方定向审、唯一CPU合同后，新协议72942f1f / builder bbb49a06 / launcher1f8a2f14已上传逐SHA与compile核对，启动器实际构建417完整源并检查设备双idle/DB-before。
+- 冻结214400 FULL416基点仅替canonical协议及添加新manifest；worker5d9a/txn84be/init791c/e155不变。原bc51 context-long、seed721201、原服务参数、VERIFY1，无6a/c6叠加。验证实际不同tail选择与SAVE→FULL→DROP、全部42层字节回读/消费者/32-0/源DB后态；当前在途，尚无机制通过或性能结论。
+- 新后验入口旧f43存在Windows远端POSIX路径格式必拒，部署前全文审发现；原字节已保留为未执行稿。systems仅修成本地b7ff996b，hardware做小delta审，不影响受测runtime。新阶段尚未发布GitHub或纳入旧232735 ZIP；本地代码、中文说明及三agent记录保留。
+
+## 新阶段：实现一次受限的进展victim候选（2026-10-22 01:41 UTC）
+
+- 上一goal turn为实质进展：五轮原件、真实调度快照、两组小信号、完整发布c20ce8f0与232735完整包均已完成。当前本地HEAD883392f，工作树开始时干净；新阶段从c3c11eaf设计继续，不重启旧实验。
+- 01:38:58Z远端实查BI-V150为68MiB/0%、无GPU进程、9031双栈闭，230548 exit0；root仍唯一SSH/GPU owner。当前尚无新GPU任务，禁止把新代码写成已验证。
+- framework实现独立FULL1aff协议副本的一次动态victim选择，唯一针对CPU合同；hardware跨角色审调度/在途KV/所有权与回退；systems准备新417源隔离builder/launcher和后继唯一实际验收。以214400完整416源为基点，仅替换canonical协议字节并加新manifest；init791c、worker5d9a/txn84be/e155和原服务参数保留，不叠6a/c6观察器。
+- 下一设备门为一次原bc51 context-long/seed721201/VERIFY1真实不同tail选择→SAVE→FULL→DROP/全42层字节/消费/32-0/source/DB/post。先过机制，再决定最短可比VERIFY0与必要accuracy；不先smoke、旧suite、参数扫描或大官方测试。两代码仓本阶段只本地，不推送/PR；实验库待新证据统一更新。
+
+## 本阶段完整工作包通过校验，继续单一调度候选（2026-10-21 23:30 UTC）
+
+- 完整包 `output/handoff/minicpm-s2-work-20261021T232735Z.zip` 已完成：458,454,694字节、42,112文件与2个symlink，CRC通过；SHA256 `97f3ea4e429a151fae413cc89193c25cf18e145c80b0751077f556f09fbe563d`。包含五轮完整原件/SQLite/tgz、输入生成源码、三agent全过程/失败/旧版本/唯一后继设计、发布回执和Git恢复数据；覆盖f91b631f工作树及发布后补充。本归档回执 `docs/observed-pairs-snapshot-archive-receipt-20261022.json` 与本条是包外说明。
+- 最新远端仍 `c20ce8f0ccf6112453431f26aa85b9587a51f30f` / tree8e0d116a /18,331项，含全部阶段实验与设计；最新ZIP为232735，旧221629仍保留但不称最新。两个共享代码仓无本阶段推送/PR。
+- 归档临时写锁已解除，持续goal active、设备空闲，三agent本阶段任务已完成且记录齐。下一从 `analysis/2026-10-22-single-victim-progress-candidate.md` 实现**唯一**新候选：原FULL显式副本、每Engine最多一次主动victim替换，仅后方/未scheduled/非failed并保护最小合法剩余和最大进展集合，按已确认输出动态选择，不按ID或固定index；worker/事务保持原实现。先唯一针对CPU合同/另一owner互审，再一次原参数VERIFY1真实恢复门；机制过后才做同条件VERIFY0比较和必要accuracy。
+- 本快照只是证明值得尝试：31running全16K、进度327–569、free0需1；原tail327，动态例候选552会多保存9,633,792B/多释放14页。WAITING/最终完成顺序仍未知，真正长尾可能另有请求；不能把225token进度差换成时间或收益。此前两组约+0.20%/+0.06%小信号均保留，非稳定收益。本轮不追加旧pair、旧套件或容量追样本。
+
+## 五轮完整证据与下一调度设计已发布（2026-10-21 23:26 UTC）
+
+- 固定本地 `f91b631f0cbec4989755a7fb8af394e525103600` 已发布至专用私有实验库，远端main `c20ce8f0ccf6112453431f26aa85b9587a51f30f`，tree `8e0d116a8e1eaf7610ea6335cee5fbba0dd0a480`，18,331项逐路径/模式/blob核验通过。五轮222731/223613/224411/225501/230548完整原件、双方同容量小信号、真实快照、实际输入源、旧未部署版本与三agent记录均包含。
+- 发布回执 `docs/github-observed-pairs-snapshot-publication-20261022.json` 为随后补充，不递归称在该tree内。新完整Git bundle已验证完整历史，13,703,622字节、SHA256 `f415d9a2a88b6636a99a837e4a7d58943e16ec4dff6f931c8d2d7d3fa1b2e259`；对应f91b631f，工作树发布回执另由ZIP与git-state补丁保存。
+- 三agent均已收口暂时停写，GPU空闲，goal active。root现在制作新的完整工作ZIP，旧221629仍不包含本阶段。下一唯一设计见 `analysis/2026-10-22-single-victim-progress-candidate.md`：动态规则可选进展更多者，严格后方/未scheduled/保护集合/一次尝试，保原FULL事务；目前没有新策略runtime，不冒称收益或继承accuracy。两个共享代码仓重新实查干净，无本阶段推送/PR。
+
 ## 真实抢占快照通过，五轮阶段证据准备统一保存（2026-10-21 23:16 UTC）
 
 - `20261021T230548Z-preemption-snapshot-context16k-long` 已于23:10:54Z exit0，32成功0失败/524288输入+32768输出；413完整源/live、原SERVER/seed/CPU6/32GiB、DB519表19340行三SHA前后一致、23:11:57.075293Z后态68MiB/0%与端口关闭通过。tgz `abe046f03d462d01fbd91bb69ff506bb19149e7969416190a406d150bcfe8cc9` 本地完整。220.418993005秒仅观察诊断，非性能或新accuracy；shutdown EngineDeadError/WARN原样保留。

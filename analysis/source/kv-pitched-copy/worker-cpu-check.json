@@ -1,0 +1,73 @@
+{
+  "status": "one_CPU_route_lifecycle_contract_passed_no_SDK_GPU",
+  "created_utc": "2026-10-22T04:08:32.584356+00:00",
+  "paths": {
+    "worker": "patches/framework/candidates/biv150_kv_pitched_save_worker.py",
+    "test": "tests/test_biv150_kv_pitched_save_worker.py",
+    "base_worker": "patches/framework/candidates/biv150_kv_full_restore_worker.py",
+    "protocol": "patches/framework/candidates/biv150_kv_full_restore_protocol.py",
+    "transaction": "patches/framework/candidates/biv150_kv_full_restore_transaction.py",
+    "runtime": "patches/framework/candidates/biv150_kv_pitched_copy.py",
+    "cpp": "patches/framework/candidates/biv150_kv_pitched_bridge.cpp"
+  },
+  "sha256": {
+    "worker": "4f1dd74c9dd6c4b558a5a0c3749b569c31cea5a8794e394f25ab3de7a997c77e",
+    "test": "38de41e794a85d258acc11c113e2f9d7b912197a689694b661634c245f6c4997",
+    "base_worker": "5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477",
+    "protocol": "1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8",
+    "transaction": "84be2242656e6ae0a30d65c803c2ae5076e836e0d1b6686731c4197a85b21883",
+    "runtime": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd",
+    "cpp": "0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44"
+  },
+  "contract": {
+    "command": "python -X utf8 -m unittest discover -s tests -p test_biv150_kv_pitched_save_worker.py -v",
+    "tests": 1,
+    "reported_seconds": 0.122,
+    "exit_code": 0,
+    "first_execution_passed": true,
+    "subcases": [
+      "VERIFY1 successful SAVE plus42 source-to-saved checks with original buffer retained",
+      "VERIFY0 no source readback",
+      "partial SDK stub failure settled does not retry",
+      "partial failure unsettled retains slot/PreparedSave/Bridge/raw/host and DROP refused",
+      "source verification mismatch returns failed ACK"
+    ]
+  },
+  "source_comparison": {
+    "existing_functions_changed": [
+      "rpc"
+    ],
+    "existing_functions_unchanged": [
+      "_integer",
+      "_command",
+      "_memory_headroom",
+      "_budget",
+      "_context",
+      "_finish",
+      "_copy",
+      "_full_restore_plan",
+      "_reply"
+    ],
+    "added_functions": [
+      "_pitched_assets",
+      "_save_pitched",
+      "_verify_saved_source"
+    ],
+    "no_deleted_functions": true,
+    "inverse_bytes_exact_to_5d9a": true,
+    "syntax_compile_worker_test": true
+  },
+  "deployment": {
+    "canonical_worker": "vllm_fl/patches/biv150_kv_worker.py",
+    "runtime_adjacent": "vllm_fl/patches/biv150_kv_pitched_copy.py",
+    "so_adjacent": "vllm_fl/patches/biv150_kv_pitched_bridge.so",
+    "SO_sha256": "9e33ecbf9cf57f52469db6b1d509a600cd1a8eeafe78a54095e88dc474c71fc0",
+    "cpp_archive_only": "biv150_kv_pitched_bridge.cpp"
+  },
+  "limitations": [
+    "Tensor/context/loader/RPC/native SDK/event and bytes are CPU stubs, not actual runtime or GPU proof",
+    "late loader regular-file/module-path/real loaded libcudart guards still require actual service",
+    "only one new contract; no old suite/device run",
+    "real42 SAVE+FULL VERIFY1/consumer remains pending; no performance/accuracy qualification"
+  ]
+}

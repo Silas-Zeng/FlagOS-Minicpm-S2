@@ -1,0 +1,16 @@
+{
+  "run_id": "20261022T044741Z-event-wait-contract",
+  "owner": "root",
+  "kind": "CPU只读取证，不是设备正确性或性能门",
+  "script": "scripts/remote/audit_event_wait_contract.py",
+  "script_sha256": "50168b584f013c999b719d2650bec4b47a0be1858a5996a38dee6bff9348de59",
+  "command": [
+    "python",
+    "/workspace/experiments/minicpm-s2/scripts/audit_event_wait_contract.py"
+  ],
+  "result_sha256": "41ba9a3bcc40ef826ac9fa350be134aa66a86a4e3cab4aa5c9234624c3bfe5eb",
+  "cache_supplement_sha256": "e55d45a4a9a61358f06e36bcd5e92ed0e3c955355b47a3171a7d416619fc4fc2",
+  "supplement_shell_command": "python - <<'PY'\nfrom pathlib import Path\nfrom datetime import datetime,timezone\nimport hashlib,json\nroot=Path('/usr/local/lib/python3.12/site-packages/torch')\nitems=[]\nfor rel in ['include/ATen/cuda/CUDAEvent.h','include/c10/cuda/CUDAEventCache.h','csrc/cuda/CUDAEventCache.cpp']:\n p=root/rel\n if p.is_file():\n  d=p.read_bytes(); items.append({'path':str(p),'sha256':hashlib.sha256(d).hexdigest(),'bytes':len(d),'text':d.decode('utf-8')})\n else:items.append({'path':str(p),'status':'missing'})\nout=Path('/workspace/experiments/minicpm-s2/source-audits/20261022T044741Z-event-wait-contract/cache-supplement.json')\nwith out.open('x') as f:json.dump({'recorded_utc':datetime.now(timezone.utc).isoformat(),'reader':'stdlib Path.read_bytes only; no imports of Torch, no SDK/device calls','files':items},f,ensure_ascii=False,indent=2)\nprint(str(out));print(hashlib.sha256(out.read_bytes()).hexdigest())\nPY",
+  "collection": "两个SCP均退出0后读取，本地SHA与远端sha256sum/stdlib SHA完全一致。",
+  "boundary": "只读固定实际安装源；未导入Torch、加载库或调用设备API；缺失绑定与缓存cpp如实保留。"
+}

@@ -1,0 +1,3743 @@
+{
+  "run_id": "20261022T044741Z-event-wait-contract",
+  "recorded_utc": "2026-10-22T04:47:41.586336+00:00",
+  "status": "read_only_collection_not_semantic_pass",
+  "command": [
+    "/usr/local/bin/python",
+    "/workspace/experiments/minicpm-s2/scripts/audit_event_wait_contract.py"
+  ],
+  "command_shell": "/usr/local/bin/python /workspace/experiments/minicpm-s2/scripts/audit_event_wait_contract.py",
+  "script_sha256": "50168b584f013c999b719d2650bec4b47a0be1858a5996a38dee6bff9348de59",
+  "files": [
+    {
+      "path": "/usr/local/lib/python3.12/site-packages/torch/cuda/streams.py",
+      "expected_sha256": "c8cb35dccf58685a7025a3af1f3082d274b7b13e42cc8b0f4609a0245ee90c7b",
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "class Event|blocking|def synchronize|super\\(\\)\\.__new__",
+        "/usr/local/lib/python3.12/site-packages/torch/cuda/streams.py"
+      ],
+      "resolved": "/usr/local/lib/python3.12/site-packages/torch/cuda/streams.py",
+      "bytes": 10193,
+      "sha256": "c8cb35dccf58685a7025a3af1f3082d274b7b13e42cc8b0f4609a0245ee90c7b",
+      "expected_identity_matches": true,
+      "status": "read_only",
+      "matched_lines": 10,
+      "matches_truncated": false,
+      "excerpts": [
+        {
+          "line": 35,
+          "text": "    def __new__(cls, device=None, priority=0, **kwargs):"
+        },
+        {
+          "line": 36,
+          "text": "        # Check CUDA availability"
+        },
+        {
+          "line": 37,
+          "text": "        if not torch.backends.cuda.is_built():"
+        },
+        {
+          "line": 38,
+          "text": "            raise RuntimeError(\"torch.cuda.Stream requires CUDA support\")"
+        },
+        {
+          "line": 39,
+          "text": "        # setting device manager is expensive, so we avoid it unless necessary"
+        },
+        {
+          "line": 40,
+          "text": "        if device is None or (\"stream_id\" in kwargs and \"device_index\" in kwargs):"
+        },
+        {
+          "line": 41,
+          "text": "            return super().__new__(cls, priority=priority, **kwargs)"
+        },
+        {
+          "line": 42,
+          "text": "        else:"
+        },
+        {
+          "line": 43,
+          "text": "            with torch.cuda.device(device):"
+        },
+        {
+          "line": 44,
+          "text": "                return super().__new__(cls, priority=priority, **kwargs)"
+        },
+        {
+          "line": 45,
+          "text": ""
+        },
+        {
+          "line": 46,
+          "text": "    def wait_event(self, event) -> None:"
+        },
+        {
+          "line": 47,
+          "text": "        r\"\"\"Make all future work submitted to the stream wait for an event."
+        },
+        {
+          "line": 48,
+          "text": ""
+        },
+        {
+          "line": 49,
+          "text": "        Args:"
+        },
+        {
+          "line": 50,
+          "text": "            event (torch.cuda.Event): an event to wait for."
+        },
+        {
+          "line": 51,
+          "text": ""
+        },
+        {
+          "line": 52,
+          "text": "        .. note:: This is a wrapper around ``cudaStreamWaitEvent()``: see"
+        },
+        {
+          "line": 53,
+          "text": "           `CUDA Stream documentation`_ for more info."
+        },
+        {
+          "line": 54,
+          "text": ""
+        },
+        {
+          "line": 55,
+          "text": "           This function returns without waiting for :attr:`event`: only future"
+        },
+        {
+          "line": 56,
+          "text": "           operations are affected."
+        },
+        {
+          "line": 94,
+          "text": ""
+        },
+        {
+          "line": 95,
+          "text": "        Returns:"
+        },
+        {
+          "line": 96,
+          "text": "            A boolean indicating if all kernels in this stream are completed."
+        },
+        {
+          "line": 97,
+          "text": "        \"\"\""
+        },
+        {
+          "line": 98,
+          "text": "        return super().query()"
+        },
+        {
+          "line": 99,
+          "text": ""
+        },
+        {
+          "line": 100,
+          "text": "    def synchronize(self) -> None:"
+        },
+        {
+          "line": 101,
+          "text": "        r\"\"\"Wait for all the kernels in this stream to complete."
+        },
+        {
+          "line": 102,
+          "text": ""
+        },
+        {
+          "line": 103,
+          "text": "        .. note:: This is a wrapper around ``cudaStreamSynchronize()``: see"
+        },
+        {
+          "line": 104,
+          "text": "           `CUDA Stream documentation`_ for more info."
+        },
+        {
+          "line": 105,
+          "text": "        \"\"\""
+        },
+        {
+          "line": 106,
+          "text": "        super().synchronize()"
+        },
+        {
+          "line": 107,
+          "text": ""
+        },
+        {
+          "line": 108,
+          "text": "    @property"
+        },
+        {
+          "line": 109,
+          "text": "    def _as_parameter_(self):"
+        },
+        {
+          "line": 110,
+          "text": "        return ctypes.c_void_p(self.cuda_stream)"
+        },
+        {
+          "line": 111,
+          "text": ""
+        },
+        {
+          "line": 112,
+          "text": "    def __eq__(self, o) -> bool:"
+        },
+        {
+          "line": 148,
+          "text": "            was originally allocated. If device is specified incorrectly,"
+        },
+        {
+          "line": 149,
+          "text": "            subsequent launches using this stream may fail."
+        },
+        {
+          "line": 150,
+          "text": "    \"\"\""
+        },
+        {
+          "line": 151,
+          "text": ""
+        },
+        {
+          "line": 152,
+          "text": "    def __new__(cls, stream_ptr, device=None, **kwargs):"
+        },
+        {
+          "line": 153,
+          "text": "        with torch.cuda.device(device):"
+        },
+        {
+          "line": 154,
+          "text": "            return super().__new__(cls, stream_ptr=stream_ptr, **kwargs)"
+        },
+        {
+          "line": 155,
+          "text": ""
+        },
+        {
+          "line": 156,
+          "text": ""
+        },
+        {
+          "line": 157,
+          "text": "class Event(torch._C._CudaEventBase):"
+        },
+        {
+          "line": 158,
+          "text": "    r\"\"\"Wrapper around a CUDA event."
+        },
+        {
+          "line": 159,
+          "text": ""
+        },
+        {
+          "line": 160,
+          "text": "    CUDA events are synchronization markers that can be used to monitor the"
+        },
+        {
+          "line": 161,
+          "text": "    device's progress, to accurately measure timing, and to synchronize CUDA"
+        },
+        {
+          "line": 162,
+          "text": "    streams."
+        },
+        {
+          "line": 163,
+          "text": ""
+        },
+        {
+          "line": 164,
+          "text": "    The underlying CUDA events are lazily initialized when the event is first"
+        },
+        {
+          "line": 165,
+          "text": "    recorded or exported to another process. After creation, only streams on the"
+        },
+        {
+          "line": 166,
+          "text": "    same device may record the event. However, streams on any device can wait on"
+        },
+        {
+          "line": 167,
+          "text": "    the event."
+        },
+        {
+          "line": 168,
+          "text": ""
+        },
+        {
+          "line": 169,
+          "text": "    Args:"
+        },
+        {
+          "line": 170,
+          "text": "        enable_timing (bool, optional): indicates if the event should measure time"
+        },
+        {
+          "line": 171,
+          "text": "            (default: ``False``)"
+        },
+        {
+          "line": 172,
+          "text": "        blocking (bool, optional): if ``True``, :meth:`wait` will be blocking (default: ``False``)"
+        },
+        {
+          "line": 173,
+          "text": "        interprocess (bool): if ``True``, the event can be shared between processes"
+        },
+        {
+          "line": 174,
+          "text": "            (default: ``False``)"
+        },
+        {
+          "line": 175,
+          "text": "        external (bool, optional): indicates whether this event should create event record and event wait nodes, or create an internal cross-stream dependency, when captured in a cuda graph. See `cross-stream dependencies <https://docs.nvidia.com/cuda/archive/12.9.0/cuda-c-programming-guide/index.html#cross-stream-dependencies-and-events>`_, `cudaEventRecordExternal <https://docs.nvidia.com/cuda/archive/12.9.0/cuda-runtime-api/group__CUDART__TYPES.html#group__CUDART__TYPES_1g3457b81d1d32c6a00f6132fbc2693d47>`_, and `cudaEventWaitExternal <https://docs.nvidia.com/cuda/archive/12.9.0/cuda-runtime-api/group__CUDART__TYPES.html#group__CUDART__TYPES_1g0c23426b7252eaa9cef695859991304e>`_ for more information about internal vs. external events. (default: ``False``)"
+        },
+        {
+          "line": 176,
+          "text": ""
+        },
+        {
+          "line": 177,
+          "text": "    .. _CUDA Event Documentation:"
+        },
+        {
+          "line": 178,
+          "text": "       https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EVENT.html"
+        },
+        {
+          "line": 179,
+          "text": "    \"\"\"  # noqa: B950"
+        },
+        {
+          "line": 180,
+          "text": ""
+        },
+        {
+          "line": 181,
+          "text": "    def __new__("
+        },
+        {
+          "line": 182,
+          "text": "        cls, enable_timing=False, blocking=False, interprocess=False, external=False"
+        },
+        {
+          "line": 183,
+          "text": "    ):"
+        },
+        {
+          "line": 184,
+          "text": "        return super().__new__("
+        },
+        {
+          "line": 185,
+          "text": "            cls,"
+        },
+        {
+          "line": 186,
+          "text": "            enable_timing=enable_timing,"
+        },
+        {
+          "line": 187,
+          "text": "            blocking=blocking,"
+        },
+        {
+          "line": 188,
+          "text": "            interprocess=interprocess,"
+        },
+        {
+          "line": 189,
+          "text": "            external=external,"
+        },
+        {
+          "line": 190,
+          "text": "        )"
+        },
+        {
+          "line": 191,
+          "text": ""
+        },
+        {
+          "line": 192,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 193,
+          "text": "    def from_ipc_handle(cls, device, handle):"
+        },
+        {
+          "line": 194,
+          "text": "        r\"\"\"Reconstruct an event from an IPC handle on the given device.\"\"\""
+        },
+        {
+          "line": 195,
+          "text": "        return super().from_ipc_handle(device, handle)"
+        },
+        {
+          "line": 196,
+          "text": ""
+        },
+        {
+          "line": 197,
+          "text": "    def record(self, stream=None):"
+        },
+        {
+          "line": 198,
+          "text": "        r\"\"\"Record the event in a given stream."
+        },
+        {
+          "line": 199,
+          "text": ""
+        },
+        {
+          "line": 230,
+          "text": ""
+        },
+        {
+          "line": 231,
+          "text": "        Time reported in milliseconds after the event was recorded and"
+        },
+        {
+          "line": 232,
+          "text": "        before the end_event was recorded."
+        },
+        {
+          "line": 233,
+          "text": "        \"\"\""
+        },
+        {
+          "line": 234,
+          "text": "        return super().elapsed_time(end_event)"
+        },
+        {
+          "line": 235,
+          "text": ""
+        },
+        {
+          "line": 236,
+          "text": "    def synchronize(self) -> None:"
+        },
+        {
+          "line": 237,
+          "text": "        r\"\"\"Wait for the event to complete."
+        },
+        {
+          "line": 238,
+          "text": ""
+        },
+        {
+          "line": 239,
+          "text": "        Waits until the completion of all work currently captured in this event."
+        },
+        {
+          "line": 240,
+          "text": "        This prevents the CPU thread from proceeding until the event completes."
+        },
+        {
+          "line": 241,
+          "text": ""
+        },
+        {
+          "line": 242,
+          "text": "         .. note:: This is a wrapper around ``cudaEventSynchronize()``: see"
+        },
+        {
+          "line": 243,
+          "text": "            `CUDA Event documentation`_ for more info."
+        },
+        {
+          "line": 244,
+          "text": "        \"\"\""
+        },
+        {
+          "line": 245,
+          "text": "        super().synchronize()"
+        },
+        {
+          "line": 246,
+          "text": ""
+        },
+        {
+          "line": 247,
+          "text": "    def ipc_handle(self):"
+        },
+        {
+          "line": 248,
+          "text": "        r\"\"\"Return an IPC handle of this event."
+        }
+      ],
+      "exact_reader": "Path.read_bytes; SHA256完整字节；片段行号从1开始；不exec源"
+    },
+    {
+      "path": "/usr/local/lib/python3.12/site-packages/torch/_streambase.py",
+      "expected_sha256": null,
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "class _EventBase|synchronize|def record|def wait",
+        "/usr/local/lib/python3.12/site-packages/torch/_streambase.py"
+      ],
+      "resolved": "/usr/local/lib/python3.12/site-packages/torch/_streambase.py",
+      "bytes": 435,
+      "sha256": "3402997d5f81859db6272b7fdd54031f59b841074855ce06f15bd406467dc09f",
+      "expected_identity_matches": true,
+      "status": "read_only",
+      "matched_lines": 1,
+      "matches_truncated": false,
+      "excerpts": [
+        {
+          "line": 13,
+          "text": ""
+        },
+        {
+          "line": 14,
+          "text": ""
+        },
+        {
+          "line": 15,
+          "text": "@deprecated("
+        },
+        {
+          "line": 16,
+          "text": "    \"`torch._streambase._EventBase` is deprecated. Please use `torch.Event` instead.\","
+        },
+        {
+          "line": 17,
+          "text": "    category=FutureWarning,"
+        },
+        {
+          "line": 18,
+          "text": ")"
+        },
+        {
+          "line": 19,
+          "text": "class _EventBase(torch.Event):"
+        },
+        {
+          "line": 20,
+          "text": "    pass"
+        }
+      ],
+      "exact_reader": "Path.read_bytes; SHA256完整字节；片段行号从1开始；不exec源"
+    },
+    {
+      "path": "/usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/Event.h",
+      "expected_sha256": null,
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "Event|blocking|synchronize",
+        "/usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/Event.h"
+      ],
+      "resolved": "/usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/Event.h",
+      "bytes": 840,
+      "sha256": "65a898ae2e0186d7c280ab1729416b9e3f6cd3e2f135de08bdd803820995ea67",
+      "expected_identity_matches": true,
+      "status": "read_only",
+      "matched_lines": 10,
+      "matches_truncated": false,
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "#if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)"
+        },
+        {
+          "line": 2,
+          "text": "#ifndef THP_EVENT_INC"
+        },
+        {
+          "line": 3,
+          "text": "#define THP_EVENT_INC"
+        },
+        {
+          "line": 4,
+          "text": ""
+        },
+        {
+          "line": 5,
+          "text": "#include <c10/core/Event.h>"
+        },
+        {
+          "line": 6,
+          "text": "#include <torch/csrc/python_headers.h>"
+        },
+        {
+          "line": 7,
+          "text": ""
+        },
+        {
+          "line": 8,
+          "text": "struct TORCH_API THPEvent {"
+        },
+        {
+          "line": 9,
+          "text": "  PyObject_HEAD"
+        },
+        {
+          "line": 10,
+          "text": "  c10::Event event;"
+        },
+        {
+          "line": 11,
+          "text": "  PyObject* weakreflist;"
+        },
+        {
+          "line": 12,
+          "text": "};"
+        },
+        {
+          "line": 13,
+          "text": "TORCH_API extern PyTypeObject* THPEventClass;"
+        },
+        {
+          "line": 14,
+          "text": "TORCH_API extern PyTypeObject THPEventType;"
+        },
+        {
+          "line": 15,
+          "text": ""
+        },
+        {
+          "line": 16,
+          "text": "TORCH_API void THPEvent_init(PyObject* module);"
+        },
+        {
+          "line": 17,
+          "text": "TORCH_API PyObject* THPEvent_new("
+        },
+        {
+          "line": 18,
+          "text": "    c10::DeviceType device_type,"
+        },
+        {
+          "line": 19,
+          "text": "    c10::EventFlag flag);"
+        },
+        {
+          "line": 20,
+          "text": "inline bool THPEvent_Check(PyObject* obj) {"
+        },
+        {
+          "line": 21,
+          "text": "  return THPEventClass && PyObject_IsInstance(obj, (PyObject*)THPEventClass);"
+        },
+        {
+          "line": 22,
+          "text": "}"
+        },
+        {
+          "line": 23,
+          "text": ""
+        },
+        {
+          "line": 24,
+          "text": "#endif // THP_EVENT_INC"
+        },
+        {
+          "line": 25,
+          "text": ""
+        },
+        {
+          "line": 26,
+          "text": "#else"
+        },
+        {
+          "line": 27,
+          "text": "#error \"This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined.\""
+        },
+        {
+          "line": 28,
+          "text": "#endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)"
+        }
+      ],
+      "exact_reader": "Path.read_bytes; SHA256完整字节；片段行号从1开始；不exec源"
+    },
+    {
+      "path": "/usr/local/lib/python3.12/site-packages/torch/csrc/Event.cpp",
+      "expected_sha256": null,
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "blocking|EventFlag|synchronize|THPEvent",
+        "/usr/local/lib/python3.12/site-packages/torch/csrc/Event.cpp"
+      ],
+      "status": "missing",
+      "boundary": "安装包未提供该源；不推断绑定实现。"
+    },
+    {
+      "path": "/usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/cuda/Event.h",
+      "expected_sha256": null,
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "Event|blocking|synchronize",
+        "/usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/cuda/Event.h"
+      ],
+      "resolved": "/usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/cuda/Event.h",
+      "bytes": 687,
+      "sha256": "28b6ba6e8a89a06df9f646c9510d394849edfe37c34e0493649c7dcd3f5bd742",
+      "expected_identity_matches": true,
+      "status": "read_only",
+      "matched_lines": 8,
+      "matches_truncated": false,
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "#if !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)"
+        },
+        {
+          "line": 2,
+          "text": "#ifndef THCP_EVENT_INC"
+        },
+        {
+          "line": 3,
+          "text": "#define THCP_EVENT_INC"
+        },
+        {
+          "line": 4,
+          "text": ""
+        },
+        {
+          "line": 5,
+          "text": "#include <ATen/cuda/CUDAEvent.h>"
+        },
+        {
+          "line": 6,
+          "text": "#include <torch/csrc/Event.h>"
+        },
+        {
+          "line": 7,
+          "text": "#include <torch/csrc/python_headers.h>"
+        },
+        {
+          "line": 8,
+          "text": ""
+        },
+        {
+          "line": 9,
+          "text": "struct THCPEvent : THPEvent {"
+        },
+        {
+          "line": 10,
+          "text": "  at::cuda::CUDAEvent cuda_event;"
+        },
+        {
+          "line": 11,
+          "text": "};"
+        },
+        {
+          "line": 12,
+          "text": "extern PyObject* THCPEventClass;"
+        },
+        {
+          "line": 13,
+          "text": ""
+        },
+        {
+          "line": 14,
+          "text": "void THCPEvent_init(PyObject* module);"
+        },
+        {
+          "line": 15,
+          "text": ""
+        },
+        {
+          "line": 16,
+          "text": "inline bool THCPEvent_Check(PyObject* obj) {"
+        },
+        {
+          "line": 17,
+          "text": "  return THCPEventClass && PyObject_IsInstance(obj, THCPEventClass);"
+        },
+        {
+          "line": 18,
+          "text": "}"
+        },
+        {
+          "line": 19,
+          "text": ""
+        },
+        {
+          "line": 20,
+          "text": "#endif // THCP_EVENT_INC"
+        },
+        {
+          "line": 21,
+          "text": ""
+        },
+        {
+          "line": 22,
+          "text": "#else"
+        },
+        {
+          "line": 23,
+          "text": "#error \"This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined.\""
+        },
+        {
+          "line": 24,
+          "text": "#endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)"
+        }
+      ],
+      "exact_reader": "Path.read_bytes; SHA256完整字节；片段行号从1开始；不exec源"
+    },
+    {
+      "path": "/usr/local/lib/python3.12/site-packages/torch/csrc/cuda/Event.cpp",
+      "expected_sha256": null,
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "blocking|cudaEventBlockingSync|synchronize|cudaEventSynchronize",
+        "/usr/local/lib/python3.12/site-packages/torch/csrc/cuda/Event.cpp"
+      ],
+      "status": "missing",
+      "boundary": "安装包未提供该源；不推断绑定实现。"
+    },
+    {
+      "path": "/usr/local/lib/python3.12/site-packages/torch/include/ATen/cuda/CUDAEvent.h",
+      "expected_sha256": null,
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "CUDAEvent\\(|flags_|cudaEventCreateWithFlags|cudaEventSynchronize",
+        "/usr/local/lib/python3.12/site-packages/torch/include/ATen/cuda/CUDAEvent.h"
+      ],
+      "resolved": "/usr/local/lib/python3.12/site-packages/torch/include/ATen/cuda/CUDAEvent.h",
+      "bytes": 13577,
+      "sha256": "abfeb89587b1a006b5ba09655d2ae11b972a53c2cb13bbb8e0d81945f7d9684a",
+      "expected_identity_matches": true,
+      "status": "read_only",
+      "matched_lines": 17,
+      "matches_truncated": false,
+      "excerpts": [
+        {
+          "line": 41,
+          "text": "* called before the event is ever recorded, it will use the current device."
+        },
+        {
+          "line": 42,
+          "text": "* Later streams that record the event must match this device."
+        },
+        {
+          "line": 43,
+          "text": "*/"
+        },
+        {
+          "line": 44,
+          "text": "struct TORCH_CUDA_CPP_API CUDAEvent {"
+        },
+        {
+          "line": 45,
+          "text": "  // Constructors"
+        },
+        {
+          "line": 46,
+          "text": "  // Default value for `flags` is specified below - it's cudaEventDisableTiming"
+        },
+        {
+          "line": 47,
+          "text": "  CUDAEvent() noexcept = default;"
+        },
+        {
+          "line": 48,
+          "text": "  CUDAEvent(unsigned int flags) noexcept : flags_{flags} {}"
+        },
+        {
+          "line": 49,
+          "text": ""
+        },
+        {
+          "line": 50,
+          "text": "  CUDAEvent("
+        },
+        {
+          "line": 51,
+          "text": "      DeviceIndex device_index, const cudaIpcEventHandle_t* handle) : device_index_(device_index) {"
+        },
+        {
+          "line": 52,
+          "text": "      CUDAGuard guard(device_index_);"
+        },
+        {
+          "line": 53,
+          "text": ""
+        },
+        {
+          "line": 54,
+          "text": "      AT_CUDA_CHECK(cudaIpcOpenEventHandle(&event_, *handle));"
+        },
+        {
+          "line": 55,
+          "text": "      is_created_ = true;"
+        },
+        {
+          "line": 56,
+          "text": "  }"
+        },
+        {
+          "line": 57,
+          "text": ""
+        },
+        {
+          "line": 58,
+          "text": "  // Note: event destruction done on creating device to avoid creating a"
+        },
+        {
+          "line": 59,
+          "text": "  // CUDA context on other devices."
+        },
+        {
+          "line": 60,
+          "text": "  ~CUDAEvent() {"
+        },
+        {
+          "line": 61,
+          "text": "    try {"
+        },
+        {
+          "line": 62,
+          "text": "      if (is_created_) {"
+        },
+        {
+          "line": 63,
+          "text": "#ifdef __ILUVATAR__"
+        },
+        {
+          "line": 64,
+          "text": "        if (c10::cuda::isCudaEventCacheEnabled() && is_from_cache_ && event_cache_) {"
+        },
+        {
+          "line": 65,
+          "text": "          bool timing = (flags_ & cudaEventDisableTiming) == 0;"
+        },
+        {
+          "line": 66,
+          "text": "          event_cache_->release(event_, timing);"
+        },
+        {
+          "line": 67,
+          "text": "        } else {"
+        },
+        {
+          "line": 68,
+          "text": "          CUDAGuard guard(device_index_);"
+        },
+        {
+          "line": 69,
+          "text": "          const c10::impl::PyInterpreter* interp = c10::impl::GPUTrace::get_trace();"
+        },
+        {
+          "line": 70,
+          "text": "          if (C10_UNLIKELY(interp)) {"
+        },
+        {
+          "line": 71,
+          "text": "            (*interp)->trace_gpu_event_deletion(at::kCUDA, reinterpret_cast<uintptr_t>(event_));"
+        },
+        {
+          "line": 72,
+          "text": "          }"
+        },
+        {
+          "line": 73,
+          "text": "          AT_CUDA_CHECK(cudaEventDestroy(event_));"
+        },
+        {
+          "line": 74,
+          "text": "        }"
+        },
+        {
+          "line": 75,
+          "text": "#else"
+        },
+        {
+          "line": 76,
+          "text": "        CUDAGuard guard(device_index_);"
+        },
+        {
+          "line": 77,
+          "text": "        const c10::impl::PyInterpreter* interp = c10::impl::GPUTrace::get_trace();"
+        },
+        {
+          "line": 81,
+          "text": "        AT_CUDA_CHECK(cudaEventDestroy(event_));"
+        },
+        {
+          "line": 82,
+          "text": "#endif"
+        },
+        {
+          "line": 83,
+          "text": "      }"
+        },
+        {
+          "line": 84,
+          "text": "    } catch (...) { /* No throw */ }"
+        },
+        {
+          "line": 85,
+          "text": "  }"
+        },
+        {
+          "line": 86,
+          "text": ""
+        },
+        {
+          "line": 87,
+          "text": "  CUDAEvent(const CUDAEvent&) = delete;"
+        },
+        {
+          "line": 88,
+          "text": "  CUDAEvent& operator=(const CUDAEvent&) = delete;"
+        },
+        {
+          "line": 89,
+          "text": ""
+        },
+        {
+          "line": 90,
+          "text": "  CUDAEvent(CUDAEvent&& other) noexcept { moveHelper(std::move(other)); }"
+        },
+        {
+          "line": 91,
+          "text": "  CUDAEvent& operator=(CUDAEvent&& other) noexcept {"
+        },
+        {
+          "line": 92,
+          "text": "    if (this != &other) {"
+        },
+        {
+          "line": 93,
+          "text": "      moveHelper(std::move(other));"
+        },
+        {
+          "line": 94,
+          "text": "    }"
+        },
+        {
+          "line": 95,
+          "text": "    return *this;"
+        },
+        {
+          "line": 96,
+          "text": "  }"
+        },
+        {
+          "line": 97,
+          "text": ""
+        },
+        {
+          "line": 98,
+          "text": "  operator cudaEvent_t() const { return event(); }"
+        },
+        {
+          "line": 99,
+          "text": ""
+        },
+        {
+          "line": 100,
+          "text": "  // Less than operator (to allow use in sets)"
+        },
+        {
+          "line": 101,
+          "text": "  friend bool operator<(const CUDAEvent& left, const CUDAEvent& right) {"
+        },
+        {
+          "line": 102,
+          "text": "    return left.event_ < right.event_;"
+        },
+        {
+          "line": 140,
+          "text": "  }"
+        },
+        {
+          "line": 141,
+          "text": ""
+        },
+        {
+          "line": 142,
+          "text": "  // Note: cudaEventRecord must be called on the same device as the event."
+        },
+        {
+          "line": 143,
+          "text": "  void record(const CUDAStream& stream) {"
+        },
+        {
+          "line": 144,
+          "text": "    if (!is_created_) {"
+        },
+        {
+          "line": 145,
+          "text": "#ifdef __ILUVATAR__"
+        },
+        {
+          "line": 146,
+          "text": "      if (c10::cuda::isCudaEventCacheEnabled() && !(flags_ & cudaEventInterprocess)) {"
+        },
+        {
+          "line": 147,
+          "text": "        device_index_ = stream.device_index();"
+        },
+        {
+          "line": 148,
+          "text": "        bool timing = (flags_ & cudaEventDisableTiming) == 0;"
+        },
+        {
+          "line": 149,
+          "text": "        event_cache_ = c10::cuda::CUDAEventCache::get(device_index_);"
+        },
+        {
+          "line": 150,
+          "text": "        event_ = event_cache_->acquire(timing);"
+        },
+        {
+          "line": 151,
+          "text": ""
+        },
+        {
+          "line": 152,
+          "text": "        is_created_ = true;"
+        },
+        {
+          "line": 153,
+          "text": "        is_from_cache_ = true;"
+        },
+        {
+          "line": 154,
+          "text": "      } else {"
+        },
+        {
+          "line": 155,
+          "text": "        // IPC"
+        },
+        {
+          "line": 156,
+          "text": "        createEvent(stream.device_index());"
+        },
+        {
+          "line": 157,
+          "text": "        is_from_cache_ = false;"
+        },
+        {
+          "line": 158,
+          "text": "        event_cache_.reset();"
+        },
+        {
+          "line": 159,
+          "text": "      }"
+        },
+        {
+          "line": 160,
+          "text": "#else"
+        },
+        {
+          "line": 207,
+          "text": "    }"
+        },
+        {
+          "line": 208,
+          "text": "  }"
+        },
+        {
+          "line": 209,
+          "text": ""
+        },
+        {
+          "line": 210,
+          "text": "  // Note: cudaEventElapsedTime can be safely called from any device"
+        },
+        {
+          "line": 211,
+          "text": "  float elapsed_time(const CUDAEvent& other) const {"
+        },
+        {
+          "line": 212,
+          "text": "    TORCH_CHECK_VALUE("
+        },
+        {
+          "line": 213,
+          "text": "        !(flags_ & cudaEventDisableTiming) && !(other.flags_ & cudaEventDisableTiming),"
+        },
+        {
+          "line": 214,
+          "text": "        \"Both events must be created with argument 'enable_timing=True'.\");"
+        },
+        {
+          "line": 215,
+          "text": "    TORCH_CHECK_VALUE("
+        },
+        {
+          "line": 216,
+          "text": "        is_created_ && other.isCreated(),"
+        },
+        {
+          "line": 217,
+          "text": "        \"Both events must be recorded before calculating elapsed time.\");"
+        },
+        {
+          "line": 218,
+          "text": "    TORCH_CHECK("
+        },
+        {
+          "line": 219,
+          "text": "        query() && other.query(),"
+        },
+        {
+          "line": 220,
+          "text": "        \"Both events must be completed before calculating elapsed time.\");"
+        },
+        {
+          "line": 221,
+          "text": ""
+        },
+        {
+          "line": 222,
+          "text": "    float time_ms = 0;"
+        },
+        {
+          "line": 223,
+          "text": "    // We do not strictly have to set the device index to the same as our event,"
+        },
+        {
+          "line": 224,
+          "text": "    // but if we don't and the current device is not initialized, it will"
+        },
+        {
+          "line": 225,
+          "text": "    // create a new cuda context, which will consume a lot of memory."
+        },
+        {
+          "line": 226,
+          "text": "    CUDAGuard guard(device_index_);"
+        },
+        {
+          "line": 227,
+          "text": "    // raise cudaErrorNotReady if either event is recorded but not yet completed"
+        },
+        {
+          "line": 228,
+          "text": "    AT_CUDA_CHECK(cudaEventElapsedTime(&time_ms, event_, other.event_));"
+        },
+        {
+          "line": 229,
+          "text": "    return time_ms;"
+        },
+        {
+          "line": 230,
+          "text": "  }"
+        },
+        {
+          "line": 231,
+          "text": ""
+        },
+        {
+          "line": 232,
+          "text": "  // Note: cudaEventSynchronize can be safely called from any device"
+        },
+        {
+          "line": 233,
+          "text": "  void synchronize() const {"
+        },
+        {
+          "line": 234,
+          "text": "    if (is_created_) {"
+        },
+        {
+          "line": 235,
+          "text": "      const c10::impl::PyInterpreter* interp = c10::impl::GPUTrace::get_trace();"
+        },
+        {
+          "line": 236,
+          "text": "      if (C10_UNLIKELY(interp)) {"
+        },
+        {
+          "line": 237,
+          "text": "          (*interp)->trace_gpu_event_synchronization(at::kCUDA, reinterpret_cast<uintptr_t>(event_));"
+        },
+        {
+          "line": 238,
+          "text": "      }"
+        },
+        {
+          "line": 239,
+          "text": "      AT_CUDA_CHECK(cudaEventSynchronize(event_));"
+        },
+        {
+          "line": 240,
+          "text": "    }"
+        },
+        {
+          "line": 241,
+          "text": "  }"
+        },
+        {
+          "line": 242,
+          "text": ""
+        },
+        {
+          "line": 243,
+          "text": "  // Note: cudaIpcGetEventHandle must be called on the same device as the event"
+        },
+        {
+          "line": 244,
+          "text": "  void ipc_handle(cudaIpcEventHandle_t * handle) {"
+        },
+        {
+          "line": 245,
+          "text": "      if (!is_created_) {"
+        },
+        {
+          "line": 246,
+          "text": "        // this CUDAEvent object was initially constructed from flags but event_"
+        },
+        {
+          "line": 247,
+          "text": "        // is not created yet."
+        },
+        {
+          "line": 248,
+          "text": "        createEvent(getCurrentCUDAStream().device_index());"
+        },
+        {
+          "line": 249,
+          "text": "      }"
+        },
+        {
+          "line": 250,
+          "text": "      CUDAGuard guard(device_index_);"
+        },
+        {
+          "line": 251,
+          "text": "      AT_CUDA_CHECK(cudaIpcGetEventHandle(handle, event_));"
+        },
+        {
+          "line": 252,
+          "text": "  }"
+        },
+        {
+          "line": 253,
+          "text": ""
+        },
+        {
+          "line": 254,
+          "text": "private:"
+        },
+        {
+          "line": 255,
+          "text": "  unsigned int flags_ = cudaEventDisableTiming;"
+        },
+        {
+          "line": 256,
+          "text": "  bool is_created_ = false;"
+        },
+        {
+          "line": 257,
+          "text": "  bool was_recorded_ = false;"
+        },
+        {
+          "line": 258,
+          "text": "  bool external_ = false;"
+        },
+        {
+          "line": 259,
+          "text": "  DeviceIndex device_index_ = -1;"
+        },
+        {
+          "line": 260,
+          "text": "  cudaEvent_t event_{};"
+        },
+        {
+          "line": 261,
+          "text": "#ifdef __ILUVATAR__"
+        },
+        {
+          "line": 262,
+          "text": "  bool is_from_cache_ = false;"
+        },
+        {
+          "line": 263,
+          "text": "  std::shared_ptr<c10::cuda::CUDAEventCache> event_cache_;"
+        },
+        {
+          "line": 264,
+          "text": "#endif"
+        },
+        {
+          "line": 265,
+          "text": ""
+        },
+        {
+          "line": 266,
+          "text": "  void createEvent(DeviceIndex device_index) {"
+        },
+        {
+          "line": 267,
+          "text": "    external_ = (flags_ & cudaEventExternal) != 0;"
+        },
+        {
+          "line": 268,
+          "text": "#ifdef USE_ROCM"
+        },
+        {
+          "line": 269,
+          "text": "    TORCH_CHECK(!external_, \"External events are disallowed in rocm\");"
+        },
+        {
+          "line": 270,
+          "text": "#endif"
+        },
+        {
+          "line": 271,
+          "text": "    flags_ &= ~cudaEventExternal;"
+        },
+        {
+          "line": 272,
+          "text": "    device_index_ = device_index;"
+        },
+        {
+          "line": 273,
+          "text": "    CUDAGuard guard(device_index_);"
+        },
+        {
+          "line": 274,
+          "text": "    AT_CUDA_CHECK(cudaEventCreateWithFlags(&event_, flags_));"
+        },
+        {
+          "line": 275,
+          "text": "    const c10::impl::PyInterpreter* interp = c10::impl::GPUTrace::get_trace();"
+        },
+        {
+          "line": 276,
+          "text": "    if (C10_UNLIKELY(interp)) {"
+        },
+        {
+          "line": 277,
+          "text": "      (*interp)->trace_gpu_event_creation(at::kCUDA, reinterpret_cast<uintptr_t>(event_));"
+        },
+        {
+          "line": 278,
+          "text": "    }"
+        },
+        {
+          "line": 279,
+          "text": "    is_created_ = true;"
+        },
+        {
+          "line": 280,
+          "text": "  }"
+        },
+        {
+          "line": 281,
+          "text": ""
+        },
+        {
+          "line": 282,
+          "text": "  void moveHelper(CUDAEvent&& other) {"
+        },
+        {
+          "line": 283,
+          "text": "    // Transfer ownership of all state from other to this"
+        },
+        {
+          "line": 284,
+          "text": "    flags_ = other.flags_;"
+        },
+        {
+          "line": 285,
+          "text": "    is_created_ = other.is_created_;"
+        },
+        {
+          "line": 286,
+          "text": "    was_recorded_ = other.was_recorded_;"
+        },
+        {
+          "line": 287,
+          "text": "    external_ = other.external_;"
+        },
+        {
+          "line": 288,
+          "text": "    device_index_ = other.device_index_;"
+        },
+        {
+          "line": 289,
+          "text": "    event_ = other.event_;"
+        },
+        {
+          "line": 290,
+          "text": ""
+        },
+        {
+          "line": 291,
+          "text": "    // Reset other to a valid empty state to prevent double-free"
+        },
+        {
+          "line": 292,
+          "text": "    // The moved-from object must not attempt to destroy the event"
+        },
+        {
+          "line": 293,
+          "text": "    other.is_created_ = false;"
+        },
+        {
+          "line": 294,
+          "text": "    other.event_ = cudaEvent_t{};"
+        },
+        {
+          "line": 295,
+          "text": "#ifdef __ILUVATAR__"
+        },
+        {
+          "line": 296,
+          "text": "    is_from_cache_ = other.is_from_cache_;"
+        }
+      ],
+      "exact_reader": "Path.read_bytes; SHA256完整字节；片段行号从1开始；不exec源"
+    },
+    {
+      "path": "/usr/local/lib/python3.12/site-packages/torch/include/c10/cuda/impl/CUDAGuardImpl.h",
+      "expected_sha256": null,
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "EventFlag|record\\(|synchronizeEvent|cudaEventCreate|cudaEventSynchronize",
+        "/usr/local/lib/python3.12/site-packages/torch/include/c10/cuda/impl/CUDAGuardImpl.h"
+      ],
+      "resolved": "/usr/local/lib/python3.12/site-packages/torch/include/c10/cuda/impl/CUDAGuardImpl.h",
+      "bytes": 11761,
+      "sha256": "6a3ed3bf2c6e7f199867a44a1c5b18dad54722eb4efab454bbfe6d923b2f59f3",
+      "expected_identity_matches": true,
+      "status": "read_only",
+      "matched_lines": 11,
+      "matches_truncated": false,
+      "excerpts": [
+        {
+          "line": 106,
+          "text": "  }"
+        },
+        {
+          "line": 107,
+          "text": "  DeviceIndex deviceCount() const noexcept override {"
+        },
+        {
+          "line": 108,
+          "text": "    return device_count();"
+        },
+        {
+          "line": 109,
+          "text": "  }"
+        },
+        {
+          "line": 110,
+          "text": ""
+        },
+        {
+          "line": 111,
+          "text": "  // Event-related functions"
+        },
+        {
+          "line": 112,
+          "text": "  void createEvent(cudaEvent_t* cuda_event, const EventFlag flag) const {"
+        },
+        {
+          "line": 113,
+          "text": "    // Maps PyTorch's Event::Flag to CUDA flag"
+        },
+        {
+          "line": 114,
+          "text": "    auto cuda_flag = cudaEventDefault;"
+        },
+        {
+          "line": 115,
+          "text": "    switch (flag) {"
+        },
+        {
+          "line": 116,
+          "text": "      case EventFlag::PYTORCH_DEFAULT:"
+        },
+        {
+          "line": 117,
+          "text": "        cuda_flag = cudaEventDisableTiming;"
+        },
+        {
+          "line": 118,
+          "text": "        break;"
+        },
+        {
+          "line": 119,
+          "text": "      case EventFlag::BACKEND_DEFAULT:"
+        },
+        {
+          "line": 120,
+          "text": "        cuda_flag = cudaEventDefault;"
+        },
+        {
+          "line": 121,
+          "text": "        break;"
+        },
+        {
+          "line": 122,
+          "text": "      default:"
+        },
+        {
+          "line": 123,
+          "text": "        TORCH_CHECK(false, \"CUDA event received unknown flag\");"
+        },
+        {
+          "line": 124,
+          "text": "    }"
+        },
+        {
+          "line": 125,
+          "text": ""
+        },
+        {
+          "line": 126,
+          "text": "    C10_CUDA_CHECK(cudaEventCreateWithFlags(cuda_event, cuda_flag));"
+        },
+        {
+          "line": 127,
+          "text": "    const c10::impl::PyInterpreter* interp = c10::impl::GPUTrace::get_trace();"
+        },
+        {
+          "line": 128,
+          "text": "    if (C10_UNLIKELY(interp)) {"
+        },
+        {
+          "line": 129,
+          "text": "      (*interp)->trace_gpu_event_creation("
+        },
+        {
+          "line": 130,
+          "text": "          c10::kCUDA, reinterpret_cast<uintptr_t>(cuda_event));"
+        },
+        {
+          "line": 131,
+          "text": "    }"
+        },
+        {
+          "line": 132,
+          "text": "  }"
+        },
+        {
+          "line": 133,
+          "text": ""
+        },
+        {
+          "line": 134,
+          "text": "  void destroyEvent(void* event, const DeviceIndex device_index)"
+        },
+        {
+          "line": 135,
+          "text": "      const noexcept override {"
+        },
+        {
+          "line": 136,
+          "text": "    if (!event)"
+        },
+        {
+          "line": 137,
+          "text": "      return;"
+        },
+        {
+          "line": 138,
+          "text": "    auto cuda_event = static_cast<cudaEvent_t>(event);"
+        },
+        {
+          "line": 176,
+          "text": "    }"
+        },
+        {
+          "line": 177,
+          "text": "    C10_CUDA_CHECK_WARN(cudaEventDestroy(cuda_event));"
+        },
+        {
+          "line": 178,
+          "text": "    C10_CUDA_CHECK_WARN(c10::cuda::SetDevice(orig_device));"
+        },
+        {
+          "line": 179,
+          "text": "#endif"
+        },
+        {
+          "line": 180,
+          "text": "  }"
+        },
+        {
+          "line": 181,
+          "text": ""
+        },
+        {
+          "line": 182,
+          "text": "  void record("
+        },
+        {
+          "line": 183,
+          "text": "      void** event,"
+        },
+        {
+          "line": 184,
+          "text": "      const Stream& stream,"
+        },
+        {
+          "line": 185,
+          "text": "      const DeviceIndex device_index,"
+        },
+        {
+          "line": 186,
+          "text": "      const EventFlag flag) const override {"
+        },
+        {
+          "line": 187,
+          "text": "    TORCH_CHECK("
+        },
+        {
+          "line": 188,
+          "text": "        device_index == -1 || device_index == stream.device_index(),"
+        },
+        {
+          "line": 189,
+          "text": "        \"Event device index \","
+        },
+        {
+          "line": 190,
+          "text": "        device_index,"
+        },
+        {
+          "line": 191,
+          "text": "        \" does not match recording stream's device index \","
+        },
+        {
+          "line": 192,
+          "text": "        stream.device_index(),"
+        },
+        {
+          "line": 193,
+          "text": "        \".\");"
+        },
+        {
+          "line": 194,
+          "text": ""
+        },
+        {
+          "line": 195,
+          "text": "    cudaEvent_t cuda_event = static_cast<cudaEvent_t>(*event);"
+        },
+        {
+          "line": 196,
+          "text": "    CUDAStream cuda_stream{stream};"
+        },
+        {
+          "line": 197,
+          "text": ""
+        },
+        {
+          "line": 198,
+          "text": "    // Moves to stream's device to record"
+        },
+        {
+          "line": 200,
+          "text": "    setDevice(stream.device());"
+        },
+        {
+          "line": 201,
+          "text": ""
+        },
+        {
+          "line": 202,
+          "text": "    // Creates the event (lazily)"
+        },
+        {
+          "line": 203,
+          "text": "#ifdef __ILUVATAR__"
+        },
+        {
+          "line": 204,
+          "text": "    if (!cuda_event) {"
+        },
+        {
+          "line": 205,
+          "text": "      if (c10::cuda::isCudaEventCacheEnabled()) {"
+        },
+        {
+          "line": 206,
+          "text": "        bool timing = (flag == EventFlag::BACKEND_DEFAULT);"
+        },
+        {
+          "line": 207,
+          "text": "        auto cache = c10::cuda::CUDAEventCache::get(stream.device_index());"
+        },
+        {
+          "line": 208,
+          "text": "        cuda_event = cache->acquire(timing);"
+        },
+        {
+          "line": 209,
+          "text": "        {"
+        },
+        {
+          "line": 210,
+          "text": "          std::lock_guard<std::mutex> lock(eventTimingMapMutex());"
+        },
+        {
+          "line": 211,
+          "text": "          eventTimingMap().insert_or_assign("
+        },
+        {
+          "line": 212,
+          "text": "              cuda_event, EventCacheInfo{timing, std::move(cache)});"
+        },
+        {
+          "line": 213,
+          "text": "        }"
+        },
+        {
+          "line": 214,
+          "text": "        *event = cuda_event;"
+        },
+        {
+          "line": 215,
+          "text": "      } else {"
+        },
+        {
+          "line": 216,
+          "text": "        createEvent(&cuda_event, flag);"
+        },
+        {
+          "line": 217,
+          "text": "      }"
+        },
+        {
+          "line": 218,
+          "text": "    }"
+        },
+        {
+          "line": 222,
+          "text": "#endif"
+        },
+        {
+          "line": 223,
+          "text": "    C10_CUDA_CHECK(cudaEventRecord(cuda_event, cuda_stream));"
+        },
+        {
+          "line": 224,
+          "text": "    // Makes the void* point to the (possibly just allocated) CUDA event"
+        },
+        {
+          "line": 225,
+          "text": "    *event = cuda_event;"
+        },
+        {
+          "line": 226,
+          "text": "    const c10::impl::PyInterpreter* interp = c10::impl::GPUTrace::get_trace();"
+        },
+        {
+          "line": 227,
+          "text": "    if (C10_UNLIKELY(interp)) {"
+        },
+        {
+          "line": 228,
+          "text": "      (*interp)->trace_gpu_event_record("
+        },
+        {
+          "line": 229,
+          "text": "          c10::kCUDA,"
+        },
+        {
+          "line": 230,
+          "text": "          reinterpret_cast<uintptr_t>(cuda_event),"
+        },
+        {
+          "line": 231,
+          "text": "          reinterpret_cast<uintptr_t>(cuda_stream.stream()));"
+        },
+        {
+          "line": 232,
+          "text": "    }"
+        },
+        {
+          "line": 233,
+          "text": ""
+        },
+        {
+          "line": 234,
+          "text": "    // Resets device"
+        },
+        {
+          "line": 235,
+          "text": "    setDevice(orig_device);"
+        },
+        {
+          "line": 236,
+          "text": "  }"
+        },
+        {
+          "line": 237,
+          "text": ""
+        },
+        {
+          "line": 238,
+          "text": "  void block(void* event, const Stream& stream) const override {"
+        },
+        {
+          "line": 239,
+          "text": "    if (!event)"
+        },
+        {
+          "line": 240,
+          "text": "      return;"
+        },
+        {
+          "line": 280,
+          "text": ""
+        },
+        {
+          "line": 281,
+          "text": "  void synchronizeStream(const Stream& stream) const override {"
+        },
+        {
+          "line": 282,
+          "text": "    CUDAStream cuda_stream{stream};"
+        },
+        {
+          "line": 283,
+          "text": "    cuda_stream.synchronize();"
+        },
+        {
+          "line": 284,
+          "text": "  }"
+        },
+        {
+          "line": 285,
+          "text": ""
+        },
+        {
+          "line": 286,
+          "text": "  void synchronizeEvent(void* event) const override {"
+        },
+        {
+          "line": 287,
+          "text": "    if (!event)"
+        },
+        {
+          "line": 288,
+          "text": "      return;"
+        },
+        {
+          "line": 289,
+          "text": "    cudaEvent_t cuda_event = static_cast<cudaEvent_t>(event);"
+        },
+        {
+          "line": 290,
+          "text": "    const c10::impl::PyInterpreter* interp = c10::impl::GPUTrace::get_trace();"
+        },
+        {
+          "line": 291,
+          "text": "    if (C10_UNLIKELY(interp)) {"
+        },
+        {
+          "line": 292,
+          "text": "      (*interp)->trace_gpu_event_synchronization("
+        },
+        {
+          "line": 293,
+          "text": "          c10::kCUDA, reinterpret_cast<uintptr_t>(cuda_event));"
+        },
+        {
+          "line": 294,
+          "text": "    }"
+        },
+        {
+          "line": 295,
+          "text": "    // Note: cudaEventSynchronize can be safely called from any device"
+        },
+        {
+          "line": 296,
+          "text": "    C10_CUDA_CHECK(cudaEventSynchronize(cuda_event));"
+        },
+        {
+          "line": 297,
+          "text": "  }"
+        },
+        {
+          "line": 298,
+          "text": ""
+        },
+        {
+          "line": 299,
+          "text": "  // Note: synchronizeDevice can be safely called from any device"
+        },
+        {
+          "line": 300,
+          "text": "  void synchronizeDevice(const c10::DeviceIndex device_index) const override {"
+        },
+        {
+          "line": 301,
+          "text": "    DeviceIndex orig_device{-1};"
+        },
+        {
+          "line": 302,
+          "text": "    C10_CUDA_CHECK(c10::cuda::GetDevice(&orig_device));"
+        },
+        {
+          "line": 303,
+          "text": "    C10_CUDA_CHECK(c10::cuda::SetDevice(device_index));"
+        },
+        {
+          "line": 304,
+          "text": "    const c10::impl::PyInterpreter* interp = c10::impl::GPUTrace::get_trace();"
+        },
+        {
+          "line": 305,
+          "text": "    if (C10_UNLIKELY(interp)) {"
+        },
+        {
+          "line": 306,
+          "text": "      (*interp)->trace_gpu_device_synchronization(c10::kCUDA);"
+        },
+        {
+          "line": 307,
+          "text": "    }"
+        },
+        {
+          "line": 308,
+          "text": "    C10_CUDA_CHECK(cudaDeviceSynchronize());"
+        }
+      ],
+      "exact_reader": "Path.read_bytes; SHA256完整字节；片段行号从1开始；不exec源"
+    },
+    {
+      "path": "/usr/local/lib/python3.12/site-packages/torch/include/c10/core/impl/InlineEvent.h",
+      "expected_sha256": null,
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "EventFlag|flag_|synchronize|createEvent",
+        "/usr/local/lib/python3.12/site-packages/torch/include/c10/core/impl/InlineEvent.h"
+      ],
+      "resolved": "/usr/local/lib/python3.12/site-packages/torch/include/c10/core/impl/InlineEvent.h",
+      "bytes": 4562,
+      "sha256": "a121d49f1a243d38e002d26c8eb70be22c18689a20b5d82e3f8372f1b0ae6e7b",
+      "expected_identity_matches": true,
+      "status": "read_only",
+      "matched_lines": 12,
+      "matches_truncated": false,
+      "excerpts": [
+        {
+          "line": 10,
+          "text": ""
+        },
+        {
+          "line": 11,
+          "text": "template <typename T>"
+        },
+        {
+          "line": 12,
+          "text": "struct InlineEvent final {"
+        },
+        {
+          "line": 13,
+          "text": "  InlineEvent() = delete;"
+        },
+        {
+          "line": 14,
+          "text": "  InlineEvent("
+        },
+        {
+          "line": 15,
+          "text": "      const DeviceType _device_type,"
+        },
+        {
+          "line": 16,
+          "text": "      const EventFlag _flag = EventFlag::PYTORCH_DEFAULT)"
+        },
+        {
+          "line": 17,
+          "text": "      : backend_{_device_type}, device_type_{_device_type}, flag_{_flag} {}"
+        },
+        {
+          "line": 18,
+          "text": ""
+        },
+        {
+          "line": 19,
+          "text": "  // Copy constructor and copy assignment operator (deleted)"
+        },
+        {
+          "line": 20,
+          "text": "  InlineEvent(const InlineEvent&) = delete;"
+        },
+        {
+          "line": 21,
+          "text": "  InlineEvent& operator=(const InlineEvent&) = delete;"
+        },
+        {
+          "line": 22,
+          "text": ""
+        },
+        {
+          "line": 23,
+          "text": "  // Move constructor and move assignment operator"
+        },
+        {
+          "line": 24,
+          "text": "  InlineEvent(InlineEvent&& other) noexcept"
+        },
+        {
+          "line": 25,
+          "text": "      : event_(other.event_),"
+        },
+        {
+          "line": 26,
+          "text": "        backend_(std::move(other.backend_)),"
+        },
+        {
+          "line": 27,
+          "text": "        device_type_(other.device_type_),"
+        },
+        {
+          "line": 28,
+          "text": "        device_index_(other.device_index_),"
+        },
+        {
+          "line": 29,
+          "text": "        flag_(other.flag_),"
+        },
+        {
+          "line": 30,
+          "text": "        was_marked_for_recording_(other.was_marked_for_recording_) {"
+        },
+        {
+          "line": 31,
+          "text": "    other.event_ = nullptr;"
+        },
+        {
+          "line": 32,
+          "text": "  }"
+        },
+        {
+          "line": 33,
+          "text": "  InlineEvent& operator=(InlineEvent&& other) noexcept {"
+        },
+        {
+          "line": 34,
+          "text": "    swap(other);"
+        },
+        {
+          "line": 35,
+          "text": "    return *this;"
+        },
+        {
+          "line": 36,
+          "text": "  }"
+        },
+        {
+          "line": 37,
+          "text": ""
+        },
+        {
+          "line": 38,
+          "text": "  void swap(InlineEvent& other) noexcept {"
+        },
+        {
+          "line": 39,
+          "text": "    std::swap(event_, other.event_);"
+        },
+        {
+          "line": 40,
+          "text": "    std::swap(backend_, other.backend_);"
+        },
+        {
+          "line": 41,
+          "text": "    std::swap(device_type_, other.device_type_);"
+        },
+        {
+          "line": 42,
+          "text": "    std::swap(device_index_, other.device_index_);"
+        },
+        {
+          "line": 43,
+          "text": "    std::swap(flag_, other.flag_);"
+        },
+        {
+          "line": 44,
+          "text": "    std::swap(was_marked_for_recording_, other.was_marked_for_recording_);"
+        },
+        {
+          "line": 45,
+          "text": "  }"
+        },
+        {
+          "line": 46,
+          "text": ""
+        },
+        {
+          "line": 47,
+          "text": "  ~InlineEvent() noexcept {"
+        },
+        {
+          "line": 48,
+          "text": "    if (event_)"
+        },
+        {
+          "line": 49,
+          "text": "      backend_.destroyEvent(event_, device_index_);"
+        },
+        {
+          "line": 50,
+          "text": "  }"
+        },
+        {
+          "line": 51,
+          "text": ""
+        },
+        {
+          "line": 52,
+          "text": "  DeviceType device_type() const noexcept {"
+        },
+        {
+          "line": 53,
+          "text": "    return device_type_;"
+        },
+        {
+          "line": 54,
+          "text": "  }"
+        },
+        {
+          "line": 55,
+          "text": "  DeviceIndex device_index() const noexcept {"
+        },
+        {
+          "line": 56,
+          "text": "    return device_index_;"
+        },
+        {
+          "line": 57,
+          "text": "  }"
+        },
+        {
+          "line": 58,
+          "text": "  EventFlag flag() const noexcept {"
+        },
+        {
+          "line": 59,
+          "text": "    return flag_;"
+        },
+        {
+          "line": 60,
+          "text": "  }"
+        },
+        {
+          "line": 61,
+          "text": "  bool was_marked_for_recording() const noexcept {"
+        },
+        {
+          "line": 62,
+          "text": "    return was_marked_for_recording_;"
+        },
+        {
+          "line": 63,
+          "text": "  }"
+        },
+        {
+          "line": 64,
+          "text": ""
+        },
+        {
+          "line": 65,
+          "text": "  void recordOnce(const Stream& stream) {"
+        },
+        {
+          "line": 66,
+          "text": "    if (!was_marked_for_recording_)"
+        },
+        {
+          "line": 67,
+          "text": "      record(stream);"
+        },
+        {
+          "line": 68,
+          "text": "  }"
+        },
+        {
+          "line": 69,
+          "text": ""
+        },
+        {
+          "line": 70,
+          "text": "  void record(const Stream& stream) {"
+        },
+        {
+          "line": 71,
+          "text": "    TORCH_CHECK("
+        },
+        {
+          "line": 73,
+          "text": "        \"Event device type \","
+        },
+        {
+          "line": 74,
+          "text": "        DeviceTypeName(device_type_),"
+        },
+        {
+          "line": 75,
+          "text": "        \" does not match recording stream's device type \","
+        },
+        {
+          "line": 76,
+          "text": "        DeviceTypeName(stream.device_type()),"
+        },
+        {
+          "line": 77,
+          "text": "        \".\");"
+        },
+        {
+          "line": 78,
+          "text": ""
+        },
+        {
+          "line": 79,
+          "text": "    backend_.record(&event_, stream, device_index_, flag_);"
+        },
+        {
+          "line": 80,
+          "text": "    was_marked_for_recording_ = true;"
+        },
+        {
+          "line": 81,
+          "text": "    device_index_ = stream.device_index();"
+        },
+        {
+          "line": 82,
+          "text": "  }"
+        },
+        {
+          "line": 83,
+          "text": ""
+        },
+        {
+          "line": 84,
+          "text": "  void block(const Stream& stream) const {"
+        },
+        {
+          "line": 85,
+          "text": "    if (!was_marked_for_recording_)"
+        },
+        {
+          "line": 86,
+          "text": "      return;"
+        },
+        {
+          "line": 87,
+          "text": ""
+        },
+        {
+          "line": 88,
+          "text": "    TORCH_CHECK("
+        },
+        {
+          "line": 89,
+          "text": "        stream.device_type() == device_type_,"
+        },
+        {
+          "line": 90,
+          "text": "        \"Event device type \","
+        },
+        {
+          "line": 91,
+          "text": "        DeviceTypeName(device_type_),"
+        },
+        {
+          "line": 112,
+          "text": "        \"Event device type \","
+        },
+        {
+          "line": 113,
+          "text": "        DeviceTypeName(device_type_),"
+        },
+        {
+          "line": 114,
+          "text": "        \" does not match other's device type \","
+        },
+        {
+          "line": 115,
+          "text": "        DeviceTypeName(other.device_type()),"
+        },
+        {
+          "line": 116,
+          "text": "        \".\");"
+        },
+        {
+          "line": 117,
+          "text": "    TORCH_CHECK_VALUE("
+        },
+        {
+          "line": 118,
+          "text": "        (flag_ == EventFlag::BACKEND_DEFAULT) &&"
+        },
+        {
+          "line": 119,
+          "text": "            (other.flag_ == EventFlag::BACKEND_DEFAULT),"
+        },
+        {
+          "line": 120,
+          "text": "        \"Both events must be created with argument 'enable_timing=True'.\");"
+        },
+        {
+          "line": 121,
+          "text": "    TORCH_CHECK_VALUE("
+        },
+        {
+          "line": 122,
+          "text": "        was_marked_for_recording() && other.was_marked_for_recording(),"
+        },
+        {
+          "line": 123,
+          "text": "        \"Both events must be recorded before calculating elapsed time.\");"
+        },
+        {
+          "line": 124,
+          "text": "    // elapsedTime in MPS can wait event to be completed if event is not ready,"
+        },
+        {
+          "line": 125,
+          "text": "    // which is a little different from CUDA"
+        },
+        {
+          "line": 126,
+          "text": "    TORCH_CHECK("
+        },
+        {
+          "line": 127,
+          "text": "        (query() && other.query()) || device_type_ == DeviceType::MPS,"
+        },
+        {
+          "line": 128,
+          "text": "        \"Both events must be completed before calculating elapsed time.\");"
+        },
+        {
+          "line": 129,
+          "text": ""
+        },
+        {
+          "line": 130,
+          "text": "    return backend_.elapsedTime(event_, other.event_, device_index_);"
+        },
+        {
+          "line": 131,
+          "text": "  }"
+        },
+        {
+          "line": 132,
+          "text": ""
+        },
+        {
+          "line": 133,
+          "text": "  void synchronize() const {"
+        },
+        {
+          "line": 134,
+          "text": "    if (!was_marked_for_recording_)"
+        },
+        {
+          "line": 135,
+          "text": "      return;"
+        },
+        {
+          "line": 136,
+          "text": "    backend_.synchronizeEvent(event_);"
+        },
+        {
+          "line": 137,
+          "text": "  }"
+        },
+        {
+          "line": 138,
+          "text": ""
+        },
+        {
+          "line": 139,
+          "text": " private:"
+        },
+        {
+          "line": 140,
+          "text": "  void* event_ = nullptr;"
+        },
+        {
+          "line": 141,
+          "text": "  T backend_;"
+        },
+        {
+          "line": 142,
+          "text": "  DeviceType device_type_;"
+        },
+        {
+          "line": 143,
+          "text": "  DeviceIndex device_index_ = -1;"
+        },
+        {
+          "line": 144,
+          "text": "  EventFlag flag_ = EventFlag::PYTORCH_DEFAULT;"
+        },
+        {
+          "line": 145,
+          "text": "  bool was_marked_for_recording_ = false;"
+        },
+        {
+          "line": 146,
+          "text": "};"
+        },
+        {
+          "line": 147,
+          "text": ""
+        },
+        {
+          "line": 148,
+          "text": "} // namespace c10::impl"
+        },
+        {
+          "line": 149,
+          "text": ""
+        },
+        {
+          "line": 150,
+          "text": "#else"
+        },
+        {
+          "line": 151,
+          "text": "#error \"This file should not be included when either TORCH_STABLE_ONLY or TORCH_TARGET_VERSION is defined.\""
+        },
+        {
+          "line": 152,
+          "text": "#endif  // !defined(TORCH_STABLE_ONLY) && !defined(TORCH_TARGET_VERSION)"
+        }
+      ],
+      "exact_reader": "Path.read_bytes; SHA256完整字节；片段行号从1开始；不exec源"
+    },
+    {
+      "path": "/usr/local/corex-4.5.0/include/IX/ixrt/driver_types.h",
+      "expected_sha256": "93c8f434cef524cd2370c003506da3301f55dd022593349122548647b9317069",
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "ixEventDefault|ixEventBlockingSync|ixEventDisableTiming|ixEventInterprocess",
+        "/usr/local/corex-4.5.0/include/IX/ixrt/driver_types.h"
+      ],
+      "resolved": "/usr/local/corex-4.5.0/include/IX/ixrt/driver_types.h",
+      "bytes": 48994,
+      "sha256": "93c8f434cef524cd2370c003506da3301f55dd022593349122548647b9317069",
+      "expected_identity_matches": true,
+      "status": "read_only",
+      "matched_lines": 4,
+      "matches_truncated": false,
+      "excerpts": [
+        {
+          "line": 45,
+          "text": "#define ixStreamNonBlocking 0x01"
+        },
+        {
+          "line": 46,
+          "text": ""
+        },
+        {
+          "line": 47,
+          "text": "#define ixStreamLegacy ((ixStream_t)0x1)"
+        },
+        {
+          "line": 48,
+          "text": ""
+        },
+        {
+          "line": 49,
+          "text": "#define ixStreamPerThread ((ixStream_t)0x2)"
+        },
+        {
+          "line": 50,
+          "text": ""
+        },
+        {
+          "line": 51,
+          "text": "#define ixEventDefault 0x00"
+        },
+        {
+          "line": 52,
+          "text": "#define ixEventBlockingSync 0x01"
+        },
+        {
+          "line": 53,
+          "text": "#define ixEventDisableTiming 0x02"
+        },
+        {
+          "line": 54,
+          "text": "#define ixEventInterprocess 0x04"
+        },
+        {
+          "line": 55,
+          "text": ""
+        },
+        {
+          "line": 56,
+          "text": "#define ixDeviceScheduleAuto 0x00"
+        },
+        {
+          "line": 57,
+          "text": "#define ixDeviceScheduleSpin 0x01"
+        },
+        {
+          "line": 58,
+          "text": "#define ixDeviceScheduleYield 0x02"
+        },
+        {
+          "line": 59,
+          "text": "#define ixDeviceScheduleBlockingSync 0x04"
+        },
+        {
+          "line": 60,
+          "text": "#define ixDeviceBlockingSync 0x04"
+        },
+        {
+          "line": 61,
+          "text": "#define ixDeviceScheduleMask 0x07"
+        },
+        {
+          "line": 62,
+          "text": "#define ixDeviceMapHost 0x08"
+        },
+        {
+          "line": 63,
+          "text": "#define ixDeviceLmemResizeToMax 0x10"
+        },
+        {
+          "line": 64,
+          "text": "#define ixDeviceMask 0x1f"
+        },
+        {
+          "line": 65,
+          "text": ""
+        },
+        {
+          "line": 66,
+          "text": "#define ixArrayDefault 0x00"
+        }
+      ],
+      "exact_reader": "Path.read_bytes; SHA256完整字节；片段行号从1开始；不exec源"
+    },
+    {
+      "path": "/usr/local/corex-4.5.0/include/IX/ixrt/ix_runtime_api.h",
+      "expected_sha256": "7dca9b9187cf2f7dda5ff75760ae2d56d04007fb07eacc3c74242b63e6c90a5b",
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "ixEventCreateWithFlags|ixEventSynchronize|ixEventQuery|ixEventRecord\\(",
+        "/usr/local/corex-4.5.0/include/IX/ixrt/ix_runtime_api.h"
+      ],
+      "resolved": "/usr/local/corex-4.5.0/include/IX/ixrt/ix_runtime_api.h",
+      "bytes": 105733,
+      "sha256": "7dca9b9187cf2f7dda5ff75760ae2d56d04007fb07eacc3c74242b63e6c90a5b",
+      "expected_identity_matches": true,
+      "status": "read_only",
+      "matched_lines": 5,
+      "matches_truncated": false,
+      "excerpts": [
+        {
+          "line": 242,
+          "text": "                                                                enum ixStreamCaptureStatus*            pCaptureStatus,"
+        },
+        {
+          "line": 243,
+          "text": "                                                                unsigned long long*                    pId,"
+        },
+        {
+          "line": 244,
+          "text": "                                                                ixGraph_t* graph_out                   __dv(0),"
+        },
+        {
+          "line": 245,
+          "text": "                                                                const ixGraphNode_t** dependencies_out __dv(0),"
+        },
+        {
+          "line": 246,
+          "text": "                                                                size_t* numDependencies_out            __dv(0));"
+        },
+        {
+          "line": 247,
+          "text": "    extern __host__ ixError_t IXRTAPI ixEventCreate(ixEvent_t* event);"
+        },
+        {
+          "line": 248,
+          "text": "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI ixEventCreateWithFlags(ixEvent_t* event, unsigned int flags);"
+        },
+        {
+          "line": 249,
+          "text": "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI ixEventRecord(ixEvent_t event, ixStream_t stream __dv(0));"
+        },
+        {
+          "line": 250,
+          "text": "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI ixEventRecordWithFlags(ixEvent_t          event,"
+        },
+        {
+          "line": 251,
+          "text": "                                                                              ixStream_t stream  __dv(0),"
+        },
+        {
+          "line": 252,
+          "text": "                                                                              unsigned int flags __dv(0));"
+        },
+        {
+          "line": 253,
+          "text": "    extern __host__ ixError_t IXRTAPI                  ixEventQuery(ixEvent_t event);"
+        },
+        {
+          "line": 254,
+          "text": "    extern __host__ ixError_t IXRTAPI                  ixEventSynchronize(ixEvent_t event);"
+        },
+        {
+          "line": 255,
+          "text": "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI ixEventDestroy(ixEvent_t event);"
+        },
+        {
+          "line": 256,
+          "text": "    extern __host__ ixError_t IXRTAPI                  ixEventElapsedTime(float* ms, ixEvent_t start, ixEvent_t end);"
+        },
+        {
+          "line": 257,
+          "text": "    extern __host__ ixError_t IXRTAPI                  ixImportExternalMemory(ixExternalMemory_t*                      extMem_out,"
+        },
+        {
+          "line": 258,
+          "text": "                                                                              const struct ixExternalMemoryHandleDesc* memHandleDesc);"
+        },
+        {
+          "line": 259,
+          "text": "    extern __host__ ixError_t IXRTAPI"
+        },
+        {
+          "line": 260,
+          "text": "    ixExternalMemoryGetMappedBuffer(void**                                   devPtr,"
+        },
+        {
+          "line": 261,
+          "text": "                                    ixExternalMemory_t                       extMem,"
+        },
+        {
+          "line": 262,
+          "text": "                                    const struct ixExternalMemoryBufferDesc* bufferDesc);"
+        },
+        {
+          "line": 263,
+          "text": "    extern __host__ ixError_t IXRTAPI"
+        },
+        {
+          "line": 264,
+          "text": "                                      ixExternalMemoryGetMappedMipmappedArray(ixMipmappedArray_t*                              mipmap,"
+        },
+        {
+          "line": 265,
+          "text": "                                                                              ixExternalMemory_t                               extMem,"
+        },
+        {
+          "line": 266,
+          "text": "                                                                              const struct ixExternalMemoryMipmappedArrayDesc* mipmapDesc);"
+        },
+        {
+          "line": 1097,
+          "text": "                                                                       int                 value,"
+        },
+        {
+          "line": 1098,
+          "text": "                                                                       struct ixExtent     extent,"
+        },
+        {
+          "line": 1099,
+          "text": "                                                                       ixStream_t stream   __dv(0));"
+        },
+        {
+          "line": 1100,
+          "text": "    extern __host__ ixError_t IXRTAPI                  ixStreamQuery(ixStream_t stream);"
+        },
+        {
+          "line": 1101,
+          "text": "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI ixStreamGetFlags(ixStream_t hStream, unsigned int* flags);"
+        },
+        {
+          "line": 1102,
+          "text": "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI ixStreamGetPriority(ixStream_t hStream, int* priority);"
+        },
+        {
+          "line": 1103,
+          "text": "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI ixEventRecord(ixEvent_t event, ixStream_t stream __dv(0));"
+        },
+        {
+          "line": 1104,
+          "text": "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI ixEventRecordWithFlags(ixEvent_t          event,"
+        },
+        {
+          "line": 1105,
+          "text": "                                                                              ixStream_t stream  __dv(0),"
+        },
+        {
+          "line": 1106,
+          "text": "                                                                              unsigned int flags __dv(0));"
+        },
+        {
+          "line": 1107,
+          "text": "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI ixStreamWaitEvent(ixStream_t   stream,"
+        },
+        {
+          "line": 1108,
+          "text": "                                                                         ixEvent_t    event,"
+        },
+        {
+          "line": 1109,
+          "text": "                                                                         unsigned int flags);"
+        },
+        {
+          "line": 1110,
+          "text": "    extern __host__ ixError_t IXRTAPI                  ixStreamAddCallback(ixStream_t         stream,"
+        },
+        {
+          "line": 1111,
+          "text": "                                                                           ixStreamCallback_t callback,"
+        },
+        {
+          "line": 1112,
+          "text": "                                                                           void*              userData,"
+        },
+        {
+          "line": 1113,
+          "text": "                                                                           unsigned int       flags);"
+        },
+        {
+          "line": 1114,
+          "text": "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI ixStreamAttachMemAsync(ixStream_t   stream,"
+        },
+        {
+          "line": 1115,
+          "text": "                                                                              void*        devPtr,"
+        }
+      ],
+      "exact_reader": "Path.read_bytes; SHA256完整字节；片段行号从1开始；不exec源"
+    },
+    {
+      "path": "/usr/local/corex-4.5.0/include/IX/mapping_cudart.h",
+      "expected_sha256": "ca962a4e5e051a6de6e8c84c89cf6ec9430d8fbb225a78708731b928662984fb",
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "cudaEvent(Default|BlockingSync|DisableTiming|CreateWithFlags|Synchronize|Query|Record)",
+        "/usr/local/corex-4.5.0/include/IX/mapping_cudart.h"
+      ],
+      "resolved": "/usr/local/corex-4.5.0/include/IX/mapping_cudart.h",
+      "bytes": 195531,
+      "sha256": "ca962a4e5e051a6de6e8c84c89cf6ec9430d8fbb225a78708731b928662984fb",
+      "expected_identity_matches": true,
+      "status": "read_only",
+      "matched_lines": 13,
+      "matches_truncated": false,
+      "excerpts": [
+        {
+          "line": 1642,
+          "text": "#define cudaDeviceGetCacheConfig ixDeviceGetCacheConfig"
+        },
+        {
+          "line": 1643,
+          "text": "#define cudaDeviceGetLimit ixDeviceGetLimit"
+        },
+        {
+          "line": 1644,
+          "text": "#define cudaDeviceGetSharedMemConfig ixDeviceGetSharedMemConfig"
+        },
+        {
+          "line": 1645,
+          "text": "#define cudaDeviceSynchronize ixDeviceSynchronize"
+        },
+        {
+          "line": 1646,
+          "text": "#define cudaErrorUnknown ixErrorUnknown"
+        },
+        {
+          "line": 1647,
+          "text": "#define cudaError_t ixError_t"
+        },
+        {
+          "line": 1648,
+          "text": "#define cudaEventCreateWithFlags ixEventCreateWithFlags"
+        },
+        {
+          "line": 1649,
+          "text": "#define cudaEventDestroy ixEventDestroy"
+        },
+        {
+          "line": 1650,
+          "text": "#define cudaEventRecord ixEventRecord"
+        },
+        {
+          "line": 1651,
+          "text": "#define cudaEventRecordWithFlags ixEventRecordWithFlags"
+        },
+        {
+          "line": 1652,
+          "text": "#define cudaEventRecord_ptsz ixEventRecord_ptsz"
+        },
+        {
+          "line": 1653,
+          "text": "#define cudaEvent_t ixEvent_t"
+        },
+        {
+          "line": 1654,
+          "text": "#define cudaExtent ixExtent"
+        },
+        {
+          "line": 1655,
+          "text": "#define cudaFree ixFree"
+        },
+        {
+          "line": 1656,
+          "text": "#define cudaFuncAttributes ixFuncAttributes"
+        },
+        {
+          "line": 1657,
+          "text": "#define cudaFuncCache ixFuncCache"
+        },
+        {
+          "line": 1658,
+          "text": "#define cudaFuncGetAttributes ixFuncGetAttributes"
+        },
+        {
+          "line": 1659,
+          "text": "#define cudaGetDevice ixGetDevice"
+        },
+        {
+          "line": 1660,
+          "text": "#define cudaGetDeviceCount ixGetDeviceCount"
+        },
+        {
+          "line": 1661,
+          "text": "#define cudaGetErrorName ixGetErrorName"
+        },
+        {
+          "line": 1662,
+          "text": "#define cudaGetErrorString ixGetErrorString"
+        },
+        {
+          "line": 1663,
+          "text": "#define cudaGetLastError ixGetLastError"
+        },
+        {
+          "line": 1664,
+          "text": "#define cudaGetParameterBuffer ixGetParameterBuffer"
+        },
+        {
+          "line": 1774,
+          "text": "#define cudaDevAttrMultiProcessorCount ixDevAttrMultiProcessorCount"
+        },
+        {
+          "line": 1775,
+          "text": "#define cudaDevAttrWarpSize ixDevAttrWarpSize"
+        },
+        {
+          "line": 1776,
+          "text": "#define cudaDeviceGetAttribute ixDeviceGetAttribute"
+        },
+        {
+          "line": 1777,
+          "text": "#define cudaErrorInvalidValue ixErrorInvalidValue"
+        },
+        {
+          "line": 1778,
+          "text": "#define cudaError_t ixError_t"
+        },
+        {
+          "line": 1779,
+          "text": "#define cudaEventCreate ixEventCreate"
+        },
+        {
+          "line": 1780,
+          "text": "#define cudaEventCreateWithFlags ixEventCreateWithFlags"
+        },
+        {
+          "line": 1781,
+          "text": "#define cudaEvent_t ixEvent_t"
+        },
+        {
+          "line": 1782,
+          "text": "#define cudaFuncAttribute ixFuncAttribute"
+        },
+        {
+          "line": 1783,
+          "text": "#define cudaFuncAttributes ixFuncAttributes"
+        },
+        {
+          "line": 1784,
+          "text": "#define cudaFuncCache ixFuncCache"
+        },
+        {
+          "line": 1785,
+          "text": "#define cudaFuncGetAttributes ixFuncGetAttributes"
+        },
+        {
+          "line": 1786,
+          "text": "#define cudaFuncSetAttribute ixFuncSetAttribute"
+        },
+        {
+          "line": 1787,
+          "text": "#define cudaFuncSetCacheConfig ixFuncSetCacheConfig"
+        },
+        {
+          "line": 1788,
+          "text": "#define cudaFuncSetSharedMemConfig ixFuncSetSharedMemConfig"
+        },
+        {
+          "line": 1789,
+          "text": "#define cudaGetChannelDesc ixGetChannelDesc"
+        },
+        {
+          "line": 1790,
+          "text": "#define cudaGetDevice ixGetDevice"
+        },
+        {
+          "line": 1791,
+          "text": "#define cudaGetMipmappedArrayLevel ixGetMipmappedArrayLevel"
+        },
+        {
+          "line": 1792,
+          "text": "#define cudaGetSymbolAddress ixGetSymbolAddress"
+        },
+        {
+          "line": 1910,
+          "text": "#define cudaDeviceSetMemPool ixDeviceSetMemPool"
+        },
+        {
+          "line": 1911,
+          "text": "#define cudaDeviceSetSharedMemConfig ixDeviceSetSharedMemConfig"
+        },
+        {
+          "line": 1912,
+          "text": "#define cudaDeviceSynchronize ixDeviceSynchronize"
+        },
+        {
+          "line": 1913,
+          "text": "#define cudaDriverGetVersion ixDriverGetVersion"
+        },
+        {
+          "line": 1914,
+          "text": "#define cudaError_t ixError_t"
+        },
+        {
+          "line": 1915,
+          "text": "#define cudaEventCreate ixEventCreate"
+        },
+        {
+          "line": 1916,
+          "text": "#define cudaEventCreateWithFlags ixEventCreateWithFlags"
+        },
+        {
+          "line": 1917,
+          "text": "#define cudaEventDestroy ixEventDestroy"
+        },
+        {
+          "line": 1918,
+          "text": "#define cudaEventElapsedTime ixEventElapsedTime"
+        },
+        {
+          "line": 1919,
+          "text": "#define cudaEventQuery ixEventQuery"
+        },
+        {
+          "line": 1920,
+          "text": "#define cudaEventRecord ixEventRecord"
+        },
+        {
+          "line": 1921,
+          "text": "#define cudaEventSynchronize ixEventSynchronize"
+        },
+        {
+          "line": 1922,
+          "text": "#define cudaEvent_t ixEvent_t"
+        },
+        {
+          "line": 1923,
+          "text": "#define cudaExtent ixExtent"
+        },
+        {
+          "line": 1924,
+          "text": "#define cudaExternalMemoryBufferDesc ixExternalMemoryBufferDesc"
+        },
+        {
+          "line": 1925,
+          "text": "#define cudaExternalMemoryGetMappedBuffer ixExternalMemoryGetMappedBuffer"
+        },
+        {
+          "line": 1926,
+          "text": "#define cudaExternalMemoryGetMappedMipmappedArray ixExternalMemoryGetMappedMipmappedArray"
+        },
+        {
+          "line": 1927,
+          "text": "#define cudaExternalMemoryHandleDesc ixExternalMemoryHandleDesc"
+        },
+        {
+          "line": 1928,
+          "text": "#define cudaExternalMemoryMipmappedArrayDesc ixExternalMemoryMipmappedArrayDesc"
+        },
+        {
+          "line": 1929,
+          "text": "#define cudaExternalMemory_t ixExternalMemory_t"
+        },
+        {
+          "line": 1930,
+          "text": "#define cudaExternalSemaphoreHandleDesc ixExternalSemaphoreHandleDesc"
+        },
+        {
+          "line": 1931,
+          "text": "#define cudaExternalSemaphoreSignalParams ixExternalSemaphoreSignalParams"
+        },
+        {
+          "line": 1932,
+          "text": "#define cudaExternalSemaphoreWaitParams ixExternalSemaphoreWaitParams"
+        },
+        {
+          "line": 1933,
+          "text": "#define cudaExternalSemaphore_t ixExternalSemaphore_t"
+        },
+        {
+          "line": 2593,
+          "text": "#define cudaErrorTimeout ixErrorTimeout"
+        },
+        {
+          "line": 2594,
+          "text": "#define cudaErrorTooManyPeers ixErrorTooManyPeers"
+        },
+        {
+          "line": 2595,
+          "text": "#define cudaErrorUnknown ixErrorUnknown"
+        },
+        {
+          "line": 2596,
+          "text": "#define cudaErrorUnmapBufferObjectFailed ixErrorUnmapBufferObjectFailed"
+        },
+        {
+          "line": 2597,
+          "text": "#define cudaErrorUnsupportedLimit ixErrorUnsupportedLimit"
+        },
+        {
+          "line": 2598,
+          "text": "#define cudaError_t ixError_t"
+        },
+        {
+          "line": 2599,
+          "text": "#define cudaEventBlockingSync ixEventBlockingSync"
+        },
+        {
+          "line": 2600,
+          "text": "#define cudaEventDefault ixEventDefault"
+        },
+        {
+          "line": 2601,
+          "text": "#define cudaEventDisableTiming ixEventDisableTiming"
+        },
+        {
+          "line": 2602,
+          "text": "#define cudaEventInterprocess ixEventInterprocess"
+        },
+        {
+          "line": 2603,
+          "text": "#define cudaEvent_t ixEvent_t"
+        },
+        {
+          "line": 2604,
+          "text": "#define cudaExtent ixExtent"
+        },
+        {
+          "line": 2605,
+          "text": "#define cudaExternalMemoryBufferDesc ixExternalMemoryBufferDesc"
+        },
+        {
+          "line": 2606,
+          "text": "#define cudaExternalMemoryDedicated ixExternalMemoryDedicated"
+        },
+        {
+          "line": 2607,
+          "text": "#define cudaExternalMemoryHandleDesc ixExternalMemoryHandleDesc"
+        },
+        {
+          "line": 2608,
+          "text": "#define cudaExternalMemoryHandleType ixExternalMemoryHandleType"
+        },
+        {
+          "line": 2609,
+          "text": "#define cudaExternalMemoryHandleTypeD3D11Resource ixExternalMemoryHandleTypeD3D11Resource"
+        },
+        {
+          "line": 2610,
+          "text": "#define cudaExternalMemoryHandleTypeD3D11ResourceKmt ixExternalMemoryHandleTypeD3D11ResourceKmt"
+        },
+        {
+          "line": 2611,
+          "text": "#define cudaExternalMemoryHandleTypeD3D12Heap ixExternalMemoryHandleTypeD3D12Heap"
+        },
+        {
+          "line": 2612,
+          "text": "#define cudaExternalMemoryHandleTypeD3D12Resource ixExternalMemoryHandleTypeD3D12Resource"
+        },
+        {
+          "line": 2613,
+          "text": "#define cudaExternalMemoryHandleTypeNvSciBuf ixExternalMemoryHandleTypeIxSciBuf"
+        },
+        {
+          "line": 2996,
+          "text": "#define cudaGraphKernelNodePortProgrammatic ixGraphKernelNodePortProgrammatic"
+        },
+        {
+          "line": 2997,
+          "text": "#define cudaGraphKernelNodePortLaunchCompletion ixGraphKernelNodePortLaunchCompletion"
+        },
+        {
+          "line": 2998,
+          "text": "#define cudaGraphChildGraphNodeOwnership ixGraphChildGraphNodeOwnership"
+        },
+        {
+          "line": 2999,
+          "text": "#define cudaGraphCondAssignDefault ixGraphCondAssignDefault"
+        },
+        {
+          "line": 3000,
+          "text": "#define cudaGraphConditionalHandleFlags ixGraphConditionalHandleFlags"
+        },
+        {
+          "line": 3001,
+          "text": "#define cudaChildGraphNodeParams ixChildGraphNodeParams"
+        },
+        {
+          "line": 3002,
+          "text": "#define cudaEventRecordNodeParams ixEventRecordNodeParams"
+        },
+        {
+          "line": 3003,
+          "text": "#define cudaEventWaitNodeParams ixEventWaitNodeParams"
+        },
+        {
+          "line": 3004,
+          "text": "#define cudaKernelNodeParamsV2 ixKernelNodeParamsV2"
+        },
+        {
+          "line": 3005,
+          "text": "#define cudaExternalSemaphoreSignalNodeParams ixExternalSemaphoreSignalNodeParams"
+        },
+        {
+          "line": 3006,
+          "text": "#define cudaExternalSemaphoreSignalNodeParamsV2 ixExternalSemaphoreSignalNodeParamsV2"
+        },
+        {
+          "line": 3007,
+          "text": "#define cudaExternalSemaphoreWaitNodeParams ixExternalSemaphoreWaitNodeParams"
+        },
+        {
+          "line": 3008,
+          "text": "#define cudaExternalSemaphoreWaitNodeParamsV2 ixExternalSemaphoreWaitNodeParamsV2"
+        },
+        {
+          "line": 3009,
+          "text": "#define cudaGraphConditionalNodeType ixGraphConditionalNodeType"
+        },
+        {
+          "line": 3010,
+          "text": "#define cudaMemAllocNodeParamsV2 ixMemAllocNodeParamsV2"
+        },
+        {
+          "line": 3011,
+          "text": "#define cudaMemFreeNodeParams ixMemFreeNodeParams"
+        },
+        {
+          "line": 3012,
+          "text": "#define cudaConditionalNodeParams ixConditionalNodeParams"
+        },
+        {
+          "line": 3013,
+          "text": "#define cudaGraphNodeParams ixGraphNodeParams"
+        },
+        {
+          "line": 3014,
+          "text": ""
+        }
+      ],
+      "exact_reader": "Path.read_bytes; SHA256完整字节；片段行号从1开始；不exec源"
+    },
+    {
+      "path": "/workspace/experiments/minicpm-s2/framework/20261021T214400Z-kv-full-restore-context16k-long-control/plugin-source/vllm_fl/worker/model_runner.py",
+      "expected_sha256": "e155a16669e69b7eb7aff370dbcbcf225a4f593fa42b2399722e96999b53a1f1",
+      "equivalent_probe_argv_not_executed": [
+        "rg",
+        "-n",
+        "-C",
+        "6",
+        "-e",
+        "torch.Event|prepare_inputs_event|async_copy_ready_event",
+        "/workspace/experiments/minicpm-s2/framework/20261021T214400Z-kv-full-restore-context16k-long-control/plugin-source/vllm_fl/worker/model_runner.py"
+      ],
+      "resolved": "/workspace/experiments/minicpm-s2/framework/20261021T214400Z-kv-full-restore-context16k-long-control/plugin-source/vllm_fl/worker/model_runner.py",
+      "bytes": 341577,
+      "sha256": "e155a16669e69b7eb7aff370dbcbcf225a4f593fa42b2399722e96999b53a1f1",
+      "expected_identity_matches": true,
+      "status": "read_only",
+      "matched_lines": 19,
+      "matches_truncated": false,
+      "excerpts": [
+        {
+          "line": 305,
+          "text": "        invalid_req_indices: list[int],"
+        },
+        {
+          "line": 306,
+          "text": "        async_output_copy_stream: current_platform.torch_device_fn.Stream,"
+        },
+        {
+          "line": 307,
+          "text": "        vocab_size: int,"
+        },
+        {
+          "line": 308,
+          "text": "        routed_experts: RoutedExpertsTensors | None = None,"
+        },
+        {
+          "line": 309,
+          "text": "    ):"
+        },
+        {
+          "line": 310,
+          "text": "        self._model_runner_output = model_runner_output"
+        },
+        {
+          "line": 311,
+          "text": "        self._invalid_req_indices = invalid_req_indices"
+        },
+        {
+          "line": 312,
+          "text": ""
+        },
+        {
+          "line": 313,
+          "text": "        # Event on the copy stream so we can synchronize the non-blocking copy."
+        },
+        {
+          "line": 314,
+          "text": "        self.async_copy_ready_event = torch.Event()"
+        },
+        {
+          "line": 315,
+          "text": ""
+        },
+        {
+          "line": 316,
+          "text": "        # Keep a reference to the device tensor to avoid it being"
+        },
+        {
+          "line": 317,
+          "text": "        # deallocated until we finish copying it to the host."
+        },
+        {
+          "line": 318,
+          "text": "        self._sampled_token_ids = sampled_token_ids"
+        },
+        {
+          "line": 319,
+          "text": "        self.vocab_size = vocab_size"
+        },
+        {
+          "line": 320,
+          "text": "        self._logprobs_tensors = logprobs_tensors"
+        },
+        {
+          "line": 321,
+          "text": "        self._routed_experts = routed_experts"
+        },
+        {
+          "line": 322,
+          "text": ""
+        },
+        {
+          "line": 323,
+          "text": "        # Initiate the copy on a separate stream, but do not synchronize it."
+        },
+        {
+          "line": 324,
+          "text": "        default_stream = current_platform.torch_device_fn.current_stream()"
+        },
+        {
+          "line": 325,
+          "text": "        with current_platform.torch_device_fn.stream(async_output_copy_stream):"
+        },
+        {
+          "line": 326,
+          "text": "            async_output_copy_stream.wait_stream(default_stream)"
+        },
+        {
+          "line": 327,
+          "text": "            self.sampled_token_ids_cpu = self._sampled_token_ids.to("
+        },
+        {
+          "line": 328,
+          "text": "                \"cpu\", non_blocking=True"
+        },
+        {
+          "line": 329,
+          "text": "            )"
+        },
+        {
+          "line": 330,
+          "text": "            self._logprobs_tensors_cpu = ("
+        },
+        {
+          "line": 331,
+          "text": "                self._logprobs_tensors.to_cpu_nonblocking()"
+        },
+        {
+          "line": 332,
+          "text": "                if self._logprobs_tensors"
+        },
+        {
+          "line": 333,
+          "text": "                else None"
+        },
+        {
+          "line": 334,
+          "text": "            )"
+        },
+        {
+          "line": 335,
+          "text": "            self._routed_experts_cpu = ("
+        },
+        {
+          "line": 336,
+          "text": "                self._routed_experts.to_cpu_nonblocking()"
+        },
+        {
+          "line": 337,
+          "text": "                if self._routed_experts is not None"
+        },
+        {
+          "line": 338,
+          "text": "                else None"
+        },
+        {
+          "line": 339,
+          "text": "            )"
+        },
+        {
+          "line": 340,
+          "text": "            self.async_copy_ready_event.record()"
+        },
+        {
+          "line": 341,
+          "text": ""
+        },
+        {
+          "line": 342,
+          "text": "    def get_output(self) -> ModelRunnerOutput:"
+        },
+        {
+          "line": 343,
+          "text": "        \"\"\"Copy the device tensors to the host and return a ModelRunnerOutput."
+        },
+        {
+          "line": 344,
+          "text": ""
+        },
+        {
+          "line": 345,
+          "text": "        This function blocks until the copy is finished."
+        },
+        {
+          "line": 346,
+          "text": "        \"\"\""
+        },
+        {
+          "line": 347,
+          "text": "        max_gen_len = self.sampled_token_ids_cpu.shape[-1]"
+        },
+        {
+          "line": 348,
+          "text": "        self.async_copy_ready_event.synchronize()"
+        },
+        {
+          "line": 349,
+          "text": ""
+        },
+        {
+          "line": 350,
+          "text": "        # Release the device tensors once the copy has completed."
+        },
+        {
+          "line": 351,
+          "text": "        del self._logprobs_tensors"
+        },
+        {
+          "line": 352,
+          "text": "        del self._sampled_token_ids"
+        },
+        {
+          "line": 749,
+          "text": ""
+        },
+        {
+          "line": 750,
+          "text": "        # Separate cuda stream for overlapping transfer of sampled token ids from"
+        },
+        {
+          "line": 751,
+          "text": "        # GPU to CPU when async scheduling is enabled."
+        },
+        {
+          "line": 752,
+          "text": "        self.async_output_copy_stream: current_platform.torch_device_fn.Stream | None = None"
+        },
+        {
+          "line": 753,
+          "text": "        # cuda event to synchronize use of reused CPU tensors between steps"
+        },
+        {
+          "line": 754,
+          "text": "        # when async scheduling is enabled."
+        },
+        {
+          "line": 755,
+          "text": "        self.prepare_inputs_event: torch.Event | None = None"
+        },
+        {
+          "line": 756,
+          "text": "        if self.use_async_scheduling:"
+        },
+        {
+          "line": 757,
+          "text": "            self.async_output_copy_stream = current_platform.torch_device_fn.Stream()"
+        },
+        {
+          "line": 758,
+          "text": "            self.prepare_inputs_event = torch.Event()"
+        },
+        {
+          "line": 759,
+          "text": ""
+        },
+        {
+          "line": 760,
+          "text": "        # self.cudagraph_batch_sizes sorts in ascending order."
+        },
+        {
+          "line": 761,
+          "text": "        if ("
+        },
+        {
+          "line": 762,
+          "text": "            self.compilation_config.cudagraph_capture_sizes"
+        },
+        {
+          "line": 763,
+          "text": "            and self.compilation_config.cudagraph_mode != CUDAGraphMode.NONE"
+        },
+        {
+          "line": 3823,
+          "text": "    @contextmanager"
+        },
+        {
+          "line": 3824,
+          "text": "    def synchronize_input_prep(self):"
+        },
+        {
+          "line": 3825,
+          "text": "        if self.prepare_inputs_event is None:"
+        },
+        {
+          "line": 3826,
+          "text": "            yield"
+        },
+        {
+          "line": 3827,
+          "text": "            return"
+        },
+        {
+          "line": 3828,
+          "text": ""
+        },
+        {
+          "line": 3829,
+          "text": "        # Ensure prior step has finished with reused CPU tensors."
+        },
+        {
+          "line": 3830,
+          "text": "        # This is required in the async scheduling case because"
+        },
+        {
+          "line": 3831,
+          "text": "        # the CPU->GPU transfer happens async."
+        },
+        {
+          "line": 3832,
+          "text": "        self.prepare_inputs_event.synchronize()"
+        },
+        {
+          "line": 3833,
+          "text": "        try:"
+        },
+        {
+          "line": 3834,
+          "text": "            yield"
+        },
+        {
+          "line": 3835,
+          "text": "        finally:"
+        },
+        {
+          "line": 3836,
+          "text": "            self.prepare_inputs_event.record()"
+        },
+        {
+          "line": 3837,
+          "text": ""
+        },
+        {
+          "line": 3838,
+          "text": "    def _model_forward("
+        },
+        {
+          "line": 3839,
+          "text": "        self,"
+        },
+        {
+          "line": 3840,
+          "text": "        input_ids: torch.Tensor | None = None,"
+        },
+        {
+          "line": 3841,
+          "text": "        positions: torch.Tensor | None = None,"
+        },
+        {
+          "line": 3842,
+          "text": "        intermediate_tensors: IntermediateTensors | None = None,"
+        },
+        {
+          "line": 4156,
+          "text": "        if has_kv_transfer_group():"
+        },
+        {
+          "line": 4157,
+          "text": "            kv_connector_metadata = scheduler_output.kv_connector_metadata"
+        },
+        {
+          "line": 4158,
+          "text": "            assert kv_connector_metadata is not None"
+        },
+        {
+          "line": 4159,
+          "text": "            get_kv_transfer_group().handle_preemptions(kv_connector_metadata)"
+        },
+        {
+          "line": 4160,
+          "text": ""
+        },
+        {
+          "line": 4161,
+          "text": "        num_scheduled_tokens = scheduler_output.total_num_scheduled_tokens"
+        },
+        {
+          "line": 4162,
+          "text": "        with ("
+        },
+        {
+          "line": 4163,
+          "text": "            record_function_or_nullcontext(\"gpu_model_runner: preprocess\"),"
+        },
+        {
+          "line": 4164,
+          "text": "            self.synchronize_input_prep(),"
+        },
+        {
+          "line": 4165,
+          "text": "        ):"
+        },
+        {
+          "line": 4166,
+          "text": "            # Update persistent batch states."
+        },
+        {
+          "line": 4167,
+          "text": "            deferred_state_corrections_fn = self._update_states(scheduler_output)"
+        },
+        {
+          "line": 4168,
+          "text": ""
+        },
+        {
+          "line": 4169,
+          "text": "            if has_ec_transfer() and not get_ec_transfer().is_consumer:"
+        },
+        {
+          "line": 4170,
+          "text": "                with self.maybe_get_ec_connector_output("
+        },
+        {
+          "line": 4171,
+          "text": "                    scheduler_output,"
+        },
+        {
+          "line": 4172,
+          "text": "                    encoder_cache=self.encoder_cache,"
+        }
+      ],
+      "exact_reader": "Path.read_bytes; SHA256完整字节；片段行号从1开始；不exec源"
+    }
+  ],
+  "identity_mismatches": [],
+  "missing_paths": [
+    "/usr/local/lib/python3.12/site-packages/torch/csrc/Event.cpp",
+    "/usr/local/lib/python3.12/site-packages/torch/csrc/cuda/Event.cpp"
+  ],
+  "limits_zh": [
+    "只读实际安装源与已有e155归档，不导入Torch、加载库、编译或调用设备API。",
+    "generic torch.Event与torch.cuda.Event必须分别跟踪；缺绑定源不假定其blocking参数相同。",
+    "头文件/声明只证明可得契约，不证明Corex真实等待会睡眠或其性能。",
+    "既有event记录后不能换event；所有SDK/device probe均未执行。"
+  ]
+}

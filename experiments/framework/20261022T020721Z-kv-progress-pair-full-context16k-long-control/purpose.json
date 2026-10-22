@@ -1,0 +1,59 @@
+{
+  "kind": "共同启动观察器原FULL/进展选择VERIFY0首个A/B，非官方计分",
+  "pair_order": "full-before-progress",
+  "automatic_repeat": false,
+  "variant": "full",
+  "wrapper_sha256": "1aaf35e13d52e97742414bda4c9aaa18452f396555c373fc64b3a4ed2b4c3510",
+  "source": "/workspace/experiments/minicpm-s2/code/kv-progress-pair-full-20261022T020721Z",
+  "base": "/workspace/experiments/minicpm-s2/code/kv-full-restore-20261021T214400Z",
+  "source_count": 418,
+  "reference": {
+    "control": "20261021T214400Z-kv-full-restore-context16k-long-control",
+    "base": "kv-full-restore-20261021T214400Z",
+    "source_manifest": "a67c717f5e1f7ab5e2240dc9cd8623c02a91aa2b2958b9ee0bf206c791183829",
+    "innovation_manifest": "93375c426c9fb0b4d5abdb869ba94a8fab0a01ce1863ab0e1bd9785f586827fe",
+    "protocol": "1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8",
+    "transaction": "84be2242656e6ae0a30d65c803c2ae5076e836e0d1b6686731c4197a85b21883",
+    "worker": "5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477"
+  },
+  "builder_sha256": "6ffb9da39f0901bc83d4c1e3a283df668f73e9c58a90b7fa565020103c36ce4b",
+  "observer_sha256": "6a772a741ac96ac1f9d7ef7c8cff7578117bbdc8cc97258afaeec88e1c5b436c",
+  "protocol_sha256": "1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8",
+  "preflight": {
+    "query": "68, 0\n",
+    "ixsmi": "Timestamp    Thu Oct 22 10:07:21 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  34C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+  },
+  "db_before": {
+    "snapshot_sha256": "dc2c76463fc6c1ef0674b16ca4374125b3ee4551fa0b1886253093f310b237da",
+    "schema_sha256": "0dc7a465bf12e53e054381d9e865460e7e4fe70287cc8c3683a41b0a4914ab39",
+    "logical_content_sha256": "c05d7e3182d1837929b48d5699c6515786351eb8d22f73eb53227a39fb3c49c8",
+    "table_count": 523,
+    "row_count": 19474
+  },
+  "matching_full_after": null,
+  "restore_byte_readback_enabled": false,
+  "command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/run_framework_screen.py",
+    "/workspace/experiments/minicpm-s2/framework/20261022T020721Z-kv-progress-pair-full-context16k-long",
+    "--source-dir",
+    "/workspace/experiments/minicpm-s2/code/kv-progress-pair-full-20261022T020721Z",
+    "--context-long-screen",
+    "--seed",
+    "721201",
+    "--require-log-marker",
+    "\"event\": \"DETERMINE_RETURN\""
+  ],
+  "required_evidence": [
+    "同PID实际profile1/原int与父list/三hook恢复及完整内存标量",
+    "双方实际KV/CPU/物理显存/DB/host工作后验",
+    "双方实际SAVE-FULL-DROP且0ZERO；progress须真实不同tail且一次主动选择",
+    "动态R/页与run/copy几何/fast/host释放/runner/原consumer"
+  ],
+  "limits": [
+    "VERIFY0无回读，不继承旧VERIFY1标记。",
+    "同observer仍有共同stdout/CPU扰动，不能称完全无扰动。",
+    "R/消费者/几何是策略行为可不同；DB/KV/启动分项失配不归因。",
+    "准备锁释放后原bc51重取；root串行且既有seal收after/live/post，不自动启动第二job。"
+  ]
+}

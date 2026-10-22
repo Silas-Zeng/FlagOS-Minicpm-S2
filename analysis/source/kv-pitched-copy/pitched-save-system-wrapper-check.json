@@ -1,0 +1,73 @@
+{
+  "recorded_utc": "2026-10-22T04:19:50.322753+00:00",
+  "status": "CPU_static_mapping_only_not_executed",
+  "builder": "scripts/remote/prepare_kv_pitched_save_source.py",
+  "builder_sha256": "cd3d5c2874f487f8115329d573cb5202f893ab46c89cf31764e9757decaf0209",
+  "launcher": "scripts/remote/launch_kv_pitched_save_screen.py",
+  "launcher_sha256": "df6a4c9e095bb25900e54c22adf56b0d1674b6a57c1b9476b55977a826a7b819",
+  "reference": {
+    "control": "20261021T214400Z-kv-full-restore-context16k-long-control",
+    "base": "kv-full-restore-20261021T214400Z",
+    "source_manifest": "a67c717f5e1f7ab5e2240dc9cd8623c02a91aa2b2958b9ee0bf206c791183829",
+    "innovation_manifest": "93375c426c9fb0b4d5abdb869ba94a8fab0a01ce1863ab0e1bd9785f586827fe",
+    "protocol": "1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8",
+    "transaction": "84be2242656e6ae0a30d65c803c2ae5076e836e0d1b6686731c4197a85b21883",
+    "worker": "5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477"
+  },
+  "input_count": 416,
+  "output_count_including_manifest": 420,
+  "changes": {
+    "vllm_fl/patches/biv150_kv_worker.py": {
+      "before": "5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477",
+      "after": "a662e478d20884c5b1d65e0ee3d270a62453d88166b28e092dcaf3b35a3df854"
+    },
+    "vllm_fl/patches/biv150_kv_pitched_copy.py": {
+      "before": null,
+      "after": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd"
+    },
+    "vllm_fl/patches/biv150_kv_pitched_bridge.cpp": {
+      "before": null,
+      "after": "0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44"
+    },
+    "vllm_fl/patches/biv150_kv_pitched_bridge.so": {
+      "before": null,
+      "after": "9e33ecbf9cf57f52469db6b1d509a600cd1a8eeafe78a54095e88dc474c71fc0"
+    }
+  },
+  "assets": {
+    "vllm_fl/patches/biv150_kv_worker.py": {
+      "input": "biv150_kv_pitched_save_worker.py",
+      "local_source": "patches/framework/candidates/biv150_kv_pitched_save_worker.py",
+      "sha256": "a662e478d20884c5b1d65e0ee3d270a62453d88166b28e092dcaf3b35a3df854"
+    },
+    "vllm_fl/patches/biv150_kv_pitched_copy.py": {
+      "input": "biv150_kv_pitched_copy.py",
+      "local_source": "patches/framework/candidates/biv150_kv_pitched_copy.py",
+      "sha256": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd"
+    },
+    "vllm_fl/patches/biv150_kv_pitched_bridge.cpp": {
+      "input": "biv150_kv_pitched_bridge.cpp",
+      "local_source": "patches/framework/candidates/biv150_kv_pitched_bridge.cpp",
+      "sha256": "0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44"
+    },
+    "vllm_fl/patches/biv150_kv_pitched_bridge.so": {
+      "input": "biv150_kv_pitched_bridge.so",
+      "local_source": "experiments/framework/20261022T035754Z-kv-pitched-threeway-gate/source/bridge.so",
+      "sha256": "9e33ecbf9cf57f52469db6b1d509a600cd1a8eeafe78a54095e88dc474c71fc0"
+    }
+  },
+  "init_protocol_transaction_runner_unchanged": true,
+  "old_innovation_preserved": true,
+  "AST_compile_and_unique_top_assignments": true,
+  "binary_compiled_or_loaded": false,
+  "full_copy_executed": false,
+  "worker_contract_repeated": false,
+  "GPU_or_SSH": false,
+  "driver": "bc51ac2d9daf90205bde362f8384b1ac34238e7be932e9a6df7fc618d7350be9",
+  "limits_zh": [
+    "只静态映射与实际已验二进制SHA，不执行builder/launcher、复制树或新测试。",
+    "真实SAVE源free前42层c95f对照与原FULL独立回读、runner/消费者仍待新原long VERIFY1。",
+    "真实R/pages/segments/counts/consumer动态读取，不套微门几何/非0stream要求；服务stream允许0但必须记录。",
+    "不自动大官方/重复长pair；最短必要正确性完成后由root决定。"
+  ]
+}

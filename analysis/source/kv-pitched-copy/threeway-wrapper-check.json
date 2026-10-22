@@ -1,0 +1,27 @@
+{
+  "recorded_utc": "2026-10-22T03:56:34.058495+00:00",
+  "status": "CPU_static_only_not_executed",
+  "wrapper": "scripts/remote/launch_kv_pitched_threeway_gate.py",
+  "wrapper_sha256": "b2c65963f621f83b0d093353e7135b3434d4c49bb9402c05bb2a3363aa6f5a88",
+  "reference_wrapper": "scripts/remote/launch_kv_pitched_copy_gate.py",
+  "reference_wrapper_sha256": "3ffe8efe643a5c280a85217299bcb0adb6349c66f499659d2de9b5167dcce7da",
+  "reverse_only_gate_input_pin_and_suffix_byte_exact": true,
+  "AST_compile": true,
+  "asset_sha256": {
+    "gate": "9b16aec69ecc6e2bf59de7fd0f323ae543a1a32eda15486aa294e2f49c645dd9",
+    "runtime": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd",
+    "bridge_cpp": "0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44"
+  },
+  "diff": "--- \n+++ \n@@ -19,7 +19,7 @@\n DB = Path(\"/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db\")\n # archived name: (ROOT/scripts input name, reviewed SHA256)\n SOURCES = {\n-    \"gate.py\": (\"validate_kv_pitched_copy.py\", \"c8c0f64e7293634a28949f4338800298b43d32daa7cbd866e64dcd59833d7dc6\"),\n+    \"gate.py\": (\"validate_kv_pitched_threeway.py\", \"9b16aec69ecc6e2bf59de7fd0f323ae543a1a32eda15486aa294e2f49c645dd9\"),\n     \"biv150_kv_pitched_copy.py\": (\"biv150_kv_pitched_copy.py\", \"818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd\"),\n     \"bridge.cpp\": (\"biv150_kv_pitched_bridge.cpp\", \"0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44\"),\n     \"biv150_kv_page_copy.py\": (\"biv150_kv_page_copy.py\", \"c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c\"),\n@@ -152,7 +152,7 @@\n def controller(run, control):\n     import fcntl\n     if (run.parent != ROOT / \"framework\" or control != run.with_name(run.name + \"-control\")\n-            or not run.name.endswith(\"-kv-pitched-copy-gate\") or not run.is_dir() or not control.is_dir()\n+            or not run.name.endswith(\"-kv-pitched-threeway-gate\") or not run.is_dir() or not control.is_dir()\n             or run.is_symlink() or control.is_symlink()):\n         raise ValueError(\"只接受本launcher新建的ROOT/framework直系run/control\")\n     manifest = {\"kind\": \"独立2D SAVE API字节与微计时门，非服务/模型/性能成绩\", \"started_utc\": utc(),\n@@ -299,7 +299,7 @@\n         raise ValueError(\"无参启动唯一UTC门；不接受源/参数覆盖\")\n     checked_assets()\n     stamp = datetime.now(timezone.utc).strftime(\"%Y%m%dT%H%M%SZ\")\n-    run = ROOT / \"framework\" / (stamp + \"-kv-pitched-copy-gate\")\n+    run = ROOT / \"framework\" / (stamp + \"-kv-pitched-threeway-gate\")\n     control = run.with_name(run.name + \"-control\")\n     run.mkdir(exist_ok=False)\n     control.mkdir(exist_ok=False)\n",
+  "executed": {
+    "controller": false,
+    "bridge_compile": false,
+    "device_worker": false,
+    "old_tests": false
+  },
+  "limits_zh": [
+    "仅独立outer三行小fork与素材pin检查，root唯一远端/设备owner。",
+    "gate三方最终终审回执另记；没有实际run或字节/性能结果。",
+    "不改旧3ffe或818e/0a4d/c95f，不新建通用验收器/生命周期。"
+  ]
+}

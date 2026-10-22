@@ -880,3 +880,235 @@ root取回完整230548原件后，本owner直接读取server.log第206行Engine2
 - `analysis/2026-10-22-preemption-snapshot-230548-hardware.md`：**e59f673c1129ff26194dd91e6be18a57c6f30a552b6c01f53ab8928f0e53747a**。
 - `analysis/2026-10-22-preemption-snapshot-interpretation.md`：**8f3a2247ff3845e1358360ed566615536a642ee1ab203f5280fdf4bf78eba5e5**。
 - `analysis/source/preemption-snapshot/interpretation-schema.json`：**8a114ee716e5cc8bada7d5cdc685482f5025ba991936eab41457873469f94caa**。
+
+
+### 新阶段：唯一进展victim候选的定向互审接续（尚待实现稿）
+
+root已解除归档锁，授权framework从FULL1aff复制独立候选、systems做新隔离包装，本owner只CPU源码/唯一合同/包装互审，不写第二实现或套件。230548只作实际结构依据，不重跑观测/旧测试，不SSH/GPU/改冻结受测源。已直接协作作者；代码与合同finalpin尚待。
+
+已复读actual df780522–568：allocate真实None后FCFS562直接pop，随后原_preempt/append/failed identity break；只准改变一次pop下标，j>failed使failed及先前索引不移动，且需三份本schedule容器均无选中对象。不能借用PRIORITY543–560的预算撤销。Base FULL保存队列R按旧queued spans及known−1，真实SAVE ACK方可free；选择资格ref1页可hashed，但恢复目的仍原fresh/unhashed/fullcoverage proof，两种“私有”含义不混。HostSlot实际空为key None且used_bytes0，不仅victim None；本轮worker5d9a/txn84be须原SHA不变。
+
+重点审attempted在读取/打分前置True、guard或元信息异常原tail且无第二选择、同Request对象/生命周期/原异常context、旧排队帧不跳过。保generator身份不承诺全局采样结果不变，不称FCFS公平或收益。唯一新合同由作者执行，本owner不重复运行。最终审结论将追加本节后。
+
+
+### 唯一进展victim候选72942与417隔离包装终审无阻断
+
+最终runtime `patches/framework/candidates/biv150_kv_progress_victim_protocol.py` SHA **72942f1f0c284069492b8ee7e1ca1348743e3b9ee49e7da05b8cf9024ac610ef** 已全文只读终审；唯一新合同 `tests/test_biv150_kv_progress_victim.py` **b5a71507c742d49f34087035e50f6bd42667a847dc8ad71cb1921cd28333868f** 与作者结果 `progress-victim-cpu-check.json` **838546644dd1c11db64eccf6b9bb1e8384abd34e65fa8ad93422c6c5d888f137** 均已读。本owner没有运行合同、旧观测、validator或设备；作者唯一1test/0.092s首轮exit0，不是GPU/RPC/accuracy证明。
+
+具体接受理由：exact87a原schedule只waiting恢复与FCFS真实None后pop两切口、删除逐byte逆回；仅变一次pop下标，不借用PRIORITY撤销。空victim且HostSlot keyNone/used0/type/maxcap通过后，在Request/queued/owned遍历前即记attempt，元数据或emit错回原tail、不第二选；guard外直接原tail，未进入计划不消费attempt。选中j>failed且不在三current容器，对象仍is scheduler.requests[rid]、actual Request/RUNNING/nonstreaming/decode，保护合法remaining最小/confirmed最大集合，动态进展tie取较后原index，无硬编码请求ID/230548下标。原pop/preempt在helper处理结束后执行，同异常对象/context；后续None仍可继续原tail，不能称总抢占=1。
+
+queued读取真实三tuple SchedulerOutput CPU字段不触Future；R扣旧queued、保known−1，不用placeholder/本schedule重复扣。ref1非null唯一页可hashed，解释可释放容量；保存逻辑prefix资格不冒称host实际余量/SAVE成功。恢复目的仍原fresh/unhashed/完整42层proof。静态逐函数源码对照17个原FULL函数全byte同，仅_core/install接入改变；worker实hash5d9a/txn84be原SHA不变，原SAVE真ACK后free/旧FIFO帧/私有排序/FULL强引用与settle/发布/runner消费者链均保留。首段沿用“不重排请求”措辞仅按没有排序整个running理解；已提醒作者/交接，不声称victim、FCFS公平或全局采样输出不变，新accuracy仍待。
+
+最终builder `scripts/remote/prepare_kv_progress_victim_source.py` **bbb49a069698d45dc0d4cd39c22d1e7254667ab5264da25b6cf98993b961f1e5**；launcher `scripts/remote/launch_kv_progress_victim_screen.py` **1f8a2f144ec43d21349398a31f268c174ca6de12996024539ec622679fafb996**。两草稿40d519/87230已全文读，final反替三pin实算逐byte回原草稿，无机制delta。固定214400完整416/a67c/93375输入，仅canonical协议替换+新manifest→417；旧innovation原字节保留且明确只是基点，当前全身份由新manifest/control映射给出。原init791c/worker5d9a/txn84be/e155/c95f均不改，不叠6a/c6。原bc51/SERVER/contextlong/seed721201/VERIFY1、准备独占锁/双idle/DBbefore/source/control齐，INSTALLED仅预检，root仍唯一设备owner。作者只静态compile/AST/map，没有整copy；本owner也未重复prepare/copy/suite。
+
+新增后验入口 `scripts/review_kv_progress_victim_run.py` **f43b7c9703ba2349a4681ee0f545cfd62422ce551f68fc0ed01e67e1e18ad8bb** 全文只读，核原2071抽出的events→return合同体无丢失局部依赖；417完整map/不同tail真实选择与保护关系/选中同SAVE rid-R-bytes、真SAVE→FULL→DROP/42byte/runner+consumer均动态判定。DECISION先emit后增selected计数，因此选中该事件counter0、后续RPC1属正确时序，不按旧计数误判。原preempt只要求实际delta>=1，不强行1。尚未拿新run，本owner不产通过文件或新实测结论。
+
+综合review JSON `analysis/source/preemption-snapshot/progress-victim-hardware-review.json` SHA **c4ae44c34636574aa707988e10e3bf1eaff6b18bb6586bfb259542f7722858fd**，列明接受理由/边界/所有finalpins。已把最终回执发root/framework/systems，无当前最短VERIFY1机制门阻断。全部只是本地CPU互审，没有新实现、参数、SSH/GPU或收益声明；等待root唯一真实门与后验原件。
+
+
+### 015315在途：后验Windows路径修正接受；候选若收益小的唯一后继保留
+
+root独占唯一015315真实VERIFY1（runner250079），本owner不SSH/GPU。systems/framework在实际后验执行前发现宿主Windows Path会把远端POSIX argv目录转为反斜杠，本owner先前全文静态审遗漏此点。旧f43完整字节保`analysis/source/preemption-snapshot/review_kv_progress_victim_run.f43b7c97.py`，未执行旧inspect，也不是设备失败。新入口 **b7ff996b5c94f85f4f9e3c8245ad30d568de8500a91a37c44a84f8710f04a2a1** 已极小diff实读：仅argv[2]比较换固定`/workspace/experiments/minicpm-s2/framework/`加合法runname，原argv==purpose/其它原参数门不动。旧新SHA及唯一delta与作者path-check证据核对，无当前后验阻断；runtime72942/builderbbb49/launcher1f8完全未变。本owner未运行新旧inspect/抽取/测试。汇总review JSON已更新新pin，SHA **9b10cb96c7c7b3b057424dea1a5cab09bff4ffcfc46061cce9bcc1a9eefc57c5**，旧f43审阅历史不抹去。
+
+等待完整新原件后，只做独立硬件/动态R/页几何/收益边界专项，不重复完整门。不能把230548的R16928/示例row2强套实际015315；dynamic选择、SAVE同rid/R、完整42byte/FULL/消费须真实发生，VERIFY1耗时不报收益。
+
+空闲仅读已有`analysis/2026-10-22-kv-fragment-aware-prefix-plan.md`及200957专项和actual84be plan_snapshot、1aff _try_restore（新72942此17函数全同），保留一个既有未实现的后继：按真实源页连续段预算选择R<=安全R0的完整前缀，普通重算已知后缀；不新增第二策略/计数器/测试/设备。历史200957前1024页为4runs/168SAVEcalls，后20单页13.125MiB却多840calls，42独立storage与6CPU quota使减提交工作有本地结构依据。它不是固定16K/截20页条件，015315页图还未知，不能套历史数字。
+
+该方向若重评，须先拿本实例稀疏RPC阶段成本，不能从calls推毫秒。当前FULL已省ZERO，旧收益式不能再算省ZERO；16SM长上下文后缀重算可能更贵，static1GiB与20GiB主机限制不放松；原full_sequence_must_fit及随后已知suffix allocate可能仍需要原容量，不能宣称R减少立即突破F<P等待。保原token IDs/输出/Key/pendingframes/digest、原query位置/采样参数和真实FULL proof；较短R必须显式真Snapshot，不伪造issued/known或丢后缀。若成本无正证据继续仅设计，不为探索扩大GPU扫描。以上条件已发root，当前优先015315原件专项。
+
+
+### 015315实际动态R/源碎片/FULL消费者专项完成
+
+root015315完整run/control已本地后，本owner直接核server.log实际选择与ACK页数组，不执行systems唯一b7ff validator或旧suite。实际Engine250261/启动KV521936；原件包 **38c096b9b254ee9846364912503d197897f5357db357422813368adca493794b**。所选rid `cmpl-bench-30645957-3-0-af5095b5`（原index2/confirmed552）不同于tail index30/327和failedindex1，候选28。SAVE/FULL/runner/consumer均同Key/rid，dynamic R16928/1058完整页/728039424B=694.3125MiB；选中可释放owned1059并不意味着保存1059页，额外owned页不在安全R。
+
+源原数组37runs/1554calls；目的排序原1058runs→65，FULL2730/回读2730，728039424B/42层真实bitwise校验pass，无ZERO。真SAVE→FULL→DROP serial1/2/3，host至DROP才释放，原runner六checks真，原update后consumer消费9个scheduledtoken（不称9个新增输出），fast/restore skip454。decision先emit故selectedcounter0、随后RPC1与设计一致。独立JSON `analysis/source/preemption-snapshot/015315-hardware-transfer-review.json` SHA **f0b949b826e44706b5926c632ba44327ccbf02da32fb8e4645d90a0a8c9d89f8**；中文 `analysis/2026-10-22-progress-victim-015315-hardware.md` SHA **1534e588bcb498ab079edeabff5ae2ee2d6ac071397139d86c305fe736c7cca9**。这些只证明机制，不推新公平/全局随机等价/accuracy或收益。
+
+root追加要求的实际源分解已核并写JSON：前1024页3runs/126calls/672MiB，后34页34个单run/1428calls/22.3125MiB。尾字节占3.213610586%、calls占91.891891892%；没有阶段时间，不等于耗时占比或推荐截短544token。更新旧fragment-prefix条件依据，不再套旧200957尾20页/4头段，更不能硬编码16K或J。FULL已无ZERO，省ZERO不再算潜在收益；16SM后缀重算/后续完整allocate都可能抵消提交节省，当前不实现/新门。
+
+DB manifests独核before519表19340行→after523表19474行，+4表/+134行，snapshot/schema/logical三SHA全变。root另做实体DBdiff/形状归属（M38/261等）负责解释，不能定位具体消费；本owner未重复SQLite全门。VERIFY1与首次DB学习/回读/log/页遍历混入耗时，本轮不与旧FULL作性能比较。最新用户撤回立即GitHub/PR，本owner没有任何外部写。
+
+### 首个FULL1aff/进展72942共同6a VERIFY0包装交叉审完成
+
+作者最终builder `scripts/remote/prepare_kv_progress_pair_source.py` **6ffb9da39f0901bc83d4c1e3a283df668f73e9c58a90b7fa565020103c36ce4b** 与launcher `scripts/remote/launch_kv_progress_pair_screen.py` **1aaf35e13d52e97742414bda4c9aaa18452f396555c373fc64b3a4ed2b4c3510** 已全文只读/实SHA核对无当前首个A/B阻断。共同214400完整416/a67c/93375基点，full原1aff/progress唯一canonical替72942；同6a原允许字典/完整791c之后append→39fb，新observer+progress-pair manifest得418，旧innovation明确仅基点且原字节保留。原worker5d9a/txn84be/e155/c95f不变，无c6/新计时器。
+
+full先，progress强制同wrapper完成FULL control，完整418/control/live/post/双栈idle/真实observer profile1与父list/三hook恢复，再核DBFULL before=after=progress before三SHA；不满足不启动。仍原bc51/SERVER/long/seed721201/VERIFY0，准备锁退出后原driver重取，不自动重复或并发。实际R/几何/原consumer允许策略差异；KV/启动分项/DB/CPU等失配不能归因gain，VERIFY0也不能声称新42byte回读或accuracy。后验脚本请用POSIX比较避免之前f43问题，已通知作者。
+
+汇总只读包装review `analysis/source/preemption-snapshot/progress-pair-hardware-review.json` SHA **c3bafa6acd3202b893720cf8e21df0845cb2c4883cf955d03a7e5c3545340436**。回执已发root/framework；本owner没有prepare/整copy/编译重跑/合同/原件validator/SSH/GPU/外部写。等待root首个A/B实际原件，已受测runtime保持原样。
+
+
+### 020721 A在途：唯一VERIFY0性能入口3f1dc静态终审
+
+root独占A020721/runner252046，本owner仅CPU审新 `scripts/review_kv_progress_pair_run.py` SHA **3f1dc20431272e424d7348e977a68bd1972e8ae0db3b414d51515913d15ad07f**；作者静态说明 `progress-pair-validator-static-check.json` **881ca55ec2c3c04370b299015be29f5f6896a09c5df4c0c8c014406d8f6c9dbd** 已读。全文并核固定c0实际helper返回字段/旧Name修复，未调用common/inspect/raw/旧validator/套件。无当前首个A/B实际后验阻断，回执已给root/systems。
+
+接受边界：两侧都真3ACK SAVE→FULL→DROP/0ZERO、VERIFY0无诊断回读；A原FULL无decision、不访问不存在progress计数；B真一次不同tail且非failed/j>failed/未scheduled及保护集合关系、选择同真实SAVE rid-R-bytes/原consumer。原FULL的R/页/段/calls/fast/skips/consumer/preempt是各侧真实策略行为，不硬要求相等。比率门仅DB四端三SHA、KV、同6a非时间启动分项、原参数/包/installed、CPU与物理显存、源码只protocol+pairmanifest差；任何失配保完整原值且gain=null。即便匹配也只一次描述总差，不称稳定因果/纯copy或准确率。
+
+固定POSIX argv和c0 loaded_sources两Name白名单已保留；无前f43 WindowsPath或旧a5b literal_eval错。汇总包装reviewJSON已附本入口与静态check，现SHA **10d2f56567a702f8e8340413262cd3d54a1862b7b881189e97fbe4b67eb51e31**。等待A完整本地原件后只独立看启动分项与几何，不重复systems唯一完整3f1dc验收；当前没有新实测通过文件/SSH/GPU/外部写。
+
+
+### A020721共同6a原FULL：启动与几何专项完成，B021658在途
+
+root取回A020721完整原件后，本owner独立直接解析memory/ACK页数组和DB manifests，不调用3f1dc/common/旧raw或suite。实际Engine252228第91/92行profile1、原worker int22447777996→父list、三hook恢复/四loaded源原身份/logger前后同（root有效30）。前端ARMED252059不是第二profile。weights5101233152、nonTorch1000341504、peakIncrease656424960、nonKV6757999616、requested29205777612.8、graph0；原available float22447777996.8/int22447777996，/688128商32621余354508，与实际KV521936算术一致。
+
+snapshot实际cuda=total−free、nonTorch=cuda−reserved等原公式齐，before→after nonTorch仍60817408B。全部选定非时间分项逐项同215849/220122早smoke；比223613旧long低4MiB残差链。本轮回到低组不是定位long/FULL/protocol或某allocator的证据，历史6块差的具体分配根因继续未知，不用不同容量旧run算收益。
+
+原FULL无progress decision，R16704/1044页/718405632B，SAVE24runs1008calls、目的66runs/FULL2772calls，0ZERO、VERIFY0无诊断回读，原consumer消费8scheduledtoken、fast/restore skip454、DROP释放host。DB before=after三SHA且523/19474；systems唯一完整3f1门另已通过，本owner不重跑。原件包73ca1a3d…，独立JSON `analysis/source/preemption-snapshot/020721-full-startup-geometry-review.json` SHA **ac17bfd30e2b72add3b471412346b19ef133bd083db165d6767a80d0d82e7d5d**，中文 `analysis/2026-10-22-progress-pair-startup-geometry.md` SHA **3161938bc8821eceb7cb53af339b157ad5ba8911acc4ece79a37d118ee1c9494**。
+
+root现独占B021658/runner253641，仍6ffb/1aaf/418/VERIFY0，A before=after=B before三SHA门通过为root回执。完整B原件尚待本owner，只待独立同6a启动/动态selected几何及环境失配边界，不要求R/consumer/runs相同、不套01531516928。本owner没有SSH/GPU/新门/旧测试/外部写，受测源不改。
+
+
+### B021658独立内存与动态几何完成：首对环境失配，本阶段停写收口
+
+root已取回B021658完整run/control，包 **c6989051d9caa8e2dac548e88e85b155fab1d95c0bbacc32f4523eea97e46176**。本owner直接解析新server.log、真实ACK页数组与DB manifests，对照自己已核A020721；未运行systems唯一3f1dc完整validator/旧raw/suite，没有SSH/GPU/外部写。独立JSON `analysis/source/preemption-snapshot/021658-progress-startup-geometry-review.json` SHA **7a2469dd101bb9f335b64a710828615d4f048a57b8a6a81c02d6dea1b182a231**；A/B中文 `analysis/2026-10-22-progress-pair-startup-geometry.md` 当前最终SHA **b77cdb1d76ae08a73a76c733d8a2beaa60d85780dd51f2f1637961d4d6497413**（覆盖此前A段时的文档SHA，原A JSON不改）。
+
+实际Engine253818第91/92行profile1/原int22443583692→父list/三hook恢复，四loaded源与A同、logger前后同。init/before_create、Torch reserved/peak/weights/graph均同A；before/after_profile的cuda及nonTorch残差均多4194304B，profile自身nonTorch增量仍60817408B，因此偏移在before_profile前已存在。nonTorch残差1000341504→1004535808、nonKV6757999616→6762193920、原available int22447777996→22443583692。/688128商32621→32615，实际KV521936→521840（6块/96token）；6块4128768B，另65536B令余354508→288972。仅阶段/残差分项链吻合，不定位具体库/allocator/进程或归因72942；不能将所有历史同容量原因回填。
+
+本次动态选择不是旧015315 index2/R16928：failedindex20、selectedindex21（rid `cmpl-bench-1aa8c016-16-0-aa813076`）、tailindex30，候选9。selectedconfirmed392、tail319、max561，selectedremaining632/min463，真一次不同tail/非failed，后方未scheduled源码门与实际事件成立。选中ref1owned1049，但安全保存页数为1048（R16768）、payload721158144B；不能混旧015315 R16928的1058页。
+
+真实SAVE26runs/1092calls、排序目的1048→66runs/FULL2772calls，无ZERO，VERIFY0无诊断回读；同selectedrid/Key串SAVE→FULL→DROP，host释放，runner六checks真、原update后consumer9scheduledtoken（不称新增9输出），fast/restore skip462。A对应R16704/1044/718405632B、24源run1008calls、66目的run2772、consumer8/fast454。这些策略行为允许不同，不应硬相等；同时容量已失配，不能把这些差异单独归因victim。
+
+实际DB A before=after=B before=after三SHA全同，523表19474行；但KV与共同observer非时间启动分项必要环境门明确失败，**不计算正或负收益，gain=null**。不追容量、不改参数、不追加盲重跑；VERIFY0机制/同DB不补成accuracy/公平/全局采样或因果证明。root负责完整raw后态与本地checkpoint，用户已撤回立即GitHub/PR，本owner未做任何外部写。按root阶段收口要求，本条最终落盘后**暂停文件写入**等待统一保存或新指令，goal未终止。
+
+
+### 唯一新CPU研究：实际正等差页段与2D异步API设计已落盘，等待检查点
+
+root新授权只读研究“保留全部KV、按实际等差页号减少提交”，不是恢复截短R/改调度或现有runtime。先对analysis/docs/patches/scripts用memcpy2D/srcPitch/等差段等精确词检索，未发现已有同路线实现/实验；旧layout备忘是跨层布局、旧fragment-prefix是缩R重算。已读两旧doc区分，不重做其设备/套件。
+
+015315与021658实际SAVE原数组各只取已有log，保2个长连续run，其余单页按原逻辑顺序左到右取最长正恒差段，逐段展开精确还原原数组、无sort/drop/recompute。得到37→11段/层（2线性+9二维）、42层当前copy_方法1554→假定显式每段提交462；26→6段/层（2线性+4二维）、1092→252。R分别仍16928/16768、全部728039424/721158144字节不变。最大step2049需spitch33570816B；各自最大等差尾确有step31×19页，本组不重叠左到右cover将首行归前段而使用末18行，不声称最优/所有最大区间。源ID/分段/重建证明与未知项见 `analysis/source/kv-pitched-copy/save-arithmetic-evidence.json` SHA **489f1468956ff96e86188feeb89933df0ab5d35458b8d184b6adbb2729497dbc**。只计算一次离线整数几何，不是运行时planner或测试suite。
+
+中文 `analysis/2026-10-22-kv-positive-stride-2d-copy-design.md` SHA **2a1751157b5b513d14b4bcb748f83d7d1ca9f3b632e5af75a56393b2cff496e4** 保留NVIDIA官方runtime memory API与api-sync契约的直接链接、FlagOS Corex4.5清单与天数官方文档入口；NVIDIA约束不证明Corex可用/效率，公开检索未取得具体Corex pitch等完整限制也不代表API不存在。指针/width/height/spitch/dpitch按真实raw+host offset逐行映射，不复制跨度洞；42层独立storage仍分开。copy_视图不等于显式2DAPI；若后继实现需actual头核实的调用桥，保原SAVE producer fence/强ref/同当前stream真实event/失败settle，返回提交不当ACK。FULL原恢复数据布局可保原，不允许中途新API错后静默当未提交原路成功。当前worker/txn/c95f/协议/原三run均未改。
+
+root补的两份纯CPU现场证据已读且实SHA核：export2334a167…实库d39d5796…有cudaMemcpy2DAsync/_ptsz GLOBAL FUNC；header e29cd7a7…中mapping ca962a…把cuda入口映ix，ix_runtime_api7dca9b91…457/1046有实声明void*/size_t/ixMemcpyKind/ixStream_t及PTSZ路径。已把“存在导出/声明”与“设备可用/正确/收益未证”分开；剩余stream typedef/enum/callingconvention、映射后符号与链接、PyTorch当前stream/PTSZ、Corex maxpitch/height/alignment与实际32.015625MiB pitch仍未知，不猜ABI。读取worker末段的一个本地只读命令上界越过末行导致IndexError，所需源码已打印；没有修改文件/运行库或设备，也未把该读命令记作测试通过。
+
+反证：API内部可能仍逐行提交，可能占SM或阻塞主机；COPY次数不等于DMA描述符/时间，减少方法/API调用不换吞吐。当前95–96%GPU利用与16SM/6CPU/42storage只提供主机提交动机。保R不降低完整准入容量、不省原454/462等待，原FULL已无ZERO；本轮无阶段时间，不给收益。root要求本地检查点，本条落盘后停止继续检索/写入/实现，无新GPU/SSH/库加载/外部写；后继桥/copygate由下一阶段单独决定。
+
+### 检查点36510ed6后：单层实际2D SAVE门已准备，待root唯一设备执行
+
+root解除写锁并明确批准独立planner＋实际SDK编译C batch桥＋最短单层设备门；没有授权修改worker/服务。root补实际ABI原件f9c348a6…已核：D2H=2、ixStream_t不透明struct指针、Linux IXRTAPI空、Torch stream._as_parameter_为cuda_stream的c_void_p，实际CUDA/IX导出与g++13.3已取证。存在声明／导出不当设备证明，不再重复公开检索或现场取证。
+
+本owner新增 `scripts/remote/validate_kv_pitched_copy.py` SHA **c8c0f64e7293634a28949f4338800298b43d32daa7cbd866e64dcd59833d7dc6**，纯device-worker，`--help`及导入无Torch／载库；必要compile、runpy import无Torch与help已通过，没有CPU复制模拟套件或GPU。source包含固定c95f、原两map489f、ABI f9c3、候选py818e/cpp0a4d及外层实际编译bridge.so SHA。首次任何异步copy前fixture强持全部tensor/pinned host/event/descriptors；两case原始页序、R和全部bytes均保留，pool取32578／32572；每case只一层。源view与pinned目的有真实storageoffset及双guard，页号／word偏移CPU oracle避免高级索引误判。新桥紧接同非0Torch流H2D producer，传相同nativehandle→同event真完成后先核CPU oracle，旧c95f此后才启动，避免旧路wait掩盖流错误；完整source及两端guard也全字节回读不变，CPU/GPU RNG不变。中途API失败只settle，无旧路重试；不settle保强引用到外层清理。
+
+两case都过才首case固定8call短ABBA，event构造／首record和submit预热窗外，真实各条submit Python/C检查（含native GetDevice/MaxPitch）＋同流event完成wall在窗内。双方plan及新Tensor检查／ctypes descriptor准备窗外单列耗时，分配／填值／producer／CPU校验不计。root明确这是**C batch＋2D合并组合**，不是纯2D贡献，暂不扩第三路；c95f为copy_方法计数，新桥为成功原生API提交数，均非DMA次数／时间占比／整个SAVE或E2E。实际maxpitch不支持的段提交前拆单页并显式记fallback，不冒充已测33,570,816B pitch。实际进程/proc/self/maps只接受唯一已核libcudart d39d…；外层ldd还不足，子进程另核SHA。
+
+framework runtime **818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd**、C++ **0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44** 已全文只读核；descriptor72／SDK实类型／extent／overflow／全batch提交前验证／pitch fallback／partial失败不降级，未见当前短门阻断。author唯一planner合同test1d470f21…1test0.013s一次通过，JSON1ec3bd2f…已读，没有重跑；只验证计划数学／导入不载库，不证明事件／GPU。gate c8c0已交framework与root只读，root初审无阻断，待framework最终回执；不因中文报告延迟上卡。
+
+systems outer `scripts/remote/launch_kv_pitched_copy_gate.py` 最终 **3ffe8efe643a5c280a85217299bcb0adb6349c66f499659d2de9b5167dcce7da** 已全文只读核，最终仅三pin替UNREVIEWED，无额外机制改动：唯一外层flock/双idle、实SDK/头/库SHA、g++/ldd/readelf、单child300s与定向进程组cleanup、DBafter/post/fullsource/seal；worker内无锁／controller，source只regular，避旧__pycache__哈希错误。无当前生命周期阻断，没执行wrapper或copy。CLI为 `python RUN/source/gate.py --device-worker --output-dir RUN --source-dir RUN/source --bridge-sha256 <actual SHA>`；results/failed独占创建，不覆盖原件。中文说明 `analysis/2026-10-22-kv-pitched-copy-gate.md`，专项review `analysis/source/kv-pitched-copy/gate-preparation-review.json` 保SHA、CPU检查及审阅边界。
+
+本阶段到此仅本地脚本/文档准备、只读互审，未SSH/GPU/SDK编译/CDLL/推共享库，没有设备pass或速度声明；root是唯一设备owner，实际结果待其独立新UTC门。旧c95f/FULL/progress/全部实际日志和source不改。
+
+最终回执：framework已全文终审c8c0无阻断并回root；本owner同步systems最终outer3ffe无阻断。门／runtime／C++／outer四SHA全部保持，不再为文档改代码，root可串行执行唯一短设备门。专项review已补cross-review回执，无任何设备结果继承或收益声明。
+
+### 032653实际单层门通过：保完整字节与组合事件小信号，下一唯一控制已采纳
+
+root新原件 `experiments/framework/20261022T032653Z-kv-pitched-copy-gate` 及control已本地，包2ba3856fef63566c8a372818a2ae60e21c999d8022465d8d29ad13a7de99c55c。本owner只直接核结果/实际segment展开/环境/算术，没有执行systems完整validator、SDK或GPU。Engine child258707，BI-V15016SM32GiB，实际so9e33ecbf…/maps libcudart d39d…/非0handle94118921500112。MaxPitch2147483647>所需33570816，两个实际map37→11(2linear9pitched)、26→6(2linear4pitched)，fallback0；全byte/CPU page-offset oracle/c95f/source+双guard/host双guard/RNG以及计时后都true。仅一层，不当42层batch/workerACK/service/accuracy。
+
+8call ABBA wall baseline7.415286498/1.454228535ms，candidate0.672264665/0.681895239；baseline首尾5.099倍，稳定wall gain保持null。event baseline均0.652585804→candidate0.628187954ms，约3.73864%只是C batch+2D组合描述性小信号，纯2D/E2E gain均null。CPU线程56/额度6，整门134periods里54throttled，累计thread throttled_time236317938303ns不可当wall；没有逐timing窗CPUstat，所以不归因pattern/比较/cgroup/某API。host门前3.219GB/门后3.251GB、上限20GiB不是峰值；原CPU准备old1.342/2.400ms,newplan1.443/2.264ms,newprepare0.759/0.891ms全在窗外，不是免费或可乘42。
+
+中文结果 `analysis/2026-10-22-kv-pitched-copy-032653-hardware.md`、专项 `analysis/source/kv-pitched-copy/032653-hardware-review.json`已存。root采纳下一唯一动作：不改818e/0a4d，64call三路固定A/B/C/C/B/A(A=c95f,B=同bridge prepare(max_pitch=PAGE)的37/26线性描述符,C=真实maxpitch C2D11/6)，逐窗口实际v1cpu.stat原值/差值/单位，采样窗外；保持56threads/6quota/官方参数。只新增Clinear完整字节/guard/counters正确性，不扩矩阵；只首case计时，准备/模式填值/CPU整源比较都在窗外、submit+同流完成计入。错误则拒绝不降级；六窗完成即收口，波动/窗口节流不确定也保留不盲重复。只有值得继续才42层真实payload/lifetime含prepare门，之后才服务。本轮先checkpoint，我没有写新gate/runtime/启动脚本或新设备请求。
+
+root后继42层选择补充已落报告/JSON：若三路值得，直接原long VERIFY1真实事务，不另造22GiB合成fixture。已只读framework边界574515e9…：新SAVE完成／SAVED及sourcefree之前复用既有单层verify_buffer，逐层冻结c95f源→event→CPU比新host，42层全过才SAVED，再原FULL回读＋consumer；独立证明SAVE，非仅host自证。原预算／fence／引用／失败settle不放宽，不新增0.7GiB影子host或GPUbuffer。目前尚无新worker代码／部署，诊断不算性能；本owner不新增脚本。
+
+### 新阶段2746e01b：唯一64call三路门已实现并双审，尚未设备执行
+
+032653报告同名冲突已依root指令恢复原正文到独占 `analysis/2026-10-22-kv-pitched-copy-032653-hardware.md`，SHA精确等于原7f93aab5c32e450ab7a4a9c6065dc2eabcde54c283952a7b4e631056e669dfb2；systems的…-result.md保持a6b88原字节，不再共写。root随后完成干净2746e01b检查点，新阶段解锁并明确授权唯一三路门。
+
+本owner独占新增 `scripts/remote/validate_kv_pitched_threeway.py` SHA **9b16aec69ecc6e2bf59de7fd0f323ae543a1a32eda15486aa294e2f49c645dd9**，从c8c0原字节复制，小diff仅新增C-linear及逐窗CPU观测／64call。现有函数AST仅correctness_case、timing、device_worker变更，新函数只有cpu_snapshot，其余原函数同。818e runtime／0a4d C++／c95f／原c8c0及旧原件未动。新worker CLI和归档asset名同旧门，不新增controller／worker服务代码。
+
+同两个冻结map只补B＝prepare_save(max_pitch=16384)的独立pinned host＋PreparedSave，首次submit前fixture强持。B是受控提交前拆段，不是实际设备pitch不足；原计数37／26全linear、0pitched，返回fallback_segments9／4属于控制方式。C仍真实maxpitch为11／6或真实回退，不混B。B须全字节CPU page/offset oracle＋c95f、source／host positive-basic双guard及计数通过；原C紧随非0流producer先核保持，失败settle／不settle强引用／不旧路重试不变。结束后三路输出和源／guard／CPU/GPU RNG仍核。
+
+仅首case固定 **A/B/C/C/B/A，每窗64call**，A=c95f、B=C-linear、C=C2D；event首record／三路submit预热和准备／pattern／CPU整池比较都在窗前，窗间无整池比较／sleep／扫描／自动repeat。每窗前后在wall/event之外读取实际v1cpu.stat及quota/period，保raw/counters/delta和累计ns单位，不当wall损失；process_time_ns单列为进程CPU时间，不冒充主线程或wall。只核56 Torch线程和600000/100000us额度，绝无setter／官方参数修改；读取缺失／计数重置／额度变化明确拒绝。wall波动／窗口节流保不确定，不追样本，不给DMA／服务或准确率结论。
+
+必要CPU检查compile／runpy导入无Torch／help过，无新suite、旧planner合同重跑、SDK编译、CDLL或GPU。framework对9b16完整delta终审无阻断；systems也只读生命周期无阻断。systems独占outer `launch_kv_pitched_threeway_gate.py` 最终 **b2c65963f621f83b0d093353e7135b3434d4c49bb9402c05bb2a3363aa6f5a88**，本owner实核仅gate输入/pin＋两处run suffix，逆换逐byte等于旧3ffe，原唯一flock／idle／SDK编译／单childtimeout／定向清理／DB后态／seal全不变，无阻断回root。运行四件资产冻结不因文档改动，root是唯一设备owner。
+
+独占中文 `analysis/2026-10-22-kv-pitched-threeway-hardware.md`，静态准备/互审证据 `analysis/source/kv-pitched-copy/threeway-hardware-preparation.json`；没有写systems报告。当前实际门尚未执行，所有收益null；若后继信号值得，仍已选原long VERIFY1真实42层SAVE源free前逐层c95f核新host→FULL／consumer，不另造22GiBfixture。本阶段没有SSH/GPU或外部写。
+
+### 035754三路实际专项完成：六窗无新增节流，保单层小收益
+
+root已取回 `experiments/framework/20261022T035754Z-kv-pitched-threeway-gate` 及control，包 **fa80a90332005eda7cc77862c82c85876a27ee9e10692456409b7abf909b4bbd**。本owner仅直接解析results/CPU原文本及算术，不执行systems唯一整门validator/旧suite/设备。实际child260602／9b16／818e／0a4d／SO9e33／maps d39、56CPU线程／6quota保持，非0handle94323367614720。两map C-linear37/26linear0pitched、控制fallback9/4；C2D11/6真实API且fallback0，全字节/源/双guard/RNG记录通过，原件完整身份/DB/后态归systems。
+
+固定首case64 ABC CBA，六窗CPU raw→counter→delta独立重算相符：nr_periods[0,1,0,1,0,0]、nr_throttled及throttled_time均0。CPU准备开始→首窗前有55period/46throttled，累计204298016825ns只界定计时前发生过节流，不定位具体函数、不倒推旧032653异常。A/B/C热wall均值 **0.686350722/0.655053591/0.631339994ms**，本轮描述性A→B4.55993%、B→C3.62010%、组合8.01496%；event均0.666308880/0.652398735/0.628310144ms，B→C3.69231%。A event首尾0.6791/0.6535仍有差，单次镜像两样本不称稳定硬件带宽；processCPU时间也非纯Python。小收益保留，不追加同类微门/盲重复、不乘42或称E2E。
+
+窗外准备oldplan1.351/0.945ms，新plan+descriptor2.778/1.505ms是单次样本，不能当免费或用热差保证一次SAVE收益；真实42层需含首次加载、prepare、pin、fence、event和生命周期。独占中文 `analysis/2026-10-22-kv-pitched-threeway-035754-hardware.md`，独占专项JSON `analysis/source/kv-pitched-copy/035754-hardware-review.json` **e521ecff420487831178668a57bf04b943542d2f7ac3a0d9ef9c3defddfcef20**。root据此推进已授权原long VERIFY1真实42层诊断，不造22GiB合成fixture。
+
+### 后继SAVE worker a662只读终审通过，尚无设备执行
+
+framework新 `patches/framework/candidates/biv150_kv_pitched_save_worker.py` 首稿4f1dd74c…已全文对比原5d9a与唯一stub合同，无当前真实VERIFY1门阻断：只改SAVE，晚加载818e／邻SO9e33／真实maps d39；全42先验/currentstream，bridge/prepared在submit前入slot强持，原fence/_finish/except及FULL1aff／txn84be不动。SAVE后源free前原verify_buffer逐层冻结c95f读真源→event→CPU比新host，全42通过才SAVED；buffer留原FULL，VERIFY0无新增回读，部分失败不旧路重试／不settle仍持引用。单层只测非0流，service实际handle含0由下一真实事务记录/验证，不用stub声称设备通过。
+
+root要求去重maps读库，最终worker **a662e478d20884c5b1d65e0ee3d270a62453d88166b28e092dcaf3b35a3df854** 仅/proc resolved路径set后每个libhash一次，避免重复8.39MB文件读；本owner实核该微delta与旧4f归档SHA，无新阻断，已回root／framework。唯一CPU合同实际4f/test38de41e7…/1test0.122s一次通过，receipt9df0b498…保真实旧身份；最终只微delta compile未重跑、不虚称stub验证SDK。独占035754中文已加明确“后继非受测代码”段，本owner不改作者代码／systems报告，无GPU/SSH/旧suite，420源包装待systems交审及root唯一真实门。
+
+用户最新验证尺度（root转达）：**“确定的收益可以不用大测试，你把握好”**。035754小收益已按单层范围保留，不追同类微门；42层真实VERIFY1只补当前未覆盖的SAVE正确性／生命周期，不能删必要正确性，也不自动扩大完整官方或重复长pair。后继仅在短证据未覆盖机制、出现矛盾或最终验收确需时扩大，建议继续保持最短。
+
+### 社区框架机制研究收口：优先 Corex blocking Event 契约，不新增运行代码
+
+先完成 systems SAVE 包装只读终审：`prepare_kv_pitched_save_source.py` **cd3d5c2874f487f8115329d573cb5202f893ab46c89cf31764e9757decaf0209**、`launch_kv_pitched_save_screen.py` **df6a4c9e095bb25900e54c22adf56b0d1674b6a57c1b9476b55977a826a7b819** 无当前阻断。完整214400 FULL416基点只替worker a662、增邻接818e runtime/9e33 SO/0a4d cpp及独立manifest到420；1aff/84be/791c/e155原字节、原bc51long/seed721201/VERIFY1、唯一锁/双idle/source/DB/清理保持。SO只hashcopy不编译/加载，INSTALLED仅预检，必须实际SAVE源free前42层c95f对照再FULL/consumer/hostfree。静态证据2b5ef220…已读，没重跑copy/suite/设备。root后续回执042225已真SAVE42/FULL42/consumer16、32/0、DB相同；本owner本轮未独立整门验收，不把回执改称自己的设备证据。
+
+root按用户“多开智能体查最新社区/论文框架机制”新增本owner独占社区研究，范围 CPU/web-only、不SSH/GPU/外部写/改runtime。最终中文 [社区报告](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/analysis/2026-10-22-community-framework-research.md>) SHA **1c06e223d06e6ff4e3c7e50d5df13bd635a8c618b1eeaf717d894679f4727971**，四项有序机制：
+
+1. [vLLM #47081](https://github.com/vllm-project/vllm/pull/47081)／[实际diff](https://github.com/vllm-project/vllm/pull/47081/files)，2026-07-07合并，device blocking Event。本站exact e155原件路径为214400-control/plugin-source/vllm_fl/worker/model_runner.py：758创建prepare_inputs_event，3832同步、3836 finally record，4162–4167在_update_states前进入输入准备CM。下一最小只动758的device事件工厂／blocking标志，原with/异常/流/顺序全部保留；314→340→348的异步输出暂不混，已record的事件不能事后换新。generic torch.Event接受blocking不代表有效，PR作者报告CUDA上generic没有兑现标志，本站Corex更需查证。TP4经验不外推TP1。
+2. [vLLM #62357](https://github.com/vllm-project/vllm/pull/62357)，2026-10-18提交仍Open，真实num_seqs不特化；actual54c kernel178/234、reducer662/670仍无DNS，specJIT66a442–463支持参数级开关。只潜在冷/JIT收益，官方warmup/skip1后可能为零；不fake N、不加kernel实参或改SME位序，不和Event叠加。
+3. [SGLang #39627](https://github.com/sgl-project/sglang/pull/39627)，2026-09-29合并，原生批量KV bookkeeping的ownership/异常边界。不是把RustTreeCore整移vLLM；该现成扩展Torch2.11–2.13/CPU-CUDA支持范围没有本站Torch2.10/Corex。actual3fc BlockPool542/597/614有逐页状态工作，但已popleft_n等批量队列、free O1、cachefull跳已缓存，不夸成重复全表。先有真实CPU占比才考虑窄批次，保block身份/alias/ref/hash/free顺序。
+4. [Triton RFC #10140](https://github.com/triton-lang/triton/issues/10140)，2026-04-27提交仍Open，guarded compiled launch handle；本站此前next-framework-priority已有条件未实施计划，本轮仅补一手证据。actual66a737后binder/cache/SME/pack仍在；只eager Attention机会，不能把graph已消掉的Python算收益，不能套NVIDIA cuLaunchKernelEx或绕过Corex options/hooks/globals。未实施或上卡。
+
+已直接核[PyTorch2.10 Event文档](https://docs.pytorch.org/docs/2.10/generated/torch.cuda.Event.html)，不是用重定向的2.14当安装契约。Corex仍缺actual Torch Event.__new__/底层绑定、IX driver_types的EventBlockingSync位、runtime createWithFlags/query/record/synchronize及mapping。旧030314 f9c348a6只摘Stream._as_parameter_和copy ABI，不含Event；实际路径/needle已发systems用于最小只读取证，避免再采整源。声明／导出存在也不证明Corex真睡眠。
+
+报告规定后继最短证伪：同实际CM跨两步复用pinned buffer、在pending事件上等、逐位核结果/事件完成/原异常语义，不用额外global sync掩盖依赖；同工作量预热短镜像窗，窗外v1cpu.stat，等待线程CPU/进程CPU/wall/event分开。CPU等待须下降且wall不退；不支持/忽略flag/完成错/wake-up回退/事件早已完成无预算均保负结果停止，不自动扩事件种类或大官方。6CPU与copy门CPU≈wall只是动机，原长服务95–96%GPU利用/driver等待混杂不能证明3832忙等或预测TPS。
+
+许可一手核vLLM/SGLang Apache-2.0、Triton MIT，后继借码须保版权许可并另核Corex派生文件。排除growth/terminal/短R/WAITING单步、已做dirtytable/C2D，不把SWA/Mamba/MoE/多模态或新框架整合当本站方案。所有事实仅天数BI-V150，C500由队友另验。
+
+额外重要纠正已与root统一：原FULL1aff的single_victim仅限制单并发host slot；_drop85–96重置victim=None，_wrap_preempt没有每Engine总次数cap，有限32req一轮实际一次SAVE不能推出长负载一生一次。当前无新性能数字／运行代码；root本阶段固定检查点，下一只做Corex Event能力纯读取证，其他三项队列保留，本owner到此停止扩大检索／实现。
+
+systems依精确缺口新增只读取证脚本 `scripts/remote/audit_event_wait_contract.py` **50168b584f013c999b719d2650bec4b47a0be1858a5996a38dee6bff9348de59** 后，本owner只读79行全文，无当前取证范围阻断：12固定安装文件及e155四窗口、五项原SHA、无Torch导入/CDLL/编译/API；missing、片段truncated及read_only_collection_not_semantic_pass保清楚。没有执行脚本。exit0仍非Corex睡眠/性能pass，缺绑定不拿新上游补成本实例事实；已回systems/root，本轮不扩文件或检索。
+
+### 后继只读实际日志核查：原输入准备等待很小，当前机会仍未证
+
+root新任务要求在50168以外找真实prepare_inputs_event等待证据，而非微门CPU≈wall或服务GPUutil。本owner只查现有分析索引/旧profiles文件，直接读取既存 [061506 host-window.pstats](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/experiments/profiles/20261021T061506Z-host-gap/host-window.pstats>)，SHA **f4902a604f0a5813e4c1148d3e16534ec3afa0951010d67c7b83a7c42a67dd62**；没有执行profile/旧validator/测试、无新文件/SSH/GPU。实际8步、shape62/61/60/59诊断窗口有明确caller归属：
+
+- `torch.Event.synchronize`共16次；来自`synchronize_input_prep`的8次合计 **64.628微秒**，平均 **8.0785微秒/步**。CM自身是generator进出16次，累计139.238微秒，不能称16个独立step。
+- 其余8次来自`AsyncGPUModelRunnerOutput.get_output`，合计 **157.091821毫秒**。这只能是输出路径等待预算线索，不是输入准备事件的数据；pstats的C方法时间也不证明其CPU忙等或阻塞睡眠，不能直接改成CPU可省时间。
+- 旧native042609的10次cudaEventSynchronize合计133.157毫秒没有Python调用归属，不能补作758证据，也不与上面另一个窗口相加。
+
+旧归档runner SHA **dfd532de4a0b0bdb286aed0f42b4d6f2c3b2c2dcf65634f895577144473b68b9**，其`synchronize_input_prep`函数AST只读比较与exact e155相同，但整树是旧SQL主因诊断而非当前SQL+C3。该窗口wall13.9476秒、SQL路径约13.4秒；长CPU间隔可能已掩盖等待，所以不能把旧微小等待外推为当前绝对无机会。反之，现有日志也没有当前e155在3832上暴露可观等待或CPU自旋的直接证据。**结论是当前机会未证；旧实测对“输入准备等待必有大收益”给出反证，不能宣称确定收益。** 不据输出157毫秒自动扩大本轮候选。
+
+停止条件保持窄：先根据信息不完整状态完成actual Event只读取证；若Corex/实际绑定不能传达blocking语义，或后续最短真实路径证伪中事件已完成、等待CPU不下降、wall回退、buffer复用/事件完成/异常语义出错，则保负结果停止，不再扩事件种类或靠长pair找样本。若旧SQL移除后的实际等待尚未测，就明确未知，不能拿整服务GPUutil、copy门CPU≈wall或上游TP4数据填空。本轮只追加本handoff，未改CURRENT/registry/研究报告/runtime；落盘后停写，root执行source audit并决定下一最短动作。
+
+### 9626003后：用户要求合理利用设备，唯一实际Event三路短门已准备
+
+root新授权尽快实现独立能力/行为门，不安装服务优化。本owner只新增 [validate_event_wait_gate.py](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/scripts/remote/validate_event_wait_gate.py>)，SHA **67090baad306b95679717a0f4b3e97d7a16abc9815317d3c885102ccac1d32ae**，240行设备子进程；另仅追加本handoff。CLI `python RUN/source/gate.py --device-worker --output-dir RUN --source-dir RUN/source`，不含bridge参数/内层锁/controller；results.json或failed.json exclusive保存，outer负责唯一flock/双idle/监控/超时清理/DB/source封存。没有改CURRENT/registry/服务或旧受测代码。
+
+固定A=`torch.Event()`、B=`torch.cuda.Event()`、C=`torch.cuda.Event(blocking=True)`，**A/B/C/C/B/A各4trial**，不扫描参数/不自动重复。单显式非0Torch copy stream；每trial连续8次32MiB uint8常数0x5a GPU→pinned host，约6GiB被测D2H合计，源回读验证另有流量并排除等待计时。全部分配、首record/synchronize、copy路径预热在六窗之前，setup_wall_ns单列；保持原56Torch线程和6CPU quota，GPU/CPU RNG前后核验，不做setter。
+
+仅被测event.synchronize区间计thread_time_ns、process_time_ns、perf_counter_ns，提交及timing begin/end record/被测event record/early query均在wait计时外；同流timing event包8次D2H。返回后必须先test query和end query都完成、host全32MiB min/max确认每字节0x5a、positive-basic两端guard原值保持，任何失败直接拒绝；**这些检查之前没有补充同步**。全部通过之后才另用同流事件核GPU源全字节，不能用其同步掩盖被测Event提前返回。相同目标重复写0x5a可能遮蔽后续未完成，故end.query为必要独立条件，不能只看最终host常数。poison只写payload，不重置guard。
+
+每窗外保真实v1cpu.stat路径/raw/counters/delta；其范围包含该窗4trial的等待与计时外poison/字节验证，不能当纯wait窗口节流，累积ns也不当wall。setup/actual Torch类型/实际Corex libcudart去重maps路径与d39完整SHA/硬件/命令/source SHA/早完成次数、每trial clocks与device elapsed、最终RNG齐全。此门不声称真实prepare_inputs_event暴露成本、缓存运行状态、CPU自旋根因或服务收益。
+
+强持所有buffer/stream/Event直到完成；异常仅尝试设备settle、不重试原路；若settle失败全部引用保global到outer定向结束，成功路径无global sync。finally清理可安全释放的引用；未完成的fail不能补成pass。必要CPU compile、runpy导入不加载Torch、--help均过，没有新增CPU模拟套件或重跑旧suite/设备。framework已全文终审67090无当前三路门阻断并回root；systems只需将同pin填入唯一outer。root是唯一SSH/GPU owner，实际结果尚未执行/取得，本条不借41ba声明构造等同设备行为，也不提前认定C生效或有收益。
+
+### 045818 typed Event负结果后：唯一原生Corex差异门小fork已准备
+
+root回执045818实际67090/32a门exit0、完整原件在本地：原A generic/B typed默认/C typed blocking三路threadCPU均约9.44ms，typed blocking没有CPU下降；C1 wall8.689ms异常不作加速。本owner当前没有重跑systems唯一完整验收，也不据该wall单点宣称收益或猜事件cache运行状态。root明确只再做一个不同机制：直接SDK创建BlockingSync事件，之后按用户“完成手头转GitHub”收口，不追加服务接入／研究／设备队列。
+
+独占新增 [validate_native_event_wait_gate.py](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/scripts/remote/validate_native_event_wait_gate.py>)，最终候选SHA **7bac3901b6ddeafb5518a473733c2486deab9d561441a6a729a92782c8e57aba**；旧67090原字节不动。只从原门小forkA=generic、B=typed blocking、C=NativeEvent，其余ABC CBA×4trial、32MiB×8、host poison／先query及完整host/guard再源回读、三clock/wall/event/CPUstat、RNG与硬件/线程设置原样，不增加窗口/负载或参数扫描。
+
+framework独占adapter [biv150_native_blocking_event.py](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/patches/framework/candidates/biv150_native_blocking_event.py>) SHA **327e8aff211f33fd9f7fe0bd841b330e4205a5c0677e7a5e9b7c28ce0fec7365**，C++实际路径 [biv150_event_bridge.cpp](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/scripts/remote/biv150_event_bridge.cpp>) SHA **ee01eb013f054fe5ebcd057794bdce9b57a977c6f3745de77e48d4411f0b31d7**。本owner已全文实读核SHA，无当前短门阻断：SDK真实pointer类型/flags OR、create部分失败保handle清理、query仅NotReady→false其他error抛；record前持refs并置pending、sync/query真成功才settled；close失败保handle/ref，无__del__或IPC/全局flag修改。声明位仍不当CPU睡眠证明，必须本门实测。
+
+gate在所有提交前强持NativeEvent；C每record显式传当前非0stream_handle与keepalive=(stream,fixture)，不替换流。构造后记录实际编译creation_flags并严格等于3、actualSO SHA及加载桥后真实maps libcudart d39；py/cpp完整pin+outer动态SO `--bridge-sha256`校验，归档素材名biv150_native_blocking_event.py/bridge.cpp/bridge.so。全部正常完成后才close()；异常只有owner真正device synchronize成功才close(owner_settled=True)，不settle或destroy失败全留引用到outer结束，不降级/重试旧路，也不能把失败清理补成pass。
+
+必要compile/help/runpy导入无Torch/ctypes均过，未编译SDK/加载SO/执行GPU/新旧suite。framework对draft b876全文审无机制阻断；最终仅填327e/ee01两pin及root要求的creation_flags/SO元数据/flags3断言，已发framework定向终审、systems外层锁定最终gatepin。文档不阻塞设备，root仍唯一SSH/GPU owner。此时native实际门尚未执行，本owner不提前写结果；实际完成后仅保字节/CPU行为与边界，手头收口即停止新增探索。
+
+systems最终outer `scripts/remote/launch_native_event_wait_gate.py` **f3133a74211b98e4e137b728ea5bc398d582db0d96ca1884ff37f11469619f2e** 相对旧32a增量已只读审，无当前阻断：4输入exact gate7bac/adapter327e/cpp ee01/契约41ba，CPU g++真实SDK编译产SO，d39库/ldd/readelf/实际SO SHA传CLI，新native suffix；原唯一锁/双idle/DB/source/子进程组timeoutcleanup/seal不变。没有执行包装/编译/API；回执已发root与systems，运行文件不再为文档改动。
+
+### Native负结果收口，转为两个可独立合入的中文PR材料
+
+root最后回执051336原生差异门exit0，字节／RNG／close均过，但直接Corex blocking的threadCPU仍约9.435ms，没有下降；不服务接入、不再找Event变体。本owner不重复systems完整验收或设备，只保root真实回执边界。用户明确现在按方法拆PR／中文说明／依赖方便合入，全部实验结束，转协作材料准备；本owner没有远端操作权限或动作。
+
+已完成两组独占准备，目录各为 `files/<repo-relative-path>` 镜像、中文 `PR.md`、`manifest.json`：
+
+- [连续页复制PR材料](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/docs/pr-preparation/kv-contiguous-copy/PR.md>)：只有c95f工具 `vllm_fl/patches/biv150_kv_page_copy.py` 与独占 `docs/kv-contiguous-copy.md`。manifest SHA **7c2eab63ff2818a1ee0c5d44bfa17d13a35eeca2e7f9063e5cc90cbd6b69405a**，PR文本SHA **4b1606830eb3869c809c5a66131fb01e76036d1c1a92fb3c55891a0dcee1b89d**。
+- [二维SAVE复制PR材料](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/docs/pr-preparation/kv-pitched-copy/PR.md>)：只有818e工具 `vllm_fl/patches/biv150_kv_pitched_copy.py`、0a4d源码 `vllm_fl/patches/biv150_kv_pitched_bridge.cpp`、独占 `docs/kv-pitched-copy.md`。manifest SHA **e212408de53ad5945c2fa82508118263e2d70053bf368c3e7538fa092e92a8cf**，PR文本SHA **108a851078a47f8fc1856c9148fbf1d7f60b9d23654f185cf52077c63f67c7a7**。
+
+只读核base：本地main70d04f38382e900949ddeb34d2ac75aacdc93af4，tree82e37f8f263eeb09563a4790359ec95a0de1ca17；对应root已核remote d5e2e3a54b48dcb1b50f575d2420979591fb3e1c同tree，当前任务无联网重核。全部五个目标在该base不存在，manifest均base_blob=null及mode100644，记录每文件SHA／Git blob SHA／原source路径与SHA／证据／验证缺口。c95f同时逐字匹配旧本地37661d的工具blob，只复用工具，未复制过期README或旧kv-save-restore文档。
+
+依赖已实际AST核：818e只导入ctypes/dataclasses/hashlib/pathlib/sys，SavePlan/Segment自有；0a4d只含标准库与实际SDK头，无PR1代码依赖。`original_c95f_runs`仅本模块自算对照统计，不import c95f。**两PR共同main、无前置依赖、任意先后合入／单独回退**；后继完整worker／协议若采用两工具再显式建立依赖，当前不虚构顺序。
+
+中文说明明确：提交不是ACK、调用方须管producer／当前流／全部强引用／真实完成／页所有权／预算和失败settle。PR2须从Git源码按实际Corex SDK手工编译并固定SO身份，未打包SO或改变setup/wheel，也未接default；仅cuda0 normal16KiB、单层或42层、1GiBcap，其他平台尤其C500未证。032653 wall波动、035754同桥线性→二维约3.62%单层热信号、042225 R16688/717717504B真42层对照和恢复回读均按原范围写明，诊断不称服务吞吐收益／准确率。PR1四构造case也不冒充packed已实际服务部署。
+
+本次仅原字节复制、Python compile(bytes)、静态依赖与Git只读tree/blob/status检查，没有新增实现／设备测／旧suite／SDK编译。collaboration当前HEAD始终37661d2d2cf811ef8093436fa17c424dfd63b25d且clean；没有checkout／index变更、commit／push／PR API。没有改README/init/setup、原c95f/818e/0a4d、当前冻结候选或任何实验原件。root负责发布和组合检查；本owner材料完成后停止新增研究／实验，等待定向修订。

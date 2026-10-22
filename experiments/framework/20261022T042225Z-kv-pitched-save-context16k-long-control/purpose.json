@@ -1,0 +1,67 @@
+{
+  "kind": "仅SAVE的C-batch加2D及原FULL VERIFY1真实机制诊断，非性能或新accuracy",
+  "variant": "full-R-pitched-save-on-frozen-full-restore",
+  "wrapper_sha256": "df6a4c9e095bb25900e54c22adf56b0d1674b6a57c1b9476b55977a826a7b819",
+  "source": "/workspace/experiments/minicpm-s2/code/kv-pitched-save-20261022T042225Z",
+  "base": "/workspace/experiments/minicpm-s2/code/kv-full-restore-20261021T214400Z",
+  "source_count": 420,
+  "reference": {
+    "control": "20261021T214400Z-kv-full-restore-context16k-long-control",
+    "base": "kv-full-restore-20261021T214400Z",
+    "source_manifest": "a67c717f5e1f7ab5e2240dc9cd8623c02a91aa2b2958b9ee0bf206c791183829",
+    "innovation_manifest": "93375c426c9fb0b4d5abdb869ba94a8fab0a01ce1863ab0e1bd9785f586827fe",
+    "protocol": "1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8",
+    "transaction": "84be2242656e6ae0a30d65c803c2ae5076e836e0d1b6686731c4197a85b21883",
+    "worker": "5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477"
+  },
+  "builder_sha256": "cd3d5c2874f487f8115329d573cb5202f893ab46c89cf31764e9757decaf0209",
+  "candidate_worker_sha256": "a662e478d20884c5b1d65e0ee3d270a62453d88166b28e092dcaf3b35a3df854",
+  "save_byte_readback_enabled": true,
+  "original_innovation_manifest_is_base_only": true,
+  "restore_byte_readback_enabled": true,
+  "preflight": {
+    "before_preparation": {
+      "query": "68, 0\n",
+      "ixsmi": "Timestamp    Thu Oct 22 12:22:25 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  31C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+    },
+    "before_driver": {
+      "query": "68, 0\n",
+      "ixsmi": "Timestamp    Thu Oct 22 12:22:27 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  31C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+    }
+  },
+  "db_before": {
+    "snapshot_sha256": "dc2c76463fc6c1ef0674b16ca4374125b3ee4551fa0b1886253093f310b237da",
+    "schema_sha256": "0dc7a465bf12e53e054381d9e865460e7e4fe70287cc8c3683a41b0a4914ab39",
+    "logical_content_sha256": "c05d7e3182d1837929b48d5699c6515786351eb8d22f73eb53227a39fb3c49c8",
+    "table_count": 523,
+    "row_count": 19474
+  },
+  "command": [
+    "/usr/local/bin/python",
+    "/workspace/experiments/minicpm-s2/scripts/run_framework_screen.py",
+    "/workspace/experiments/minicpm-s2/framework/20261022T042225Z-kv-pitched-save-context16k-long",
+    "--source-dir",
+    "/workspace/experiments/minicpm-s2/code/kv-pitched-save-20261022T042225Z",
+    "--context-long-screen",
+    "--seed",
+    "721201",
+    "--require-log-marker",
+    "BIV150_KV_PROTOCOL_INSTALLED"
+  ],
+  "required_evidence": [
+    "真实SAVE implementation与runtime/bridge/库身份、完整R/42层及动态调用几何",
+    "SAVE提交非ACK，真实event完成后源free前42层原c95f对照全bytes通过",
+    "同一事务SAVE→RESTORE_FULL→DROP真ACK、原caps、0ZERO",
+    "原RESTORE_FULL独立42层整页回读通过，runner六checks/原消费者/host释放",
+    "32成功0失败/原tokens、DBbeforeafter变化、420源归档-live一致及完整后态"
+  ],
+  "limits": [
+    "INSTALLED只load前预检，不等于SAVE/FULL/两组回读/消费完成。",
+    "原protocol1aff/txn84be/init791c/e155不变；只替worker SAVE，不叠72942/6a。",
+    "CPP只归档，SO固定已验9e33，不在worker编译；真实服务stream允许0，必须记录实际值。",
+    "旧innovation-source.json仅基点；新420身份以当前manifest及本control映射为准。",
+    "VERIFY1含SAVE源free前原c95f对照及原FULL回读，不计吞吐或accuracy。",
+    "准备锁先释放再由bc51重取；root既有seal收DB-after/source/live/post。",
+    "不自动追加smoke/性能pair/大官方测试；最短必要正确性证据后由root决定。"
+  ]
+}

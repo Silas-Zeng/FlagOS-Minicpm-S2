@@ -1,5 +1,7 @@
 # GitHub 团队协作与交付
 
+2026-10-22本轮新增四项独立中文Draft PR，均未合并；链接、依赖和已解决的CPU import冲突见[方法协作安排](pr-collaboration-plan.md)，精确head/tree见[创建回执](pr-preparation/publication-receipt.json)。完整实验数据同步身份见[本轮发布回执](github-publications/20261022-pr-maintenance.json)。下方旧发布表保留历史身份。
+
 三个仓库均为本实验专用私有库。实验记录与分析按硬件平台区分；另外两个代码库由团队共用，不要求按平台划分目录或分支。官方上游只作参考，修改发布到自己的协作副本。
 
 | 仓库 | 用途与范围 |

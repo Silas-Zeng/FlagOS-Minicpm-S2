@@ -1,5 +1,7 @@
 # FlagOS 第二季 MiniCPM5-2B 双平台协作
 
+四项独立中文 Draft PR 已创建：[CPU metadata #1](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/1)、[async token #2](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/2)、[KV连续页 #3](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/3)、[KV二维SAVE #4](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/4)。均未合并；两个CPU方法的import冲突已有双向解决补丁，详见协作安排。
+
 本仓库是团队的实验记录与交接总入口，覆盖 **天数 BI-V150** 和 **沐曦－曦云 C500**。本实验库按平台分别维护环境、分析、验证结果和中文报告；框架和算子代码在另外两个团队共用代码库中协作。
 
 | 平台 | 负责人 | 当前证据与进度 | 入口 |
@@ -19,7 +21,13 @@
 
 ## 接续工作
 
-切换 API 或加入协作时，先读 [CURRENT_WORK.md](CURRENT_WORK.md)、[协作规范](AGENTS.md) 和 [子智能体交接索引](docs/agent-work-index.md)。本轮官方对照已完成并作为稳定基点保存；用户已恢复持续优化，重点根据硬件与输入特点探索调度、KV 及执行框架。小收益候选也进入最短上卡实测并保留，新候选和已验收版本分别记录。
+切换 API 或加入协作时，先读 [CURRENT_WORK.md](CURRENT_WORK.md)、[协作规范](AGENTS.md) 和 [子智能体交接索引](docs/agent-work-index.md)。2026-10-22 本轮手头设备实验已结束，现转入 GitHub 协作整理，暂不新增实验。已验证小收益和负结果全部保留，代码按方法拆分草稿 PR，合并前核对各自验证范围和组合边界。
+
+当前代码库主分支曾一次性导入完整 SQL+C3 候选，包含下方列出的多项优化；这不代表此前已通过多个 PR 分别合并。新增方法的 PR 与历史组合版本分开记录，主分支中的旧方法不重复提交。
+
+- 最近的 KV 二维复制门保留局部成本改善；真实42层 SAVE 与原 FULL 恢复均通过完整字节检查，尚不作为新官方吞吐或准确率结果。
+- 两轮 Event 对比均通过完成性检查，但 typed blocking 和直接 Corex blocking 都未降低等待线程 CPU，按负结果结束，不作为生产优化加入代码 PR。
+- 框架草稿 PR 的范围、依赖与合并步骤统一记录于 [方法与协作安排](docs/pr-collaboration-plan.md)。
 
 - [团队交接](docs/team-github-handoff.md)
 - [BI-V150 技术报告](docs/technical-report.md)

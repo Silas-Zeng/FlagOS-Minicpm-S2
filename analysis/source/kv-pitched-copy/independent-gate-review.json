@@ -1,0 +1,25 @@
+{
+  "status": "static_cross_owner_review_no_blocker_for_short_device_gate",
+  "scope": "仅CPU只读跨owner审阅，不执行设备/SDK编译/旧门或新套件",
+  "sha256": {
+    "scripts/remote/validate_kv_pitched_copy.py": "c8c0f64e7293634a28949f4338800298b43d32daa7cbd866e64dcd59833d7dc6",
+    "scripts/remote/launch_kv_pitched_copy_gate.py": "3ffe8efe643a5c280a85217299bcb0adb6349c66f499659d2de9b5167dcce7da",
+    "patches/framework/candidates/biv150_kv_pitched_copy.py": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd",
+    "patches/framework/candidates/biv150_kv_pitched_bridge.cpp": "0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44"
+  },
+  "reviewed": [
+    "两组冻结实际页数组，完整R；候选先与CPU物理页号+页内offset全字节oracle比较，再与冻结c95f全字节比较",
+    "真实非零storage_offset；pinned目标两端basic narrow guards及完整源+源双guard回读不变",
+    "明确非0 Torch stream与native handle一致；H2D producer后直接candidate submit，同stream event完成后才读host，旧copy不能掩盖candidate流错误",
+    "全部fixture/PreparedSave/Tensor/event强引用先于首次异步操作；失败全device settle，无法settle保引用到进程退出，禁止旧路重试",
+    "两组正确性真完成后首case固定8call ABBA，event提前record/sync；真实submit成本含C GetDevice/maxpitch和各自调用校验，准备另列",
+    "外层不import候选/Torch/CDLL；真实SDK headers和libcudart identity校验、编译源在-lcudart之前、明确rpath/ldd/readelf与实际.so SHA传child",
+    "单设备flock覆盖编译与唯一设备child，双栈9031关闭/68MiB0%预检，300s child、定向进程组清理、DB前后/全source/post及flush后完整seal"
+  ],
+  "limits": [
+    "本文件为静态审阅回执，不是设备结果；尚无本owner设备字节/性能结论",
+    "只单层真实页几何构造与C batch+2D组合submit成本，不推42层SAVE、纯DMA、worker/service或E2E收益",
+    "只允许root唯一串行设备执行；不授权集成现有worker/更改R、victim、调度或默认代码"
+  ],
+  "next": "root执行唯一最短门后封存完整run/control，再按实际results或failed原件判断"
+}

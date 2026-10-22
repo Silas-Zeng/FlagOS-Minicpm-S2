@@ -1,0 +1,21 @@
+{
+  "status": "static_review_pass_before_unique_device_run",
+  "run_id": "20261022T042225Z-kv-pitched-save-context16k-long",
+  "review_scope": "root全文读原5d9a、4f1新增SAVE delta、a662 maps去重delta及独立builder/launcher；未重复旧CPU套件。",
+  "worker_sha256": "a662e478d20884c5b1d65e0ee3d270a62453d88166b28e092dcaf3b35a3df854",
+  "builder_sha256": "cd3d5c2874f487f8115329d573cb5202f893ab46c89cf31764e9757decaf0209",
+  "launcher_sha256": "df6a4c9e095bb25900e54c22adf56b0d1674b6a57c1b9476b55977a826a7b819",
+  "runtime_sha256": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd",
+  "bridge_sha256": "9e33ecbf9cf57f52469db6b1d509a600cd1a8eeafe78a54095e88dc474c71fc0",
+  "notes": [
+    "原上下文约束、fence、_finish、FULL/旧RESTORE/ZERO、失败settle与DROP保持；slot首次submit前强持PreparedSave/Bridge/stream。",
+    "当前Torch stream传原native handle；原_finish跟随同线程当前流，真实服务handle0与42层字节由本轮门负责。",
+    "新SAVE完成后、SAVED ACK和源free前，以原单层verify_buffer逐层c95f回读源对照新host；所有层通过才继续原FULL与consumer。",
+    "root要求同libcudart多段mapping先去重再hash一次，避免重复读取8.39MB库；加载/首次核验仍属于实际SAVE成本。",
+    "实际FULL416输入只替canonical worker并附py/cpp/so/manifest为420项；协议/事务/init/runner/原服务和bc51long参数未改。",
+    "远端新脚本上传后逐SHA/compile通过；旧818e/0a4d实体同；SO由032653已验证实体以新建文件复制，未重编译。",
+    "本回执只记录静态审与部署，设备成功/性能/accuracy尚不能由此得出。"
+  ],
+  "runner_pid": 262136,
+  "publication": "用户暂由自己处理GitHub，当前无push/PR。"
+}

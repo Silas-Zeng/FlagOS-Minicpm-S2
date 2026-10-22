@@ -1,0 +1,46 @@
+{
+  "status": "one_planner_cpu_contract_passed_no_SDK_or_device_execution",
+  "created_utc": "2026-10-22T03:21:26.742173+00:00",
+  "sha256": {
+    "patches/framework/candidates/biv150_kv_pitched_copy.py": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd",
+    "patches/framework/candidates/biv150_kv_pitched_bridge.cpp": "0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44",
+    "tests/test_biv150_kv_pitched_copy.py": "1d470f21163c71de62e2bcc25f4aaa1c0c2954f391fcc99287a9828fb0d3554d"
+  },
+  "actual_geometry_evidence_sha256": "489f1468956ff96e86188feeb89933df0ab5d35458b8d184b6adbb2729497dbc",
+  "actual_SDK_ABI_evidence_sha256": "f9c348a60fa34469377fda671d2d57a42c108fca2554fd59963b6b7033ffb576",
+  "contract": {
+    "command": "python -X utf8 -m unittest discover -s tests -p test_biv150_kv_pitched_copy.py -v",
+    "tests": 1,
+    "exit_code": 0,
+    "reported_seconds": 0.013,
+    "tool_command_wall_seconds": 0.617167,
+    "first_execution_passed": true,
+    "coverage": [
+      "015315/021658 actual arrays exactly reconstruct source and destination logical order/fullR/fullbytes",
+      "preserve original long consecutive runs; left-to-right positive constant-step singleton cover",
+      "descending/non-positive differences are single linear rows, no negative size_t",
+      "single row/duplicate/negative/out-of-range/bool/overflow/overlap/hole/incomplete coverage rejected",
+      "module import and planning prohibit CDLL; no torch/numpy/vllm import",
+      "ctypes descriptor sizeof72 matches static C++ ABI assertion"
+    ]
+  },
+  "API": {
+    "make_plan": "source_ids, source_pages, page_bytes=16384",
+    "prepare_save": "sources/destinations sequence length1or42, max_pitch keyword; metadata only; supports storageoffset",
+    "Bridge": "path, expected_sha256 keyword; explicit worker only loads library",
+    "submit": "PreparedSave, stream_handle keyword native integer; return submission statistics only",
+    "ABI_version": 1,
+    "descriptor_bytes": 72,
+    "max_native_descriptors": 65536,
+    "payload_cap_bytes": 1073741824
+  },
+  "limitations": [
+    "no local SDK bridge compile or load",
+    "CPU test does not prove native API correctness/pitch support/stream semantics/device byte equivalence",
+    "completion_ackFalse; caller must hold PreparedSave/Tensors and actual same-stream event until settled, including error path",
+    "CopySubmissionError.submitted_calls counts only successful SDK returns; zero does not prove no internal work, always settle and never silently retry old path",
+    "native GetDevice/MaxPitch in each submit is included in device timing; no speculative cache optimization",
+    "no worker integration, model/service or changed victim/R/scheduler",
+    "not DMA descriptor count or E2E gain"
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "recorded_utc": "2026-10-22T03:36:53.429376+00:00",
+  "status": "pass_independent_local_evidence_review",
+  "run_id": "20261022T032653Z-kv-pitched-copy-gate",
+  "root_archive_sha256_attested": "2ba3856fef63566c8a372818a2ae60e21c999d8022465d8d29ad13a7de99c55c",
+  "execution_scope": "本agent只读本地stdlib审计，无测试/候选/桥加载/远端/设备；首次相对URI失败已保留，修绝对路径续审",
+  "first_local_review_incomplete": "032653-first-review-incomplete.json",
+  "seal_file_count": 86,
+  "seal_sha256": "b5dae1451739a99b0bd168c1fe5fb0eceab73b1a1871903f37f4631ad97dd628",
+  "results_sha256": "4c32881390f1da0baa8c0e9f4e9dd63d9045156bdf352679d39544801f66fc37",
+  "source_sha256": {
+    "biv150_kv_page_copy.py": "c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c",
+    "biv150_kv_pitched_copy.py": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd",
+    "bridge.cpp": "0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44",
+    "bridge.so": "9e33ecbf9cf57f52469db6b1d509a600cd1a8eeafe78a54095e88dc474c71fc0",
+    "gate.py": "c8c0f64e7293634a28949f4338800298b43d32daa7cbd866e64dcd59833d7dc6",
+    "memcpy2d-abi.json": "f9c348a60fa34469377fda671d2d57a42c108fca2554fd59963b6b7033ffb576",
+    "save-arithmetic-evidence.json": "489f1468956ff96e86188feeb89933df0ab5d35458b8d184b6adbb2729497dbc"
+  },
+  "compile_argv": [
+    "g++",
+    "-O2",
+    "-std=c++17",
+    "-fPIC",
+    "-shared",
+    "-I/usr/local/corex/include",
+    "/workspace/experiments/minicpm-s2/framework/20261022T032653Z-kv-pitched-copy-gate/source/bridge.cpp",
+    "-L/usr/local/corex/lib64",
+    "-Wl,-rpath,/usr/local/corex/lib64",
+    "-lcudart",
+    "-o",
+    "/workspace/experiments/minicpm-s2/framework/20261022T032653Z-kv-pitched-copy-gate/source/bridge.so"
+  ],
+  "bridge_bytes": 15936,
+  "ABI_headers_match": true,
+  "actual_loaded_libcudart": {
+    "/usr/local/corex-4.5.0/lib64/libcudart.so.10.2.89": {
+      "sha256": "d39d579627d19ddb903855ebc4859661579633a7ecc4d1ad51866d79296ba527",
+      "mapped_path": "/usr/local/corex-4.5.0/lib64/libcudart.so.10.2.89"
+    }
+  },
+  "device": {
+    "name": "Iluvatar BI-V150",
+    "SM": 16,
+    "total_memory": 34359738368
+  },
+  "explicit_nondefault_stream_handle": 94118921500112,
+  "max_pitch_bytes": 2147483647,
+  "controller_pid": 258685,
+  "worker_pid": 258707,
+  "started_utc": "2026-10-22T03:26:53.269434+00:00",
+  "finished_utc": "2026-10-22T03:27:06.844419+00:00",
+  "postflight_utc": "2026-10-22T03:27:06.831936+00:00",
+  "DB": {
+    "db-before": {
+      "snapshot_sha256": "dc2c76463fc6c1ef0674b16ca4374125b3ee4551fa0b1886253093f310b237da",
+      "schema_sha256": "0dc7a465bf12e53e054381d9e865460e7e4fe70287cc8c3683a41b0a4914ab39",
+      "logical_content_sha256": "c05d7e3182d1837929b48d5699c6515786351eb8d22f73eb53227a39fb3c49c8",
+      "table_count": 523,
+      "row_count": 19474
+    },
+    "db-after": {
+      "snapshot_sha256": "dc2c76463fc6c1ef0674b16ca4374125b3ee4551fa0b1886253093f310b237da",
+      "schema_sha256": "0dc7a465bf12e53e054381d9e865460e7e4fe70287cc8c3683a41b0a4914ab39",
+      "logical_content_sha256": "c05d7e3182d1837929b48d5699c6515786351eb8d22f73eb53227a39fb3c49c8",
+      "table_count": 523,
+      "row_count": 19474
+    }
+  },
+  "CPU_quota": 6.0,
+  "torch_CPU_threads": 56,
+  "host_limit_bytes": 21474836480,
+  "worker_memory_fields_observed": false,
+  "environment": {
+    "recorded_utc": "2026-10-22T03:26:53.440881+00:00",
+    "python": "3.12.11 (main, Jul 31 2025, 06:45:11) [GCC 13.3.0]",
+    "platform": "Linux-5.4.0-148-generic-x86_64-with-glibc2.39",
+    "packages": {
+      "torch": "2.10.0+corex.4.5.0",
+      "triton": null,
+      "vllm": "0.24.0+empty",
+      "flag-gems": "5.3.5",
+      "vllm-fl": null
+    },
+    "env": {
+      "PATH": "/usr/local/corex/bin:/usr/local/lib/python3.12/site-packages/bin:/usr/local/openmpi/bin:/usr/local/openmpi/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "LD_LIBRARY_PATH": "/usr/local/corex/lib64:/usr/local/openmpi/lib:/usr/local/lib:/usr/local/lib:/usr/local/openmpi/lib:",
+      "CUDA_VISIBLE_DEVICES": null,
+      "PYTHONDONTWRITEBYTECODE": null
+    },
+    "cgroup_observation_not_peak": {
+      "/sys/fs/cgroup/cpu/cpu.cfs_quota_us": "600000\n",
+      "/sys/fs/cgroup/cpu/cpu.cfs_period_us": "100000\n",
+      "/sys/fs/cgroup/cpu/cpu.stat": "nr_periods 786559\nnr_throttled 3565\nthrottled_time 14354705257926\n",
+      "/sys/fs/cgroup/memory/memory.limit_in_bytes": "21474836480\n",
+      "/sys/fs/cgroup/memory/memory.usage_in_bytes": "3219083264\n",
+      "/sys/fs/cgroup/memory/memory.stat": "cache 2389073920\nrss 185933824\nrss_huge 0\nshmem 0\nmapped_file 0\ndirty 1081344\nwriteback 2973696\npgpgin 287049378\npgpgout 286419910\npgfault 503400645\npgmajfault 1254\ninactive_anon 0\nactive_anon 187031552\ninactive_file 851558400\nactive_file 1530101760\nunevictable 0\nhierarchical_memory_limit 21474836480\ntotal_cache 2389073920\ntotal_rss 185933824\ntotal_rss_huge 0\ntotal_shmem 0\ntotal_mapped_file 0\ntotal_dirty 1081344\ntotal_writeback 2973696\ntotal_pgpgin 287049378\ntotal_pgpgout 286419910\ntotal_pgfault 503400645\ntotal_pgmajfault 1254\ntotal_inactive_anon 0\ntotal_active_anon 187031552\ntotal_inactive_file 851558400\ntotal_active_file 1530101760\ntotal_unevictable 0\n"
+    }
+  },
+  "cases": [
+    {
+      "run_id_evidence": "20261022T015315Z-kv-progress-victim-context16k-long",
+      "prefix_tokens_evidence": 16928,
+      "logical_pages": 1058,
+      "one_layer_bytes": 17334272,
+      "original_runs": 37,
+      "new_plan_segments": 11,
+      "candidate_submit": {
+        "submitted_bytes": 17334272,
+        "copy_calls": 11,
+        "linear_calls": 2,
+        "pitched_calls": 9,
+        "fallback_pitched_segments": 0,
+        "original_c95f_calls": 37,
+        "completion_ack": false
+      },
+      "baseline_submit": {
+        "submitted_bytes": 17334272,
+        "copy_calls": 37,
+        "completion_ack": false
+      },
+      "payload_sha256": "87b4cca7ea118461bf8ea2a91f53da4f1d60b52c0b61765094276d21a2beb108",
+      "CPU_prepare_excluded_ms": {
+        "baseline_make_plan": 1.3420628383755684,
+        "new_make_plan": 1.443368848413229,
+        "new_prepare_save_all_tensor_checks_and_ctypes_descriptors": 0.7593920454382896
+      }
+    },
+    {
+      "run_id_evidence": "20261022T021658Z-kv-progress-pair-progress-context16k-long",
+      "prefix_tokens_evidence": 16768,
+      "logical_pages": 1048,
+      "one_layer_bytes": 17170432,
+      "original_runs": 26,
+      "new_plan_segments": 6,
+      "candidate_submit": {
+        "submitted_bytes": 17170432,
+        "copy_calls": 6,
+        "linear_calls": 2,
+        "pitched_calls": 4,
+        "fallback_pitched_segments": 0,
+        "original_c95f_calls": 26,
+        "completion_ack": false
+      },
+      "baseline_submit": {
+        "submitted_bytes": 17170432,
+        "copy_calls": 26,
+        "completion_ack": false
+      },
+      "payload_sha256": "8ca4b4c567bcaec9e38b37cec8bd23f0527ca14a592430f2b240421ee240f239",
+      "CPU_prepare_excluded_ms": {
+        "baseline_make_plan": 2.400442026555538,
+        "new_make_plan": 2.2636190988123417,
+        "new_prepare_save_all_tensor_checks_and_ctypes_descriptors": 0.890783965587616
+      }
+    }
+  ],
+  "correctness_checks_true": 18,
+  "timing_post_checks_true": 5,
+  "independent_CPU_oracle_payload_SHA_match": true,
+  "RNG_unchanged": {
+    "CPU": true,
+    "GPU": true
+  },
+  "timing": {
+    "method": "首case固定8call ABBA；真实submit+同流event完成wall，含各自Python/C校验和event record/sync",
+    "excluded": "双方plan、Tensor/ctypes descriptors准备、分配/填值/H2D producer/CPU比较/guard检查在窗外，准备耗时另列",
+    "interpretation": "只比较c95f与C batch+2D组合；不分离2D贡献、不代表42层SAVE、服务或E2E",
+    "batches": [
+      {
+        "label": "baseline_c95f",
+        "loops": 8,
+        "wall_ms_per_call": 7.415286498144269,
+        "same_stream_event_ms_per_call": 0.6524918079376221,
+        "last_submit": {
+          "submitted_bytes": 17334272,
+          "copy_calls": 37,
+          "completion_ack": false
+        }
+      },
+      {
+        "label": "candidate_C_batch_plus_2D",
+        "loops": 8,
+        "wall_ms_per_call": 0.6722646648995578,
+        "same_stream_event_ms_per_call": 0.6282668113708496,
+        "last_submit": {
+          "submitted_bytes": 17334272,
+          "copy_calls": 11,
+          "linear_calls": 2,
+          "pitched_calls": 9,
+          "fallback_pitched_segments": 0,
+          "original_c95f_calls": 37,
+          "completion_ack": false
+        }
+      },
+      {
+        "label": "candidate_C_batch_plus_2D",
+        "loops": 8,
+        "wall_ms_per_call": 0.6818952388130128,
+        "same_stream_event_ms_per_call": 0.6281090974807739,
+        "last_submit": {
+          "submitted_bytes": 17334272,
+          "copy_calls": 11,
+          "linear_calls": 2,
+          "pitched_calls": 9,
+          "fallback_pitched_segments": 0,
+          "original_c95f_calls": 37,
+          "completion_ack": false
+        }
+      },
+      {
+        "label": "baseline_c95f",
+        "loops": 8,
+        "wall_ms_per_call": 1.4542285352945328,
+        "same_stream_event_ms_per_call": 0.6526798009872437,
+        "last_submit": {
+          "submitted_bytes": 17334272,
+          "copy_calls": 37,
+          "completion_ack": false
+        }
+      }
+    ],
+    "post_timing_checks": {
+      "baseline_payload_still_equal": true,
+      "candidate_payload_still_equal": true,
+      "baseline_guards": true,
+      "candidate_guards": true,
+      "entire_source_and_both_guards_unchanged": true
+    }
+  },
+  "source_post_unchanged": true,
+  "cleanup_post_idle": true,
+  "performance_gain_claim": null,
+  "limits_zh": [
+    "单层构造张量使用两真实SAVE页序，非模型/42层/服务/准确率。",
+    "提交返回不是ACK；冻结gate在同一非0Torch流record/event.synchronize之后才读CPU完整数据，真实字节门已pass。",
+    "C batch+2D组合与c95f比较，不分离2D贡献，不将单层计时外推E2E。",
+    "基线两wall相差大，CPUquota6与56Torch线程/全程cgroup观察存在；不能归因为某段配额节流或稳定DMA带宽。",
+    "worker memory_before/after为空是v1路径未观察，不能解释为零内存；外层v1 host/cpu观察非峰值。",
+    "root提供tgz SHA为owner attestation，本agent独立复核完整86项seal+DB实体+source+所有设备原件。"
+  ]
+}
