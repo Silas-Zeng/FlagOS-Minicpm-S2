@@ -10,7 +10,7 @@
 
 | 仓库 | 团队查看内容 |
 |---|---|
-| [vllm-plugin-FL](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL) | 比赛原始框架＋按方法拆分的PR；main已恢复原始源码，未合并优化不属于main |
+| [vllm-plugin-FL](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL) | 比赛原始框架＋按方法拆分的 PR；十项方法已按依赖合并，后续代码和维护继续通过 PR |
 | [FlagGems](https://github.com/Silas-Zeng/FlagGems) | 比赛指定算子代码＋实际发生的算子改动PR；目前没有新增库内算子实现 |
 | 本实验库 | 实验总表、方法记录、每轮短记和原始证据；按硬件区分 |
 
@@ -20,9 +20,9 @@
 
 | 方法 / 版本 | 结果与处理 |
 |---|---|
-| BI-V150历史SQL+C3完整组合 | 官方准确率103/105，完整两档吞吐已留档；这些结果只属于该历史组合，DB/KV对照限制见[原报告](docs/technical-report.md)。当前以方法PR重新呈现，尚未合入新main |
+| BI-V150历史SQL+C3完整组合 | 官方准确率103/105，完整两档吞吐已留档；这些结果只属于该历史组合，DB/KV对照限制见[原报告](docs/technical-report.md)。对应方法已合并，不能把历史准确率自动赋予新增 CPU 组合 |
 | [CPU metadata＋async token](team/methods/cpu-combination.md) | 两轮64/0、同KV与DB，单轮吞吐+0.6986%、平均TTFT−0.1250%；保留待确认，未做新整模型准确率 |
-| [KV复制](team/methods/kv-pitched.md) | 字节正确性和局部成本信号已记录，尚无稳定端到端收益；工具保留Draft |
+| [KV复制](team/methods/kv-pitched.md) | 字节正确性和局部成本信号已记录，尚无稳定端到端收益；工具已合并，仍需显式调用，未启用 KV offload |
 | 沐曦－曦云C500 | 由该平台队友补充环境与实测，不能套用BI-V150结果 |
 
 原始日志与环境文件保留在experiments/，从短记进入即可；不需要先读审计过程。早期未证实、放弃或失败的方法仍在总表中。
