@@ -1,0 +1,655 @@
+{
+  "kind": "current mixed native GPU evidence; no performance verdict",
+  "trace": "/workspace/experiments/minicpm-s2/framework/20261022T114435Z-current-mixed-native-diagnostic/native-trace.json",
+  "trace_sha256": "54e62f23f2c814b7e076a1bb9732a37b093f9d343fab7adbe2c42a2e9e56d3dd",
+  "reader_sha256": "25c5ae091cbf289e80ff9dea979b6756fd31ee832cc75ae79b55046fd060a162",
+  "current_three_mixed_window_valid": true,
+  "start_stop_events": [
+    {
+      "event": "start",
+      "pid": 299378,
+      "source": "/workspace/experiments/minicpm-s2/code/current-mixed-native-20261022T114435Z/vllm_fl/worker/model_runner.py",
+      "shape": [
+        2,
+        2048,
+        2047
+      ],
+      "scheduled_tokens": [
+        1,
+        2047
+      ],
+      "single_query_count": 1,
+      "eligible_mixed_seen": 3
+    },
+    {
+      "event": "stop",
+      "pid": 299378,
+      "source": "/workspace/experiments/minicpm-s2/code/current-mixed-native-20261022T114435Z/vllm_fl/worker/model_runner.py",
+      "result": 0,
+      "executed_shapes": [
+        [
+          2,
+          2048,
+          2047
+        ],
+        [
+          2,
+          2048,
+          2047
+        ],
+        [
+          2,
+          2048,
+          2047
+        ]
+      ],
+      "executed_scheduled_tokens": [
+        [
+          1,
+          2047
+        ],
+        [
+          1,
+          2047
+        ],
+        [
+          1,
+          2047
+        ]
+      ]
+    }
+  ],
+  "kernel_sources_reported_separately": [
+    {
+      "table": "cuda_kernel_data",
+      "calls": 1656,
+      "sum_ms": 1063.1562179999999,
+      "by_kernel_name": [
+        {
+          "name": "kernel_unified_attention",
+          "calls": 252,
+          "sum_ms": 668.969591,
+          "observed_kernel_sum_percent": 62.9229815594231,
+          "mean_ms": 2.6546412341269843,
+          "kernel_names": [
+            "kernel_unified_attention"
+          ]
+        },
+        {
+          "name": "mm_kernel",
+          "calls": 504,
+          "sum_ms": 337.191759,
+          "observed_kernel_sum_percent": 31.716106559986272,
+          "mean_ms": 0.6690312678571428,
+          "kernel_names": [
+            "mm_kernel"
+          ]
+        },
+        {
+          "name": "triton_poi_fused_mul_silu_slice_1",
+          "calls": 126,
+          "sum_ms": 17.390976,
+          "observed_kernel_sum_percent": 1.6357874511344856,
+          "mean_ms": 0.13802361904761903,
+          "kernel_names": [
+            "triton_poi_fused_mul_silu_slice_1"
+          ]
+        },
+        {
+          "name": "triton_red_fused_fused_add_rms_norm_2",
+          "calls": 126,
+          "sum_ms": 10.393068999999999,
+          "observed_kernel_sum_percent": 0.9775674377892787,
+          "mean_ms": 0.08248467460317459,
+          "kernel_names": [
+            "triton_red_fused_fused_add_rms_norm_2"
+          ]
+        },
+        {
+          "name": "triton_poi_fused_3",
+          "calls": 123,
+          "sum_ms": 10.134997,
+          "observed_kernel_sum_percent": 0.953293300495939,
+          "mean_ms": 0.08239834959349594,
+          "kernel_names": [
+            "triton_poi_fused_3"
+          ]
+        },
+        {
+          "name": "triton_red_fused_fused_add_rms_norm_0",
+          "calls": 126,
+          "sum_ms": 6.378869,
+          "observed_kernel_sum_percent": 0.5999935749799659,
+          "mean_ms": 0.050625944444444446,
+          "kernel_names": [
+            "triton_red_fused_fused_add_rms_norm_0"
+          ]
+        },
+        {
+          "name": "reshape_and_cache_kernel_flash",
+          "calls": 126,
+          "sum_ms": 3.929684,
+          "observed_kernel_sum_percent": 0.36962432551939417,
+          "mean_ms": 0.031187968253968253,
+          "kernel_names": [
+            "reshape_and_cache_kernel_flash"
+          ]
+        },
+        {
+          "name": "linear_kernel",
+          "calls": 3,
+          "sum_ms": 2.529487,
+          "observed_kernel_sum_percent": 0.2379224197887351,
+          "mean_ms": 0.8431623333333333,
+          "kernel_names": [
+            "linear_kernel"
+          ]
+        },
+        {
+          "name": "sweep",
+          "calls": 24,
+          "sum_ms": 2.506467,
+          "observed_kernel_sum_percent": 0.23575716884910317,
+          "mean_ms": 0.10443612499999999,
+          "kernel_names": [
+            "sweep"
+          ]
+        },
+        {
+          "name": "reduce_segments",
+          "calls": 126,
+          "sum_ms": 1.32394,
+          "observed_kernel_sum_percent": 0.12452920629957692,
+          "mean_ms": 0.010507460317460316,
+          "kernel_names": [
+            "reduce_segments"
+          ]
+        },
+        {
+          "name": "compute_global_hist_kernel",
+          "calls": 3,
+          "sum_ms": 0.964564,
+          "observed_kernel_sum_percent": 0.09072645991898812,
+          "mean_ms": 0.3215213333333333,
+          "kernel_names": [
+            "compute_global_hist_kernel"
+          ]
+        },
+        {
+          "name": "triton_poi_fused_1",
+          "calls": 3,
+          "sum_ms": 0.248803,
+          "observed_kernel_sum_percent": 0.02340229928467577,
+          "mean_ms": 0.08293433333333333,
+          "kernel_names": [
+            "triton_poi_fused_1"
+          ]
+        },
+        {
+          "name": "softmax_kernel_inner",
+          "calls": 6,
+          "sum_ms": 0.19124,
+          "observed_kernel_sum_percent": 0.017987949161390314,
+          "mean_ms": 0.03187333333333333,
+          "kernel_names": [
+            "softmax_kernel_inner"
+          ]
+        },
+        {
+          "name": "argmax_kernel_inner",
+          "calls": 3,
+          "sum_ms": 0.15051,
+          "observed_kernel_sum_percent": 0.01415690351537783,
+          "mean_ms": 0.05017,
+          "kernel_names": [
+            "argmax_kernel_inner"
+          ]
+        },
+        {
+          "name": "triton_red_fused__to_copy_embedding_rms_norm_0",
+          "calls": 3,
+          "sum_ms": 0.126034,
+          "observed_kernel_sum_percent": 0.011854701864707525,
+          "mean_ms": 0.04201133333333334,
+          "kernel_names": [
+            "triton_red_fused__to_copy_embedding_rms_norm_0"
+          ]
+        },
+        {
+          "name": "zeros_kernel",
+          "calls": 27,
+          "sum_ms": 0.10146999999999999,
+          "observed_kernel_sum_percent": 0.00954422297326017,
+          "mean_ms": 0.0037581481481481476,
+          "kernel_names": [
+            "zeros_kernel"
+          ]
+        },
+        {
+          "name": "_copy_kernel_kernel_rank_2",
+          "calls": 6,
+          "sum_ms": 0.095233,
+          "observed_kernel_sum_percent": 0.00895757353318701,
+          "mean_ms": 0.015872166666666666,
+          "kernel_names": [
+            "_copy_kernel_kernel_rank_2"
+          ]
+        },
+        {
+          "name": "_scatter_jit_function",
+          "calls": 3,
+          "sum_ms": 0.054303,
+          "observed_kernel_sum_percent": 0.005107715976317602,
+          "mean_ms": 0.018101,
+          "kernel_names": [
+            "_scatter_jit_function"
+          ]
+        },
+        {
+          "name": "true_div_func_kernel_rank_2",
+          "calls": 3,
+          "sum_ms": 0.054241,
+          "observed_kernel_sum_percent": 0.005101884283951956,
+          "mean_ms": 0.018080333333333334,
+          "kernel_names": [
+            "true_div_func_kernel_rank_2"
+          ]
+        },
+        {
+          "name": "le_func_kernel_rank_2",
+          "calls": 3,
+          "sum_ms": 0.051557,
+          "observed_kernel_sum_percent": 0.004849428440252042,
+          "mean_ms": 0.017185666666666665,
+          "kernel_names": [
+            "le_func_kernel_rank_2"
+          ]
+        },
+        {
+          "name": "_to_copy_func_kernel_rank_1",
+          "calls": 9,
+          "sum_ms": 0.048643,
+          "observed_kernel_sum_percent": 0.004575338899066665,
+          "mean_ms": 0.0054047777777777774,
+          "kernel_names": [
+            "_to_copy_func_kernel_rank_1"
+          ]
+        },
+        {
+          "name": "reduce_then_scan_block_scan_kernel_row",
+          "calls": 3,
+          "sum_ms": 0.042294,
+          "observed_kernel_sum_percent": 0.0039781547889136265,
+          "mean_ms": 0.014098,
+          "kernel_names": [
+            "reduce_then_scan_block_scan_kernel_row"
+          ]
+        },
+        {
+          "name": "reduce_then_scan_root_scan_kernel_row",
+          "calls": 6,
+          "sum_ms": 0.030766999999999996,
+          "observed_kernel_sum_percent": 0.0028939303066748364,
+          "mean_ms": 0.005127833333333332,
+          "kernel_names": [
+            "reduce_then_scan_root_scan_kernel_row"
+          ]
+        },
+        {
+          "name": "true_div_func_kernel_rank_1",
+          "calls": 3,
+          "sum_ms": 0.029375,
+          "observed_kernel_sum_percent": 0.0027629994071106485,
+          "mean_ms": 0.009791666666666666,
+          "kernel_names": [
+            "true_div_func_kernel_rank_1"
+          ]
+        },
+        {
+          "name": "masked_fill_kernel_kernel_rank_1",
+          "calls": 3,
+          "sum_ms": 0.027490999999999998,
+          "observed_kernel_sum_percent": 0.002585791206838429,
+          "mean_ms": 0.009163666666666665,
+          "kernel_names": [
+            "masked_fill_kernel_kernel_rank_1"
+          ]
+        },
+        {
+          "name": "fused_exponential_kernel_f32_unroll8",
+          "calls": 3,
+          "sum_ms": 0.027371999999999997,
+          "observed_kernel_sum_percent": 0.002574598119878559,
+          "mean_ms": 0.009123999999999998,
+          "kernel_names": [
+            "fused_exponential_kernel_f32_unroll8"
+          ]
+        },
+        {
+          "name": "_compute_slot_mapping_kernel",
+          "calls": 3,
+          "sum_ms": 0.027023,
+          "observed_kernel_sum_percent": 0.0025417713354332276,
+          "mean_ms": 0.009007666666666666,
+          "kernel_names": [
+            "_compute_slot_mapping_kernel"
+          ]
+        },
+        {
+          "name": "reduce_then_scan_block_sum_kernel_row",
+          "calls": 3,
+          "sum_ms": 0.022751999999999998,
+          "observed_kernel_sum_percent": 0.0021400429790836245,
+          "mean_ms": 0.007584,
+          "kernel_names": [
+            "reduce_then_scan_block_sum_kernel_row"
+          ]
+        },
+        {
+          "name": "sub_func_tensor_scalar_kernel_rank_1",
+          "calls": 6,
+          "sum_ms": 0.022321,
+          "observed_kernel_sum_percent": 0.0020995033111869546,
+          "mean_ms": 0.0037201666666666668,
+          "kernel_names": [
+            "sub_func_tensor_scalar_kernel_rank_1"
+          ]
+        },
+        {
+          "name": "fill_scalar_func_kernel_rank_1",
+          "calls": 6,
+          "sum_ms": 0.021526999999999998,
+          "observed_kernel_sum_percent": 0.002024820025084968,
+          "mean_ms": 0.003587833333333333,
+          "kernel_names": [
+            "fill_scalar_func_kernel_rank_1"
+          ]
+        },
+        {
+          "name": "arange_func",
+          "calls": 3,
+          "sum_ms": 0.021214,
+          "observed_kernel_sum_percent": 0.0019953793845938826,
+          "mean_ms": 0.007071333333333333,
+          "kernel_names": [
+            "arange_func"
+          ]
+        },
+        {
+          "name": "_index_linearized_jit_function",
+          "calls": 3,
+          "sum_ms": 0.014384,
+          "observed_kernel_sum_percent": 0.001352952628829943,
+          "mean_ms": 0.004794666666666667,
+          "kernel_names": [
+            "_index_linearized_jit_function"
+          ]
+        },
+        {
+          "name": "rsub_func_tensor_scalar_kernel_rank_1",
+          "calls": 3,
+          "sum_ms": 0.011848,
+          "observed_kernel_sum_percent": 0.001114417599164152,
+          "mean_ms": 0.003949333333333333,
+          "kernel_names": [
+            "rsub_func_tensor_scalar_kernel_rank_1"
+          ]
+        },
+        {
+          "name": "_copy_kernel_kernel_rank_1",
+          "calls": 3,
+          "sum_ms": 0.011276,
+          "observed_kernel_sum_percent": 0.0010606155341133505,
+          "mean_ms": 0.0037586666666666667,
+          "kernel_names": [
+            "_copy_kernel_kernel_rank_1"
+          ]
+        },
+        {
+          "name": "sub_func_kernel_rank_1",
+          "calls": 3,
+          "sum_ms": 0.011137,
+          "observed_kernel_sum_percent": 0.0010475412560677886,
+          "mean_ms": 0.003712333333333333,
+          "kernel_names": [
+            "sub_func_kernel_rank_1"
+          ]
+        }
+      ],
+      "by_category": [
+        {
+          "category": "Attention-2D",
+          "calls": 126,
+          "sum_ms": 640.380398,
+          "observed_kernel_sum_percent": 60.23389480848618,
+          "mean_ms": 5.082384111111112,
+          "kernel_names": [
+            "kernel_unified_attention"
+          ]
+        },
+        {
+          "category": "GEMM",
+          "calls": 504,
+          "sum_ms": 337.191759,
+          "observed_kernel_sum_percent": 31.716106559986272,
+          "mean_ms": 0.6690312678571428,
+          "kernel_names": [
+            "mm_kernel"
+          ]
+        },
+        {
+          "category": "Other-or-unattributed",
+          "calls": 627,
+          "sum_ms": 48.759018999999995,
+          "observed_kernel_sum_percent": 4.586251594495212,
+          "mean_ms": 0.07776558054226475,
+          "kernel_names": [
+            "_compute_slot_mapping_kernel",
+            "_copy_kernel_kernel_rank_1",
+            "_copy_kernel_kernel_rank_2",
+            "_index_linearized_jit_function",
+            "_scatter_jit_function",
+            "_to_copy_func_kernel_rank_1",
+            "arange_func",
+            "compute_global_hist_kernel",
+            "fill_scalar_func_kernel_rank_1",
+            "le_func_kernel_rank_2",
+            "masked_fill_kernel_kernel_rank_1",
+            "reduce_then_scan_block_scan_kernel_row",
+            "reduce_then_scan_block_sum_kernel_row",
+            "reduce_then_scan_root_scan_kernel_row",
+            "rsub_func_tensor_scalar_kernel_rank_1",
+            "sub_func_kernel_rank_1",
+            "sub_func_tensor_scalar_kernel_rank_1",
+            "sweep",
+            "triton_poi_fused_1",
+            "triton_poi_fused_3",
+            "triton_poi_fused_mul_silu_slice_1",
+            "triton_red_fused__to_copy_embedding_rms_norm_0",
+            "triton_red_fused_fused_add_rms_norm_0",
+            "triton_red_fused_fused_add_rms_norm_2",
+            "zeros_kernel"
+          ]
+        },
+        {
+          "category": "Attention-3D",
+          "calls": 126,
+          "sum_ms": 28.589192999999998,
+          "observed_kernel_sum_percent": 2.689086750936916,
+          "mean_ms": 0.22689835714285714,
+          "kernel_names": [
+            "kernel_unified_attention"
+          ]
+        },
+        {
+          "category": "KV-writer",
+          "calls": 126,
+          "sum_ms": 3.929684,
+          "observed_kernel_sum_percent": 0.36962432551939417,
+          "mean_ms": 0.031187968253968253,
+          "kernel_names": [
+            "reshape_and_cache_kernel_flash"
+          ]
+        },
+        {
+          "category": "Linear-LM-head-shape-unobserved",
+          "calls": 3,
+          "sum_ms": 2.529487,
+          "observed_kernel_sum_percent": 0.2379224197887351,
+          "mean_ms": 0.8431623333333333,
+          "kernel_names": [
+            "linear_kernel"
+          ]
+        },
+        {
+          "category": "Attention-reduce",
+          "calls": 126,
+          "sum_ms": 1.32394,
+          "observed_kernel_sum_percent": 0.12452920629957692,
+          "mean_ms": 0.010507460317460316,
+          "kernel_names": [
+            "reduce_segments"
+          ]
+        },
+        {
+          "category": "Sampler-and-vocab-elementwise-name-based",
+          "calls": 18,
+          "sum_ms": 0.452738,
+          "observed_kernel_sum_percent": 0.042584334487709305,
+          "mean_ms": 0.02515211111111111,
+          "kernel_names": [
+            "argmax_kernel_inner",
+            "fused_exponential_kernel_f32_unroll8",
+            "softmax_kernel_inner",
+            "true_div_func_kernel_rank_1",
+            "true_div_func_kernel_rank_2"
+          ]
+        }
+      ],
+      "attention_launch_groups": [
+        {
+          "kernel_name": "kernel_unified_attention",
+          "parameters": {
+            "grid": "(128, 2, 1)",
+            "block": "(512, 1, 1)",
+            "regs": 102,
+            "srfs": 104,
+            "staticSharedMemory": 0,
+            "dynamicSharedMemory": 65536
+          },
+          "process": {
+            "pid": 299378,
+            "name": "Process",
+            "attribution": "direct processId"
+          },
+          "device": 0,
+          "count": 126,
+          "duration": {
+            "samples": 126,
+            "sum_raw": 640380398,
+            "median_raw": 5076755.5,
+            "p95_raw": 6515030,
+            "min_raw": 3656476,
+            "max_raw": 6532030,
+            "unit": "ns",
+            "sum_ms": 640.380398,
+            "median_ms": 5.0767555,
+            "p95_ms": 6.515029999999999,
+            "min_ms": 3.6564759999999996,
+            "max_ms": 6.53203
+          }
+        },
+        {
+          "kernel_name": "kernel_unified_attention",
+          "parameters": {
+            "grid": "(1, 2, 16)",
+            "block": "(128, 1, 1)",
+            "regs": 102,
+            "srfs": 104,
+            "staticSharedMemory": 0,
+            "dynamicSharedMemory": 12288
+          },
+          "process": {
+            "pid": 299378,
+            "name": "Process",
+            "attribution": "direct processId"
+          },
+          "device": 0,
+          "count": 126,
+          "duration": {
+            "samples": 126,
+            "sum_raw": 28589193,
+            "median_raw": 227443.5,
+            "p95_raw": 229926,
+            "min_raw": 208561,
+            "max_raw": 232115,
+            "unit": "ns",
+            "sum_ms": 28.589192999999998,
+            "median_ms": 0.2274435,
+            "p95_ms": 0.229926,
+            "min_ms": 0.208561,
+            "max_ms": 0.232115
+          }
+        },
+        {
+          "kernel_name": "reduce_segments",
+          "parameters": {
+            "grid": "(1, 16, 1)",
+            "block": "(256, 1, 1)",
+            "regs": 22,
+            "srfs": 57,
+            "staticSharedMemory": 0,
+            "dynamicSharedMemory": 1024
+          },
+          "process": {
+            "pid": 299378,
+            "name": "Process",
+            "attribution": "direct processId"
+          },
+          "device": 0,
+          "count": 126,
+          "duration": {
+            "samples": 126,
+            "sum_raw": 1323940,
+            "median_raw": 10480.0,
+            "p95_raw": 11376,
+            "min_raw": 9280,
+            "max_raw": 11680,
+            "unit": "ns",
+            "sum_ms": 1.32394,
+            "median_ms": 0.01048,
+            "p95_ms": 0.011375999999999999,
+            "min_ms": 0.00928,
+            "max_ms": 0.01168
+          }
+        }
+      ],
+      "bounds": {
+        "observed": true,
+        "first_ts_ns": 3835270192960873,
+        "last_end_ns": 3835271267221127,
+        "span_ms": 1074.260254,
+        "kernel_interval_union_ms": 1063.156218,
+        "uncovered_inside_kernel_span_ms": 11.104036,
+        "limit": "Observed intervals only; missing kernels/graph activity prevent CPU-idle or GPU-util inference."
+      }
+    }
+  ],
+  "graph_sources_reported_separately": [],
+  "graph_visibility": {
+    "graph_table_rows": {
+      "cuda_graph_data": 0
+    },
+    "completeness": "unproven",
+    "membership_fields_present": false,
+    "kernel_share_of_graph_time": null,
+    "reason": "No validated graph-node membership/completeness relation; kernel and graph sums are not a coverage ratio."
+  },
+  "limits": [
+    "Ranks refer only to observed kernel sums, not E2E or throughput.",
+    "2D/3D classification uses actual54c grid.z: 1 versus >1; grids are not tensor shapes.",
+    "Sampler/linear labels require source/shape attribution; no new shape is guessed.",
+    "Graph aggregates are not added to kernel sums or assumed to expose graph nodes.",
+    "Run only after profiler has stopped/flushed; cold/JIT gaps may remain after two warm mixed steps."
+  ]
+}

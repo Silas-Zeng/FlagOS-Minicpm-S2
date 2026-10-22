@@ -1,0 +1,197 @@
+{
+  "utc": "2026-10-22T11:35:58.629124+00:00",
+  "scope": "CPU本地归档安全解包与每项seal校验；不SSH/GPU/发布，不改原始文件",
+  "archives": [
+    {
+      "archive": "experiments/accuracy/20261022T105839Z-cpu-combination-level3.tgz",
+      "expected_sha256": "20162b2fd6680b851bbc88b233188d8ba6fcb18fb1a094a7e8391acbffa0ea8c",
+      "expected_bytes": 3187813,
+      "sha256": "20162b2fd6680b851bbc88b233188d8ba6fcb18fb1a094a7e8391acbffa0ea8c",
+      "bytes": 3187813,
+      "archive_hash_pass": true,
+      "status": "pass",
+      "safe_members": 350,
+      "regular_files": 268,
+      "sealed_files": 267,
+      "seal_exit_code": 0,
+      "seal_utc": "2026-10-22T11:26:43.528441+00:00",
+      "every_sealed_file_verified": true,
+      "full_file_coverage_excluding_seal": true,
+      "extracted_roots": [
+        "20261022T105839Z-cpu-combination-level3",
+        "20261022T105839Z-cpu-combination-level3-control"
+      ],
+      "seal_sha256": "75b98bf7985fa678a098c4535a9ebdb7dd9dc38b4d006a2d9bd88b30b4621521"
+    },
+    {
+      "archive": "experiments/framework/20261022T112338Z-decode-cpu-gather-gate.tgz",
+      "expected_sha256": "ba958922463854b6173d6cc2149714b9d06c6890061c94ba6b376570ed912168",
+      "expected_bytes": 193312,
+      "sha256": "ba958922463854b6173d6cc2149714b9d06c6890061c94ba6b376570ed912168",
+      "bytes": 193312,
+      "archive_hash_pass": true,
+      "status": "pass",
+      "safe_members": 29,
+      "regular_files": 26,
+      "sealed_files": 25,
+      "seal_exit_code": 0,
+      "seal_utc": "2026-10-22T11:26:35.696014+00:00",
+      "every_sealed_file_verified": true,
+      "full_file_coverage_excluding_seal": true,
+      "extracted_roots": [
+        "20261022T112338Z-decode-cpu-gather-gate",
+        "20261022T112338Z-decode-cpu-gather-gate-control"
+      ],
+      "seal_sha256": "49b09ab060fbcb19d919bb513673aeba4494c391b9285585d81b7060380d11c6"
+    }
+  ],
+  "issues": [
+    "准确率运行前后 DB 发生变化；不可将其性能结果（未测）或较早 DB 基线混为匹配对照。"
+  ],
+  "accuracy": {
+    "review": {
+      "format": "math500-level3-readonly-review-v1",
+      "evaluation_dir": "/workspace/experiments/minicpm-s2/accuracy/20261022T105839Z-cpu-combination-level3/math500-level3/20261022_185942",
+      "validity": "valid",
+      "accuracy_gate": "pass",
+      "correct": 102,
+      "samples": 105,
+      "expected_samples": 105,
+      "exact_accuracy": 0.9714285714285714,
+      "threshold": 0.95,
+      "minimum_correct": 100,
+      "reported_score": 0.9714,
+      "errors": [],
+      "diagnostics": {
+        "stop_reasons": {
+          "stop": 105
+        },
+        "review_statuses": {
+          "success": 105
+        },
+        "transport_error_count": 0,
+        "transport_error_indices": [],
+        "output_cap_count": 0,
+        "output_cap_indices": [],
+        "empty_final_count": 0,
+        "empty_final_indices": [],
+        "empty_extracted_count": 0,
+        "empty_extracted_indices": [],
+        "missing_usage_indices": []
+      },
+      "evalscope_version": "1.11.1",
+      "dataset_fingerprint": "sha256:d2a0a846c4e8e0b074d9cf260e5bb5c3a1d6e41086e4ecefc7d17c624949151a",
+      "artifact_sha256": {
+        "reports/minicpm/math_500.json": "9547f6f3245b673f09275a753e9c03a65d4f7c8315ff26a9842237cf70d08ffa",
+        "predictions/minicpm/math_500_Level 3.jsonl": "d906bffc5eaf4224640ad8a3405d75591ec1940fd07eaf9369357d0b1ffab736",
+        "reviews/minicpm/math_500_Level 3.jsonl": "de8cc3760e2f896d56b76779ce93a82af54a33eb43a805abfb2c478b4037f81e",
+        "configs/task_config.yaml": "14fee2c3a5bdab00f0663dfae7f719d2df845d0d859e198ab499613b84b245d5"
+      },
+      "limitations": [
+        "Reads saved outputs only; does not prove server code installation or cleanup.",
+        "Truncation/empty-answer diagnostics do not change the official denominator.",
+        "Does not independently recompute the official answer judge."
+      ]
+    },
+    "process_exit_code": 0,
+    "cleanup_errors": [],
+    "postflight": {
+      "checked_utc": "2026-10-22T11:22:10.462549+00:00",
+      "port_9031": "free",
+      "free_mib": 32700
+    },
+    "database_before": {
+      "status": "complete",
+      "table_count": 523,
+      "row_count": 19474,
+      "snapshot_sha256": "dc2c76463fc6c1ef0674b16ca4374125b3ee4551fa0b1886253093f310b237da",
+      "logical_content_sha256": "c05d7e3182d1837929b48d5699c6515786351eb8d22f73eb53227a39fb3c49c8"
+    },
+    "database_after": {
+      "status": "complete",
+      "table_count": 527,
+      "row_count": 19608,
+      "snapshot_sha256": "d9ee1de13f7c1b34f2646f84b77c3482957749dd0794ad8de02b4dbe4cbab89d",
+      "logical_content_sha256": "5a21ddb63efb029f2c98378a5d269c57be6a86db037b6a6ebe346552b441b93e"
+    },
+    "database_changed": true,
+    "database_delta": {
+      "tables": 4,
+      "rows": 134,
+      "added_tables": [
+        {
+          "name": "_index_linearized_jit_function_122b44034ff514e2346f5ae9aa8bb265-9924b48a7525689bfbd1343251dd73a2",
+          "row_count": 1
+        },
+        {
+          "name": "_index_linearized_jit_function_51f5a3b415a8840265dca6f7bc3a90c454665fea5f82e2289253fb09e92a6b54_benchmark_v2-be4075f355600487930f16fe2a2e2b52",
+          "row_count": 2
+        },
+        {
+          "name": "_index_linearized_jit_function_6e8a96123ad92106c2bfe6bdf3907a2185ed9ea320e4e322fbf59981038b94a0_benchmark_v2-be4075f355600487930f16fe2a2e2b52",
+          "row_count": 2
+        },
+        {
+          "name": "_index_linearized_jit_function_f46d654dca9a4a11c70520744248d8de-9924b48a7525689bfbd1343251dd73a2",
+          "row_count": 1
+        }
+      ],
+      "removed_tables": [],
+      "existing_tables_row_count_changed": [
+        {
+          "name": "mm_kernel_36ce59ddfe9157c845ec97dbe082e4199b4bb981085cde1f6da15a432167592c_benchmark_v2-45d27be3cd9525ad18861f4533a01e22",
+          "before": 14883,
+          "after": 15003
+        },
+        {
+          "name": "mm_kernel_7ea0a6df3012d3bc5475d21d5eb156a7-45eed7266d4cc0f7be44aaaa091bc3b1",
+          "before": 1005,
+          "after": 1013
+        }
+      ],
+      "existing_tables_content_changed": [
+        {
+          "name": "mm_kernel_36ce59ddfe9157c845ec97dbe082e4199b4bb981085cde1f6da15a432167592c_benchmark_v2-45d27be3cd9525ad18861f4533a01e22",
+          "rows_before": 14883,
+          "rows_after": 15003
+        },
+        {
+          "name": "mm_kernel_7ea0a6df3012d3bc5475d21d5eb156a7-45eed7266d4cc0f7be44aaaa091bc3b1",
+          "rows_before": 1005,
+          "rows_after": 1013
+        }
+      ]
+    },
+    "database_note": "准确率运行期间 DB 从 523 表/19474 行变为 527 表/19608 行，与 autotune 新增一致；不称 DB 前后完全匹配。性能基线须使用并核对之后的 DB。",
+    "performance_claim": false
+  },
+  "gather_gate": {
+    "status": "pass",
+    "result_path": "experiments/framework/20261022T112338Z-decode-cpu-gather-gate/results.json",
+    "case_count": 7,
+    "cases": [
+      "decode62",
+      "mixed259",
+      "mixed952",
+      "mixed2048",
+      "prefill2048",
+      "decode_identity",
+      "decode_new_request"
+    ],
+    "all_case_checks": true,
+    "graph_steps": 4,
+    "graph_input_ids_changed_across_steps": true,
+    "performance_claim": false,
+    "accuracy_claim": false,
+    "limits": "无模型权重的真实方法正确性门；不等于真实服务命中，不评价 TPS 或整模型准确率。",
+    "process_exit_code": 0,
+    "postflight": {
+      "checked_utc": "2026-10-22T11:23:57.149288+00:00",
+      "port_9031": "free",
+      "free_mib": 32700
+    },
+    "runner_sha256": "6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141",
+    "candidate_runner_sha256": "d5f98f3c5f4a0ca54f611408586cf2d2f63a4dd72605cecef16edb0d1ab9a6bd"
+  },
+  "updated_utc": "2026-10-22T11:39:45.449115+00:00"
+}

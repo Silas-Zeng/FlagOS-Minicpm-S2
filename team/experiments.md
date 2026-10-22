@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共129条登记、126个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共136条登记、133个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -107,6 +107,13 @@
 | 天数 BI-V150 | 127 | 2026-10-22T10:49:22.358997+00:00 | [输入准备成本诊断](methods/input-prep.md) | 部分记录 | 16384/1024/64/32 | EngineCore289848最后快照2048步，等待累计14.059984ms/max132.438us，预处理累计14.488006758s，占0.0970%；输入等待方向暂降优先级，诊断不报性能收益 | [20261022T104920Z-input-prep-timing-combined-context16k-long](runs/bi-v150/20261022T104920Z-input-prep-timing-combined-context16k-long.md) |
 | 天数 BI-V150 | 128 | 2026-10-22T10:55:36.829635+00:00 | [Attention热key复用](methods/hot-key.md) | 已完成 | 未记录/未记录/未记录/未记录 | wall从0.464890547到0.502826703ms，增加8.1602%；原件保留，不报服务收益或整模型accuracy | [20261022T105536Z-small-input-hot-key-v2-gate](runs/bi-v150/20261022T105536Z-small-input-hot-key-v2-gate.md) |
 | 天数 BI-V150 | 129 | 2026-10-22T10:56:35.240823+00:00 | [C3重复视图清理](methods/c3-views.md) | 已完成 | 未记录/未记录/未记录/未记录 | wall从0.460218219到0.432736688ms，耗时降低5.9714%；仅单层短形状信号，不外推整体吞吐或整模型accuracy | [20261022T105635Z-small-input-c3views-gate](runs/bi-v150/20261022T105635Z-small-input-c3views-gate.md) |
+| 天数 BI-V150 | 130 | 2026-10-22T10:58:39.123592+00:00 | [CPU metadata + async token 组合](methods/cpu-combination.md) | 已完成 | 未记录/未记录/未记录/未记录 | 干净6f918组合首次完整Math500 Level 3：102/105（97.1429%）通过95%门 | [20261022T105839Z-cpu-combination-level3](runs/bi-v150/20261022T105839Z-cpu-combination-level3.md) |
+| 天数 BI-V150 | 131 | 2026-10-22T11:23:38.529281+00:00 | [纯decode CPU gather跳过](methods/decode-cpu-gather.md) | 已完成 | 未记录/未记录/未记录/未记录 | RNG门通过，selected metadata11/async16，gather skip6/fallback5 | [20261022T112338Z-decode-cpu-gather-gate](runs/bi-v150/20261022T112338Z-decode-cpu-gather-gate.md) |
+| 天数 BI-V150 | 132 | 2026-10-22T11:25:49.962695+00:00 | [C3重复视图清理](methods/c3-views.md) | 已完成 | 4096/128/64/64 | 64成功0失败，38.971822050s、6936.7041565 tok/s、TTFT20086.2203ms | [20261022T112548Z-c3views-service-baseline-decode4k](runs/bi-v150/20261022T112548Z-c3views-service-baseline-decode4k.md) |
+| 天数 BI-V150 | 133 | 2026-10-22T11:33:27.661684+00:00 | [C3重复视图清理](methods/c3-views.md) | 结论未定 | 4096/128/64/64 | 64成功0失败，38.964930220s、6937.9310696 tok/s，较112548表观+0.01769% | [20261022T113326Z-c3views-service-candidate-decode4k](runs/bi-v150/20261022T113326Z-c3views-service-candidate-decode4k.md) |
+| 天数 BI-V150 | 134 | 2026-10-22T11:36:29.383148+00:00 | [纯decode CPU gather跳过](methods/decode-cpu-gather.md) | 已完成 | 4096/128/64/64 | 吞吐-0.79831%，TTFT20339.6547ms | [20261022T113627Z-decode-gather-service-candidate-decode4k](runs/bi-v150/20261022T113627Z-decode-gather-service-candidate-decode4k.md) |
+| 天数 BI-V150 | 135 | 2026-10-22T11:44:37.430487+00:00 | [当前版本GPU热点](methods/gpu-hotspots.md) | 已完成 | 16384/128/64/32 | 可见kernel累计1063.156218ms：2D Attention640.380398ms/60.2339%，GEMM337.191759ms/31.7161%，3D2.6891%，reduce0.1245% | [20261022T114435Z-current-mixed-native-diagnostic](runs/bi-v150/20261022T114435Z-current-mixed-native-diagnostic.md) |
+| 天数 BI-V150 | 136 | 2026-10-22T12:02:26.759990+00:00 | [Attention 分流与 launch](methods/attention.md) | 已完成 | 未记录/未记录/未记录/未记录 | wall11.089565→14.605917ms（慢31.7087%），event10.983371→14.497282ms（慢31.9930%） | [20261022T120226Z-prefill-w16-gate](runs/bi-v150/20261022T120226Z-prefill-w16-gate.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

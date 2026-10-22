@@ -1156,3 +1156,34 @@ root负责GitHub；本owner只读现有文件/原manifest并复算静态SHA，�
 两个helper继续取原PR files镜像：cpu-metadata/files/vllm_fl/patches/biv150_cpu_metadata.py →同repo路径，**0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f**；async-token-update/files/vllm_fl/patches/biv150_async_token_update.py →同repo路径，**1bb85e31c7b3fefa81414a54b04a1f0b6cf949c0876f87149956c821bb483adc**。独占中文docs/cpu-metadata-reuse.md与docs/async-token-update.md都保留；不将未验证新方法夹入冲突解决。已测组合方法门062205和原短服务结果由root复用，不重新测试；这段仅源码映射不新增准确率承诺。
 
 C3最终tmp包已完成跨owner只读审：runtime ba085577/gate e5eef652/launcher7418e0de无当前最短门阻断；相对本owner首稿仅加拒绝JIT instance.run叠候选，原两call/math/scale与异常、newQ/out非0流、计数/恢复/单controller配套。已在`tmp/next-c3-views/README.md`末补互审和暂停状态，未重跑hardware唯一CPU合同（cpu-check只描述符）、未上卡/复制formal。用户最新转合并已有PR，本批暂停所有新实验准备，等待root定向接续。
+
+
+### 阶段实验记录改走增量PR：只准备tmp发布器，未写GitHub
+
+root授权准备安全批量发布。已读原scripts/publish_private_tree.py：完整tree并直接PATCH main，不适于保留队友新增路径；原文件未改。新`tmp/stage-pr-publisher/publish_experiment_pr.py` **7d98aa9bb09b81078f5bc305f4227bdace9d1c4d6792fd9c3df2abd9638f69da** 默认仅计划，明确--base-local/--target-local，固定实验库ID1427279927/private/main；取新远端main，只叠本地发布基点→最终commit的路径增量。相同目标skip、队友同路径改动/删除/文件目录碰撞停止，保全未触及远端及Git mode/symlink。复用远端blob，完整合成tree SHA后验后只POST新codex分支/中文PR，无PATCH/force/自动merge。main前进要求重计划，不覆盖分支；PR state不当已合并发布水位。
+
+已实际执行离线8af67cc→ed86941：523路径（515新增8改0删）、475不同blob/10,002,185B，tree与Git精确一致、变更字节凭据模式扫描通过，结果`ed86941-local-delta.json`。唯一`check_plan.py`（9b5baaa5）及cpu-check.json通过队友保留/already/冲突/结构/模式/禁止写路由合同，无模型/网络。一次默认权限gh GET被socket权限拒绝，未取得live main；未升级权限、未写GitHub，不冒称已实时审阅或发布成功。命令/来源/后续最终commit替换/未覆盖Git忽略raw数据的边界简写在同目录README.md。root阶段末仍须先commit新run，然后使用最终target；不能把ed869例子或离线snapshot当真实远端计划。
+
+已发root可审脚本与SHA；请求team_view_final_check有空仅静态看安全路径，不跑合同/网络；没有重新审任何实验旧代码或重复GPU。当前只待定向review/阶段root发布指令，禁止自行GitHub写操作。额外只读核小shapeD29/P128/M157/KV1024门的几何和helper导入：共享[0,256)与新写≥896不重叠、64页映射及原2D/3D守卫适配，已回作者/root无阻断；未执行新门。
+
+发布器中间维护适配最终冻结 **f8e8819654ab87c7772d325304a95bb3a3c8cb918eba922f5e2954c66470ef08**，替代前述7d98草稿；显式 `--accepted-maintenance-local ed86941` 验祖先区间，仅固定六文档远端条目恰等ed才承接后续改动，已等target跳过，任意队友/模式变化仍停；计划列intermediate_accepted_paths。唯一新增check_maintenance.py通过，当前pin在maintenance-check.json；未重跑旧合同/网络。ed869示例475种变化blob中只有67种/7,217,336B不在上一发布树，复用对象即可，未加并发。README命令已同步最终target可替换，root阶段末生成live plan并决定是否发布，本owner不执行GitHub写。此处落盘后停止文件修改供阶段commit。
+
+### 纯decode CPU gather真实服务接线：跨职责终审通过，等待root设备结果
+
+本owner只读审`tmp/decode-gather-service/`新增接线，未重审或重跑原1a9方法门。初稿观察读取／打印未兜底可能覆盖原execute成功结果，已向hardware提出并由作者最小修复；旧稿与receipt保`history/initial`。最终footer **59864f48bb0b9d687d91b4c088fa04642a629ac3af0239e67c3daab8f5c5d304**、prepare **44018c6c8881e23a138a2cdcf8f4672bfd2635aab7076e85b955959367ddd33b**、runner **70db5a6bbc5bb4bc75784ca6bce5d48021ff39aa58386853bc2872e8f8d7f16c**：原execute恰一在观察except之外，前后读取或emit失败只撤观察，不改原结果／异常。作者只给同一接线合同补两必要分支，当前receipt **ae9b8fb6fec47c401f3f343567c0a7f78c81189b783a9b33b8461eed3e38d594**；本owner未执行合同／设备／SSH。
+
+原helper1a9、launcherf4a8、checkerc2c7未变；只在原6f runner精确transform后追加缩进footer，隔离source静态412→413仅runner和helper两路径。dummy及单请求smoke不能冒充命中，须真实execute返回后该runner selected增量>0且N>=2，同PID首次marker后撤观察；这只证明至少一步输入准备命中，不是GPU完成或覆盖率。完整412基点由root首次选定时对已封存070452全map核实；原bc51／seed721201不变，DB／KV／环境和完整后态仍需真实服务后验。最终跨审结论已追加同目录README，未改候选代码或共享代码库。下一可执行操作由root唯一设备owner部署并封存；本owner等待实际原件，不自行启动或追加套件。
+
+### 当前优化版GPU热点：只读收口两个切口，先补自然mixed短native
+
+新增`tmp/current-gpu-hotspots-framework.md`，复用旧原件／当前6f源码，未SSH／GPU／导入模型／改主代码。b0的92.96%Attention与71.68%top-p是旧实现不能继承；a3早期4split hist也不当当前单split。与hardware协调改用042609 native manifesta896／summarybb0a，实际top-pda77／runtimea0c／Attention54c／MM4c2e同当前基础字节：5真实decode步可见LM-head5.598190ms、温度rank2div1.678733ms、hist1.568927ms，但graph壳401.683256ms内部未知，不能全GPU排名。当前104544／104920部分输入等待占preprocess仅0.0408%／0.0970%，不支持继续拆等待或旧SQL重复预算。
+
+最多两项未实施候选：一是actualsampler1a2f无条件full-vocab温度div，利用真实InputBatch de1e CPU镜像／本步最终采样行证明all1才省GPUidentity遍历，原RNG／top-p／非1 fallback保持；旧约0.336ms／步预算小，不宣称大收益。二是旧真实FXab75的submod84末层全M O／MLP／norm，6f4447后才选Nlogit行，可研究在末层Attention后前移同indices/residual选行删除死行GPU工作；仅部分1/42层且M形状变会改变GEMM数值、当前installed模型挂点仍缺，不能继承准确率／扩到所有层。没有实现、GPU或新性能承诺，最短可否定门和反证已在同一短文。
+
+root随后要求当前自然mixed短native；hardware已明确独占`tmp/current-mixed-native/`，本owner只做新增风险互审。拟复用bc51 ixsys／原SERVER／context16K32req128out／seed721201，独立目录；第三次自然mixed起采3个连续execute并保实际每步shape，不能把夹puredecode窗口当全mixed，不改调度凑样本。下一等hardware可读稿审新增footer／driver小diff后回root；root唯一设备owner，本owner不写其文件或启动设备。
+
+该接线已只读终审收口：footer **f0f41e303dee92b8e468f16d2c7d63cdc38a7ef24da6c38f731cb55c40b53e75**、prepare **60b6b691a3963453515b15d1515f39f2f5c55e9fe3413f649beebf5a987e3b1c**、driver **2214bbeda3a537396178113e1217a78140a08fb8bc7b6e235f88c54ab32d2b36**、runner **29d98aeeb36079b4a5f5882ce6879a6aa6c7ddb6e93dcf965dd04c0aba781320**。本owner发现初稿第三execute返回立即stop会漏独立sample_tokens（6f4477／4496／4514、Core27b549／565），作者改到第四execute入口先stop／restore再原call，恰3前序forward+sampler、双边界sync，旧初稿保.initial。唯一CPU合同作者必要更新通过，本owner仅读delta／receipt，不重跑。原SERVER／context负载／seed／ixsys和原driverowner清理保持；原三shape若夹puredecode会拒绝而非冒充完整mixed。root自写薄launcher核完整412干净基点并唯一上卡，本owner不扩大检查；尚无该轮实际trace结果。
+
+114435已出真实热点，root回执3×N2/M2048/P2047，2D640.380ms/60.2339%、MM337.1918ms/31.7161%，sampler+vocab名称下界0.0426%。按此停止温度identity实现；actual现有CPU flags没有all1 O(1)证明及可在metadata创建时O(N)绑定对象、常态O(1)核身份的补审，仅留原tmp短文，不排设备。原InputBatch de1e／sampler1a2f已读，未改代码。当前C3有1decode＋2047prefill实际launch，不为覆盖/对齐再改调度；root改选唯一未测2D w16（BM128/T64/s1原样），hardware独占tmp/next-prefill-w16，本owner只待稿审新增launch/数值边界。a4四CSV42行17配置无w16已核，旧BM256/T128/stage失败不重跑，D1/P2047/KV16K声明上界而非trace精确长度。下一runtime/门定稿即只读短审，不SSH/GPU/改硬件资产；尚未有该点运行结果。
+
+w16新增launch／门定向终审已收口：policy **c27a4da71feae630252c46a1cc310fed9fc6d26b2dd00783459c206dce27463d**，gate **279424148f3837e300646e6006d7cf2a300d19e7c198d138d8a8a418954a67b3**。只strict 2D BM128/T64/s1的warps8→16，原C2outer下3D仍w2、原JIT数学与C3／metadata不动，失败不重试。首稿把source:helpers整个PYTHONPATH当Path会必然失败，本owner发现后作者仅改取首项并拒空，当前与rootlauncher配套。max_abs／max_rel分母floor1e-6／双方NaN／allclose仅记录，strict bits门没放宽；资源来自真实compiled返回，不以stub预测occupancy。原D1/P2047/16K单点32ABBA、KV／RNG／新指针非默认流／scale与原child超时清理复用。本owner没有重跑作者唯一CPU合同或GPU、没有改硬件文件；最终无本轮短门阻断已回root，可唯一串行设备门，尚无实测结果／accuracy承诺。

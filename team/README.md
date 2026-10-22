@@ -13,6 +13,8 @@
 
 ## 按方法
 
+- [当前版本GPU热点](methods/gpu-hotspots.md)
+- [纯decode CPU gather跳过](methods/decode-cpu-gather.md)
 - [C3重复视图清理](methods/c3-views.md)
 - [Attention热key复用](methods/hot-key.md)
 - [输入准备成本诊断](methods/input-prep.md)

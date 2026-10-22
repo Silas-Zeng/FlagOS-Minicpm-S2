@@ -1186,3 +1186,55 @@ root后续恢复C3 CPU准备，因framework优先修hot-key，本owner接手其�
 本owner同时对hot-key v2 **a67d3add779387331edcccffd863f1e1b70b76d0ffaf98cebdb8ac69f9458ac7**／gate **1f402c6d0d2de2de7c69e688028648fdc1f4f0e875264c570c3480555864acd4** 作只读定向审：仅原key/cache两行改为可复用配方，probe不launch，原globals／grid／metadata／当前hooks／run尾AST全部保留，故移除两个hook None资格不再绕过hook；唯一stub合同范围清楚，无当前最短门阻断，已回root。没有执行其合同或改该代码；实际设备结果不在本owner回执中预写。
 
 用户最新转为按依赖合并已有PR并复用既有测试，root明确所有新候选留tmp，不再启动设备门。本owner已完成 [C3简短README](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/tmp/next-c3-views/README.md>) 后停写；C3稿已发framework，独立互审若尚未完成须按README待续，不冒称已验。新C3／hot-v2未复制正式路径、未安装／部署／推送／改已发布代码，当前原CPU组合B2由root唯一device owner收尾，不追加新实验。
+
+
+### 6f 输入准备：入口等待反证后，仅准备纯decode死CPU gather候选
+
+root已实际跑hot-key v2与C3视图门：前者P2019KV16K正确性真hot但wall变慢0.1869%、短输入又慢8.16%，不集成；后者大P2019 wall变慢0.3177%但CPU提交约省6.9%，后续105635 D29/P128KV1024正确性、真实selected68，wall0.4602182→0.4327367ms省5.9714%、event省0.6663%、CPU提交省7.36%，由root/另一owner保留与准备真实服务。本owner没有重跑原件validator／CPU旧合同／设备；之前handoff“暂停／尚未上卡”是旧时点，后继明确恢复授权与这些回执覆盖该状态。
+
+下一原备忘考虑CPU持久状态和pinned提交快照分离，但root真实104544组合诊断先64步wait461730ns/preprocess1702852919ns，后512步wait4.078ms/preprocess10.849s，均局部快照；约0.027%/0.0376%不足支持高成本拆所有权。现不实现、不删synchronize；旧MRV2备忘buffer_utils当前不存在async_copy_to_gpu()，实际main已见UvaBufferPool.copy_to_gpu等，已提醒framework，未改其共享备忘。
+
+root继而明确批准唯一 strict pure decode CPU gather候选，独占tmp/next-decode-gather：runtime biv150_decode_cpu_gather.py SHA1a9de781b2f9504c627991071c5ee4b52eda59ca8af283f28a15b9fab38ef7bd、最短门validate_decode_gather.py SHAf9bc1491347811027c94dbbbc80edd24c0ed55e193b18fc15654ab4e4976e4f1。只把精确6f:2011–2024生成token_indices/from_numpy/flatten/CPU index_select包一层条件；原_prepare_input_ids、metadata/async两helper、event、GPU消费者和采样完全不改。allN各1token+全有合法唯一prevrow，原GPU identity或scatter覆盖0..N−1，num_common==total故两处CPU H2D分支都不读旧scratch。CPU ids直接站点只有2023写入，间接copy_to_gpu1794/1852被严格代数条件排除；newreq/mixed/无prev/spec/embeds/MM/越界/别名/未知回原，每步资格重算。合法reverse映射不是请求重排策略，只保原映射；不承诺FCFS或输出随机分配变化。
+
+门小forkabfc组合：双方6f+同两helper，原五case仅加identity/newreq两项；原4graph步改decode62，并要求同次metadata/async/gatherskip均1，CPU poison原样而GPU全有效IDs与独立CPU token/previous oracle相同、四consumer非陈旧、RNG及固定地址保持。controller沿原锁/child/monitor/300s清理，只增--gather-runtime-path，控制器stdlib生成/封存独立candidate，不覆6f。无timing；资格guard开销可能抵消gather节省，尚无局部/服务收益，不能预言大收益。
+
+唯一新CPU合同check_cpu_contract.py实际首轮一次0.1833s通过：真实meta/async scope AST配纯CPU Tensor描述符、16边界和逐步失效，精确变换逆回、原GPU/CM四方法AST不变；receipt cpu-check.json。没有Torch/Triton/vLLM导入，不是GPU复制/stream/graph/RNG证明。compile/stdlib导入/help另过，未重跑旧suite；门已交team_view_final_check定向跨职责互审，尚待最终回执，不提前声称可部署。root正独占准确率／后继C3服务设备；本owner无SSH/GPU、远端或共享代码仓修改。最短恢复步骤与范围见tmp/next-decode-gather/README.md。
+
+
+C3服务交叉审补充：按team/root分工，本owner只读tmp/c3views-service新service_append/prepare/launcher/check_actual_selection及唯一CPU receipt，不重审ba085数学、不执行合同/设备。c70542e6服务模块保ba085全core字节；candidate80610017保6f完整原文并在原C3安装末尾追加install_service。原execute恰一次/原异常透传、计数先后增量不含dummy历史，成功真实execute才同EnginePID首marker并撤观察器；prepare完整copy仅runner+module两路径、原bc51参数/seed/设备owner不变，无当前短服务阻断已回root/team。首命中checker不等于全程覆盖/性能门；complete_step_return只是原方法返回，不是新增设备完成ACK；DB前后/容量/环境按root原封存匹配。资料与本owner候选仍只本地，未改已发布代码或远端。
+
+
+pure-gather最终跨职责回执：team_view_final_check已实际只读核1a9de781 runtime／f9bc1491 gate，确认CPU写点/间接H2D读取与全有效GPU覆盖证明、新req/mixed/unsupported fallback、逐步失效、原GPU方法/event、poison仅死scratch/四graph consumer及RNG门相互配套，无当前6f子集最短门阻断；没有重跑合同/GPU。回执由其追加同README，本owner已把最终两SHA及可由root唯一owner部署的状态交root。仍未真实selected、未GPU数学/graph验证、无服务/准确率/速度结论，guard开销可能反而更慢；不要因正确性门具备而自动扩大长测。本轮至此CPU准备与互审完成，后续只按root唯一队列接真实回执。
+
+
+### 纯gather：预备独立真实服务接线，不改受测runtime
+
+root要求在当前准确率后串行方法门，并提前CPU准备服务candidate，待GPU门通过后决定是否复用紧接的干净6f baseline。本owner独占tmp/decode-gather-service，复用已审C3服务prepare/source-map/launcher/evidence结构；原helper1a9de781逐字节不改。runner由原helper精确transform(6f)加极小真实execute观察footer，candidate b0993b84e7efcdd78ab7ead23aa55a4b0c16237041d61636a7266e065c65dad3；新增helper与runner仅两路径。原SQL+C2+C3、metadata/async、GPU IDs／CPU staging／event／采样参数均不变，不叠C3views。
+
+preparer4dd446ba074bc8e7cd6751f7330832b05afb20fef151a054a0c16839ee7cff69；launcher f4a8a0586ee0c02050ce70513e4c05b89c7118465ace7532d56ad3977073a59f，原bc51/decode4k/seed721201命令行逐字相同、原driver唯一owner。footer5b9dcc8a…是追加到runner的缩进代码，不是第三运行时文件；真实execute原调用一次返回后，self的selected当次增量>0且N>=2才同EnginePID打印一次并撤wrapper，startup/dummy历史与单请求smoke不算screen命中。N>=2仅收紧观察，不改变N=1方法资格；原异常不记录假成功。checker c2c760dd…只首命中，不是全程覆盖/设备完成/性能门。
+
+唯一新CPU接线合同首轮一次通过，receipt2e578428b1064ddd6f021fa781cb889bc7b7c03b5ab4f171955f0838b3f17c48：原helper全字节/逆6f、原execute恰一/结果/同异常context、dummy与smoke不报、首命中后撤/缓存wrapper不重报、原命令行及静态完整source map412→413两路径。没有整copy/旧runtime或方法门/GPU、没有设备框架import。已把可审代码与pin交framework owner，仅待其只读新增接线风险回执；其余旧证明复用，不新资料或大报告。root仍唯一SSH/GPU owner，本owner不执行远端、不改已发布checkout；DB/容量/环境/源匹配与完整封存由root原流程验收，收益未知、guard成本可能抵消。
+
+
+服务包终审必要修订：framework指出初稿观察器print/读取失败可能把原成功execute变成服务异常。本owner只修footer前后观察各try、原execute在except结束后恰一次、观察失败静默retire并保原result/context；helper1a9与原方法完全不动。最终footer59864f48bb0b9d687d91b4c088fa04642a629ac3af0239e67c3daab8f5c5d304、preparer44018c6c8881e23a138a2cdcf8f4672bfd2635aab7076e85b955959367ddd33b、candidate runner70db5a6bbc5bb4bc75784ca6bce5d48021ff39aa58386853bc2872e8f8d7f16c；launcherf4a8/checkerc2c/1a9不变。原b099/4dd/5b9的footer/prepare/test/receipt逐字节保history/initial，先前回执仅历史，不用于部署。唯一接线合同加emit失败成功返回、前观察失败后原error同对象/context两分支必要再过一次，当前receipt ae9b8fb6fec47c401f3f343567c0a7f78c81189b783a9b33b8461eed3e38d594。
+
+framework已只读末次delta并核最终runtime/receipt一致，无新增服务接线阻断；没有重跑该合同/旧suite/设备。README已换最终pins，待其末尾追加回执。完整干净6f BASE不仅四文件一致：prepare记录/核copy全map但只直接pin四核心，root首次选定BASE应单次核与封存070452完整412文件map一致再复用。服务启动/方法GPU验收仍由root唯一owner决定，本owner不提前跑服务、不改竞赛参数/已发布仓库或声称收益。
+
+
+追加C3服务v2观察失败隔离跨审：本owner按root/team要求只读新service_append差分及4失败注入receipt，实核policy ebe870172f38a306201ec7ede620a85bf431c0994131c692be2ec17d67ea42a9、suffix c2cd377ca51c511efc20b46e99b27a5475fee4a6f826ced9dcf25fe7b8dbea5a，剥suffix后core exact ba085，prepare98cc/runner806100不变。前读取失败在except结束后仍原execute恰一次，后计数/json/print失败只disabled并identity条件撤包装，保成功result；原模型异常不吞/不重试，无短服务阻断已回root/team。未重跑唯一新失败合同、旧suite或GPU，不改其包文件，team负责README留痕。
+
+
+### 当前6f真实GPU热点收口与w16唯一单点准备
+
+前述纯decode gather正确性门通过后，root真实113627服务同DB/KV下6881.3277TPS，对照6936.7042为−0.7983%，不集成；这覆盖此前“尚无服务结果”的时点。输入event等待512步4.078ms/预处理10.849s不支持昂贵拆pinned所有权，hot-key两负结果也不再追。
+
+root批准当前6f自然mixed原生诊断，本owner独占tmp/current-mixed-native纯CPU接线，第四execute入口停以含前三sampler，framework跨审通过。114435已实际封存：3步均N2/M2048/P2047，2D126call640.380398ms/60.2339%，MM504call337.191759ms/31.7161%，3D28.589193ms；真实2D512threads/regs102/shared65536。已读本地native-hotspots并在tmp/current-gpu-hotspots-hardware.md保存版本与图壳限制，不借旧92.96%外推。
+
+root授权唯一历史未测w16点，本owner独占tmp/next-prefill-w16：policy c27a4da71feae630252c46a1cc310fed9fc6d26b2dd00783459c206dce27463d、gate279424148f3837e300646e6006d7cf2a300d19e7c198d138d8a8a418954a67b3。strict审计54c/59d/1219/C2e5，只2D BM128/T64/s1原w8→16；D1/P2047/KV16K上界fixture、原真实builder/writer和整KV/RNG/scale/新指针/非默认流门，严格bits失败停止timing且保maxabs/maxrel/NaN，不冒称模型accuracy失败。编译资源失败原异常恰一次/no retry；成功记真实compiled资源，32ABBA/prerecord/windowCPUstat。不叠C3views/hot-key、不改installed/官方参数，基点controller先核干净6f。
+
+唯一新增CPU launch stub合同0.000137s首次pass，非GPU数学/资源证据；framework指出PYTHONPATH多项整串Path会部署失败，已只取首项拒空修正，最终c27a/279424只读终审ready。root负责launcher与唯一上卡，本owner无SSH/GPU。可执行参数/恢复/停止边界在该README，未扩矩阵/旧套件。
+
+
+120226单点真实回执：exit0，strict所有正确性/原global恢复true，selected68/fallback0/原3D68；32ABBA wall11.08956495→14.60591725ms慢31.7087%，event10.98337078→14.49728155慢31.9930%，实际w16 regs101/spills0/shared65536/warp64。没有收益，停止w16及tile扫描，不集成/不扩大accuracy。本owner按root唯一owner回执更新，未另执行/重跑原件；完整封存由root负责。已更新w16 README、纯gather服务README负结果及当前GPU热点短文。
+
+下一阶段仅建议末层删除无用hidden行：原6f4445/4451在全模型结束才gather logits_indices，当前M2048/N2。必须先保最后层全M K/V写cache，再仅N行Q/Attention/O/MLP/norm；前41层原路，不改采样N/顺序/RNG、不宣称只改gather已实现此算法。上界约一层/42，模型接点/residual/metadata/unsupported特征尚需CPU证明，当前无新runtime/合同/GPU队列。本阶段至此停写交root封存。

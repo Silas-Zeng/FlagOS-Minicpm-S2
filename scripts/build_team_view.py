@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 GROUPS = {
+    'gpu-hotspots': ('当前版本GPU热点', '复用原轨迹并按需补短native诊断；GPU路径占比只用于选择下一实验，不作吞吐成绩。', []),
+    'decode-cpu-gather': ('纯decode CPU gather跳过', '严格纯decode省略无消费者的CPU输入整理；正确性门通过，当前服务候选负收益，不集成。', []),
     'c3-views': ('C3重复视图清理', '复用mixed Attention中的视图，减少重复slice/unbind；短输入信号与大输入、真实服务结果分别记录。', []),
     'hot-key': ('Attention热key复用', '复用绑定后的key/cache并保留原launch尾；未命中、实际命中及负结果都保留。', []),
     'input-prep': ('输入准备成本诊断', '当前组合的真实输入等待与预处理累计；诊断耗时不作为性能收益。', []),
@@ -37,6 +39,7 @@ GROUPS = {
     'other': ('其它登记与控制记录', '没有足够字段继续归类的登记；不补猜实验结论。', []),
 }
 CODE = {
+    'decode-cpu-gather': ['archive/ai/20261022-next-service-queue/next-decode-gather/biv150_decode_cpu_gather.py'],
     'c3-views': ['patches/framework/candidates/biv150_c3_view_reuse.py'],
     'hot-key': ['patches/framework/candidates/biv150_attention_key_recipe_v2.py'],
     'input-prep': ['scripts/remote/input-prep-timing-combined/prepare_input_prep_timing.py', 'scripts/remote/input-prep-timing-combined/biv150_input_prep_timing.py'],
@@ -56,6 +59,9 @@ def group(row):
         parent = BY_ID.get(row['run_id'].removesuffix('-control'))
         return group(parent[0]) if parent else 'other'
     for key, pattern in [
+        ('attention', r'prefill[_-]w16'),
+        ('gpu-hotspots', r'current[_-]mixed'),
+        ('decode-cpu-gather', r'decode[_-](cpu[_-])?gather'),
         ('c3-views', r'c3[_-]view|c3views'),
         ('hot-key', r'key[_-]recipe|hot[_-]key'),
         ('input-prep', r'input[_-]prep'),
@@ -150,7 +156,7 @@ def keep(row):
         return '保留诊断结论；当前不据此实施输入同步优化。'
     if re.search(r'baseline|reference|original13eb|^b0$', row['profile_id'], re.I):
         return '保留作对照基线；不据此判断候选收益。'
-    if re.search(r'failed|reject|error|no_.*cpu_reduction', state) or re.search(r'不集成|未集成|不启用|不服务集成|无CPU下降|未见.*收益|无正信号', text):
+    if re.search(r'failed|reject|error|no_.*cpu_reduction', state) or re.search(r'放弃|不集成|未集成|不启用|不服务集成|无CPU下降|未见.*收益|无正信号', text):
         return '未集成；失败或无收益记录保留。'
     if 'positive_signal' in state or re.search(r'信号.{0,8}保留|保留.{0,8}候选|小收益.{0,8}保留', text):
         return '保留作候选，仍待确认；不等于默认启用。'

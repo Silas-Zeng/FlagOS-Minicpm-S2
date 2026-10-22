@@ -1,0 +1,608 @@
+{
+  "status": "correctness_passed_single_layer_signal_only",
+  "accuracy": "not evaluated",
+  "official_performance": "not evaluated",
+  "timing_loops": 32,
+  "timing_method": "P2047 ABBA, 32 calls/window; prerecord events; wall includes record/submit/final sync; CPU submit clocks exclude final sync; v1 cpu.stat outside window",
+  "worker_command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/framework/20261022T120226Z-prefill-w16-gate/source/gate.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261022T120226Z-prefill-w16-gate",
+    "--model",
+    "/workspace/MiniCPM5-2B"
+  ],
+  "worker_command_shell": "/usr/local/bin/python3 /workspace/experiments/minicpm-s2/framework/20261022T120226Z-prefill-w16-gate/source/gate.py --worker --run-dir /workspace/experiments/minicpm-s2/framework/20261022T120226Z-prefill-w16-gate --model /workspace/MiniCPM5-2B",
+  "limitations": [
+    "Actual backend/builder/writer, synthetic inputs, no model runner or weights.",
+    "Only 2D BM128/T64/s1 warps 8 to 16; original 3D C2, reducer, math and scale retained.",
+    "D1/P2047 KV16K is an upper-bound fixture, not an observed native seq_len.",
+    "Submit CPU clocks include callback work; the sole changed option is 2D num_warps.",
+    "Bitwise is a conservative gate: a mismatch stops timing, not a model-accuracy verdict. allclose 0.01 is recorded only, not a relaxed pass condition.",
+    "No graph replay, service, official-performance or model-accuracy conclusion."
+  ],
+  "c2_install": {
+    "installed": true,
+    "num_warps": 2,
+    "num_stages": 1,
+    "scope": "audited BF16 MiniCPM 3D decode only"
+  },
+  "c3_install": {
+    "installed": true,
+    "scope": "BF16 MiniCPM natural-prefix mixed Attention only",
+    "ordinary_mixed_dummy_may_split": true,
+    "accuracy": "mixed 2D to 3D remains unverified"
+  },
+  "manager_prepare_wall_ns": 280506,
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "torch_num_threads": 56,
+  "cases": [
+    {
+      "case": "C3-P2047-KV16K",
+      "lengths": [
+        1,
+        2047
+      ],
+      "kv_len": 16384,
+      "random_physical_pages": true,
+      "reused_old_prefix_blocks": 16,
+      "negative_padding_slots": 3,
+      "correctness": {
+        "all_output_bits_equal": true,
+        "valid_output_finite": true,
+        "padding_untouched": true,
+        "entire_kv_bits_unchanged": true,
+        "rng_unchanged": true,
+        "default_scale_arguments_same": true,
+        "original_3d_preserved": true,
+        "layer_scale_values_preserved": true,
+        "new_q_pointer": true,
+        "new_output_pointer": true,
+        "nondefault_stream": true,
+        "new_pointer_output_bits_equal": true,
+        "new_pointer_output_finite": true,
+        "new_pointer_padding_untouched": true,
+        "selected_on_new_pointer": true,
+        "other_2d_fallbacks": true,
+        "original_3d_new_pointer_preserved": true,
+        "kv_unchanged_after_new_pointer": true,
+        "rng_unchanged_after_new_pointer": true,
+        "unsupported_output_scales_original_error": true,
+        "unsupported_output_scales_fallback": true,
+        "layer_scale_identity_preserved": true
+      },
+      "bootstrap_before": {
+        "selected_calls": 0,
+        "fallback_calls": 0,
+        "original_3d_calls": 0,
+        "compiled_resources": null
+      },
+      "bootstrap_after": {
+        "selected_calls": 1,
+        "fallback_calls": 0,
+        "original_3d_calls": 1,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+          "n_regs": 101,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 16,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          }
+        }
+      },
+      "hot_before": {
+        "selected_calls": 1,
+        "fallback_calls": 0,
+        "original_3d_calls": 1,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+          "n_regs": 101,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 16,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          }
+        }
+      },
+      "hot_after": {
+        "selected_calls": 2,
+        "fallback_calls": 0,
+        "original_3d_calls": 2,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+          "n_regs": 101,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 16,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          }
+        }
+      },
+      "nondefault_stream_handle": 94532064537008,
+      "layer_scale_values": [
+        0.75,
+        1.25,
+        0.5
+      ],
+      "output_scale_guard": {
+        "errors": [
+          [
+            "NotImplementedError",
+            "fused block_scale output quantization is not yet supported for TritonAttentionImpl",
+            true
+          ],
+          [
+            "NotImplementedError",
+            "fused block_scale output quantization is not yet supported for TritonAttentionImpl",
+            true
+          ]
+        ],
+        "before": {
+          "selected_calls": 2,
+          "fallback_calls": 0,
+          "original_3d_calls": 2,
+          "compiled_resources": {
+            "compiled_type": "CompiledKernel",
+            "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+            "n_regs": 101,
+            "n_spills": 0,
+            "metadata": {
+              "num_warps": 16,
+              "num_stages": 1,
+              "shared": 65536,
+              "use_sme": 234881027,
+              "warp_size": 64
+            }
+          }
+        },
+        "after": {
+          "selected_calls": 2,
+          "fallback_calls": 0,
+          "original_3d_calls": 2,
+          "compiled_resources": {
+            "compiled_type": "CompiledKernel",
+            "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+            "n_regs": 101,
+            "n_spills": 0,
+            "metadata": {
+              "num_warps": 16,
+              "num_stages": 1,
+              "shared": 65536,
+              "use_sme": 234881027,
+              "warp_size": 64
+            }
+          }
+        }
+      },
+      "numerical_error": {
+        "max_abs": 0.0,
+        "max_relative_to_baseline_floor_1e_6": 0.0,
+        "candidate_nan_count": 0,
+        "baseline_nan_count": 0,
+        "allclose_atol_0_01_rtol_0_01": true
+      }
+    }
+  ],
+  "timings": [
+    {
+      "calls": 32,
+      "wall_total_ms": 354.979504,
+      "wall_per_call_ms": 11.0931095,
+      "event_total_ms": 351.5523376464844,
+      "event_per_call_ms": 10.986010551452637,
+      "submit_thread_cpu_ns": 13365891,
+      "submit_process_cpu_ns": 13431594,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 855912\nnr_throttled 4118\nthrottled_time 16716262159422",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 855912,
+          "nr_throttled": 4118,
+          "throttled_time": 16716262159422
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 855916\nnr_throttled 4118\nthrottled_time 16716262159422",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 855916,
+          "nr_throttled": 4118,
+          "throttled_time": 16716262159422
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 4,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "baseline",
+      "counters_before": {
+        "selected_calls": 4,
+        "fallback_calls": 0,
+        "original_3d_calls": 4,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+          "n_regs": 101,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 16,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          }
+        }
+      },
+      "counters_after": {
+        "selected_calls": 4,
+        "fallback_calls": 0,
+        "original_3d_calls": 4,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+          "n_regs": 101,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 16,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          }
+        }
+      }
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 466.643914,
+      "wall_per_call_ms": 14.5826223125,
+      "event_total_ms": 463.56329345703125,
+      "event_per_call_ms": 14.486352920532227,
+      "submit_thread_cpu_ns": 14156829,
+      "submit_process_cpu_ns": 14262735,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 855916\nnr_throttled 4118\nthrottled_time 16716262159422",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 855916,
+          "nr_throttled": 4118,
+          "throttled_time": 16716262159422
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 855921\nnr_throttled 4118\nthrottled_time 16716262159422",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 855921,
+          "nr_throttled": 4118,
+          "throttled_time": 16716262159422
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 5,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "candidate",
+      "counters_before": {
+        "selected_calls": 4,
+        "fallback_calls": 0,
+        "original_3d_calls": 4,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+          "n_regs": 101,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 16,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          }
+        }
+      },
+      "counters_after": {
+        "selected_calls": 36,
+        "fallback_calls": 0,
+        "original_3d_calls": 36,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+          "n_regs": 101,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 16,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          }
+        }
+      }
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 468.13479,
+      "wall_per_call_ms": 14.6292121875,
+      "event_total_ms": 464.2627258300781,
+      "event_per_call_ms": 14.508210182189941,
+      "submit_thread_cpu_ns": 14436038,
+      "submit_process_cpu_ns": 14523602,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 855921\nnr_throttled 4118\nthrottled_time 16716262159422",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 855921,
+          "nr_throttled": 4118,
+          "throttled_time": 16716262159422
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 855925\nnr_throttled 4118\nthrottled_time 16716262159422",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 855925,
+          "nr_throttled": 4118,
+          "throttled_time": 16716262159422
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 4,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "candidate",
+      "counters_before": {
+        "selected_calls": 36,
+        "fallback_calls": 0,
+        "original_3d_calls": 36,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+          "n_regs": 101,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 16,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          }
+        }
+      },
+      "counters_after": {
+        "selected_calls": 68,
+        "fallback_calls": 0,
+        "original_3d_calls": 68,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+          "n_regs": 101,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 16,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          }
+        }
+      }
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 354.752653,
+      "wall_per_call_ms": 11.08602040625,
+      "event_total_ms": 351.3833923339844,
+      "event_per_call_ms": 10.980731010437012,
+      "submit_thread_cpu_ns": 13276697,
+      "submit_process_cpu_ns": 13379078,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 855925\nnr_throttled 4118\nthrottled_time 16716262159422",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 855925,
+          "nr_throttled": 4118,
+          "throttled_time": 16716262159422
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 855929\nnr_throttled 4118\nthrottled_time 16716262159422",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 855929,
+          "nr_throttled": 4118,
+          "throttled_time": 16716262159422
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 4,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "baseline",
+      "counters_before": {
+        "selected_calls": 68,
+        "fallback_calls": 0,
+        "original_3d_calls": 68,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+          "n_regs": 101,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 16,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          }
+        }
+      },
+      "counters_after": {
+        "selected_calls": 68,
+        "fallback_calls": 0,
+        "original_3d_calls": 68,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+          "n_regs": 101,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 16,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "wall": {
+      "baseline_ms": 11.089564953125,
+      "candidate_ms": 14.605917250000001,
+      "fraction_saved": -0.3170865865106913
+    },
+    "event": {
+      "baseline_ms": 10.983370780944824,
+      "candidate_ms": 14.497281551361084,
+      "fraction_saved": -0.31993008708333726
+    }
+  },
+  "final_counters": {
+    "selected_calls": 68,
+    "fallback_calls": 0,
+    "original_3d_calls": 68,
+    "compiled_resources": {
+      "compiled_type": "CompiledKernel",
+      "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+      "n_regs": 101,
+      "n_spills": 0,
+      "metadata": {
+        "num_warps": 16,
+        "num_stages": 1,
+        "shared": 65536,
+        "use_sme": 234881027,
+        "warp_size": 64
+      }
+    }
+  },
+  "restored_counters": {
+    "selected_calls": 68,
+    "fallback_calls": 0,
+    "original_3d_calls": 68,
+    "compiled_resources": {
+      "compiled_type": "CompiledKernel",
+      "hash": "fa4a1bfef9a915ea25a396a7ebe806d2d23039ba192c9bc222f42e7fc0c612d2",
+      "n_regs": 101,
+      "n_spills": 0,
+      "metadata": {
+        "num_warps": 16,
+        "num_stages": 1,
+        "shared": 65536,
+        "use_sme": 234881027,
+        "warp_size": 64
+      }
+    }
+  },
+  "original_forward_restored": true,
+  "original_global_bindings_retained": true,
+  "source_sha256": {
+    "gate.py": "279424148f3837e300646e6006d7cf2a300d19e7c198d138d8a8a418954a67b3",
+    "runtime.py": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+    "mixed.py": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+    "policy.py": "c27a4da71feae630252c46a1cc310fed9fc6d26b2dd00783459c206dce27463d",
+    "validate_hidden_row_gather.py": "65cb8affd4ae08af877ccb4b4cfca6822eec5ba3f83770f39999ee677c546863",
+    "validate_mixed_decode.py": "b6275ee86f4fb24824091e72fccd774d174247975f8189d360400f333a20351f",
+    "bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+    "backend.py": "1219c4d1820b56e99ef6686de8a49c8c5aa57707794bcabf3322023799a03605",
+    "attention.py": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f",
+    "helpers.py": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1",
+    "writer.py": "f18224e51162e37c14a2e2b3045bca55baf0b207b1d203ad6ee7d8ed417139eb",
+    "model-config.json": "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180"
+  }
+}
