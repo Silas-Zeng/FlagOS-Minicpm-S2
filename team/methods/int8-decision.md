@@ -18,3 +18,4 @@
 - [20261022T122551Z-w8a8-mitigation-arms](../runs/bi-v150/20261022T122551Z-w8a8-mitigation-arms.md)（登记#130）：缓解臂同协议（24 题、1024 token、greedy、bf16 参考臂在本 run 内）：去掉 down_proj（252 层）与只量化 MLP（126 层）都是 gold 13/24、最终答案一致率 0.95833、各 1 题翻转，与“只量化权重”同级 **是否保留：** 待确认；通过某项检查不自动等于优化保留。
 - [20261022T124239Z-w8a16-column-read-gemm](../runs/bi-v150/20261022T124239Z-w8a16-column-read-gemm.md)（登记#136）：W8A16 自写 Triton kernel 的第一版：权重按 [N,K] 存放，tile 以列方向读取（不合并） **是否保留：** 待确认；通过某项检查不自动等于优化保留。
 - [20261022T125433Z-w8a16-coalesced-gemm](../runs/bi-v150/20261022T125433Z-w8a16-coalesced-gemm.md)（登记#137）：输出端 **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261022T161227Z-w8a8-in-situ-negative](../runs/bi-v150/20261022T161227Z-w8a8-in-situ-negative.md)（登记#144）：即 int8 链在服务里比 bf16 **慢约 47%**，prefill 与 decode 同时变差 **是否保留：** 待确认；通过某项检查不自动等于优化保留。

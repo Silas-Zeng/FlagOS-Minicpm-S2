@@ -39,4 +39,10 @@
 
 按上面的组合实现了自研 W8A8 补丁 `vllm_fl/patches/biv150_w8a8_linear.py`（框架库分支 `codex/biv150-w8a8-linear`，提交 `b9840d883358a3e745e6c136592c8c2063cbe05c`）：在 `process_weights_after_loading` 里把 bf16 权重对称量化成 per-channel int8 并 `replace_parameter` 释放原显存，`apply` 跑三 kernel；默认层集 `qkv_proj,o_proj,gate_up_proj`，`down_proj` 与 `lm_head` 保持 bf16。不读 checkpoint 的量化配置、不改官方服务参数，`VLLM_FL_BIV150_W8A8` 未开启时完全不生效。
 
-未闭环：端到端两轮对照、官方 Level-3、以及 CUDA graph 捕获下 `_int_mm` 的可用性验证。这些跑完之前不进入合并讨论，也不按微测外推收益。
+## 端到端结果（2026-10-23 凌晨）：负
+
+补丁在服务里真正执行后的 16K 缩放暖探针只有 **1721.67 tok/s / TPOT 112.72 ms**，而同一实例 kernel-only 是 3236.25 / 56.35 ms，即慢约 47%，prefill 与 decode 同时变差；GPU KV 也从 521,936 掉到 486,464。与孤立微测方向相反。
+
+过程中确认了三件会被反复踩到的事：① `torch._int_mm` 要求 M>16，而 `FULL_DECODE_ONLY` 会捕获到 M=1 的图，必须保留 bf16 权重做小 M 回退；② 分块要均分，按固定步长会在 `total % MAX_ROWS ≤ 16` 时留下 1 行尾块；③ 最关键——`model_runner.py` 用 `torch.compile(fullgraph=True)` 并把产物缓存在 `/root/.cache/vllm/torch_compile_cache`，**热缓存会让任何改到图内的补丁静默沿用旧图**（前三轮“精确零效果”就是这个原因），冷缓存则要求热路径没有 print/状态/符号形状分支，最终只能把整条链包成 `torch.library.custom_op`，而每层一次的 Python 分发又吃掉全部收益（TPOT 的 +56 ms 与 126 层 × 每步一次的量级吻合）。
+
+结论：这套编译栈里“Python custom op + 多 kernel”的逐层 GEMM 替换不成立。若要继续，必须换成编译器能原生捕获的算子实现（无 Python 分发），或只在 eager prefill 段生效并承担 prefill 回归；在那之前补丁保持默认关闭，不进入合并讨论。原始登记见 `int8_decision` 的 `20261022T161227Z-w8a8-in-situ-negative`。
