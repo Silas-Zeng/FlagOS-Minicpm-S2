@@ -1,0 +1,565 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-22T07:47:11.657769+00:00",
+  "status": "local_rebuild_material_only_no_branch_or_remote_changes",
+  "base_commit": "13eb9be69ecc5b5ca4f79c44e9ee40081eaa1bf0",
+  "base_tree": "649161e62191e81a4b367e0e19dc37e32e745099",
+  "legacy_snapshot_commit": "70d04f38382e900949ddeb34d2ac75aacdc93af4",
+  "legacy_snapshot_tree": "82e37f8f263eeb09563a4790359ec95a0de1ca17",
+  "legacy_code_tree_with_original_readme": "5c14cfb8d3a452e97a67758873bf18039e1bf989",
+  "legacy_changed_code_paths": [
+    "vllm_fl/__init__.py",
+    "vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py",
+    "vllm_fl/patches/biv150_decode_launch_runtime.py",
+    "vllm_fl/patches/biv150_mixed_decode.py",
+    "vllm_fl/patches/biv150_runtime.py",
+    "vllm_fl/patches/biv150_sql_reflection.py",
+    "vllm_fl/patches/biv150_top_p_triton.py",
+    "vllm_fl/platform.py",
+    "vllm_fl/worker/model_runner.py"
+  ],
+  "legacy_document_only_paths": [
+    "README.md",
+    "README.upstream.md"
+  ],
+  "stages": [
+    {
+      "id": "00-diagnostics",
+      "title": "实验配置与诊断开关",
+      "recommended_parent": "root-restored-baseline-R",
+      "required_earlier_stages_for_this_package": [],
+      "entries": [
+        {
+          "path": "vllm_fl/__init__.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/__init__.py",
+          "base_blob": "8754e325aceccf6a7286c990d8d8e4910342995e",
+          "base_sha256": "14bc7332cc485365dd24414063cffc5cf09e9a39a69563bc91182abdbd83a7b7",
+          "head_blob": "9d4b97de9fbe99206d861049856e9e5d4e7b02fa",
+          "head_sha256": "e043b7893bfac27aee4f96cf7201cd6227053a261498e121245c3e63f2f2ebff",
+          "bytes": 7127
+        },
+        {
+          "path": "vllm_fl/platform.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/platform.py",
+          "base_blob": "86bd70b1247f61cf8cf521aa34a5d4cd1cadecb2",
+          "base_sha256": "a430774735447365bc662dfc5cb12d067899a730e6726d7d61d0e7641460bbb9",
+          "head_blob": "72c81807bc4608a8d5981d98b7eb314514623918",
+          "head_sha256": "e6f231af2c90f93116ebed7a8a2ce640bcc2d4c31ba5fde2e0fa0cbd8236ea36",
+          "bytes": 22377
+        },
+        {
+          "path": "vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py",
+          "base_blob": "0c7758e5da3ac71b890c63910aa9e740af9ff6eb",
+          "base_sha256": "f146b713929cf7570d5f5f39206494bc3e1c33450b566da87f28ffb508524692",
+          "head_blob": "db7fdad9ca0562531ef79b22b6b459889b83176c",
+          "head_sha256": "93fb470cfb9d5b170917a6663922931be22cc70658f5c2fbb2f2541d0864d58f",
+          "bytes": 18001
+        },
+        {
+          "path": "docs/00-diagnostics-biv150.md",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/docs/00-diagnostics-biv150.md",
+          "base_blob": null,
+          "base_sha256": null,
+          "head_blob": "9ab62d782e77c9de0156265e3b6e73e97427e823",
+          "head_sha256": "b66f1b49114e68ae23d14f82d78d0b48f7db81139a46166726a1efbb44d3d473",
+          "bytes": 763
+        }
+      ],
+      "code_projection_tree_with_original_upstream_readme": "921a45700997d4574ac16f05b43f65dfe9493913",
+      "summary": "默认关闭的CPU线程cap、sampler compile诊断开关、batch/prefix/block覆盖通道，以及原等价block16分支日志。不能把它们记成SQL或Attention收益；正式评测未借这些通道改参数。",
+      "boundary": "与性能方法算法独立；为逐byte复建历史retained tree先单列。默认无环境变量时不启用覆盖；不建议借本PR修改比赛参数。",
+      "device_or_accuracy_newly_verified": false,
+      "manifest_path": "docs/pr-rebuild/00-diagnostics/manifest.json",
+      "manifest_sha256": "da8e0d5d2c87a53578ef7ff4a8d6011fae82078b1b20f0b2e962d645a9c9fb6a",
+      "pr_sha256": "b6a883d1e6fc8b139878208a9f854e8798c6b8e6ab0065e9a7421f9b8d1e7285",
+      "historical_algorithm_function_bodies_modified": false,
+      "integration_split_note": "01仅移除原top-p函数与入口调用；02完整补回。其它代码使用旧快照字节。"
+    },
+    {
+      "id": "01-prefill",
+      "title": "MiniCPM prefill Attention启动策略",
+      "recommended_parent": "00-diagnostics",
+      "required_earlier_stages_for_this_package": [
+        "00-diagnostics"
+      ],
+      "entries": [
+        {
+          "path": "vllm_fl/patches/biv150_runtime.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/patches/biv150_runtime.py",
+          "base_blob": null,
+          "base_sha256": null,
+          "head_blob": "a09d943a52cb488607acd04764e582c6ee76532d",
+          "head_sha256": "e63d933859bf305038a014651474a3433e2f12fd0ba87607e2b7d4c8c8fc7c48",
+          "bytes": 3508
+        },
+        {
+          "path": "vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py",
+          "base_blob": "db7fdad9ca0562531ef79b22b6b459889b83176c",
+          "base_sha256": "93fb470cfb9d5b170917a6663922931be22cc70658f5c2fbb2f2541d0864d58f",
+          "head_blob": "1d65d7f29a9b210e12aadc1391bcc0a800dafcf4",
+          "head_sha256": "00baadcdcc85a46e26e52e547e4cd1bded3833673cf59dcbbd5470283ea4c250",
+          "bytes": 18385
+        },
+        {
+          "path": "docs/01-prefill-biv150.md",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/docs/01-prefill-biv150.md",
+          "base_blob": null,
+          "base_sha256": null,
+          "head_blob": "ef1daf3a75cc1ba6ac74e471595d9271c8e06948",
+          "head_sha256": "bc05687cee7655b265439ba3af2c0696758481e48937e9d82b177f85037494f1",
+          "bytes": 841
+        }
+      ],
+      "code_projection_tree_with_original_upstream_readme": "c7c6cde05a8a10da6f7cfb1c12cc6e8265bd7378",
+      "summary": "从原runtime机械抽出原_patch_generic_attention及两段原字符串变换；目标GQA8/head128/multi-token时BM128、BQ16、TILE64、warps8/stages1。vendor入口沿原函数调用，只执行Attention部分。",
+      "boundary": "包装使用00后的共享vendor文件；算法不依赖诊断开关。此安装器会修改site-packages Attention源码、清pycache、重绑backend，须隔离已安装源；不能把Git回到13eb等同安装源也恢复。",
+      "device_or_accuracy_newly_verified": false,
+      "manifest_path": "docs/pr-rebuild/01-prefill/manifest.json",
+      "manifest_sha256": "a359e2eda4aa40d1dbc4c4f0af90d9fe26a00f2e63440df129bf6871b54aa6aa",
+      "pr_sha256": "dea5877f68e843dd1084e20a53c8efe624d087a7d89a50bac593bfa465d34e97",
+      "historical_algorithm_function_bodies_modified": false,
+      "integration_split_note": "01仅移除原top-p函数与入口调用；02完整补回。其它代码使用旧快照字节。"
+    },
+    {
+      "id": "02-top-p",
+      "title": "直方图zoom top-p过滤",
+      "recommended_parent": "01-prefill",
+      "required_earlier_stages_for_this_package": [
+        "01-prefill"
+      ],
+      "entries": [
+        {
+          "path": "vllm_fl/patches/biv150_runtime.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/patches/biv150_runtime.py",
+          "base_blob": "a09d943a52cb488607acd04764e582c6ee76532d",
+          "base_sha256": "e63d933859bf305038a014651474a3433e2f12fd0ba87607e2b7d4c8c8fc7c48",
+          "head_blob": "1a1f4e610514cab17a7b5625f6bc1d54ac954988",
+          "head_sha256": "a0c09c51826e0b9e0e5c4f320e68451359db44001d56fd68e1e78de8dda2c9b4",
+          "bytes": 5035
+        },
+        {
+          "path": "vllm_fl/patches/biv150_top_p_triton.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/patches/biv150_top_p_triton.py",
+          "base_blob": null,
+          "base_sha256": null,
+          "head_blob": "99b84acc8cef0f5f39f7b3ef9dd0a7eea998eed0",
+          "head_sha256": "da77c411a88ad4ead072c99cdc4edb52b5bef5b8e5990b9cc8e04db08ed31ca9",
+          "bytes": 9692
+        },
+        {
+          "path": "docs/02-top-p-biv150.md",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/docs/02-top-p-biv150.md",
+          "base_blob": null,
+          "base_sha256": null,
+          "head_blob": "3c6ea686135f8343780d9b4b017bfdefb3a5b80f",
+          "head_sha256": "9db66761a42fc09c30b0e12b3da57357d61c26530a98108f609de8e9c09ae1a6",
+          "bytes": 767
+        }
+      ],
+      "code_projection_tree_with_original_upstream_readme": "6ef1ca85f2607261e9d52832bf57851c26246efa",
+      "summary": "加入原_patch_top_p_sampler和原bounded histogram实现，并在共享入口中按原顺序先top-p后Attention；top-p-only、float32 logits、vocab130560的路由及其余fallback逐byte保留。",
+      "boundary": "此堆叠依赖是共享biv150_runtime文件的拆包关系，top-p算法不依赖prefill计算。01与02中原算法函数体不改，02完成后共享runtime精确回受测a0c。",
+      "device_or_accuracy_newly_verified": false,
+      "manifest_path": "docs/pr-rebuild/02-top-p/manifest.json",
+      "manifest_sha256": "38a88fc6ae13dee9d32f35831cdc871520bc1c2ba292728e471518cce4202dc8",
+      "pr_sha256": "f824fb080562207a9d8ef42a5793303b0a9951a05cc4f9b5ff66638120f84883",
+      "historical_algorithm_function_bodies_modified": false,
+      "integration_split_note": "01仅移除原top-p函数与入口调用；02完整补回。其它代码使用旧快照字节。"
+    },
+    {
+      "id": "03-sql",
+      "title": "SQLite目标表反射",
+      "recommended_parent": "02-top-p",
+      "required_earlier_stages_for_this_package": [
+        "02-top-p"
+      ],
+      "entries": [
+        {
+          "path": "vllm_fl/worker/model_runner.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/worker/model_runner.py",
+          "base_blob": "343dfdd45d176d38ee28a6a8e4b53a73be206062",
+          "base_sha256": "446f12c0653131c9a4f5ff7783e52e1a3882d2b20cdd50a6899d218a2dc0bd64",
+          "head_blob": "8f28141b8929762bd9525084fd7c3c17e9b4a368",
+          "head_sha256": "c81e6ae9ba4bed1fe207c45755c91787e39d5a2b044c42c9d6eb7552b36360ed",
+          "bytes": 341030
+        },
+        {
+          "path": "vllm_fl/patches/biv150_sql_reflection.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/patches/biv150_sql_reflection.py",
+          "base_blob": null,
+          "base_sha256": null,
+          "head_blob": "dedbbe07dfc2dbb7a58567e69ac430888bcae0b6",
+          "head_sha256": "ad84c9affe0c3f4b9a4432dd2cbb3861306726f07d53328e129af41c74ea8e8e",
+          "bytes": 2762
+        },
+        {
+          "path": "docs/03-sql-biv150.md",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/docs/03-sql-biv150.md",
+          "base_blob": null,
+          "base_sha256": null,
+          "head_blob": "39338da4c1e68317dc7ca97493eec9cc298db0d0",
+          "head_sha256": "592c0832ceda6015973fce59a4eeed8dd2db287a403829fdd4f829518605cd08",
+          "bytes": 794
+        }
+      ],
+      "code_projection_tree_with_original_upstream_readme": "5292f4256d3c5dad0f23c7327d5122944438ba00",
+      "summary": "只加原ad84模块与runner安装footer，fresh automap base用only callable过滤目标表，保缺表None与默认外键闭包；非SQLite走原函数，固定FlagGems SQL源6dc19c。",
+      "boundary": "算法与前两性能方法独立；堆叠顺序用于精确恢复历史SQL-only测试上下文。现成SQL独立patch也能作用于原13eb runner，但历史服务证据基于retained，不冒称原13eb全树独立结果。",
+      "device_or_accuracy_newly_verified": false,
+      "manifest_path": "docs/pr-rebuild/03-sql/manifest.json",
+      "manifest_sha256": "c18f7a871696a463f158271e9d814e66d58e571516f0c9801d9d84fe3eef7bfc",
+      "pr_sha256": "e434bada14e7c834b665332b40bf2affd7a914325155b9963eb9eed3bb886653",
+      "historical_algorithm_function_bodies_modified": false,
+      "integration_split_note": "01仅移除原top-p函数与入口调用；02完整补回。其它代码使用旧快照字节。"
+    },
+    {
+      "id": "04-decode-3d",
+      "title": "3D decode的w2s1启动",
+      "recommended_parent": "03-sql",
+      "required_earlier_stages_for_this_package": [
+        "01-prefill",
+        "03-sql"
+      ],
+      "entries": [
+        {
+          "path": "vllm_fl/worker/model_runner.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/worker/model_runner.py",
+          "base_blob": "8f28141b8929762bd9525084fd7c3c17e9b4a368",
+          "base_sha256": "c81e6ae9ba4bed1fe207c45755c91787e39d5a2b044c42c9d6eb7552b36360ed",
+          "head_blob": "6f2435956ef061a75d41b66b3242f55e3ceb1323",
+          "head_sha256": "7ddf885ac0fc95af291a67f7e6289224af00ccdde7cbf286deb5302780bd6953",
+          "bytes": 341346
+        },
+        {
+          "path": "vllm_fl/patches/biv150_decode_launch_runtime.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/patches/biv150_decode_launch_runtime.py",
+          "base_blob": null,
+          "base_sha256": null,
+          "head_blob": "772169a838a256f5c3805a05d64be04420067d12",
+          "head_sha256": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+          "bytes": 3824
+        },
+        {
+          "path": "docs/04-decode-3d-biv150.md",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/docs/04-decode-3d-biv150.md",
+          "base_blob": null,
+          "base_sha256": null,
+          "head_blob": "ceca838cc1b690c615f15c211910e4d25eb84568",
+          "head_sha256": "67c65258d7f56623696e29caef270d820ad0285d741ea38b287120010337be36",
+          "bytes": 708
+        }
+      ],
+      "code_projection_tree_with_original_upstream_readme": "dff9340ae00cde8caf4c578998c0f7d31707dba5",
+      "summary": "加入原e5模块与原footer，在严格BF16/3D/shape/feature守卫下把4warps3stages改为2warps1stage，kernel/grid/reducer不改。",
+      "boundary": "真正源码依赖prefill产生的Attention54c和helper59d9；SQL不是算法依赖，只为保持runner footer与历史073309字节及推荐堆叠顺序。此处不能混入mixed拆分。",
+      "device_or_accuracy_newly_verified": false,
+      "manifest_path": "docs/pr-rebuild/04-decode-3d/manifest.json",
+      "manifest_sha256": "9be4028550b96cb3d5ec9966796177b0b0fc378847b1a48378e7c6ac15733079",
+      "pr_sha256": "978dcd97c82f5064c4ef3f8ab773b68d1185b9c24de988c8329c8561bf002e19",
+      "historical_algorithm_function_bodies_modified": false,
+      "integration_split_note": "01仅移除原top-p函数与入口调用；02完整补回。其它代码使用旧快照字节。"
+    },
+    {
+      "id": "05-mixed",
+      "title": "Attention内部天然单token前缀拆分",
+      "recommended_parent": "04-decode-3d",
+      "required_earlier_stages_for_this_package": [
+        "04-decode-3d"
+      ],
+      "entries": [
+        {
+          "path": "vllm_fl/worker/model_runner.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/worker/model_runner.py",
+          "base_blob": "6f2435956ef061a75d41b66b3242f55e3ceb1323",
+          "base_sha256": "7ddf885ac0fc95af291a67f7e6289224af00ccdde7cbf286deb5302780bd6953",
+          "head_blob": "5288f44709edb1334db697d2bac77715711899f8",
+          "head_sha256": "e155a16669e69b7eb7aff370dbcbcf225a4f593fa42b2399722e96999b53a1f1",
+          "bytes": 341577
+        },
+        {
+          "path": "vllm_fl/patches/biv150_mixed_decode.py",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/vllm_fl/patches/biv150_mixed_decode.py",
+          "base_blob": null,
+          "base_sha256": null,
+          "head_blob": "01e1f165fce28503f6f11c29d2a002b868d9ae91",
+          "head_sha256": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+          "bytes": 12461
+        },
+        {
+          "path": "docs/05-mixed-biv150.md",
+          "mode": "100644",
+          "type": "blob",
+          "file": "files/docs/05-mixed-biv150.md",
+          "base_blob": null,
+          "base_sha256": null,
+          "head_blob": "7be03857f2cd2df1e1937e376396f1141b2e5929",
+          "head_sha256": "f0e31006c37793890a68a650b9303a3a7e38ae26489f2dd3957b4ef308149733",
+          "bytes": 760
+        }
+      ],
+      "code_projection_tree_with_original_upstream_readme": "5c14cfb8d3a452e97a67758873bf18039e1bf989",
+      "summary": "加入原a129模块与原footer，builder构造天然连续单token前缀计划，forward拆原Attention的decode/prefill范围，不排序请求、不拆整个模型。",
+      "boundary": "硬依赖已安装原e5 DecodeLaunch以及Attention54c/backend1219/helper59d9。mixed把部分原2D转3D，归约顺序变化；准确率属于对应完整组合，不能把它归入SQL。",
+      "device_or_accuracy_newly_verified": false,
+      "manifest_path": "docs/pr-rebuild/05-mixed/manifest.json",
+      "manifest_sha256": "c15f8416b447ae70108f06e5049261ec1be6c17f049ab7c80f04468f370ac97b",
+      "pr_sha256": "4d10308d31c755825fc75db054d9bf2a4e3232fb898c9074b2dd43975d24e3b1",
+      "historical_algorithm_function_bodies_modified": false,
+      "integration_split_note": "01仅移除原top-p函数与入口调用；02完整补回。其它代码使用旧快照字节。"
+    }
+  ],
+  "exact_final_nine_code_files_verified": true,
+  "all_other_code_stays_original_13eb": true,
+  "all_python_bytes_compile_without_import": true,
+  "new_docs_are_not_in_legacy_tree_hash": true,
+  "method_shared_runtime_note": "01原Attention函数/常量逐byte保留，去原top-p函数和入口调用；02完整补回受测runtime。共用入口的打包依赖不冒称算法依赖。",
+  "history_note": "本地仓库不含d60 commit对象；历史6e8 patch和原064632 launcher记录d60。复建不猜commit，直接从已验13eb对象和固定字节建立阶段。",
+  "source_assets_sha256": {
+    "patches/vllm-plugin-FL-biv150-performance.patch": "6e8d9fa631b7e2f9aa0a848443e602c224c1bbd1f0787b417f78dd3b9f51e99b",
+    "patches/candidates/vllm-plugin-FL-biv150-sql-reflection.patch": "2825325e926024572e744c47125c85ffbbb306fa9bd95c5c36ef78ed3bf34bee",
+    "patches/candidates/vllm-plugin-FL-biv150-sql-mixed-decode.patch": "4b3e2e52b01d04a0f0477ae4e9b8dc3fed3c1f721360af3bbe6b01014572bbba",
+    "patches/candidates/vllm-plugin-FL-biv150-sql-mixed-decode-full.patch": "4aba147aa0bd3ec8dd1c12b6ae94bf39537a4cbad449e68e2fcdbfbdc0f8def6"
+  },
+  "other_developed_not_default_summary": [
+    "CPU metadata与async token两PR：单方法短筛与组合062205方法门，未合默认；其源head必须保留受测字节。",
+    "c95f连续KV页复制和818e二维SAVE工具两个PR：只有工具/桥，非默认服务hook。",
+    "KV SAVE/ZERO/RESTORE/FULL、私有页排序、capacity/progress选择、pitched SAVE worker：独立服务/机制实验，未进入旧main。",
+    "token bucket、hidden gather、growth admission、Attention overlap、visible prefix、CTA grouping等保留候选/负结果：不混入本六包。",
+    "C3 coverage、KV completion/runtime/memory、preemption snapshot等只观察模块；Event/native阻塞门无CPU收益，不服务接入。"
+  ],
+  "other_framework_source_inventory": [
+    {
+      "path": "patches/framework/biv150_async_token_update.py",
+      "sha256": "1bb85e31c7b3fefa81414a54b04a1f0b6cf949c0876f87149956c821bb483adc"
+    },
+    {
+      "path": "patches/framework/biv150_async_token_update_c3_source.py",
+      "sha256": "123d7f1d34404ae2f7069800de70cbd8f88c490377a97c8aab4daf45b08d013c"
+    },
+    {
+      "path": "patches/framework/biv150_async_token_update_source.py",
+      "sha256": "e5a84a3cd90a81ec7134a3646b36921454be647ba1cb2a1936460c849a2daf8c"
+    },
+    {
+      "path": "patches/framework/biv150_async_token_update_sql_mixed_source.py",
+      "sha256": "cfd378a494c0ccbb5aece861527cdf59ccd148afbe53ac229a09bb43162bdb6f"
+    },
+    {
+      "path": "patches/framework/biv150_block_table.py",
+      "sha256": "63dad21b13b2c20c9cb1a065dda00909719f99a53e235d6d8804353b482ff020"
+    },
+    {
+      "path": "patches/framework/biv150_c3_coverage.py",
+      "sha256": "29137c16ceb1d811b6b29b28782e2dcdf3463fce154917b16871d3157f7466b3"
+    },
+    {
+      "path": "patches/framework/biv150_cpu_metadata.py",
+      "sha256": "0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f"
+    },
+    {
+      "path": "patches/framework/biv150_cpu_metadata_source.py",
+      "sha256": "0096cdac2c63544b5e3e62766168dc3df22f6ab63c09231bf9c6e93abaf29835"
+    },
+    {
+      "path": "patches/framework/biv150_decode_hidden_view.py",
+      "sha256": "b939fe9943213fdb441afbb63e3bb831999dca653e72be0b5cef5436a341fd18"
+    },
+    {
+      "path": "patches/framework/biv150_decode_launch.py",
+      "sha256": "b4f3698c2a1404d056f223d6ee0983dbd2f4c7be8d4677a93c18316132619708"
+    },
+    {
+      "path": "patches/framework/biv150_direct_decode.py",
+      "sha256": "133db2e566bb14547bc2503a20607d3867fb1d2d2ac610b6f667f0bd2fe60f33"
+    },
+    {
+      "path": "patches/framework/biv150_growth_admission.py",
+      "sha256": "9245dd089a310620840a1c056544e66fb2dd0ea24f41ef8f0e4b22721bac7e49"
+    },
+    {
+      "path": "patches/framework/biv150_growth_admission_source.py",
+      "sha256": "b0d5516684e4092dd643836c7bf43ffcd3681d855a32033d6745f13fda0cb709"
+    },
+    {
+      "path": "patches/framework/biv150_growth_admission_v2.py",
+      "sha256": "72d6f3822c96be028f6ab3cd818de1da6bafdb38d52a50a12633851717332803"
+    },
+    {
+      "path": "patches/framework/biv150_growth_admission_v2_source.py",
+      "sha256": "e5bad3d863a36d0d24bc3650c513600e23909d2224fb315bb8eb99943f8b0d9a"
+    },
+    {
+      "path": "patches/framework/biv150_growth_descriptor_once.py",
+      "sha256": "4a6eaefa0b40358307f48c586b9be7dc4a801f4b8eeeda752ff2db5275619b99"
+    },
+    {
+      "path": "patches/framework/biv150_hidden_row_gather.py",
+      "sha256": "109905b3d276d6e4ff6cc74a7b97dfe6e8ee31a517b0ac7c4fdb163cc37ad8fd"
+    },
+    {
+      "path": "patches/framework/biv150_hidden_row_gather_source.py",
+      "sha256": "881f2cf209da11842577aab01cca3830e985ad7c9030554156757a5de7e791f2"
+    },
+    {
+      "path": "patches/framework/biv150_kv_completion_probe.py",
+      "sha256": "a4de3abea10b333aeb73d3c3ab49f82c91510c89cc8f9210c531f666feefb2c6"
+    },
+    {
+      "path": "patches/framework/biv150_kv_memory_observer.py",
+      "sha256": "6a772a741ac96ac1f9d7ef7c8cff7578117bbdc8cc97258afaeec88e1c5b436c"
+    },
+    {
+      "path": "patches/framework/biv150_kv_page_copy.py",
+      "sha256": "c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c"
+    },
+    {
+      "path": "patches/framework/biv150_kv_protocol.py",
+      "sha256": "0e2115d0fbdedea64d1b911c0d6ae3b359f178004d844a8dd8088dfa4388fb86"
+    },
+    {
+      "path": "patches/framework/biv150_kv_runtime_descriptor.py",
+      "sha256": "0c892ad02fbfe663d3f7c8f668cdd000c0c1fc7860ff915db8bce5949cae0667"
+    },
+    {
+      "path": "patches/framework/biv150_kv_transaction.py",
+      "sha256": "616040602c4ebcfc6b21ace693d193f09fb1bb95da2b874e0bf48039c14a1b13"
+    },
+    {
+      "path": "patches/framework/biv150_kv_worker.py",
+      "sha256": "31cc7f8d48a57c8e6fef23a2200257750d830422b6e887cc4dacdbc2b602ffbf"
+    },
+    {
+      "path": "patches/framework/biv150_mapped_attention.py",
+      "sha256": "72713a90584bc6567706fb881188afa04335230afc13e021c10f862f88d054a1"
+    },
+    {
+      "path": "patches/framework/biv150_mapped_decode.py",
+      "sha256": "d085ad6dcc0fd5dc26188d3e0f5801b8e394dc07a79c05a376192ec9e1e95b4b"
+    },
+    {
+      "path": "patches/framework/biv150_mapped_decode_source.py",
+      "sha256": "919e80abf5b95c55ea63aa8619fa3202cd78b0c4cc0e303df7b4197bf1898316"
+    },
+    {
+      "path": "patches/framework/biv150_mixed_attention_overlap.py",
+      "sha256": "93c3124ccab9311cb98f319d9f786f7aae571f9c1d976d1a9f1d623adca378db"
+    },
+    {
+      "path": "patches/framework/biv150_mixed_token_bucket.py",
+      "sha256": "d2620ff750beb3fab97f372d64a1ec0e5550ee133cc6ca33adb8ba3f43de4605"
+    },
+    {
+      "path": "patches/framework/biv150_mm_cta_group.py",
+      "sha256": "06c7cd9216907886e7d66a81d4fd5d9f78edef9daac2380ca263ce8c1770b8e1"
+    },
+    {
+      "path": "patches/framework/biv150_mm_cta_group_service.py",
+      "sha256": "44fc8e5c887340f245332635a245690946de38f201678b07212137d4c8a716f7"
+    },
+    {
+      "path": "patches/framework/biv150_mm_cta_group_service_source.py",
+      "sha256": "4ab31a9cb864af75be8ad891902b1433cf1bb007a05e18bbbc4310b6aa37016d"
+    },
+    {
+      "path": "patches/framework/biv150_preemption_snapshot.py",
+      "sha256": "c6b3baa96db494e7c22d8c7a3f02980d06d3469c491bf850e9ebac77675204f6"
+    },
+    {
+      "path": "patches/framework/biv150_prefill_visible_prefix.py",
+      "sha256": "87c6a31075939c551402d7007b491546a215584a58ec82caddc08fc7249998d6"
+    },
+    {
+      "path": "patches/framework/biv150_visible_prefix_service.py",
+      "sha256": "7258ad7929ad22676201fec045184f0038be4689f2eef3a51b21e30c658029da"
+    },
+    {
+      "path": "patches/framework/biv150_visible_prefix_service_source.py",
+      "sha256": "464b9ea73f6961097c1cde2c92d97bdf9ed50909e9da1ecbb65f1dd437bccaba"
+    },
+    {
+      "path": "patches/framework/candidates/biv150_kv_capacity_protocol.py",
+      "sha256": "67e4c07566ee3e52f84d6a96a494b8976d858420dadd5f833e66c3291e32fb73"
+    },
+    {
+      "path": "patches/framework/candidates/biv150_kv_full_restore_protocol.py",
+      "sha256": "1aff952a421bdd942d85cb80903c2bbadba69a16c3301ee327ee22fc2b1aacd8"
+    },
+    {
+      "path": "patches/framework/candidates/biv150_kv_full_restore_transaction.py",
+      "sha256": "84be2242656e6ae0a30d65c803c2ae5076e836e0d1b6686731c4197a85b21883"
+    },
+    {
+      "path": "patches/framework/candidates/biv150_kv_full_restore_worker.py",
+      "sha256": "5d9a082fa8a41d5f3b549bf3a2caf02a646da34095cc2b892a1df902946a4477"
+    },
+    {
+      "path": "patches/framework/candidates/biv150_kv_pitched_bridge.cpp",
+      "sha256": "0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44"
+    },
+    {
+      "path": "patches/framework/candidates/biv150_kv_pitched_copy.py",
+      "sha256": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd"
+    },
+    {
+      "path": "patches/framework/candidates/biv150_kv_pitched_save_worker.py",
+      "sha256": "a662e478d20884c5b1d65e0ee3d270a62453d88166b28e092dcaf3b35a3df854"
+    },
+    {
+      "path": "patches/framework/candidates/biv150_kv_progress_victim_protocol.py",
+      "sha256": "72942f1f0c284069492b8ee7e1ca1348743e3b9ee49e7da05b8cf9024ac610ef"
+    },
+    {
+      "path": "patches/framework/candidates/biv150_native_blocking_event.py",
+      "sha256": "327e8aff211f33fd9f7fe0bd841b330e4205a5c0677e7a5e9b7c28ce0fec7365"
+    },
+    {
+      "path": "patches/framework/decode_launch_footer.py",
+      "sha256": "ae71f34662aa199885314b30e757681e3f76fc1ded21b42728d5ff15515867b0"
+    },
+    {
+      "path": "patches/framework/mixed_token_bucket_footer.py",
+      "sha256": "21074c950f7ebfec73215f8db746f13b6980779277b084cec6c79e27b706e620"
+    }
+  ],
+  "cpu_pr_graph_warning": "按F→R→六链→S，旧CPU head H基F，merge-base(S,H)=F。S重建代码同F时三点diff保持CPU自身，无须改旧head；实际构造后核merge-base/diff/merge-tree。只有另从13eb断开重建才需桥或替代head。",
+  "commit_parent_policy": "root先从旧main F创建非force恢复R：R代码身份13eb但parent保F；00的真实parent应为R，后续逐stage，不能直接另起13eb历史。",
+  "inventory_markdown_sha256": "c5f8729d7faafbc0c0b6be57ea23f52478b468e6cb34d860e52b3ef2739b9e16"
+}

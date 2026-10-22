@@ -1,0 +1,49 @@
+{
+  "id": "01-prefill",
+  "title": "MiniCPM prefill Attention启动策略",
+  "recommended_parent": "00-diagnostics",
+  "required_earlier_stages_for_this_package": [
+    "00-diagnostics"
+  ],
+  "entries": [
+    {
+      "path": "vllm_fl/patches/biv150_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/vllm_fl/patches/biv150_runtime.py",
+      "base_blob": null,
+      "base_sha256": null,
+      "head_blob": "a09d943a52cb488607acd04764e582c6ee76532d",
+      "head_sha256": "e63d933859bf305038a014651474a3433e2f12fd0ba87607e2b7d4c8c8fc7c48",
+      "bytes": 3508
+    },
+    {
+      "path": "vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py",
+      "base_blob": "db7fdad9ca0562531ef79b22b6b459889b83176c",
+      "base_sha256": "93fb470cfb9d5b170917a6663922931be22cc70658f5c2fbb2f2541d0864d58f",
+      "head_blob": "1d65d7f29a9b210e12aadc1391bcc0a800dafcf4",
+      "head_sha256": "00baadcdcc85a46e26e52e547e4cd1bded3833673cf59dcbbd5470283ea4c250",
+      "bytes": 18385
+    },
+    {
+      "path": "docs/01-prefill-biv150.md",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/docs/01-prefill-biv150.md",
+      "base_blob": null,
+      "base_sha256": null,
+      "head_blob": "ef1daf3a75cc1ba6ac74e471595d9271c8e06948",
+      "head_sha256": "bc05687cee7655b265439ba3af2c0696758481e48937e9d82b177f85037494f1",
+      "bytes": 841
+    }
+  ],
+  "code_projection_tree_with_original_upstream_readme": "c7c6cde05a8a10da6f7cfb1c12cc6e8265bd7378",
+  "summary": "从原runtime机械抽出原_patch_generic_attention及两段原字符串变换；目标GQA8/head128/multi-token时BM128、BQ16、TILE64、warps8/stages1。vendor入口沿原函数调用，只执行Attention部分。",
+  "boundary": "包装使用00后的共享vendor文件；算法不依赖诊断开关。此安装器会修改site-packages Attention源码、清pycache、重绑backend，须隔离已安装源；不能把Git回到13eb等同安装源也恢复。",
+  "device_or_accuracy_newly_verified": false,
+  "historical_algorithm_function_bodies_modified": false,
+  "integration_split_note": "01仅移除原top-p函数与入口调用；02完整补回。其它代码使用旧快照字节。"
+}

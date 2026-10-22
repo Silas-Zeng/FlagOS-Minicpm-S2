@@ -1,3 +1,31 @@
+## 团队可读视图已完成：一张总表、每run短记、方法/硬件导航（仅自动生成，无实验重审）
+
+独占scripts/build_team_view.py与team/已落；运行`python scripts/build_team_view.py`从registry120条既有登记生成144份Markdown：唯一总表team/experiments.md、117个run短记（同run多阶段保留）、19方法汇总、BI-V150/C500/CPU/未记录平台入口、team/README.md及team/archive-index.md。原登记仍唯一实验数据源，字段缺失显示未记录；设备空白27条不擅自补成BI或C500，C500目前无登记。摘要只摘原登记结果/边界句，不重算/改判实验；原English摘录标原记录，导航状态中文。每run链接已有commands/manifest/raw/report/logs；无常见单列文件时提示见原目录，不声称原证据不存在。
+
+按root已创建PR填当前方法导航：CPU1/2、KV3/4；sql页#8并链接#9/#10组合来源，明确不把组合成绩拆给单项或制造依赖；attention页#6/#9/#10，early页#5/#7。root已报告main恢复R77bc248...且旧F保codex/archive/sql-c3-imported-20261022，六链真实从R继续，framework已采纳F→R→链→S；CPU retarget由root做，本agent不改任何branch/远端。此前57行迁移review不再扩审。
+
+AI/详细SHA/过程稿只通过team/archive-index.md映射现docs/agent-work、analysis/source、原experiments与PR准备/重建等目录，不搬任何原文件，不破坏固定manifest/scripts路径。仅生成视图并核其相对链接存在，registry原字节未动，无模型/设备/新审计套件/原实验重跑；未改root README/CURRENT/AGENTS。当前整理完成即停写供root发布，后续新增登记后只运行同一生成器，不逐份手工改。
+
+## 最新用户纠正：GitHub main回原始框架，全部新增改由方法PR展示
+
+root授权独占docs/pr-rebuild/github-rebuild-review.md定向短审，已完成；不再沿用“旧main SQL+C3只做回顾”的旧组织方案。建议保F d5e2/tree82e37快照，以F为parent追加R恢复13eb/tree649161+明确中文首页白名单，六方法增量从R继续到S、S代码精确回F；不force/不抹旧历史。KV3/4 additive，baseF/oursR/theirsK三方保恢复并仅加工具，可保head/base main。CPU1/2旧head基F，若F→R→六链→S成立，mergebase(S,H)=F，retarget S仍三文件；若六链直接从13eb另起则不成立，会夹历史包，已向root/framework明确此关键条件。最短门是实际R/S产生后merge-base+三点diff+merge-tree结果相对R/S的路径/blob，不预先重写四head/新增桥commit；仅把S指旧F不能再向R重引方法。
+
+复用hardware已核KV路径在13eb全不存在/无相互或CPU-框架前置、FlagGems只有README改动；framework拥有六方法含独立诊断开关盘点。未重复旧源/DB/设备审计，没有新测试/SSH-GPU/GitHub/分支操作，未改registry120/queue92或他人文件。旧组合官方/准确率证据仍归历史SQL+C3，原基线与各重建方法不继承；完整KV事务/失败Event只留实验库。parent负责最终构造/读回/发布，本agent本轮只此迁移review与handoff。
+
+## 最新070004→070452实际短pair已收口，registry120/queue92，停写供root发布
+
+唯一系统后验analysis/source/cpu-combination/screen-system-review.json SHA89da4cbe8ae307ed797f2f663d4d247efd5fb3415a857036ccbd56af18e88b1e；指定中文analysis/2026-10-22-cpu-combination-screen-result.md。SCP14687实际exit0后才核完整A2477555B/0512d379、B2480387B/508f74ef归档，并逐450/451seal及410/412源验证；只runner6f918+helper0e961/1bb85相对原e155三差分，其余原init/代码/installed依赖/原bc51SERVER-decode-seed721201/packages同。实际64-0与262144in8192out同、CPU6/32GiB/KV521936同、四端DB52319474物理dc2c/schema0dc7/logicalc05d实体只读重算同，preempt均0→0。B Engine273944两FIRST_SELECTED，不冒充全步计数/同一步双命中；同链正确性单独见062205。
+
+A39.225860193837434s/6891.780031441377TPS/TTFT20088.914546053275ms，B38.95371279399842s/6939.928972358459TPS/TTFT20063.802888413193ms；TPS+0.6986430312258873%、耗时省0.693795874696379%(0.272147399839s)、TTFT−0.1250025609024985%，保留单轮小正信号，非稳定因果/官方/accuracy，旧单项不相加/103-105不继承。07:02:04/07:06:52Zexit0，封存07:02:34/07:07:32Z均68-0/9031双闭/空GPU，server/Engine消失，两controllerZ仅未回收。A无ERROR，B完成测量后的abort/forcekill关停阶段有8条ERROR组成EngineDeadError尾栈及warnings，全部保留，不写无ERROR或测量失败。
+
+A-control/combined-prelaunch-db-check.json保root首CPU前置误比live物理与backupSHA exit1，无新run/GPU；实际仅header偏移26,27,42,43,94,95六字节差、逻辑同；不是DB内容变更。最终四端同方式snapshot一致。registry仅append两行保旧字节现120×16/queue92一行/均LF，phase与原plan最新完成说明均同步。只本地stdlib/hash/只读DB复算，不重跑旧run或062205/不造suite/不SSH-GPU/不动CURRENT-README-作者材料或代码PRhead；root负责更新协作材料和发布，本agent现在停写。
+
+## 当前另行授权单轮真实短pair：0519静态终审，无新结果
+
+root在062205通过后授权baseline/combined一对原bc51 decode-screen seed721201短服务，framework新launcher0519e554及base mapcd506fa2已由本owner实际diff终审无阻断。map逐byte174402完整410；baseline410/combined412仅6f918 runner与0e961+1bb85，init及其它基点字节/原SERVER/driver/命令尾段保留。只embeddedPython AST/compile，没有副本/套件/服务/GPU执行。独占静态记录analysis/source/cpu-combination/screen-launcher-system-review.json，计划末节同步。原eab7 seal_framework_screen.py直接复用，精确命令已给root；不造新outer。root唯一SSH/GPU。
+
+launcher不自动核DB四端或KV；root基线完成封存后核A_before=A_after=B_before，再最终核B_after三hash及同KV/环境/原负载；两个FIRST_SELECTED必须负载后实际命中。已有方法门不冒充服务与accuracy，旧单项gain不相加；结果待root原件，registry118/queue91暂不变。本owner后继唯一实际新两run验收/登记，不重审旧实验或062205，不为静态终审另跑套件。
+
 ## 最新062205组合真实方法门已通过，registry118/queue91，当前收口停写
 
 root唯一串行run20261022T062205Z-cpu-combination-gate已完成；SCP43608实际exit0、整包225a8539/2035183B与本地55seal过后本agent才执行一次原件后验。独占analysis/source/cpu-combination/062205-system-review.json SHA07c12b13f6b99a0df3621be3c1c36b30f2d0ea36d20daa49492973c0721113bf及指定中文analysis/2026-10-22-cpu-combination-062205-result.md。55seal/10source/d505-abfc/6f918-e155/0e961-1bb85/原依赖、原commands/PIDs/sourcepost/DB实体只读重算/双idle全核。

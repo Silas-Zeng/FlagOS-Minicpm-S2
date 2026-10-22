@@ -1,0 +1,7 @@
+# [Draft] SQLite目标表反射
+
+只加原ad84模块与runner安装footer，fresh automap base用only callable过滤目标表，保缺表None与默认外键闭包；非SQLite走原函数，固定FlagGems SQL源6dc19c。
+
+基于重建堆叠的`02-top-p`；最初所有代码来自比赛原始13eb。算法与前两性能方法独立；堆叠顺序用于精确恢复历史SQL-only测试上下文。现成SQL独立patch也能作用于原13eb runner，但历史服务证据基于retained，不冒称原13eb全树独立结果。
+
+本PR只含manifest列出的增量与独占中文说明，不把其它方法算入本方法。代码为已留存实现的字节拆包；不能把本次重新打包当成新设备/准确率验证。逐项字节身份和父版本见manifest；完整方法之间的依赖与历史证据范围见实验库framework-inventory。请保留Draft并按团队评审决定合入，不把六个PR分别宣称为已独立通过完整官方成绩。

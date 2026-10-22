@@ -1,0 +1,49 @@
+{
+  "id": "03-sql",
+  "title": "SQLite目标表反射",
+  "recommended_parent": "02-top-p",
+  "required_earlier_stages_for_this_package": [
+    "02-top-p"
+  ],
+  "entries": [
+    {
+      "path": "vllm_fl/worker/model_runner.py",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/vllm_fl/worker/model_runner.py",
+      "base_blob": "343dfdd45d176d38ee28a6a8e4b53a73be206062",
+      "base_sha256": "446f12c0653131c9a4f5ff7783e52e1a3882d2b20cdd50a6899d218a2dc0bd64",
+      "head_blob": "8f28141b8929762bd9525084fd7c3c17e9b4a368",
+      "head_sha256": "c81e6ae9ba4bed1fe207c45755c91787e39d5a2b044c42c9d6eb7552b36360ed",
+      "bytes": 341030
+    },
+    {
+      "path": "vllm_fl/patches/biv150_sql_reflection.py",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/vllm_fl/patches/biv150_sql_reflection.py",
+      "base_blob": null,
+      "base_sha256": null,
+      "head_blob": "dedbbe07dfc2dbb7a58567e69ac430888bcae0b6",
+      "head_sha256": "ad84c9affe0c3f4b9a4432dd2cbb3861306726f07d53328e129af41c74ea8e8e",
+      "bytes": 2762
+    },
+    {
+      "path": "docs/03-sql-biv150.md",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/docs/03-sql-biv150.md",
+      "base_blob": null,
+      "base_sha256": null,
+      "head_blob": "39338da4c1e68317dc7ca97493eec9cc298db0d0",
+      "head_sha256": "592c0832ceda6015973fce59a4eeed8dd2db287a403829fdd4f829518605cd08",
+      "bytes": 794
+    }
+  ],
+  "code_projection_tree_with_original_upstream_readme": "5292f4256d3c5dad0f23c7327d5122944438ba00",
+  "summary": "只加原ad84模块与runner安装footer，fresh automap base用only callable过滤目标表，保缺表None与默认外键闭包；非SQLite走原函数，固定FlagGems SQL源6dc19c。",
+  "boundary": "算法与前两性能方法独立；堆叠顺序用于精确恢复历史SQL-only测试上下文。现成SQL独立patch也能作用于原13eb runner，但历史服务证据基于retained，不冒称原13eb全树独立结果。",
+  "device_or_accuracy_newly_verified": false,
+  "historical_algorithm_function_bodies_modified": false,
+  "integration_split_note": "01仅移除原top-p函数与入口调用；02完整补回。其它代码使用旧快照字节。"
+}

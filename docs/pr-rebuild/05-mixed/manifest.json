@@ -1,0 +1,49 @@
+{
+  "id": "05-mixed",
+  "title": "Attention内部天然单token前缀拆分",
+  "recommended_parent": "04-decode-3d",
+  "required_earlier_stages_for_this_package": [
+    "04-decode-3d"
+  ],
+  "entries": [
+    {
+      "path": "vllm_fl/worker/model_runner.py",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/vllm_fl/worker/model_runner.py",
+      "base_blob": "6f2435956ef061a75d41b66b3242f55e3ceb1323",
+      "base_sha256": "7ddf885ac0fc95af291a67f7e6289224af00ccdde7cbf286deb5302780bd6953",
+      "head_blob": "5288f44709edb1334db697d2bac77715711899f8",
+      "head_sha256": "e155a16669e69b7eb7aff370dbcbcf225a4f593fa42b2399722e96999b53a1f1",
+      "bytes": 341577
+    },
+    {
+      "path": "vllm_fl/patches/biv150_mixed_decode.py",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/vllm_fl/patches/biv150_mixed_decode.py",
+      "base_blob": null,
+      "base_sha256": null,
+      "head_blob": "01e1f165fce28503f6f11c29d2a002b868d9ae91",
+      "head_sha256": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+      "bytes": 12461
+    },
+    {
+      "path": "docs/05-mixed-biv150.md",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/docs/05-mixed-biv150.md",
+      "base_blob": null,
+      "base_sha256": null,
+      "head_blob": "7be03857f2cd2df1e1937e376396f1141b2e5929",
+      "head_sha256": "f0e31006c37793890a68a650b9303a3a7e38ae26489f2dd3957b4ef308149733",
+      "bytes": 760
+    }
+  ],
+  "code_projection_tree_with_original_upstream_readme": "5c14cfb8d3a452e97a67758873bf18039e1bf989",
+  "summary": "加入原a129模块与原footer，builder构造天然连续单token前缀计划，forward拆原Attention的decode/prefill范围，不排序请求、不拆整个模型。",
+  "boundary": "硬依赖已安装原e5 DecodeLaunch以及Attention54c/backend1219/helper59d9。mixed把部分原2D转3D，归约顺序变化；准确率属于对应完整组合，不能把它归入SQL。",
+  "device_or_accuracy_newly_verified": false,
+  "historical_algorithm_function_bodies_modified": false,
+  "integration_split_note": "01仅移除原top-p函数与入口调用；02完整补回。其它代码使用旧快照字节。"
+}

@@ -14,7 +14,7 @@ from pathlib import Path
 import re
 import subprocess
 
-ALLOWED = {'Silas-Zeng/FlagOS-S2-Minicpm-throughput',
+ALLOWED = {'Silas-Zeng/FlagOS-Minicpm-S2',
            'Silas-Zeng/FlagOS-S2-vllm-plugin-FL', 'Silas-Zeng/FlagGems'}
 GH = 'C:/Program Files/GitHub CLI/gh.exe'
 PATTERNS = [rb'-----BEGIN (?:OPENSSH |RSA |EC |DSA |ENCRYPTED )?PRIVATE KEY-----',
@@ -107,7 +107,7 @@ def main():
 
     head = api('GET', 'git/ref/heads/main', allow_missing=True)
     if head is None:
-        seed = '# 团队代码协作\n\n完整源码同步中，实验与中文报告见 [实验记录库](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput)。\n'
+        seed = '# 团队代码协作\n\n完整源码同步中，实验与中文报告见 [实验记录库](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2)。\n'
         api('PUT', 'contents/README.md', {'message': '初始化私有团队协作库',
                                         'content': base64.b64encode(seed.encode()).decode(), 'branch': 'main'})
         head = api('GET', 'git/ref/heads/main')

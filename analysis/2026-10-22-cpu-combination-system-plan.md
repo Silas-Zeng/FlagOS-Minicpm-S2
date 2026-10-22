@@ -1,3 +1,5 @@
+> 后续070004/070452单轮真实短pair现也已完成并唯一验收：同KV521936/同DB四端，TPS+0.698643031%、TTFT−0.125002561%，仅小单轮信号；详见 `analysis/2026-10-22-cpu-combination-screen-result.md`。registry120/queue92收口，下方未开始/待结果均为历史计划，不自动继续设备。
+
 > 最新收口：062205真实方法组合门已完成并唯一实际验收通过，见 `analysis/2026-10-22-cpu-combination-062205-result.md`。registry118/queue91已登记，性能和整模型accuracy未测。下文“待最终pin/未有原件”等为实施前计划，不是当前待办，服务/pair未自动启动。
 
 # CPU metadata 与 async token 组合：最短验证的系统计划
@@ -73,3 +75,10 @@ DB或KV或参数任一不满足即保留原件、收益null/不可归因；不�
 旧 sealer 可复用 source/live/54c/DB-after/两个 FIRST_SELECTED 的只读取证，但它要求exit0、没有替失败run封存；新任务仍须保留失败/清理证据。controller退出后再取后态，68MiB/0%、GPU空进程表、9031双栈关闭、owned进程消失或明确Z，不能把shutdown尾ERROR与测量阶段故障混写。
 
 本文件仅来源阅读和计划；新 gate 尚待最终 pin/真实原件，registry/queue保持117/90不动。当前以root选择的方法门为准，以上服务与pair均不是已授权启动项。
+
+
+## 后续单轮短服务pair已另行授权：0519静态终审
+
+root在062205通过后另行决定只跑一对原bc51 decode短筛；framework拥有`launch_cpu_combination_screen.sh`（0519e554…）及完整基点map `cpu-combination-base-sha256.json`（cd506fa2…）。本owner只做定向diff，embedded Python AST/compile，不执行副本/旧门或服务；map逐byte原174402完整410，新baseline410/combined412只替runner6f918并增加两个原helper。其余init/所有基点字节及原decode-screen/seed721201/SQL安装预检/唯一driver启动不变。双栈预检、完整source/live/归档map与合法内部file alias解引用均已审，无本轮阻断。静态回执`analysis/source/cpu-combination/screen-launcher-system-review.json`。
+
+结束原样调用`python3 /workspace/experiments/minicpm-s2/scripts/seal_framework_screen.py <RID>`，脚本eab7f787补DB-after/live-source/installed54c/双栈68-0空进程与ownedPID消失或Z/选择标记；它只收成功exit0，不自动tar/全目录seal，root复用原收集命令即可。launcher不自动保证paired身份，root须先核A前后=B前DB三hash，最终核B后及实际同KV；后验不匹配只记null收益，不凑容量/看TPS择优，不新大accuracy或重复062205。此段覆盖上文“当前不排pair”，并未声称已有run或结果；registry/queue暂不新增。

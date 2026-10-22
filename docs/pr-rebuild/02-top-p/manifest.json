@@ -1,0 +1,49 @@
+{
+  "id": "02-top-p",
+  "title": "直方图zoom top-p过滤",
+  "recommended_parent": "01-prefill",
+  "required_earlier_stages_for_this_package": [
+    "01-prefill"
+  ],
+  "entries": [
+    {
+      "path": "vllm_fl/patches/biv150_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/vllm_fl/patches/biv150_runtime.py",
+      "base_blob": "a09d943a52cb488607acd04764e582c6ee76532d",
+      "base_sha256": "e63d933859bf305038a014651474a3433e2f12fd0ba87607e2b7d4c8c8fc7c48",
+      "head_blob": "1a1f4e610514cab17a7b5625f6bc1d54ac954988",
+      "head_sha256": "a0c09c51826e0b9e0e5c4f320e68451359db44001d56fd68e1e78de8dda2c9b4",
+      "bytes": 5035
+    },
+    {
+      "path": "vllm_fl/patches/biv150_top_p_triton.py",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/vllm_fl/patches/biv150_top_p_triton.py",
+      "base_blob": null,
+      "base_sha256": null,
+      "head_blob": "99b84acc8cef0f5f39f7b3ef9dd0a7eea998eed0",
+      "head_sha256": "da77c411a88ad4ead072c99cdc4edb52b5bef5b8e5990b9cc8e04db08ed31ca9",
+      "bytes": 9692
+    },
+    {
+      "path": "docs/02-top-p-biv150.md",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/docs/02-top-p-biv150.md",
+      "base_blob": null,
+      "base_sha256": null,
+      "head_blob": "3c6ea686135f8343780d9b4b017bfdefb3a5b80f",
+      "head_sha256": "9db66761a42fc09c30b0e12b3da57357d61c26530a98108f609de8e9c09ae1a6",
+      "bytes": 767
+    }
+  ],
+  "code_projection_tree_with_original_upstream_readme": "6ef1ca85f2607261e9d52832bf57851c26246efa",
+  "summary": "加入原_patch_top_p_sampler和原bounded histogram实现，并在共享入口中按原顺序先top-p后Attention；top-p-only、float32 logits、vocab130560的路由及其余fallback逐byte保留。",
+  "boundary": "此堆叠依赖是共享biv150_runtime文件的拆包关系，top-p算法不依赖prefill计算。01与02中原算法函数体不改，02完成后共享runtime精确回受测a0c。",
+  "device_or_accuracy_newly_verified": false,
+  "historical_algorithm_function_bodies_modified": false,
+  "integration_split_note": "01仅移除原top-p函数与入口调用；02完整补回。其它代码使用旧快照字节。"
+}

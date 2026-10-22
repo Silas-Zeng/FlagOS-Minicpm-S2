@@ -1,0 +1,233 @@
+{
+  "repository": "Silas-Zeng/FlagOS-S2-vllm-plugin-FL",
+  "source_baseline": "13eb9be69ecc5b5ca4f79c44e9ee40081eaa1bf0",
+  "previous_main": "d5e2e3a54b48dcb1b50f575d2420979591fb3e1c",
+  "archive_branch": "codex/archive/sql-c3-imported-20261022",
+  "restored_main": "77bc248820e0032873cf2461d513a7a82b82347c",
+  "restored_tree": "8efb2ffbbd18c16b40cca50398d731559610038b",
+  "restored_files": 405,
+  "force": false,
+  "source_check": "所有原始源码与13eb相同；只保留新的中文README与原README.upstream",
+  "stages": [
+    {
+      "id": "00-diagnostics",
+      "title": "实验配置与诊断开关",
+      "branch": "codex/20261022-framework-00-diagnostics",
+      "head_sha": "2555b4080b2cb8803941a477163e37d3c87b6578",
+      "parent_sha": "77bc248820e0032873cf2461d513a7a82b82347c",
+      "tree_sha": "c11a79e35df04a0755beaca78b67cb2afb42d718",
+      "paths": [
+        "vllm_fl/__init__.py",
+        "vllm_fl/platform.py",
+        "vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py",
+        "docs/00-diagnostics-biv150.md"
+      ]
+    },
+    {
+      "id": "01-prefill",
+      "title": "MiniCPM prefill Attention启动策略",
+      "branch": "codex/20261022-framework-01-prefill",
+      "head_sha": "452f409f05802adf73e77f5cce658745f85f2f12",
+      "parent_sha": "2555b4080b2cb8803941a477163e37d3c87b6578",
+      "tree_sha": "100858011cc9ca69eea169213c3d7daf97c7e7e2",
+      "paths": [
+        "vllm_fl/patches/biv150_runtime.py",
+        "vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py",
+        "docs/01-prefill-biv150.md"
+      ]
+    },
+    {
+      "id": "02-top-p",
+      "title": "直方图zoom top-p过滤",
+      "branch": "codex/20261022-framework-02-top-p",
+      "head_sha": "1c19c1519b93718fdd9790fe6495c130aa36efb3",
+      "parent_sha": "452f409f05802adf73e77f5cce658745f85f2f12",
+      "tree_sha": "79652e85eae7e7143ae552e0cf2cdde2ab5f0d10",
+      "paths": [
+        "vllm_fl/patches/biv150_runtime.py",
+        "vllm_fl/patches/biv150_top_p_triton.py",
+        "docs/02-top-p-biv150.md"
+      ]
+    },
+    {
+      "id": "03-sql",
+      "title": "SQLite目标表反射",
+      "branch": "codex/20261022-framework-03-sql",
+      "head_sha": "07bdc22ea3ecf19cdc5aaad61508152d1abe6c55",
+      "parent_sha": "1c19c1519b93718fdd9790fe6495c130aa36efb3",
+      "tree_sha": "19b70dc48d81b65ba9f15c2e7c5a4c90a287a1ff",
+      "paths": [
+        "vllm_fl/worker/model_runner.py",
+        "vllm_fl/patches/biv150_sql_reflection.py",
+        "docs/03-sql-biv150.md"
+      ]
+    },
+    {
+      "id": "04-decode-3d",
+      "title": "3D decode的w2s1启动",
+      "branch": "codex/20261022-framework-04-decode-3d",
+      "head_sha": "11223e56eb7e604ea29d31400eccaabb94023c02",
+      "parent_sha": "07bdc22ea3ecf19cdc5aaad61508152d1abe6c55",
+      "tree_sha": "2f10289661970d7dfce5f69894e1562f127db8ff",
+      "paths": [
+        "vllm_fl/worker/model_runner.py",
+        "vllm_fl/patches/biv150_decode_launch_runtime.py",
+        "docs/04-decode-3d-biv150.md"
+      ]
+    },
+    {
+      "id": "05-mixed",
+      "title": "Attention内部天然单token前缀拆分",
+      "branch": "codex/20261022-framework-05-mixed",
+      "head_sha": "ac966b359f7a43de8c689cf684e536391acf3b23",
+      "parent_sha": "11223e56eb7e604ea29d31400eccaabb94023c02",
+      "tree_sha": "e21aed921612a4c2dac1edbc7b56b3be7f0cc5f8",
+      "paths": [
+        "vllm_fl/worker/model_runner.py",
+        "vllm_fl/patches/biv150_mixed_decode.py",
+        "docs/05-mixed-biv150.md"
+      ]
+    }
+  ],
+  "new_prs": [
+    {
+      "id": "00-diagnostics",
+      "number": 5,
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/5",
+      "title": "实验配置与诊断开关",
+      "head": "codex/20261022-framework-00-diagnostics",
+      "head_sha": "2555b4080b2cb8803941a477163e37d3c87b6578",
+      "base": "main",
+      "base_sha": "77bc248820e0032873cf2461d513a7a82b82347c",
+      "body": "默认关闭的CPU线程cap、sampler compile诊断开关、batch/prefix/block覆盖通道，以及原等价block16分支日志。不能把它们记成SQL或Attention收益；正式评测未借这些通道改参数。\n\n基于重建堆叠的`root-restored-baseline-R`；最初所有代码来自比赛原始13eb。与性能方法算法独立；为逐byte复建历史retained tree先单列。默认无环境变量时不启用覆盖；不建议借本PR修改比赛参数。\n\n本PR只含manifest列出的增量与独占中文说明，不把其它方法算入本方法。代码为已留存实现的字节拆包；不能把本次重新打包当成新设备/准确率验证。逐项字节身份和父版本见manifest；完整方法之间的依赖与历史证据范围见实验库framework-inventory。请保留Draft并按团队评审决定合入，不把六个PR分别宣称为已独立通过完整官方成绩。\n\n本项目实现以前曾直接进入 main；本轮先恢复原始框架，再以方法 PR 展示这些新增改动。历史提交和测试证据保留，本 PR 保持 Draft。\n\n[原始方法与证据](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-rebuild/framework-inventory.md) · [团队实验入口](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/README.md)\n\n本方法的实验记录：[尝试、测试、结果及是否保留](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/methods/early.md)。",
+      "changed_files": 4,
+      "draft": true,
+      "merged": false
+    },
+    {
+      "id": "01-prefill",
+      "number": 6,
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/6",
+      "title": "MiniCPM prefill Attention启动策略",
+      "head": "codex/20261022-framework-01-prefill",
+      "head_sha": "452f409f05802adf73e77f5cce658745f85f2f12",
+      "base": "codex/20261022-framework-00-diagnostics",
+      "base_sha": "2555b4080b2cb8803941a477163e37d3c87b6578",
+      "body": "从原runtime机械抽出原_patch_generic_attention及两段原字符串变换；目标GQA8/head128/multi-token时BM128、BQ16、TILE64、warps8/stages1。vendor入口沿原函数调用，只执行Attention部分。\n\n基于重建堆叠的`00-diagnostics`；最初所有代码来自比赛原始13eb。包装使用00后的共享vendor文件；算法不依赖诊断开关。此安装器会修改site-packages Attention源码、清pycache、重绑backend，须隔离已安装源；不能把Git回到13eb等同安装源也恢复。\n\n本PR只含manifest列出的增量与独占中文说明，不把其它方法算入本方法。代码为已留存实现的字节拆包；不能把本次重新打包当成新设备/准确率验证。逐项字节身份和父版本见manifest；完整方法之间的依赖与历史证据范围见实验库framework-inventory。请保留Draft并按团队评审决定合入，不把六个PR分别宣称为已独立通过完整官方成绩。\n\n本项目实现以前曾直接进入 main；本轮先恢复原始框架，再以方法 PR 展示这些新增改动。历史提交和测试证据保留，本 PR 保持 Draft。\n\n[原始方法与证据](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-rebuild/framework-inventory.md) · [团队实验入口](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/README.md)\n\n本方法的实验记录：[尝试、测试、结果及是否保留](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/methods/attention.md)。\n\n本 PR 堆叠在 #5 上；先审阅前置项，当前 diff 只展示本方法增量。",
+      "changed_files": 3,
+      "draft": true,
+      "merged": false
+    },
+    {
+      "id": "02-top-p",
+      "number": 7,
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/7",
+      "title": "直方图zoom top-p过滤",
+      "head": "codex/20261022-framework-02-top-p",
+      "head_sha": "1c19c1519b93718fdd9790fe6495c130aa36efb3",
+      "base": "codex/20261022-framework-01-prefill",
+      "base_sha": "452f409f05802adf73e77f5cce658745f85f2f12",
+      "body": "加入原_patch_top_p_sampler和原bounded histogram实现，并在共享入口中按原顺序先top-p后Attention；top-p-only、float32 logits、vocab130560的路由及其余fallback逐byte保留。\n\n基于重建堆叠的`01-prefill`；最初所有代码来自比赛原始13eb。此堆叠依赖是共享biv150_runtime文件的拆包关系，top-p算法不依赖prefill计算。01与02中原算法函数体不改，02完成后共享runtime精确回受测a0c。\n\n本PR只含manifest列出的增量与独占中文说明，不把其它方法算入本方法。代码为已留存实现的字节拆包；不能把本次重新打包当成新设备/准确率验证。逐项字节身份和父版本见manifest；完整方法之间的依赖与历史证据范围见实验库framework-inventory。请保留Draft并按团队评审决定合入，不把六个PR分别宣称为已独立通过完整官方成绩。\n\n本项目实现以前曾直接进入 main；本轮先恢复原始框架，再以方法 PR 展示这些新增改动。历史提交和测试证据保留，本 PR 保持 Draft。\n\n[原始方法与证据](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-rebuild/framework-inventory.md) · [团队实验入口](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/README.md)\n\n本方法的实验记录：[尝试、测试、结果及是否保留](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/methods/early.md)。\n\n本 PR 堆叠在 #6 上；先审阅前置项，当前 diff 只展示本方法增量。",
+      "changed_files": 3,
+      "draft": true,
+      "merged": false
+    },
+    {
+      "id": "03-sql",
+      "number": 8,
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/8",
+      "title": "SQLite目标表反射",
+      "head": "codex/20261022-framework-03-sql",
+      "head_sha": "07bdc22ea3ecf19cdc5aaad61508152d1abe6c55",
+      "base": "codex/20261022-framework-02-top-p",
+      "base_sha": "1c19c1519b93718fdd9790fe6495c130aa36efb3",
+      "body": "只加原ad84模块与runner安装footer，fresh automap base用only callable过滤目标表，保缺表None与默认外键闭包；非SQLite走原函数，固定FlagGems SQL源6dc19c。\n\n基于重建堆叠的`02-top-p`；最初所有代码来自比赛原始13eb。算法与前两性能方法独立；堆叠顺序用于精确恢复历史SQL-only测试上下文。现成SQL独立patch也能作用于原13eb runner，但历史服务证据基于retained，不冒称原13eb全树独立结果。\n\n本PR只含manifest列出的增量与独占中文说明，不把其它方法算入本方法。代码为已留存实现的字节拆包；不能把本次重新打包当成新设备/准确率验证。逐项字节身份和父版本见manifest；完整方法之间的依赖与历史证据范围见实验库framework-inventory。请保留Draft并按团队评审决定合入，不把六个PR分别宣称为已独立通过完整官方成绩。\n\n本项目实现以前曾直接进入 main；本轮先恢复原始框架，再以方法 PR 展示这些新增改动。历史提交和测试证据保留，本 PR 保持 Draft。\n\n已有测试：真实 SQLAlchemy 2.0.48 的6项配置契约门通过；保留 performance 基点上的 SQL 独立短筛两轮分别43.199/43.091秒，对照120.471秒，约2.79倍吞吐信号（4K输入、128输出、64请求）。早期未保存DB前后快照，不称缓存完全匹配或官方成绩；没有SQL单项模型准确率，101/105和103/105分别属于SQL+C2和SQL+C3组合。\n\n[原始方法与证据](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-rebuild/framework-inventory.md) · [团队实验入口](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/README.md)\n\n本方法的实验记录：[尝试、测试、结果及是否保留](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/methods/sql.md)。\n\n本 PR 堆叠在 #7 上；先审阅前置项，当前 diff 只展示本方法增量。",
+      "changed_files": 3,
+      "draft": true,
+      "merged": false
+    },
+    {
+      "id": "04-decode-3d",
+      "number": 9,
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/9",
+      "title": "3D decode的w2s1启动",
+      "head": "codex/20261022-framework-04-decode-3d",
+      "head_sha": "11223e56eb7e604ea29d31400eccaabb94023c02",
+      "base": "codex/20261022-framework-03-sql",
+      "base_sha": "07bdc22ea3ecf19cdc5aaad61508152d1abe6c55",
+      "body": "加入原e5模块与原footer，在严格BF16/3D/shape/feature守卫下把4warps3stages改为2warps1stage，kernel/grid/reducer不改。\n\n基于重建堆叠的`03-sql`；最初所有代码来自比赛原始13eb。真正源码依赖prefill产生的Attention54c和helper59d9；SQL不是算法依赖，只为保持runner footer与历史073309字节及推荐堆叠顺序。此处不能混入mixed拆分。\n\n本PR只含manifest列出的增量与独占中文说明，不把其它方法算入本方法。代码为已留存实现的字节拆包；不能把本次重新打包当成新设备/准确率验证。逐项字节身份和父版本见manifest；完整方法之间的依赖与历史证据范围见实验库framework-inventory。请保留Draft并按团队评审决定合入，不把六个PR分别宣称为已独立通过完整官方成绩。\n\n本项目实现以前曾直接进入 main；本轮先恢复原始框架，再以方法 PR 展示这些新增改动。历史提交和测试证据保留，本 PR 保持 Draft。\n\n[原始方法与证据](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-rebuild/framework-inventory.md) · [团队实验入口](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/README.md)\n\n本方法的实验记录：[尝试、测试、结果及是否保留](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/methods/attention.md)。\n\n本 PR 堆叠在 #8 上；先审阅前置项，当前 diff 只展示本方法增量。",
+      "changed_files": 3,
+      "draft": true,
+      "merged": false
+    },
+    {
+      "id": "05-mixed",
+      "number": 10,
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/10",
+      "title": "Attention内部天然单token前缀拆分",
+      "head": "codex/20261022-framework-05-mixed",
+      "head_sha": "ac966b359f7a43de8c689cf684e536391acf3b23",
+      "base": "codex/20261022-framework-04-decode-3d",
+      "base_sha": "11223e56eb7e604ea29d31400eccaabb94023c02",
+      "body": "加入原a129模块与原footer，builder构造天然连续单token前缀计划，forward拆原Attention的decode/prefill范围，不排序请求、不拆整个模型。\n\n基于重建堆叠的`04-decode-3d`；最初所有代码来自比赛原始13eb。硬依赖已安装原e5 DecodeLaunch以及Attention54c/backend1219/helper59d9。mixed把部分原2D转3D，归约顺序变化；准确率属于对应完整组合，不能把它归入SQL。\n\n本PR只含manifest列出的增量与独占中文说明，不把其它方法算入本方法。代码为已留存实现的字节拆包；不能把本次重新打包当成新设备/准确率验证。逐项字节身份和父版本见manifest；完整方法之间的依赖与历史证据范围见实验库framework-inventory。请保留Draft并按团队评审决定合入，不把六个PR分别宣称为已独立通过完整官方成绩。\n\n本项目实现以前曾直接进入 main；本轮先恢复原始框架，再以方法 PR 展示这些新增改动。历史提交和测试证据保留，本 PR 保持 Draft。\n\n[原始方法与证据](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-rebuild/framework-inventory.md) · [团队实验入口](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/README.md)\n\n本方法的实验记录：[尝试、测试、结果及是否保留](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/team/methods/attention.md)。\n\n本 PR 堆叠在 #9 上；先审阅前置项，当前 diff 只展示本方法增量。",
+      "changed_files": 3,
+      "draft": true,
+      "merged": false
+    }
+  ],
+  "existing_prs": [
+    {
+      "number": 1,
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/1",
+      "title": "复用 CPU metadata，减少输入准备中的小型 GPU 操作",
+      "base": "codex/20261022-framework-05-mixed",
+      "base_sha": "ac966b359f7a43de8c689cf684e536391acf3b23",
+      "head": "codex/20261022-cpu-metadata-reuse",
+      "head_sha": "169e73370db098fa2aefe80b00f86a99700e6cc1",
+      "draft": true,
+      "merged": false,
+      "changed_files": 3,
+      "body": "输入准备已在 CPU 算出 positions 和 sequence lengths，原路径仍通过小型 GPU 操作重新生成这些 metadata。本改动复用 CPU 结果和持久 pinned buffer，异步写回原 GPU 地址；配置或张量条件不满足时沿用原表达式。提交包含受测 runner、独立模块与中文方法说明。\n\n已有 BI-V150 验证：五种形状的真实方法门、buffer 地址、事件生命周期和 graph consumer 检查通过；同 KV 容量、同 DB 的单次 64 请求短对照全部完成，吞吐约 **+0.2867%**，平均 TTFT 约 **+0.2344%（变慢）**。这是单轮小信号，尚无新整模型准确率或稳定收益结论，保留 Draft。C500 未验证，runtime 没有按硬件型号自动禁用。\n\n本 PR 现在堆叠于 [#10](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/10) 的 SQL+C3 前置方法链。受测代码原父提交为 `d5e2e3a…`；前置链的实际代码已精确重建为同一版本，因此保留本 PR 的原受测 head。GitHub main 已恢复比赛原始框架，本 PR 尚未合入主线。与 async token PR 独立；两者合并仅在 helper import 位置发生文本冲突，解决时必须保留两条 import。双向静态组合及解决补丁见[合并说明](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-preparation/combination-review.md)，实际组合验证见下方记录。\n\n详见本分支的 [中文方法说明](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/codex/20261022-cpu-metadata-reuse/docs/cpu-metadata-reuse.md)及实验库的[源码与证据清单](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-preparation/cpu-metadata/manifest.json)。不改官方服务参数、benchmark、模型或量化设置。\n\n2026-10-22 补充组合验证：固定组合 runner `6f918ae6…` 已在 BI-V150 完成 `20261022T062205Z-cpu-combination-gate` 真实方法门。五种形状的 55 项数据/地址检查、四轮包含 input IDs 的图读取、同次双快路径计数与 RNG 检查通过；两 helper 累计分别命中 9 / 7 次，DB 前后相同，结束后设备空闲。该门使用真实方法与缓冲区、fixture 状态，不加载模型权重，属于方法正确性验证；随后另做的真实服务短测见下文。详见[组合上卡记录](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/analysis/2026-10-22-cpu-combination-062205-result.md)。\n\n2026-10-22 的组合真实服务验证：固定 runner `6f918ae6…` 的基线 `20261022T070004Z` 与组合 `20261022T070452Z` 均 **64 成功、0 失败**。原服务参数、负载和 seed 相同，KV 均为 **521936 tokens**，四份 DB 快照一致，两条快路径均在组合 EngineCore 实际触发。\n\n| 指标 | 基线 | 两方法组合 |\n| --- | ---: | ---: |\n| total tokens/s | 6891.7800 | 6939.9290（+0.6986%） |\n| 平均 TTFT | 20088.9145 ms | 20063.8029 ms（−0.1250%） |\n\n这是 CPU metadata 与 async token 的**组合结果**，不能分别算作本 PR 的收益，也不把两个单项百分比相加。只有一次顺序短对照，尚不构成稳定收益或新整模型准确率结论，继续保留 Draft；C500 未验证。组合轮在测量完成后的关停阶段有 `EngineDeadError` 尾栈，原日志与清理证据完整保留。详见[中文测试报告](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/analysis/2026-10-22-cpu-combination-screen-result.md)、[完整复核与条件](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/analysis/source/cpu-combination/screen-system-review.json)及[原始归档和精确命令](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/analysis/source/cpu-combination/screen-collection-receipt.json)。"
+    },
+    {
+      "number": 2,
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/2",
+      "title": "融合异步采样 token 的整数 gather/scatter 更新",
+      "base": "codex/20261022-framework-05-mixed",
+      "base_sha": "ac966b359f7a43de8c689cf684e536391acf3b23",
+      "head": "codex/20261022-async-token-update",
+      "head_sha": "bb2c01f8687c158fc011e7013338c3971a5e4c3b",
+      "draft": true,
+      "merged": false,
+      "changed_files": 3,
+      "body": "请求删除、压缩或重排后，原异步输入准备先 gather 上批采样 token，再 scatter 到当前 input IDs。本改动以新实现的 int32 Triton kernel 完成一次 gather/scatter，保留 CPU 请求映射、两份索引 H2D、原 stream 与回退路径；不改采样算法或 token 内容。提交包含受测 runner、独立模块与中文说明。\n\n已有 BI-V150 验证：真实方法的 12 类 case 通过，覆盖重排、删除、新请求空洞、stride、跨 stream 与回退；同 KV 容量、同 DB 的单次 64 请求短对照全部完成，吞吐约 **+0.7037%**，平均 TTFT 约 **−0.8656%**。这是单轮小信号，尚无新整模型准确率或稳定收益结论，保留 Draft。C500 未验证。\n\n本 PR 现在堆叠于 [#10](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/10) 的 SQL+C3 前置方法链。受测代码原父提交为 `d5e2e3a…`；前置链的实际代码已精确重建为同一版本，因此保留本 PR 的原受测 head。GitHub main 已恢复比赛原始框架，本 PR 尚未合入主线。与 CPU metadata PR 独立；双向组合仅在 helper import 位置冲突，保留两条 import 的解决补丁与后续次序见[合并说明](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-preparation/combination-review.md)。实际组合验证见下方记录。\n\n详见本分支的 [中文方法说明](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/codex/20261022-async-token-update/docs/async-token-update.md)及[源码与证据清单](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-preparation/async-token-update/manifest.json)。不改官方服务参数、benchmark、模型或量化设置。\n\n2026-10-22 补充组合验证：固定组合 runner `6f918ae6…` 已在 BI-V150 完成 `20261022T062205Z-cpu-combination-gate` 真实方法门。五种形状的 55 项数据/地址检查、四轮包含 input IDs 的图读取、同次双快路径计数与 RNG 检查通过；两 helper 累计分别命中 9 / 7 次，DB 前后相同，结束后设备空闲。该门使用真实方法与缓冲区、fixture 状态，不加载模型权重，属于方法正确性验证；随后另做的真实服务短测见下文。详见[组合上卡记录](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/analysis/2026-10-22-cpu-combination-062205-result.md)。\n\n2026-10-22 的组合真实服务验证：固定 runner `6f918ae6…` 的基线 `20261022T070004Z` 与组合 `20261022T070452Z` 均 **64 成功、0 失败**。原服务参数、负载和 seed 相同，KV 均为 **521936 tokens**，四份 DB 快照一致，两条快路径均在组合 EngineCore 实际触发。\n\n| 指标 | 基线 | 两方法组合 |\n| --- | ---: | ---: |\n| total tokens/s | 6891.7800 | 6939.9290（+0.6986%） |\n| 平均 TTFT | 20088.9145 ms | 20063.8029 ms（−0.1250%） |\n\n这是 CPU metadata 与 async token 的**组合结果**，不能分别算作本 PR 的收益，也不把两个单项百分比相加。只有一次顺序短对照，尚不构成稳定收益或新整模型准确率结论，继续保留 Draft；C500 未验证。组合轮在测量完成后的关停阶段有 `EngineDeadError` 尾栈，原日志与清理证据完整保留。详见[中文测试报告](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/analysis/2026-10-22-cpu-combination-screen-result.md)、[完整复核与条件](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/analysis/source/cpu-combination/screen-system-review.json)及[原始归档和精确命令](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/analysis/source/cpu-combination/screen-collection-receipt.json)。"
+    },
+    {
+      "number": 3,
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/3",
+      "title": "增加显式调用的 KV 连续页合并复制工具",
+      "base": "main",
+      "base_sha": "d5e2e3a54b48dcb1b50f575d2420979591fb3e1c",
+      "head": "codex/20261022-kv-contiguous-copy",
+      "head_sha": "38c5d4547212f609224e4edace4ac0f0f23fe15b",
+      "draft": true,
+      "merged": false,
+      "changed_files": 2,
+      "body": "逐页复制 KV 会产生较多 API 提交。本改动提供显式调用的连续页合并复制工具，在保留逻辑顺序和原始字节的条件下，将连续页合并为复制段。提交只含工具模块与中文说明，由后续调用方决定接入位置。\n\n已有 BI-V150 字节门覆盖 normal/packed 布局、连续与分片页序。工具只提交复制；producer 依赖、完成事件、对象生命周期、页所有权和失败后的等待由调用方负责。当前没有默认服务接入或端到端吞吐声明，保留 Draft，C500 未验证。\n\n受测实现整理自历史快照 `d5e2e3a…`；当前以已恢复比赛原始框架的 main 为审阅基线，保留原受测 head。此 PR 只有独立新增的工具与说明，不会重新带入旧 SQL+C3 代码。与二维 SAVE 工具无代码依赖，新增路径独立，可任意顺序评审合入；不改初始化入口、serving 参数或完整 KV 协议。\n\n详见本分支的 [中文方法说明](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/codex/20261022-kv-contiguous-copy/docs/kv-contiguous-copy.md)及实验库的[源码与证据清单](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-preparation/kv-contiguous-copy/manifest.json)。"
+    },
+    {
+      "number": 4,
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/4",
+      "title": "增加 KV 正等差二维 SAVE 规划与 SDK 批量桥",
+      "base": "main",
+      "base_sha": "d5e2e3a54b48dcb1b50f575d2420979591fb3e1c",
+      "head": "codex/20261022-kv-pitched-copy",
+      "head_sha": "39d65bf2e2a474b66f0920e5f752d739063be27e",
+      "draft": true,
+      "merged": false,
+      "changed_files": 3,
+      "body": "稀疏 KV 源页中的正等差段可合并为二维 D2H 提交。本改动提供页序规划、Python adapter 和 Corex SDK C++ 批量桥，保留全部原 KV 字节及逻辑顺序，并补充中文编译和调用说明。\n\n已有 BI-V150 两组真实页序字节门及三路短对照通过，同桥线性→二维的单层热 wall 小信号约 **3.62%**。独立实验 worker 的 42 层诊断保存 717717504 B，API 提交从 966 次降至 210 次，源释放前独立对照及恢复后回读均通过。该完整 worker 不在本 PR 内；这些结果不代表端到端吞吐提升，保留 Draft。\n\nSO 需从 Git 源码按实际 Corex SDK 编译。调用方负责 producer 依赖、stream、全部强引用、真实完成事件及失败后的等待。当前验证范围为 cuda:0、normal 16 KiB 页、单层或 42 层、payload 不超过 1 GiB；C500 未验证。\n\n受测实现整理自历史快照 `d5e2e3a…`；当前以已恢复比赛原始框架的 main 为审阅基线，保留原受测 head。此 PR 只有独立新增的工具与说明，不会重新带入旧 SQL+C3 代码。不依赖连续页复制 PR，可任意顺序合入；不改默认初始化入口、setup 或服务参数，不包含 SO 与完整 KV 事务。\n\n详见本分支的 [中文方法说明](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/codex/20261022-kv-pitched-copy/docs/kv-pitched-copy.md)及[源码与证据清单](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/blob/main/docs/pr-preparation/kv-pitched-copy/manifest.json)。"
+    }
+  ],
+  "note_zh": "按用户要求纠正GitHub协作：保留历史，主线恢复原框架，新开发方法全部通过PR呈现。六阶段全部vllm_fl源码逐字节重建为旧受测快照；CPU旧head不变并以#10为base，KV旧head保持并以main为base。所有PR为Draft未合并。其它探索原型与负结果留实验记录，未冒充默认实现。"
+}

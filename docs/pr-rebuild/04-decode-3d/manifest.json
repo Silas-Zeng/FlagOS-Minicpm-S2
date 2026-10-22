@@ -1,0 +1,50 @@
+{
+  "id": "04-decode-3d",
+  "title": "3D decode的w2s1启动",
+  "recommended_parent": "03-sql",
+  "required_earlier_stages_for_this_package": [
+    "01-prefill",
+    "03-sql"
+  ],
+  "entries": [
+    {
+      "path": "vllm_fl/worker/model_runner.py",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/vllm_fl/worker/model_runner.py",
+      "base_blob": "8f28141b8929762bd9525084fd7c3c17e9b4a368",
+      "base_sha256": "c81e6ae9ba4bed1fe207c45755c91787e39d5a2b044c42c9d6eb7552b36360ed",
+      "head_blob": "6f2435956ef061a75d41b66b3242f55e3ceb1323",
+      "head_sha256": "7ddf885ac0fc95af291a67f7e6289224af00ccdde7cbf286deb5302780bd6953",
+      "bytes": 341346
+    },
+    {
+      "path": "vllm_fl/patches/biv150_decode_launch_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/vllm_fl/patches/biv150_decode_launch_runtime.py",
+      "base_blob": null,
+      "base_sha256": null,
+      "head_blob": "772169a838a256f5c3805a05d64be04420067d12",
+      "head_sha256": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+      "bytes": 3824
+    },
+    {
+      "path": "docs/04-decode-3d-biv150.md",
+      "mode": "100644",
+      "type": "blob",
+      "file": "files/docs/04-decode-3d-biv150.md",
+      "base_blob": null,
+      "base_sha256": null,
+      "head_blob": "ceca838cc1b690c615f15c211910e4d25eb84568",
+      "head_sha256": "67c65258d7f56623696e29caef270d820ad0285d741ea38b287120010337be36",
+      "bytes": 708
+    }
+  ],
+  "code_projection_tree_with_original_upstream_readme": "dff9340ae00cde8caf4c578998c0f7d31707dba5",
+  "summary": "加入原e5模块与原footer，在严格BF16/3D/shape/feature守卫下把4warps3stages改为2warps1stage，kernel/grid/reducer不改。",
+  "boundary": "真正源码依赖prefill产生的Attention54c和helper59d9；SQL不是算法依赖，只为保持runner footer与历史073309字节及推荐堆叠顺序。此处不能混入mixed拆分。",
+  "device_or_accuracy_newly_verified": false,
+  "historical_algorithm_function_bodies_modified": false,
+  "integration_split_note": "01仅移除原top-p函数与入口调用；02完整补回。其它代码使用旧快照字节。"
+}

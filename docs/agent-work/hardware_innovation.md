@@ -1126,3 +1126,47 @@ fixture仅补decoder字段，两实际helper绑定namespace。保原五CASES/11c
 必要CPU compile、runpy无Torch/Triton导入、--help通过；AST核只make_runner/worker/main改变，增加计数/pointer两小helper、删除旧timing call函数，五CASE AST完全相同。framework全文delta终审无当前正确性门阻断，final保持abfc不再改；没有执行新门／旧suite／GPU或网络。root是唯一设备owner。CLI为 `--run-dir RUN --runtime-path METADATA --async-runtime-path ASYNC --runner-path BASE --candidate-runner-path COMBINED`，沿原controller独占flock/idle/child/monitor/timeout/定向清理；systems薄层仅资产pin/DB前后/env/source/seal，不第二锁或GPU清理。该门不带权重、不导入完整runner、不会启动服务；设备结果待root唯一新run。
 
 062205后续实际回执（root提供，非本owner重复验收）：唯一组合门exit0，五case所有比较、graph四步同次双delta1／四consumer／RNG全过，metadata总9、async总7。准备时“待root新run”已由本次结果取代，完整原件正取回并由systems唯一全审；本owner没有执行validator/新GPU。**prefill2048实测async delta1**，不是单token identity：prev行0需要写到2048-token chunk的末索引2047，common_indices_match不成立。实际decode62/mixed952/prefill2048各async1，两no-previous为0，加四graph步为7；不再把设计时未强制prefill当作观测可能0。图已核原/组合逐步相同且input_ids首末非陈旧，仍不宣称真实InputBatch重排／输出队列全生命周期、服务收益或全模型准确率。代码abfc及两个helper／runner均保持，不补门/长pair；本owner只收口静态review文档与交接，待root后续指示。
+
+### 长期协作要求：PR、我们新增的README与说明保持自然中文
+
+用户再次明确：**PR标题、正文、我们新增的README与维护说明使用自然中文**，英文专有名词、API、路径、命令、数值与哈希保留原样；不要为了中文化改写上游原文、许可证或实验原始证据。该要求持续适用于后续修订与新API接续，不仅是本轮翻译任务。历史发布回执／固定manifest与其证据不可为了追新状态直接改写，后续状态用有版本的说明或新回执补充。
+
+本owner本轮只读核对 `docs/pr-preparation/` 四项CPU metadata／async token／连续页复制／二维SAVE复制的 `PR.md`、`publication-body.md`、新增说明及本地发布标题，并核 `combination-review.md`；标题和正文已使用中文，技术专名保留，无必须修正的英文标题或英文整段。另核根README、两个私有代码副本的协作README与 `docs/github-collaboration.md`、`docs/pr-collaboration-plan.md`、当前AGENTS规范，均符合中文要求；两代码副本的 `README.upstream.md` 保留上游原文，FlagGems仍链接原 `README_cn.md`。这是本地材料语言核对，不是远端PR重新读取或方法门／准确率复验。
+
+一项状态提醒已另告root：`docs/pr-collaboration-plan.md` 开头“05:13:44 UTC后没有启动新GPU工作”和部分README的“探索已冻结／暂不新增实验”属于旧阶段状态，与062205及当前恢复主线不符；建议由root在维护当前说明时明确其历史范围，不为此改固定发布回执或旧manifest。本owner不修改这些共享文件，也不推断当前服务结果。
+
+本轮唯一写入为此交接追加；没有修改CURRENT_WORK、代码、共享checkout、README、PR材料或远端PR，没有SSH／GPU／新测试。root仍串行负责短服务基线→CPU组合，本owner不重复062205方法门，追加后停止本轮文件写入。
+
+### SQL独立审阅PR：原始测量与正确性证据，不继承组合成绩
+
+用户问SQL为何未独立PR；root准备为main中已存在的方法补历史审阅入口，不重复合入。分工：framework核独立源码patch／真实历史基点；本owner只读原服务JSON、manifest／driver／server日志及CPU gate原log，未执行validator／测试／设备，不操作共享分支或远端。证据仅天数BI-V150，不能外推C500。
+
+**SQL单项有真实独立增量短筛，但它接在保留performance基点d60b023之后，并非从13eb原版单独只加SQL。** 071554为该保留基点B0，两个SQL run不叠C2/C3／新token融合。三轮同driver SHA `22a076e79a486712ae5c0655b17a9ee986e51b987083bdcb64fdbc4840ea5603`、同官方SERVER（launch-command.json三者SHA均 `ec915d0098862907f563bd0a91d14079d59b6a82a6660710085c80f37d36887b`）、seed721101、4096输入／128输出、64请求／64并发，vLLM0.24／Corex Torch2.10／FlagGems5.3.5／SQLAlchemy2.0.48、6CPU quota。三轮均64完成／0失败、262144输入／8192输出、exit0；真实server日志KV均521840。两SQL日志有 `BIV150_SQL_REFLECTION_INSTALLED sqlite_targeted_only=1`，B0没有；两SQL runner同c81e6ae9，模块同ad84c9。三轮仍保留vllm._C缺失和shutdown forcekill等原WARN，不能写成无告警。
+
+| 原件 | duration s | total token/s | 原JSON完整SHA256 |
+|---|---:|---:|---|
+| [064632 SQL单项](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/experiments/framework/20261021T064632Z-sql-reflection-screen/decode-4k/results/decode-4k-infqps-concurrency64-minicpm-20261021-144829.json>) | 43.19865510286763 | 6257.972600217696 | `2ca4aff5fbd480ec5ad61f2bed39a4eb9183a4f17b05bea69ed5a141b470fe53` |
+| [071554 B0控制](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/experiments/framework/20261021T071554Z-b0-sql-pair/decode-4k/results/decode-4k-infqps-concurrency64-minicpm-20261021-152045.json>) | 120.4714753809385 | 2243.983475301355 | `fce96ee95530251b0f1e5d4fb58279f4cf095806631ba728818260cf632d1cc8` |
+| [072153 SQL单项重复](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/experiments/framework/20261021T072153Z-sql-reflection-screen/decode-4k/results/decode-4k-infqps-concurrency64-minicpm-20261021-152350.json>) | 43.09057237813249 | 6273.6692756764005 | `c5c9a2b6dca7a363ade8908ea2809c71b58d71b344c8f8a2fc53294890d9c34a` |
+
+三份manifest分别为同run目录 `manifest.json`，本轮实际复算SHA依次 `e7a706ce2225d2a6bec0a4f6bf71f0b58920c0228c967211ba8d875e20752044`／`ef41f5b44e95b810b561e94cd3045baf80c50c58cb4c44f917360d49ee86c10d`／`7989f97849add91e8940e983e62410fa1a5d2c47adaf2faa1e8a7343005ba2ab`。原server.log分别 `fc633b208fccb68b12fc22da6e00bf1350d02ead7459c8b31cc6f5d5214695b7`／`6252e5f4f53ec9e21e75c1b7e0be9d209af1350dea29bd51eb812eba926e2163`／`979822978d24b85d36699744199157537dcbb57a8dd5f73110b5014e2a3e2d2e`。三份postflight均port9031关闭、68MiB／0%／无设备进程；这里只读取原记录，没有实时设备检查。
+
+据同token工作量原JSON计算，SQL两次相对B0吞吐为 **2.7887783796524097×、2.7957733845762305×**，耗时减少64.1420%／64.2317%。可写“同参数／同KV条件下重复出现约2.79倍的4K短筛信号”；**不能写缓存严格匹配或确定的纯SQL官方吞吐收益**：早期没有持久调优库before／after完整快照，不知道其初态逐byte或schema／配置行是否相同，更不能外推空库、所有shape、整档原四轮或总分。相同driver／参数不弥补缺失的DB证据；不得后来补造快照。
+
+**SQL独立正确性证据是配置反射／读写契约CPU门，不是独立模型准确率。** [072702原gate.log](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/experiments/framework/20261021T072702Z-sql-cpu-gate/gate.log>) SHA `db813e049d0448344c60ce4b502e3c035881149701bb5589ec790a01000030a8`，原Python3.12.11／SQLAlchemy2.0.48、6test／0.853s／OK，涵盖真实配置get／put及不覆盖、目标表过滤／列PK行、缺表后新表可见、引号／默认FK闭包、跨engine并发隔离、回退／幂等／hashguard。原 [source.sha256](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/experiments/framework/20261021T072702Z-sql-cpu-gate/source.sha256>) SHA `135c4ae56c969b975e779961e70145000f44815e37d000cb90e50e12acf3caa7` 锚定runtime `ad84c9affe0c3f4b9a4432dd2cbb3861306726f07d53328e129af41c74ea8e8e`、测试 `8f10a7d10885cc290a0aa7fab5fa1889471bcd2967ace7af3e452b60daccedec`、actual SQL fixture `6dc19cb581d70154f14b95ed9112d682c6b5919b6cf3f8dea01a78a75ec0efd7`。本轮只读这些log／hash，未重跑CPU门。
+
+后续 **SQL+C2的101/105仅属该组合，SQL+C3的103/105仅属该组合**；64服务请求成功不是题目准确率。官方4K+93.3208%／16K+216.6027%来自13eb原版与完整SQL+C3（还含保留prefill／top-p／C2／C3）的描述性比较，不能拆给SQL。已有 [最终比较JSON](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/analysis/2026-10-21-official-final-comparison.json>) 本轮实际复算SHA `52f8da4bea6ba7caf4f517edccb9c3c0ecbe85db89f79372b0e5c1c4fc74d832`；其中两边KV521840／521936、初态DB512表19130行／489表18384行不同，已明确非cache-matched／稳定单项因果，不合成总分。
+
+可直接用于独立中文审阅PR的最小摘要：“把SQLite配置模型的全库反射改为只反射目标表及默认外键依赖，保留配置读写与缺表语义。真实SQLAlchemy2.0.48的6项CPU契约通过；在保留performance基点上，独立4K／64请求／128输出短筛两次为43.199／43.091秒，对照120.471秒。早期调优库未留前后快照，约2.79倍仅为短筛重复信号；没有SQL单项模型准确率或官方整档成绩，组合103/105不继承。该方法现已包含于main，本PR补历史审阅而非再次合入实现。”
+
+参考既有中文方案 [SQL反射计划](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/analysis/2026-10-21-sql-reflection-plan.md>) SHA `800e280b9dcfcb222c603cd9bd27af6ac9241583c01cb80b0ea0c0df6dac6d45`；本轮只追加own handoff，精确源码／基点交framework单独审，不改CURRENT／PR材料／共享代码／远端，不新增设备或旧套件重复审计。
+
+### 用户纠正GitHub起点：KV盘点收口，下一候选仅提窄方案
+
+用户明确main必须原始待改造13eb，旧完整导入优化应保历史快照、按方法PR呈现。本owner只读核原13eb路径／现有PR3、4 manifest与imports，独占简表 [kv-inventory.md](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/docs/pr-rebuild/kv-inventory.md>) 已写完，SHA **8cc13dfb9cffc29242d11e5429a54894d2a7581a9ffff2b76fc713b01c2a448f**。PR3/4三个代码及两个docs在13eb均不存在，互无代码依赖／无SQL+C3或CPU方法前置；完整KV事务／42层SAVE接入另有真实依赖与未覆盖accuracy，不能偷渡进工具PR。本地FlagGems HEAD6ddb4c4对固定4df52d9全tree仅README修改／上游README备份，status clean，没有实际新增库内算子；实验draft不冒称部署。已同步root／systems，不改checkout、PR／远端或旧manifest。
+
+root要求少整理、多构思下一步；下面只留**一个待批准实现的热launch主机路径候选**，不恢复Event或旧KV负项，也不写新门。社区一手 [Triton RFC #10140](https://github.com/triton-lang/triton/issues/10140)讨论受guard的已编译launch handle；仍是RFC，不能当Corex已合并功能或引用其吞吐。本实例actual `spec/iluvatar/triton/runtime/jit.py` 66a168…的737–790在热命中仍做binder／specialization-key／cache查找／used-global检查，**761的get_corex_sme仅cache miss执行，不是每次热launch成本**；此前社区报告该段若被读成“每次SME计算”必须按本实际分支纠正。候选只在eager mixed／prefill同kernel／tile／dtype／stride／scalar-specialization／globals／hooks完全一致时，于54c `unified_attention:1036`主kernel和`:1112` reducer两处复用首次原JIT返回的compiled对象，逐次传真实指针／标量／current stream，未知或capture走原路，绝不缓存旧tensor闭包；本实例CTA入口`:145 compiled[GRID](*all_args)`只证明该接口实际曾可用，尚不证明Attention新包装安全或收益大。16SM、42层短kernel与6CPU限制使逐层热Python提交有可聚合潜力，但decode已graph replay的部分不计入预算，现有profile不能定量其占比。最短可证伪方案是**小fork现有 `launch_prefill_visible_prefix_gate.sh`／`validate_prefill_visible_prefix.py`，取消省mask变换、只换热launch代理，复用原P2019+Q2048／KV16K两case及32call预record ABBA**，先同bits／整KV／RNG／新Q指针与后继调用正确，再核CPU/wall是否确实下降；没有正信号或guard不能低成本完整证明就停止，不上长服务pair、不直接合并新框架。当前没有新runtime／门／设备请求，该建议需root指示才实施。
+
+后续root批准与framework合力准备最短热launch候选。本owner已直接发送上述五句／actual路径／挂点，与其约定framework独占runtime／特殊化契约，本owner独占后继新 `scripts/remote/validate_attention_hot_launch.py` 小fork（尚未写），原d3db门不改。实际compiler.py:542–553的compiled[grid]默认取当前device／stream并保launch hooks，但不保JIT globals／pre_run_hooks，不能裸绕；C2 `DecodeLaunch`先改kwargs为w2s1再进JIT，不能在外层误缓存w4s3参数。
+
+framework据actual契约进一步收窄方案：**保原JIT737–754 prefix及真实binder，只复用post-binder同recipe的key／compiled**，不猜native_specialize_impl，不声称省binder。actual `compute_cache_key:605–608` 热路径确构造`(tuple(specialization), str(options))`并查dict；这才是当前可削预算。globals仍逐次原样核，非空pre_run_hooks／capture／未知回原尾；get_corex_sme只cache miss的事实不变。两方已把“范围更窄、尚无收益”报root，等待其决定是否值得试再写最小门，避免为guard搭新框架。接口预定`create(attention, helpers, backend)`→manager install／restore／snapshot，计数kernel_hot／reducer_hot／对应bootstrap／fallbacks；若实施，两case内仅加一次新Q／out指针的后继调用及非默认stream，不新增shape扫描／旧套件／服务。当前无新runtime／gate写入、无SSH／GPU／共享代码或远端动作。

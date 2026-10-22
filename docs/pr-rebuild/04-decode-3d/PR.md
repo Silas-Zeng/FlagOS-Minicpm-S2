@@ -1,0 +1,7 @@
+# [Draft] 3D decode的w2s1启动
+
+加入原e5模块与原footer，在严格BF16/3D/shape/feature守卫下把4warps3stages改为2warps1stage，kernel/grid/reducer不改。
+
+基于重建堆叠的`03-sql`；最初所有代码来自比赛原始13eb。真正源码依赖prefill产生的Attention54c和helper59d9；SQL不是算法依赖，只为保持runner footer与历史073309字节及推荐堆叠顺序。此处不能混入mixed拆分。
+
+本PR只含manifest列出的增量与独占中文说明，不把其它方法算入本方法。代码为已留存实现的字节拆包；不能把本次重新打包当成新设备/准确率验证。逐项字节身份和父版本见manifest；完整方法之间的依赖与历史证据范围见实验库framework-inventory。请保留Draft并按团队评审决定合入，不把六个PR分别宣称为已独立通过完整官方成绩。

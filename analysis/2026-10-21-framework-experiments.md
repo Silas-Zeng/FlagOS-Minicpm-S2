@@ -757,3 +757,12 @@ root在36510ed6 checkpoint后授权新outer，scripts/remote/launch_kv_pitched_c
 唯一实际本地审计07c12b13通过：55seal/10源/d505launcher-abfcgate/原e155+组合6f918/metadata0e961+async1bb85/实际依赖pin全核，真实方法同链fixture非模型。五case各11字段全过；selection实际decode62为1-1、mixed259为1-0、mixed952为1-1、mixed2048为1-0、prefill2048为1-1（有previous sampled tokens，非纯无历史prefill）。原event四步固定地址graph消费positions-seq-slots-inputIDs全部一致且位置与token变更，每步双delta1，总metadata9-async7，CPU-GPU RNG SHA同。launcher270063-controller270069-worker270073，仅内层唯一锁/worker/cleanup；06:22:26.210821Z外层exit0。CPU6-host20GiB-单BI-V150物理32GiB，DB实体只读重算52319474三SHAdc2c-0dc7-c05d前后同，06:22:26.205563Z后态68-0双栈闭无GPU进程/源不变；worker无Traceback-ERROR，原warnings留存。2035183B归档225a8539已待SCP43608exit0后整包核；无性能计时/完整service或accuracy/C500结论，不相加单项gain或继承103-105，不自动大测。
 
 独占中文结果见 `analysis/2026-10-22-cpu-combination-062205-result.md`，系统JSON见 `analysis/source/cpu-combination/062205-system-review.json`。本轮只做一次最短真实方法门，不重跑旧门或建立新大验证框架。
+
+
+## 070004→070452：CPU两方法组合单轮真实短pair正信号
+
+唯一配对后验89da4cbe：450seal/410源/0519launcher-cd506完整基点/e155/原bc51SERVER-decode-seed721201，64-0/262144in8192out/39.225860193837434s/6891.780031441377total/TTFT20088.914546053275ms/KV521936/CPU6-32GiB/preempt0-0。A前后与B前后三SHA物理dc2c-schema0dc7-logicalc05d/52319474全同，包/installed依赖及原命令一致；07:02:04Zexit0，07:02:34Z68-0双栈闭/无GPU进程，controllerZ而server-Engine消失。A无ERROR但关停forcekill/资源warning保留。组合前误比live与backup物理SHA的CPU前置exit1无run-GPU，六header字节差但逻辑同，原件保留不写DB内容变化。单轮A-B，不复用旧基点或062205性能。
+
+唯一配对后验89da4cbe：451seal/412源，仅runner6f918+metadata0e961-async1bb85相对410基点三差分，原bc51SERVER-decode-seed721201/64-0/262144in8192out/38.95371279399842s/6939.928972358459total/TTFT20063.802888413193ms/KV521936/CPU6-32GiB/preempt0-0，Engine273944两FIRST_SELECTED真命中非全步计数。与070004同KV/DB四端52319474三SHA全同/包与installed依赖及原命令一致：TPS+0.6986430312pct、耗时省0.6937958747pct即0.2721474s、TTFT-0.1250025609pct，仅单轮短筛信号非稳定因果/官方或accuracy，不相加单项收益/不继承103-105。07:06:52Zexit0，07:07:32Z68-0双栈闭无GPU进程/源live同；controllerZ。测量完成后abort-forcekill阶段有8条ERROR组成EngineDeadError尾栈和资源warning，均保留，不写无ERROR或测量失败；不自动复跑/大测。
+
+中文实际结果见 `analysis/2026-10-22-cpu-combination-screen-result.md`；唯一JSON `analysis/source/cpu-combination/screen-system-review.json`。本次只读新两run，未重跑旧四run脚本/062205门或创建新大验收套件，未改代码PR head/合并。

@@ -1,0 +1,7 @@
+# [Draft] MiniCPM prefill Attention启动策略
+
+从原runtime机械抽出原_patch_generic_attention及两段原字符串变换；目标GQA8/head128/multi-token时BM128、BQ16、TILE64、warps8/stages1。vendor入口沿原函数调用，只执行Attention部分。
+
+基于重建堆叠的`00-diagnostics`；最初所有代码来自比赛原始13eb。包装使用00后的共享vendor文件；算法不依赖诊断开关。此安装器会修改site-packages Attention源码、清pycache、重绑backend，须隔离已安装源；不能把Git回到13eb等同安装源也恢复。
+
+本PR只含manifest列出的增量与独占中文说明，不把其它方法算入本方法。代码为已留存实现的字节拆包；不能把本次重新打包当成新设备/准确率验证。逐项字节身份和父版本见manifest；完整方法之间的依赖与历史证据范围见实验库framework-inventory。请保留Draft并按团队评审决定合入，不把六个PR分别宣称为已独立通过完整官方成绩。

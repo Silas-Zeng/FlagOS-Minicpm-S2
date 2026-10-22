@@ -1,0 +1,7 @@
+# [Draft] Attention内部天然单token前缀拆分
+
+加入原a129模块与原footer，builder构造天然连续单token前缀计划，forward拆原Attention的decode/prefill范围，不排序请求、不拆整个模型。
+
+基于重建堆叠的`04-decode-3d`；最初所有代码来自比赛原始13eb。硬依赖已安装原e5 DecodeLaunch以及Attention54c/backend1219/helper59d9。mixed把部分原2D转3D，归约顺序变化；准确率属于对应完整组合，不能把它归入SQL。
+
+本PR只含manifest列出的增量与独占中文说明，不把其它方法算入本方法。代码为已留存实现的字节拆包；不能把本次重新打包当成新设备/准确率验证。逐项字节身份和父版本见manifest；完整方法之间的依赖与历史证据范围见实验库framework-inventory。请保留Draft并按团队评审决定合入，不把六个PR分别宣称为已独立通过完整官方成绩。

@@ -1,5 +1,9 @@
 # 子智能体工作与 API 接续索引
 
+**本轮完成（2026-10-22 15:18，北京时间）：** root串行完成070004基线/070452组合短服务，64/0、同KV521936、四端DB一致；组合两快路实触发。systems唯一后验89da4cbe通过完整原件、source与条件匹配，单轮TPS+0.698643%、TTFT−0.125003%，保留小信号；关停EngineDeadError与前置DB误判完整记录。framework已冻结launcher/map，hardware已完成中文规范核对，各角色handoff保留。无新GPU作业，不重复本pair或自动大测；四PR仍Draft未合并。中文报告与完整原件由root同步专用实验库，精确发布身份读CURRENT所指状态文件。
+
+**当前短测（2026-10-22 15:00，北京时间）：** root唯一启动070004基线短服务（runner272397），计划串行接固定6f918的CPU组合版本。framework复用原bc51 driver准备launcher0519和完整410项mapcd506，systems完成定向互审并复用eab7封存器；后验由systems唯一负责。hardware只读核对PR/README中文规范。所有PR仍Draft、未合并；用户再次要求PR标题/正文、维护README和报告保持中文，英文专有名词和原证据不改。各自交接继续落盘；实际结果以CURRENT顶端及原件为准。
+
 **组合门完成（2026-10-22 14:22，北京时间）：** root唯一062205上卡已exit0，原件/tgz/55seal本地齐；metadata9/async7、五形状55项、四轮graph包含input IDs、同次双命中、RNG与DB均通过。framework完成语义和gate/launcher互审，hardware完成最小fork并纠正prefill2048实际命中，systems负责唯一完整后验/registry118/queue91及[结果报告](../analysis/2026-10-22-cpu-combination-062205-result.md)。当前无GPU作业；组合服务吞吐与整模型accuracy仍未验证，不把单项百分比相加。
 
 **持续目标接续（2026-10-22 14:08，北京时间）：** 四项PR与完整实验发布已完成，root依据持续目标优先补CPU metadata与async token组合的最短运行证据。hardware只fork现有真实方法门，补双快路径同次命中及input IDs图读取；framework检查两方法的缓冲区/事件交互并互审新门；systems只补DB/原件封存与唯一后验。固定组合runner6f918，两helper不改；无新算子或Event路线，不先服务、大测或收益pair。06:07:21Z设备实查空闲，新门尚未启动。具体run/源码/结果读CURRENT与后续原件。

@@ -1,30 +1,24 @@
 # 方法 PR 协作安排
 
-本轮已建立四个独立中文 Draft PR，全部尚未合并。最后设备实验于2026-10-22 05:13:44 UTC结束，随后没有启动新GPU工作。主分支仍是此前完整 SQL+C3 快照；现有多项优化没有分别经过多个历史PR合并。
+GitHub框架main已恢复比赛原始源码13eb9be，恢复提交77bc2488。旧SQL+C3快照保留在codex/archive/sql-c3-imported-20261022；本地实验版本不受影响。所有下列PR均为Draft、未合并。
 
-| 方法 | PR | 受测范围 | 合并关系 |
-|---|---|---|---|
-| CPU metadata 复用 | [#1](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/1) | 真实方法门通过；单轮同KV/同DB短筛吞吐约+0.2867%，TTFT约+0.2344%（变慢） | 与#2共享runner，只在新增import处冲突 |
-| async token update | [#2](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/2) | 12类方法case通过；单轮同KV/同DB短筛吞吐约+0.7037% | 与#1独立，后合者保留两条import |
-| KV连续页复制工具 | [#3](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/3) | normal/packed等字节门；无默认服务接入 | 独占新增路径，与其余PR无代码依赖 |
-| KV二维SAVE工具 | [#4](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/4) | 单层热wall约3.62%小信号；独立42层诊断字节门通过，不是E2E收益 | 不依赖#3；不交付完整KV事务或SO |
+| PR | 方法 | 审阅基线 / 依赖 |
+|---|---|---|
+| [#5](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/5) | 默认关闭的实验诊断开关 | main；不作为性能收益，不借此改比赛参数 |
+| [#6](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/6) | prefill Attention启动策略 | #5；会改已安装Attention，复现须隔离依赖 |
+| [#7](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/7) | 确定性top-p | #6；共享安装入口的拆分 |
+| [#8](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/8) | SQLite目标表反射 | #7；此顺序还原历史受测上下文，算法本身独立 |
+| [#9](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/9) | 3D decode launch | #8；依赖prefill产生的受测Attention版本 |
+| [#10](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/10) | mixed Attention天然前缀拆分 | #9；需要对应decode实现 |
+| [#1](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/1) | CPU metadata复用 | #10；原受测head保留 |
+| [#2](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/2) | async token更新 | #10；与#1并列，合并时保留两条helper import |
+| [#3](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/3) | KV连续页复制工具 | main；独立新增文件 |
+| [#4](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/4) | KV二维SAVE工具 | main；与#3无代码依赖，未默认接入服务 |
 
-共同远端基点为 `d5e2e3a54b48dcb1b50f575d2420979591fb3e1c`，tree为 `82e37f8f263eeb09563a4790359ec95a0de1ca17`。四个head/tree、创建时间和最终中文正文见[发布回执](pr-preparation/publication-receipt.json)。回读均为open、draft=true、merged=false，各自对当前main可文本合并；这是GitHub当前文本状态，不代表组合运行资格。
+六项历史增量重建后的vllm_fl源码逐字节等于原受测SQL+C3快照；这只是拆包核对，不是新模型验证。CPU两PR各自仍仅3个变更文件，KV两PR分别2/3个，未把旧整包重新带入独立PR。
 
-## 已经准备好的合并方式
+先评审前置项，前置合入后再更新后续PR基线；不要将整条链盲目批量合并。CPU两项已有组合真实方法门与64请求短测，但未做新整模型准确率。两KV工具的完成事件、引用生命周期及接入职责仍由调用方承担。
 
-建议先评审#1，再评审#2；反过来也可以。两种顺序已经实际执行三方文本合并，均只有同位置helper import的一处冲突。最小解决是同时保留两条原import；两方法体各自逐字节保留，逆撤能精确回到单方法或基线。解决后的runner SHA256为 `6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141`。
+日常查看[方法实验记录](../team/README.md)，每个PR写明尝试、改动、测试、结果和是否保留。单项与组合证据分开，不把103/105或整体吞吐分配给单项。
 
-[组合审阅与指令](pr-preparation/combination-review.md)包含冲突原件、完整解决文件、两方向可应用补丁及哈希。只有一个方法的分支可先核SHA再用对应补丁；已经处于merge冲突状态时按文档保留两条import，并保留两PR各自新增的模块。不要把整份runner直接覆盖到已被队友另外修改的版本。
-
-#3和#4只有独占新增文件，可任意顺序审阅。调用方仍负责producer依赖、stream、完成事件、引用生命周期与失败后的等待；两工具尚未默认挂接服务。
-
-没有自动合并。2026-10-22已补固定组合runner的最短真实方法上卡门：五形状数据检查、四轮图读取、同次双快路与RNG均通过，见[062205报告](../analysis/2026-10-22-cpu-combination-062205-result.md)。该门使用fixture状态，未加载模型；组合服务吞吐和整模型准确率仍未验证。各自短测小信号保留，不相加、不继承旧103/105准确率，也不将局部成本改善写成官方吞吐。合并为正式提交候选前，按实际缺项安排必要的最短组合验证与比赛最终门槛。
-
-## 仓库与证据范围
-
-实验记录库按BI-V150和C500分开，两个共享代码库按方法组织。已有设备证据都来自BI-V150；C500由队友独立补证。PR标题、描述、我们新增的README与说明用中文，英文专有名词保留。
-
-完整KV事务、调度候选、大小收益、失配与负结果继续保留在实验库。两轮blocking Event虽正确性通过，却没有等待CPU下降，不建立生产优化PR。FlagGems本轮没有新的代码变更，因此保持原版本。原公开fork、官方上游及其他参考仓库只读。
-
-root负责GitHub发布；framework、hardware、systems的源码整理、独立核验、组合审阅与失败记录均在[子智能体交接索引](agent-work-index.md)。实验库完整同步身份见[本轮发布回执](github-publications/20261022-pr-maintenance.json)。
+其它本地探索、失败和未集成原型留在实验记录中；进入共享代码库时继续按真实方法PR呈现。FlagGems目前没有新增库内算子，不制造算子PR。精确head/tree和历史迁移回执放[归档](../archive/github/20261022-framework-rebuild.json)。

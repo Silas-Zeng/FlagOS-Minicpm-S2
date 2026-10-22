@@ -1097,3 +1097,42 @@ root随后指定hardware独占 `scripts/remote/validate_cpu_combination.py` 最�
 systems薄层 `scripts/remote/launch_cpu_combination_gate.py` 草稿 **cda5bbef1acfd49fd9f8d18881cefc0acc2602f5bdbd768bc911919f4c7f2ede** 全文只读轻审：外层仅固定source/双idle/DB/env/后态/seal，由内层gate唯一持锁、启动worker/monitor并负责清理；锁外DB snapshot与root串行派发前提明确，无第二GPU owner。final **d50511c9a194b1dadad87498b22862641cbea9643eea94aa73f32b320a6abb2f** 已实SHA/单值逆换逐byte回cda5（只填abfc，出现一次，无UNREVIEWED）。两最终pin配套，**无本轮最短组合正确性门阻断**，已直接回root可唯一派发，不为长文等候或扩套件。
 
 独占报告已补全真实审阅与最终pin，当前SHA **63959c4c04d06902887dc80efee0573d9388da309d01a5caa4acebf18136c7eb**；原d72为首版语义报告、93b为gate定稿后但launcher未填pin时版本，均不是设备结果。只新增/更新该report和own handoff，未改任何PR、候选、共享checkout/branch/远端，不新搜论文/SSH/GPU/模型导入。下一由root唯一执行这一个门、保存实际字节/counter/RNG/source/idle后态并指定owner验收；本owner不预声明pass/准确率/叠加性能，任务收口等定向原件或纠错。
+
+### 062205组合门后只准备一组原短服务：新最小启动器，待互审/实际执行
+
+root报告062205组合方法门已通过并随实验acea0934发布，本owner不重复验收。root本轮授权从旧 `launch_small_framework_screen.sh`（d259b7c04dd4a105bdfa1e6755a8416ee23b6d4c25f6e86b9dfd845a34d693d4）最小fork一组baseline→combined短服务包装；无PR修改/新GPU/旧套件或长报告。
+
+新增 `scripts/remote/launch_cpu_combination_screen.sh` **0519e554c341c1d5c05e65a76bee4fa510f411643648c6e8a11ad5fb41d5ef35**，只接受baseline/combined；新增随脚本部署的 `scripts/remote/cpu-combination-base-sha256.json` **cd506fa2ed386df5961a188702a512351829cca59b684f2d47897e57e298c676**，逐byte复制174402-control/source-sha256.json（410项）。先校080656完整410 map/e155，再复制全新隔离source；combined只直接复制固定6f918 runner及0e961/1bb85两helper，完整expected412。隔离source、control/plugin-source两树各自全map相等，最后基点再核未变；内部regular-file alias允许解引用并记录，外部/目录alias拒绝。control/purpose.json.source、source-sha256.json、plugin-source保持原seal兼容路径，未造新outer。
+
+实际CPU静态核已过：embedded Python compile、Git Bash `-n`；410参考逐byte/归档每文件SHA及412三asset overlay核对；`PY`后原DB-before、bc51/decode-screen/seed721201/SQL安装预检和单nohup driver尾部与旧稿完全相同。没有执行prepare复制主流程、运行候选/服务/旧suite或SSH/GPU；source/DB/actual selected/性能尚无新结果。systems已获两final候选pin做定向diff互审，启动预检只SQL，两个FIRST_SELECTED须负载后核，不冒充全步计数。
+
+下一由root在互审无阻断后上传这两个新文件，唯一设备owner依次 `bash .../launch_cpu_combination_screen.sh baseline` / `combined`，每轮结束先封存和确认idle，再进行后一轮；现有root scripts中的组合runner与helpers由启动器重新核SHA。沿用原eab7 seal，无自动重复、参数调整、额外profiling或官方大测；A/B的DB/KV和环境必须后验核对，不能由脚本名称推定matched或把两个旧小收益相加。
+
+
+systems已对0519脚本/cd506参考完整定向终审并回root：无本轮阻断；eab7封存字段兼容，未执行复制/套件/设备。两asset现正式冻结不再改，可由root唯一串行上短服务；launcher只支持成对实验的单轮启动，不自动证明DB/KV匹配，后验不满足即保失配。
+
+
+### SQL追问后用户纠正GitHub基点：已按原13eb产六历史方法重建包
+
+root先委派只读SQL历史入口，本owner定位独立patch `patches/candidates/vllm-plugin-FL-biv150-sql-reflection.patch` SHA2825325e926024572e744c47125c85ffbbb306fa9bd95c5c36ef78ed3bf34bee、原runtime ad84及原runner c81e，064632/071554/072153/072702证据指针已交hardware独立核，不重复原测量。随后用户明确所有新开发必须PR、GitHub应以原待改框架为起点；root任务已覆盖SQL回顾PR方案，改为完整历史方法拆包。本owner没有创建空PR、修改main/代码分支/远端，也没有GPU/SSH。
+
+独占入口 `docs/pr-rebuild/framework-inventory.md` **c5f8729d7faafbc0c0b6be57ea23f52478b468e6cb34d860e52b3ef2739b9e16** 与机器入口 `framework-inventory.json` **f85839dd881822c9644355f69f70d43b7e695a7848568070d6110257974f6f2f** 完成。Git对象原基点13eb9be69ecc5b5ca4f79c44e9ee40081eaa1bf0/tree649161e62191e81a4b367e0e19dc37e32e745099；旧快照70d04/tree82e37只改9个Python代码文件+两README。六目录 `00-diagnostics`→`01-prefill`→`02-top-p`→`03-sql`→`04-decode-3d`→`05-mixed` 各含files镜像/中文PR.md/manifest；entries逐路径给base/head Git blob、SHA、mode和内容相对路径，可供root create_tree/commit/branch/PR，不需猜源码或重写算法。
+
+没有漏掉旧main额外实验支持：init线程cap、vendor KEEP_SAMPLER_COMPILE、platform maxbatch/prefix/block开关及默认16日志独立00，不算进SQL或prefill性能。01只从原共享runtime机械去掉top-p函数/入口调用，原Attention函数体和替换字符串逐byte保留；02完整补回原top-p实现与分派，runtime回受测a0c。03只ad84+SQL footer，04原e5+footer，05原a129+footer；三阶段runner分别精确c81e/7ddf/e155。最终9代码文件逐byte等旧70d；保原README、排新中文docs的投影tree精确5c14cfb8d3a452e97a67758873bf18039e1bf989，实际新GitHub全tree因中文基线/六说明不同不能冒称同tree。各Python只compile语法、不导入；完整六manifest/PR正文/镜像SHA末次复核通过，没有新suite或复制设备环境。
+
+依赖已明确：prefill/top-p是共享文件的拆包堆叠而非算法互依；SQL算法可直接接13eb runner（retained不改runner），但历史SQL-only服务基于retained，不冒称原13eb全树单项官方验证。3D decode必须Attention54c/helper59d9，mixed硬依赖原e5代理+backend1219等；SQL不是它们算法前置。旧d60对象本地不可读，保留6e8patch/原launcher的来源，不伪造commit；六包直接由已验13eb对象+旧快照字节构建。
+
+与systems澄清祖先后已采用root方案：F旧main→R非force恢复13eb代码→六链→S，00真实parent为root-restored-baseline-R，R保F祖先而不是直接从13eb另起历史。因此旧CPU H基F，merge-base(S,H)=F、S代码同F时三点diff仍仅CPU，可保旧head及受测blob，不必预先桥commit；只有另起历史才需桥。先前聊天提出桥的条件已在最终JSON/短文纠正。root负责实际merge-base/diff/merge-tree，不由本owner改分支。KV工具旧head只增独占文件，保原并按三方结果处理。
+
+其他未默认开发范围也未漏：CPU metadata/async两Draft；KV连续/二维工具两Draft；KV事务/FULL/私有排序/capacity/progress/pitched SAVE服务候选；bucket/hidden/growth/overlap/visible-prefix/CTA；各只观察模块与无CPU收益的Event/native。48份其它framework源码路径/SHA在机器入口中，仅交接不自动排PR。旧组合accuracy103/105/完整官方不能分摊到单方法；SQL两短筛无早期DB快照，hardware已独立保边界。本轮没有重新验证源算法或性能。
+
+两最终入口已通知root可用，所有6包代码/manifest/中文PR正式冻结；下一由root按恢复R祖先方案发布堆叠、保快照、核CPU/KV旧PR关系。本owner不主动新方案/设备/PR，等root下一项框架短测或定向纠错。
+
+
+### 下一短测只核Attention compiled热launch：actual契约已读，范围取舍待root
+
+root已收到六阶段远端tree匹配，分派本owner与hardware开始CPU-only compiled Attention准备；未改任何已发PR/运行资产。actual183920 spec JIT66a168的737–790已逐行读：pre-run/FlagPrism/debug→真实device/stream→binder→compute_cache_key→globals→launch；get_corex_sme只在miss，绝不能算热收益。actual spec compiler的542–553证明CompiledKernel[三维grid](*当前全bound参数,stream=当前stream)可用，仍沿原launcher/launchmetadata/launch hooks；但它不执行JIT的binder/used_globals/前置hooks，裸替换不等价。
+
+为不猜native_specialize_impl的对齐/类型语义，已给root建议首轮缩窄为post-binder key-recipe复用：保原737–754前缀与真实binder，在其后严格匹配spec/options/同cache对象与原compiled identity，只省str(options)/key-cache，globals仍逐次核，capture/hooks/未知状态留原路径且不双执行prefix。原C2必须先调w2s1再到该点，不能在外层绕过其policy；此候选不声称省binder或SME，新增guard可能抵消预算。manager可约定create(attention,helpers,backend)及install/restore/snapshot，kernel_hot/reducer_hot/bootstrap/fallback字段，当前只是接口方案，没有runtime或新门。
+
+hardware已对齐并等待root取舍，未先写猜接口门。若批准，唯一最短门只fork原visible-prefix门，取消所有数学变换，原P2019/Q2048两case、原JIT bootstrap后新Q/新out pointer及显式非0流ready/完成证明、完整bits/KV/RNG，然后Pcase32call预record ABBA含真实guard/pack开销、另记thread/processCPU与窗外v1stat；负即停，不服务/大测/重复Event。当前未SSH/GPU/安装/源码转换/套件或新长报告；完整绕binder的严格等价目前证据不足，不能把接口存在当作其可安全直绕证明。

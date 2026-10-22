@@ -1,0 +1,7 @@
+# [Draft] 直方图zoom top-p过滤
+
+加入原_patch_top_p_sampler和原bounded histogram实现，并在共享入口中按原顺序先top-p后Attention；top-p-only、float32 logits、vocab130560的路由及其余fallback逐byte保留。
+
+基于重建堆叠的`01-prefill`；最初所有代码来自比赛原始13eb。此堆叠依赖是共享biv150_runtime文件的拆包关系，top-p算法不依赖prefill计算。01与02中原算法函数体不改，02完成后共享runtime精确回受测a0c。
+
+本PR只含manifest列出的增量与独占中文说明，不把其它方法算入本方法。代码为已留存实现的字节拆包；不能把本次重新打包当成新设备/准确率验证。逐项字节身份和父版本见manifest；完整方法之间的依赖与历史证据范围见实验库framework-inventory。请保留Draft并按团队评审决定合入，不把六个PR分别宣称为已独立通过完整官方成绩。
