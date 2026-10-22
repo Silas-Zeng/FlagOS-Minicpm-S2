@@ -1,5 +1,9 @@
 # 当前工作与 API 切换交接
 
+## 本轮完整发布已完成
+
+实验库全量发布提交为 [0d671d3c](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/commit/0d671d3c65683491a3fddee234c4c352a09d8129)，来源本地 `754f2a46b81a016b45e22f1b26401c166b75df18`，完整 tree `6150dab7c55a2793245fd60fbab4bba106e76428`，20,649项文件与模式全部相符。四个中文 Draft PR 已创建并保持未合并；两个CPU方法的组合补丁已保存。最终身份和覆盖范围见[发布回执](docs/github-publications/20261022-pr-maintenance.json)。本节与回执随后以文档提交补齐，数据批次身份不自指。当前没有新GPU任务，下一步由团队评审这些PR；不得从下方历史计划自动恢复旧实验。
+
 ## 四个中文 Draft PR 已创建，完成实验后转 GitHub 协作（2026-10-22 05:40 UTC）
 
 当前按用户最新安排完成手头工作并维护 GitHub，不启动新研究、服务或 GPU 实验。最后原生 Event 门 `20261022T051336Z-native-event-wait-gate` 已于05:13:44Z结束；24 trial 的144项检查和 RNG 通过，但原生 BlockingSync 也没有降低等待 CPU，停止该路线。全部 run/control/tgz、85项封存校验与唯一系统验收已保存；registry117、queue90完成。最后封存后态为68MiB/0%、无GPU进程、9031双栈关闭。
