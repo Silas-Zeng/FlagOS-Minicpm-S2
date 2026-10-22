@@ -1,0 +1,38 @@
+--- v1/launch_last_layer_tail_gate.py
++++ v2/launch_last_layer_tail_v2_gate.py
+@@ -23,7 +23,7 @@
+ REFERENCE = ROOT / "scripts/cpu-combination-base-sha256.json"
+ REFERENCE_SHA = "cd506fa2ed386df5961a188702a512351829cca59b684f2d47897e57e298c676"
+ SOURCES = {
+-    "gate.py": ("validate_last_layer_tail.py", "25d3e9cb194b9a6504db7f678f05d0f2113495e5bdd4d3829b82d813f153b650"),
++    "gate.py": ("validate_last_layer_tail_v2.py", "8e4903e37dedb423070bb33e506cc76c2de0b70c54a3412d14d651e6494b6bbf"),
+     "last_layer_tail.py": ("last_layer_tail.py", "99d5a8c86dac67b7a2c0029842576fbd1439060525d4c6789b0ddd32703fc9ec"),
+ }
+ INSTALLED = {
+@@ -32,6 +32,8 @@
+     "layernorm.py": (Path("/usr/local/lib/python3.12/site-packages/vllm/model_executor/layers/layernorm.py"), "696615d858292fea7a2942480803cd4c7d2d1e88d818bfe5cd9d695ac464f37c"),
+     "activation.py": (Path("/usr/local/lib/python3.12/site-packages/vllm/model_executor/layers/activation.py"), "757209cef4b5cc091d29d95b4a6b29f2511984110c9b66810c760d4499cb156c"),
+     "model-config.json": (MODEL / "config.json", "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180"),
++    "parallel_state.py": (Path("/usr/local/lib/python3.12/site-packages/vllm/distributed/parallel_state.py"), "1feda9ac98c1dd14cbad60a9205194d224ad7d75656c6e94cffbe3bdbcbf4003"),
++    "parameter.py": (Path("/usr/local/lib/python3.12/site-packages/vllm/model_executor/parameter.py"), "ff6054fbd19ec932c548d562c6f4cc4506383b71cbe411fcfd554c8b1d87b510"),
+ }
+ BASE_OVERLAY = {
+     "vllm_fl/worker/model_runner.py": "6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141",
+@@ -196,7 +198,7 @@
+ def controller(run, control):
+     import fcntl
+     if (run.parent != ROOT / "framework" or control != run.with_name(run.name + "-control")
+-            or not run.name.endswith("-last-layer-tail-gate") or not run.is_dir() or not control.is_dir()
++            or not run.name.endswith("-last-layer-tail-v2-gate") or not run.is_dir() or not control.is_dir()
+             or run.is_symlink() or control.is_symlink()):
+         raise ValueError("只接受本launcher新建的ROOT/framework直系run/control")
+     manifest = {"kind": "actual末层局部eager尾段门，非生产AOT/模型服务性能", "started_utc": utc(),
+@@ -344,7 +346,7 @@
+         raise ValueError("无参启动唯一UTC门；不接受源/参数覆盖")
+     checked_assets()
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+-    run = ROOT / "framework" / (stamp + "-last-layer-tail-gate")
++    run = ROOT / "framework" / (stamp + "-last-layer-tail-v2-gate")
+     control = run.with_name(run.name + "-control")
+     run.mkdir(exist_ok=False)
+     control.mkdir(exist_ok=False)

@@ -1,0 +1,58 @@
+{
+  "utc": "2026-10-22T12:29:35.002789+00:00",
+  "run_id": "20261022T121701Z-prefill-v-late-gate",
+  "archive_sha256": "933c5ecc72add5e50fbcb537e10401fddc2010d7cffae7938ddba1022408345f",
+  "archive_bytes": 141948,
+  "safe_members": 40,
+  "sealed_files": 35,
+  "seal_sha256": "5f35018f9771ce49d9714aa7e0ce7c5011a17d0b586b74c7ab7adc2438ea1950",
+  "all_sealed_files_verified_before_and_after_data_filter_extraction": true,
+  "core_asset_sha256": {
+    "biv150_prefill_v_late.py": "89134ef1d49d532d91d460094ae7a0563d1546c7d1b8b529490b77ecfa16ab08",
+    "check_transform_cpu.py": "c04790d04cd572d79cce8f23f8b4774c1b64982578d494d5de858f8384bd4308",
+    "cpu-check.json": "65e45b3bd372ab88b2766b76e8295c2f5b7942385034e36fbf4a0a6f534046f1",
+    "generated_attention.py": "b7aee63a1f45f39a8d917ae25b462b6c9a9ccf45c7c1d60b556e0cf1a8fad9d9",
+    "launch_prefill_v_late_gate.sh": "34d07ae72b33ec18e2775b8291fd37aed42b9576db1d4cd7daa433466e344003",
+    "validate_prefill_v_late.py": "8f83395fbd8cef50cf1508e5cc05dfa94cba7fddc7961190920373c70a4675ae",
+    "next-gpu-mainline.md": "1308f386e798d88afd703f20023253206da1864abe3358f2c66036545a9228e2"
+  },
+  "all_correctness_checks_passed": true,
+  "correctness_check_count": 22,
+  "selected_calls": 68,
+  "fallback_calls": 0,
+  "original_3d_calls": 68,
+  "binding_restored": true,
+  "timing": {
+    "method": "32 calls/window ABBA；仅 D1/P2047/KV16K 实际层合成输入",
+    "wall_ms_baseline": 11.106083156250001,
+    "wall_ms_candidate": 11.267371781249999,
+    "wall_slowdown_percent": 1.4522547934393115,
+    "event_ms_baseline": 10.993639469146729,
+    "event_ms_candidate": 11.136705875396729,
+    "event_slowdown_percent": 1.3013561764646742
+  },
+  "resources": {
+    "baseline": {
+      "regs": 102,
+      "spills": 0,
+      "shared_bytes": 65536,
+      "warps": 8,
+      "stages": 1
+    },
+    "candidate": {
+      "regs": 100,
+      "spills": 0,
+      "shared_bytes": 49152,
+      "warps": 8,
+      "stages": 1
+    }
+  },
+  "conclusion": "严格门通过但 wall/event 均慢约1.3–1.45%；放弃当前 V-late 点，保留原 V load 顺序，不接真实服务或扩大扫描。资源下降不等于关键路径改善；缺少 stall/驻留证据，不推断具体变慢原因。",
+  "limits": "KV16K 是上界 fixture，不是 native 窗口逐步实测 seq_len；未评估整模型准确率、graph replay 或官方吞吐。",
+  "postflight": {
+    "checked_utc": "2026-10-22T12:17:24.804527+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "exit_code": 0
+}

@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共136条登记、133个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共144条登记、141个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -114,6 +114,14 @@
 | 天数 BI-V150 | 134 | 2026-10-22T11:36:29.383148+00:00 | [纯decode CPU gather跳过](methods/decode-cpu-gather.md) | 已完成 | 4096/128/64/64 | 吞吐-0.79831%，TTFT20339.6547ms | [20261022T113627Z-decode-gather-service-candidate-decode4k](runs/bi-v150/20261022T113627Z-decode-gather-service-candidate-decode4k.md) |
 | 天数 BI-V150 | 135 | 2026-10-22T11:44:37.430487+00:00 | [当前版本GPU热点](methods/gpu-hotspots.md) | 已完成 | 16384/128/64/32 | 可见kernel累计1063.156218ms：2D Attention640.380398ms/60.2339%，GEMM337.191759ms/31.7161%，3D2.6891%，reduce0.1245% | [20261022T114435Z-current-mixed-native-diagnostic](runs/bi-v150/20261022T114435Z-current-mixed-native-diagnostic.md) |
 | 天数 BI-V150 | 136 | 2026-10-22T12:02:26.759990+00:00 | [Attention 分流与 launch](methods/attention.md) | 已完成 | 未记录/未记录/未记录/未记录 | wall11.089565→14.605917ms（慢31.7087%），event10.983371→14.497282ms（慢31.9930%） | [20261022T120226Z-prefill-w16-gate](runs/bi-v150/20261022T120226Z-prefill-w16-gate.md) |
+| 天数 BI-V150 | 137 | 2026-10-22T12:17:01.200367+00:00 | [其它登记与控制记录](methods/other.md) | 已完成 | 未记录/未记录/未记录/未记录 | wall11.106083→11.267372ms（慢1.4523%），event10.993639→11.136706ms（慢1.3014%） | [20261022T121701Z-prefill-v-late-gate](runs/bi-v150/20261022T121701Z-prefill-v-late-gate.md) |
+| 天数 BI-V150 | 138 | 2026-10-22T12:22:18.138102+00:00 | [其它登记与控制记录](methods/other.md) | 已完成 | 16384/1024/64/32 | 输出/32请求/c64，32成功0失败，219.973985s、总2532.372182 tok/s、输出148.963070 tok/s、TTFT62352.5218ms | [20261022T122216Z-current-combination-context16k-long-baseline](runs/bi-v150/20261022T122216Z-current-combination-context16k-long-baseline.md) |
+| 天数 BI-V150 | 139 | 2026-10-22T12:33:34.405596+00:00 | [其它登记与控制记录](methods/other.md) | 失败/未通过 | 未记录/未记录/未记录/未记录 | 失败：RowParallelLinear的disable_tp未免除ModelWeightParameter对TP组的依赖，真实TP组未初始化 | [20261022T123334Z-last-layer-tail-gate](runs/bi-v150/20261022T123334Z-last-layer-tail-gate.md) |
+| 天数 BI-V150 | 140 | 2026-10-22T12:43:58.125520+00:00 | [其它登记与控制记录](methods/other.md) | 失败/未通过 | 未记录/未记录/未记录/未记录 | 123334失败与v2资产保留 | [20261022T124358Z-last-layer-tail-v2-gate](runs/bi-v150/20261022T124358Z-last-layer-tail-v2-gate.md) |
+| 天数 BI-V150 | 141 | 2026-10-22T12:48:57Z | [其它登记与控制记录](methods/other.md) | 已完成 | 未记录/未记录/未记录/未记录 | 实际SDK只读属性查询exit0：BI-V150/32GiB/16SM/warp64 | [20261022T124857Z-biv150-resource-query](runs/bi-v150/20261022T124857Z-biv150-resource-query.md) |
+| 天数 BI-V150 | 142 | 2026-10-22T12:51:37.147775+00:00 | [其它登记与控制记录](methods/other.md) | 已完成 | 16384/1024/64/32 | 32成功0失败，219.995999768s、总2532.118768tok/s、输出148.948163tok/s、TTFT62317.2833ms | [20261022T125135Z-current-combination-context16k-long-baseline](runs/bi-v150/20261022T125135Z-current-combination-context16k-long-baseline.md) |
+| 天数 BI-V150 | 143 | 2026-10-22T13:00:38.456563+00:00 | [其它登记与控制记录](methods/other.md) | 失败/未通过 | 未记录/未记录/未记录/未记录 | 失败，下一轮只修source pin | [20261022T130038Z-prefill-v-late-cache-gate](runs/bi-v150/20261022T130038Z-prefill-v-late-cache-gate.md) |
+| 天数 BI-V150 | 144 | 2026-10-22T13:04:58.061004+00:00 | [其它登记与控制记录](methods/other.md) | 已完成 | 未记录/未记录/未记录/未记录 | wall慢0.27180%、event仅快0.02373%，不能认定收益，当前不集成；负结果不外推其他A+B | [20261022T130457Z-prefill-v-late-cache-v2-gate](runs/bi-v150/20261022T130457Z-prefill-v-late-cache-v2-gate.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

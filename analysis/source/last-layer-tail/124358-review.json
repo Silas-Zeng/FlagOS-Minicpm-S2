@@ -1,0 +1,111 @@
+{
+  "status": "REVIEWED_FAILED_LOCAL_TOLERANCE_NOT_PERFORMANCE",
+  "run_id": "20261022T124358Z-last-layer-tail-v2-gate",
+  "tgz_sha256": "0a0b84f6c7d4a6cb6305d4784716ea907e80c2c04e4047bc0e6ac58721367ccd",
+  "seal": {
+    "controller_seal_indexed_files": 481,
+    "evidence_seal_indexed_files": 482,
+    "evidence_seal_includes_controller_seal": true,
+    "validation": "root回收时额外生成evidence-seal.json，tmp/import_saved_gate.py已对其482项逐SHA全核；本owner复用，不重扫原件。"
+  },
+  "review_initial_count_error": "首次将root evidence-seal的482项误套controller seal而本地断言失败，写入前停止；两seal不同，原run无误。",
+  "source_count": 9,
+  "base_files": 412,
+  "source_unchanged": true,
+  "case_results": [
+    {
+      "case": "M2048-N2-default-stream",
+      "hidden": {
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs": 0.0,
+        "max_rel_floor_1e_6": 0.0,
+        "allclose_atol_0_01_rtol_0_01": true
+      },
+      "final_residual": {
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs": 0.0,
+        "max_rel_floor_1e_6": 0.0,
+        "allclose_atol_0_01_rtol_0_01": true
+      }
+    },
+    {
+      "case": "new-values-pointers-nondefault-stream",
+      "hidden": {
+        "bitwise_equal": false,
+        "finite": true,
+        "max_abs": 0.0234375,
+        "max_rel_floor_1e_6": 3.5,
+        "allclose_atol_0_01_rtol_0_01": false
+      },
+      "final_residual": {
+        "bitwise_equal": false,
+        "finite": true,
+        "max_abs": 0.017578125,
+        "max_rel_floor_1e_6": 3.5,
+        "allclose_atol_0_01_rtol_0_01": false
+      }
+    }
+  ],
+  "timings": [],
+  "distributed": {
+    "backend": "nccl",
+    "world_size": 1,
+    "rank": 0,
+    "local_rank": 0,
+    "init_method": "file:///workspace/experiments/minicpm-s2/framework/20261022T124358Z-last-layer-tail-v2-gate/world1-rendezvous",
+    "source_sha256": {
+      "parallel_state.py": "1feda9ac98c1dd14cbad60a9205194d224ad7d75656c6e94cffbe3bdbcbf4003",
+      "parameter.py": "ff6054fbd19ec932c548d562c6f4cc4506383b71cbe411fcfd554c8b1d87b510"
+    },
+    "initialized": true
+  },
+  "distributed_cleanup": {
+    "errors": [],
+    "torch_initialized_after": false,
+    "model_parallel_initialized_after": false
+  },
+  "device_settled": true,
+  "inputs_unchanged": true,
+  "rng_unchanged": true,
+  "db_before": {
+    "snapshot_sha256": "d9ee1de13f7c1b34f2646f84b77c3482957749dd0794ad8de02b4dbe4cbab89d",
+    "schema_sha256": "5f034a8b7c3cd39a35725b6b5d341025dc8277d3dae2d724fe75578b3a67b43c",
+    "logical_content_sha256": "5a21ddb63efb029f2c98378a5d269c57be6a86db037b6a6ebe346552b441b93e",
+    "table_count": 527,
+    "row_count": 19608
+  },
+  "db_after": {
+    "snapshot_sha256": "67b19658c81b569032401c8ee49cb1292d756996b9b159f21c417a27516bb9cb",
+    "schema_sha256": "5f034a8b7c3cd39a35725b6b5d341025dc8277d3dae2d724fe75578b3a67b43c",
+    "logical_content_sha256": "dd3c10ee0e56822b283b6701a75d635fdccded0e84879e0a2e8f995897aa6f53",
+    "table_count": 527,
+    "row_count": 19702
+  },
+  "db_note": "同527表，新增94行；physical/logical变化，schema同。未据此解释数值差异。",
+  "warnings": "原worker.log保FlagGems重注册、native fused_add_rms_norm及index_select deprecation warning；失败原AssertionError保results.json。",
+  "postflight": {
+    "recorded_utc": "2026-10-22T12:44:50.121212+00:00",
+    "query": "68, 0\n",
+    "ixsmi": "Timestamp    Thu Oct 22 20:44:50 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  34C   P0       92W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n",
+    "sockets": [
+      {
+        "host": "127.0.0.1",
+        "port": 9031,
+        "connect_ex": 111
+      },
+      {
+        "host": "::1",
+        "port": 9031,
+        "connect_ex": 111
+      }
+    ]
+  },
+  "asset_archive": "archive/ai/20261022-current-gpu-hotspots/next-last-layer-tail-v2",
+  "limits": [
+    "No timing, accuracy or speed result.",
+    "New values and nondefault stream changed together; no causal attribution.",
+    "No threshold relaxation, new v3 or device rerun."
+  ]
+}

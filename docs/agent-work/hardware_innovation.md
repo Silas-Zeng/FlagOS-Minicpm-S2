@@ -1238,3 +1238,69 @@ root授权唯一历史未测w16点，本owner独占tmp/next-prefill-w16：policy
 120226单点真实回执：exit0，strict所有正确性/原global恢复true，selected68/fallback0/原3D68；32ABBA wall11.08956495→14.60591725ms慢31.7087%，event10.98337078→14.49728155慢31.9930%，实际w16 regs101/spills0/shared65536/warp64。没有收益，停止w16及tile扫描，不集成/不扩大accuracy。本owner按root唯一owner回执更新，未另执行/重跑原件；完整封存由root负责。已更新w16 README、纯gather服务README负结果及当前GPU热点短文。
 
 下一阶段仅建议末层删除无用hidden行：原6f4445/4451在全模型结束才gather logits_indices，当前M2048/N2。必须先保最后层全M K/V写cache，再仅N行Q/Attention/O/MLP/norm；前41层原路，不改采样N/顺序/RNG、不宣称只改gather已实现此算法。上界约一层/42，模型接点/residual/metadata/unsupported特征尚需CPU证明，当前无新runtime/合同/GPU队列。本阶段至此停写交root封存。
+
+
+### 恢复主线：2D V迟加载单候选
+
+root新阶段授权不再tile扫点；本owner用primary Triton官方FA2与FlashAttention split启发式交叉54c，选择V资源生命周期，不选缺并行论据的splitKV。具体源/反证/链接仅写tmp/next-gpu-mainline.md，未开长综述。root随即授权实现，独占tmp/next-prefill-v-late/policy89134ef1、gate8f83395f，CLI沿w16同门，exact54c仅新增constexpr开关/移动原V offset+load+cast，w8/BM128/T64/s1和FP调用顺序/原3DC2不动；selector逐AST复用87c6。首baseline观察只计编译信息，正式timing baseline原binding；raw asm哈希与资源不能单独证明调度/occupancy。
+
+唯一CPU transform/launch合同首次0.0322s pass，generated b7aee63a…；无Torch/Triton/设备导入，不冒称同IR或GPU数值。framework首稿全文审未见新变换/SME/selector阻断，最终两pin无变化已交其末审/root；GPU唯一由root串行。末层tail局部门由framework独占，本owner只预留新增风险互审，不竞争实现。
+
+
+### 121701 Vlate负结果与资源驻留反证
+
+
+121701实际回执（root唯一owner）：Vlate strict bits/KV/RNG/scale/新指针/流全部过，selected68/fallback0/原3D68；资源确由baseline regs102/shared65536变为candidate regs100/shared49152，双方spills0/w8/s1。32ABBA wall11.106083→11.267372ms慢1.4523%，Event10.993639→11.136706慢1.3014%，暂不集成。新源确改变了资源，并不证明优化了关键路径；减少V前取可能损失延迟隐藏，但无阶段stall证据不能定因。
+
+是否因此再试pipeline：当前本地env/硬件记录没有每SM shared/register/thread总量，已归档actual Triton compiler.py:164/506的max_shared_mem仅证明装载上限查询/检查，不等于SM总池。比如64KiB SM池时原64与新48都最多1CTA；128KiB池时都最多2CTA，96KiB池才可能shared1→2，尚需512线程与真实寄存器分配颗粒限制。不能从shared降16KiB直接批准s2，更不能重做旧tile/stage扫描；stage加深还可能重新占用shared。没有实际上限/驻留证据前只保此负结果，优先末层tail真删工作；将来若root自然取得actual完整properties/occupancy信息再决定唯一流水点，本轮不增设备诊断。
+
+
+### 末层尾段局部门跨职责只读审完成
+
+framework新独占tmp/next-last-layer-tail helper99d5a8c86dac67b7a2c0029842576fbd1439060525d4c6789b0ddd32703fc9ec/gate25d3e9cb194b9a6504db7f678f05d0f2113495e5bdd4d3829b82d813f153b650，本owner实读actual4源并核1e10 llama/0bd6 linear/6966 norm/7572 activation SHA。Llama233 Oproj→328 postnorm→330 MLP→427 finalnorm行独立链与同时gather Attention output/residual正确，QKV/Attention/KV不在此局部工具。首稿baseline计时多gather一份final_residual（生产原本丢弃），本owner提出实质修订，作者已删该额外工作；正确性仍比residual。最终baseline一次hidden gather/candidate两前置gather计窗，原norm maybe_inplace由32独立residual工作副本窗外reset，避免污染跨窗输入。新值/新ptr的输入不变、非默认流、RNG、NaN可JSON保存和actual v1CPUstat路径已补。
+
+最终静态无当前短门阻断已回root/作者，没运行任何合同/设备；framework唯一CPU语法/stdlib/末行边界receipt不冒充数学门。输出N不能直接接原runner期待M的契约；这是随机权重actual类eager尾段、非当前生产AOT/FX接线，不继承模型accuracy/完整KV或E2E收益。后继GPU仍root独占。
+
+
+### 专项硬件主线：保留A+B机会，先核实际loader交互
+
+root授权公开primary+actual硬件研究，本owner已实际浏览厂商产品/支持页、FlagTree官方iluvatar compiler/driver/wiki、Triton range契约，落archive/ai/20261022-current-gpu-hotspots/biv150-resource-interactions.md。完整板64GB/350W不可缩放成本实例16SM32GiB；每SMshared/regs/thread/CTA、矩阵峰值/带宽仍未知。actual compiler a0d2:386明确ivcore11无硬件namedbarrier/setmaxnreg，软件pipeline/SMEload/prefetch存在不等于本kernel真重叠；TE-FL多缓冲引用实际是Ascend，已反证外推。
+
+发现公开loader跨48KiB偏好阈值后，root纯CPU取回actual driver.c6d1b04，本owner独立核:146–157同分支：shared>49152才PREFER_SHARED及动态shared上限。原64进/Vlate48不进是新A+B证据，不是证明硬件cache实际变化或回退根因。已给root精确SDK补读路径/属性查询，不SSH/GPU。组合优先Vlate+保baseline函数cache偏好，次选Vlate+固定一步K预取/有限内层流水；两者均需真实资源/严格数值/一次ABBA，没写实现、没排设备，不因A单负推断组合负。
+
+期间先完成framework tailouter75b06/987c定向终审：复用32a单锁/单child/monitor/DB/双idle/cleanup/seal，new99d5/25d3+actual4源/config、完整412核归档无部署阻断，未运行包装/旧suite/GPU；实际首门123334随后暴露ModelWeightParameter需要真TP组，不是尾算法数值失败，framework独占v2真实world1初始化，等待只读新delta。
+
+
+补充actual SDK与只读collector（尚待root返回查询值）：`tmp/current-biv150-sdk-source/ix.h`真实定义IXDRVfunction为struct指针，cuFuncGetAttribute/cuFuncSetCacheConfig经mapping_cudart映到ixdrv*；PREFER_SHARED枚举真实为0x01，函数carveout/maxdynamic属性均有声明，但没有FuncGetCacheConfig，context getter不能替代。MAX_BLOCKS_PER_MULTIPROCESSOR不在该actual enum中，必须保未知。设备属性collector独占同目录`query_biv150_resources.cpp`最终SHA57326c2e1f2298654c3c0fa7fffbe2e5597dc6658775499c1f49262220a72e4b；SDK编译枚举，dlopen actual libcuda仅Init/DeviceGet/19只读属性和主context状态，不建context/分配/stream/sync/Set/kernel。只读函数属性必须同进程真实JIT handle，不能从其他进程传整数。初始生成过度C++转义在CPU准备检查发现并弃用，未编译/设备；最终无该转义层。root唯一owner编译执行，本owner未运行。
+
+Tail v2接线增量只读终审完成：worker8e4903e3/outer510bd162/shd7568982，真world1/rank0/local0私有file URI、current config、actual1feda/ff605 API与源pin，不伪造_TP。partialinit先attempt，finally原device settle后独立尝试destroy_model_parallel/world并核状态，未settle保引用；原helper99d5和算法/32a owner链不变。没运行合同/包装/设备。root后续v2触发局部数值门失败并清理，说明真实组问题已修通但数值未过，不能写成通过/生产可用；等待作者/原件分析，不新增尾段设备测。
+
+
+124857只读collector owner实际回执：最终57326编译/运行成功，19SDK属性rc0，primaryctx前后active0；SM shared131072/regs262144/threads8192，perblock threads4096/shared131072/optin131072/regs262144，16SM/warp64/32GiB，L2=16777216、global/localL1=1、asyncengine1/concurrent1、clock1500000/mem1600000/bus2048。按owner回执更新硬件研究并同步team；原包15223B SHA510c7a4f5d4ca3a155aa9c5551d6c162774844d30764d05fc56358a134859b9b正在下载，未冒称本owner已独立读原JSON。128KiB shared使64/48都最多2CTA粗界，不能称Vlate驻留翻倍；cache配置阈值A+B独立可测，属性不证明实际occupancy/峰值带宽/矩阵吞吐或完整调度粒度。不支持字段如MAX_BLOCKS仍unknown。
+
+
+### 130457 cache组合负结果；一步K lookahead已CPU交接
+
+当前root真实130457三臂strict通过：原wall11.0918682813/Event10.9864487648ms，A默认Vlate11.2275998594/11.1361632347，B加PREFER_SHARED11.2581162031/11.1335206032。B较原慢1.49883%wall/1.33867%Event；cache单因素wall慢0.27180%、Event仅快0.023730%，无可确认收益，保负结果不集成。A/B独立module/function且同binary/compilehash/shared49152/regs100，setter仅B一次rc0 enum1；maxdynamic131072/static0不变、carveout801不支持，原绑定恢复。本owner按root回执，不冒称独立完整验收。
+
+root授权唯一下一A+B点，独占tmp/next-v-late-k-lookahead：policy1919c50be7914d7d77ff81910e84835fa6ab0589f9e9ba677dab3aa0885e7559、gateab9a47874b4234c2f7d9dbd51c98053204a4953685cafcb5a90130915e1ce5c2、generated06ad08f22f275bb696143bbe9fdcd19821d262d01d99f57860e8606863f43644。变换自exact54c两层可逆，原Vlate后移V＋一步K/物理页carry，仅首lo<hi、next j+1<hi预取，原partial mask/地址/遍历与FP调用顺序不变，3D原C2；不叠cache、warp/stage/tile。原同D1/P2047/KV16K上界层门，strictbits/整KV/RNG/scale/当前指针/非默认流过后同worker直接32ABBA；首编译落真实asm/resources，禁止将CPU目录中的fakecompiled llir字符串当IR。
+
+唯一新CPU合同首次0.0530856s pass，9个边界/地址carry/byte逆回/原guard/原异常不重试/restore齐；无Torch/Triton导入或设备。framework已全文只读最终三pin＋receipt，无当前短门阻断，未重跑合同/设备。本owner给root可部署两pin/CLI，简短README保存恢复/失败/IR证伪边界，等待root唯一GPU run；尚无新候选数值/资源/流水/性能结论。
+
+
+### K lookahead收益反证评审：NO-GO，暂停部署
+
+按root最新“先推收益，推不出不组合不测”指令，1919/ab9只保CPU草稿，当前不部署、不运行GPU、不重跑合同。此前“可部署/交叉审ready”仅是语义与门的静态资格，不能替代收益资格，本结论覆盖其执行建议。
+
+1. **没有驻留提升证据。** 已实读16SM/warp64、每SM128KiB shared；原64KiB与Vlate48KiB的shared粗界都为2CTA。carry一个128×64 BF16 K tile逻辑16KiB加页向量，可能重新扩大shared/寄存器活跃期，不能把Vlate省16KiB当可免费换取的双缓冲空间。实际分配/occupancy仍未知；Vlate实测慢1.45%，而cache修复组合也负，尚无资源瓶颈被解除的证据。
+2. **源码只证明移动依赖，不证明产生有效异步重叠。** 本候选不减K/V字节、dot/softmax次数或CTA数；在PV前执行普通tl.load并跨迭代carry，未新增已证有效的async-load/wait机制。编译器可能调回、串行等待，或让下一K与当前V/P/acc同时存活；单凭源码位置不能证明latency隐藏收益，也没有当前kernel的K等待/stall或带宽利用证据来量化可省部分。
+3. **已有编译器含预取/流水pass，但尚无Attention IR正文证明其缺口。** actual a0d2 compiler.py:307–309先assign_latencies/schedule_loops/pipeline(num_stages)，:329再add_prefetch，且后续reorder/coalesce；这不证明原K已经预取，也不允许假定原来完全不预取。本次CPU递归核本地tmp/experiments：真实TTGIR/LLIR只有183920三份MM缓存；121701/130457 Attention results只存baseline TTGIR ff6456…/LLIR32b351…与Vlate TTGIR305cdd…/LLIRceee81…哈希，未归档正文。本目录两.llir.txt是CPU stub，不能分析调度。没有原K load→PV/loop依赖、wait/barrier与资源正文，收益前提未成立。
+
+最短后继若自然可得，仅由root只读取回上述**现存同哈希**Attention缓存IR/机器汇编，不编译、不启动benchmark；先看原版/Vlate是否已跨迭代预取、原K load等待是否可与PV重叠、carry是否打破现有SME/共享布局。无明确新机制与成本优势就保持NO-GO，不拿跑卡代替思考。本次只读源码/归档与追加本handoff，未改候选或新建报告。
+
+
+真实IR补证（root只读取回现存cache，未编译/设备）：analysis/source/current-attention-ir/retrieval.json及baseline/v_late的TTIR/TTGIR/LLIR/ASM八件，SHA与130457原件全部一致。**最终仍NO-GO，但理由由缺正文收紧为实际机制净收益不足**：
+
+1. 真TTGIR两者:291均只有M/acc/L三项iter_args；baseline:335–348、Vlate:325–332当轮K load→local_alloc/local_load→QK，PV均:383，没有下一K carry或显式async。这是新正证据：nextK与currentPV存在数据依赖上的潜在重叠窗口，不能再声称原版已经跨迭代预取K。普通tl.load实际会lower为可延迟等待的ml_lsa_*，故也不能声称它绝不可能overlap；但无K等待耗时/关键路径占比证明可兑现。
+2. 真ASM baseline约1830–1970已交错ml_slb_load与ml_matrix_mad，并按lmcnt等待；当前Vlate的下一次页表读取/等待见约1445–1460，后续K/SLB/MAD也由native调度。新方案只尝试跨迭代global-K延迟隐藏，不能把已有矩阵/SLB交错又算收益；next页表必须先完成才能发K，实际sl_wait vmcnt(0)还可能提前约束当前V发起，净可隐藏时间未知。真实TTGIR两种layout还各生成一次物理页tt.load(:305–306)，源码carry单一向量不保证native页表读取减半。
+3. Vlate LLIR在32768区域复用K/V shared（:543/645起），baseline的V另占49152区域（:552起），解释了64→48KiB但未得到性能提升；新carry会增加K/页向量活跃期并可能破坏复用/加寄存器。128KiB/SM下原64与48仍都最多2CTA粗界，字节/dot/CTA数不减，已负1.45%的Vlate上没有可量化正收益下界。保留1919/ab9，当前不测、不改。framework独立读取同IR亦给NO-GO，无新合同/报告/SSH/GPU。

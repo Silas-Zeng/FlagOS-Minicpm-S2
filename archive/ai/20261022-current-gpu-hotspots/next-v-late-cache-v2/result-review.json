@@ -1,0 +1,31 @@
+{
+  "run": "20261022T130457Z-prefill-v-late-cache-v2-gate",
+  "all_sealed_files_verified": true,
+  "evidence_seal_files": 38,
+  "conclusion": "修正actual spec身份后，同worker原版/A默认Vlate/B仅PREFER_SHARED三臂严格正确性通过。32次/窗的原-A-B-B-A-原中，wall原11.091868/A11.227600/B11.258116ms；B较原慢1.49883%，B对A wall慢0.27180%、event仅快0.02373%，不能认定收益，当前不集成。A/B独立module/function但同binary和资源；setter rc0只说明接受，carveout rc801不可观察，原maxdynamic均128KiB且未修改。原绑定恢复，38原件全核；负结果不外推其他A+B。",
+  "summary": {
+    "wall": {
+      "baseline_ms": 11.091868281250001,
+      "candidate_ms": 11.258116203124999,
+      "fraction_saved": -0.01498827047522977
+    },
+    "event": {
+      "baseline_ms": 10.986448764801025,
+      "candidate_ms": 11.133520603179932,
+      "fraction_saved": -0.013386658557959397
+    }
+  },
+  "cache_only_comparison": {
+    "wall": {
+      "late_v_default_ms": 11.227599859375001,
+      "late_v_cache_ms": 11.258116203124999,
+      "fraction_saved": -0.0027179757145083805
+    },
+    "event": {
+      "late_v_default_ms": 11.136163234710693,
+      "late_v_cache_ms": 11.133520603179932,
+      "fraction_saved": 0.0002373017955165091
+    }
+  },
+  "review": "原门复用；hardware定向审独立函数/同binary/一次setter/还原风险。root补实际spec代码身份锁；无正式集成。"
+}

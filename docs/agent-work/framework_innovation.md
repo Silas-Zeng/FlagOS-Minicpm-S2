@@ -1187,3 +1187,59 @@ root随后要求当前自然mixed短native；hardware已明确独占`tmp/current
 114435已出真实热点，root回执3×N2/M2048/P2047，2D640.380ms/60.2339%、MM337.1918ms/31.7161%，sampler+vocab名称下界0.0426%。按此停止温度identity实现；actual现有CPU flags没有all1 O(1)证明及可在metadata创建时O(N)绑定对象、常态O(1)核身份的补审，仅留原tmp短文，不排设备。原InputBatch de1e／sampler1a2f已读，未改代码。当前C3有1decode＋2047prefill实际launch，不为覆盖/对齐再改调度；root改选唯一未测2D w16（BM128/T64/s1原样），hardware独占tmp/next-prefill-w16，本owner只待稿审新增launch/数值边界。a4四CSV42行17配置无w16已核，旧BM256/T128/stage失败不重跑，D1/P2047/KV16K声明上界而非trace精确长度。下一runtime/门定稿即只读短审，不SSH/GPU/改硬件资产；尚未有该点运行结果。
 
 w16新增launch／门定向终审已收口：policy **c27a4da71feae630252c46a1cc310fed9fc6d26b2dd00783459c206dce27463d**，gate **279424148f3837e300646e6006d7cf2a300d19e7c198d138d8a8a418954a67b3**。只strict 2D BM128/T64/s1的warps8→16，原C2outer下3D仍w2、原JIT数学与C3／metadata不动，失败不重试。首稿把source:helpers整个PYTHONPATH当Path会必然失败，本owner发现后作者仅改取首项并拒空，当前与rootlauncher配套。max_abs／max_rel分母floor1e-6／双方NaN／allclose仅记录，strict bits门没放宽；资源来自真实compiled返回，不以stub预测occupancy。原D1/P2047/16K单点32ABBA、KV／RNG／新指针非默认流／scale与原child超时清理复用。本owner没有重跑作者唯一CPU合同或GPU、没有改硬件文件；最终无本轮短门阻断已回root，可唯一串行设备门，尚无实测结果／accuracy承诺。
+
+### 末层死行：actual类局部门已写，生产接线尚未实施
+
+root授权本owner独占`tmp/next-last-layer-tail/`。root统一取回`tmp/current-gpu-tail-source/`四实际源：llama1e100345／linear0bd60103／layernorm696615d8／activation757209ce，config复用120226 source内MiniCPM原59613157。actual LlamaAttention:233 O投影→Decoder:328–330 postnorm／MLP→Model:427 finalnorm顺序已实读，不用旧FX冒充当前模型hook。
+
+新增helper **last_layer_tail.py 99d5a8c86dac67b7a2c0029842576fbd1439060525d4c6789b0ddd32703fc9ec**，使用actual RowParallelLinear／LlamaMLP.forward／RMSNorm.forward_native，TP1 disable_tp、不创建distributed组、无模型安装入口。新增纯child **validate_last_layer_tail.py 25d3e9cb194b9a6504db7f678f05d0f2113495e5bdd4d3829b82d813f153b650**：`--device-worker --output-dir RUN --source-dir RUN/source --model /workspace/MiniCPM5-2B`；source须同名helper＋上述四源，actual安装与归档SHA双核。只约80MiB随机BF16投影权重、M2048/N2([1,2047])；全M原尾后取N对比Attention后先同选output/residual再原尾，QKV／Attention／KV均未构造。含新值／新指针非默认流、原input/RNG和最终hidden/residual误差；局部atol／rtol0.01与bits并列，不当整模型准确率。
+
+norm可能原地消费residual，32ABBA用窗外重置的32份独占resid副本，候选两gather计入。hardware首审指出baseline原计时多算无消费者的finalresidual gather，已仅删该额外gather（correctness保比）；v1cpu.stat改actual cpu路径并显式缺失，新旧immutable输入与非有限失败JSON保留齐。唯一必要CPU syntax/runpy无torch导入、query末行正整数边界检查通过，末次小delta仅compile；没有设备／模型／旧suite。README明确eager类调用非生产Inductor／AOT、N输出不能直接接现runner仍按M取indices，生产scatter或契约改变未做；只部分1/42尾段，不能夸大收益。当前交hardware末次delta终审，root准备唯一outer／锁／PID／DB／后态，不自行上卡。
+
+并行主线V迟加载只读互审已完成：hardware policy89134ef1／gate8f83395f／derivedb7aee63a，strict普通BF16 2D将原V offset/load/cast移到原softmax+accscale之后PV之前，原score／mask／softmax／PV／遍历不变，源逆回且仅一constexpr无SME真实operand增位，3D+C2原路；未重跑其唯一合同。本owner已回root正式ready。后继hardware回执121701真门全bits／KV／RNG通过、shared64→48KiB／regs102→100但wall／event慢约1.45%／1.30%，不集成；这是owner回执，完整原件由root封存，不包装为资源必然带来收益。
+
+hardware已完成99d5/25d3与actual四源定向终审，无当前局部门阻断、未运行合同或设备；README末尾和root消息已保存final。两代码文件现在冻结不再改，root可唯一单卡局部门，尚未有实际数值／性能结果。
+
+GPU主线审阅收口后，按team请求仅读`tmp/stage-pr-updater/update_existing_pr.py` d1dee216新增PR2 ref／resume路径，未重审旧f8逻辑或执行网络／合同。固定private repo／PR2／codex ref、远端原head唯一父、完整tree后验后仅PATCH force=false，source冲突停、队友非碰撞路径保留；断线已更新statecommit只GET核父／tree恢复，main没有写入口。并发分支前进在GET／PATCH间仍由FF拒绝不覆盖；main自然前进可能让既有PR过时、API最终一致性可能使后置检查保守失败，这些边界已告作者／root，由作者简记README，本owner不改其文件。
+
+### Tail单卡owner外壳：原child/helper不改，等待末次外壳互审
+
+按root新授权仅补本地`tmp/next-last-layer-tail/launch_last_layer_tail_gate.py` **75b06e49dbae9d39301b3cc13144a0f0b12821d6c570584cda2acea0466d4f1b**、`.sh` **987c3702a37e00c371f19b6780ca5a4b99044b7674e90221f0d095676adfa1b7**；99d5/25d3全字节保持。最小fork已审32a Eventouter，去事件契约、无C++／模型服务，固定ROOT/scripts两asset、actual四源／config固定SHA；干净100830基点用cd506原410参考叠6f＋两helper严格412、完整归档，安全内部文件alias解引用记账，原树前后不改。worker环境明确PYTHONPATH=BASE、VLLM_PLUGINS=fl、不写pycache。唯一flock、双idle／9031双栈、单child300s及monitor、killpg升级、DBbeforeafter／env／sourcepost／完整seal保原；原idle／stop／snapshot／command函数AST一致。
+
+只compile／stdlib runpy不载设备模块、顶层函数名唯一、Bash-n和定向AST核，未执行copy／snapshot／controller／SSH／GPU，也未跑原child或旧suite。outer-vs-event.diff／outer-check.json与README保存部署来源，已给hardware只读审新增部署/身份/清理差分并通知root四asset准确命令。当前122216 baseline由root独占，下一其完成封存后root决定是否无参bash launcher启动唯一UTC局部门；尚无实际结果，不把exit0当E2E／accuracy。
+
+hardware最终定向审75b06/987c无新增阻断已回root，完整412／actual四源及config／alias与sourcepost闭环、原单owner协议保持；未执行其main／copy／DB／套件／设备。README补回执，四asset正式冻结等root唯一上卡。
+
+### Tail 123334 失败与 v2 真实 TP 生命周期修复；124358 数值失败后暂停
+
+123334 在任何数值 case／计时前因 actual `ModelWeightParameter.__init__` 仍读取 TP rank/world size 而失败，说明 `disable_tp=True` 不免除真实组初始化；旧目录和四资产保原字节。root 取回 actual parallel_state **1feda9ac98c1dd14cbad60a9205194d224ad7d75656c6e94cffbe3bdbcbf4003**／parameter **ff6054fbd19ec932c548d562c6f4cc4506383b71cbe411fcfd554c8b1d87b510** 后，本 owner 仅在 `tmp/next-last-layer-tail-v2/` 增加原API world1/rank0/file rendezvous/current平台backend初始化及TP/PP/PCP/DCP1；原device settle成功后分别销毁model/world组，partial-init也清理，未settle不销毁。没有 fake group／rank monkeypatch／改服务参数。
+
+v2 worker **8e4903e37dedb423070bb33e506cc76c2de0b70c54a3412d14d651e6494b6bbf**、outer **510bd1623177d00a7bd5cd6f462dfccb439a0cab2e362cb107ce1a977297e206**、sh **d756898283f2c65db6a34dcdfe2964572ca7aeb2cd6538e7337fbdf7516f5a8b**，helper仍99d5。移除新增块逐byte逆回25d3，原math／两gather／容差／ABBA不动；outer仅加两实际源归档、新workerpin与v2suffix，原412基点／锁／DB／清理保持。compile／stdlib runpy和help不导Torch/Triton/vLLM、Bash-n通过；静态逆回首断言仅检查器多保留一空行，修检查器边界后通过，记录在v2-check.json。hardware定向实际API／生命周期／外壳终审无阻断，未重跑旧suite或GPU。
+
+root随后124358实际回执：TP初始化／清理成功，默认输入hidden/residual bitwise；换值新指针非默认流hidden maxabs0.0234375、residual0.017578125，原atol/rtol0.01均false，finite／输入／RNG通过，因此**无计时**。本owner未独立读完整原件，不将此回执包装为数值通过；代码／门不放宽，方法暂挂。M2048→N2可改变实际BF16 GEMM形状／累加路径，但第二case同时改变数值和stream，不能单因归结stream或舍入。README只留未执行的两交叉条件诊断计划（新值默认流、原值side流，同权重／阈值，必要时逐尾段定位），不实现v3／不再上卡，主线按root改V-late＋cache。
+
+### 124358／124857 原件本地登记与归档完成（registry 141）
+
+后续按root指令实际读取124358 results／manifest／9源map与DB前后，独立确认上述失败且timings空、world1初始化和清理成功、device settled／输入／RNG过、完整412基点未变。DB并非不变：527表19608→19702行（+94），schema相同，physical与logical均变；不以此解释数值失败。原worker的FlagGems重注册、native fused_add_rms_norm、index_select deprecation告警保留。`analysis/source/last-layer-tail/124358-review.json`记录失败与边界，v2全部自写资产归档`archive/ai/20261022-current-gpu-hotspots/next-last-layer-tail-v2/`，旧123334不动。计数按root澄清：回收额外`evidence-seal.json`索引**482项（含原controller seal）**已由root import_saved_gate逐SHA全核，本owner复用；原controller seal另有481项，不能混为同一seal。首次本地计数断言因混用两者写入前停，记录后纠正、不扫第二轮全包。
+
+124857只读硬件包SHA510c7a4f／15223B已预验19个tar members，无绝对／回退路径、link或覆盖；安全解包唯一同名run（无control），`run/seal.json`17项逐SHA通过。真实SDK查询exit0且19项attribute return0：32GiB／16SM／warp64，SM shared131072B／register262144／threads8192，block threads4096与shared/optin131072B、L2 16MiB；primary context前后active0、68MiB0／双栈端口闭。max blocks/SM与live kernel属性仍unobserved，不能据此声称实测驻留或性能。`analysis/source/biv150-resource-query/124857-review.json`保原结果；自写collector57326及root `tmp/run_resource_query.py`、SDK SHA manifest归档`archive/ai/20261022-current-gpu-hotspots/biv150-resource-query/`，**四个SDK proprietary头文件原文未加入归档**。本owner未执行runner或网络／设备。registry139→141已登记两轮，未改CURRENT／共享README／Git，root125135仍唯一设备owner。
+
+root随后交125135完整结束原件，本owner只追加这一行使registry达到142，之后登记权交回root。实际raw32/0、219.9959997679107s、总2532.118768467／output148.948162851tok/s、TTFT62317.28328ms；server实际KV**521840**、preempt0→1（不是122216的521936）。527表19702行DB三SHA前后同，412源、451项root evidence-seal全核复用、后态68MiB0／双栈闭；独立摘要`analysis/source/last-layer-tail/125135-baseline-review.json`。与122216旧19608行DB及不同KV容量不能配对算收益。
+
+### 保持总M的context分配：仅机会检查，当前不足以实施
+
+按root指定社区第2项，本owner新增`tmp/next-context-prefill-opportunity/PLAN.md`及stdlib只读`check_existing_evidence.py`，一次本地执行生成`existing-evidence-check.json`。真实114435的3步均原M2048／chunks[1,2047]，本窗有两个q>1的步数为0；缺逐请求computed／prompt／owned／placeholder，不据此推全负载不存在多prefill。125135 aggregate Running／Waiting与一次抢占也不能替代合法准入证据，结论为`INSUFFICIENT_MULTI_PREFILL_CONTEXT_EVIDENCE_NOT_DEPLOYABLE`，不实现调度或借此上卡。
+
+最短下一检查位置为actual df780原`_update_after_schedule(scheduler_output)`之前：原allocation已成功但computed尚未增长，仅读合法CPU标量和原payload，需至少同一步两个eligible prefill（不是两步各一个），text/noSpec且known=prompt／无placeholder等。成本c必须是原issued causal context，不是SAVE的confirmed floor；未来任何提案必须原同一合法集合、decode不变、prefill q和及原M=2048逐token不变、原maxlen和KV allocation失败路径保持。总Attention工作不减少，更早驻留可能增加KV压力；既有growth／缩chunk／tile对齐反证保留。没有新的runtime／observer／策略／框架模拟／设备／网络；未改CURRENT或README，root可直接停止此未知机会方向而不新增纯观察长门。
+
+### V-late＋一步K lookahead：新增差分跨审 ready
+
+root要求机会检查暂停后优先审硬件稿，本owner已只读`tmp/next-v-late-k-lookahead/` policy **1919c50be7914d7d77ff81910e84835fa6ab0589f9e9ba677dab3aa0885e7559**／gate **ab9a47874b4234c2f7d9dbd51c98053204a4953685cafcb5a90130915e1ce5c2** 与generated06ad／唯一CPU receipt，不重审旧owner或重跑合同。非空lo<hi才首K/table；下一K严格j+1<hi，分页地址与prefix/dim mask同原，当前V先使用原physical SSA再更新下一轮carry，无空loop／末尾额外读取。QK→softmax→accscale→PV浮点顺序保持，一constexpr无新真实operand/SME位移，selected仅原strict普通BF16 2D，3D仍原C2。首次compiled资源／IR保存位于correctness/bootstrap，计时前warm完成后不再触发；32ABBA仍核每窗32选中和32原3D。已回root和hardware无当前最短门阻断；CPU tile序列证明不代表编译器真overlap、资源或数值等价，真门失败仍保原件，不给先验收益承诺。本owner不改硬件资产／运行设备／网络。
+
+### 用户新增收益先验规则后：K lookahead 收益 NO-GO，不部署
+
+前述“无correctness门阻断”不是收益go。root已纯文件回收130457同SHA原/Vlate真IR至`analysis/source/current-attention-ir/`；本owner重点读真实TTGIR ff6456／305cdd，而非CPU合同8字节fake IR。Vlate:291仅M/acc/L三个loop carry，325–332 K load→shared→QK，378–383 V load→shared→PV，没有显式跨迭代K carry／async；因此nextK和当前PV确有依赖独立的窗口，不能说理论上绝无overlap。但原compiler已有schedule/pipeline/prefetch pass，实际K等待是否暴露仍不能靠源码或num_stages=1推断。
+
+每CTA K/V各64×128×BF16=16KiB，原K已复用于BLOCK_M128（16 query×8 GQA）。候选不减K/V逻辑字节、两dot或256个2D CTA，只可能隐藏“未被其它CTA隐藏且能与一次PV重叠”的nextK等待；不能把可见Attention60.23%或一半KV字节当可省时间。新16KiB K和页向量跨PV活跃，会增加register／布局搬运或破坏Vlate的shared复用；SDK128KiB下48／64KiB仅粗共享上限都2CTA，不能推更多驻留或SM利用。TTGIR305–306实际页向量已有K/V两布局各一load，Python同vector也不能保证native表指令减少。
+
+现有证据没有K-load stall／cache miss预算支持净正，且Vlate真层已慢1.30–1.45%、恢复cache偏好仍无wall收益；按用户先验要求，本轮**NO-GO：不组合、不部署、不测**，代码原样保留，不宣称理论不可能。下一唯一有实证主线是以已回收当前2D TTGIR／LLIR／ASM核真实shared/layout重复搬运和barrier可删预算；只有找到明确可消除工作再立候选，目前不硬推第二种未证组合。没有新GPU／compile／官方资料泛搜或owner文件修改。
