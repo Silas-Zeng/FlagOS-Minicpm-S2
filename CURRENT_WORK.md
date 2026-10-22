@@ -12,6 +12,10 @@
 
 已入库 [docs/operator-backlog-biv150.md](docs/operator-backlog-biv150.md)：63 条候选，按 A 注意力/ B 预填充/ C GEMM/ D KV 与内存/ E 调度执行/ F 采样输出/ G 测量流程/ H 多天项目分组，每条标注状态（已合并、已测负、待测、设计已备、多天）、依据、预期量级、成本、验证方法与合规风险。当前优先级：A2 缺页敏感度探针（25 分钟，决定稀疏线生死）→ A1+A3（+25~39%，设计已备）→ C6/F2/A13/A14 小项（合计 +3~5%）→ H1/H2 多天项目待拍板。
 
+## 合规判定更新（2026-10-23）
+
+按官方原文与本项目要求文档逐条核对：**改 serve 参数值（含 block_size）、以批处理配置为优化路线均属禁止**，已把 block32、max_num_batched_tokens、prefill budget 三条从候选移除；**自研量化（含自研 int8 KV）是明确允许的**，此前判为“合规禁止”有误，其真实障碍是内存与工程量；`async_scheduling` 属“开现成开关”，若做需自研实现；跨轮 prefix KV 保留会改变评测可比性，建议先向组委会确认。详见 [候选清单](docs/operator-backlog-biv150.md) 的合规判定节。
+
 ## 团队入口
 
 实验记录库现名为 `Silas-Zeng/FlagOS-Minicpm-S2`（GitHub ID 1427279927），原名 `FlagOS-S2-Minicpm-throughput` 的链接仍重定向。2026-10-22 本轮首次发布在名称校验处停止、未写入；适配现名后重新发布，保持三个协作库分工。
