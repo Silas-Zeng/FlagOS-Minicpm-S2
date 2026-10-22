@@ -6,7 +6,7 @@
 
 - **Triton int8 GEMM**：FlagGems `scaled_mm` 在该 vendor 走通用回退（`flag_gems/ops/scaled_mm.py`，nvidia 默认 64³/4 warp 配置，无 iluvatar 覆盖），在合并形状的 M=2048 / M=8192 只有 bf16 的 0.5185–0.7020x，即 46.25–63.53 TOP/s；同一 kernel 在 M=64 却达 0.8689–2.0536x（其中 k_proj 0.873、v_proj 0.869、lm_head 0.968 仍低于 1）。自写同类 kernel 也因 `tl.dot` 在该后端对 int8 tile 的编译限制未能跑通；这条路不值得继续。
 - **`torch._int_mm` + torch 反量化链**：0.32–1.04x。原因不在 GEMM 而在 epilogue——int32→fp32、物化 `[M,1]x[1,N]` 的 fp32 scale 乘积、再加 bias，等于对 `[M,N]` 多走三遍。q_proj M=2048 的 GEMM 部分约 0.08 ms，整链测得 0.425 ms（bf16 为 0.195 ms）。
-- **W8A16（int8 权重 + bf16 数学）**：自写 Triton kernel 测两种权重布局，`[N,K]` 列读 0.30–0.61x，`[K,N]` 双向合并 0.34–0.42x（M=8192 0.21x），权重带宽只有 39–129 GB/s（锚点 553 GB/s）。瓶颈是内循环逐元素 int8→bf16 加宽，不是地址模式；与 int8 KV 探针慢 1.58x 同源。**该设备上进 tensor core 的数据必须一路 int8，任何逐元素转换都亏。**
+- **W8A16（int8 权重 + bf16 数学）**：自写 Triton kernel 测两种权重布局。`[N,K]` 列读（不合并）16 个形状各取 8 个配置里最快者，ratio 0.2007–0.6092、权重带宽 1.1–128.5 GB/s（m=2048 为 0.20–0.25，qkv 0.2531；m=8192 稳定 0.21；maxdiff 0.0391–0.0547）；改成 `[K,N]` 双向合并反而更差，0.2079–0.4180、36.2–79.0 GB/s，且那一版只测到 m=128。瓶颈是内循环逐元素 int8→bf16 加宽而不是地址模式：两版都远低于 `lm_head` 的 553 GB/s 锚点（analysis/2026-10-22-int8-kv-probe.md，同文 int8 KV 慢 1.58x）。**该设备上进 tensor core 的数据必须一路 int8，任何逐元素转换都亏。**
 
 ## 成立的形式
 
