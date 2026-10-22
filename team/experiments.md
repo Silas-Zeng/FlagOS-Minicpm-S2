@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共141条登记、135个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共143条登记、137个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -119,6 +119,8 @@
 | 天数 BI-V150 | 139 | 2026-10-22T14:24:47+00:00 | [专用 GQA decode attention kernel](methods/gqa-decode-kernel.md) | 失败/未通过 | 4096/1024/64/64 | 失败：`UnboundLocalError: cannot access local variable inspect where it is not associated with a value`（server.lo… | [20261022T142447Z-probe-gqa-engine-start-crash](runs/bi-v150/20261022T142447Z-probe-gqa-engine-start-crash.md) |
 | 天数 BI-V150 | 140 | 2026-10-22T14:44:41+00:00 | [专用 GQA decode attention kernel](methods/gqa-decode-kernel.md) | 已完成 | 4096/1024/64/64 | 与修复前 #125 的 5058.23 / 3234.26 相比差 0.008% 与 0.06%，即  审计、batch-invariant 拒绝、seq_len==0 安全化、视图键加 stride 与 try/exc…；本轮 GPU KV 为 521840 tokens（#125 候选为 521936），是同一构建在不同 重启下的分配抖动，两臂对照仍用各自的 marker 与 KV 数字，不外推 | [20261022T144441Z-probe-gqa-validation-after-fixes](runs/bi-v150/20261022T144441Z-probe-gqa-validation-after-fixes.md) |
 | 天数 BI-V150 | 141 | 2026-10-22T14:44:41+00:00 | [专用 GQA decode attention kernel](methods/gqa-decode-kernel.md) | 已完成 | 16384/1024/64/16 | 与修复前 #125 的 5058.23 / 3234.26 相比差 0.008% 与 0.06%，即  审计、batch-invariant 拒绝、seq_len==0 安全化、视图键加 stride 与 try/exc…；本轮 GPU KV 为 521840 tokens（#125 候选为 521936），是同一构建在不同 重启下的分配抖动，两臂对照仍用各自的 marker 与 KV 数字，不外推 | [20261022T144441Z-probe-gqa-validation-after-fixes](runs/bi-v150/20261022T144441Z-probe-gqa-validation-after-fixes.md) |
+| 天数 BI-V150 | 142 | 2026-10-22T14:59:40+00:00 | [专用 GQA decode attention kernel](methods/gqa-decode-kernel.md) | 已完成 | 4096/1024/64/256 | 合并基 87ed537 上、官方仪表（benchmark_throughput_serve.py 未改动，test-cases=[[4096,1024,64,256]]）、按用户要求两轮，kernel 显式关闭（VLLM… | [20261022T145940Z-official-4k-control-on-merged-base](runs/bi-v150/20261022T145940Z-official-4k-control-on-merged-base.md) |
+| 天数 BI-V150 | 143 | 2026-10-22T14:59:40+00:00 | [专用 GQA decode attention kernel](methods/gqa-decode-kernel.md) | 已完成 | 4096/1024/64/256 | 稳态对 #新控制行 3738.62 为 **+31.2%**，首轮对首轮 +30.5% | [20261022T151533Z-official-4k-default-on-merged-base](runs/bi-v150/20261022T151533Z-official-4k-default-on-merged-base.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
