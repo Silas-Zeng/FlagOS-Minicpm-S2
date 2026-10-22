@@ -13,6 +13,9 @@
 
 ## 按方法
 
+- [C3重复视图清理](methods/c3-views.md)
+- [Attention热key复用](methods/hot-key.md)
+- [输入准备成本诊断](methods/input-prep.md)
 - [CPU metadata + async token 组合](methods/cpu-combination.md)
 - [CPU metadata 复用](methods/cpu-metadata.md)
 - [异步 token 更新](methods/async-token.md)

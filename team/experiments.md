@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共120条登记、117个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共129条登记、126个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -98,6 +98,15 @@
 | 天数 BI-V150 | 118 | 2026-10-22T06:22:05.830235+00:00 | [CPU metadata + async token 组合](methods/cpu-combination.md) | 已完成 | 未记录/未记录/未记录/未记录 | 五case各11字段全过 | [20261022T062205Z-cpu-combination-gate](runs/bi-v150/20261022T062205Z-cpu-combination-gate.md) |
 | 天数 BI-V150 | 119 | 2026-10-22T07:00:05.513586+00:00 | [CPU metadata + async token 组合](methods/cpu-combination.md) | 已完成 | 4096/128/64/64 | 39.225860193837434s/6891.780031441377total/TTFT20088.914546053275ms | [20261022T070004Z-cpu-combination-baseline-decode4k](runs/bi-v150/20261022T070004Z-cpu-combination-baseline-decode4k.md) |
 | 天数 BI-V150 | 120 | 2026-10-22T07:04:54.111695+00:00 | [CPU metadata + async token 组合](methods/cpu-combination.md) | 已完成 | 4096/128/64/64 | TPS+0.6986430312pct、耗时省0.6937958747pct即0.2721474s、TTFT-0.1250025609pct，仅单轮短筛信号非稳定因果/官方或accuracy，不相加单项收益/不继承103…；与070004同KV/DB四端52319474三SHA全同/包与installed依赖及原命令一致：TPS+0.6986430312pct、耗时省0.6937958747pct即0.2721474s、TTFT-0.1250025609pct，仅单轮短筛信号非稳定因果/官方或accuracy，不相加单项收益/不继承103-105 | [20261022T070452Z-cpu-combination-combined-decode4k](runs/bi-v150/20261022T070452Z-cpu-combination-combined-decode4k.md) |
+| 天数 BI-V150 | 121 | 2026-10-22T08:59:23.226738+00:00 | [Attention热key复用](methods/hot-key.md) | 未激活 | 未记录/未记录/未记录/未记录 | 失败源码和原件保留 | [20261022T085923Z-attention-key-recipe-gate](runs/bi-v150/20261022T085923Z-attention-key-recipe-gate.md) |
+| 天数 BI-V150 | 122 | 2026-10-22T10:01:50.022464+00:00 | [Attention热key复用](methods/hot-key.md) | 失败/未通过 | 未记录/未记录/未记录/未记录 | 独立诊断仍exit1、未计时 | [20261022T100149Z-attention-key-recipe-diagnostic](runs/bi-v150/20261022T100149Z-attention-key-recipe-diagnostic.md) |
+| 天数 BI-V150 | 123 | 2026-10-22T10:08:31.449674+00:00 | [CPU metadata + async token 组合](methods/cpu-combination.md) | 已完成 | 4096/128/64/64 | 10:10:29Z exit0、后态68MiB/0%且端口闭 | [20261022T100830Z-cpu-combination-combined-decode4k](runs/bi-v150/20261022T100830Z-cpu-combination-combined-decode4k.md) |
+| 天数 BI-V150 | 124 | 2026-10-22T10:43:49.424170+00:00 | [Attention热key复用](methods/hot-key.md) | 已完成 | 未记录/未记录/未记录/未记录 | wall增加0.1869%，event增加0.1134%，提交CPU也增加；仅局部门，未测整模型accuracy或官方吞吐 | [20261022T104349Z-attention-key-recipe-v2-gate](runs/bi-v150/20261022T104349Z-attention-key-recipe-v2-gate.md) |
+| 天数 BI-V150 | 125 | 2026-10-22T10:44:50.004885+00:00 | [C3重复视图清理](methods/c3-views.md) | 已完成 | 未记录/未记录/未记录/未记录 | wall增加0.3177%，event增加0.1112%；不外推服务吞吐或整模型accuracy | [20261022T104449Z-c3-views-gate](runs/bi-v150/20261022T104449Z-c3-views-gate.md) |
+| 天数 BI-V150 | 126 | 2026-10-22T10:45:46.284032+00:00 | [输入准备成本诊断](methods/input-prep.md) | 部分记录 | 4096/128/64/64 | EngineCore288617最后快照256步，wait累计1.858095ms/max34.337us，preprocess累计4.553460970s，等待占0.0408%；诊断有计时扰动，不报性能收益 | [20261022T104544Z-input-prep-timing-combined-decode4k](runs/bi-v150/20261022T104544Z-input-prep-timing-combined-decode4k.md) |
+| 天数 BI-V150 | 127 | 2026-10-22T10:49:22.358997+00:00 | [输入准备成本诊断](methods/input-prep.md) | 部分记录 | 16384/1024/64/32 | EngineCore289848最后快照2048步，等待累计14.059984ms/max132.438us，预处理累计14.488006758s，占0.0970%；输入等待方向暂降优先级，诊断不报性能收益 | [20261022T104920Z-input-prep-timing-combined-context16k-long](runs/bi-v150/20261022T104920Z-input-prep-timing-combined-context16k-long.md) |
+| 天数 BI-V150 | 128 | 2026-10-22T10:55:36.829635+00:00 | [Attention热key复用](methods/hot-key.md) | 已完成 | 未记录/未记录/未记录/未记录 | wall从0.464890547到0.502826703ms，增加8.1602%；原件保留，不报服务收益或整模型accuracy | [20261022T105536Z-small-input-hot-key-v2-gate](runs/bi-v150/20261022T105536Z-small-input-hot-key-v2-gate.md) |
+| 天数 BI-V150 | 129 | 2026-10-22T10:56:35.240823+00:00 | [C3重复视图清理](methods/c3-views.md) | 已完成 | 未记录/未记录/未记录/未记录 | wall从0.460218219到0.432736688ms，耗时降低5.9714%；仅单层短形状信号，不外推整体吞吐或整模型accuracy | [20261022T105635Z-small-input-c3views-gate](runs/bi-v150/20261022T105635Z-small-input-c3views-gate.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

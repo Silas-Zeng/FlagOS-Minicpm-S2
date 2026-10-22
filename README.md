@@ -21,7 +21,9 @@
 | 方法 / 版本 | 结果与处理 |
 |---|---|
 | BI-V150历史SQL+C3完整组合 | 官方准确率103/105，完整两档吞吐已留档；这些结果只属于该历史组合，DB/KV对照限制见[原报告](docs/technical-report.md)。对应方法已合并，不能把历史准确率自动赋予新增 CPU 组合 |
-| [CPU metadata＋async token](team/methods/cpu-combination.md) | 两轮64/0、同KV与DB，单轮吞吐+0.6986%、平均TTFT−0.1250%；保留待确认，未做新整模型准确率 |
+| [CPU metadata＋async token](team/methods/cpu-combination.md) | 两轮64/0、同KV与DB，单轮吞吐+0.6986%、平均TTFT−0.1250%；保留待确认，首次组合完整准确率门正在运行 |
+| [C3重复视图清理](team/runs/bi-v150/20261022T105635Z-small-input-c3views-gate.md) | 短输入单层耗时降低5.97%，正确性通过；保留候选，待真实服务对照，大输入单层未见wall收益 |
+| [输入准备等待](team/methods/input-prep.md) | 4K短负载与16K长输出的部分累计中，等待占预处理均低于0.1%；暂不优先改造此处同步。诊断不计吞吐收益 |
 | [KV复制](team/methods/kv-pitched.md) | 字节正确性和局部成本信号已记录，尚无稳定端到端收益；工具已合并，仍需显式调用，未启用 KV offload |
 | 沐曦－曦云C500 | 由该平台队友补充环境与实测，不能套用BI-V150结果 |
 

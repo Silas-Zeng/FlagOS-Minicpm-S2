@@ -1,0 +1,424 @@
+{
+  "status": "correctness_passed_single_layer_signal_only",
+  "accuracy": "not evaluated",
+  "official_performance": "not evaluated",
+  "timing_loops": 32,
+  "timing_method": "D29/P128/KV1024 ABBA, 32 calls/window; prerecord events; wall includes record/submit/final sync; CPU submit clocks exclude final sync; v1 cpu.stat outside window",
+  "worker_command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/framework/20261022T105536Z-small-input-hot-key-v2-gate/source/gate.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261022T105536Z-small-input-hot-key-v2-gate",
+    "--model",
+    "/workspace/MiniCPM5-2B"
+  ],
+  "worker_command_shell": "/usr/local/bin/python3 /workspace/experiments/minicpm-s2/framework/20261022T105536Z-small-input-hot-key-v2-gate/source/gate.py --worker --run-dir /workspace/experiments/minicpm-s2/framework/20261022T105536Z-small-input-hot-key-v2-gate --model /workspace/MiniCPM5-2B",
+  "limitations": [
+    "Actual backend/builder/writer, synthetic inputs, no model runner or weights.",
+    "Post-binder key-recipe reuse only; original binder and SME miss behavior retained.",
+    "\u65b0\u589eD29/P128/KV1024\u6b63\u786e\u6027\u4e0e\u8ba1\u65f6\uff1b\u590d\u7528\u65e2\u6709\u5927shape/\u7eafprefill\u8bc1\u636e\uff0c\u4e0d\u91cd\u8dd1\u3002",
+    "Submit CPU clocks include callback work, not pure key-building time.",
+    "No graph replay, service, official-performance or model-accuracy conclusion."
+  ],
+  "c2_install": {
+    "installed": true,
+    "num_warps": 2,
+    "num_stages": 1,
+    "scope": "audited BF16 MiniCPM 3D decode only"
+  },
+  "c3_install": {
+    "installed": true,
+    "scope": "BF16 MiniCPM natural-prefix mixed Attention only",
+    "ordinary_mixed_dummy_may_split": true,
+    "accuracy": "mixed 2D to 3D remains unverified"
+  },
+  "manager_prepare_wall_ns": 50655362,
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "torch_num_threads": 56,
+  "cases": [
+    {
+      "case": "C3-D29-P128-KV1024",
+      "lengths": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        128
+      ],
+      "kv_len": 1024,
+      "random_physical_pages": true,
+      "reused_old_prefix_blocks": 16,
+      "negative_padding_slots": 3,
+      "correctness": {
+        "all_output_bits_equal": true,
+        "valid_output_finite": true,
+        "padding_untouched": true,
+        "entire_kv_bits_unchanged": true,
+        "rng_unchanged": true,
+        "new_q_pointer": true,
+        "new_output_pointer": true,
+        "nondefault_stream": true,
+        "new_pointer_output_bits_equal": true,
+        "new_pointer_output_finite": true,
+        "new_pointer_padding_untouched": true,
+        "kernel_hot_on_new_pointer": true,
+        "reducer_hot_on_new_pointer": true,
+        "kv_unchanged_after_new_pointer": true,
+        "rng_unchanged_after_new_pointer": true
+      },
+      "bootstrap_before": {
+        "kernel_hot": 0,
+        "reducer_hot": 0,
+        "kernel_bootstrap": 0,
+        "reducer_bootstrap": 0,
+        "fallbacks": 0
+      },
+      "bootstrap_after": {
+        "kernel_hot": 0,
+        "reducer_hot": 0,
+        "kernel_bootstrap": 2,
+        "reducer_bootstrap": 1,
+        "fallbacks": 0
+      },
+      "hot_before": {
+        "kernel_hot": 0,
+        "reducer_hot": 0,
+        "kernel_bootstrap": 2,
+        "reducer_bootstrap": 1,
+        "fallbacks": 0
+      },
+      "hot_after": {
+        "kernel_hot": 2,
+        "reducer_hot": 1,
+        "kernel_bootstrap": 2,
+        "reducer_bootstrap": 1,
+        "fallbacks": 0
+      },
+      "nondefault_stream_handle": 93960801913632
+    }
+  ],
+  "timings": [
+    {
+      "calls": 32,
+      "wall_total_ms": 14.801779,
+      "wall_per_call_ms": 0.46255559375,
+      "event_total_ms": 11.49358081817627,
+      "event_per_call_ms": 0.3591744005680084,
+      "submit_thread_cpu_ns": 13234348,
+      "submit_process_cpu_ns": 13293470,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 832297\nnr_throttled 3971\nthrottled_time 16119301577004",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 832297,
+          "nr_throttled": 3971,
+          "throttled_time": 16119301577004
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 832297\nnr_throttled 3971\nthrottled_time 16119301577004",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 832297,
+          "nr_throttled": 3971,
+          "throttled_time": 16119301577004
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 0,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "baseline",
+      "counters_before": {
+        "kernel_hot": 6,
+        "reducer_hot": 3,
+        "kernel_bootstrap": 2,
+        "reducer_bootstrap": 1,
+        "fallbacks": 0
+      },
+      "counters_after": {
+        "kernel_hot": 6,
+        "reducer_hot": 3,
+        "kernel_bootstrap": 2,
+        "reducer_bootstrap": 1,
+        "fallbacks": 0
+      }
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 16.073773,
+      "wall_per_call_ms": 0.50230540625,
+      "event_total_ms": 15.731310844421387,
+      "event_per_call_ms": 0.49160346388816833,
+      "submit_thread_cpu_ns": 14587579,
+      "submit_process_cpu_ns": 14690189,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 832297\nnr_throttled 3971\nthrottled_time 16119301577004",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 832297,
+          "nr_throttled": 3971,
+          "throttled_time": 16119301577004
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 832298\nnr_throttled 3971\nthrottled_time 16119301577004",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 832298,
+          "nr_throttled": 3971,
+          "throttled_time": 16119301577004
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 1,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "candidate",
+      "counters_before": {
+        "kernel_hot": 6,
+        "reducer_hot": 3,
+        "kernel_bootstrap": 2,
+        "reducer_bootstrap": 1,
+        "fallbacks": 0
+      },
+      "counters_after": {
+        "kernel_hot": 70,
+        "reducer_hot": 35,
+        "kernel_bootstrap": 2,
+        "reducer_bootstrap": 1,
+        "fallbacks": 0
+      }
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 16.107136,
+      "wall_per_call_ms": 0.503348,
+      "event_total_ms": 12.591341972351074,
+      "event_per_call_ms": 0.39347943663597107,
+      "submit_thread_cpu_ns": 14392013,
+      "submit_process_cpu_ns": 14487187,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 832298\nnr_throttled 3971\nthrottled_time 16119301577004",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 832298,
+          "nr_throttled": 3971,
+          "throttled_time": 16119301577004
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 832298\nnr_throttled 3971\nthrottled_time 16119301577004",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 832298,
+          "nr_throttled": 3971,
+          "throttled_time": 16119301577004
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 0,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "candidate",
+      "counters_before": {
+        "kernel_hot": 70,
+        "reducer_hot": 35,
+        "kernel_bootstrap": 2,
+        "reducer_bootstrap": 1,
+        "fallbacks": 0
+      },
+      "counters_after": {
+        "kernel_hot": 134,
+        "reducer_hot": 67,
+        "kernel_bootstrap": 2,
+        "reducer_bootstrap": 1,
+        "fallbacks": 0
+      }
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 14.951216,
+      "wall_per_call_ms": 0.4672255,
+      "event_total_ms": 11.688142776489258,
+      "event_per_call_ms": 0.3652544617652893,
+      "submit_thread_cpu_ns": 13248863,
+      "submit_process_cpu_ns": 13329894,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 832298\nnr_throttled 3971\nthrottled_time 16119301577004",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 832298,
+          "nr_throttled": 3971,
+          "throttled_time": 16119301577004
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 832298\nnr_throttled 3971\nthrottled_time 16119301577004",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 832298,
+          "nr_throttled": 3971,
+          "throttled_time": 16119301577004
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 0,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "baseline",
+      "counters_before": {
+        "kernel_hot": 134,
+        "reducer_hot": 67,
+        "kernel_bootstrap": 2,
+        "reducer_bootstrap": 1,
+        "fallbacks": 0
+      },
+      "counters_after": {
+        "kernel_hot": 134,
+        "reducer_hot": 67,
+        "kernel_bootstrap": 2,
+        "reducer_bootstrap": 1,
+        "fallbacks": 0
+      }
+    }
+  ],
+  "summary": {
+    "wall": {
+      "baseline_ms": 0.464890546875,
+      "candidate_ms": 0.502826703125,
+      "fraction_saved": -0.08160233952918028
+    },
+    "event": {
+      "baseline_ms": 0.36221443116664886,
+      "candidate_ms": 0.4425414502620697,
+      "fraction_saved": -0.2217664791452323
+    }
+  },
+  "final_counters": {
+    "kernel_hot": 134,
+    "reducer_hot": 67,
+    "kernel_bootstrap": 2,
+    "reducer_bootstrap": 1,
+    "fallbacks": 0
+  },
+  "restored_counters": {
+    "kernel_hot": 134,
+    "reducer_hot": 67,
+    "kernel_bootstrap": 2,
+    "reducer_bootstrap": 1,
+    "fallbacks": 0
+  },
+  "original_jit_instance_runs_restored": true,
+  "original_global_bindings_retained": true,
+  "source_sha256": {
+    "gate.py": "67cec428a8029d325ddb8022f315449f68f66ae25dd52b464bee35542d4578c3",
+    "runtime.py": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+    "mixed.py": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+    "policy.py": "a67d3add779387331edcccffd863f1e1b70b76d0ffaf98cebdb8ac69f9458ac7",
+    "validate_hidden_row_gather.py": "65cb8affd4ae08af877ccb4b4cfca6822eec5ba3f83770f39999ee677c546863",
+    "validate_mixed_decode.py": "b6275ee86f4fb24824091e72fccd774d174247975f8189d360400f333a20351f",
+    "bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+    "backend.py": "1219c4d1820b56e99ef6686de8a49c8c5aa57707794bcabf3322023799a03605",
+    "attention.py": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f",
+    "helpers.py": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1",
+    "writer.py": "f18224e51162e37c14a2e2b3045bca55baf0b207b1d203ad6ee7d8ed417139eb",
+    "model-config.json": "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180"
+  }
+}

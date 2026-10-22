@@ -13,6 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 GROUPS = {
+    'c3-views': ('C3重复视图清理', '复用mixed Attention中的视图，减少重复slice/unbind；短输入信号与大输入、真实服务结果分别记录。', []),
+    'hot-key': ('Attention热key复用', '复用绑定后的key/cache并保留原launch尾；未命中、实际命中及负结果都保留。', []),
+    'input-prep': ('输入准备成本诊断', '当前组合的真实输入等待与预处理累计；诊断耗时不作为性能收益。', []),
     'cpu-combination': ('CPU metadata + async token 组合', '两种CPU准备方法的组合；方法正确性与短服务性能分别记录。', ['cpu-metadata', 'async-token-update']),
     'cpu-metadata': ('CPU metadata 复用', '复用已计算的CPU视图，写回原GPU缓冲区；回退和事件边界见原报告。', ['cpu-metadata']),
     'async-token': ('异步 token 更新', '整数gather/scatter更新；既有索引、stream和回退条件保留。', ['async-token-update']),
@@ -34,6 +37,9 @@ GROUPS = {
     'other': ('其它登记与控制记录', '没有足够字段继续归类的登记；不补猜实验结论。', []),
 }
 CODE = {
+    'c3-views': ['patches/framework/candidates/biv150_c3_view_reuse.py'],
+    'hot-key': ['patches/framework/candidates/biv150_attention_key_recipe_v2.py'],
+    'input-prep': ['scripts/remote/input-prep-timing-combined/prepare_input_prep_timing.py', 'scripts/remote/input-prep-timing-combined/biv150_input_prep_timing.py'],
     'cpu-combination': ['docs/pr-preparation/combination-artifacts/resolved/vllm_fl/worker/model_runner.py', 'patches/framework/biv150_cpu_metadata.py', 'patches/framework/biv150_async_token_update.py'],
     'cpu-metadata': ['patches/framework/biv150_cpu_metadata.py'],
     'async-token': ['patches/framework/biv150_async_token_update.py'],
@@ -50,6 +56,9 @@ def group(row):
         parent = BY_ID.get(row['run_id'].removesuffix('-control'))
         return group(parent[0]) if parent else 'other'
     for key, pattern in [
+        ('c3-views', r'c3[_-]view|c3views'),
+        ('hot-key', r'key[_-]recipe|hot[_-]key'),
+        ('input-prep', r'input[_-]prep'),
         ('cpu-combination', r'cpu[_-]combination|cpu_metadata_async_token'),
         ('cpu-metadata', r'cpu[_-]metadata'), ('async-token', r'async[_-]token'),
         ('kv-pitched', r'kv[_-]pitched|kv_save_threeway'), ('kv-contiguous', r'kv[_-]page[_-]copy'),
@@ -137,6 +146,8 @@ def keep(row):
     state = row['status'].lower()
     if row['profile_id'] == 'launcher_only':
         return '保留作过程记录。'
+    if 'input_prep_timing' in row['profile_id']:
+        return '保留诊断结论；当前不据此实施输入同步优化。'
     if re.search(r'baseline|reference|original13eb|^b0$', row['profile_id'], re.I):
         return '保留作对照基线；不据此判断候选收益。'
     if re.search(r'failed|reject|error|no_.*cpu_reduction', state) or re.search(r'不集成|未集成|不启用|不服务集成|无CPU下降|未见.*收益|无正信号', text):

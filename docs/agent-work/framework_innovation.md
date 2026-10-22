@@ -1136,3 +1136,23 @@ root已收到六阶段远端tree匹配，分派本owner与hardware开始CPU-only
 为不猜native_specialize_impl的对齐/类型语义，已给root建议首轮缩窄为post-binder key-recipe复用：保原737–754前缀与真实binder，在其后严格匹配spec/options/同cache对象与原compiled identity，只省str(options)/key-cache，globals仍逐次核，capture/hooks/未知状态留原路径且不双执行prefix。原C2必须先调w2s1再到该点，不能在外层绕过其policy；此候选不声称省binder或SME，新增guard可能抵消预算。manager可约定create(attention,helpers,backend)及install/restore/snapshot，kernel_hot/reducer_hot/bootstrap/fallback字段，当前只是接口方案，没有runtime或新门。
 
 hardware已对齐并等待root取舍，未先写猜接口门。若批准，唯一最短门只fork原visible-prefix门，取消所有数学变换，原P2019/Q2048两case、原JIT bootstrap后新Q/新out pointer及显式非0流ready/完成证明、完整bits/KV/RNG，然后Pcase32call预record ABBA含真实guard/pack开销、另记thread/processCPU与窗外v1stat；负即停，不服务/大测/重复Event。当前未SSH/GPU/安装/源码转换/套件或新长报告；完整绕binder的严格等价目前证据不足，不能把接口存在当作其可安全直绕证明。
+
+
+### hot-key 短门未命中后修正：v2保留原tail，C3实现已交hardware
+
+本轮仅CPU本地。首版1fd87/gate59074及诊断59c075/gate96eb均保留；root报告085923、100149两门输出/KV/RNG/新指针/非默认流通过但hot/bootstrap0，未完成完整两case与计时。100149首次日志证实默认launch enter/exit均非None；root实读knobs.py233f2698的HookChain默认对象，即使calls空也truthy，原guard恒拒。KVQuantMode为IntEnum/NONE0，原比较正确，不放宽。
+
+root批准新版只替原JIT的compute_cache_key/kernel_cache.get两行。`tmp/hot-key-v2/biv150_attention_key_recipe.py` **a67d3add779387331edcccffd863f1e1b70b76d0ffaf98cebdb8ac69f9458ac7**；同目录gate **1f402c6d0d2de2de7c69e688028648fdc1f4f0e875264c570c3480555864acd4**，仅换policy pin。probe只返key/compiled，原globals/grid/metadata/当前hook/launch尾AST完全保原；不是取消hook或另走compiled[]。新增唯一CPU合同check_hook_tail_cpu.py实际通过，cpu-hook-check.json存exact AST逆回、非None hook同metadata/顺序恰一、原二维grid、新args/currentstream、动态globals与原hook异常身份/no retry/no context；stub不证明实际设备。hardware定向审无当前短门阻断。新版尚无设备结果，root串行派发，其他guard不扩张。
+
+独立C3 view首稿已落`tmp/next-c3-views/biv150_c3_view_reuse.py`（首稿1a161226），exact1219 AST只两unbind→同pair及unified Q/out去全段二次slice，其他分支/scale/kwargs保原；AST逆回/compile/no框架import过，尚未运行调用合同或设备。root为并行已改由hardware独占该目录runtime/gate/唯一CPU合同，本owner停止写入其文件，后续只互审；计数selected_calls/fallback_calls，原数学/C2/C3 builder不变，不叠hot-key。须读取hardware最终pin而非把首稿当定稿。
+
+对community owner的`tmp/input-prep-timing`仅新增风险静态审通过：原wait→yield→finally record次序/异常保持，dummy默认不测，JSON在计时取样后且写失败不覆盖原异常，同PID路径/新副本无新GPU操作。现场须实际Engine JSON calls>0；部分累计不能冒称完整；首次recorder import/目录操作在时钟外会扰动首wait，不当无扰动或性能对照。未重复其CPU合同、旧410源审或设备。下一先等root v2短门/input-prep原件，另按hardware最终C3稿定向审；本owner未SSH/上GPU/改代码库或PR。
+
+
+### 用户要求依赖顺序合并已有框架PR：仅给#1/#2冲突依据，停止新实验准备
+
+root负责GitHub；本owner只读现有文件/原manifest并复算静态SHA，没有运行测试、修改共享checkout/PR或设备。#1 CPU metadata与#2 async合并的权威runner为`docs/pr-preparation/combination-artifacts/resolved/vllm_fl/worker/model_runner.py`，**6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141**。必须保留22/23两imports、1879–1890 async条件调用+原scatter、2181–2197 metadata条件调用+原GPU路径、2199原slot mapping，以及7686–7695原SQL→C2→C3 footer。不能直接选50493或f0d0单项runner覆盖另一方法。
+
+两个helper继续取原PR files镜像：cpu-metadata/files/vllm_fl/patches/biv150_cpu_metadata.py →同repo路径，**0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f**；async-token-update/files/vllm_fl/patches/biv150_async_token_update.py →同repo路径，**1bb85e31c7b3fefa81414a54b04a1f0b6cf949c0876f87149956c821bb483adc**。独占中文docs/cpu-metadata-reuse.md与docs/async-token-update.md都保留；不将未验证新方法夹入冲突解决。已测组合方法门062205和原短服务结果由root复用，不重新测试；这段仅源码映射不新增准确率承诺。
+
+C3最终tmp包已完成跨owner只读审：runtime ba085577/gate e5eef652/launcher7418e0de无当前最短门阻断；相对本owner首稿仅加拒绝JIT instance.run叠候选，原两call/math/scale与异常、newQ/out非0流、计数/恢复/单controller配套。已在`tmp/next-c3-views/README.md`末补互审和暂停状态，未重跑hardware唯一CPU合同（cpu-check只描述符）、未上卡/复制formal。用户最新转合并已有PR，本批暂停所有新实验准备，等待root定向接续。
