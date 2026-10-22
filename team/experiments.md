@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共144条登记、138个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共145条登记、139个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -122,6 +122,7 @@
 | 天数 BI-V150 | 142 | 2026-10-22T14:59:40+00:00 | [专用 GQA decode attention kernel](methods/gqa-decode-kernel.md) | 已完成 | 4096/1024/64/256 | 合并基 87ed537 上、官方仪表（benchmark_throughput_serve.py 未改动，test-cases=[[4096,1024,64,256]]）、按用户要求两轮，kernel 显式关闭（VLLM… | [20261022T145940Z-official-4k-control-on-merged-base](runs/bi-v150/20261022T145940Z-official-4k-control-on-merged-base.md) |
 | 天数 BI-V150 | 143 | 2026-10-22T14:59:40+00:00 | [专用 GQA decode attention kernel](methods/gqa-decode-kernel.md) | 已完成 | 4096/1024/64/256 | 稳态对 #新控制行 3738.62 为 **+31.2%**，首轮对首轮 +30.5% | [20261022T151533Z-official-4k-default-on-merged-base](runs/bi-v150/20261022T151533Z-official-4k-default-on-merged-base.md) |
 | 天数 BI-V150 | 144 | 2026-10-22T16:12:27+00:00 | [int8 与 W8A8 决策测量](methods/int8-decision.md) | 已完成 | 16384/1024/64/16 | 即 int8 链在服务里比 bf16 **慢约 47%**，prefill 与 decode 同时变差 | [20261022T161227Z-w8a8-in-situ-negative](runs/bi-v150/20261022T161227Z-w8a8-in-situ-negative.md) |
+| 天数 BI-V150 | 145 | 2026-10-22T16:49:22+00:00 | [int8 与 W8A8 决策测量](methods/int8-decision.md) | 已完成 | 16384/1024/64/16 | 与同实例 kernel-only 的 3236.25 / 56.35 相比，op 边界本身要让出约 18% | [20261022T164922Z-w8a8-bf16-inside-op-control](runs/bi-v150/20261022T164922Z-w8a8-bf16-inside-op-control.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

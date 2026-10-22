@@ -45,4 +45,6 @@
 
 过程中确认了三件会被反复踩到的事：① `torch._int_mm` 要求 M>16，而 `FULL_DECODE_ONLY` 会捕获到 M=1 的图，必须保留 bf16 权重做小 M 回退；② 分块要均分，按固定步长会在 `total % MAX_ROWS ≤ 16` 时留下 1 行尾块；③ 最关键——`model_runner.py` 用 `torch.compile(fullgraph=True)` 并把产物缓存在 `/root/.cache/vllm/torch_compile_cache`，**热缓存会让任何改到图内的补丁静默沿用旧图**（前三轮“精确零效果”就是这个原因），冷缓存则要求热路径没有 print/状态/符号形状分支，最终只能把整条链包成 `torch.library.custom_op`，而每层一次的 Python 分发又吃掉全部收益（TPOT 的 +56 ms 与 126 层 × 每步一次的量级吻合）。
 
-结论：这套编译栈里“Python custom op + 多 kernel”的逐层 GEMM 替换不成立。若要继续，必须换成编译器能原生捕获的算子实现（无 Python 分发），或只在 eager prefill 段生效并承担 prefill 回归；在那之前补丁保持默认关闭，不进入合并讨论。原始登记见 `int8_decision` 的 `20261022T161227Z-w8a8-in-situ-negative`。
+收尾对照（同一 custom op，内部改回 bf16 `F.linear`）：16K 探针 2102.84 / 2650.10（TPOT 56.05 / 74.37），而 kernel-only 是 3236.25 / 56.35、int8 是 1721.67 / 112.72。也就是说 **op 边界本身让出约 18%，int8 链再让出约 35%**：真实服务里 decode 段（M 小、每层一次 op 加量化/反量化）把 prefill 的 1.2–1.54x 全部吃掉。
+
+**结论：W8A8 线性链在这套 fullgraph 编译栈里没有确认的端到端收益，停止集成。** 补丁保留在分支 `codex/20261022-w8a8-linear` 且默认关闭，不进入合并讨论。若将来重启，前提是换成编译器原生捕获、无 Python 分发的 int8 算子，并且只作用于 prefill 段；在那之前不再投入。原始登记：`20261022T161227Z-w8a8-in-situ-negative`、`20261022T164922Z-w8a8-bf16-inside-op-control`。

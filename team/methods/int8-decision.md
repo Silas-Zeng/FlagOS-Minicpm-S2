@@ -19,3 +19,4 @@
 - [20261022T124239Z-w8a16-column-read-gemm](../runs/bi-v150/20261022T124239Z-w8a16-column-read-gemm.md)（登记#136）：W8A16 自写 Triton kernel 的第一版：权重按 [N,K] 存放，tile 以列方向读取（不合并） **是否保留：** 待确认；通过某项检查不自动等于优化保留。
 - [20261022T125433Z-w8a16-coalesced-gemm](../runs/bi-v150/20261022T125433Z-w8a16-coalesced-gemm.md)（登记#137）：输出端 **是否保留：** 待确认；通过某项检查不自动等于优化保留。
 - [20261022T161227Z-w8a8-in-situ-negative](../runs/bi-v150/20261022T161227Z-w8a8-in-situ-negative.md)（登记#144）：即 int8 链在服务里比 bf16 **慢约 47%**，prefill 与 decode 同时变差 **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261022T164922Z-w8a8-bf16-inside-op-control](../runs/bi-v150/20261022T164922Z-w8a8-bf16-inside-op-control.md)（登记#145）：与同实例 kernel-only 的 3236.25 / 56.35 相比，op 边界本身要让出约 18% **是否保留：** 待确认；通过某项检查不自动等于优化保留。
