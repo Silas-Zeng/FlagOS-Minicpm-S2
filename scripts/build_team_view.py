@@ -22,6 +22,8 @@ GROUPS = {
     'kv-memory': ('KV 启动内存观察', '启动内存组成和容量分项诊断，不作为性能成绩。', []),
     'kv-protocol': ('KV 保存 / 恢复协议', '单victim、容量下界、私有页序与FULL恢复；VERIFY诊断不等于性能。', []),
     'kv-observation': ('KV 生命周期观察', '分配失败、抢占与恢复的观察原件，不自动等于可回收机会。', []),
+    'gqa-decode-kernel': ('专用 GQA decode attention kernel', '为 MiniCPM5-2B 的 16Q/2KV、head128、单 token decode 重写的 attention kernel 与其段归约；只在该守卫命中时生效，其余路径走原 kernel。', ['gqa-decode-kernel']),
+    'int8-decision': ('int8 与 W8A8 决策测量', '真实形状上的 int8 GEMM、W8A16、_int_mm+融合 epilogue 及 QDQ 精度模拟；负结果与候选并存，不混用证据级别。', []),
     'admission': ('准入与输出增长', '准入候选及其负结果、未激活和容量限制。', []),
     'mapped-attention': ('非前缀 decode 映射', '单层构造、服务实际命中与重复结果分开记录。', []),
     'mm-cta': ('矩阵乘 CTA 分组', '固定tile下的映射与守卫诊断；单层收益不外推服务。', []),
@@ -34,6 +36,7 @@ GROUPS = {
     'other': ('其它登记与控制记录', '没有足够字段继续归类的登记；不补猜实验结论。', []),
 }
 CODE = {
+    'gqa-decode-kernel': ['patches/framework/biv150_gqa_decode.py'],
     'cpu-combination': ['docs/pr-preparation/combination-artifacts/resolved/vllm_fl/worker/model_runner.py', 'patches/framework/biv150_cpu_metadata.py', 'patches/framework/biv150_async_token_update.py'],
     'cpu-metadata': ['patches/framework/biv150_cpu_metadata.py'],
     'async-token': ['patches/framework/biv150_async_token_update.py'],
@@ -50,6 +53,8 @@ def group(row):
         parent = BY_ID.get(row['run_id'].removesuffix('-control'))
         return group(parent[0]) if parent else 'other'
     for key, pattern in [
+        ('gqa-decode-kernel', r'gqa[_-]decode|gqa_decode_kernel'),
+        ('int8-decision', r'int8|intmm|w8a8|w8a16|quantdequant'),
         ('cpu-combination', r'cpu[_-]combination|cpu_metadata_async_token'),
         ('cpu-metadata', r'cpu[_-]metadata'), ('async-token', r'async[_-]token'),
         ('kv-pitched', r'kv[_-]pitched|kv_save_threeway'), ('kv-contiguous', r'kv[_-]page[_-]copy'),

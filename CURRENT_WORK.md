@@ -24,4 +24,13 @@
 - 单卡实验仍由root唯一负责，始终串行。代码版本/命令/环境/原始结果自动保存，结论、失败原因、下一步只写几句话；阶段结束批量报告/PR，设备运行时CPU准备下一项。
 - 所有维护说明与PR保持自然中文，英文专有名词、命令与原证据原样保留；BI-V150与C500证据分别报告。未确认准确率的组合不冒称最终提交资格。
 
+## 算子线（天数 BI-V150，CJJ 侧）2026-10-22 晚
+
+- 框架库 PR：专用 GQA decode attention kernel。分支 `codex/gqa-decode-kernel`，基点 main `87ed537`，提交 kernel `3be29805`、方法说明 `3232d803`、默认开启 `53635f29`。同机同 prompt 暖探针在公共基上 4K 3787.49→5058.23（+33.6%）、16K 2589.32→3234.26（+24.9%）；较早快照 `b71e585` 的官方四轮为 4K 4809.36、16K 3364.03，官方 math_500 Level 3 为 0.9714（102/105，门槛 0.95）。kernel 默认开启，`VLLM_FL_BIV150_GQA_DECODE=0` 只作对照关闭，官方命令不需要任何新 env。
+- 合并基上的官方仪表对照按用户要求改为两轮（第一轮冷启动、第二轮稳态，不改官方脚本、跑满两轮后停止）：控制 2712.00 / 2734.40；候选（默认开启）待填。证据级别标注为“官方仪表、两轮”，不与官方四轮均值混用。
+- int8 线：唯一有收益的形式是三 kernel 链（Triton per-token 量化 + `torch._int_mm` + 自写融合 dequant+bias），在合并形状 M=2048/8192 实测 1.18–1.61x；FlagGems Triton int8 GEMM、torch 反量化链、W8A16 全部实测为负并保留原件。精度侧只有“去掉 down_proj”或“只量化 MLP”把 greedy 答案一致率拉回 95.8%（与只量化权重同级），全层 W8A8 为 87.5%。自研 W8A8 补丁已实现（分支 `codex/biv150-w8a8-linear`，默认关闭），端到端与官方 Level-3 未跑，不进入合并讨论，也不按微测外推收益。
+- 登记：`experiments/operator/` 11 轮原件 + registry 11 行 + 两个方法视图 `team/methods/gqa-decode-kernel.md`、`team/methods/int8-decision.md`；kernel 源码副本 `patches/framework/biv150_gqa_decode.py`（SHA256 `a8e9715c130b2fdbe53ee6fa2a2f27e66d9573ebba46cebc5e25072e5eb466cd`）。方法说明见 [GQA decode kernel](docs/operator-gqa-decode-kernel-biv150.md)、[int8 决策](docs/operator-int8-decision-biv150.md)。
+- 重新生成团队视图时，除新增登记外，既有页面只出现同一目录内原件链接的顺序变化（本机目录列举顺序不同），没有内容改动。
+- 接续：实验脚本、逐轮日志与探针 CSV 在 BI-V150 实例 `/workspace/experiments/minicpm-s2/`，经 bundle 同步到 Mac `repos/minicpm-s2-cjj`。设备队列（单卡串行）：W8A8 三 kernel 链的两轮端到端对照 → 正向才跑官方 Level-3 → 之后回到 decode 每步算术（P 的 fp32→bf16、accumulator rescale、dot 形状）与 4K 残余热点。
+
 [完整旧交接原文](archive/ai/CURRENT_WORK-before-team-rebuild-20261022.md)保留，旧文中的相对路径以项目根目录为基准；它是历史，当前安排以本页为准。

@@ -1,0 +1,1462 @@
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:728: DeprecationWarning: use_cuda_graph is deprecated; use benchmark_mode='replay' or benchmark_mode='event'
+  super().__init__(*args, **kwargs)
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:411: RuntimeWarning: active Triton backend does not provide a replay benchmarker; falling back to event timing
+  resolved_benchmark = resolve_benchmarker(
+{"name": "q_proj", "m": 64, "n": 2048, "k": 2048, "bf16_ms": 0.03131730854511261, "quant_ms": 0.07870576903223991, "chain_ms": 0.06247692368924618, "chain_maxdiff": 0.0625, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.019542308524250984, "fg_maxdiff": 0.0625, "chain_ratio": 0.5012620131695615, "chain_tops": 8.593107347447852, "fg_ratio": 1.6025388457177137, "fg_tops": 27.472236012125755}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "q_proj", "m": 128, "n": 2048, "k": 2048, "bf16_ms": 0.026226923801004887, "quant_ms": 0.08342115581035614, "chain_ms": 0.06991153955459595, "chain_maxdiff": 0.0595703125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.0237096156924963, "fg_maxdiff": 0.0595703125, "chain_ratio": 0.3751444177612985, "chain_tops": 15.358577866268899, "fg_ratio": 1.106172455140438, "fg_tops": 45.28718803062765}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "q_proj", "m": 2048, "n": 2048, "k": 2048, "bf16_ms": 0.19463461637496948, "quant_ms": 0.462792307138443, "chain_ms": 0.42499038577079773, "chain_maxdiff": 0.0703125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.28270576894283295, "fg_maxdiff": 0.0703125, "chain_ratio": 0.4579741633965767, "chain_tops": 40.42413607272825, "fg_ratio": 0.6884706212497819, "fg_tops": 60.769432644559906}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "q_proj", "m": 8192, "n": 2048, "k": 2048, "bf16_ms": 0.759351909160614, "quant_ms": 1.704053819179535, "chain_ms": 1.570932686328888, "chain_maxdiff": 0.0703125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 1.081755816936493, "fg_maxdiff": 0.0703125, "chain_ratio": 0.4833764780432083, "chain_tops": 43.74438022331213, "fg_ratio": 0.7019623997133483, "fg_tops": 63.525867538768544}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "k_proj", "m": 64, "n": 256, "k": 2048, "bf16_ms": 0.014315384440124035, "quant_ms": 0.06315961480140686, "chain_ms": 0.044648075476288795, "chain_maxdiff": 0.046875, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.016392307355999947, "fg_maxdiff": 0.046875, "chain_ratio": 0.32062713313872826, "chain_tops": 1.503062859576992, "fg_ratio": 0.8732989279196433, "fg_tops": 4.093924213508397}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "k_proj", "m": 128, "n": 256, "k": 2048, "bf16_ms": 0.01644423045217991, "quant_ms": 0.06713461503386497, "chain_ms": 0.04914423078298569, "chain_maxdiff": 0.06640625, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.01670384593307972, "fg_maxdiff": 0.06640625, "chain_ratio": 0.3346116154466924, "chain_tops": 2.731098358069484, "fg_ratio": 0.9844577421307702, "fg_tops": 8.035139245040561}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "k_proj", "m": 2048, "n": 256, "k": 2048, "bf16_ms": 0.030888461507856846, "quant_ms": 0.4615057706832886, "chain_ms": 0.07370192557573318, "chain_maxdiff": 0.05859375, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.044142307713627815, "fg_maxdiff": 0.05859375, "chain_ratio": 0.41909978968076056, "chain_tops": 29.137415762541114, "fg_ratio": 0.6997473196971262, "fg_tops": 48.64910239699631}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "k_proj", "m": 8192, "n": 256, "k": 2048, "bf16_ms": 0.10874999687075615, "quant_ms": 1.702486515045166, "chain_ms": 0.2142711579799652, "chain_maxdiff": 0.0703125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.15955576300621033, "fg_maxdiff": 0.0703125, "chain_ratio": 0.5075344619219564, "chain_tops": 40.08908465787624, "fg_ratio": 0.6815798741567443, "fg_tops": 53.836567417910544}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "v_proj", "m": 64, "n": 256, "k": 2048, "bf16_ms": 0.014196154195815325, "quant_ms": 0.06261538714170456, "chain_ms": 0.04489230737090111, "chain_maxdiff": 0.046875, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.016338462010025978, "fg_maxdiff": 0.046875, "chain_ratio": 0.31622687777053704, "chain_tops": 1.494885603574467, "fg_ratio": 0.8688794690163589, "fg_tops": 4.107416227966814}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "v_proj", "m": 128, "n": 256, "k": 2048, "bf16_ms": 0.016349999234080315, "quant_ms": 0.06682692095637321, "chain_ms": 0.04901730827987194, "chain_maxdiff": 0.046875, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.01643461547791958, "fg_maxdiff": 0.046875, "chain_ratio": 0.3335556318337077, "chain_tops": 2.7381701017457556, "fg_ratio": 0.9948513402121912, "fg_tops": 8.166770204044369}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "v_proj", "m": 2048, "n": 256, "k": 2048, "bf16_ms": 0.03085576929152012, "quant_ms": 0.4621615409851074, "chain_ms": 0.07375384494662285, "chain_maxdiff": 0.05859375, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.044228846207261086, "fg_maxdiff": 0.05859375, "chain_ratio": 0.41836150120513804, "chain_tops": 29.11690433975581, "fg_ratio": 0.6976390283148399, "fg_tops": 48.553915196807594}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "v_proj", "m": 8192, "n": 256, "k": 2048, "bf16_ms": 0.10802115499973297, "quant_ms": 1.6991154551506042, "chain_ms": 0.21544422954320908, "chain_maxdiff": 0.0625, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.1566961482167244, "fg_maxdiff": 0.0625, "chain_ratio": 0.5013880168838241, "chain_tops": 39.87080373520619, "fg_ratio": 0.6893670088835261, "fg_tops": 54.819053880758915}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "o_proj", "m": 64, "n": 2048, "k": 2048, "bf16_ms": 0.0278884619474411, "quant_ms": 0.0625634603202343, "chain_ms": 0.05138653889298439, "chain_maxdiff": 0.0546875, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.018046153709292412, "fg_maxdiff": 0.0546875, "chain_ratio": 0.5427192130125854, "chain_tops": 10.447695516486652, "fg_ratio": 1.5453964538205525, "fg_tops": 29.74988025972271}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "o_proj", "m": 128, "n": 2048, "k": 2048, "bf16_ms": 0.023944230750203133, "quant_ms": 0.06684615463018417, "chain_ms": 0.05869230628013611, "chain_maxdiff": 0.0546875, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.02358269225805998, "fg_maxdiff": 0.0546875, "chain_ratio": 0.40796200162791774, "chain_tops": 18.29442208106582, "fg_ratio": 1.0153306708236245, "fg_tops": 45.53092633573343}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "o_proj", "m": 2048, "n": 2048, "k": 2048, "bf16_ms": 0.1942557692527771, "quant_ms": 0.4619673043489456, "chain_ms": 0.4243096113204956, "chain_maxdiff": 0.064453125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.282138466835022, "fg_maxdiff": 0.064453125, "chain_ratio": 0.45781609482809726, "chain_tops": 40.48899371035801, "fg_ratio": 0.6885121742947816, "fg_tops": 60.89162309812147}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "o_proj", "m": 8192, "n": 2048, "k": 2048, "bf16_ms": 0.7595019042491913, "quant_ms": 1.7014923095703125, "chain_ms": 1.5750846862792969, "chain_maxdiff": 0.0673828125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 1.0829885005950928, "fg_maxdiff": 0.0673828125, "chain_ratio": 0.48219750395980615, "chain_tops": 43.62906790639353, "fg_ratio": 0.7013019102528343, "fg_tops": 63.453560862593875}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "gate_proj", "m": 64, "n": 6144, "k": 2048, "bf16_ms": 0.05709615349769592, "quant_ms": 0.06251730769872665, "chain_ms": 0.0754346139729023, "chain_maxdiff": 0.0546875, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.02891730796545744, "fg_maxdiff": 0.0546875, "chain_ratio": 0.7568959459142465, "chain_tops": 21.3511099371247, "fg_ratio": 1.9744629605874422, "fg_tops": 55.69718792371418}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "gate_proj", "m": 128, "n": 6144, "k": 2048, "bf16_ms": 0.07749615237116814, "quant_ms": 0.06678269430994987, "chain_ms": 0.10654230788350105, "chain_maxdiff": 0.0625, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.05485769174993038, "fg_maxdiff": 0.0625, "chain_ratio": 0.727374447866349, "chain_tops": 30.234237797084862, "fg_ratio": 1.412676142562387, "fg_tops": 58.71966845932937}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "gate_proj", "m": 2048, "n": 6144, "k": 2048, "bf16_ms": 0.580361545085907, "quant_ms": 0.46181923151016235, "chain_ms": 1.2270172834396362, "chain_maxdiff": 0.0703125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 1.0678077340126038, "fg_maxdiff": 0.0703125, "chain_ratio": 0.4729856318396824, "chain_tops": 42.00397846680822, "fg_ratio": 0.5435075309906462, "fg_tops": 48.26674869484665}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "gate_proj", "m": 8192, "n": 6144, "k": 2048, "bf16_ms": 2.2979960441589355, "quant_ms": 1.702275037765503, "chain_ms": 4.648968935012817, "chain_maxdiff": 0.0703125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 4.307426929473877, "fg_maxdiff": 0.0703125, "chain_ratio": 0.49430230149571863, "chain_tops": 44.34497908888084, "fg_ratio": 0.5334962337804812, "fg_tops": 47.86115553054335}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "up_proj", "m": 64, "n": 6144, "k": 2048, "bf16_ms": 0.05945192463696003, "quant_ms": 0.0628499984741211, "chain_ms": 0.07644423097372055, "chain_maxdiff": 0.0625, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.028950000181794167, "fg_maxdiff": 0.0625, "chain_ratio": 0.7777163021941838, "chain_tops": 21.069120788901454, "fg_ratio": 2.053607055738385, "fg_tops": 55.63429104960313}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "up_proj", "m": 128, "n": 6144, "k": 2048, "bf16_ms": 0.07954230904579163, "quant_ms": 0.06711538508534431, "chain_ms": 0.1099173091351986, "chain_maxdiff": 0.0625, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.054817307740449905, "fg_maxdiff": 0.0625, "chain_ratio": 0.7236558979801294, "chain_tops": 29.305898200599902, "fg_ratio": 1.4510436999644374, "fg_tops": 58.76292734498971}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "up_proj", "m": 2048, "n": 6144, "k": 2048, "bf16_ms": 0.5823884606361389, "quant_ms": 0.4625134617090225, "chain_ms": 1.2256211638450623, "chain_maxdiff": 0.0703125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 1.094365417957306, "fg_maxdiff": 0.0703125, "chain_ratio": 0.4751782017283784, "chain_tops": 42.05182569653751, "fg_ratio": 0.5321700147681927, "fg_tops": 47.09542782172481}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "up_proj", "m": 8192, "n": 6144, "k": 2048, "bf16_ms": 2.2952345609664917, "quant_ms": 1.7042134404182434, "chain_ms": 4.648163318634033, "chain_maxdiff": 0.068206787109375, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 4.297753810882568, "fg_maxdiff": 0.068206787109375, "chain_ratio": 0.493793871606258, "chain_tops": 44.35266492929174, "fg_ratio": 0.5340544530853786, "fg_tops": 47.968878460645044}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "down_proj", "m": 64, "n": 2048, "k": 6144, "bf16_ms": 0.0723942294716835, "quant_ms": 0.08214615285396576, "chain_ms": 0.07556730881333351, "chain_maxdiff": 0.0625, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.041228845715522766, "fg_maxdiff": 0.0625, "chain_ratio": 0.9580098935442024, "chain_tops": 21.313617770596252, "fg_ratio": 1.7559121099630226, "fg_tops": 39.065191082795714}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "down_proj", "m": 128, "n": 2048, "k": 6144, "bf16_ms": 0.07815192267298698, "quant_ms": 0.09947115182876587, "chain_ms": 0.09214230999350548, "chain_maxdiff": 0.05859375, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.05615192465484142, "fg_maxdiff": 0.05859375, "chain_ratio": 0.848165437555184, "chain_tops": 34.9592437201438, "fg_ratio": 1.3917941932244833, "fg_tops": 57.366252213088934}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "down_proj", "m": 2048, "n": 2048, "k": 6144, "bf16_ms": 0.544182687997818, "quant_ms": 1.279521107673645, "chain_ms": 0.548994243144989, "chain_maxdiff": 0.0703125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 0.9562442302703857, "fg_maxdiff": 0.0703125, "chain_ratio": 0.9912356910709894, "chain_tops": 93.88005101246286, "fg_ratio": 0.5690833688418135, "fg_tops": 53.897954016859025}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "down_proj", "m": 8192, "n": 2048, "k": 6144, "bf16_ms": 2.1587769985198975, "quant_ms": 4.894873142242432, "chain_ms": 2.079351782798767, "chain_maxdiff": 0.0703125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 3.7312248945236206, "fg_maxdiff": 0.0703125, "chain_ratio": 1.0381971037215385, "chain_tops": 99.14552790606446, "fg_ratio": 0.5785705926459618, "fg_tops": 55.252212352726865}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "lm_head", "m": 64, "n": 130560, "k": 2048, "bf16_ms": 0.9708653688430786, "quant_ms": 0.06335384771227837, "chain_ms": 1.1822922825813293, "chain_maxdiff": 0.0703125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 1.0031134486198425, "fg_maxdiff": 0.0703125, "chain_ratio": 0.8211720427738589, "chain_tops": 28.94844290556861, "fg_ratio": 0.9678520113341784, "fg_tops": 34.119291977482696}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "lm_head", "m": 128, "n": 130560, "k": 2048, "bf16_ms": 1.0922807455062866, "quant_ms": 0.06728461384773254, "chain_ms": 1.8765326738357544, "chain_maxdiff": 0.0703125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 1.6002019047737122, "fg_maxdiff": 0.0703125, "chain_ratio": 0.5820739285469483, "chain_tops": 36.477404435533565, "fg_ratio": 0.6825893296638391, "fg_tops": 42.77650281242467}
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 43, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/core.py", line 2054, in dot
+    res = _semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/language/semantic.py", line 1618, in dot
+    assert acc.type.shape == ret_ty.shape and acc.type.element_ty == out_dtype
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 94, in fused_int8_linear
+    _fused_int8_gemm[grid](a_q, w_t_q, sa, sb, bias, out, m, n, k,
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 342, in compile
+    module = src.make_ir(target, options, codegen_fns, module_map, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 108, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 27:14:
+    offs_k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), dtype=tl.int32)
+    a_ptrs = a_ptr + rows[:, None] * k + offs_k[None, :]
+    b_ptrs = b_ptr + cols[None, :] * k + offs_k[:, None]
+    row_ok = rows < m
+    col_ok = cols < n
+    row_mask = row_ok[:, None]
+    col_mask = col_ok[None, :]
+    for start in range(0, k, BK):
+        a = tl.load(a_ptrs, mask=row_mask, other=0)
+        b = tl.load(b_ptrs, mask=col_mask, other=0)
+        acc = tl.dot(a, b, acc)
+              ^
+{"name": "lm_head", "m": 2048, "n": 130560, "k": 2048, "bf16_ms": 12.276386260986328, "quant_ms": 0.4624692350625992, "chain_ms": 24.552983283996582, "chain_maxdiff": 0.078125, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\\\n                     BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr,\\\\n                     GROUP_M: tl.constexpr, HAS_BIAS: tl.constexpr):\\\\n    pid = tl.program_id(0)\\\\n    grid_m = tl.cdiv(m, BM)\\\\n    grid_n = tl.cdiv(n, BN)\\\\n    width = GROUP_M * grid_n\\\\n    group_id = pid // width\\\\n    group_size = tl.minimum(grid_m - group_id * GROUP_M, GROUP_M)\\\\n    pid_m = group_id * GROUP_M +", "fg_ms": 23.678531646728516, "fg_maxdiff": 0.078125, "chain_ratio": 0.49999570801597737, "chain_tops": 44.606256103870386, "fg_ratio": 0.5184606226493974, "fg_tops": 46.253571666523406}
+wrote sweeps/20261022T122551Z-int8-decision2/int8-shapes.json
