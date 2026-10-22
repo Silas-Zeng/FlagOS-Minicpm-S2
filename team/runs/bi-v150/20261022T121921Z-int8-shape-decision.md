@@ -31,7 +31,7 @@
   "profiler": "false",
   "status": "complete_negative_for_triton_int8_and_torch_chain",
   "artifacts": "experiments/operator/20261022T121921Z-int8-shape-decision",
-  "conclusion": "int8 linear 候选在模型真实形状上的 A/B（seed=1234，权重预量化，激活量化单独计时）。原件为 20261022T122551Z-int8-decision2/int8-shapes.json：FlagGems scaled_mm（该 vendor 走通用 Triton 回退）fg_ratio 在 m=2048 为 0.5185–0.6997、m=8192 为 0.5335–0.7020，对应 46.25–63.53 TOP/s；torch._int_mm 加 torch 反量化链 chain_ratio 全域 0.3162–1.0382。同一份数据在 m=64 给出 fg_ratio 0.8689–2.0536，其中 gate 1.974 / up 2.054 / down 1.756 / q_proj 1.603 / o_proj 1.545 快于 bf16，而 k_proj 0.873、v_proj 0.869、lm_head 0.968 慢于 bf16；该臂的 torch 版激活量化耗时 0.063–0.082 ms，与 int8 GEMM 同量级。结论：int8 在 decode 尺寸靠减半字节取胜，在 prefill 尺寸任何现成 int8 GEMM 都是负的。（本目录的 int8-shapes.log 是首次运行，只出 1 行后因脚本 del 位置错误 rc=1 中止，完整数据在同名 json，来自 #130（20261022T122551Z）那次重跑。）"
+  "conclusion": "int8 linear 候选在模型真实形状上的 A/B（seed=1234，权重预量化，激活量化单独计时）。原件为 20261022T122551Z-int8-decision2/int8-shapes.json：FlagGems scaled_mm（该 vendor 走通用 Triton 回退）fg_ratio 在 m=2048 为 0.5185–0.6997、m=8192 为 0.5335–0.7020，对应 46.25–63.53 TOP/s；torch._int_mm 加 torch 反量化链 chain_ratio 全域 0.3162–1.0382。同一份数据在 m=64 给出 fg_ratio 0.8689–2.0536，其中 gate 1.974 / up 2.054 / down 1.756 / q_proj 1.603 / o_proj 1.545 快于 bf16，而 k_proj 0.873、v_proj 0.869、lm_head 0.968 慢于 bf16；该臂的 torch 版激活量化耗时 0.063–0.082 ms，与 int8 GEMM 同量级。结论：int8 在 decode 尺寸靠减半字节取胜，在 prefill 尺寸任何现成 int8 GEMM 都是负的。（本目录 int8-shapes.log 是首次运行，只出 1 行后因脚本 del 位置错误 rc=1 中止；完整数据为本目录 int8-shapes.json，由 20261022T122551Z 那次重跑产出并已复制到此目录。）"
 }
 ```
 

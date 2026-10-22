@@ -9,7 +9,7 @@
 - **尝试**：为 MiniCPM5-2B 的 16Q/2KV、head128、单 token decode 重写的 attention kernel 与其段归约；只在该守卫命中时生效，其余路径走原 kernel。
 - **改动**：相关实现 [biv150_gqa_decode.py](../../../patches/framework/biv150_gqa_decode.py)；本轮准确变体以原件源码清单为准。
 - **怎么测**：原官方吞吐对照；输入 / 输出 / 并发 / 请求数：16384 / 1024 / 64 / 128。
-- **结果**：同一构建的 16K 官方四轮：原始 3349.87 / 3364.23 / 3364.10 / 3363.77，协议平均 total 3364.03 tok/s，mean TTFT 155385.04 ms，mean TPOT 133.37 ms，后三轮极差 0.0137%
+- **结果**：同一构建的 16K 官方四轮：四轮原始 3252.40 / 3364.23 / 3364.10 / 3363.77，协议平均 total 3364.03 tok/s，mean TTFT 155385.04 ms，mean TPOT 133.37 ms，后三轮极差 0.0137%
 - **是否保留**：待确认；通过某项检查不自动等于优化保留。
 
 <details><summary>完整原登记（含UTC、状态、过程与标识）</summary>
@@ -31,7 +31,7 @@
   "profiler": "false",
   "status": "complete_official_four_rounds",
   "artifacts": "experiments/operator/20261022T095640Z-gqa-decode-official-16k",
-  "conclusion": "同一构建的 16K 官方四轮：原始 3349.87 / 3364.23 / 3364.10 / 3363.77，协议平均 total 3364.03 tok/s，mean TTFT 155385.04 ms，mean TPOT 133.37 ms，后三轮极差 0.0137%。相对队友官方 2729.07 为 +23.3%。原件 RESULT.md 的结论是 TTFT 由排队与抢占共同主导、KV 接近满容量；本行不再写“不是抢占受限”，该判断没有对应的已登记原件。保留。"
+  "conclusion": "同一构建的 16K 官方四轮：四轮原始 3252.40 / 3364.23 / 3364.10 / 3363.77，协议平均 total 3364.03 tok/s，mean TTFT 155385.04 ms，mean TPOT 133.37 ms，后三轮极差 0.0137%。相对队友官方 2729.07 为 +23.3%。原件 RESULT.md 的结论是 TTFT 由排队与抢占共同主导、KV 接近满容量；本行不再写“不是抢占受限”，该判断没有对应的已登记原件。保留。"
 }
 ```
 

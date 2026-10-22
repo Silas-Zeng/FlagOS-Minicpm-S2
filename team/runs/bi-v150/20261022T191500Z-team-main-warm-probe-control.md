@@ -31,7 +31,7 @@
   "profiler": "false",
   "status": "complete_matched_pair_control",
   "artifacts": "experiments/operator/20261022T191500Z-team-main-warm-probe-control",
-  "conclusion": "公共基线 = 团队 main 87ed537（#1–#11 已合并），本 kernel 由 VLLM_FL_BIV150_GQA_DECODE 关闭，install-markers.txt 记录 installed False，GPU KV 521840 tokens。仪表是 scripts/probe_bench.py 的缩放暖探针（不是官方四轮），4K case 4096x1024x64x64 共 4 个 repeat：3533.66 / 3798.15 / 3784.87 / 3787.49，丢第一轮取中位 = 3787.49 tok/s（全四轮中位 3786.18），TPOT 68.69 ms；16K case 16384x1024x64x16 共 3 个 repeat：2590.06 / 2589.05 / 2589.32，中位 2589.32，TPOT 76.41 ms。原件为本目录两份 CSV。与候选臂的唯一差别是这一个补丁与这一个 env；KV 相差 96 tokens（521840 对 521936，0.018%）。"
+  "conclusion": "公共基线 = 团队 main 87ed537（#1–#11 已合并），本 kernel 由 VLLM_FL_BIV150_GQA_DECODE 关闭，install-markers.txt 记录 installed False，GPU KV 521840 tokens。仪表是 scripts/probe_bench.py 的缩放暖探针（不是官方四轮），4K case 4096x1024x64x64 共 4 个 repeat：3533.66 / 3798.15 / 3784.87 / 3787.49，丢第一轮取中位 = 3787.49 tok/s（全四轮中位 3786.18），TPOT（丢第一轮中位）68.69 ms；16K case 16384x1024x64x16 共 3 个 repeat：2590.06 / 2589.05 / 2589.32，中位 2589.32，TPOT 中位 76.43 ms。原件为本目录两份 CSV。与候选臂的唯一差别是这一个补丁与这一个 env；KV 相差 96 tokens（521840 对 521936，0.018%）。"
 }
 ```
 
@@ -64,7 +64,7 @@
   "profiler": "false",
   "status": "complete_matched_pair_control",
   "artifacts": "experiments/operator/20261022T191500Z-team-main-warm-probe-control",
-  "conclusion": "公共基线 = 团队 main 87ed537（#1–#11 已合并），本 kernel 由 VLLM_FL_BIV150_GQA_DECODE 关闭，install-markers.txt 记录 installed False，GPU KV 521840 tokens。仪表是 scripts/probe_bench.py 的缩放暖探针（不是官方四轮），4K case 4096x1024x64x64 共 4 个 repeat：3533.66 / 3798.15 / 3784.87 / 3787.49，丢第一轮取中位 = 3787.49 tok/s（全四轮中位 3786.18），TPOT 68.69 ms；16K case 16384x1024x64x16 共 3 个 repeat：2590.06 / 2589.05 / 2589.32，中位 2589.32，TPOT 76.41 ms。原件为本目录两份 CSV。与候选臂的唯一差别是这一个补丁与这一个 env；KV 相差 96 tokens（521840 对 521936，0.018%）。"
+  "conclusion": "公共基线 = 团队 main 87ed537（#1–#11 已合并），本 kernel 由 VLLM_FL_BIV150_GQA_DECODE 关闭，install-markers.txt 记录 installed False，GPU KV 521840 tokens。仪表是 scripts/probe_bench.py 的缩放暖探针（不是官方四轮），4K case 4096x1024x64x64 共 4 个 repeat：3533.66 / 3798.15 / 3784.87 / 3787.49，丢第一轮取中位 = 3787.49 tok/s（全四轮中位 3786.18），TPOT（丢第一轮中位）68.69 ms；16K case 16384x1024x64x16 共 3 个 repeat：2590.06 / 2589.05 / 2589.32，中位 2589.32，TPOT 中位 76.43 ms。原件为本目录两份 CSV。与候选臂的唯一差别是这一个补丁与这一个 env；KV 相差 96 tokens（521840 对 521936，0.018%）。"
 }
 ```
 
@@ -75,7 +75,7 @@
 - 原始目录：[20261022T191500Z-team-main-warm-probe-control](../../../experiments/operator/20261022T191500Z-team-main-warm-probe-control)
 - 原命令：未单列，见原始目录
 - 环境 / 源码 / 后态：未单列，见原始目录
-- 原始结果：未单列，见原始目录
+- 原始结果：[20261022T191500Z-team-main-4k.csv](../../../experiments/operator/20261022T191500Z-team-main-warm-probe-control/20261022T191500Z-team-main-4k.csv)；[20261022T191500Z-team-main-16k.csv](../../../experiments/operator/20261022T191500Z-team-main-warm-probe-control/20261022T191500Z-team-main-16k.csv)
 - 日志 / 采样：未单列，见原始目录
 - 相关说明：未记录
 - 完整原登记：[registry.csv](../../../experiments/registry.csv)（登记序号见上；同一run可有多个阶段）

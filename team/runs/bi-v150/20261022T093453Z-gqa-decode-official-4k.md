@@ -31,7 +31,7 @@
   "profiler": "false",
   "status": "complete_official_four_rounds",
   "artifacts": "experiments/operator/20261022T093453Z-gqa-decode-official-4k",
-  "conclusion": "自研 GQA decode attention kernel（ROWS=8、grid=(seq,kv_head,segment)、页标量索引、exp2 softmax、自带 strided 段归约、split-K 宽度按 TARGET_PROGRAMS=256 自适应）。官方驱动四轮原始值为 2646.96 / 4615.49 / 4904.45 / 4908.13，协议丢第一轮取后三轮平均得 total 4809.36 tok/s，mean TTFT 4723.09 ms，mean TPOT 61.64 ms（后三轮 60.32/64.23/60.37）。相对官方基线 1878.47 为 +156.0%，相对队友官方 3683.65 为 +30.6%。四轮递增来自官方驱动不传 seed 造成的 prefix cache 逐轮升温，协议均值比稳态低约 2%。本行不含任何探针数字：48 ms 级 TPOT 属于 #125 的暖探针，不能与官方四轮混写。保留。"
+  "conclusion": "自研 GQA decode attention kernel（ROWS=8、grid=(seq,kv_head,segment)、页标量索引、exp2 softmax、自带 strided 段归约、split-K 宽度按 TARGET_PROGRAMS=256 自适应）。官方驱动四轮四轮原始值 4771.01 / 4615.49 / 4904.45 / 4908.13，协议丢第一轮取后三轮平均得 total 4809.36 tok/s，mean TTFT 4723.09 ms，mean TPOT 61.64 ms（后三轮 60.32/64.23/60.37）。相对官方基线 1878.47 为 +156.0%，相对队友官方 3683.65 为 +30.6%。四轮递增来自官方驱动不传 seed 造成的 prefix cache 逐轮升温，协议均值比稳态低约 2%。本行不含任何探针数字：48 ms 级 TPOT 属于 #125 的缩放暖探针，不能与官方四轮混写。保留。"
 }
 ```
 

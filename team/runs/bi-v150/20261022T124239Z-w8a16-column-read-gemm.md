@@ -31,7 +31,7 @@
   "profiler": "false",
   "status": "complete_negative_w8a16",
   "artifacts": "experiments/operator/20261022T124239Z-w8a16-column-read-gemm",
-  "conclusion": "W8A16 自写 Triton kernel 的第一版：权重按 [N,K] 存放，tile 以列方向读取（不合并）。每个形状取 12 个配置里最快者，ratio 全域 0.2007–0.6092（m=64 最好 0.61，m=2048/8192 稳定 0.20–0.21），int8 权重有效带宽 1.1–128.5 GB/s。maxdiff 0.043–0.055 属量化误差本身。负结果：不保留。"
+  "conclusion": "W8A16 自写 Triton kernel 的第一版：权重按 [N,K] 存放，tile 以列方向读取（不合并）。每个形状取 8 个配置里最快者，ratio 全域 0.2007–0.6092（m=64 最好 0.61；m=2048 为 0.20–0.25，其中 qkv 0.2531；m=8192 稳定 0.21），int8 权重有效带宽 1.1–128.5 GB/s。maxdiff 0.0391–0.0547 属量化误差本身。负结果：不保留。"
 }
 ```
 

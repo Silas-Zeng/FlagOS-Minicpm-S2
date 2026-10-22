@@ -31,7 +31,7 @@
   "profiler": "false",
   "status": "failed_gate_too_strict_all_calls_fell_back",
   "artifacts": "experiments/operator/20261022T140539Z-probe-gqa-gate-overclose",
-  "conclusion": "把审查项“门控必须 fail-closed”实现成“_GATE_KEYS 全部键都出现在调用点”之后跑的第一轮：4K 缩放暖探针第 1 个 repeat total 3557.73 tok/s、TPOT 68.59 ms，与控制臂同水平而不是候选的 48 ms；日志只有 FIRST_FALLBACK（dummy 256/256）而没有 FIRST_WIDTH，说明每次真实调用都被拒。原因是被审计的 triton_attn 后端调用传 31 个关键字、不传 qq_bias，该键由函数默认值给出。修复方式是把“安装期对签名断言全部键存在”和“运行期只要求调用点实际传递的键”分开（_RUNTIME_KEYS 排除 qq_bias），由 20261022T141457Z 复测。此轮不保留为性能数字，保留为失败原因。"
+  "conclusion": "把审查项“门控必须 fail-closed”实现成“_GATE_KEYS 全部键都出现在调用点”之后跑的第一轮：4K 缩放暖探针第 1 个 repeat total 3557.73 tok/s、TPOT 68.59 ms，与控制臂同水平而不是候选的 48 ms；日志只有 FIRST_FALLBACK（dummy 256/256）而没有 FIRST_WIDTH，说明每次真实调用都被拒。原因是被审计的 triton_attn 后端调用传 31 个关键字、不传 qq_bias，该键由函数默认值给出。修复方式是把“安装期对签名断言全部键存在”和“运行期只要求调用点实际传递的键”分开（_RUNTIME_KEYS 排除 qq_bias），复测分两步：20261022T141457Z 因为补丁脚本没有真正写回文件，门控仍然是全键要求，4K 第 1 个 repeat 仍是 3557.51 / TPOT 68.60；20261022T142447Z 则是修复写入后 install() 里残留的局部 import inspect 遮蔽了模块级名字，引擎启动即 UnboundLocalError。两轮都不保留为性能数字，只保留失败原因。"
 }
 ```
 

@@ -31,7 +31,7 @@
   "profiler": "false",
   "status": "complete_two_rounds_default_on",
   "artifacts": "experiments/operator/20261022T133309Z-gqa-on-official-16k-two-rounds-default",
-  "conclusion": "默认开启门验证：只用官方命令（仅 VLLM_PLUGINS=fl，无任何 VLLM_FL_*）启动，manifest 记录 BIV150_GQA_DECODE_INSTALL installed True、rows 8、page_size 16、backend_rebound True、GPU KV 521936 tokens。同一官方仪表、两轮：第 1 轮 3341.90（duration 666.75 s）、第 2 轮 3371.88 total tok/s，mean TTFT 155019.71 ms、mean TPOT 133.06 ms。对 #126 控制臂同口径稳态 2734.40 为 +23.3%。这与 #125 缩放暖探针的 +24.9% 一致，与更早快照的官方四轮 3364.03 同量级。证据级别：官方仪表、两轮。"
+  "conclusion": "默认开启门验证：只用官方命令（仅 VLLM_PLUGINS=fl，无任何 VLLM_FL_*）启动，manifest 记录 BIV150_GQA_DECODE_INSTALL installed True、rows 8、page_size 16、backend_rebound True、GPU KV 521936 tokens。同一官方仪表、两轮：第 1 轮 3341.90（duration 666.75 s）、第 2 轮 3371.88 total tok/s；逐轮 TTFT 157971.44 / 155019.71 ms（两轮均值 156495.58），逐轮 TPOT 133.06 / 133.06 ms。对 #126 控制臂同口径稳态 2734.40 为 +23.3%。这与 #125 缩放暖探针的 +24.9% 一致，与更早快照的官方四轮 3364.03 同量级。证据级别：官方仪表、两轮。"
 }
 ```
 
