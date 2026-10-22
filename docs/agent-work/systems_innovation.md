@@ -1,3 +1,17 @@
+## 最新062205组合真实方法门已通过，registry118/queue91，当前收口停写
+
+root唯一串行run20261022T062205Z-cpu-combination-gate已完成；SCP43608实际exit0、整包225a8539/2035183B与本地55seal过后本agent才执行一次原件后验。独占analysis/source/cpu-combination/062205-system-review.json SHA07c12b13f6b99a0df3621be3c1c36b30f2d0ea36d20daa49492973c0721113bf及指定中文analysis/2026-10-22-cpu-combination-062205-result.md。55seal/10source/d505-abfc/6f918-e155/0e961-1bb85/原依赖、原commands/PIDs/sourcepost/DB实体只读重算/双idle全核。
+
+五case各11字段pass，实际delta为decode62(1,1)、mixed259(1,0)、mixed952(1,1)、mixed2048(1,0)、prefill2048(1,1)。prefill case有previous sampled tokens，不能沿单请求identity推async0。四步原event+固定地址graph consumer均双delta1，positions/inputIDs变更/全消费一致、总metadata9-async7/RNG CPU-GPU SHA同。fixture/实际buffer与blocktable，无模型/服务、无timing/E2E/完整accuracy或C500证明；不相加单项gain/不继承103-105。
+
+launcher270063/controller270069/worker270073，只有内层持锁管理GPU，06:22:26.210821Z外层exit0/后态06:22:26.205563Z68-0/9031双栈闭/无GPU进程，worker无Traceback-ERROR、原warnings保留。CPU6-host20GiB-单BI-V15032GiB，DB52319474物理dc2c/schema0dc7/logicalc05d前后同；包metadata名称查询null/unavailable原值不解释缺runtime。registry118×16只append保旧字节/queue91仅新增一行/均LF，phase与计划顶端已标真实完成。未改原件/测试代码/作者PR包/CURRENT，不SSH/GPU/新suite/服务。root随后发布；当前已完成即停写，不自动追加收益pair/官方大测。
+
+## 当前继续目标：CPU两方法组合最短门，方法级优先，尚无新结果
+
+root在GitHub四Draft收口后重新授权只做CPU metadata+async组合验证。只读原launch_small_framework_screen/原bc51/两旧method门与source、SERVER/seed/DB/清理，计划已落analysis/2026-10-22-cpu-combination-system-plan.md。关键已核：单条--smoke-only会被原identityslice1857–1868绕async，不能证明真组合；已知decode-screen64/4K/128out两单项真命中但root最终选择更短的真实方法组合门，不会自动上服务/收益pair/大官方。
+
+hardware独占validate_cpu_combination.py并沿旧b124唯一controller锁/idle/worker/monitor/timeout/cleanup，我准备另行授权薄launch_cpu_combination_gate.py仅pins/DBbefore-after/env/source/seal，不第二owner、不编译/Event/KV素材。CLI及BASE e155/COMBINED6f918/两runtime0e961+1bb85已对齐；提醒fixture补model.is_encoder_decoder=False以满足原async scope。DB wrapper位于设备controller锁外仅依root独占串行，不伪称原子受锁保护。当前仅CPU准备未SSH/GPU/新测试/结果，registry117/queue90不动，当前任务覆盖上方“停写等待维护”而不恢复旧探索。方法门最终pin/真实原件完成后本agent唯一登记，完整accuracy/收益仍未有。
+
 ## 最新：四份 PR 材料双序实际组合收口（仅CPU，现已停写）
 
 独占 docs/pr-preparation/combination-review.json/.md 与 combination-artifacts/ 已完成。固定 base70d04/tree82e37、runner e155/blob5288f，实际 git merge-file --stdout --diff3 两顺序均exit1/仅1处22–27行import冲突；保留两原import后同字节runner SHA6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141/blob907fa58d。_prepare_inputs逐byte等metadata50493，_prepare_input_ids逐byte等asyncf0d0；逆撤任一改动精确回另一单方法、撤两者回e155；其它函数AST和原event/C3/守卫字节不变。六作者Python快照+组合仅compile，无任何导入/套件/设备。两方向原冲突stdout、命令、resolved runner及可应用patch（382356e3/b7833473）均留独占目录；中文有准确路径和指令，冲突状态用resolved单文件而不对markers套patch。

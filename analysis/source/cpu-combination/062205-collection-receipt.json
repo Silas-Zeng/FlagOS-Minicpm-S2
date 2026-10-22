@@ -1,0 +1,14 @@
+{
+  "run_id": "20261022T062205Z-cpu-combination-gate",
+  "archive": {
+    "path": "/workspace/experiments/minicpm-s2/framework/20261022T062205Z-cpu-combination-gate.tgz",
+    "bytes": 2035183,
+    "sha256": "225a853904047c7770c9adb1cb284fcd2d9c389ca50cbb94be5ddc174e0b1852"
+  },
+  "scp_completed_exit_code": 0,
+  "local_seal_files_verified": 55,
+  "launch_command": "set -euo pipefail\npython3 - <<'PY'\nfrom pathlib import Path\nimport hashlib\nroot=Path('/workspace/experiments/minicpm-s2/scripts')\nfor name,expected in {\n 'validate_cpu_combination.py':'abfc7981a8d5a20ff32b80f42dd30148bbeb5d680c649bf892e2b3924ead0bad',\n 'launch_cpu_combination_gate.py':'d50511c9a194b1dadad87498b22862641cbea9643eea94aa73f32b320a6abb2f',\n 'cpu-combination-model_runner.py':'6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141'}.items():\n raw=(root/name).read_bytes()\n assert hashlib.sha256(raw).hexdigest()==expected,name\n compile(raw,name,'exec')\n print(name,expected)\nPY\nstamp=$(date -u +%Y%m%dT%H%M%SZ)\nlog=\"/tmp/minicpm-cpu-combination-$stamp.log\"\nnohup python3 /workspace/experiments/minicpm-s2/scripts/launch_cpu_combination_gate.py > \"$log\" 2>&1 < /dev/null &\npid=$!\nprintf 'LAUNCHER_PID=%s\\nLAUNCH_LOG=%s\\n' \"$pid\" \"$log\"\nsleep 1\ncat \"$log\"\n",
+  "archive_command": "set -euo pipefail\npython3 - <<'PY'\nfrom pathlib import Path\nimport json,hashlib\nroot=Path('/workspace/experiments/minicpm-s2/framework');r=root/'20261022T062205Z-cpu-combination-gate';c=root/'20261022T062205Z-cpu-combination-gate-control'\nassert (c/'exit-code').read_text().strip()=='0'\nseal=json.loads((c/'seal.json').read_text())\nfor name,sha in seal['files_sha256'].items():\n assert hashlib.sha256((root/name).read_bytes()).hexdigest()==sha,name\nprint(json.dumps({'seal_files':len(seal['files_sha256']),'status':seal['status']}))\nPY\narchive=\"/workspace/experiments/minicpm-s2/framework/20261022T062205Z-cpu-combination-gate.tgz\"\ntest ! -e \"$archive\"\ntar -czf \"$archive\" -C /workspace/experiments/minicpm-s2/framework \"20261022T062205Z-cpu-combination-gate\" \"20261022T062205Z-cpu-combination-gate-control\" -C /tmp \"minicpm-cpu-combination-20261022T062205Z.log\"\npython3 - <<'PY'\nfrom pathlib import Path\nimport hashlib,json\np=Path('/workspace/experiments/minicpm-s2/framework/20261022T062205Z-cpu-combination-gate.tgz')\nprint(json.dumps({'path':str(p),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}))\nPY",
+  "launcher_log_in_archive": "minicpm-cpu-combination-20261022T062205Z.log",
+  "note_zh": "等待SCP session43608实际exit0后，才核整个tgz的尺寸/SHA并安全解包；远端和本地55项seal逐byte匹配。外层stdout独立归档，不属于55项seal但包含在tgz哈希中。"
+}

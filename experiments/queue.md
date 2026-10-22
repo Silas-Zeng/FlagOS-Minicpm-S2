@@ -124,6 +124,8 @@
 
 | 90 | 最后手头门已完成，native无CPU下降，不接服务 | 独立API门 | 051336 generic/typedblocking/directCorexblocking | 唯一系统审计365e6760：85seal/source5/actualSDK编译so1376/flags3/mapsd39、24trial144checks/RNG/settled-close全部过；native threadCPU两窗9.4344/9.4364ms≈wall9.4194/9.4210ms，无低CPU证据。early0、六窗节流增量0，DB52319474三SHA同/05:13:44Z68-0双栈闭/源码不变。首次SCP未退出时文件锁仅收集时序，完整exit0解包后全核，非设备失败。registry117，按用户完成手头后只维护GitHub/方法PR，不新实验/服务/大测试。 |
 
+| 91 | 已完成，同链组合正确性通过，无性能或整模型accuracy | 真实方法设备门 | 062205 CPU metadata+async token组合 | 唯一后验07c12b13：55seal/10源/6f918+0e961+1bb85/d505-abfc全核；五case55字段、四步固定地址graph消费与双delta1、总9-7、CPU-GPU RNG同。prefill2048实际async1（有previous），两无previous mixed实际async0；无模型/服务/计时。DB52319474三SHA同，CPU6/32GiB，06:22:26Z exit0/68-0双栈闭/源不变，归档225a8539；registry118，两个Draft组合不继承旧accuracy/叠加gain，不自动服务pair或大测。 |
+
 ## 执行边界
 
 - 原13eb基线122607已完整结束，root12:26:07Z实际恢复54c41796B→bab241176B、启动及封存后bab2均核实。未清SQLite/Tritoncache；初始DB与候选不同必须保留。仅隔离091033插件不足以证明原版，live/source依赖身份不可省略。16:40Z继续探索授权覆盖旧冻结；新增设备实验由root另行排程，不改既有正式原件。

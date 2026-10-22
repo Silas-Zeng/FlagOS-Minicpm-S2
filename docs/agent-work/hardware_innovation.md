@@ -1112,3 +1112,17 @@ root最后回执051336原生差异门exit0，字节／RNG／close均过，但直
 中文说明明确：提交不是ACK、调用方须管producer／当前流／全部强引用／真实完成／页所有权／预算和失败settle。PR2须从Git源码按实际Corex SDK手工编译并固定SO身份，未打包SO或改变setup/wheel，也未接default；仅cuda0 normal16KiB、单层或42层、1GiBcap，其他平台尤其C500未证。032653 wall波动、035754同桥线性→二维约3.62%单层热信号、042225 R16688/717717504B真42层对照和恢复回读均按原范围写明，诊断不称服务吞吐收益／准确率。PR1四构造case也不冒充packed已实际服务部署。
 
 本次仅原字节复制、Python compile(bytes)、静态依赖与Git只读tree/blob/status检查，没有新增实现／设备测／旧suite／SDK编译。collaboration当前HEAD始终37661d2d2cf811ef8093436fa17c424dfd63b25d且clean；没有checkout／index变更、commit／push／PR API。没有改README/init/setup、原c95f/818e/0a4d、当前冻结候选或任何实验原件。root负责发布和组合检查；本owner材料完成后停止新增研究／实验，等待定向修订。
+
+### GitHub维护后接续：两CPU方法最短组合门，先审旧覆盖再获准实现
+
+root已完成Github维护；本owner新任务先只读b124 metadata门与607cd async门，找6f918组合风险，不恢复旧探索。独占 [最短门审阅](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/analysis/2026-10-22-cpu-combination-minimal-gate-review.md>) 已保存：b124实际提取5方法形成_prepare_inputs→_prepare_input_ids链、actual CpuGpuBuffer/BlockTable、5case/11checks及4轮原event/graph可复用，但只锁单metadata，缺async helper绑定／model.is_encoder_decoder=False／graph input_ids／同次双命中。607cd有真实单方法12类映射/stride/显式跨流与缓存门，没有整_prepare_inputs/metadata/原event+graph，不能拼成组合已验；本轮不重复12类。
+
+静态实际关系无互相缺输入：async读CPU cumsum/prev_positions.np与原两份局部索引H2D，不读metadata跳过的req/query/scheduled GPU scratch；两helper仍同原prepare event/流内。请求重排fixture是reqID→旧行映射，不是实际InputBatch swap/condense／scheduler/输出队列生命周期，文档明确没有该完整服务证明。
+
+root随后明确批准新独占 [validate_cpu_combination.py](<C:/Users/Administrator/Documents/ChatGPT/MiniCPM 模型推理吞吐性能优化/scripts/remote/validate_cpu_combination.py>)，最终SHA **abfc7981a8d5a20ff32b80f42dd30148bbeb5d680c649bf892e2b3924ead0bad**；不是自行扩大只读授权。只从b124小fork，固定basee155／combo6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141／metadata0e961／async1bb85和3旧依赖完整SHA；controller直接copy源码，不transform，不改两个helper/runner/原门。
+
+fixture仅补decoder字段，两实际helper绑定namespace。保原五CASES/11checks，decode62和mixed952每次须metadata/async各delta1；no-previous async须0，不强迫所有shape都融合。四event/graph轮加入input_ids实际consumer并要求其跨轮非陈旧，每次双delta1，positions/seq/input_ids/slots地址固定；原CM内configure／H2D／kernel／finally record／graph顺序保留，四步之间无整卡sync，最终比较前才drain。全部timing和32call被删除，RNG从正确性流程前后核equal并保存SHA；没有组合速度/准确率结论。
+
+必要CPU compile、runpy无Torch/Triton导入、--help通过；AST核只make_runner/worker/main改变，增加计数/pointer两小helper、删除旧timing call函数，五CASE AST完全相同。framework全文delta终审无当前正确性门阻断，final保持abfc不再改；没有执行新门／旧suite／GPU或网络。root是唯一设备owner。CLI为 `--run-dir RUN --runtime-path METADATA --async-runtime-path ASYNC --runner-path BASE --candidate-runner-path COMBINED`，沿原controller独占flock/idle/child/monitor/timeout/定向清理；systems薄层仅资产pin/DB前后/env/source/seal，不第二锁或GPU清理。该门不带权重、不导入完整runner、不会启动服务；设备结果待root唯一新run。
+
+062205后续实际回执（root提供，非本owner重复验收）：唯一组合门exit0，五case所有比较、graph四步同次双delta1／四consumer／RNG全过，metadata总9、async总7。准备时“待root新run”已由本次结果取代，完整原件正取回并由systems唯一全审；本owner没有执行validator/新GPU。**prefill2048实测async delta1**，不是单token identity：prev行0需要写到2048-token chunk的末索引2047，common_indices_match不成立。实际decode62/mixed952/prefill2048各async1，两no-previous为0，加四graph步为7；不再把设计时未强制prefill当作观测可能0。图已核原/组合逐步相同且input_ids首末非陈旧，仍不宣称真实InputBatch重排／输出队列全生命周期、服务收益或全模型准确率。代码abfc及两个helper／runner均保持，不补门/长pair；本owner只收口静态review文档与交接，待root后续指示。

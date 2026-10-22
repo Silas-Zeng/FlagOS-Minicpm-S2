@@ -1,5 +1,25 @@
 # 当前工作与 API 切换交接
 
+## CPU 两方法组合上卡门已通过（2026-10-22 06:22 UTC）
+
+唯一系统验收 `analysis/source/cpu-combination/062205-system-review.json` SHA `07c12b13f6b99a0df3621be3c1c36b30f2d0ea36d20daa49492973c0721113bf` 已通过；registry118/queue91及中文报告已收口。PR #1/#2已实际补中文上卡证据，两个head与Draft状态保持不变；回执见 `analysis/source/cpu-combination/pr-update-receipt.json`。本轮完整工作以包含本节的Git提交为准，全部原始证据随实验库发布。
+
+唯一 `20261022T062205Z-cpu-combination-gate` 已结束：launcher270063/controller270069/worker270073，06:22:26.210821Z外层exit0。固定组合runner6f918、两原helper不变。五种形状各11项数据与地址检查通过，四轮真实输入准备事件+固定地址graph consumer均通过，包含input IDs且跨轮值确实变化；decode/mixed及四轮graph同次双快路命中。累计metadata9、async7；prefill2048实际async也命中，不能将先前“可能identity快路”写成结果。CPU/GPU RNG不变。
+
+本轮只做真实方法+fixture正确性，无模型权重、服务、吞吐计时或整模型准确率。DB523表19474行三SHA前后相同，10份归档source不变；后态68MiB/0%、无GPU进程、9031双闭。tgz2035183B，SHA `225a853904047c7770c9adb1cb284fcd2d9c389ca50cbb94be5ddc174e0b1852`，SCP实际退出0后核验，本地与远端55项seal逐byte一致。原件和精确命令已在实验库，唯一系统验收与注册表由systems收口，详见[本轮报告](analysis/2026-10-22-cpu-combination-062205-result.md)。
+
+四项PR仍未合并，本轮仅补PR #1/#2的中文组合证据，不更新代码head或将单项收益相加。下一主线是确认组合在原参数真实服务中的可达性及代表性短负载收益；可复用已有decode-screen。若比较性能必须新建同DB/KV/物理资源的可比基线，不能借用旧单项不同条件结果。当前没有新GPU作业，不自动启动完整官方大测。
+
+
+## 持续目标接续：两项 CPU 方法的最短组合正确性验证（2026-10-22 06:08 UTC）
+
+上一阶段已经完成 GitHub 维护：远端实验 main 为 `de13c4f21e5bc21b7368eb54d32cdd4e46b3c92d`，对应本地 `4658c90987e17ea1514a332ca8e9eeb27e717919`、tree `48b8743f73e617f7666044ffb048a4a6a6c1b008`；四项中文 Draft PR 均未合并。持续目标本轮继续，优先补既有两项 CPU 方法组合的运行证据，不重复已结束的 Event 路线。
+
+固定组合 runner `6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141`，两 helper 保持原受测版本。framework 已确认两者写入不相交，async 依赖原 CPU 镜像与本方法索引 H2D，不读 metadata 省掉的三个 GPU 镜像；原事件在两者完成提交后记录。选择复用真实 `_prepare_inputs`/`_prepare_input_ids` 链的最短方法门，补同一步两个快路径计数和读取 input IDs 的图 consumer，不先启整模型服务、不测收益或自动大测。
+
+hardware 独占最小新门，framework 跨职责审阅，systems 负责 DB/原件封存和唯一后验；root 唯一 SSH/GPU。06:07:21Z 实查68MiB/0%、无GPU进程、9031双栈关闭，当前新门仍在准备，尚未启动。首次受沙箱限制的只读SSH未执行；按已有授权提升后只读检查成功，没有读取或输出私钥。具体原件和后续结果以下一实际 run 为准，不以此计划声称组合通过。
+
+
 ## 本轮完整发布已完成
 
 实验库全量发布提交为 [0d671d3c](https://github.com/Silas-Zeng/FlagOS-S2-Minicpm-throughput/commit/0d671d3c65683491a3fddee234c4c352a09d8129)，来源本地 `754f2a46b81a016b45e22f1b26401c166b75df18`，完整 tree `6150dab7c55a2793245fd60fbab4bba106e76428`，20,649项文件与模式全部相符。四个中文 Draft PR 已创建并保持未合并；两个CPU方法的组合补丁已保存。最终身份和覆盖范围见[发布回执](docs/github-publications/20261022-pr-maintenance.json)。本节与回执随后以文档提交补齐，数据批次身份不自指。当前没有新GPU任务，下一步由团队评审这些PR；不得从下方历史计划自动恢复旧实验。

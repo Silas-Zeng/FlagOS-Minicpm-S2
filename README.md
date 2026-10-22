@@ -1,5 +1,7 @@
 # FlagOS 第二季 MiniCPM5-2B 双平台协作
 
+2026-10-22补充：CPU metadata与async token组合已通过[最短真实方法上卡门](analysis/2026-10-22-cpu-combination-062205-result.md)，双快路径、连续图读取和原始字节对照通过。PR仍为Draft，组合服务吞吐与整模型准确率未测；当前状态以CURRENT_WORK顶部为准。
+
 四项独立中文 Draft PR 已创建：[CPU metadata #1](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/1)、[async token #2](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/2)、[KV连续页 #3](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/3)、[KV二维SAVE #4](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/4)。均未合并；两个CPU方法的import冲突已有双向解决补丁，详见协作安排。
 
 本仓库是团队的实验记录与交接总入口，覆盖 **天数 BI-V150** 和 **沐曦－曦云 C500**。本实验库按平台分别维护环境、分析、验证结果和中文报告；框架和算子代码在另外两个团队共用代码库中协作。

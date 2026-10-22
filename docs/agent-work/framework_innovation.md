@@ -1078,3 +1078,22 @@ async token草稿材料也已完成并冻结：
 证据与边界均写进中文PR及方法说明：metadata174115五形状/11字段/连续event与固定地址门通过，175049对175441同KV521936/同DB单轮total TPS **+0.286723%**，TTFT **+0.234431%（变慢）**；async063353真实方法12类门通过，cfd适配方法体与门一致，174741对174402同KV521840/同DB单轮TPS **+0.703657%**，TTFT **−0.865638%**。所有结果仅BI-V150，不外推C500、不称稳定收益或官方分数；旧103/105不能继承，新准确率未有，保持Draft。metadata不检测芯片型号、首次依赖SHA不符会报错的实际边界明确保留；async为iluvatar vendor scope。
 
 两份都触runner，但不同原方法位置；systems已收到准确Git对象库路径和两份final manifest，按root分工独立做双合并顺序/冲突/组合静态检查。本owner不执行组合、不修改共享README或checkout、不remote/commit/push/PR、不GPU/旧套件。下一可执行操作：root读取这两份manifest与`files/`作分方法Draft PR，按systems组合回执决定先后；组合后的设备/accuracy仍未验证，不因文本可合并视为已测。本owner本批材料收口，除定向纠错外不再新增实现或实验。
+
+### GitHub维护后仅补两CPU方法组合语义风险：只读报告完成，等最短门互审
+
+root报告维护已完成、四个Draft未合并，持续目标下一步仅补CPU metadata+async token组合风险；未授权修改已发PR或新调度研究。本owner只读固定组合runner **6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141**、原helper0e961524/1bb85e31，以及真实execute/preprocess/sample链和174115旧gate；三资产与旧gate b124实际SHA已重算，没有重做文本合并、执行候选/旧套件或设备。
+
+独占 `analysis/2026-10-22-cpu-combination-framework-review.md` **d72da46885eed1c0ced82176d4f68c94b75c98d27cbe0bf6fee0021c55238f22** 已落盘并先回root关键结论：未见新增共享写/事件冲突。async读取CPU cu_num_tokens与prev_positions.np及两份独立新indices H2D，不读metadata省去H2D的req_indices.gpu/query_pos.gpu/num_scheduled_tokens.gpu；metadata仍保持CPU镜像和原computed H2D，先写positions/seq，再原slot计算，之后嵌套async input IDs更新。两helper不切流，原prepare事件最后record，覆盖持久pinned staging及原H2D；record_stream只保生命周期，不冒称ready同步。原源采样/输出copy stream关系保留，任意无wait换流仍非已支持。
+
+最短建议复用174115实际方法链/真实buffer与blocktable，固定e155对6f918+两原helper，补fixture `model.is_encoder_decoder=False`（旧fixture缺字段会挡住原async守卫），五case与连续四round原event/graph consumer加入input_ids，至少同一reverse-mapping调用和连续round要求两counter各delta1；旧no-previous轮应async delta0。逐字段/固定地址/CPU镜像/slot与input IDs逐轮非陈旧，保RNG检查，删除计时，不加载模型或先做长服务。报告明确该门尚未实现/执行、新accuracy未有、单方法收益不可相加。
+
+root随后指定hardware独占 `scripts/remote/validate_cpu_combination.py` 最小fork；本owner只负责其定向delta互审，不再实现包装。已把旧五case `previous=ordinal%2==0` 的预期差异告作者，避免把合法回退判错或改算法造命中。当前该文件尚未落稿，下一等待作者SHA后检查同次双命中、graph读取、原生命周期/源算法守卫，仅读不重复旧suite；所有PR与原资产保持冻结。
+
+
+### CPU组合最短门最终abfc/d505互审完成，无当前设备门阻断
+
+在前述只读语义审阅后，hardware的新 `scripts/remote/validate_cpu_combination.py` final **abfc7981a8d5a20ff32b80f42dd30148bbeb5d680c649bf892e2b3924ead0bad** 已全文及对174115固定b124的完整stdlib diff审阅，作者确认不再改。真实五方法AST抽取与原七项源身份守卫保持，fixture仅补原守卫字段；decode62/mixed952同次两helper各delta1，原no-previous轮async0，连续四round每轮双delta1；graph实际读positions/seq/slot/input IDs，逐步对oracle且positions/input IDs非陈旧，四源GPU地址稳定。原event保护CPU复用、replay/clone次序与最后总sync不改，删32call计时，无模型/服务/新算法。本owner未执行新门或旧套件。
+
+systems薄层 `scripts/remote/launch_cpu_combination_gate.py` 草稿 **cda5bbef1acfd49fd9f8d18881cefc0acc2602f5bdbd768bc911919f4c7f2ede** 全文只读轻审：外层仅固定source/双idle/DB/env/后态/seal，由内层gate唯一持锁、启动worker/monitor并负责清理；锁外DB snapshot与root串行派发前提明确，无第二GPU owner。final **d50511c9a194b1dadad87498b22862641cbea9643eea94aa73f32b320a6abb2f** 已实SHA/单值逆换逐byte回cda5（只填abfc，出现一次，无UNREVIEWED）。两最终pin配套，**无本轮最短组合正确性门阻断**，已直接回root可唯一派发，不为长文等候或扩套件。
+
+独占报告已补全真实审阅与最终pin，当前SHA **63959c4c04d06902887dc80efee0573d9388da309d01a5caa4acebf18136c7eb**；原d72为首版语义报告、93b为gate定稿后但launcher未填pin时版本，均不是设备结果。只新增/更新该report和own handoff，未改任何PR、候选、共享checkout/branch/远端，不新搜论文/SSH/GPU/模型导入。下一由root唯一执行这一个门、保存实际字节/counter/RNG/source/idle后态并指定owner验收；本owner不预声明pass/准确率/叠加性能，任务收口等定向原件或纠错。

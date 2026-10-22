@@ -1,5 +1,9 @@
 # 子智能体工作与 API 接续索引
 
+**组合门完成（2026-10-22 14:22，北京时间）：** root唯一062205上卡已exit0，原件/tgz/55seal本地齐；metadata9/async7、五形状55项、四轮graph包含input IDs、同次双命中、RNG与DB均通过。framework完成语义和gate/launcher互审，hardware完成最小fork并纠正prefill2048实际命中，systems负责唯一完整后验/registry118/queue91及[结果报告](../analysis/2026-10-22-cpu-combination-062205-result.md)。当前无GPU作业；组合服务吞吐与整模型accuracy仍未验证，不把单项百分比相加。
+
+**持续目标接续（2026-10-22 14:08，北京时间）：** 四项PR与完整实验发布已完成，root依据持续目标优先补CPU metadata与async token组合的最短运行证据。hardware只fork现有真实方法门，补双快路径同次命中及input IDs图读取；framework检查两方法的缓冲区/事件交互并互审新门；systems只补DB/原件封存与唯一后验。固定组合runner6f918，两helper不改；无新算子或Event路线，不先服务、大测或收益pair。06:07:21Z设备实查空闲，新门尚未启动。具体run/源码/结果读CURRENT与后续原件。
+
 **当前收尾（2026-10-22 13:40，北京时间）：** 045818及051336 Event门均已完成，正确性通过但没有等待CPU收益，原件/负结论/registry117与queue90全部保存；不再启动新GPU或研究。framework完成CPU metadata与async token两份受测源码及中文PR包，hardware完成连续/二维KV工具两份包与完整tree独立核验，systems完成双向组合冲突定位及最小解决。root已创建四个中文Draft PR #1—#4，均未合并；详细链接和精确身份见[协作安排](pr-collaboration-plan.md)、[创建回执](pr-preparation/publication-receipt.json)和[组合说明](pr-preparation/combination-review.md)。三名agent均保留独占handoff，本轮进入实验仓库发布收尾；不能从下方历史条目重复旧任务。
 
 

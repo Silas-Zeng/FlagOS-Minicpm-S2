@@ -1,0 +1,257 @@
+{
+  "status": "pass",
+  "run_id": "20261022T062205Z-cpu-combination-gate",
+  "reviewed_utc": "2026-10-22T06:35:23.944109+00:00",
+  "review_scope": "唯一实际本地原件审计；stdlib读取/哈希/只读DB，不导入或重跑GPU门",
+  "seal_items_verified": 55,
+  "source_items_verified": 10,
+  "launcher_sha256": "d50511c9a194b1dadad87498b22862641cbea9643eea94aa73f32b320a6abb2f",
+  "source_sha256": {
+    "gate.py": "abfc7981a8d5a20ff32b80f42dd30148bbeb5d680c649bf892e2b3924ead0bad",
+    "runtime.py": "0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f",
+    "async-runtime.py": "1bb85e31c7b3fefa81414a54b04a1f0b6cf949c0876f87149956c821bb483adc",
+    "runner.py": "e155a16669e69b7eb7aff370dbcbcf225a4f593fa42b2399722e96999b53a1f1",
+    "runner-combined.py": "6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+    "gpu_input_batch.py": "de1ea4fc9d43fc6079dd375e407c2b6d93f5e1a11f49732d13654c41eaf30a65",
+    "utils.py": "4e4cda209e10d4477d251003779dec26ea5ef47541c3310995c007c7ee5fdcdb",
+    "block_table.py": "b3a6649b968fba0b48c333d7ac96e65cc713a86133cc7eef0a8399f5339ec600"
+  },
+  "exact_commands": {
+    "controller": [
+      "/usr/local/bin/python3",
+      "/workspace/experiments/minicpm-s2/scripts/validate_cpu_combination.py",
+      "--run-dir",
+      "/workspace/experiments/minicpm-s2/framework/20261022T062205Z-cpu-combination-gate",
+      "--runtime-path",
+      "/workspace/experiments/minicpm-s2/scripts/biv150_cpu_metadata.py",
+      "--async-runtime-path",
+      "/workspace/experiments/minicpm-s2/scripts/biv150_async_token_update.py",
+      "--runner-path",
+      "/workspace/experiments/minicpm-s2/code/sql-mixed-20261021T080656Z/vllm_fl/worker/model_runner.py",
+      "--candidate-runner-path",
+      "/workspace/experiments/minicpm-s2/scripts/cpu-combination-model_runner.py"
+    ],
+    "worker": [
+      "/usr/local/bin/python3",
+      "/workspace/experiments/minicpm-s2/framework/20261022T062205Z-cpu-combination-gate/source/gate.py",
+      "--worker",
+      "--run-dir",
+      "/workspace/experiments/minicpm-s2/framework/20261022T062205Z-cpu-combination-gate"
+    ]
+  },
+  "pids": {
+    "launcher": 270063,
+    "controller": 270069,
+    "worker": 270073
+  },
+  "started_utc": "2026-10-22T06:22:05.830235+00:00",
+  "finished_utc": "2026-10-22T06:22:26.210821+00:00",
+  "cases": [
+    {
+      "name": "decode62",
+      "tokens": 62,
+      "requests": 62,
+      "checks_passed": 11,
+      "selection_delta": {
+        "metadata": 1,
+        "async_token": 1
+      },
+      "fixture_previous_sampled_tokens": true
+    },
+    {
+      "name": "mixed259",
+      "tokens": 259,
+      "requests": 32,
+      "checks_passed": 11,
+      "selection_delta": {
+        "metadata": 1,
+        "async_token": 0
+      },
+      "fixture_previous_sampled_tokens": false
+    },
+    {
+      "name": "mixed952",
+      "tokens": 952,
+      "requests": 32,
+      "checks_passed": 11,
+      "selection_delta": {
+        "metadata": 1,
+        "async_token": 1
+      },
+      "fixture_previous_sampled_tokens": true
+    },
+    {
+      "name": "mixed2048",
+      "tokens": 2048,
+      "requests": 30,
+      "checks_passed": 11,
+      "selection_delta": {
+        "metadata": 1,
+        "async_token": 0
+      },
+      "fixture_previous_sampled_tokens": false
+    },
+    {
+      "name": "prefill2048",
+      "tokens": 2048,
+      "requests": 1,
+      "checks_passed": 11,
+      "selection_delta": {
+        "metadata": 1,
+        "async_token": 1
+      },
+      "fixture_previous_sampled_tokens": true
+    }
+  ],
+  "field_checks_passed": 55,
+  "graph_steps": [
+    {
+      "ordinal": 0,
+      "before": {
+        "metadata": 5,
+        "async_token": 3
+      },
+      "after": {
+        "metadata": 6,
+        "async_token": 4
+      },
+      "delta": {
+        "metadata": 1,
+        "async_token": 1
+      }
+    },
+    {
+      "ordinal": 1,
+      "before": {
+        "metadata": 6,
+        "async_token": 4
+      },
+      "after": {
+        "metadata": 7,
+        "async_token": 5
+      },
+      "delta": {
+        "metadata": 1,
+        "async_token": 1
+      }
+    },
+    {
+      "ordinal": 2,
+      "before": {
+        "metadata": 7,
+        "async_token": 5
+      },
+      "after": {
+        "metadata": 8,
+        "async_token": 6
+      },
+      "delta": {
+        "metadata": 1,
+        "async_token": 1
+      }
+    },
+    {
+      "ordinal": 3,
+      "before": {
+        "metadata": 8,
+        "async_token": 6
+      },
+      "after": {
+        "metadata": 9,
+        "async_token": 7
+      },
+      "delta": {
+        "metadata": 1,
+        "async_token": 1
+      }
+    }
+  ],
+  "graph_consumers": [
+    "positions",
+    "seq_lens",
+    "slot_mapping",
+    "input_ids"
+  ],
+  "graph_data_changed_and_fixed_addresses_passed": true,
+  "selection_total": {
+    "metadata": 9,
+    "async_token": 7
+  },
+  "rng_unchanged": {
+    "CPU": true,
+    "GPU": true
+  },
+  "rng_sha256": {
+    "CPU_before": "5f81496c0c4e84ce29e6519a94a579f264d33c295bec60bf65fb3ef463fb87a3",
+    "CPU_after": "5f81496c0c4e84ce29e6519a94a579f264d33c295bec60bf65fb3ef463fb87a3",
+    "GPU_before": "f7f371b0ba6689027de8debadf3c059e7a7d14bf87a3d98a6f01e8dd9e4a326a",
+    "GPU_after": "f7f371b0ba6689027de8debadf3c059e7a7d14bf87a3d98a6f01e8dd9e4a326a"
+  },
+  "database": {
+    "snapshot_sha256": "dc2c76463fc6c1ef0674b16ca4374125b3ee4551fa0b1886253093f310b237da",
+    "schema_sha256": "0dc7a465bf12e53e054381d9e865460e7e4fe70287cc8c3683a41b0a4914ab39",
+    "logical_content_sha256": "c05d7e3182d1837929b48d5699c6515786351eb8d22f73eb53227a39fb3c49c8",
+    "table_count": 523,
+    "row_count": 19474
+  },
+  "database_recomputed_readonly": true,
+  "db_snapshot_lock_scope": "outside controller lock; root-exclusive serial dispatch required",
+  "environment": {
+    "packages": {
+      "torch": "2.10.0+corex.4.5.0",
+      "numpy": "1.26.4",
+      "vllm": "0.24.0+empty",
+      "vllm-plugin-fl": "0.3.0rc0+g13eb9be69",
+      "flag-gems": "5.3.5",
+      "flagtree": "0.6.2a3+iluvatar3.6",
+      "triton": null,
+      "sqlalchemy": "2.0.48"
+    },
+    "cpu_quota_cores": 6,
+    "host_limit_bytes": 21474836480,
+    "physical_gpu_mib": 32768
+  },
+  "postflight": {
+    "utc": "2026-10-22T06:22:26.205563+00:00",
+    "query": "68, 0\n",
+    "ixsmi": "Timestamp    Thu Oct 22 14:22:26 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  30C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n",
+    "ports_closed": {
+      "127.0.0.1": true,
+      "::1": true
+    }
+  },
+  "exit_codes": {
+    "controller": 0,
+    "wrapper": 0
+  },
+  "worker_markers": {
+    "BIV150_CPU_METADATA_FIRST_SELECTED": [
+      "BIV150_CPU_METADATA_FIRST_SELECTED positions_seq_h2d=2"
+    ],
+    "BIV150_ASYNC_TOKEN_UPDATE_FIRST_SELECTED": [
+      "BIV150_ASYNC_TOKEN_UPDATE_FIRST_SELECTED integer_gather_scatter=1"
+    ]
+  },
+  "warnings_preserved": [
+    "/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:728: DeprecationWarning: use_cuda_graph is deprecated; use benchmark_mode='replay' or benchmark_mode='event'",
+    "/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:411: RuntimeWarning: active Triton backend does not provide a replay benchmarker; falling back to event timing"
+  ],
+  "archive": {
+    "path": "/workspace/experiments/minicpm-s2/framework/20261022T062205Z-cpu-combination-gate.tgz",
+    "bytes": 2035183,
+    "sha256": "225a853904047c7770c9adb1cb284fcd2d9c389ca50cbb94be5ddc174e0b1852"
+  },
+  "collection_receipt_sha256": "945336a76a2e15e43531214f6e2a1910c2520cbad4f9911485679b9499730359",
+  "accuracy": "not evaluated",
+  "end_to_end": "not evaluated",
+  "timing": "not measured",
+  "limitations_zh": [
+    "真实AST方法/实际buffer和blocktable类，fixture runner/config/InputBatch；不加载模型权重或启动服务。",
+    "prefill2048是有previous sampled tokens的2048-token fixture，实际双delta1；名称不代表纯无历史prefill，不能推测async0。",
+    "图是固定地址四tensor copy consumer，不是整模型CUDA graph覆盖。",
+    "旧单项性能/103-105准确率不继承为组合结果；没有组合性能pair，不宣称已满足最终提交资格。",
+    "controller的FlagGems unavailable及triton null是发行包metadata名称查询原值，outer精确flag-gems=5.3.5；不推断缺失runtime。"
+  ]
+}

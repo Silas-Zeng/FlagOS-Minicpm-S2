@@ -750,3 +750,10 @@ root在36510ed6 checkpoint后授权新outer，scripts/remote/launch_kv_pitched_c
 ## 90最后手头门：051336 native SDK flags3完成性通过，无等待CPU下降
 
 唯一系统实审365e6760通过85seal/source5/实际SDK编译so1376/mapsd39/DB/post；24trial144checks/RNG/settledclose均true、early0，无failureowner全卡同步救场。直接Corex flags3两窗threadCPU9.4344/9.4364ms≈wall9.4194/9.4210ms，没有CPU下降信号，不接服务/不猜驱动实现。DB52319474三SHA同，05:13:44Z68-0双栈闭/source不变；首次SCP未退出的文件锁仅收集时序，完整exit0解包后全核，非设备失败。registry117/queue90，短报告analysis/2026-10-22-native-event-wait-051336-system.md。按用户最后要求，设备手头全部结束，转GitHub/方法PR文档维护，不新研究/设备/自动服务/大测试。
+
+
+## 062205：两个CPU方法同链设备门通过，仍非服务或准确率
+
+唯一实际本地审计07c12b13通过：55seal/10源/d505launcher-abfcgate/原e155+组合6f918/metadata0e961+async1bb85/实际依赖pin全核，真实方法同链fixture非模型。五case各11字段全过；selection实际decode62为1-1、mixed259为1-0、mixed952为1-1、mixed2048为1-0、prefill2048为1-1（有previous sampled tokens，非纯无历史prefill）。原event四步固定地址graph消费positions-seq-slots-inputIDs全部一致且位置与token变更，每步双delta1，总metadata9-async7，CPU-GPU RNG SHA同。launcher270063-controller270069-worker270073，仅内层唯一锁/worker/cleanup；06:22:26.210821Z外层exit0。CPU6-host20GiB-单BI-V150物理32GiB，DB实体只读重算52319474三SHAdc2c-0dc7-c05d前后同，06:22:26.205563Z后态68-0双栈闭无GPU进程/源不变；worker无Traceback-ERROR，原warnings留存。2035183B归档225a8539已待SCP43608exit0后整包核；无性能计时/完整service或accuracy/C500结论，不相加单项gain或继承103-105，不自动大测。
+
+独占中文结果见 `analysis/2026-10-22-cpu-combination-062205-result.md`，系统JSON见 `analysis/source/cpu-combination/062205-system-review.json`。本轮只做一次最短真实方法门，不重跑旧门或建立新大验证框架。
