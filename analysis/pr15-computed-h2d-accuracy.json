@@ -1,0 +1,102 @@
+{
+  "run_id": "20261023T112356Z-pr15-computed-h2d",
+  "device": "Iluvatar BI-V150",
+  "status": "actual_PR15_accuracy_pass",
+  "change": "PR15实际提交在CPU metadata成功分支省去无消费者的computed H2D；复用原方法门与短pair",
+  "test": "固定638c4ac0完整432个Git blob；原35d/6e045/SERVER与Math500 Level3全部105题",
+  "commit": "638c4ac0f07ed98e4476a5971c849630d9cdd580",
+  "tree": "d6a9597c34c29d06613562a40a95b91f70eeb70f",
+  "pr_url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/15",
+  "source_count": 432,
+  "accuracy": {
+    "validity": "valid",
+    "accuracy_gate": "pass",
+    "correct": 100,
+    "samples": 105,
+    "exact_accuracy": 0.9523809523809523,
+    "threshold": 0.95
+  },
+  "diagnostics": {
+    "stop_reasons": {
+      "stop": 105
+    },
+    "review_statuses": {
+      "success": 105
+    },
+    "transport_error_count": 0,
+    "transport_error_indices": [],
+    "output_cap_count": 0,
+    "output_cap_indices": [],
+    "empty_final_count": 0,
+    "empty_final_indices": [],
+    "empty_extracted_count": 0,
+    "empty_extracted_indices": [],
+    "missing_usage_indices": []
+  },
+  "actual_metadata_marker": "(EngineCore pid=14214) BIV150_CPU_METADATA_FIRST_SELECTED positions_seq_h2d=2",
+  "actual_method_activated": true,
+  "database": {
+    "before": {
+      "table_count": 560,
+      "row_count": 20718,
+      "snapshot_sha256": "92dc8b68583e2ebcd86d296ae6f4e59af0e37d62a11c3de5818ff6b20cd4f041",
+      "schema_sha256": "45061fceaeab826fef4ebdd0e5ddfcadf5c75b97e3521d6f67fbc7457e64c070",
+      "logical_content_sha256": "df77298e4d247271df1cf7e53ab537ddfee7a53ed02641fa1a4dca8810d43c30"
+    },
+    "after": {
+      "table_count": 561,
+      "row_count": 20721,
+      "snapshot_sha256": "ed9262776cce7a72a50b1757e60a874ed51d00e8c9c506d0e8ff3fb1d516db1f",
+      "schema_sha256": "18cf63b7dda5ed41152d594965eb7cd22b3017c067bd05afd3948e83eb79b2b1",
+      "logical_content_sha256": "c8e8d43b966037f774c5f966c55692bdc46470f13b0069b32897937c70877647"
+    }
+  },
+  "database_unchanged": false,
+  "cleanup": {
+    "exit_code": 0,
+    "cleanup_errors": [],
+    "ports_closed": {
+      "127.0.0.1": true,
+      "::1": true
+    },
+    "gpu_query": "68, 0",
+    "owned_pids": {
+      "driver": 14048,
+      "server": 14062,
+      "engine": 14214,
+      "evaluation": 14489
+    },
+    "driver_zombie_inactive": true,
+    "other_owned_processes_absent": true
+  },
+  "transfer": {
+    "archive_bytes": 3977779,
+    "archive_sha256": "c83a14455d77485f8820f2052d3a420063a9eef0945118ae4c1c763af31fbcff",
+    "sealed_files": 709,
+    "imported_files": 710,
+    "scp_exit": 0,
+    "materialized_symlinks": [
+      {
+        "path": "20261023T112356Z-pr15-computed-h2d-control/plugin-source/vllm_fl/configs/moe/E=256,N=512,device_name=nvidia.json",
+        "linkname": "E=256,N=512,device_name=nvidia,model=Qwen3.6-35B-A3B-H100.json",
+        "git_blob": "e0f0558233316d08efb00d75dce9ff2fd1a1f530",
+        "target": "20261023T112356Z-pr15-computed-h2d-control/plugin-source/vllm_fl/configs/moe/E=256,N=512,device_name=nvidia,model=Qwen3.6-35B-A3B-H100.json",
+        "materialized_sha256": "97ccbad3a1933385e777d0817618edecbb80ff528b412e353c89c728d7d90193"
+      }
+    ],
+    "verification": "原tgz完整保留；一次封包/逐文件核验已完成，未重跑评测或判卷"
+  },
+  "evidence": {
+    "review": "experiments/accuracy/20261023T112356Z-pr15-computed-h2d/accuracy-review.json",
+    "result": "experiments/accuracy/20261023T112356Z-pr15-computed-h2d/result.json",
+    "server_log": "experiments/accuracy/20261023T112356Z-pr15-computed-h2d/server.log",
+    "seal": "experiments/accuracy/20261023T112356Z-pr15-computed-h2d-control/evidence-seal.json"
+  },
+  "conclusion": "100/105（95.2381%）达到原95%门，105请求成功、无到上限/空最终答案，且实际省H2D路径已命中。保留PR15方法候选；单pair小收益仍非稳定统计，C500未验证，保持Draft，不自动合并。",
+  "limits": [
+    "只验证本次BI-V150实际提交，不继承或对旧QGQA分数作精度升降归因",
+    "本轮不是吞吐对照，不更新原单pair收益",
+    "关闭阶段ResourceWarning与semaphore警告原样保留；原owner及封存后态确认清理完成"
+  ],
+  "gain": null
+}

@@ -7,7 +7,7 @@
 ## 登记 #176 · 省去无消费者的 computed H2D
 
 - **尝试**：CPU metadata成功时省略一次计数GPU副本提交，保留原回退和固定buffer/event；方法门与独立短服务单pair分别记录，不与KV组合收益相加。
-- **改动**：相关实现 [framework](../../../patches/framework)；本轮准确变体以原件源码清单为准。
+- **改动**：相关实现 [pr15-computed-h2d-accuracy.json](../../../analysis/pr15-computed-h2d-accuracy.json)；[skip-computed-h2d-service-pair.json](../../../analysis/skip-computed-h2d-service-pair.json)；本轮准确变体以原件源码清单为准。
 - **怎么测**：具体测法未单列，见原命令；输入 / 输出 / 并发 / 请求数：4096 / 128 / 64 / 64。
 - **结果**：吞吐+0.619291%、时长−0.615480%、TTFT−1.026463%、TPOT−0.053834%
 - **是否保留**：保留作候选，仍待确认；不等于默认启用。
