@@ -1,0 +1,82 @@
+--- original-owner
++++ shadow-owner
+@@ -1,4 +1,4 @@
+-"""计算序423短服务：固定四路径变化，原bc51负责SERVER/单卡锁/清理；非准确率证明。"""
++"""一次自然命中的计算顺序shadow诊断；原bc51负责SERVER/单卡锁/清理，不计性能。"""
+ from datetime import datetime, timezone
+ import hashlib
+ import json
+@@ -51,41 +51,41 @@
+ 
+ stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+ assets = Path(__file__).parent
+-for name, pin in {
+-    'prepare_compute_order.py': 'b1a804a0c6da15b7c295a4eb5b62d0a6d853fc15d104b6ddcffd36c8a7211670',
+-    'biv150_compute_order.py': '5ce6f7b6a815ab54d9d9965c30f37362fd1d271c82d442caa76829e01f4938ce',
+-}.items():
+-    assert sha(assets / name) == pin, name
++deployment_path = assets / 'deployment.json'
++assert sha(deployment_path) == '370a757740f44cdde4d5976a425f85d7fd94be75c3a596b7819cdfa19f37ca86'
++receipt = json.loads(deployment_path.read_text())
++expected = receipt['output_map']
++assert receipt['source_count'] == len(expected) == 424
++assert receipt['changed_paths'] == ['vllm_fl/patches/biv150_compute_order.py', 'vllm_fl/patches/biv150_compute_order_structure.py', 'vllm_fl/patches/biv150_kv_protocol.py', 'vllm_fl/patches/biv150_kv_worker.py', 'vllm_fl/worker/model_runner.py']
++for rel in receipt['changed_paths']:
++    assert sha(assets / 'files' / rel) == expected[rel], rel
+ base_source = SOURCE
+-SOURCE = ROOT / 'code' / ('compute-order-' + stamp)
+-subprocess.run(['python3', str(assets / 'prepare_compute_order.py'), '--base', str(base_source), '--output', str(SOURCE)], check=True)
+-prepared = SOURCE.with_name(SOURCE.name + '-prepare.json')
+-receipt = json.loads(prepared.read_text())
+-expected = receipt['output_map']
+-assert receipt['source_count'] == len(expected) == 423
+-assert expected['vllm_fl/worker/model_runner.py'] == 'ea64a59cff6197c42babbc190246ab24dce4f540874b2025c0f4ebfee02195ac'
+-assert set(receipt['changed_paths']) == {
+-    'vllm_fl/patches/biv150_compute_order.py', 'vllm_fl/worker/model_runner.py',
+-    'vllm_fl/patches/biv150_kv_worker.py', 'vllm_fl/patches/biv150_kv_protocol.py'}
++SOURCE = ROOT / 'code' / ('compute-order-structure-' + stamp)
++assert not SOURCE.exists()
++shutil.copytree(base_source, SOURCE, ignore=shutil.ignore_patterns('.git', '__pycache__', '*.pyc', '*.pyo'))
++for rel in receipt['changed_paths']:
++    destination = SOURCE / rel
++    destination.parent.mkdir(parents=True, exist_ok=True)
++    shutil.copyfile(assets / 'files' / rel, destination)
+ assert mapping(SOURCE) == expected
++prepared = deployment_path
+ reference_bytes = (json.dumps(expected, indent=2) + '\n').encode()
+-run = ROOT / 'framework' / (stamp + '-compute-order-candidate-context16k')
++run = ROOT / 'framework' / (stamp + '-compute-order-structure-context16k')
+ control = run.with_name(run.name + '-control')
+ assert not run.exists()
+ control.mkdir()
+ shutil.copyfile(prepared, control / 'prepare.json')
+-for name in ('prepare_compute_order.py', 'biv150_compute_order.py'):
+-    shutil.copyfile(assets / name, control / name)
++shutil.copytree(assets / 'files', control / 'changed-source')
+ shutil.copyfile(__file__, control / 'launch_candidate.py')
+ shutil.copyfile(asset_map, control / 'base-source-sha256.json')
+ shutil.copytree(SOURCE, control / 'plugin-source')
+ assert mapping(control / 'plugin-source') == expected and mapping(SOURCE) == expected
+ (control / 'source-sha256.json').write_bytes(reference_bytes)
+ (control / 'purpose.json').write_text(json.dumps({
+-    'kind': '计算序423短服务；无profiler；实际命中和32/0只作集成及性能信号，不替代数值/准确率',
+-    'variant': 'candidate', 'source': str(SOURCE), 'source_count': 423,
+-    'reference_control': str(REFERENCE), 'comparison_baseline': '20261023T054306Z-compute-order-baseline-context16k', 'verify_restore': '0',
+-    'limits': ['不改官方SERVER；原context-screen/seed721201', '不继承原accuracy；收益须同DB/KV等可比性且实际命中；不自动排第二任务'],
++    'kind': '单次完整M输入与N个logits索引映射、原sample衔接诊断；不计性能',
++    'variant': 'shadow-diagnostic', 'source': str(SOURCE), 'source_count': 424,
++    'reference_control': str(REFERENCE), 'comparison_baseline': None, 'verify_restore': '0',
++    'limits': ['不改官方SERVER；原context-screen/seed721201', '必须有实际shadow完成证据；未命中为未覆盖；不同bit不自动等于算法错误；不自动排第二任务'],
+ }, ensure_ascii=False, indent=2) + '\n')
+ shutil.copyfile(ROOT / 'scripts/snapshot_tuning_db.py', control / 'snapshot_tuning_db.py')
+ with (control / 'db-before.log').open('x') as output:
+@@ -93,7 +93,9 @@
+         '/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db', '--output', str(control / 'db-before')],
+         stdout=output, stderr=subprocess.STDOUT, check=True)
+ (control / 'q-hoist-artifacts').mkdir()
++(control / 'structure-artifacts').mkdir()
+ command = ['env', '-u', 'BIV150_FINITE_GROWTH_ADMISSION',
++    'BIV150_COMPUTE_ORDER_STRUCTURE_DIR=' + str(control / 'structure-artifacts'),
+     'BIV150_KV_VERIFY_RESTORE=0', 'BIV150_Q_FRAGMENT_SERVICE_ARTIFACT_DIR=' + str(control / 'q-hoist-artifacts'),
+     'python3', str(ROOT / 'scripts/run_framework_screen.py'), str(run), '--source-dir', str(SOURCE),
+     '--context-screen', '--seed', '721201', '--require-log-marker', 'BIV150_KV_PROTOCOL_INSTALLED']

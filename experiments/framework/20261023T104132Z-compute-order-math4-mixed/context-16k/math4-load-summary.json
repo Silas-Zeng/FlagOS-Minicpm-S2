@@ -1,0 +1,86 @@
+{
+  "kind": "一次混合诊断；非官方105题门或性能pair",
+  "status": "processes_completed_requires_report_review",
+  "commands": {
+    "background": [
+      "bash",
+      "/workspace/experiments/minicpm-s2/scripts/run_diagnostic_load.sh",
+      "/workspace/experiments/minicpm-s2/framework/20261023T104132Z-compute-order-math4-mixed/context-16k/background",
+      "context-16k",
+      "16384",
+      "128",
+      "64",
+      "32",
+      "721201"
+    ],
+    "math4": [
+      "/usr/local/bin/python3",
+      "/workspace/experiments/minicpm-s2/scripts/compute-order-math4-20261023/capture_evalscope.py",
+      "--output",
+      "/workspace/experiments/minicpm-s2/framework/20261023T104132Z-compute-order-math4-mixed-control/client-capture",
+      "--",
+      "eval",
+      "--model",
+      "minicpm",
+      "--api-url",
+      "http://127.0.0.1:9031/v1/chat/completions",
+      "--api-key",
+      "EMPTY",
+      "--eval-type",
+      "openai_api",
+      "--datasets",
+      "math_500",
+      "--dataset-args",
+      "{\"math_500\":{\"dataset_id\":\"/workspace/evalscope-datasets/math_500\",\"subset_list\":[\"Level 3\"]}}",
+      "--eval-batch-size",
+      "8",
+      "--timeout",
+      "3600",
+      "--generation-config",
+      "{\"temperature\":1.0,\"top_p\":0.95,\"max_tokens\":32768}",
+      "--work-dir",
+      "/workspace/experiments/minicpm-s2/framework/20261023T104132Z-compute-order-math4-mixed/context-16k/math500-level3",
+      "--ignore-errors",
+      "--limit",
+      "4"
+    ]
+  },
+  "deadline_seconds": 210,
+  "requested_dataset_scope": "原Level 3 limit4；index0..3题身份待原报告后验",
+  "official_sha256": "6e045c1cda5a6379ddff1bf7c41ab1e4cbaaddd51b2ca9b4b1d2a92cfa8bb5f4",
+  "background_sha256": "621dedfc11ce21d35bdcffc9918ab4ac8bf63adc0e277fe7c2117e5f7e4ec378",
+  "capture_sha256": "9e1f6bcf44c0b3c78226e87d2b8ccc0b5a95aa6d5af98a2eeab6f66a41d74aa5",
+  "started_monotonic_ns": 3917857886680774,
+  "jobs": {
+    "background": {
+      "pid": 13206,
+      "started_monotonic_ns": 3917857887453796,
+      "returncode": 0
+    },
+    "math4": {
+      "pid": 13695,
+      "started_monotonic_ns": 3917935978759072,
+      "returncode": 0
+    }
+  },
+  "cleanup_errors": [],
+  "arrival_gate_log_start_byte": 34835,
+  "arrival_gate": {
+    "marker": {
+      "pid": 12929,
+      "N": 17,
+      "M": 2048,
+      "Dprefix": 1,
+      "Dall": 15,
+      "outside": 14,
+      "sampler_rows": 17,
+      "original_model_forward_returned": true,
+      "runtime_mode": "NONE",
+      "inverse_logits_order": "original_request_rows",
+      "token_bitwise_equivalence_claimed": false
+    },
+    "monotonic_ns": 3917935977557969
+  },
+  "finished_monotonic_ns": 3918006665013169,
+  "exit_code": 0
+}

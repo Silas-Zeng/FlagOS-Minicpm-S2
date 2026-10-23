@@ -1,0 +1,31 @@
+--- bc51/run_framework_screen.py
++++ math4/run_math4_gate.py
+@@ -72,7 +72,14 @@
+     parser.add_argument('--context-screen', action='store_true', help='One 16K load: 32 requests, 128 output tokens, concurrency64')
+     parser.add_argument('--context-long-screen', action='store_true', help='One 16K load: 32 requests, 1024 output tokens, concurrency64')
+     parser.add_argument('--require-log-marker', help='Fail before loads if installation evidence is absent')
++    parser.add_argument('--math4-capture', required=True, type=Path)
++    parser.add_argument('--math4-capture-output', required=True, type=Path)
+     args = parser.parse_args()
++    if not args.context_screen or args.native_profile or args.host_profile or args.smoke_only or args.decode_screen or args.context_long_screen or args.seed != 721201:
++        parser.error('math4只接受原context-screen与seed721201，不启profiler')
++    math4_load = Path(__file__).with_name('run_math4_load.py')
++    if hashlib.sha256(math4_load.read_bytes()).hexdigest() != '03a0c9027063b239dad66b8d15d87bb867d6e93a1ccf0286882284140d9030e6':
++        raise ValueError('math4负载身份变化')
+     if args.context_long_screen and (args.context_screen or args.native_profile or args.host_profile or args.smoke_only or args.decode_screen):
+         parser.error('--context-long-screen requires a standalone unprofiled load')
+     if args.context_screen and (args.native_profile or args.host_profile or args.smoke_only or args.decode_screen):
+@@ -257,9 +264,10 @@
+         elif args.decode_screen or args.host_profile:
+             cases = [('decode-4k', 4096, 128, 64, 64)]
+         for offset, (label, length, output, concurrency, prompts) in enumerate(cases):
+-            command = ['bash', str(ROOT / 'scripts/run_diagnostic_load.sh'),
+-                       str(run / label), label, str(length), str(output),
+-                       str(concurrency), str(prompts), str(args.seed + offset)]
++            command = ['python3', str(math4_load), '--run-dir', str(run / label),
++                       '--capture', str(args.math4_capture.resolve()),
++                       '--capture-output', str(args.math4_capture_output.resolve()),
++                       '--seed', str(args.seed)]
+             commands.append(command)
+             (run / 'load-commands.json').write_text(json.dumps(commands, indent=2))
+             (run / f'cpu-before-{label}.json').write_text(json.dumps(cpu_state()))
