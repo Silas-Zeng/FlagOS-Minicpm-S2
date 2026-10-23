@@ -121,3 +121,13 @@ PR #15 实际提交完整准确率最薄包装新增窄审通过：`tmp/pr15-acc
 PR15准确率本地导入器新增symlink分支窄审通过：`tmp/pr15-accuracy/import_pr15_accuracy.py` b6c1e0f7ee452cad0da5e30de1fc5eb888f3c5acd7ed59e7e59c225ba5ce9aef。只允许固定112356 control/plugin-source中的nvidia.json别名，linkname及e0f Git blob逐字锁、sealed432 Gitmap唯一120000；同目录H100目标必须tar regular，目标Gitblob及目标/别名两处原seal内容SHA均一致，不能形成循环或escape。本地以普通文件材料化原目标字节，保持旧size/SHA/完整seal集合与已有异字节拒覆盖；stdout单列materialized_symlinks的原路径/linkname/blob/目标，不改原tgz、不向sealed树加说明。parents[2]项目定位和Windows扩展路径保留。仅静态新增风险/实际SHA审核，未执行导入、读取本轮包、reader、下载或设备；已回root/作者无当前本地导入阻断。
 
 PR15 importer最终8e2d67dc9c32d0fff49cc1396f04cbd0b712ede965cf91a12eb6e4c2ddb48e38仅根定位改为当前文件祖先中registry.csv+AGENTS.md双标识唯一根，零/多根拒绝，再用原Windows扩展路径；已静态通过，可归档后复用。原b6c链接/seal门未重审，未运行测试或导入。
+
+compute-order pending决定复核（仅现成证据/源码）：目前保留但不集成合理。054306→060425表观+4.7989%因KV521936/521840失配仍gain=null；061500原105题与104132原4题都无目标P覆盖，不能和100604完整结构通过、085500单行GQA更近CPU参考拼接成新路径答案质量通过，也不因不同Attention输出bit不等直接否P。现成044216短输出metadata记录的759/3000 outside中，30请求步位于当前P拒绝的Dprefix0两步；按形状至多70mixed步/729 outside（总250mixed），未核逐步其他guard/forward。002156长输出至多2步/52 outside，不能外推官方多波或短输出。以上均非K/耗时加权，192308的1.587s 2D是prefill且29decode已GQA，不能整段当P可省。082246另证P把suffix变纯prefill后Q-hoist从fallback变selected，因此净差包含outside→GQA及suffix已有Q-hoist启用，不能重复或全归outside。私有页表np.take按短快照形状累计约36.97MiB（N16/17每步0.5/0.53125MiB CPU复制），其后页表H2D替代原同大小copy；其余Plan/metadata/索引成本未获实际临界路径计时，没有可靠秒级收益上限。
+
+下一最有信息价值的条件建议是同KV/同DB、原context-screen且实际P命中的最短对照，直接计入私有重排全部代价，不再为填预算造长profile或重试Math题/到达时序。匹配pair有净正信号才推进必要的新路径质量验证，仍不直接集成；匹配pair非正则保留已有实现与负结果、停止当前P额外诊断投入（不称单pair证明永无小收益）。再遇KV失配就继续pending，不强凑容量/重复挑好结果。真实质量门仍是默认集成的独立条件，不被性能正信号替代。已与framework/hardware交换现成覆盖与预算缺口；未新增代码/长报告、运行旧suite或访问设备，原文只补本段。
+
+root采纳一次原context-screen短pair，复用422/423，不再加Math覆盖门或profile。现有两个emitter携带冻结82514完整map，原bc51/SERVER/seed/VERIFY0/finiteunset及单owner保持；通用seal_framework_screen.py按run ID补源码/清理/DB后态可沿用。旧save_baseline.py含旧包SHA、结果和registry写入，不能复用；旧pair reader须只更新新RUNS/launcher pin，保31门。DB最早在baseline封存后核两端，candidate db-before后可与其比，但现owner紧接Popen而无自动比较闸；完整四端须候选清理后db-after。KV最早在server.log出现GPU KV cache size时可知，原bc51 ready后自动smoke/load，没有启动KV拦截闸。任一失配就gain=null/pending，不循环重启、改容量或挑结果。
+
+本轮新candidate launcher `tmp/compute-order-retest/launch_candidate.py` SHA63abd494f5831c5d35393dbcc88bafa1a776a7930e24fb4afc9f699ee4bdc24a已只读封口：仅purpose.comparison_baseline由054306改为实际120949基线，单锚逆换逐字节等于995d原稿；423 builder、命令和清理未改，无新增运行阻断。本人未执行owner、设备、旧suite或重新compile；root唯一运行本轮，最终仍以新pair真实KV/DB及实际P命中验收。
+
+新pair reader `archive/ai/20261022-framework-kv/compute-order-retest/compare_service_pair.py` SHA7a891612ee6492d7669a83f0d6dc3b6d2ac38b7589b26d796726c7ab4db895cc窄审通过：对e3ae原稿仅两RUNS改120949/121541、candidate launcher pin改63abd及ROOT改registry+AGENTS祖先定位四处，当前祖先唯一命中项目根，原31门、DB/KV失配gain=null及marker验收逐字保留。未执行reader、旧测试或设备。

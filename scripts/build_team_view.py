@@ -14,7 +14,7 @@ TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 GROUPS = {
     'accepted-fill': ('省去无消费者的 accepted GPU fill', '固定非推测Full路径保留CPU fill，省略无消费者的accepted-count GPU fill。064838→065325两侧32成功0失败，吞吐表观−0.235046%，但KV521840→521936不同，31门仅same_KV失败、gain=null；当前不集成，保留小负及失配证据。冷ENABLED后同Engine原CPU_METADATA_FIRST_SELECTED只证明首次prepare，不证明全程/GPU数值或新准确率。', []),
-    'compute-order': ('计算顺序与采样顺序分离', '计算顺序与采样顺序分离：100604完整token逆排列、logits索引与原sample单次衔接通过；104132固定四题原judge4/4，但题目P outside覆盖0/4，记未覆盖，不改题/时序重试。085500单行独立参考下P/GQA更接近FP32，不能据单层或0P准确率证明新路径全模型正确。候选保留暂不集成，诊断段先收口，主线回到实际GPU热点。此前短筛表观+4.7989%受KV失配影响、gain=null；061500完整准确率101/105通过却未命中新路径；负结果一并保留，不调容差。', []),
+    'compute-order': ('计算顺序与采样顺序分离', '将计算行重排以适配现有Attention路径，采样仍按原请求顺序。120949→121541原短负载对照31项可比门全过，同KV521936及DB561/20721，吞吐5056.65→5315.79 tok/s（+5.124857%）；两侧32/0且候选实际命中。保留单pair正信号，不称稳定收益，暂不集成。100604映射与原采样接线已通过；085500单行独立参考中P/GQA更接近FP32，但完整logits有差异；061500完整准确率101/105及104132原四题4/4均未覆盖新路径，不能代替目标路径质量验证。旧KV失配、负结果和未覆盖证据均保留，不调容差。', []),
     'allocator-noop': ('KV 分配器无状态快返', '普通decode不新增页或完整块哈希时返回原空分配结果；保留新页、哈希、恢复与非RUNNING原路径，CPU片段和服务配对分别记录。', []),
     'kv-restore-pitched': ('KV 二维 FULL 恢复', '保留原页序、私有页资格和完成事件，合并H2D提交；独立单层字节门与真实42层事务分开记录，调用数下降不当作性能收益。', []),
     'skip-computed-h2d': ('省去无消费者的 computed H2D', 'CPU metadata成功时省略一次计数GPU副本提交，保留原回退和固定buffer/event；方法门与独立短服务单pair分别记录，不与KV组合收益相加。', ['skip-computed-h2d']),
@@ -53,7 +53,7 @@ GROUPS = {
 CODE = {
     'accepted-fill': ['analysis/accepted-fill-service-pair.json'],
     'skip-computed-h2d': ['analysis/pr15-computed-h2d-accuracy.json', 'analysis/skip-computed-h2d-service-pair.json'],
-    'compute-order': ['analysis/compute-order-math4-summary.json', 'analysis/compute-order-structure.json', 'analysis/compute-order-oracle-summary.json', 'analysis/compute-order-oracle-085500.json', 'analysis/compute-order-first-layer.json', 'experiments/framework/20261023T075210Z-compute-order-shadow-context16k-control/shadow-artifacts/8403/result.json', 'archive/ai/20261022-framework-kv/compute-order-shadow-gate/README.md', 'experiments/framework/20261023T070816Z-compute-order-answer-baseline/context-16k/answer-summary.json', 'analysis/compute-order-service-pair.json', 'analysis/compute-order-accuracy.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
+    'compute-order': ['analysis/compute-order-service-retest-pair.json', 'analysis/compute-order-math4-summary.json', 'analysis/compute-order-structure.json', 'analysis/compute-order-oracle-summary.json', 'analysis/compute-order-oracle-085500.json', 'analysis/compute-order-first-layer.json', 'experiments/framework/20261023T075210Z-compute-order-shadow-context16k-control/shadow-artifacts/8403/result.json', 'archive/ai/20261022-framework-kv/compute-order-shadow-gate/README.md', 'experiments/framework/20261023T070816Z-compute-order-answer-baseline/context-16k/answer-summary.json', 'analysis/compute-order-service-pair.json', 'analysis/compute-order-accuracy.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
     'allocator-noop': ['archive/ai/20261022-framework-kv/next-kv-noop-allocate/README.md', 'analysis/allocator-noop-service-pair.json'],
     'kv-restore-pitched': ['archive/ai/20261022-framework-kv/q-gqa-kv-restore-pitch/README.md', 'analysis/kv-pitched-restore-method.json'],
     'finite-growth-admission': ['analysis/finite-growth-common-db-service-pair.json', 'analysis/finite-growth-warm-service-pair.json', 'analysis/finite-growth-service-pair.json', 'analysis/current-kv-memory-smokes.json'],
@@ -189,6 +189,10 @@ def result(row, limit=190):
 def keep(row):
     text = row['conclusion']
     state = row['status'].lower()
+    if state == 'comparable_single_pair' and row['profile_id'] == 'compute_order':
+        if 'baseline' in row['phase']:
+            return '保留作本轮可比对照基线。'
+        return '保留单pair正信号；稳定收益与目标路径质量尚待确认，暂不集成。'
     if state in ('first_layer_attention_mismatch_localized', 'oracle_favors_permuted_sample_only'):
         return '保留诊断与候选；完整正确性尚未确认，暂不集成，不计性能。'
     if row['profile_id'] == 'launcher_only':
@@ -234,6 +238,8 @@ def code_links(key, page):
 
 def status(row):
     value = row['status'].lower()
+    if value == 'comparable_single_pair':
+        return '可比单对照，候选待确认'
     if value in ('first_layer_attention_mismatch_localized', 'oracle_favors_permuted_sample_only'):
         return '诊断完成，候选待确认'
     for needle, text in [('confounded', '不可直接比较'), ('inconclusive', '结论未定'),

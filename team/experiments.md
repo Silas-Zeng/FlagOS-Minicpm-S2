@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共198条登记、195个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共200条登记、197个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -176,6 +176,8 @@
 | 天数 BI-V150 | 196 | 2026-10-23T10:06:05.626846+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 已完成 | 16384/128/64/32 | 未命中P的原105题流程 | [20261023T100604Z-compute-order-structure-context16k](runs/bi-v150/20261023T100604Z-compute-order-structure-context16k.md) |
 | 天数 BI-V150 | 197 | 2026-10-23T10:41:33.720855+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 已登记，见短记 | mixed/128/32768/64/8/36 | 固定原Level3 index0..3题身份/response ID/原judge已核，4/4正确 | [20261023T104132Z-compute-order-math4-mixed](runs/bi-v150/20261023T104132Z-compute-order-math4-mixed.md) |
 | 天数 BI-V150 | 198 | 2026-10-23T11:23:56.445956+00:00 | [省去无消费者的 computed H2D](methods/skip-computed-h2d.md) | 已完成 | 未记录/未记录/8/105 | PR15实际638c4ac0首次完整准确率100/105（95.2381%），通过原95%门 | [20261023T112356Z-pr15-computed-h2d](runs/bi-v150/20261023T112356Z-pr15-computed-h2d.md) |
+| 天数 BI-V150 | 199 | 2026-10-23T12:09:50.560252+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 可比单对照，候选待确认 | 16384/128/64/32 | 吞吐变化+5.124857% | [20261023T120949Z-compute-order-baseline-context16k](runs/bi-v150/20261023T120949Z-compute-order-baseline-context16k.md) |
+| 天数 BI-V150 | 200 | 2026-10-23T12:15:43.388748+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 可比单对照，候选待确认 | 16384/128/64/32 | 吞吐变化+5.124857% | [20261023T121541Z-compute-order-candidate-context16k](runs/bi-v150/20261023T121541Z-compute-order-candidate-context16k.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
