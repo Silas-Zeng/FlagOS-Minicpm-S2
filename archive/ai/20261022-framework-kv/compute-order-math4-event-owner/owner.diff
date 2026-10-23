@@ -1,0 +1,56 @@
+--- 原Math4 owner
++++ 事件Math4 owner
+@@ -52,17 +52,17 @@
+ stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+ assets = Path(__file__).parent
+ deployment_path = assets / 'deployment.json'
+-assert sha(deployment_path) == '10f674e7c92bf68cf45bdaf1c5b42dcbf5f5c9e96e23e0e4f1574de37ad5c1b6'
++assert sha(deployment_path) == '03f2d1da9caa0448ac8bc69118e974161cdbb3044297cf18fe65cf3af4dace42'
+ receipt = json.loads(deployment_path.read_text())
+ expected = receipt['output_map']
+-assert receipt['source_count'] == len(expected) == 424
+-assert receipt['changed_paths'] == ['vllm_fl/patches/biv150_compute_order.py', 'vllm_fl/patches/biv150_compute_order_math4.py', 'vllm_fl/patches/biv150_kv_protocol.py', 'vllm_fl/patches/biv150_kv_worker.py', 'vllm_fl/worker/model_runner.py']
++assert receipt['source_count'] == len(expected) == 425
++assert receipt['changed_paths'] == ['vllm_fl/patches/biv150_compute_order.py', 'vllm_fl/patches/biv150_compute_order_math4.py', 'vllm_fl/patches/biv150_kv_protocol.py', 'vllm_fl/patches/biv150_kv_worker.py', 'vllm_fl/patches/biv150_math4_events.py', 'vllm_fl/worker/model_runner.py']
+ for rel in receipt['changed_paths']:
+     assert sha(assets / 'files' / rel) == expected[rel], rel
+ for rel, pin in receipt['diagnostic_asset_sha256'].items():
+     assert sha(assets / rel) == pin, rel
+ base_source = SOURCE
+-SOURCE = ROOT / 'code' / ('compute-order-math4-' + stamp)
++SOURCE = ROOT / 'code' / ('compute-order-math4-event-' + stamp)
+ assert not SOURCE.exists()
+ shutil.copytree(base_source, SOURCE, ignore=shutil.ignore_patterns('.git', '__pycache__', '*.pyc', '*.pyo'))
+ for rel in receipt['changed_paths']:
+@@ -72,7 +72,7 @@
+ assert mapping(SOURCE) == expected
+ prepared = deployment_path
+ reference_bytes = (json.dumps(expected, indent=2) + '\n').encode()
+-run = ROOT / 'framework' / (stamp + '-compute-order-math4-mixed')
++run = ROOT / 'framework' / (stamp + '-compute-order-math4-event')
+ control = run.with_name(run.name + '-control')
+ assert not run.exists()
+ control.mkdir()
+@@ -87,7 +87,7 @@
+ (control / 'source-sha256.json').write_bytes(reference_bytes)
+ (control / 'purpose.json').write_text(json.dumps({
+     'kind': '固定前4题、原采样与原判卷的独立混合诊断；不计性能或官方准确率',
+-    'variant': 'math4-mixed-diagnostic', 'source': str(SOURCE), 'source_count': 424,
++    'variant': 'math4-event-diagnostic', 'source': str(SOURCE), 'source_count': 425,
+     'reference_control': str(REFERENCE), 'comparison_baseline': None, 'verify_restore': '0',
+     'limits': ['不改官方SERVER/原题/采样/judge；诊断limit4与原context-screen/seed721201', '必须逐题关联实际P outside采样与原响应；未命中或超时为未覆盖，不重试换题，不自动排第二任务'],
+ }, ensure_ascii=False, indent=2) + '\n')
+@@ -98,10 +98,12 @@
+         stdout=output, stderr=subprocess.STDOUT, check=True)
+ (control / 'q-hoist-artifacts').mkdir()
+ (control / 'math4-artifacts').mkdir()
++(control / 'events').mkdir()
+ command = ['env', '-u', 'BIV150_FINITE_GROWTH_ADMISSION',
+     'BIV150_COMPUTE_ORDER_MATH4_DIR=' + str(control / 'math4-artifacts'),
++    'BIV150_COMPUTE_ORDER_MATH4_EVENT_DIR=' + str(control / 'events'),
+     'BIV150_KV_VERIFY_RESTORE=0', 'BIV150_Q_FRAGMENT_SERVICE_ARTIFACT_DIR=' + str(control / 'q-hoist-artifacts'),
+-    'python3', str(assets / 'run_math4_gate.py'), str(run), '--source-dir', str(SOURCE),
++    'python3', str(assets / 'run_math4_event_gate.py'), str(run), '--source-dir', str(SOURCE),
+     '--context-screen', '--seed', '721201', '--require-log-marker', 'BIV150_KV_PROTOCOL_INSTALLED',
+     '--math4-capture', str(assets / 'capture_evalscope.py'), '--math4-capture-output', str(control / 'client-capture')]
+ (control / 'command.txt').write_text(shlex.join(command) + '\n')

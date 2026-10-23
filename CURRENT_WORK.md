@@ -1,10 +1,13 @@
 # 当前工作与 API 接续
 
-更新：2026-10-23 12:22 UTC。root 是唯一 SSH/GPU owner；接续已有成果，不重新开始。团队只看[实验总表](team/experiments.md)和[方法汇总](team/README.md)，细节沿原件链接。历史过程已移入[AI归档](archive/ai/CURRENT_WORK-through-20261023T060425Z.md)。
+更新：2026-10-23 13:16 UTC。root 是唯一 SSH/GPU owner；接续已有成果，不重新开始。团队只看[实验总表](team/experiments.md)和[方法汇总](team/README.md)，细节沿原件链接。历史过程已移入[AI归档](archive/ai/CURRENT_WORK-through-20261023T060425Z.md)。
 
 ## 当前任务
 
-- **120949/121541 短对照已完成并回收、GPU空闲**：两侧32/0，104.492952367→99.398900815s，5056.647247798→5315.793189548 total tok/s，KV521936→521936。31项可比门全通过，本轮吞吐变化+5.124857%。单pair不能证明稳定收益；实际P命中不等于新路径准确率通过，候选保留不集成，不改容量参数或循环重启。两侧封包、逐文件导入、源码和清理已核；原bc51/SERVER/423实现不变，候选Engine16760实际N17/M2048/outside14。资产与回执见archive/ai/20261022-framework-kv/compute-order-retest/；[分析](analysis/compute-order-service-retest-pair.json)。本地200条/197run，待批量同步实验PR2。Math4因果复核只排除题目过晚，具体未覆盖原因未证；不把旧0P准确率拼成新路径通过。
+- **130351事件四题诊断已完成回收、GPU空闲**：原四题4/4正确；index0/1/2三题实际outside，均在生成token下标94（总1123/744/1651）且首个完整答案框之前；index3位于row0未outside。Engine18855实际N5/outside3，原sample一次，原响应与固定题ID、judge关联通过。背景32/0、exit0；owner18690为Z，server18703/Engine18855/客户端19132、19272均退出，客户端组空、68MiB/0、双栈9031关闭。531原件逐项核、532导入；包SHAf10e8cba。DB561/20721→565/20919。仅小样本新路径质量信号，不是105题或性能成绩，不证明稳定收益；保留候选，推进独立Draft PR材料，暂不集成。[简短摘要](analysis/compute-order-math4-event-130351.json)。新gate b742仅修内部长度guard，425模型源/事件编排/原题/采样/SERVER不变，资产与CPU字段证据在archive/ai/20261022-framework-kv/compute-order-math4-event-fix{,-owner}。
+- **125330发送前校验失败已封存回收**：owner17695为Z，其余server17708/Engine17860/两客户端18137、18277均退出，客户端PGID也空。exit1；Math4完成ready4但未go，背景0条发送，原因为新增guard混淆内部长度与服务端含BOS长度，不是模型或优化失败。489原件已逐项核、490导入，原包SHA89972962，DB561/20721三hash不变；原失败保留。修复只是guard值，不能将此轮计作覆盖失败后调时序重试。
+
+- **120949/121541 短对照已完成并回收、GPU空闲**：两侧32/0，104.492952367→99.398900815s，5056.647247798→5315.793189548 total tok/s，KV521936→521936。31项可比门全通过，本轮吞吐变化+5.124857%。单pair不能证明稳定收益；实际P命中不等于新路径准确率通过，候选保留不集成，不改容量参数或循环重启。两侧封包、逐文件导入、源码和清理已核；原bc51/SERVER/423实现不变，候选Engine16760实际N17/M2048/outside14。资产与回执见archive/ai/20261022-framework-kv/compute-order-retest/；[分析](analysis/compute-order-service-retest-pair.json)。本地200条/197run已同步实验PR2并核对，head9a54b88c、tree972856a3；[发布回执](archive/github/20261023-compute-retest-update.json)。Math4因果复核只排除题目过晚，具体未覆盖原因未证；不把旧0P准确率拼成新路径通过。
 
 - **112356 PR15完整准确率已完成、GPU空闲**：实际提交638c4ac0/tree d6a9597的432个Git blob；原105题100正确（95.2381%），达到95%门。105成功、无transport错误/到上限/空最终答案；Engine14214实际metadata标记已证省H2D分支启用。owner14048为Z，server14062/Engine14214/eval14489均退出，exit0、68MiB/0、双栈9031关闭。709原件一次核完、710导入；原包保留，Windows仅材料化已审的一处Nvidia配置相对链接，原link身份和内容核验见导入回执。DB 560/20718→561/20721，三hash有变化。[摘要](analysis/pr15-computed-h2d-accuracy.json)。实验PR2与框架PR15均已同步并核对；已发布198条/195run。保持Draft，无C500验证，不报新吞吐或自动合并。
 
@@ -21,9 +24,10 @@
 
 ## 最新结论与 GitHub
 
+
 - **计算序短测**：054306→060425两侧32/0，104.312939462→99.536272152s、5065.373507102→5308.456792453 total tok/s。表观+4.7989%，但KV521936→521840，31门仅same_KV失败、gain=null。Engine2350实际N17/M2048/Dprefix1/outside14，保留候选不默认集成；[分析](analysis/compute-order-service-pair.json)。
 - **061500完整准确率已回收**：101/105（96.19%）、105请求成功、2个max_tokens（23、83），通过原95%门。没有COMPUTE_ORDER_FIRST_SELECTED，不能证明新排列路径正确，也不与原422的103/105作精度升降统计；[简短摘要](analysis/compute-order-accuracy.json)。原35d/6e045/SERVER未变，723原件已核导入，设备/端口清理；DB554/20517→558/20651。
-- **实验PR #2已更新并核对**：[PR链接](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/pull/2)，最新head d197ca4c、tree f0f368b0，本地发布基点cb2639bf；已发布198条登记/195run，新增112356 PR15实际代码完整准确率原件。74个增量对象上传完成，中文正文/完整树/单父e405ade6已核；main仍f75b549a，未合并、未触碰队友PR。[回执](archive/github/20261023-pr15-accuracy-update.json)。
+- **实验PR #2已更新并核对**：[PR链接](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/pull/2)，最新head9a54b88c、tree972856a3，本地发布基点94480580；已发布200条登记/197run，新增120949/121541可比短对照。90个增量对象上传完成，中文正文/完整树/单父d197ca4c已核；main仍f75b549a，未合并、未触碰队友PR。[回执](archive/github/20261023-compute-retest-update.json)。
 - **代码PR #15已建Draft**：[computed H2D](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/15)，只改一个runner文件，head638c4ac0，基于当前main9a43eb1。引用既有+0.619291%可比单pair及214819方法门；只静态迁移，没有为上传重测。112356已补实际提交的BI-V150完整准确率100/105及真实方法命中，中文PR正文已更新核对，代码head仍638c4ac0；无C500验证，保持Draft，不触碰队友#14。
 - 当前原422组合的完整准确率是103/105；官方231746为1536成功，4K总4957.95、16K总3669.74 tok/s，仅绝对值。002156 GPU轨迹显示下一graph已提前提交，不支持继续把当前热点当CPU未及时提交。其余正负方法见总表，不重复旧测试。
 

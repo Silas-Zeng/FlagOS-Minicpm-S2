@@ -1,0 +1,33 @@
+{
+  "status": "cpu_prepared_not_deployed",
+  "original_methods_changed": [
+    "execute_model",
+    "sample_tokens"
+  ],
+  "original_sample_AST_unchanged": true,
+  "source_count": 425,
+  "changed_paths": [
+    "vllm_fl/worker/model_runner.py",
+    "vllm_fl/patches/biv150_compute_order_math4.py",
+    "vllm_fl/patches/biv150_math4_events.py",
+    "vllm_fl/patches/biv150_compute_order.py",
+    "vllm_fl/patches/biv150_kv_worker.py",
+    "vllm_fl/patches/biv150_kv_protocol.py"
+  ],
+  "helper_sha256": "7f929c0460a467cae5689be20e7bb8c6cf7f7160a31f35c1223c1944435c0e43",
+  "runner_sha256": "7e1104d9604df654033a86504b51eb3ea6d82b4b09e76632a2c7d13311128402",
+  "checks": [
+    "compile",
+    "original_P_inverse_exact",
+    "complete_input_map",
+    "emit_only_output_map",
+    "B_current_q1_scalar_delta",
+    "ID_field_delta",
+    "original_29b952_bytes"
+  ],
+  "model_imported": false,
+  "gpu_run": false,
+  "mock_suite": false,
+  "preparation_note": "首次AST类名选择误用GPUModelRunner导致StopIteration；改为actual ModelRunnerFL后通过，运行源未改。",
+  "review": "team最终7f929c新增只读通过；客户端独立审阅未完成不代称联合ready"
+}

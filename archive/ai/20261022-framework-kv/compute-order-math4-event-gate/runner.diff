@@ -1,0 +1,38 @@
+--- frozen060425-P-ea64
++++ math4
+@@ -22,6 +22,8 @@
+ from vllm_fl.patches.biv150_cpu_metadata import try_cpu_metadata as _biv150_try_cpu_metadata
+ from vllm_fl.patches.biv150_async_token_update import fused_sampled_token_update as _biv150_fused_sampled_token_update
+ from vllm_fl.patches.biv150_compute_order import make_plan as _biv150_compute_order_plan
++from vllm_fl.patches.biv150_compute_order_math4 import after_forward as _math4_forward, before_sample as _math4_before, after_sample as _math4_after
++from vllm_fl.patches.biv150_math4_events import observe_batch as _math4_event_batch
+ import torch.distributed
+ import torch.nn as nn
+ from tqdm import tqdm
+@@ -4234,6 +4236,7 @@
+             compute_order = _biv150_compute_order_plan(
+                 self, scheduler_output, num_scheduled_tokens_np, max_num_scheduled_tokens
+             )
++            _math4_event_batch(self, scheduler_output, num_scheduled_tokens_np, compute_order)
+             logits_indices, spec_decode_metadata = self._prepare_inputs(
+                 scheduler_output,
+                 num_scheduled_tokens_np,
+@@ -4500,6 +4503,8 @@
+                 assert broadcasted is not None
+                 logits = broadcasted["logits"]
+ 
++        _math4_forward(self, compute_order, scheduler_output, num_scheduled_tokens_np, logits)
++
+         self.execute_model_state = ExecuteModelState(
+             scheduler_output,
+             logits,
+@@ -4574,7 +4579,9 @@
+             )
+ 
+         with record_function_or_nullcontext("gpu_model_runner: sample"):
++            math4_ticket = _math4_before(self, scheduler_output, logits, spec_decode_metadata)
+             sampler_output = self._sample(logits, spec_decode_metadata)
++            _math4_after(math4_ticket, self, scheduler_output, sampler_output)
+ 
+         self._update_states_after_model_execute(
+             sampler_output.sampled_token_ids, scheduler_output

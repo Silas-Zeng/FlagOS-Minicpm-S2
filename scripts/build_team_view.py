@@ -14,7 +14,7 @@ TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 GROUPS = {
     'accepted-fill': ('省去无消费者的 accepted GPU fill', '固定非推测Full路径保留CPU fill，省略无消费者的accepted-count GPU fill。064838→065325两侧32成功0失败，吞吐表观−0.235046%，但KV521840→521936不同，31门仅same_KV失败、gain=null；当前不集成，保留小负及失配证据。冷ENABLED后同Engine原CPU_METADATA_FIRST_SELECTED只证明首次prepare，不证明全程/GPU数值或新准确率。', []),
-    'compute-order': ('计算顺序与采样顺序分离', '将计算行重排以适配现有Attention路径，采样仍按原请求顺序。120949→121541原短负载对照31项可比门全过，同KV521936及DB561/20721，吞吐5056.65→5315.79 tok/s（+5.124857%）；两侧32/0且候选实际命中。保留单pair正信号，不称稳定收益，暂不集成。100604映射与原采样接线已通过；085500单行独立参考中P/GQA更接近FP32，但完整logits有差异；061500完整准确率101/105及104132原四题4/4均未覆盖新路径，不能代替目标路径质量验证。旧KV失配、负结果和未覆盖证据均保留，不调容差。', []),
+    'compute-order': ('计算顺序与采样顺序分离', '将计算行重排以适配现有Attention路径，采样仍按原请求顺序。120949→121541原短负载对照31项可比门全过，同KV521936及DB561/20721，吞吐5056.65→5315.79 tok/s（+5.124857%）；两侧32/0且候选实际命中，仅单pair正信号。130351事件质量诊断原四题4/4正确，index0/1/2三题在token index94实际outside、首完整boxed前，index3位于row0未覆盖；背景32/0，DB561/20721→565/20919。仅4题诊断，不计性能、105题或稳定收益；保留候选，可推进独立Draft PR，仍不自动集成。100604结构接线及085500单行参考分别保留；061500完整准确率101/105和104132四题4/4均未覆盖新路径，125330另为发送前客户端长度校验失败，不是优化负结果。旧KV失配、负结果和未覆盖证据均保留，不调容差。', []),
     'allocator-noop': ('KV 分配器无状态快返', '普通decode不新增页或完整块哈希时返回原空分配结果；保留新页、哈希、恢复与非RUNNING原路径，CPU片段和服务配对分别记录。', []),
     'kv-restore-pitched': ('KV 二维 FULL 恢复', '保留原页序、私有页资格和完成事件，合并H2D提交；独立单层字节门与真实42层事务分开记录，调用数下降不当作性能收益。', []),
     'skip-computed-h2d': ('省去无消费者的 computed H2D', 'CPU metadata成功时省略一次计数GPU副本提交，保留原回退和固定buffer/event；方法门与独立短服务单pair分别记录，不与KV组合收益相加。', ['skip-computed-h2d']),
@@ -53,7 +53,7 @@ GROUPS = {
 CODE = {
     'accepted-fill': ['analysis/accepted-fill-service-pair.json'],
     'skip-computed-h2d': ['analysis/pr15-computed-h2d-accuracy.json', 'analysis/skip-computed-h2d-service-pair.json'],
-    'compute-order': ['analysis/compute-order-service-retest-pair.json', 'analysis/compute-order-math4-summary.json', 'analysis/compute-order-structure.json', 'analysis/compute-order-oracle-summary.json', 'analysis/compute-order-oracle-085500.json', 'analysis/compute-order-first-layer.json', 'experiments/framework/20261023T075210Z-compute-order-shadow-context16k-control/shadow-artifacts/8403/result.json', 'archive/ai/20261022-framework-kv/compute-order-shadow-gate/README.md', 'experiments/framework/20261023T070816Z-compute-order-answer-baseline/context-16k/answer-summary.json', 'analysis/compute-order-service-pair.json', 'analysis/compute-order-accuracy.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
+    'compute-order': ['analysis/compute-order-math4-event-130351.json', 'analysis/compute-order-math4-event-125330.json', 'analysis/compute-order-service-retest-pair.json', 'analysis/compute-order-math4-summary.json', 'analysis/compute-order-structure.json', 'analysis/compute-order-oracle-summary.json', 'analysis/compute-order-oracle-085500.json', 'analysis/compute-order-first-layer.json', 'experiments/framework/20261023T075210Z-compute-order-shadow-context16k-control/shadow-artifacts/8403/result.json', 'archive/ai/20261022-framework-kv/compute-order-shadow-gate/README.md', 'experiments/framework/20261023T070816Z-compute-order-answer-baseline/context-16k/answer-summary.json', 'analysis/compute-order-service-pair.json', 'analysis/compute-order-accuracy.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
     'allocator-noop': ['archive/ai/20261022-framework-kv/next-kv-noop-allocate/README.md', 'analysis/allocator-noop-service-pair.json'],
     'kv-restore-pitched': ['archive/ai/20261022-framework-kv/q-gqa-kv-restore-pitch/README.md', 'analysis/kv-pitched-restore-method.json'],
     'finite-growth-admission': ['analysis/finite-growth-common-db-service-pair.json', 'analysis/finite-growth-warm-service-pair.json', 'analysis/finite-growth-service-pair.json', 'analysis/current-kv-memory-smokes.json'],
@@ -150,6 +150,10 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     """只摘结果/失败原句，不把审计与库身份搬入主视图。"""
+    if row['run_id'] == '20261023T125330Z-compute-order-math4-event':
+        return '客户端长度校验在发送前失败；背景0发送、四题未放行，本轮未评价优化。'
+    if row['run_id'] == '20261023T130351Z-compute-order-math4-event':
+        return '原四题4/4正确，3题实际覆盖且在首完整答案框前；背景32/0。仅小样本诊断，不计性能或完整准确率。'
     note = re.sub(r'\s+', ' ', row['conclusion']).strip()
     if row['profile_id'] == 'launcher_only':
         return '启动或收集记录，实验结果见对应主run。'
@@ -189,6 +193,10 @@ def result(row, limit=190):
 def keep(row):
     text = row['conclusion']
     state = row['status'].lower()
+    if state == 'client_validation_failed_before_requests':
+        return '保留客户端失败与修复证据；本轮未评价优化。'
+    if state == 'limited_math4_quality_signal_three_outside_questions':
+        return '保留小样本质量信号及候选，可准备独立Draft PR；暂不集成。'
     if state == 'comparable_single_pair' and row['profile_id'] == 'compute_order':
         if 'baseline' in row['phase']:
             return '保留作本轮可比对照基线。'
@@ -238,6 +246,10 @@ def code_links(key, page):
 
 def status(row):
     value = row['status'].lower()
+    if value == 'client_validation_failed_before_requests':
+        return '客户端发送前失败'
+    if value == 'limited_math4_quality_signal_three_outside_questions':
+        return '小样本质量信号（3/4题覆盖）'
     if value == 'comparable_single_pair':
         return '可比单对照，候选待确认'
     if value in ('first_layer_attention_mismatch_localized', 'oracle_favors_permuted_sample_only'):
