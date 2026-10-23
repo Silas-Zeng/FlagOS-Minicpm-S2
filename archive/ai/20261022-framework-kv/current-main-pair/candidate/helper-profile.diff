@@ -1,0 +1,121 @@
+--- frozen5ce6
++++ current_main_profile
+@@ -1,11 +1,13 @@
+-"""固定422的局部计算序；持久请求/采样序不动，未知描述在首次写前回原路。"""
++"""固定main3283672b的局部计算序；持久请求/采样序不动，未知描述在首次写前回原路。"""
+ import hashlib
++import inspect
++import types
+ import json
+ import os
+ from pathlib import Path
+ import sys
+ 
+-EXPECTED_RUNNER = 'ea64a59cff6197c42babbc190246ab24dce4f540874b2025c0f4ebfee02195ac'
++EXPECTED_RUNNER = '183de0ab77ab27235eec00e231eb96d4a3b4037a9f628b9397cbe53d17fa3cab'
+ _STATE = '_biv150_compute_order_buffers'
+ SOURCES = {
+     'vllm.v1.cudagraph_dispatcher': '51f632753af729aeee6ce4a802d9d74b64f22eef02a524f36e2a24b07ef0cf63',
+@@ -17,8 +19,83 @@
+     'vllm_fl.patches.biv150_cpu_metadata': '0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f',
+     'vllm_fl.patches.biv150_mixed_decode': 'a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42',
+     'vllm_fl.patches.biv150_gqa_decode': '1a81409ba23a149081f7fc257460ea1512cbfdceeb0af32a2698994958749b9a',
+-    'vllm_fl.patches.biv150_q_fragment_service': '51fcaf55133124c2e51dfa0385e1939bf908b65f8444ac63f912329f6ca73800',
++    'vllm_fl.patches.biv150_prefill_normalized': '24a421fa25e0ce7e21b54deb760a5bc893d3899a86ced4849bd3f3bfab50ed42',
++    'vllm.v1.attention.ops.triton_unified_attention': '54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f',
++    'vllm.v1.attention.ops.triton_attention_helpers': '59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1',
+ }
++
++
++def _function_cells(function, module, qualname):
++    if (not isinstance(function, types.FunctionType)
++            or function.__globals__ is not vars(module)
++            or function.__code__.co_qualname != qualname
++            or Path(function.__code__.co_filename).resolve() != Path(module.__file__).resolve()):
++        raise ValueError('非固定main函数绑定：' + qualname)
++    return dict(zip(function.__code__.co_freevars,
++                    (cell.cell_contents for cell in (function.__closure__ or ()))))
++
++
++def _main_stack(torch):
++    attention = sys.modules['vllm.v1.attention.ops.triton_unified_attention']
++    backend = sys.modules['vllm.v1.attention.backends.triton_attn']
++    normalized = sys.modules['vllm_fl.patches.biv150_prefill_normalized']
++    gqa = sys.modules['vllm_fl.patches.biv150_gqa_decode']
++    mixed = sys.modules['vllm_fl.patches.biv150_mixed_decode']
++    top = attention.unified_attention
++    if (backend.unified_attention is not top
++            or getattr(attention, normalized._INSTALLED, False) is not True
++            or getattr(attention, gqa._INSTALLED_ATTR, False) is not True):
++        raise ValueError('main normalized/GQA安装或双统一入口不符')
++    cells = _function_cells(top, normalized, 'install.<locals>.wrapper')
++    if set(cells) != {'normalized', 'original', 'signature'}:
++        raise ValueError('normalization闭包不符')
++    previous = cells['original']
++    if getattr(top, '__wrapped__', None) is not previous:
++        raise ValueError('normalization原路不是本GQA')
++    old = _function_cells(previous, gqa, '_make_wrapper.<locals>.patched')
++    if set(old) != {'original'} or getattr(previous, '__wrapped__', None) is not old['original']:
++        raise ValueError('GQA原路存在未知包装')
++    generic = old['original']
++    if _function_cells(generic, attention, 'unified_attention'):
++        raise ValueError('generic存在未知闭包')
++    clone = cells['normalized']
++    if (not isinstance(clone, types.FunctionType) or clone.__code__ is not generic.__code__
++            or getattr(clone, '__wrapped__', None) is not generic
++            or clone.__globals__ is generic.__globals__
++            or clone.__defaults__ != generic.__defaults__
++            or clone.__kwdefaults__ != generic.__kwdefaults__
++            or clone.__closure__ is not generic.__closure__
++            or clone.__globals__.get('reduce_segments') is not attention.reduce_segments
++            or not isinstance(cells['signature'], inspect.Signature)
++            or cells['signature'] != inspect.signature(previous)):
++        raise ValueError('normalized统一函数不是原generic的独立global克隆')
++    source = inspect.getsource(attention.kernel_unified_attention.fn)
++    old_mass = 'L = tl.full([BLOCK_M], 1.0, dtype=tl.float32)'
++    old_name = 'def kernel_unified_attention('
++    if source.count(old_mass) != 1 or source.count(old_name) != 1:
++        raise ValueError('pinned原kernel源码形态不符')
++    expected = source.replace(old_mass, 'L = tl.zeros([BLOCK_M], dtype=tl.float32)')
++    expected = expected.replace(old_name, 'def kernel_biv150_prefill_normalized(', 1)
++    kernel = clone.__globals__.get('kernel_unified_attention')
++    fn = getattr(kernel, 'fn', None)
++    digest = hashlib.sha256(expected.encode()).hexdigest()
++    if (kernel is attention.kernel_unified_attention or not isinstance(fn, types.FunctionType)
++            or fn.__code__.co_filename != '<biv150-prefill-normalized-' + digest + '.py>'
++            or fn.__code__.co_name != 'kernel_biv150_prefill_normalized'
++            or inspect.getsource(fn) != expected):
++        raise ValueError('normalized kernel不是本次已核L=0克隆')
++    for function, name, original_name, qualname in (
++        (backend.TritonAttentionMetadataBuilder.build, 'build', 'original_build', 'TritonAttentionMetadataBuilder.build'),
++        (backend.TritonAttentionImpl.forward, 'forward', 'original_forward', 'TritonAttentionImpl.forward'),
++    ):
++        captured = _function_cells(function, mixed, '_wrap_backend.<locals>.' + name)
++        original = captured.get(original_name)
++        if (set(captured) != {'backend', original_name, 'torch'}
++                or captured['backend'] is not backend or captured['torch'] is not torch
++                or getattr(function, mixed._MARKER, False) is not True
++                or getattr(function, '__wrapped__', None) is not original
++                or _function_cells(original, backend, qualname)):
++            raise ValueError('C3原build/forward闭包或动态backend不符')
+ 
+ 
+ def _cold(runner, torch):
+@@ -26,6 +103,7 @@
+         module = sys.modules.get(name)
+         if pin is None or module is None or hashlib.sha256(Path(module.__file__).read_bytes()).hexdigest() != pin:
+             raise ValueError('未自然加载的固定compute-order源：' + name)
++    _main_stack(torch)
+     md = sys.modules['vllm_fl.patches.biv150_cpu_metadata']
+     backend = sys.modules['vllm.v1.attention.backends.triton_attn']
+     dispatcher_module = sys.modules['vllm.v1.cudagraph_dispatcher']
+@@ -146,6 +224,9 @@
+ def make_plan(runner, output, scheduled, max_query_len):
+     if max_query_len <= 1:
+         return None
++    platforms = sys.modules.get('vllm.platforms')
++    if getattr(getattr(platforms, 'current_platform', None), 'vendor_name', None) != 'iluvatar':
++        return None
+     import numpy as np
+     import torch
+     try:

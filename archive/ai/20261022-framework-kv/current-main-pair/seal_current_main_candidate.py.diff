@@ -1,0 +1,66 @@
+--- seal_current_main_baseline.py
++++ seal_current_main_candidate.py
+@@ -14,8 +14,9 @@
+ name=sys.argv[1]
+ if not re.fullmatch(r'\d{8}T\d{6}Z-[a-z0-9-]+',name):raise ValueError('invalid run ID')
+ run=ROOT/'framework'/name;control=Path(str(run)+'-control')
+-if name != '20261023T140324Z-current-main-baseline-context16k':raise RuntimeError('not this fixed current-main baseline')
+-if (run/'exit-code').read_text().strip()!='0':raise RuntimeError('screen did not pass')
++if name != '20261023T141159Z-current-main-compute-order-context16k':raise RuntimeError('not this fixed current-main compute-order run')
++terminal_code=int((run/'exit-code').read_text().strip())
++if terminal_code not in (0,1) or not (run/'finished-at.txt').is_file():raise RuntimeError('not terminal exit0/1')
+ purpose=json.loads((control/'purpose.json').read_text())
+ source=Path(purpose['source'])
+ def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+@@ -23,13 +24,21 @@
+     with path.open('x',encoding='utf-8') as f:json.dump(data,f,ensure_ascii=False,indent=2);f.write('\n')
+ expected=json.loads((control/'source-sha256.json').read_text())
+ failures=[name for name,value in expected.items() if sha(source/name)!=value or sha(control/'plugin-source'/name)!=value]
+-launcher=control/'launch_current_main_baseline.py'
+-if sha(launcher)!='571a9690fb01c0b0efca0f28c0dc5dc71d90fe0de4323bd066ba479c38837802':raise RuntimeError('frozen launcher changed')
++launcher=control/'launch_compute_order_main.py'
++if sha(launcher)!='88b35410fc49d1d259ebad0cc910c623a5cea2723220707932e38544f3c89e02':raise RuntimeError('frozen launcher changed')
+ import runpy
+ namespace=runpy.run_path(str(launcher))  # 仅stdlib/函数定义；__main__分支不运行。
+ expected_blobs=namespace['expected_tree']()
++manifest_path=control/'candidate-manifest.json'
++if sha(manifest_path)!='0b17b3a18fc89a3968f409d9e340190a19ffd4e7aadec3f456293f91281f4ec4':raise RuntimeError('candidate manifest changed')
++candidate=json.loads(manifest_path.read_text())
++if set(candidate['changed_paths'])!={'vllm_fl/worker/model_runner.py','vllm_fl/patches/biv150_compute_order.py'}:raise RuntimeError('not two declared paths')
++for path,entry in candidate['changed_paths'].items():
++    if expected_blobs.get(path)!=entry['before']:raise RuntimeError('base blob mismatch')
++    expected_blobs[path]=entry['after']
++if len(expected_blobs)!=446 or namespace['tree_oid'](expected_blobs)!='5c77e68caff6aa0c8b6c230adb78a2d4c293cca1':raise RuntimeError('candidate complete tree mismatch')
+ archived_blobs=json.loads((control/'source-git-blobs.json').read_text())
+-if len(expected)!=445 or archived_blobs!=expected_blobs:
++if len(expected)!=446 or archived_blobs!=expected_blobs:
+     raise RuntimeError('not complete current-main Git tree')
+ if namespace['source_maps'](source)!=(expected_blobs,expected) or namespace['source_maps'](control/'plugin-source')!=(expected_blobs,expected):
+     raise RuntimeError('live/archive complete Git blobs, modes or symlink changed')
+@@ -54,12 +63,10 @@
+ save(target/'manifest.json',{'path':str(attention),'sha256':sha(attention)})
+ if sha(attention)!='54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f':raise RuntimeError('Attention changed')
+ subprocess.run(['python3',str(ROOT/'scripts/snapshot_tuning_db.py'),'--database','/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db','--output',str(control/'db-after')],check=True)
+-markers=['BIV150_SQL_REFLECTION_INSTALLED','BIV150_ASYNC_TOKEN_UPDATE_FIRST_SELECTED','BIV150_CPU_METADATA_FIRST_SELECTED','BIV150_PREFILL_NORMALIZATION_INSTALL','BIV150_PREFILL_NORMALIZATION_SELECTED']
++markers=['BIV150_SQL_REFLECTION_INSTALLED','BIV150_ASYNC_TOKEN_UPDATE_FIRST_SELECTED','BIV150_CPU_METADATA_FIRST_SELECTED','BIV150_PREFILL_NORMALIZATION_INSTALL','BIV150_PREFILL_NORMALIZATION_SELECTED','BIV150_COMPUTE_ORDER_FIRST_SELECTED','BIV150_COMPUTE_ORDER_SCOPE_REJECTED']
+ save(run/'selected-marker-review.json',{'markers':{marker:[line for line in log.splitlines() if marker in line] for marker in markers},'first_selected_is_full_count':False})
+-if not all(any(marker in line for line in log.splitlines()) for marker in (
+-        'BIV150_PREFILL_NORMALIZATION_INSTALL','BIV150_PREFILL_NORMALIZATION_SELECTED')):
+-    raise RuntimeError('normalization install/actual selected evidence missing')
+-tool=control/'seal_current_main_baseline.py'
++# P未命中/scope拒绝/失败只记录原日志，不阻止完整证据封存；可比性由pair reader判。
++tool=control/'seal_current_main_candidate.py'
+ if tool.exists():
+     if tool.read_bytes()!=Path(__file__).read_bytes():raise RuntimeError('existing sealer differs')
+ else:shutil.copyfile(__file__,tool)
+@@ -69,8 +76,8 @@
+ if seal.exists() or archive.exists():raise FileExistsError('refuse to overwrite evidence seal/archive')
+ files={path.relative_to(ROOT/'framework').as_posix():sha(path)
+        for folder in (run,control) for path in folder.rglob('*') if path.is_file()}
+-save(seal,{'utc':post['utc'],'exit_code':0,'files':files,
+-    'limits':['current-main short baseline only; no new accuracy or causal performance gain',
++save(seal,{'utc':post['utc'],'exit_code':terminal_code,'files':files,
++    'limits':['current-main short candidate only; no new accuracy or causal performance gain from sealing alone',
+               'symlink bytes in seal follow target; source-git-blobs retains original link text/mode']})
+ import tarfile
+ with tarfile.open(archive,'x:gz') as bundle:

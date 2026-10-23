@@ -1,0 +1,84 @@
+{
+  "run_id": "20261023T142019Z-current-main-compute-order",
+  "status": "完整准确率通过，P分支未覆盖",
+  "base_commit": "3283672b92fa30f93f652b242193999836a95f88",
+  "tree": "5c77e68caff6aa0c8b6c230adb78a2d4c293cca1",
+  "source_count": 446,
+  "change": "当前normalized main仅增加计算顺序runner/helper两文件，原输入/采样请求顺序保持",
+  "test": "原35d/6e045/SERVER，Math500 Level3全部105题，未改原采样参数",
+  "accuracy": {
+    "validity": "valid",
+    "accuracy_gate": "pass",
+    "correct": 103,
+    "samples": 105,
+    "exact_accuracy": 0.9809523809523809,
+    "threshold": 0.95
+  },
+  "diagnostics": {
+    "stop_reasons": {
+      "stop": 104,
+      "max_tokens": 1
+    },
+    "review_statuses": {
+      "success": 105
+    },
+    "transport_error_count": 0,
+    "transport_error_indices": [],
+    "output_cap_count": 1,
+    "output_cap_indices": [
+      83
+    ],
+    "empty_final_count": 0,
+    "empty_final_indices": [],
+    "empty_extracted_count": 0,
+    "empty_extracted_indices": [],
+    "missing_usage_indices": []
+  },
+  "actual_p_observed": false,
+  "normalization_selected": true,
+  "database": {
+    "before": {
+      "table_count": 565,
+      "row_count": 20919,
+      "snapshot_sha256": "da44cce52a2e8f020b035547d6c1d453a9b7e526fc6c1c9fd0d69f16edd05d6d",
+      "schema_sha256": "f74aa4d772de6e0b2524742b71ebe42e2498558cb9cec9718eadf70dbf561514",
+      "logical_content_sha256": "528ecee70df90c970e8298519f81c568f7c6f8819cc91049695d1f83ab3c8010"
+    },
+    "after": {
+      "table_count": 567,
+      "row_count": 20986,
+      "snapshot_sha256": "05006b90d260b992736fc6f35b476d5c16f7544dd7e6792f84249bafcba597bd",
+      "schema_sha256": "054725f7c672ad7aed7a3ea57a6c20bf1d73a5b97af19f34868afe040194075f",
+      "logical_content_sha256": "8438ccd1a671fbf4b906362212483120c6f8cf5488da9475078815ce92c4e3e6"
+    }
+  },
+  "database_unchanged": false,
+  "cleanup": {
+    "exit_code": 0,
+    "ports_closed": {
+      "127.0.0.1": true,
+      "::1": true
+    },
+    "query": "68, 0",
+    "driver_zombie_inactive": true,
+    "server_engine_evaluation_absent": true
+  },
+  "transfer": {
+    "archive_bytes": 4099545,
+    "archive_sha256": "fdd9857c00f576e74b73da0e5cb63d06a322f406379577fd7f6f34ecfe29587b",
+    "sealed_files": 728,
+    "imported_files": 729,
+    "all_file_bytes_verified": true
+  },
+  "evidence": {
+    "review": "experiments/accuracy/20261023T142019Z-current-main-compute-order/accuracy-review.json",
+    "coverage": "experiments/accuracy/20261023T142019Z-current-main-compute-order/method-coverage.json",
+    "seal": "experiments/accuracy/20261023T142019Z-current-main-compute-order-control/evidence-seal.json"
+  },
+  "conclusion": "103/105（98.0952%）达到原95%门；105成功、无transport/空最终答案，1题达到原输出上限(index83)。完整题集通过，但P分支0命中，不能据此证明该分支准确率。保留候选，使用同一冻结446源码进入官方吞吐。",
+  "limits": [
+    "旧423收益和三题覆盖不继承为本轮结果",
+    "140324/141159因KV容量不同gain=null，约+6.59%只记表观变化",
+    "本轮仅BI-V150，不代表C500验证"
+  ]
+}

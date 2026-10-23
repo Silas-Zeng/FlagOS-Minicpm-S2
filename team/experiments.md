@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共202条登记、199个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共206条登记、203个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -180,6 +180,10 @@
 | 天数 BI-V150 | 200 | 2026-10-23T12:15:43.388748+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 可比单对照，候选待确认 | 16384/128/64/32 | 吞吐变化+5.124857% | [20261023T121541Z-compute-order-candidate-context16k](runs/bi-v150/20261023T121541Z-compute-order-candidate-context16k.md) |
 | 天数 BI-V150 | 201 | 2026-10-23T12:53:31.497732+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 客户端发送前失败 | mixed/128/32768/64/8/36 | 客户端长度校验在发送前失败；背景0发送、四题未放行，本轮未评价优化。 | [20261023T125330Z-compute-order-math4-event](runs/bi-v150/20261023T125330Z-compute-order-math4-event.md) |
 | 天数 BI-V150 | 202 | 2026-10-23T13:03:52.887994+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 小样本质量信号（3/4题覆盖） | mixed/128/32768/64/8/36 | 原四题4/4正确，3题实际覆盖且在首完整答案框前；背景32/0。仅小样本诊断，不计性能或完整准确率。 | [20261023T130351Z-compute-order-math4-event](runs/bi-v150/20261023T130351Z-compute-order-math4-event.md) |
+| 天数 BI-V150 | 203 | 2026-10-23T14:03:25.696901+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 不可直接比较 | 16384/128/64/32 | 吞吐+6.589830%，但KV容量不同（521840→521936），33项仅same_KV失败、gain=null，不能归因收益 | [20261023T140324Z-current-main-baseline-context16k](runs/bi-v150/20261023T140324Z-current-main-baseline-context16k.md) |
+| 天数 BI-V150 | 204 | 2026-10-23T14:12:01.362230+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 不可直接比较 | 16384/128/64/32 | 吞吐+6.589830%，但KV容量不同（521840→521936），33项仅same_KV失败、gain=null，不能归因收益 | [20261023T141159Z-current-main-compute-order-context16k](runs/bi-v150/20261023T141159Z-current-main-compute-order-context16k.md) |
+| 天数 BI-V150 | 205 | 2026-10-23T14:20:20.133450+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 通过 | original_math500_level3/32768/8/105 | 103/105（98.0952%）达到原95%门 | [20261023T142019Z-current-main-compute-order](runs/bi-v150/20261023T142019Z-current-main-compute-order.md) |
+| 天数 BI-V150 | 206 | 2026-10-23T14:46:20.713826+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 已完成 | 4096/16384/1024/64/256/128 x4 | 两case各4轮全部SUCCESS，1536请求成功，原第2–4轮均值：4K5116.68、16K3436.04 total tok/s | [20261023T144620Z-current-main-compute-order-official](runs/bi-v150/20261023T144620Z-current-main-compute-order-official.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
