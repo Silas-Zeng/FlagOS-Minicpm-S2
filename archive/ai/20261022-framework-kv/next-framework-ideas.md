@@ -4,6 +4,8 @@
 
 **1. 页表有效列 H2D：保留低优先级，不新造桥。**
 
+2026-10-23 用户问是否改参数：按当日保存的官网4.1规则，保留8192列容量/行跨度、KV block大小及原SERVER，仅按实际seq及所有消费者读表上界动态缩小搬运范围，属于KV/显存管理实现优化；不能硬编码16K/1024列、减少上下文支持或改benchmark。最终仍需准确率与复现。当前尚未实施。
+
 [上游 MRV2 #25266](https://github.com/vllm-project/vllm/pull/25266) 已用 GPU 持久页表及增量传输避免全表上传；本地可考虑保留原 GPU 行跨度、仅二维搬有效前缀，不引入其 Triton 更新算子或升级框架。这不同于 KV 内容 restore-pitch：现有 SDK 桥 `q-gqa-kv-restore-pitch/biv150_kv_pitched_restore_bridge.cpp`（48295ffd）已使用 `cudaMemcpy2DAsync(..., cudaMemcpyHostToDevice, current_stream)`，只能证明已有接口能力，不能证明窄页表快。
 
 原件 `experiments/framework/20261023T002156Z-q-gqa-puredecode-native-diagnostic/native-trace.json` 实为 SQLite。复用 `analysis/q-gqa-puredecode-native.json` 的内部 step 2→3 至 6→7 映射，排除前两步边界 sync 扰动；`ts/dur` 单位 ns，`bytes` 单位 B。定位查询：

@@ -14,7 +14,7 @@ TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 GROUPS = {
     'accepted-fill': ('省去无消费者的 accepted GPU fill', '固定非推测Full路径保留CPU fill，省略无消费者的accepted-count GPU fill。064838→065325两侧32成功0失败，吞吐表观−0.235046%，但KV521840→521936不同，31门仅same_KV失败、gain=null；当前不集成，保留小负及失配证据。冷ENABLED后同Engine原CPU_METADATA_FIRST_SELECTED只证明首次prepare，不证明全程/GPU数值或新准确率。', []),
-    'compute-order': ('计算顺序与采样顺序分离', '075210自然混合shadow诊断出现原序/P logits大差：最大绝对差11.828125，top1仅12/17行一致；finite和采样前RNG相同不代表数值门通过。32成功0失败只说明服务结束，不计性能；当前不集成，停止性能大测，CPU定位诊断与候选根因。原0/1/16行bitexact、14个outside q1行全差只是线索。此前短筛表观+4.7989%受KV失配影响、gain=null；061500准确率101/105虽通过却未命中新排列路径，不能证明该路径正确，也不与旧422的103/105作升降统计。070816辅助答案基线仅4/32符合预设答案，提示门无判别力，候选侧未运行，不归因优化失败。', []),
+    'compute-order': ('计算顺序与采样顺序分离', '计算顺序与采样顺序分离：自然混合原/P logits明显不同，候选暂不集成。082246确认首层实际输入QKV/有效metadata同bit而Attention不同；085500对最坏outside单行采真实KV，独立FP32参考下原2D最大误差0.0083881、P/GQA0.0007672，FP32对FP64仅5.63e-8，该样本新路径更接近参考，不能据此证明全模型正确或放宽容差。单P快照的共同上下文条件见原始摘要，诊断不计性能。此前短筛表观+4.7989%受KV失配影响、gain=null；061500完整准确率101/105通过却未命中新路径；070816辅助答案基线无判别力，候选侧未运行。保留正负证据，先定位实际两路精度差异，不重复未改代码的旧测试。', []),
     'allocator-noop': ('KV 分配器无状态快返', '普通decode不新增页或完整块哈希时返回原空分配结果；保留新页、哈希、恢复与非RUNNING原路径，CPU片段和服务配对分别记录。', []),
     'kv-restore-pitched': ('KV 二维 FULL 恢复', '保留原页序、私有页资格和完成事件，合并H2D提交；独立单层字节门与真实42层事务分开记录，调用数下降不当作性能收益。', []),
     'skip-computed-h2d': ('省去无消费者的 computed H2D', 'CPU metadata成功时省略一次计数GPU副本提交，保留原回退和固定buffer/event；方法门与独立短服务单pair分别记录，不与KV组合收益相加。', ['skip-computed-h2d']),
@@ -52,7 +52,7 @@ GROUPS = {
 }
 CODE = {
     'accepted-fill': ['analysis/accepted-fill-service-pair.json'],
-    'compute-order': ['experiments/framework/20261023T075210Z-compute-order-shadow-context16k-control/shadow-artifacts/8403/result.json', 'archive/ai/20261022-framework-kv/compute-order-shadow-gate/README.md', 'experiments/framework/20261023T070816Z-compute-order-answer-baseline/context-16k/answer-summary.json', 'analysis/compute-order-service-pair.json', 'analysis/compute-order-accuracy.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
+    'compute-order': ['analysis/compute-order-oracle-summary.json', 'analysis/compute-order-oracle-085500.json', 'analysis/compute-order-first-layer.json', 'experiments/framework/20261023T075210Z-compute-order-shadow-context16k-control/shadow-artifacts/8403/result.json', 'archive/ai/20261022-framework-kv/compute-order-shadow-gate/README.md', 'experiments/framework/20261023T070816Z-compute-order-answer-baseline/context-16k/answer-summary.json', 'analysis/compute-order-service-pair.json', 'analysis/compute-order-accuracy.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
     'allocator-noop': ['archive/ai/20261022-framework-kv/next-kv-noop-allocate/README.md', 'analysis/allocator-noop-service-pair.json'],
     'kv-restore-pitched': ['archive/ai/20261022-framework-kv/q-gqa-kv-restore-pitch/README.md', 'analysis/kv-pitched-restore-method.json'],
     'finite-growth-admission': ['analysis/finite-growth-common-db-service-pair.json', 'analysis/finite-growth-warm-service-pair.json', 'analysis/finite-growth-service-pair.json', 'analysis/current-kv-memory-smokes.json'],
@@ -153,6 +153,10 @@ def result(row, limit=190):
     if row['profile_id'] == 'launcher_only':
         return '启动或收集记录，实验结果见对应主run。'
     clauses = [x.strip() for x in re.split(r'[。；;]', note) if x.strip()]
+    if row['status'] == 'oracle_favors_permuted_sample_only':
+        return '；'.join(x for x in clauses if x.startswith(('独立CPU FP32', '本样本P')))
+    if row['status'] == 'first_layer_attention_mismatch_localized':
+        return clauses[0] + '；仅诊断，候选暂不集成'
     positive = next((x for x in clauses if re.search(r'(?i)(?:TPS|TTFT|吞吐|耗时|wall|event)\s*(?:[+−-]\d|省\d|提升|降低)|\d+(?:\.\d+)?(?:%|pct|倍)|throughput factor\s+\d', x)), None)
     negative = next((x for x in clauses if re.search(r'无CPU下降|未见.*收益|无正信号|不支持.*收益|未激活|未命中|失败|遮蔽.*循环', x)), None)
     correctness = next((x for x in clauses if re.search(r'字段.*过|checks.*(?:过|true)|全bytes|全字节|bitwise|RNG.*(?:同|过|true)|输出.*通过|正确性.*通过', x, re.I)), None)
@@ -184,6 +188,8 @@ def result(row, limit=190):
 def keep(row):
     text = row['conclusion']
     state = row['status'].lower()
+    if state in ('first_layer_attention_mismatch_localized', 'oracle_favors_permuted_sample_only'):
+        return '保留诊断与候选；完整正确性尚未确认，暂不集成，不计性能。'
     if row['profile_id'] == 'launcher_only':
         return '保留作过程记录。'
     if row['profile_id'] == 'finite_admission_observer':
@@ -210,6 +216,8 @@ def how(row):
     if row['profile_id'] == 'launcher_only':
         return '只记录启动、日志或封存，不单独测性能。'
     kind = next((label for pattern, label in [
+        ('cpu_oracle', '实际单行KV与独立CPU FP32/FP64参考'),
+        ('first_layer_diagnostic', '自然混合负载同一步首层对照诊断'),
         ('official', '原官方吞吐对照'), ('accuracy', '准确率门'), ('profile', '性能分析诊断'),
         ('gate|correctness|byte', '局部正确性或能力门'), ('smoke|startup|descriptor', '启动或描述符诊断'),
         ('context|screen|decode|4k|16k', '真实服务短负载')]
@@ -225,6 +233,8 @@ def code_links(key, page):
 
 def status(row):
     value = row['status'].lower()
+    if value in ('first_layer_attention_mismatch_localized', 'oracle_favors_permuted_sample_only'):
+        return '诊断完成，候选待确认'
     for needle, text in [('confounded', '不可直接比较'), ('inconclusive', '结论未定'),
                          ('not_activated', '未激活'), ('no_activation', '未激活'),
                          ('failed', '失败/未通过'), ('reject', '失败/未通过'),
