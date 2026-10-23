@@ -1,0 +1,12 @@
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:728: DeprecationWarning: use_cuda_graph is deprecated; use benchmark_mode='replay' or benchmark_mode='event'
+  super().__init__(*args, **kwargs)
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:411: RuntimeWarning: active Triton backend does not provide a replay benchmarker; falling back to event timing
+  resolved_benchmark = resolve_benchmarker(
+{"name": "q_proj", "m": 64, "n": 2048, "k": 2048, "bf16_ms": 0.031469231471419334, "quant_ms": 0.07916730642318726, "chain_ms": 0.06293461471796036, "chain_maxdiff": 0.0625, "fused_error": "RuntimeError(\"fused int8 kernel unusable: CompilationError('def _fused_int8_gemm(a_ptr, b_ptr, sa_ptr, sb_ptr, bias_ptr, out_ptr,\\\\n                     m, n, k,\\\\n                     sak, sbk, sok,\\", "fg_ms": 0.018338462337851524, "fg_maxdiff": 0.0625, "chain_ratio": 0.500030573198037, "chain_tops": 8.530614104908265, "fg_ratio": 1.7160234534203684, "fg_tops": 29.27567765002145}
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 205, in <module>
+    main()
+  File "/workspace/experiments/minicpm-s2/scripts/bench_int8_gemm_shapes.py", line 156, in main
+    reference = torch.nn.functional.linear(x, w, bias)
+                                              ^
+UnboundLocalError: cannot access local variable 'w' where it is not associated with a value

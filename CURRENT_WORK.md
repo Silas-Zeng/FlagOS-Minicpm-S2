@@ -8,6 +8,14 @@
 - 新一轮已收尾：085923 hot-key 门输出/KV/RNG正确但未命中，100149诊断确认默认 HookChain 对象被误当作非空 hook 拒绝；均 exit1、没有性能结论。100830 CPU组合短测64/0、38.867665s、6955.2931 tok/s，10:10:29Z exit0；随后用户要求直接合并，未再跑反序基线，不能据此形成新配对收益。三轮原件和校验包均已回收至本地 experiments/framework/，待下一实验记录批次发布。
 - 本轮设备后态已核为68MiB/0%、9031双闭、无GPU进程；现在无本任务设备作业。下一次启动仍需实时查空闲。
 
+## 算子候选清单（2026-10-23）
+
+已入库 [docs/operator-backlog-biv150.md](docs/operator-backlog-biv150.md)：63 条候选，按 A 注意力/ B 预填充/ C GEMM/ D KV 与内存/ E 调度执行/ F 采样输出/ G 测量流程/ H 多天项目分组，每条标注状态（已合并、已测负、待测、设计已备、多天）、依据、预期量级、成本、验证方法与合规风险。当前优先级：A2 缺页敏感度探针（25 分钟，决定稀疏线生死）→ A1+A3（+25~39%，设计已备）→ C6/F2/A13/A14 小项（合计 +3~5%）→ H1/H2 多天项目待拍板。
+
+## 合规判定更新（2026-10-23）
+
+按官方原文与本项目要求文档逐条核对：**改 serve 参数值（含 block_size）、以批处理配置为优化路线均属禁止**，已把 block32、max_num_batched_tokens、prefill budget 三条从候选移除；**自研量化（含自研 int8 KV）是明确允许的**，此前判为“合规禁止”有误，其真实障碍是内存与工程量；`async_scheduling` 属“开现成开关”，若做需自研实现；跨轮 prefix KV 保留会改变评测可比性，建议先向组委会确认。详见 [候选清单](docs/operator-backlog-biv150.md) 的合规判定节。
+
 ## 团队入口
 
 实验记录库现名为 `Silas-Zeng/FlagOS-Minicpm-S2`（GitHub ID 1427279927），原名 `FlagOS-S2-Minicpm-throughput` 的链接仍重定向。2026-10-22 本轮首次发布在名称校验处停止、未写入；适配现名后重新发布，保持三个协作库分工。
@@ -23,5 +31,21 @@
 - 子智能体已收口保存接续信息；新方法按适用输入大小判断，有依据就用对应最短负载实测，小收益保留，未变的验证复用。
 - 单卡实验仍由root唯一负责，始终串行。代码版本/命令/环境/原始结果自动保存，结论、失败原因、下一步只写几句话；阶段结束批量报告/PR，设备运行时CPU准备下一项。
 - 所有维护说明与PR保持自然中文，英文专有名词、命令与原证据原样保留；BI-V150与C500证据分别报告。未确认准确率的组合不冒称最终提交资格。
+
+## 算子线（天数 BI-V150，CJJ 侧）2026-10-22 晚
+
+- 框架库 PR：专用 GQA decode attention kernel。分支 `codex/20261022-gqa-decode-kernel`，基点 main `87ed537`，提交 kernel `3be29805`、方法说明 `3232d803`、默认开启 `8538d518`、审阅修复 `b50aa865`+`23e69682`。同机同 prompt 暖探针在公共基上 4K 3787.49→5058.23（+33.6%）、16K 2589.32→3234.26（+24.9%）；较早快照 `b71e585` 的官方四轮为 4K 4809.36、16K 3364.03，官方 math_500 Level 3 为 0.9714（102/105，门槛 0.95）。kernel 默认开启，`VLLM_FL_BIV150_GQA_DECODE=0` 只作对照关闭，官方命令不需要任何新 env。
+- 合并基上的官方仪表对照按用户要求改为两轮（第一轮冷启动、第二轮稳态，不改官方脚本、跑满两轮后停止）：控制 2712.00 / 2734.40；候选（默认开启，无任何 VLLM_FL_*）3341.90 / 3371.88，稳态 +23.3%（逐轮 TTFT 157971.44 / 155019.71 ms）。证据级别标注为“官方仪表、两轮”，不与官方四轮均值混用。
+- int8 线：唯一有收益的形式是三 kernel 链（Triton per-token 量化 + `torch._int_mm` + 自写融合 dequant+bias），在合并形状 M=2048/8192 实测 1.18–1.61x；FlagGems Triton int8 GEMM、torch 反量化链、W8A16 全部实测为负并保留原件。精度侧只有“去掉 down_proj”或“只量化 MLP”把 greedy 答案一致率拉回 95.8%（与只量化权重同级），全层 W8A8 为 87.5%。自研 W8A8 补丁已实现（分支 `codex/20261022-w8a8-linear`，默认关闭），端到端与官方 Level-3 未跑，不进入合并讨论，也不按微测外推收益。
+- 登记：`experiments/operator/` 17 个 run 目录 + registry 19 行（含三次失败留档：门控写太紧全部回退、补丁未真正写入的复测、install() 局部 import 遮蔽导致引擎启动崩溃） + 两个方法视图 `team/methods/gqa-decode-kernel.md`、`team/methods/int8-decision.md`；kernel 源码副本 `patches/framework/biv150_gqa_decode.py`（SHA256 `a8e9715c130b2fdbe53ee6fa2a2f27e66d9573ebba46cebc5e25072e5eb466cd`）。方法说明见 [GQA decode kernel](docs/operator-gqa-decode-kernel-biv150.md)、[int8 决策](docs/operator-int8-decision-biv150.md)。
+- 重新生成团队视图时，除新增登记外，既有页面只出现同一目录内原件链接的顺序变化（本机目录列举顺序不同），没有内容改动。
+- 接续：实验脚本、逐轮日志与探针 CSV 在 BI-V150 实例 `/workspace/experiments/minicpm-s2/`，经 bundle 同步到 Mac `repos/minicpm-s2-cjj`。设备队列（单卡串行）：W8A8 三 kernel 链的两轮端到端对照 → 正向才跑官方 Level-3 → 之后回到 decode 每步算术（P 的 fp32→bf16、accumulator rescale、dot 形状）与 4K 残余热点。
+
+## 算子线下一阶段（2026-10-23 凌晨，设计稿，未上卡）
+
+- decode attention 在最优段数下实测 **512 / 510 GB/s**（553 GB/s 锚点的 92–93%），bf16 地板 26 ms/step、当前 27.5 ms，再快只能少读页。
+- 已排除：循环流水线（慢 21–35%）、`evict_first`（无差别）、固定 Δ 单遍 V-skip（不触发且慢 3–6%）。设备在 03:00 之后由另一 agent 使用，本轮未再占卡。
+- 唯一还够量级的路线是 **Quest 式页选择**（论文自述端到端 1.74×；本机按 f=0.5 推算 TPOT 60.35→46.6，约 +29%），拟采用"上一步页分数 + 边缘页保留"的简化形态，内存约 7 MB、不进 torch.compile 图内。设计与闸门见 [docs/operator-page-selection-design-biv150.md](docs/operator-page-selection-design-biv150.md)。
+- 前置闸门（必须先做，25 分钟）：解码只保留"首 32 token + 最近 W token"跑一次官方 Level-3，若 ≥0.965 才投入页选择，若 <0.95 则整条稀疏线放弃。序列槽复用导致的"首步脏分数"是已知风险点。
 
 [完整旧交接原文](archive/ai/CURRENT_WORK-before-team-rebuild-20261022.md)保留，旧文中的相对路径以项目根目录为基准；它是历史，当前安排以本页为准。
