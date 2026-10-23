@@ -1,0 +1,48 @@
+<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
+
+# 20261023T054306Z-compute-order-baseline-context16k
+
+平台：天数 BI-V150。本页只摘录既有登记；未记录字段不补猜。
+
+## 登记 #187 · 计算顺序与采样顺序分离
+
+- **尝试**：仅在合格混合步骤重排模型计算序，保留原请求及采样序。054306→060425两侧均32成功0失败，候选真实命中；单pair吞吐表观+4.7989%，但KV容量521936→521840不同，31项仅same_KV不通过、gain=null，不能归因收益。保留候选与失配证据，默认版本暂不采用；061500准确率仍pending，不继承422结果。
+- **改动**：相关实现 [compute-order-service-pair.json](../../../analysis/compute-order-service-pair.json)；[framework_innovation.md](../../../docs/agent-work/framework_innovation.md)；[compute_order_review.md](../../../docs/agent-work/compute_order_review.md)；[completion.json](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json)；本轮准确变体以原件源码清单为准。
+- **怎么测**：真实服务短负载；输入 / 输出 / 并发 / 请求数：16384 / 128 / 64 / 32。
+- **结果**：32成功0失败、exit0，104.312939462s、5065.373507102 total tok/s
+- **是否保留**：待确认；通过某项检查不自动等于优化保留。
+
+<details><summary>完整原登记（含UTC、状态、过程与标识）</summary>
+
+```json
+{
+  "run_id": "20261023T054306Z-compute-order-baseline-context16k",
+  "local_date": "2026-10-23",
+  "utc_start": "2026-10-23T05:43:07.486932+00:00",
+  "profile_id": "compute_order",
+  "phase": "baseline_context16k_short_output",
+  "device": "Iluvatar BI-V150",
+  "vllm_commit": "d60b02367a852826f653165953f31b6dc696658e",
+  "flaggems_commit": "4df52d9168ac55c1c1061cefb4638c570292d896",
+  "input_len": "16384",
+  "output_len": "128",
+  "concurrency": "64",
+  "num_prompts": "32",
+  "profiler": "false",
+  "status": "baseline_complete_candidate_not_deployed",
+  "artifacts": "experiments/framework/20261023T054306Z-compute-order-baseline-context16k",
+  "conclusion": "原422短负载基线，32成功0失败、exit0，104.312939462s、5065.373507102 total tok/s；560原件逐文件核对导入。原bc51/SERVER/seed721201、VERIFY0、finiteunset、无profiler；KV521936，DB554表/20517行三SHA前后不变。候选仍在CPU实现和互审，gain=null；后续先正确性并检查同DB/KV等可比条件，不与旧coverage诊断比较性能；设备68MiB/0、双栈9031关闭。"
+}
+```
+
+</details>
+
+## 原件与说明
+
+- 原始目录：[20261023T054306Z-compute-order-baseline-context16k](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k)
+- 原命令：[load-commands.json](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k/load-commands.json)；[launch-command.json](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k/launch-command.json)；[command.txt](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k-control/command.txt)
+- 环境 / 源码 / 后态：[manifest.json](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k/manifest.json)；[postflight-full.json](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k/postflight-full.json)；[purpose.json](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k-control/purpose.json)；[source-sha256.json](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k-control/source-sha256.json)
+- 原始结果：[context-16k-infqps-concurrency64-minicpm-20261023-134612.json](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k/context-16k/results/context-16k-infqps-concurrency64-minicpm-20261023-134612.json)
+- 日志 / 采样：[server.log](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k/server.log)；[gpu.csv](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k/gpu.csv)；[exit-code](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k/exit-code)
+- 相关说明：未记录
+- 完整原登记：[registry.csv](../../../experiments/registry.csv)（登记序号见上；同一run可有多个阶段）

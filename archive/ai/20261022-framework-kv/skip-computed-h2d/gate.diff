@@ -1,0 +1,193 @@
+--- b1240720/validate_cpu_metadata.py
++++ skip-computed-h2d/validate_skip_computed_h2d.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""Owned exact-method CPU metadata gate, without weights or a service.
++"""Owned exact-method skip-computed-H2D gate, without weights or a service.
+ 
+ The controller imports no accelerator packages. Its one child executes the
+ actual pinned _prepare_inputs and input-ID helpers using fixture runner state,
+@@ -28,10 +28,11 @@
+ 
+ 
+ EXPECTED = {
+-    "runner.py": "e155a16669e69b7eb7aff370dbcbcf225a4f593fa42b2399722e96999b53a1f1",
++    "runner.py": "cc442e54e66c81f4375ac7b3311953441245f53bd0a576d27798528ce02e2663",
+     "runtime.py": "0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f",
+-    "transform.py": "0096cdac2c63544b5e3e62766168dc3df22f6ab63c09231bf9c6e93abaf29835",
+-    "runner-transformed.py": "50493fb68b194ed935650a3a743d2f56696d7379b702f4d7717eecac0325a9de",
++    "transform.py": "23d833a1bd3f4155652a2457b19bdaedf29b918de488e18e5b986b2cb5e08427",
++    "runner-transformed.py": "97f41ac455cad0db7c8ddfd2b9809e77326b6472285cb14e56ce486f2f0f7443",
++    "async-runtime.py": "1bb85e31c7b3fefa81414a54b04a1f0b6cf949c0876f87149956c821bb483adc",
+     "gpu_input_batch.py": "de1ea4fc9d43fc6079dd375e407c2b6d93f5e1a11f49732d13654c41eaf30a65",
+     "utils.py": "4e4cda209e10d4477d251003779dec26ea5ef47541c3310995c007c7ee5fdcdb",
+     "block_table.py": "b3a6649b968fba0b48c333d7ac96e65cc713a86133cc7eef0a8399f5339ec600",
+@@ -80,7 +81,7 @@
+     device = torch.device("cuda:0")
+     maximum, requests, model_len = 2048, 64, 131072
+     text = NS(hidden_size=2048, num_hidden_layers=42, num_attention_heads=16, num_key_value_heads=2)
+-    model = NS(model="/workspace/MiniCPM5-2B", dtype=torch.bfloat16, quantization=None, hf_text_config=text)
++    model = NS(model="/workspace/MiniCPM5-2B", dtype=torch.bfloat16, quantization=None, hf_text_config=text, is_encoder_decoder=False)
+     config = NS(model_config=model, parallel_config=NS(tensor_parallel_size=1, pipeline_parallel_size=1,
+         decode_context_parallel_size=1, data_parallel_size=1, use_ubatching=False), speculative_config=None,
+         lora_config=None, cache_config=NS(kv_sharing_fast_prefill=False))
+@@ -97,6 +98,7 @@
+     runner.prepare_inputs_event = torch.Event()
+     runner.uses_xdrope_dim = runner.num_spec_tokens = runner.prev_num_spec_tokens = 0
+     runner._draft_token_ids = runner.mamba_prev_last_scheduled_idx = runner.num_accepted_tokens_event = None
++    runner.valid_sampled_token_count_gpu = None
+     runner.cache_config, runner.lora_config = NS(mamba_cache_mode="none"), None
+     buffer = lambda size, dtype: buffers(size, dtype=dtype, device=device, pin_memory=True)
+     runner.input_ids = buffer(maximum, torch.int32)
+@@ -158,7 +160,7 @@
+     result = {"status": "started", "cases": [], "accuracy": "not evaluated", "end_to_end": "not evaluated",
+               "limitations": ["AST-extracted actual methods, fixture runner/InputBatch fields, no model weights.",
+                               "Original dispatch in this isolated method is not proof of compiled service dispatch.",
+-                              "Private req_indices/query_pos/scheduled GPU buffers intentionally unused in strict scope."]}
++                              "Both sides use unchanged metadata/async helpers; only candidate computed GPU buffer intentionally stale on success."]}
+     try:
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("expected exactly one visible accelerator")
+@@ -167,11 +169,14 @@
+             if digest(Path(module.__file__)) != EXPECTED[label]:
+                 raise RuntimeError("installed source mismatch: " + label)
+         runtime = load("vllm_fl.patches.biv150_cpu_metadata", run / "source/runtime.py")
++        asynchronous = load("vllm_fl.patches.biv150_async_token_update", run / "source/async-runtime.py")
+         original_source = (run / "source/runner.py").read_bytes()
+         candidate_source = (run / "source/runner-transformed.py").read_bytes()
+-        common = {"np": np, "torch": torch, "contextmanager": contextlib.contextmanager}
++        common = {"np": np, "torch": torch, "contextmanager": contextlib.contextmanager,
++                  "_biv150_try_cpu_metadata": runtime.try_cpu_metadata,
++                  "_biv150_fused_sampled_token_update": asynchronous.fused_sampled_token_update}
+         original = extract_methods(original_source, dict(common))
+-        candidate = extract_methods(candidate_source, {**common, "_biv150_try_cpu_metadata": runtime.try_cpu_metadata})
++        candidate = extract_methods(candidate_source, dict(common))
+         baseline = make_runner(torch, np, original, utils.CpuGpuBuffer, table_module.MultiGroupBlockTable)
+         changed = make_runner(torch, np, candidate, utils.CpuGpuBuffer, table_module.MultiGroupBlockTable)
+         pointers = [(r.positions.data_ptr(), r.seq_lens.data_ptr()) for r in (baseline, changed)]
+@@ -184,10 +189,17 @@
+                     outputs.append(runner._prepare_inputs(output, scheduled))
+             torch.cuda.synchronize()
+             checks = {}
+-            for key in ("positions", "seq_lens", "num_computed_tokens"):
++            for key in ("positions", "seq_lens"):
+                 checks[key] = torch.equal(getattr(baseline, key), getattr(changed, key))
+             for key in ("input_ids", "query_start_loc", "discard_request_mask", "num_accepted_tokens"):
+                 checks[key] = torch.equal(getattr(baseline, key).gpu, getattr(changed, key).gpu)
++            checks["baseline_computed_current"] = torch.equal(
++                baseline.num_computed_tokens[:len(lengths)].cpu(),
++                baseline.input_batch.num_computed_tokens_cpu_tensor[:len(lengths)])
++            checks["candidate_computed_poison_untouched"] = bool(
++                (changed.num_computed_tokens == -113).all())
++            checks["both_real_metadata_selected"] = all(
++                getattr(r, runtime._STATE)["selected"] == ordinal + 1 for r in (baseline, changed))
+             checks["logits_indices"] = torch.equal(outputs[0][0], outputs[1][0]) and outputs[0][1] is outputs[1][1] is None
+             checks["slots"] = torch.equal(baseline.input_batch.block_table[0].slot_mapping.gpu,
+                                          changed.input_batch.block_table[0].slot_mapping.gpu)
+@@ -196,17 +208,42 @@
+             checks["fixed_addresses"] = pointers == [(r.positions.data_ptr(), r.seq_lens.data_ptr()) for r in (baseline, changed)]
+             assert all(checks.values()), (name, checks)
+             result["cases"].append({"name": name, "tokens": sum(lengths), "requests": len(lengths), "checks": checks})
++        # 实际helper拒绝async-spec scope；valid count为None，原CPU-copy分支必须恢复。
++        before_fallback = [getattr(r, runtime._STATE)["selected"] for r in (baseline, changed)]
++        fallback_outputs = []
++        for runner in (baseline, changed):
++            runner.use_async_spec_decode = True
++            with runner.synchronize_input_prep():
++                output, scheduled = configure(runner, np, torch, [1] * 31 + [921], 9, previous=False)
++                fallback_outputs.append(runner._prepare_inputs(output, scheduled))
++            runner.use_async_spec_decode = False
++        torch.cuda.synchronize()
++        fallback = {
++            "real_helper_false": before_fallback == [getattr(r, runtime._STATE)["selected"] for r in (baseline, changed)],
++            "computed_from_current_cpu": all(torch.equal(r.num_computed_tokens[:32].cpu(),
++                r.input_batch.num_computed_tokens_cpu_tensor[:32]) for r in (baseline, changed)),
++            "consumers_equal": all(torch.equal(getattr(baseline, k), getattr(changed, k))
++                for k in ("positions", "seq_lens")),
++            "input_ids_equal": torch.equal(baseline.input_ids.gpu, changed.input_ids.gpu),
++            "slots_equal": torch.equal(baseline.input_batch.block_table[0].slot_mapping.gpu,
++                changed.input_batch.block_table[0].slot_mapping.gpu),
++            "logits_equal": torch.equal(fallback_outputs[0][0], fallback_outputs[1][0]),
++        }
++        assert all(fallback.values()), fallback
++        result["full_method_real_guard_fallback"] = fallback
++        # 恢复成功scope重新留毒，原四步event/graph必须仍读当前真正输入。
++        changed.num_computed_tokens.fill_(-113)
+         # Consecutive changed host values with no per-step device synchronize.
+         # Copies are consumed by graph replay at the original fixed addresses.
+         captures, destinations = [], []
+         for runner in (baseline, changed):
+             destination = tuple(torch.empty_like(tensor) for tensor in (runner.positions, runner.seq_lens,
+-                                runner.input_batch.block_table[0].slot_mapping.gpu))
++                                runner.input_batch.block_table[0].slot_mapping.gpu, runner.input_ids.gpu))
+             torch.cuda.synchronize()
+             graph = torch.cuda.CUDAGraph()
+             with torch.cuda.graph(graph):
+                 for target, source in zip(destination, (runner.positions, runner.seq_lens,
+-                                         runner.input_batch.block_table[0].slot_mapping.gpu)):
++                                         runner.input_batch.block_table[0].slot_mapping.gpu, runner.input_ids.gpu)):
+                     target.copy_(source)
+             captures.append(graph)
+             destinations.append(destination)
+@@ -223,7 +260,10 @@
+         torch.cuda.synchronize()
+         assert all(torch.equal(a, b) for pair in consumed for a, b in zip(*pair))
+         assert not torch.equal(consumed[0][1][0], consumed[-1][1][0]), "graph observed stale positions"
++        assert not torch.equal(consumed[0][1][3], consumed[-1][1][3]), "graph observed stale input IDs"
++        assert bool((changed.num_computed_tokens == -113).all()), "graph steps unexpectedly wrote computed"
+         result["consecutive_event_and_fixed_graph_consumer"] = True
++        result["graph_consumers"] = ["positions", "seq_lens", "slot_mapping", "input_ids"]
+         # Scope fallback must submit no candidate copy and preserve all storage.
+         state = getattr(changed, runtime._STATE)
+         selected = state["selected"]
+@@ -244,13 +284,16 @@
+         for label in ("original", "candidate", "candidate", "original"):
+             runner = baseline if label == "original" else changed
+             torch.cuda.synchronize()
++            selected_before = getattr(runner, runtime._STATE)["selected"]
+             begin = time.perf_counter_ns()
+             for _ in range(32):
+                 call(runner, output, scheduled)
+             torch.cuda.synchronize()
+             times[label].append((time.perf_counter_ns() - begin) / 32 / 1e6)
++            assert getattr(runner, runtime._STATE)["selected"] - selected_before == 32, "timing did not select real metadata"
+         assert torch.equal(cpu_rng, torch.get_rng_state()) and torch.equal(gpu_rng, torch.cuda.get_rng_state())
+         result["timing"] = {"method": "exact-method-host-wall-32calls-ABBA-including-final-drain",
++                            "performance_pass_gate": False, "end_to_end_gain": "not evaluated",
+                             "milliseconds_per_call": times,
+                             "median": {key: statistics.median(values) for key, values in times.items()}}
+         result["selected"] = state["selected"]
+@@ -267,6 +310,7 @@
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument("--run-dir", type=Path, required=True)
+     parser.add_argument("--runtime-path", type=Path)
++    parser.add_argument("--async-runtime-path", type=Path)
+     parser.add_argument("--transform-path", type=Path)
+     parser.add_argument("--runner-path", type=Path)
+     parser.add_argument("--installed-root", type=Path, default=Path("/usr/local/lib/python3.12/site-packages"))
+@@ -275,7 +319,7 @@
+     args = parser.parse_args()
+     if args.worker:
+         return worker(args.run_dir)
+-    if any(value is None for value in (args.runtime_path, args.transform_path, args.runner_path)):
++    if any(value is None for value in (args.runtime_path, args.async_runtime_path, args.transform_path, args.runner_path)):
+         parser.error("controller requires exact runner, runtime and transformer paths")
+     import fcntl
+     import validate_block_table_candidate as owner
+@@ -285,7 +329,7 @@
+         raise RuntimeError("new run directory must be below experiment root")
+     run.mkdir(parents=True, exist_ok=False)
+     manifest = {"started_utc": utc(), "pid": os.getpid(), "command": [sys.executable, *sys.argv],
+-                "command_shell": shlex.join([sys.executable, *sys.argv]), "kind": "exact-method-no-weights-cpu-metadata"}
++                "command_shell": shlex.join([sys.executable, *sys.argv]), "kind": "exact-method-no-weights-skip-computed-h2d"}
+     lock = child = monitor = monitor_log = None
+     status = 1
+     def interrupted(signum, frame):
+@@ -303,6 +347,7 @@
+         source.mkdir()
+         assets = {"gate.py": Path(__file__), "runtime.py": args.runtime_path,
+                   "transform.py": args.transform_path, "runner.py": args.runner_path,
++                  "async-runtime.py": args.async_runtime_path,
+                   "validate_block_table_candidate.py": Path(owner.__file__),
+                   "monitor_gpu.sh": root / "scripts/monitor_gpu.sh"}
+         assets.update({Path(name).name: args.installed_root / name for name in (

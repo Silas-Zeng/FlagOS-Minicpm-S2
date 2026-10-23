@@ -13,6 +13,17 @@ ROOT = Path(__file__).resolve().parents[1]
 TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 GROUPS = {
+    'compute-order': ('计算顺序与采样顺序分离', '仅在合格混合步骤重排模型计算序，保留原请求及采样序。054306→060425两侧均32成功0失败，候选真实命中；单pair吞吐表观+4.7989%，但KV容量521936→521840不同，31项仅same_KV不通过、gain=null，不能归因收益。保留候选与失配证据，默认版本暂不采用；061500准确率仍pending，不继承422结果。', []),
+    'allocator-noop': ('KV 分配器无状态快返', '普通decode不新增页或完整块哈希时返回原空分配结果；保留新页、哈希、恢复与非RUNNING原路径，CPU片段和服务配对分别记录。', []),
+    'kv-restore-pitched': ('KV 二维 FULL 恢复', '保留原页序、私有页资格和完成事件，合并H2D提交；独立单层字节门与真实42层事务分开记录，调用数下降不当作性能收益。', []),
+    'skip-computed-h2d': ('省去无消费者的 computed H2D', 'CPU metadata成功时省略一次计数GPU副本提交，保留原回退和固定buffer/event；方法门与独立短服务单pair分别记录，不与KV组合收益相加。', []),
+    'finite-growth-admission': ('有限窗口增长准入', '真实服务消除本轮抢占，但共同DB对照仍有KV容量失配；默认关闭保留研究证据，不宣称确定收益。\n\n两轮原 bc51 smoke 仅作启动显存诊断：共同 observer 下，finite 的非 Torch 内存多 4 MiB，差异在 before_profile 已存在；KV 为 baseline 521936、finite 521840，与旧性能对照方向相反。四端 DB 均为 532 表、19839 行且三项 SHA 一致；文本及 32 个 token ID 相同，但未覆盖 mixed Q/GQA 命中，不算准确率或性能收益。停止追查启动差异，旧性能对照仍因 KV 容量失配而不能归因。', []),
+    'admission-observer': ('有限增长准入观察', '当前Q+GQA上的稀疏CPU准入与失败状态诊断；不实现预留策略，不把页预算反事实当作吞吐收益。', []),
+    'q-gqa-framework': ('Q-hoist + GQA 框架组合', '仅适配精确GQA包装的安装身份，保留两条算术路径与原服务参数；已获单pair正信号及独立101/105准确率通过，评测DB增长另列。', []),
+    'async-bookkeeping': ('异步输出 CPU 批量记账', '将有效单 token 异步输出的逐行 CPU 数组更新合并，保留请求历史、事件与回退；服务对照的 KV 失配单列。', []),
+    'bq16-chunk-alignment': ('BQ16 chunk 形状对齐', '复用现有 C2/C3 与原算子，比较七段恢复链的 chunk 形状；局部正信号保留，未实现调度器或接入服务。', []),
+    'prefix-scan': ('公共前缀扫描', '在实际不支持cascade的后端中检查公共前缀统计成本；观察诊断与跳过扫描的真实服务结果分开记录。', []),
+    'q-fragment-hoist': ('Q fragment 循环外保留', '同一方法的KV16K/4K局部门与真实服务配对分别记录；保留单轮正信号，TTFT变化及准确率边界同时展示。', []),
     'gpu-hotspots': ('当前版本GPU热点', '复用原轨迹并按需补短native诊断；GPU路径占比只用于选择下一实验，不作吞吐成绩。', []),
     'decode-cpu-gather': ('纯decode CPU gather跳过', '严格纯decode省略无消费者的CPU输入整理；正确性门通过，当前服务候选负收益，不集成。', []),
     'c3-views': ('C3重复视图清理', '复用mixed Attention中的视图，减少重复slice/unbind；短输入信号与大输入、真实服务结果分别记录。', []),
@@ -39,6 +50,15 @@ GROUPS = {
     'other': ('其它登记与控制记录', '没有足够字段继续归类的登记；不补猜实验结论。', []),
 }
 CODE = {
+    'compute-order': ['analysis/compute-order-service-pair.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
+    'allocator-noop': ['archive/ai/20261022-framework-kv/next-kv-noop-allocate/README.md', 'analysis/allocator-noop-service-pair.json'],
+    'kv-restore-pitched': ['archive/ai/20261022-framework-kv/q-gqa-kv-restore-pitch/README.md', 'analysis/kv-pitched-restore-method.json'],
+    'finite-growth-admission': ['analysis/finite-growth-common-db-service-pair.json', 'analysis/finite-growth-warm-service-pair.json', 'analysis/finite-growth-service-pair.json', 'analysis/current-kv-memory-smokes.json'],
+    'admission-observer': ['experiments/framework/20261022T191047Z-q-gqa-admission-observe-context16k-long-control/biv150_admission_observer.py'],
+    'q-gqa-framework': ['archive/ai/20261022-framework-kv/q-gqa-framework/METHOD.md', 'archive/ai/20261022-framework-kv/q-gqa-framework/biv150_q_fragment_service.py', 'analysis/q-gqa-service-pair.json', 'experiments/accuracy/20261022T184819Z-q-gqa-framework/accuracy-review.json'],
+    'async-bookkeeping': ['archive/ai/20261022-framework-kv/async-bookkeeping/biv150_async_bookkeeping.py', 'archive/ai/20261022-framework-kv/async-bookkeeping/compare_service_pair.py', 'analysis/async-bookkeeping-service-pair.json'],
+    'bq16-chunk-alignment': ['archive/ai/20261022-framework-kv/bq16-chunk-alignment/validate_bq16_chunk_chain.py', 'archive/ai/20261022-framework-kv/bq16-chunk-alignment/result-review.json'],
+    'q-fragment-hoist': ['archive/ai/20261022-current-gpu-hotspots/q-hoist-service/biv150_q_fragment_service.py', 'archive/ai/20261022-current-gpu-hotspots/q-hoist-service/compare_q_service_pair.py', 'analysis/q-fragment-service-pair.json'],
     'decode-cpu-gather': ['archive/ai/20261022-next-service-queue/next-decode-gather/biv150_decode_cpu_gather.py'],
     'c3-views': ['patches/framework/candidates/biv150_c3_view_reuse.py'],
     'hot-key': ['patches/framework/candidates/biv150_attention_key_recipe_v2.py'],
@@ -59,8 +79,19 @@ def group(row):
         parent = BY_ID.get(row['run_id'].removesuffix('-control'))
         return group(parent[0]) if parent else 'other'
     for key, pattern in [
+        ('compute-order', r'compute[_-]order'),
+        ('allocator-noop', r'allocator[_-]noop'),
+        ('kv-restore-pitched', r'kv[_-](?:pitched[_-]restore|restore[_-]pitch)'),
+        ('skip-computed-h2d', r'skip[_-]computed[_-]h2d'),
+        ('finite-growth-admission', r'finite[_-]growth'),
+        ('admission-observer', r'finite[_-]admission|q[_-]gqa[_-]admission[_-]observ'),
+        ('q-gqa-framework', r'q[_-]gqa[_-](?:framework|service)'),
+        ('async-bookkeeping', r'async[_-](?:cpu[_-])?bookkeeping'),
+        ('bq16-chunk-alignment', r'bq16[_-]chunk'),
+        ('prefix-scan', r'no[_-]cascade[_-]prefix|prefix[_-]cost|prefix[_-]skip'),
+        ('q-fragment-hoist', r'q[_-](?:fragment|hoist)'),
         ('attention', r'prefill[_-]w16'),
-        ('gpu-hotspots', r'current[_-]mixed'),
+        ('gpu-hotspots', r'current[_-]mixed|q[_-]gqa[_-]puredecode'),
         ('decode-cpu-gather', r'decode[_-](cpu[_-])?gather'),
         ('c3-views', r'c3[_-]view|c3views'),
         ('hot-key', r'key[_-]recipe|hot[_-]key'),
@@ -69,7 +100,7 @@ def group(row):
         ('cpu-metadata', r'cpu[_-]metadata'), ('async-token', r'async[_-]token'),
         ('kv-pitched', r'kv[_-]pitched|kv_save_threeway'), ('kv-contiguous', r'kv[_-]page[_-]copy'),
         ('kv-progress', r'progress[_-]victim|preemption[_-]snapshot'), ('kv-memory', r'kv[_-](memory|startup)'),
-        ('kv-observation', r'kv[_-]completion'), ('kv-protocol', r'kv[_-]'),
+        ('kv-observation', r'kv[_-]completion|q[_-]gqa[_-]resume[_-]native'), ('kv-protocol', r'kv[_-]'),
         ('admission', r'growth'), ('mapped-attention', r'mapped[_-]decode'),
         ('mm-cta', r'cta|mm[_-]'), ('buffers', r'hidden|bucket'),
         ('event', r'event'), ('official', r'official|original13eb'),
@@ -152,6 +183,14 @@ def keep(row):
     state = row['status'].lower()
     if row['profile_id'] == 'launcher_only':
         return '保留作过程记录。'
+    if row['profile_id'] == 'finite_admission_observer':
+        return '保留作准入状态诊断；尚未实现预留策略，不提供性能收益结论。'
+    if row['profile_id'] == 'q_gqa_framework' and 'baseline' in row['phase']:
+        return '保留作GQA对照基线；组合单pair正信号与独立准确率另列。'
+    if row['profile_id'] == 'q_gqa_framework' and row['phase'] == 'official_math500_level3':
+        return '组合准确率通过；性能仍仅单pair，不据此声明稳定或完整官方成绩。'
+    if row['profile_id'] == 'async_cpu_bookkeeping' and 'baseline' in row['phase']:
+        return '保留作对照基线；KV失配，不据此判断候选收益。'
     if 'input_prep_timing' in row['profile_id']:
         return '保留诊断结论；当前不据此实施输入同步优化。'
     if re.search(r'baseline|reference|original13eb|^b0$', row['profile_id'], re.I):

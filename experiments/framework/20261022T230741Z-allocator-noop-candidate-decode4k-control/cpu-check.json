@@ -1,0 +1,142 @@
+{
+  "kind": "actual原类/原方法CPU无状态链片段；非生产scope/分配写入/GPU结果",
+  "source_sha256": {
+    "vllm.v1.core.kv_cache_manager": "2e91e77f84dfd9d4bed79f50392be72559207f54e845a3d3402baf88dc529320",
+    "vllm.v1.core.kv_cache_coordinator": "9dd0a647f671b859e3743fbf5ec84cd892fd5754022eef58c5b8c989a4cda97b",
+    "vllm.v1.core.single_type_kv_cache_manager": "22e3677acf0e769461bdbf278df031d6e362c97aa1ba7b862c071b76d47d8914",
+    "vllm.v1.core.block_pool": "3fc5dfe0ab7ccc6206f6eb7886b2aad15384f92708e6b9f7e5ec7838b7379abe",
+    "vllm.v1.request": "06b1c6ad3cc0223c2036b4a2e317868fa4988391b4b024bc5e5f54672b7d2c80"
+  },
+  "policy_sha256": "fc410a4a02f93694402480a91a4a027ce16e5c6beaf90efc59d141cf0c5de2b3",
+  "checks": {
+    "normal_q1": "same original empty object; all tracked allocator/request state unchanged",
+    "queued_optimistic_known_cap": "same original empty object; all tracked allocator/request state unchanged",
+    "new_page_boundary": "both reached same original pool mutation entry; actual mutation deliberately not run",
+    "new_hash_boundary": "both reached same original pool mutation entry; actual mutation deliberately not run",
+    "PREEMPTED": "original fallback",
+    "FINISHED_ABORTED": "original fallback",
+    "FINISHED_STOPPED": "original fallback",
+    "reserved_blocks_zero_demand_can_still_fail": "original None preserved"
+  },
+  "timing": [
+    {
+      "N": 30,
+      "windows": [
+        {
+          "arm": "baseline",
+          "batches": 2048,
+          "requests_per_batch": 30,
+          "thread_cpu_ns_per_batch": 106811.5234375,
+          "wall_ns_per_batch": 107379.736328125
+        },
+        {
+          "arm": "candidate",
+          "batches": 2048,
+          "requests_per_batch": 30,
+          "thread_cpu_ns_per_batch": 30517.578125,
+          "wall_ns_per_batch": 32530.126953125
+        },
+        {
+          "arm": "candidate",
+          "batches": 2048,
+          "requests_per_batch": 30,
+          "thread_cpu_ns_per_batch": 30517.578125,
+          "wall_ns_per_batch": 32148.095703125
+        },
+        {
+          "arm": "baseline",
+          "batches": 2048,
+          "requests_per_batch": 30,
+          "thread_cpu_ns_per_batch": 106811.5234375,
+          "wall_ns_per_batch": 108474.365234375
+        }
+      ],
+      "median_wall_ns_baseline": 107927.05078125,
+      "median_wall_ns_candidate": 32339.111328125,
+      "wall_ns_saved_per_batch": 75587.939453125,
+      "local_fragment_only_not_E2E": true
+    },
+    {
+      "N": 31,
+      "windows": [
+        {
+          "arm": "baseline",
+          "batches": 2048,
+          "requests_per_batch": 31,
+          "thread_cpu_ns_per_batch": 114440.91796875,
+          "wall_ns_per_batch": 114047.802734375
+        },
+        {
+          "arm": "candidate",
+          "batches": 2048,
+          "requests_per_batch": 31,
+          "thread_cpu_ns_per_batch": 38146.97265625,
+          "wall_ns_per_batch": 37592.3828125
+        },
+        {
+          "arm": "candidate",
+          "batches": 2048,
+          "requests_per_batch": 31,
+          "thread_cpu_ns_per_batch": 38146.97265625,
+          "wall_ns_per_batch": 37225.341796875
+        },
+        {
+          "arm": "baseline",
+          "batches": 2048,
+          "requests_per_batch": 31,
+          "thread_cpu_ns_per_batch": 114440.91796875,
+          "wall_ns_per_batch": 114737.353515625
+        }
+      ],
+      "median_wall_ns_baseline": 114392.578125,
+      "median_wall_ns_candidate": 37408.8623046875,
+      "wall_ns_saved_per_batch": 76983.7158203125,
+      "local_fragment_only_not_E2E": true
+    },
+    {
+      "N": 64,
+      "windows": [
+        {
+          "arm": "baseline",
+          "batches": 2048,
+          "requests_per_batch": 64,
+          "thread_cpu_ns_per_batch": 236511.23046875,
+          "wall_ns_per_batch": 235024.853515625
+        },
+        {
+          "arm": "candidate",
+          "batches": 2048,
+          "requests_per_batch": 64,
+          "thread_cpu_ns_per_batch": 68664.55078125,
+          "wall_ns_per_batch": 68652.24609375
+        },
+        {
+          "arm": "candidate",
+          "batches": 2048,
+          "requests_per_batch": 64,
+          "thread_cpu_ns_per_batch": 68664.55078125,
+          "wall_ns_per_batch": 70224.169921875
+        },
+        {
+          "arm": "baseline",
+          "batches": 2048,
+          "requests_per_batch": 64,
+          "thread_cpu_ns_per_batch": 228881.8359375,
+          "wall_ns_per_batch": 227440.966796875
+        }
+      ],
+      "median_wall_ns_baseline": 231232.91015625,
+      "median_wall_ns_candidate": 69438.2080078125,
+      "wall_ns_saved_per_batch": 161794.7021484375,
+      "local_fragment_only_not_E2E": true
+    }
+  ],
+  "limits": [
+    "隔离原类定义/未执行构造器；只填本no-op路径所需原字段，opaque owned refs没有读页内容",
+    "新页/hash边界只到原pool写入口即停止，不伪造pool操作成功；无Tensor/无GPU/无整框架mock",
+    "CPU cdiv仅非负整数正除数的等价表达；原source方法体不改",
+    "局部Windows perf_counter wall配对中位数为净省判据；thread_time仅诊断（可能15.625ms量化），非实际6CPU服务；每步完整guard/kwargs/计数计入，来源验证一次在窗口外",
+    "无生产安装入口；有CPU省才准备严格422模型scope/薄服务，queue2可遮盖CPU节省"
+  ],
+  "cpu_fragment_go": true
+}

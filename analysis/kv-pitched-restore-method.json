@@ -1,0 +1,53 @@
+{
+  "run_id": "20261022T222047Z-kv-pitched-restore-gate",
+  "status": "pass",
+  "bridge_sha256": "f9bf8757133b084cd198ea8a8b0b217af887ac03b2f2bfb9599fd806a9801d2c",
+  "case": {
+    "constructed_minimum_pool_pages": 32608,
+    "logical_pages": 1043,
+    "one_layer_bytes": 17088512,
+    "raw_layout": "单层normal raw uint8[pool,16384]，不是42层事务",
+    "host_storage_offset_bytes": 16384,
+    "GPU_destination_storage_offset_bytes": 16384,
+    "actual_max_pitch_bytes": 2147483647,
+    "required_destination_pitch_bytes": 33570816,
+    "candidate_submit": {
+      "submitted_bytes": 17088512,
+      "copy_calls": 14,
+      "linear_calls": 4,
+      "pitched_calls": 10,
+      "fallback_pitched_segments": 0,
+      "original_c95f_calls": 66,
+      "completion_ack": false
+    },
+    "baseline_H2D_submit": {
+      "submitted_bytes": 17088512,
+      "copy_calls": 66,
+      "completion_ack": false
+    },
+    "checks": {
+      "native_submit_counts_and_not_ACK": true,
+      "same_stream_consumer_all_selected_bytes": true,
+      "consumer_host_guards": true,
+      "host_and_destination_nonzero_storage_offsets": true,
+      "pinned_host_source_and_both_guards_unchanged": true,
+      "candidate_all_selected_gap_and_guards_match_CPU_oracle": true,
+      "candidate_positive_basic_guard_reads": true,
+      "baseline_c95f_all_selected_gap_and_guards_match_same_oracle": true,
+      "baseline_c95f_submit": true,
+      "host_source_and_both_guards_still_unchanged": true
+    },
+    "selected_payload_sha256": "d386af33deeb2d2fe3b8841dd576860851eb452bbf597a104eab49c9025b0fd3",
+    "native_completion_event": "同非0 current stream 的消费及回读之后 record/synchronize",
+    "normal42_coverage": "未执行；本门不证明私有页资格/epoch/事务ACK/consumer恢复或42层生命周期"
+  },
+  "RNG_unchanged": {
+    "CPU": true,
+    "GPU": true
+  },
+  "source_unchanged": true,
+  "database_unchanged": true,
+  "sealed_files": 88,
+  "performance_gain_claim": null,
+  "scope": "仅独立单层H2D真实页序/selected+gap+guard/offset/事件；无模型/性能/42层事务"
+}

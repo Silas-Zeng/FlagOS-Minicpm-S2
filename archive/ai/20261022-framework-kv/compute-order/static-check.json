@@ -1,0 +1,40 @@
+{
+  "status": "passed_static_only",
+  "runner_sha256": "ea64a59cff6197c42babbc190246ab24dce4f540874b2025c0f4ebfee02195ac",
+  "helper_sha256": "5ce6f7b6a815ab54d9d9965c30f37362fd1d271c82d442caa76829e01f4938ce",
+  "runner_changed_methods": [
+    "_build_attention_metadata",
+    "_prepare_inputs",
+    "execute_model"
+  ],
+  "protected_methods_source_equal": [
+    "_prepare_input_ids",
+    "_sample",
+    "_bookkeeping_sync",
+    "_update_states",
+    "synchronize_input_prep",
+    "_get_slot_mappings",
+    "_model_forward"
+  ],
+  "runner_reverse_byte_equal": true,
+  "worker_protocol_runner_pin_only": true,
+  "source_count_before": 422,
+  "source_count_after": 423,
+  "changed_paths": [
+    "vllm_fl/patches/biv150_compute_order.py",
+    "vllm_fl/patches/biv150_kv_protocol.py",
+    "vllm_fl/patches/biv150_kv_worker.py",
+    "vllm_fl/worker/model_runner.py"
+  ],
+  "original_dispatch_call_count": 1,
+  "plan_creation_inside_original_event": true,
+  "original_hidden_logits_gather_count": 2,
+  "persistent_gpu_storage_added_by_source": 0,
+  "transient_gpu_logits_index": "N int32, replaces original N int32 subtraction result; actual allocator peak not measured",
+  "extra_host_staging": "full CPU block table + positions(maxM,int64) + seq/computed/prompt/logits(maxN,int32)",
+  "first_static_attempt": "metadata call anchor was not unique; tightened to cascade+slot lines before output, no runtime was executed",
+  "limits": [
+    "No runtime/Torch import, no numerical/RNG/device proof",
+    "Other-owner CPU contract is separate tmp/compute-order-review/cpu-contract-result.json"
+  ]
+}

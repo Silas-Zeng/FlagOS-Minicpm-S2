@@ -16,3 +16,4 @@
 - [20261022T015315Z-kv-progress-victim-context16k-long](../runs/bi-v150/20261022T015315Z-kv-progress-victim-context16k-long.md)（登记#110）：全bytespass/0ZERO/fast454/runner6/consumer9/host释放，原preempt0→1 **是否保留：** 待确认；通过某项检查不自动等于优化保留。
 - [20261022T020721Z-kv-progress-pair-full-context16k-long](../runs/bi-v150/20261022T020721Z-kv-progress-pair-full-context16k-long.md)（登记#111）：218.39959823712707s/2550.627402689529total/TTFT62408.937510466785ms **是否保留：** 保留作对照基线；不据此判断候选收益。
 - [20261022T021658Z-kv-progress-pair-progress-context16k-long](../runs/bi-v150/20261022T021658Z-kv-progress-pair-progress-context16k-long.md)（登记#112）：218.51338428491727s/2549.299219464107total/TTFT62356.0446958727ms **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261022T165525Z-resume-native-diagnostic](../runs/bi-v150/20261022T165525Z-resume-native-diagnostic.md)（登记#152）：3696可见kernel合计3430.398ms：2D Attention58.1271%、GEMM22.6206%、3D Attention15.5462% **是否保留：** 待确认；通过某项检查不自动等于优化保留。

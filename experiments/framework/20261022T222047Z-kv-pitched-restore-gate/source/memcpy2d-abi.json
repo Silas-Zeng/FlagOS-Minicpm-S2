@@ -1,0 +1,408 @@
+{
+  "run_id": "20261022T030314Z-memcpy2d-abi",
+  "kind": "CPU-only actual ABI source evidence",
+  "recorded_utc": "2026-10-22T03:03:14.119659+00:00",
+  "platform": "Linux-5.4.0-148-generic-x86_64-with-glibc2.39",
+  "headers": [
+    {
+      "path": "/usr/local/corex/include/IX/ixrt/driver_types.h",
+      "resolved": "/usr/local/corex-4.5.0/include/IX/ixrt/driver_types.h",
+      "sha256": "93c8f434cef524cd2370c003506da3301f55dd022593349122548647b9317069",
+      "excerpts": [
+        {
+          "start_line": 367,
+          "end_line": 379,
+          "lines": [
+            "};",
+            "",
+            "enum __device_builtin__ ixMemcpyKind",
+            "{",
+            "    ixMemcpyHostToHost     = 0,",
+            "    ixMemcpyHostToDevice   = 1,",
+            "    ixMemcpyDeviceToHost   = 2,",
+            "    ixMemcpyDeviceToDevice = 3,",
+            "    ixMemcpyDefault        = 4",
+            "};",
+            "",
+            "struct __device_builtin__ ixPitchedPtr",
+            "{"
+          ]
+        },
+        {
+          "start_line": 778,
+          "end_line": 789,
+          "lines": [
+            "    ixDevAttrMaxGridDimX                            = 5,",
+            "    ixDevAttrMaxGridDimY                            = 6,",
+            "    ixDevAttrMaxGridDimZ                            = 7,",
+            "    ixDevAttrMaxSharedMemoryPerBlock                = 8,",
+            "    ixDevAttrTotalConstantMemory                    = 9,",
+            "    ixDevAttrWarpSize                               = 10,",
+            "    ixDevAttrMaxPitch                               = 11,",
+            "    ixDevAttrMaxRegistersPerBlock                   = 12,",
+            "    ixDevAttrClockRate                              = 13,",
+            "    ixDevAttrTextureAlignment                       = 14,",
+            "    ixDevAttrGpuOverlap                             = 15,",
+            "    ixDevAttrMultiProcessorCount                    = 16,"
+          ]
+        },
+        {
+          "start_line": 1172,
+          "end_line": 1181,
+          "lines": [
+            "};",
+            "",
+            "typedef __device_builtin__ enum ixError ixError_t;",
+            "",
+            "typedef __device_builtin__ struct IXDRVstream_st* ixStream_t;",
+            "",
+            "typedef __device_builtin__ struct IXDRVfunc_st* ixFunction_t;",
+            "",
+            "typedef __device_builtin__ struct IXDRVkern_st* ixKernel_t;",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/usr/local/corex/include/IX/crt/host_defines.h",
+      "resolved": "/usr/local/corex-4.5.0/include/IX/crt/host_defines.h",
+      "sha256": "9a1026954ab376f61bf03ba10e3c74ddec811f708e5e37b1dab2a16c434db4d8",
+      "excerpts": [
+        {
+          "start_line": 20,
+          "end_line": 53,
+          "lines": [
+            "    \"crt/host_defines.h is an internal header file and must not be used directly.  Please use ix_runtime_api.h or ix_runtime.h instead.\"",
+            "#endif",
+            "#define __IX_INCLUDE_COMPILER_INTERNAL_HEADERS__",
+            "#define __UNDEF_IX_INCLUDE_COMPILER_INTERNAL_HEADERS_HOST_DEFINES_H__",
+            "#endif",
+            "",
+            "#if !defined(__HOST_DEFINES_H__)",
+            "#define __HOST_DEFINES_H__",
+            "",
+            "#if defined(__IXCC_RTC__) || defined(__IX_LIBDEVICE__) || (defined(__PGIC__) && defined(__linux__)) || defined(__GNUC__)",
+            "",
+            "#if defined(__IXCC_RTC__)",
+            "#define __volatile__ volatile",
+            "#endif",
+            "",
+            "#define __no_return__ __attribute__((noreturn))",
+            "",
+            "#if defined(__IX_LIBDEVICE__) || defined(__IX_ARCH__) || defined(__IXCC__)",
+            "#define __noinline__ __attribute__((noinline))",
+            "#endif",
+            "",
+            "#define __forceinline__ __inline__ __attribute__((always_inline))",
+            "#define __align__(n) __attribute__((aligned(n)))",
+            "#define __thread__ __thread",
+            "#define __import__",
+            "#define __export__",
+            "#define __cdecl",
+            "#define __annotate__(a) __attribute__((a))",
+            "#define __location__(a) __annotate__(a)",
+            "#define IXRTAPI",
+            "",
+            "#elif defined(_MSC_VER)",
+            "",
+            "#if _MSC_VER >= 1400"
+          ]
+        },
+        {
+          "start_line": 65,
+          "end_line": 75,
+          "lines": [
+            "#define __noinline__ __declspec(noinline)",
+            "#define __forceinline__ __forceinline",
+            "#define __align__(n) __declspec(align(n))",
+            "#define __thread__ __declspec(thread)",
+            "#define __import__ __declspec(dllimport)",
+            "#define __export__ __declspec(dllexport)",
+            "#define __annotate__(a) __declspec(a)",
+            "#define __location__(a) __annotate__(__##a##__)",
+            "#define IXRTAPI __stdcall",
+            "",
+            "#else"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/usr/local/corex/include/IX/ixrt/ix_runtime_api.h",
+      "resolved": "/usr/local/corex-4.5.0/include/IX/ixrt/ix_runtime_api.h",
+      "sha256": "7dca9b9187cf2f7dda5ff75760ae2d56d04007fb07eacc3c74242b63e6c90a5b",
+      "excerpts": [
+        {
+          "start_line": 25,
+          "end_line": 75,
+          "lines": [
+            "#include \"crt/host_defines.h\"",
+            "",
+            "#include \"cuda_device_runtime_api.h\"",
+            "",
+            "#if defined(__IX_API_VERSION_INTERNAL) || defined(IX_API_PER_THREAD_DEFAULT_STREAM)",
+            "#define __IXRT_API_PER_THREAD_DEFAULT_STREAM",
+            "#define __IXRT_API_PTDS(api) api##_ptds",
+            "#define __IXRT_API_PTSZ(api) api##_ptsz",
+            "#else",
+            "#define __IXRT_API_PTDS(api) api",
+            "#define __IXRT_API_PTSZ(api) api",
+            "#endif",
+            "",
+            "#if defined(__IXRT_API_PER_THREAD_DEFAULT_STREAM)",
+            "#define ixMemcpy __IXRT_API_PTDS(ixMemcpy)",
+            "#define ixMemcpyToSymbol __IXRT_API_PTDS(ixMemcpyToSymbol)",
+            "#define ixMemcpyFromSymbol __IXRT_API_PTDS(ixMemcpyFromSymbol)",
+            "#define ixMemcpy2D __IXRT_API_PTDS(ixMemcpy2D)",
+            "#define ixMemcpyToArray __IXRT_API_PTDS(ixMemcpyToArray)",
+            "#define ixMemcpy2DToArray __IXRT_API_PTDS(ixMemcpy2DToArray)",
+            "#define ixMemcpyFromArray __IXRT_API_PTDS(ixMemcpyFromArray)",
+            "#define ixMemcpy2DFromArray __IXRT_API_PTDS(ixMemcpy2DFromArray)",
+            "#define ixMemcpyArrayToArray __IXRT_API_PTDS(ixMemcpyArrayToArray)",
+            "#define ixMemcpy2DArrayToArray __IXRT_API_PTDS(ixMemcpy2DArrayToArray)",
+            "#define ixMemcpy3D __IXRT_API_PTDS(ixMemcpy3D)",
+            "#define ixMemcpy3DPeer __IXRT_API_PTDS(ixMemcpy3DPeer)",
+            "#define ixMemset __IXRT_API_PTDS(ixMemset)",
+            "#define ixMemset2D __IXRT_API_PTDS(ixMemset2D)",
+            "#define ixMemset3D __IXRT_API_PTDS(ixMemset3D)",
+            "#define ixGraphInstantiateWithParams __IXRT_API_PTSZ(ixGraphInstantiateWithParams)",
+            "#define ixGraphLaunch __IXRT_API_PTSZ(ixGraphLaunch)",
+            "#define ixGraphUpload __IXRT_API_PTSZ(ixGraphUpload)",
+            "#define ixStreamBeginCapture __IXRT_API_PTSZ(ixStreamBeginCapture)",
+            "#define ixStreamBeginCaptureToGraph __IXRT_API_PTSZ(ixStreamBeginCaptureToGraph)",
+            "#define ixStreamEndCapture __IXRT_API_PTSZ(ixStreamEndCapture)",
+            "#define ixStreamGetCaptureInfo __IXRT_API_PTSZ(ixStreamGetCaptureInfo)",
+            "#define ixStreamUpdateCaptureDependencies __IXRT_API_PTSZ(ixStreamUpdateCaptureDependencies)",
+            "#define ixStreamIsCapturing __IXRT_API_PTSZ(ixStreamIsCapturing)",
+            "#define ixMemcpyAsync __IXRT_API_PTSZ(ixMemcpyAsync)",
+            "#define ixMemcpyToSymbolAsync __IXRT_API_PTSZ(ixMemcpyToSymbolAsync)",
+            "#define ixMemcpyFromSymbolAsync __IXRT_API_PTSZ(ixMemcpyFromSymbolAsync)",
+            "#define ixMemcpy2DAsync __IXRT_API_PTSZ(ixMemcpy2DAsync)",
+            "#define ixMemcpyToArrayAsync __IXRT_API_PTSZ(ixMemcpyToArrayAsync)",
+            "#define ixMemcpy2DToArrayAsync __IXRT_API_PTSZ(ixMemcpy2DToArrayAsync)",
+            "#define ixMemcpyFromArrayAsync __IXRT_API_PTSZ(ixMemcpyFromArrayAsync)",
+            "#define ixMemcpy2DFromArrayAsync __IXRT_API_PTSZ(ixMemcpy2DFromArrayAsync)",
+            "#define ixMemcpy3DAsync __IXRT_API_PTSZ(ixMemcpy3DAsync)",
+            "#define ixMemcpy3DPeerAsync __IXRT_API_PTSZ(ixMemcpy3DPeerAsync)",
+            "#define ixMemsetAsync __IXRT_API_PTSZ(ixMemsetAsync)",
+            "#define ixMemset2DAsync __IXRT_API_PTSZ(ixMemset2DAsync)",
+            "#define ixMemset3DAsync __IXRT_API_PTSZ(ixMemset3DAsync)"
+          ]
+        },
+        {
+          "start_line": 447,
+          "end_line": 470,
+          "lines": [
+            "                                                         size_t offset          __dv(0),",
+            "                                                         enum ixMemcpyKind kind __dv(ixMemcpyDeviceToHost));",
+            "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI",
+            "    ixMemcpyAsync(void* dst, const void* src, size_t count, enum ixMemcpyKind kind, ixStream_t stream __dv(0));",
+            "    extern __host__ ixError_t IXRTAPI                  ixMemcpyPeerAsync(void*             dst,",
+            "                                                                         int               dstDevice,",
+            "                                                                         const void*       src,",
+            "                                                                         int               srcDevice,",
+            "                                                                         size_t            count,",
+            "                                                                         ixStream_t stream __dv(0));",
+            "    extern __host__ __ixrt_builtin__ ixError_t IXRTAPI ixMemcpy2DAsync(void*             dst,",
+            "                                                                       size_t            dpitch,",
+            "                                                                       const void*       src,",
+            "                                                                       size_t            spitch,",
+            "                                                                       size_t            width,",
+            "                                                                       size_t            height,",
+            "                                                                       enum ixMemcpyKind kind,",
+            "                                                                       ixStream_t stream __dv(0));",
+            "    extern __host__ ixError_t IXRTAPI                  ixMemcpy2DToArrayAsync(ixArray_t         dst,",
+            "                                                                              size_t            wOffset,",
+            "                                                                              size_t            hOffset,",
+            "                                                                              const void*       src,",
+            "                                                                              size_t            spitch,",
+            "                                                                              size_t            width,"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/usr/local/corex/include/IX/mapping_cudart.h",
+      "resolved": "/usr/local/corex-4.5.0/include/IX/mapping_cudart.h",
+      "sha256": "ca962a4e5e051a6de6e8c84c89cf6ec9430d8fbb225a78708731b928662984fb",
+      "excerpts": [
+        {
+          "start_line": 1640,
+          "end_line": 1643,
+          "lines": [
+            "#define cudaDeviceAttr ixDeviceAttr",
+            "#define cudaDeviceGetAttribute ixDeviceGetAttribute",
+            "#define cudaDeviceGetCacheConfig ixDeviceGetCacheConfig",
+            "#define cudaDeviceGetLimit ixDeviceGetLimit"
+          ]
+        },
+        {
+          "start_line": 1671,
+          "end_line": 1674,
+          "lines": [
+            "#define cudaMalloc ixMalloc",
+            "#define cudaMemcpy2DAsync ixMemcpy2DAsync",
+            "#define cudaMemcpy2DAsync_ptsz ixMemcpy2DAsync_ptsz",
+            "#define cudaMemcpy3DAsync ixMemcpy3DAsync"
+          ]
+        },
+        {
+          "start_line": 1676,
+          "end_line": 1679,
+          "lines": [
+            "#define cudaMemcpy3DParms ixMemcpy3DParms",
+            "#define cudaMemcpyAsync ixMemcpyAsync",
+            "#define cudaMemcpyAsync_ptsz ixMemcpyAsync_ptsz",
+            "#define cudaMemcpyKind ixMemcpyKind"
+          ]
+        },
+        {
+          "start_line": 1775,
+          "end_line": 1778,
+          "lines": [
+            "#define cudaDevAttrWarpSize ixDevAttrWarpSize",
+            "#define cudaDeviceGetAttribute ixDeviceGetAttribute",
+            "#define cudaErrorInvalidValue ixErrorInvalidValue",
+            "#define cudaError_t ixError_t"
+          ]
+        },
+        {
+          "start_line": 1811,
+          "end_line": 1814,
+          "lines": [
+            "#define cudaMemPool_t ixMemPool_t",
+            "#define cudaMemcpyDeviceToHost ixMemcpyDeviceToHost",
+            "#define cudaMemcpyFromSymbol ixMemcpyFromSymbol",
+            "#define cudaMemcpyFromSymbolAsync ixMemcpyFromSymbolAsync"
+          ]
+        },
+        {
+          "start_line": 1890,
+          "end_line": 1893,
+          "lines": [
+            "#define cudaDeviceEnablePeerAccess ixDeviceEnablePeerAccess",
+            "#define cudaDeviceGetAttribute ixDeviceGetAttribute",
+            "#define cudaDeviceGetByPCIBusId ixDeviceGetByPCIBusId",
+            "#define cudaDeviceGetCacheConfig ixDeviceGetCacheConfig"
+          ]
+        },
+        {
+          "start_line": 2131,
+          "end_line": 2134,
+          "lines": [
+            "#define cudaMemcpy2DArrayToArray ixMemcpy2DArrayToArray",
+            "#define cudaMemcpy2DAsync ixMemcpy2DAsync",
+            "#define cudaMemcpy2DFromArray ixMemcpy2DFromArray",
+            "#define cudaMemcpy2DFromArrayAsync ixMemcpy2DFromArrayAsync"
+          ]
+        },
+        {
+          "start_line": 2143,
+          "end_line": 2146,
+          "lines": [
+            "#define cudaMemcpyArrayToArray ixMemcpyArrayToArray",
+            "#define cudaMemcpyAsync ixMemcpyAsync",
+            "#define cudaMemcpyDeviceToDevice ixMemcpyDeviceToDevice",
+            "#define cudaMemcpyDeviceToHost ixMemcpyDeviceToHost"
+          ]
+        },
+        {
+          "start_line": 2145,
+          "end_line": 2148,
+          "lines": [
+            "#define cudaMemcpyDeviceToDevice ixMemcpyDeviceToDevice",
+            "#define cudaMemcpyDeviceToHost ixMemcpyDeviceToHost",
+            "#define cudaMemcpyFromArray ixMemcpyFromArray",
+            "#define cudaMemcpyFromArrayAsync ixMemcpyFromArrayAsync"
+          ]
+        },
+        {
+          "start_line": 2395,
+          "end_line": 2398,
+          "lines": [
+            "#define cudaDevAttrMaxGridDimZ ixDevAttrMaxGridDimZ",
+            "#define cudaDevAttrMaxPitch ixDevAttrMaxPitch",
+            "#define cudaDevAttrMaxRegistersPerBlock ixDevAttrMaxRegistersPerBlock",
+            "#define cudaDevAttrMaxRegistersPerMultiprocessor ixDevAttrMaxRegistersPerMultiprocessor"
+          ]
+        },
+        {
+          "start_line": 2869,
+          "end_line": 2872,
+          "lines": [
+            "#define cudaMemcpyDeviceToDevice ixMemcpyDeviceToDevice",
+            "#define cudaMemcpyDeviceToHost ixMemcpyDeviceToHost",
+            "#define cudaMemcpyHostToDevice ixMemcpyHostToDevice",
+            "#define cudaMemcpyHostToHost ixMemcpyHostToHost"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/usr/local/lib/python3.12/site-packages/torch/cuda/streams.py",
+      "resolved": "/usr/local/lib/python3.12/site-packages/torch/cuda/streams.py",
+      "sha256": "c8cb35dccf58685a7025a3af1f3082d274b7b13e42cc8b0f4609a0245ee90c7b",
+      "excerpts": [
+        {
+          "start_line": 97,
+          "end_line": 114,
+          "lines": [
+            "        \"\"\"",
+            "        return super().query()",
+            "",
+            "    def synchronize(self) -> None:",
+            "        r\"\"\"Wait for all the kernels in this stream to complete.",
+            "",
+            "        .. note:: This is a wrapper around ``cudaStreamSynchronize()``: see",
+            "           `CUDA Stream documentation`_ for more info.",
+            "        \"\"\"",
+            "        super().synchronize()",
+            "",
+            "    @property",
+            "    def _as_parameter_(self):",
+            "        return ctypes.c_void_p(self.cuda_stream)",
+            "",
+            "    def __eq__(self, o) -> bool:",
+            "        if isinstance(o, Stream):",
+            "            return super().__eq__(o)"
+          ]
+        }
+      ]
+    }
+  ],
+  "library": {
+    "path": "/usr/local/corex-4.5.0/lib64/libcudart.so.10.2.89",
+    "sha256": "d39d579627d19ddb903855ebc4859661579633a7ecc4d1ad51866d79296ba527",
+    "export_command": [
+      "readelf",
+      "--dyn-syms",
+      "--wide",
+      "/usr/local/corex-4.5.0/lib64/libcudart.so.10.2.89"
+    ],
+    "exports": [
+      "   357: 000000000012f290   541 FUNC    GLOBAL DEFAULT   12 cudaMemcpy2DAsync@@CUDART",
+      "   495: 000000000012f290   541 FUNC    GLOBAL DEFAULT   12 ixMemcpy2DAsync@@CUDART",
+      "   632: 000000000011c270   365 FUNC    GLOBAL DEFAULT   12 cudaDeviceGetAttribute@@CUDART",
+      "   646: 00000000001317c0   443 FUNC    GLOBAL DEFAULT   12 cudaMemcpyAsync@@CUDART",
+      "   812: 000000000011c270   365 FUNC    GLOBAL DEFAULT   12 ixDeviceGetAttribute@@CUDART",
+      "   842: 0000000000120800   241 FUNC    GLOBAL DEFAULT   12 ixGetErrorString@@CUDART",
+      "   872: 00000000001317c0   443 FUNC    GLOBAL DEFAULT   12 ixMemcpyAsync@@CUDART"
+    ],
+    "stderr": ""
+  },
+  "compiler": {
+    "command": [
+      "g++",
+      "--version"
+    ],
+    "stdout": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "stderr": ""
+  },
+  "script_sha256": "6de7944a0e0f5593d9ed66a8af0eb2cf23b147bf39cba8d2e4204e69399ed53a",
+  "limits_zh": [
+    "未导入torch、加载库或调用设备API。",
+    "编译桥必须使用这些实际头文件；类型证据不代表真实复制成功。",
+    "pitch能力需设备查询及真实字节门；stream指针适配仍需设备验证。"
+  ]
+}

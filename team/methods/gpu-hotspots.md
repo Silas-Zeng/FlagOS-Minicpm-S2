@@ -13,3 +13,4 @@
 ## 天数 BI-V150
 
 - [20261022T114435Z-current-mixed-native-diagnostic](../runs/bi-v150/20261022T114435Z-current-mixed-native-diagnostic.md)（登记#135）：可见kernel累计1063.156218ms：2D Attention640.380398ms/60.2339%，GEMM337.191759ms/31.7161%，3D2.6891%，reduce0.1245% **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261023T002156Z-q-gqa-puredecode-native-diagnostic](../runs/bi-v150/20261023T002156Z-q-gqa-puredecode-native-diagnostic.md)（登记#185）：末次2109execute/252mixed，q1共4032、outside及未入plan均52（1.28968%），此前局部零遗漏判断已更正 **是否保留：** 待确认；通过某项检查不自动等于优化保留。

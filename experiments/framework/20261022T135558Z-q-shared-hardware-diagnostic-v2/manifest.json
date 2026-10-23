@@ -1,0 +1,103 @@
+{
+  "started_utc": "2026-10-22T13:55:58.358486+00:00",
+  "pid": 312724,
+  "command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/q-shared-diagnostic-v2-20261022/diagnose_q_shared.py",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261022T135558Z-q-shared-hardware-diagnostic-v2",
+    "--runtime-path",
+    "/workspace/experiments/minicpm-s2/code/cpu-combination-combined-20261022T100830Z/vllm_fl/patches/biv150_decode_launch_runtime.py",
+    "--mixed-path",
+    "/workspace/experiments/minicpm-s2/code/cpu-combination-combined-20261022T100830Z/vllm_fl/patches/biv150_mixed_decode.py",
+    "--model",
+    "/workspace/MiniCPM5-2B"
+  ],
+  "command_shell": "/usr/local/bin/python3 /workspace/experiments/minicpm-s2/scripts/q-shared-diagnostic-v2-20261022/diagnose_q_shared.py --run-dir /workspace/experiments/minicpm-s2/framework/20261022T135558Z-q-shared-hardware-diagnostic-v2 --runtime-path /workspace/experiments/minicpm-s2/code/cpu-combination-combined-20261022T100830Z/vllm_fl/patches/biv150_decode_launch_runtime.py --mixed-path /workspace/experiments/minicpm-s2/code/cpu-combination-combined-20261022T100830Z/vllm_fl/patches/biv150_mixed_decode.py --model /workspace/MiniCPM5-2B",
+  "kind": "baseline-only D1/P2047 KV16K hardware-metrics diagnostic; no performance verdict",
+  "profile_calls": 128,
+  "environment": {
+    "VLLM_PLUGINS": "fl",
+    "PYTHONPATH": "/workspace/experiments/minicpm-s2/code/cpu-combination-combined-20261022T100830Z:/workspace/experiments/minicpm-s2/scripts",
+    "COREX_VISIBLE_DEVICES": "all"
+  },
+  "base_runner_sha256": "6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141",
+  "preflight": {
+    "checked_utc": "2026-10-22T13:55:58.366509+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "source_sha256": {
+    "controller.py": "fd87098719975fe8ee2a9235bb6f7342a10e663c395e2b21237445957c2c60de",
+    "runtime.py": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+    "mixed.py": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+    "worker.py": "900ee5702b177b86922b0d6be8bf6e85f900e5b6531bdf31b448f24246abfadb",
+    "fixture.py": "60d99d1d24cbbb91f0ad0a2eca13abfe1760ae551de01904801874561d3710a5",
+    "asset-pins.json": "99107121c721620ab6f81d94c1de219d2b1bfe2ef8c11ce8983d9f01639755da",
+    "validate_hidden_row_gather.py": "65cb8affd4ae08af877ccb4b4cfca6822eec5ba3f83770f39999ee677c546863",
+    "bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a"
+  },
+  "packages": {
+    "torch": "2.10.0+corex.4.5.0",
+    "vllm": "0.24.0+empty",
+    "FlagGems": "unavailable",
+    "SQLAlchemy": "2.0.48"
+  },
+  "ixsys": {
+    "path": "/usr/local/corex-4.5.0/bin/ixsys",
+    "sha256": "7b47fa41f8afb2777fcddd1fb68d9f1e9f221b2f3538f70cd9681b216b277932"
+  },
+  "worker_command": [
+    "/usr/local/corex-4.5.0/bin/ixsys",
+    "-t",
+    "cuda",
+    "--profile-from-start",
+    "off",
+    "--gpu-metrics-device",
+    "0",
+    "--gpu-metrics-set",
+    "3",
+    "--gpu-metrics-frequency",
+    "500",
+    "-o",
+    "/workspace/experiments/minicpm-s2/framework/20261022T135558Z-q-shared-hardware-diagnostic-v2/native-trace.json",
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/framework/20261022T135558Z-q-shared-hardware-diagnostic-v2/source/worker.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261022T135558Z-q-shared-hardware-diagnostic-v2",
+    "--model",
+    "/workspace/MiniCPM5-2B"
+  ],
+  "worker_pid": 312727,
+  "ixsys_exit_code": 0,
+  "worker_completion": {
+    "complete": true,
+    "worker_status": "diagnostic_complete_no_performance_verdict",
+    "profile": {
+      "start_utc": "2026-10-22T13:56:14.470352+00:00",
+      "start_perf_counter_ns": 3843079455791581,
+      "start_returned": true,
+      "stop_returned": true,
+      "end_utc": "2026-10-22T13:56:15.876112+00:00",
+      "end_perf_counter_ns": 3843080861551718,
+      "completed_calls": 128
+    },
+    "checks": {
+      "entire_kv_bits_unchanged": true,
+      "rng_unchanged": true,
+      "valid_output_finite": true,
+      "padding_untouched": true,
+      "same_q_repeat_output_bits": true
+    }
+  },
+  "postflight": {
+    "checked_utc": "2026-10-22T13:56:22.624153+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "finished_utc": "2026-10-22T13:56:22.692986+00:00",
+  "exit_code": 0
+}

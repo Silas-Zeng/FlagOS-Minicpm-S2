@@ -1,0 +1,92 @@
+{
+  "run_id": "20261022T152020Z-q-fragment-hoist-4k-gate",
+  "method": "Q fragment循环外保留：同一方法的KV4K短门",
+  "status": "complete_positive_single_layer_signal",
+  "strict_checks": {
+    "all_output_bits_equal": true,
+    "valid_output_finite": true,
+    "padding_untouched": true,
+    "entire_kv_bits_unchanged": true,
+    "rng_unchanged": true,
+    "default_scale_arguments_same": true,
+    "original_3d_preserved": true,
+    "layer_scale_values_preserved": true,
+    "actual_lowered_Q_reads_removed": true,
+    "independent_jit_cache": true,
+    "original_jit_cache_unchanged": true,
+    "new_q_pointer": true,
+    "new_output_pointer": true,
+    "nondefault_stream": true,
+    "new_pointer_output_bits_equal": true,
+    "new_pointer_output_finite": true,
+    "new_pointer_padding_untouched": true,
+    "selected_on_new_pointer": true,
+    "other_2d_fallbacks": true,
+    "original_3d_new_pointer_preserved": true,
+    "kv_unchanged_after_new_pointer": true,
+    "rng_unchanged_after_new_pointer": true,
+    "unsupported_output_scales_original_error": true,
+    "unsupported_output_scales_fallback": true,
+    "layer_scale_identity_preserved": true
+  },
+  "summary": {
+    "wall": {
+      "baseline_ms": 2.4644994375,
+      "candidate_ms": 2.0676500000000004,
+      "fraction_saved": 0.16102638591087093
+    },
+    "event": {
+      "baseline_ms": 2.358253240585327,
+      "candidate_ms": 1.8713387846946716,
+      "fraction_saved": 0.20647250579831777
+    }
+  },
+  "mechanism": {
+    "ttgir_q_load_outside_loop": true,
+    "llvm_q_memory_reads_in_loop": 0,
+    "llvm_q_memory_reads_total": 32,
+    "q_read_blocks": [
+      ".lr.ph62",
+      "240",
+      "249",
+      "253",
+      "257",
+      "261",
+      "265",
+      "269",
+      "273",
+      "277",
+      "281",
+      "285",
+      "289",
+      "293",
+      "297",
+      "301",
+      "305"
+    ],
+    "barrier_calls": 3,
+    "mechanism_pass": true,
+    "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+  },
+  "resources": {
+    "baseline": {
+      "shared_bytes": 65536,
+      "registers": 102,
+      "spills": 0
+    },
+    "candidate": {
+      "shared_bytes": 32768,
+      "registers": 114,
+      "spills": 0
+    }
+  },
+  "conclusion": "同一Q fragment循环外保留方法，仅将D1/P2047合成fixture的KV16K改为4K，policy80d63不变。strict bits/完整KV/RNG/scale/新Q与输出指针/非默认流全过，误差0；真实TTGIR外提及LLVM循环内Q内存读0，shared64→32KiB、regs102→114、spill0。同worker32ABBA wall2.464499437500→2.067650000000ms（缩短16.1026%），event2.358253240585→1.871338784695ms（缩短20.6473%），保留短KV局部正信号待真实服务验证；不计为另一独立方法或与16K收益相加，无整模型准确率、服务、官方性能或C500结论。独立JIT缓存、原缓存未改、绑定已恢复；root46项seal全核复用。",
+  "sealed_files": 46,
+  "seal_validation": "复用 root 已完成的逐项核验，未重复扫描。",
+  "archive_sha256": "1000532d78f70a293de577e049c9d1929bdb67492a020b47f2670d282ee58ffe",
+  "assets_sha256": {
+    "biv150_q_fragment_hoist.py": "80d63add1d209335ebdc2c16cc605dd5fd89e6d63d0f7b1b456990804c863097",
+    "launch_q_fragment_hoist_gate.sh": "3358f39b57647c1839c83edc837a6f3ecceeb5b427dbda372088dfb3e12f75d8",
+    "validate_q_fragment_hoist.py": "63a062a339e4806661a56683bd47eb547ae267c318cfe9fadb38e0f7214be97d"
+  }
+}

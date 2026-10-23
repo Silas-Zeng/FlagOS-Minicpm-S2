@@ -1,0 +1,35 @@
+{
+  "kind": "仅SQLite URI入口适配；不重跑旧套件或实际reader",
+  "run_id": "20261022T222222Z-q-gqa-kv-restore-pitched-verify1-context16k-long",
+  "first_failure": {
+    "reader_sha256": "ba5d47ff58ee63c1baabbf1a1ca76f8d106ef7466dc174a96c2a111d0e7360a5",
+    "reported_by": "root实际运行",
+    "exception": "sqlite3.OperationalError: invalid uri authority: %3F",
+    "cause": "Windows扩展路径as_uri将问号编码进authority；不是DB内容不一致"
+  },
+  "reader_sha256": "d45de2f8d72d79321629b6ddcdcef5d5eaf68bc756745dfed0aa07a37bc6c6bc",
+  "path_checks": [
+    {
+      "phase": "before",
+      "normal_path_chars": 181,
+      "plain_file_uri_no_extended_authority": true
+    },
+    {
+      "phase": "after",
+      "normal_path_chars": 180,
+      "plain_file_uri_no_extended_authority": true
+    }
+  ],
+  "checks": {
+    "syntax_and_legacy_adapter_compile": true,
+    "single_original_fingerprint_callsite": true,
+    "actual_db_paths_normal_under_260": true,
+    "original_fingerprint_function_still_called": true,
+    "other_paths_keep_extended_prefix": true
+  },
+  "not_run": [
+    "reader实际run验收或DB fingerprint",
+    "旧套件/几何门/SSH/GPU"
+  ],
+  "frozen_helper_unchanged": true
+}

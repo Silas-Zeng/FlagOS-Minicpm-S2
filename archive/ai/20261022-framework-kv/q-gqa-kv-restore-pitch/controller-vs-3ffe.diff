@@ -1,0 +1,64 @@
+--- scripts\remote\launch_kv_pitched_copy_gate.py
++++ tmp\q-gqa-kv-restore-pitch\launch_kv_pitched_restore_gate.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""独立2D SAVE API门的生命周期控制器；不加载模型、Torch、候选或共享库。"""
++"""独立H2D RESTORE字节门；复用原SAVE门owner，不加载模型/Torch/候选或库。"""
+ from datetime import datetime, timezone
+ import hashlib
+ import importlib.metadata
+@@ -17,14 +17,16 @@
+ 
+ ROOT = Path("/workspace/experiments/minicpm-s2")
+ DB = Path("/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db")
+-# archived name: (ROOT/scripts input name, reviewed SHA256)
++# archived name: (isolated absolute input path, reviewed SHA256); HELPERS仍沿ROOT/scripts。
+ SOURCES = {
+-    "gate.py": ("validate_kv_pitched_copy.py", "c8c0f64e7293634a28949f4338800298b43d32daa7cbd866e64dcd59833d7dc6"),
+-    "biv150_kv_pitched_copy.py": ("biv150_kv_pitched_copy.py", "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd"),
+-    "bridge.cpp": ("biv150_kv_pitched_bridge.cpp", "0a4d44d8bd71488f57d5adaa7bdc80f8b16193b11884c167b8767b9e7d9c6d44"),
+-    "biv150_kv_page_copy.py": ("biv150_kv_page_copy.py", "c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c"),
+-    "save-arithmetic-evidence.json": ("save-arithmetic-evidence.json", "489f1468956ff96e86188feeb89933df0ab5d35458b8d184b6adbb2729497dbc"),
+-    "memcpy2d-abi.json": ("memcpy2d-abi.json", "f9c348a60fa34469377fda671d2d57a42c108fca2554fd59963b6b7033ffb576"),
++    'gate.py': ('/workspace/experiments/minicpm-s2/scripts/kv-pitched-restore-gate/validate_kv_pitched_restore.py', '10e5ec18ea1a1ddc125362a9bf21063f59c6a196214a0873a455c1c8ed3d6df9'),
++    'biv150_kv_pitched_copy.py': ('/workspace/experiments/minicpm-s2/scripts/kv-pitched-restore-gate/biv150_kv_pitched_copy.py', '818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd'),
++    'biv150_kv_pitched_restore.py': ('/workspace/experiments/minicpm-s2/scripts/kv-pitched-restore-gate/biv150_kv_pitched_restore.py', 'a7439c2c0b2b588dcd2af5c66b6eb62e562132ef8b5bc1d54ce54fc4b6e9804c'),
++    'bridge.cpp': ('/workspace/experiments/minicpm-s2/scripts/kv-pitched-restore-gate/biv150_kv_pitched_restore_bridge.cpp', '48295ffde897cce988d3a8460904ab4451669e1de2fbe2bd5257d3f75e35ab20'),
++    'biv150_kv_page_copy.py': ('/workspace/experiments/minicpm-s2/scripts/kv-pitched-restore-gate/biv150_kv_page_copy.py', 'c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c'),
++    'pitched-save-gate.py': ('/workspace/experiments/minicpm-s2/scripts/kv-pitched-restore-gate/validate_kv_pitched_copy.py', 'c8c0f64e7293634a28949f4338800298b43d32daa7cbd866e64dcd59833d7dc6'),
++    'restore-page-evidence.json': ('/workspace/experiments/minicpm-s2/scripts/kv-pitched-restore-gate/restore-page-evidence.json', '55c383db7601041cbc9a0d464e2395f30b36637d22ffb65231414d17444ae308'),
++    'memcpy2d-abi.json': ('/workspace/experiments/minicpm-s2/scripts/kv-pitched-restore-gate/memcpy2d-abi.json', 'f9c348a60fa34469377fda671d2d57a42c108fca2554fd59963b6b7033ffb576'),
+ }
+ HELPERS = {
+     "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+@@ -152,10 +154,10 @@
+ def controller(run, control):
+     import fcntl
+     if (run.parent != ROOT / "framework" or control != run.with_name(run.name + "-control")
+-            or not run.name.endswith("-kv-pitched-copy-gate") or not run.is_dir() or not control.is_dir()
++            or not run.name.endswith("-kv-pitched-restore-gate") or not run.is_dir() or not control.is_dir()
+             or run.is_symlink() or control.is_symlink()):
+         raise ValueError("只接受本launcher新建的ROOT/framework直系run/control")
+-    manifest = {"kind": "独立2D SAVE API字节与微计时门，非服务/模型/性能成绩", "started_utc": utc(),
++    manifest = {"kind": "独立单层H2D RESTORE正确性门，无微计时/服务/模型/性能成绩", "started_utc": utc(),
+                 "controller_pid": os.getpid(), "run": str(run), "control": str(control),
+                 "controller_sha256": sha(Path(__file__)), "command": [sys.executable, *sys.argv]}
+     write(control / "started.json", manifest)
+@@ -286,7 +288,7 @@
+                     files[str(path.relative_to(run.parent))] = {"sha256": sha(path), "bytes": path.stat().st_size}
+         write(control / "seal.json", {"kind": "本轮API门完整字节索引，不代表设备正确性通过", "recorded_utc": utc(),
+                                      "run": str(run), "control": str(control), "exit_code": status, "files": files,
+-                                     "collect": [str(run), str(control)], "limits": ["worker结果/失败原件另审；exit0不冒充服务或准确率。", "一层真实页几何构造，不是已执行42层模型或E2E。"]})
++                                     "collect": [str(run), str(control)], "limits": ["worker结果/失败原件另审；exit0不冒充服务或准确率。", "仅H2D一层真实目的页，不是42层事务/模型或E2E。"]})
+         if lock is not None:
+             lock.close()
+     return status
+@@ -299,7 +301,7 @@
+         raise ValueError("无参启动唯一UTC门；不接受源/参数覆盖")
+     checked_assets()
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+-    run = ROOT / "framework" / (stamp + "-kv-pitched-copy-gate")
++    run = ROOT / "framework" / (stamp + "-kv-pitched-restore-gate")
+     control = run.with_name(run.name + "-control")
+     run.mkdir(exist_ok=False)
+     control.mkdir(exist_ok=False)

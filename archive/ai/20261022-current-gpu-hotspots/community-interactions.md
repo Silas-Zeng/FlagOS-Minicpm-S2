@@ -33,3 +33,11 @@
 社区一手核实：[vLLM GPU sampler](https://github.com/vllm-project/vllm/blob/main/vllm/v1/worker/gpu/sample/sampler.py) 的 `Sampler.__call__` 仍先 `sample`，再按 prefill 是否完成生成 `num_sampled`，没有提供可直接回移的“跳过整行”实现；[SGLang result processor](https://github.com/sgl-project/sglang/blob/main/python/sglang/srt/managers/scheduler_components/batch_result_processor.py) 的 `_validate_pp_skip_output_comm` 只核全中间 chunk 时省去 PP 输出通信，不能当作单卡计算收益证据。
 
 最低成本否决条件：只读既有调度/采样状态，若不能证明存在可整段省去 LM-head/采样的纯中间 prefill，或不能在不新增 GPU 同步、保留原 RNG 与异步行映射的前提下给出删除路径，就不进入实现与上卡队列。当前只有 mixed 窗口，尚不足以证明这一正收益前提；这是否决当前投入，不是宣称所有负载绝无收益。本轮未写实现、未运行 GPU、未新增性能结论。
+
+## 124358 末层裁剪复核：保持暂停，不追加诊断
+
+已只读原件 `20261022T124358Z-last-layer-tail-v2-gate/source/gate.py`（`8e4903e37dedb423070bb33e506cc76c2de0b70c54a3412d14d651e6494b6bbf`）、helper `99d5a8c8…`、实际类和 `results.json`（`f82a28840259f7a01d83a23397d9e0e2e52853075d93845b9f0d549206b5c009`）。baseline 独占 residual clone，candidate 对 Attention output/residual 同 indices 各自 gather；原输入实测未变。ready 在新输入准备后记录，side wait 后顺序运行两路径，done settle，输入/权重/stream 均保活；未发现 Python 接线层的明显 clone、残差污染或生命周期错误。底层算子是否遵循当前 stream、shape 调优是否改变累加仍未证明；不能因默认 case bitwise 就认定第二 case 是正常舍入。
+
+真正能省的是末层 O、gate-up、down 的死行计算及相应 norm/SiLU，末层全 M QKV/Attention/KV 必须保留。按 42 层均摊并以矩阵 FLOPs 分配，`31.7161% × (40/45) ÷ 42 ≈ 0.67%` 是线性部分的**可见 kernel 时间粗估预算**，不是严格上限或端到端预测，也未扣 gather、小 M GEMM、动态图接线成本。原 trace 未可靠区分最后一层三个投影的真实耗时，不能用 2046/2048 裁行比例兑算实际加速；小收益本身不是否决理由。
+
+结论：当前实现 **NO-GO 集成，方向暂停**，原因是数值失败未解、生产 Inductor/AOT 接线未证及其成本，与当前 Q 共享搬运机会竞争；不是证明 0.67% 小于执行开销。若以后恢复，唯一第一判别应复用同一 changed 输入、indices 和权重，仅补默认流同值对照、保持原容差；若它也失败，说明 side stream 不是失败的必要条件，仍需定位首个差异才能判断 GEMM shape。该诊断尚不能证明纯舍入或保证可修，root 本轮明确先不执行。未改原 gate、未写 v3、未重跑 GPU。

@@ -1,0 +1,82 @@
+{
+  "started_utc": "2026-10-22T13:49:39.499161+00:00",
+  "pid": 311967,
+  "command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/q-shared-diagnostic-20261022/diagnose_q_shared.py",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261022T134939Z-q-shared-hardware-diagnostic",
+    "--runtime-path",
+    "/workspace/experiments/minicpm-s2/code/cpu-combination-combined-20261022T100830Z/vllm_fl/patches/biv150_decode_launch_runtime.py",
+    "--mixed-path",
+    "/workspace/experiments/minicpm-s2/code/cpu-combination-combined-20261022T100830Z/vllm_fl/patches/biv150_mixed_decode.py",
+    "--model",
+    "/workspace/MiniCPM5-2B"
+  ],
+  "command_shell": "/usr/local/bin/python3 /workspace/experiments/minicpm-s2/scripts/q-shared-diagnostic-20261022/diagnose_q_shared.py --run-dir /workspace/experiments/minicpm-s2/framework/20261022T134939Z-q-shared-hardware-diagnostic --runtime-path /workspace/experiments/minicpm-s2/code/cpu-combination-combined-20261022T100830Z/vllm_fl/patches/biv150_decode_launch_runtime.py --mixed-path /workspace/experiments/minicpm-s2/code/cpu-combination-combined-20261022T100830Z/vllm_fl/patches/biv150_mixed_decode.py --model /workspace/MiniCPM5-2B",
+  "kind": "baseline-only D1/P2047 KV16K hardware-metrics diagnostic; no performance verdict",
+  "profile_calls": 128,
+  "environment": {
+    "VLLM_PLUGINS": "fl",
+    "PYTHONPATH": "/workspace/experiments/minicpm-s2/code/cpu-combination-combined-20261022T100830Z:/workspace/experiments/minicpm-s2/scripts",
+    "COREX_VISIBLE_DEVICES": "all"
+  },
+  "base_runner_sha256": "6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141",
+  "preflight": {
+    "checked_utc": "2026-10-22T13:49:39.507166+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "source_sha256": {
+    "controller.py": "57dc327b64f04d6b1ebe384d4c7f118e355730eef4291cb4c9a650b54e61efe5",
+    "runtime.py": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+    "mixed.py": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+    "worker.py": "f12c1a6c3aaf2f8c90aaf37d5eb533b9da97cb02faf4094ab23389428cd5370c",
+    "fixture.py": "60d99d1d24cbbb91f0ad0a2eca13abfe1760ae551de01904801874561d3710a5",
+    "asset-pins.json": "51fcb63aced499c98d6ba5d2a7899bbdd1119aa169d881307337a7787822fcb6",
+    "validate_hidden_row_gather.py": "65cb8affd4ae08af877ccb4b4cfca6822eec5ba3f83770f39999ee677c546863",
+    "bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a"
+  },
+  "packages": {
+    "torch": "2.10.0+corex.4.5.0",
+    "vllm": "0.24.0+empty",
+    "FlagGems": "unavailable",
+    "SQLAlchemy": "2.0.48"
+  },
+  "ixsys": {
+    "path": "/usr/local/corex-4.5.0/bin/ixsys",
+    "sha256": "7b47fa41f8afb2777fcddd1fb68d9f1e9f221b2f3538f70cd9681b216b277932"
+  },
+  "worker_command": [
+    "/usr/local/corex-4.5.0/bin/ixsys",
+    "-t",
+    "cuda",
+    "--profile-from-start",
+    "off",
+    "--gpu-metrics-device",
+    "0",
+    "--gpu-metrics-set",
+    "3",
+    "--gpu-metrics-frequency",
+    "500",
+    "-o",
+    "/workspace/experiments/minicpm-s2/framework/20261022T134939Z-q-shared-hardware-diagnostic/native-trace.json",
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/framework/20261022T134939Z-q-shared-hardware-diagnostic/source/worker.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261022T134939Z-q-shared-hardware-diagnostic",
+    "--model",
+    "/workspace/MiniCPM5-2B"
+  ],
+  "worker_pid": 311970,
+  "postflight": {
+    "checked_utc": "2026-10-22T13:50:02.673102+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "finished_utc": "2026-10-22T13:50:02.746022+00:00",
+  "exit_code": 0
+}

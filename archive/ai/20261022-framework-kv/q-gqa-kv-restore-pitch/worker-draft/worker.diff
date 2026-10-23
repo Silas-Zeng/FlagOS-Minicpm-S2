@@ -1,0 +1,84 @@
+--- frozen422/worker2de7802d.py
++++ FULL_H2D_DRAFT/worker.py
+@@ -206,6 +206,69 @@
+                 save_segments_per_layer=len(plan.segments), save_runtime_sha256=PITCHED_RUNTIME,
+                 save_bridge_sha256=PITCHED_BRIDGE, save_max_pitch_bytes=maximum_pitch,
+                 save_current_stream_handle=handle)
++    return info
++
++
++# 独立FULL-only草稿：新桥尚无实际SO身份；None必须拒绝，不可部署。
++RESTORE_RUNTIME = "a7439c2c0b2b588dcd2af5c66b6eb62e562132ef8b5bc1d54ce54fc4b6e9804c"
++RESTORE_BRIDGE = None
++
++
++def _restore_assets(slot):
++    """仅原FULL验证/绑定/fence后晚加载；未审SO绝不自动沿用SAVE桥。"""
++    if (type(RESTORE_BRIDGE) is not str or len(RESTORE_BRIDGE) != 64
++            or any(c not in "0123456789abcdef" for c in RESTORE_BRIDGE)):
++        raise RuntimeError("RESTORE H2D草稿尚无已验SO pin；禁止提交")
++    runtime_path = Path(__file__).with_name("biv150_kv_pitched_restore.py")
++    bridge_path = Path(__file__).with_name("biv150_kv_pitched_restore_bridge.so")
++    if (runtime_path.is_symlink() or not runtime_path.is_file()
++            or hashlib.sha256(runtime_path.read_bytes()).hexdigest() != RESTORE_RUNTIME):
++        raise RuntimeError("未经审阅的FULL H2D runtime")
++    runtime = importlib.import_module("vllm_fl.patches.biv150_kv_pitched_restore")
++    if Path(runtime.__file__).resolve(strict=True) != runtime_path.resolve(strict=True):
++        raise RuntimeError("FULL H2D runtime不在同一隔离source")
++    save_runtime = slot.get("save_runtime")
++    save_path = Path(__file__).with_name("biv150_kv_pitched_copy.py")
++    if (save_runtime is None or save_path.is_symlink()
++            or Path(save_runtime.__file__).resolve(strict=True) != save_path.resolve(strict=True)
++            or hashlib.sha256(save_path.read_bytes()).hexdigest() != PITCHED_RUNTIME):
++        raise RuntimeError("只复用原SAVE已经持有的同source 818e模块")
++    bridge = runtime.RestoreBridge(bridge_path, expected_sha256=RESTORE_BRIDGE, save_runtime=save_runtime)
++    # 在maxpitch/prepare/首提交之前就把新库/runtime强持到原slot。
++    slot["restore_bridge"], slot["restore_runtime"] = bridge, runtime
++    library_paths = set()
++    for line in Path("/proc/self/maps").read_text(encoding="utf-8").splitlines():
++        fields = line.split(None, 5)
++        if len(fields) == 6 and "libcudart.so" in Path(fields[5]).name:
++            library_paths.add(Path(fields[5]).resolve(strict=True))
++    libraries = {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(library_paths)}
++    if len(libraries) != 1 or next(iter(libraries.values())) != PITCHED_CUDART:
++        raise RuntimeError("FULL H2D实际Corex libcudart身份不符")
++    slot["restore_loaded_libcudart"] = libraries
++    return runtime, bridge, save_runtime
++
++
++def _restore_pitched(torch, raw, slot, packet, pool):
++    """不接管资格/完成状态，只在原RESTORE_FULL处替换一次H2D提交。"""
++    runtime, bridge, save_runtime = _restore_assets(slot)
++    maximum_pitch = bridge.max_pitch(device=0)
++    plan = runtime.make_restore_plan(packet["pages"], pool, save_runtime=save_runtime)
++    slot["restore_plan"] = plan
++    prepared = runtime.prepare_restore(slot["host"], raw, plan, max_pitch=maximum_pitch)
++    slot["restore_prepared"] = prepared
++    stream = torch.cuda.current_stream(0)
++    slot["restore_stream"] = stream
++    handle = int(stream.cuda_stream)
++    # 原rpc except覆盖任何native异常（包括submitted=0），不catch后重试旧COPY。
++    info = bridge.submit(prepared, stream_handle=handle)
++    if info["submitted_bytes"] != packet["nbytes"] or info["completion_ack"] is not False:
++        raise RuntimeError("FULL H2D提交字节/完成语义不符")
++    info = dict(info)
++    info["restore_submission_completion_ack"] = info.pop("completion_ack")
++    info.update(restore_implementation="C_batch_positive_stride_FULL_H2D", restore_layers=LAYERS,
++                restore_segments_per_layer=len(plan.segments), restore_runtime_sha256=RESTORE_RUNTIME,
++                restore_bridge_sha256=RESTORE_BRIDGE, restore_max_pitch_bytes=maximum_pitch,
++                restore_current_stream_handle=handle)
+     return info
+ 
+ 
+@@ -362,7 +425,10 @@
+                 slot["destination_pages"], slot["phase"] = packet["pages"], "ZEROED"
+             else:
+                 count = packet["prefix_tokens"] // 16
+-                info = _copy(policy, slot["host"], raw, range(count), packet["pages"])
++                if kind == "RESTORE_FULL":
++                    info = _restore_pitched(torch, raw, slot, packet, pool)
++                else:
++                    info = _copy(policy, slot["host"], raw, range(count), packet["pages"])
+                 _finish(torch, slot)
+                 if slot["verify"]:
+                     verify_buffer = slot["verify_buffer"]

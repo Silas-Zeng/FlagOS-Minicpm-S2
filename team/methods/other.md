@@ -21,6 +21,8 @@
 - [20261022T125135Z-current-combination-context16k-long-baseline](../runs/bi-v150/20261022T125135Z-current-combination-context16k-long-baseline.md)（登记#142）：32成功0失败，219.995999768s、总2532.118768tok/s、输出148.948163tok/s、TTFT62317.2833ms **是否保留：** 保留作对照基线；不据此判断候选收益。
 - [20261022T130038Z-prefill-v-late-cache-gate](../runs/bi-v150/20261022T130038Z-prefill-v-late-cache-gate.md)（登记#143）：失败，下一轮只修source pin **是否保留：** 未集成；失败或无收益记录保留。
 - [20261022T130457Z-prefill-v-late-cache-v2-gate](../runs/bi-v150/20261022T130457Z-prefill-v-late-cache-v2-gate.md)（登记#144）：wall慢0.27180%、event仅快0.02373%，不能认定收益，当前不集成；负结果不外推其他A+B **是否保留：** 未集成；失败或无收益记录保留。
+- [20261022T134939Z-q-shared-hardware-diagnostic](../runs/bi-v150/20261022T134939Z-q-shared-hardware-diagnostic.md)（登记#145）：失败后返回0，v1外层controller误报0，均不能算诊断成功 **是否保留：** 未集成；失败或无收益记录保留。
+- [20261022T135558Z-q-shared-hardware-diagnostic-v2](../runs/bi-v150/20261022T135558Z-q-shared-hardware-diagnostic-v2.md)（登记#146）：RNG/输出有限及padding/重复Q输出检查通过，worker与controller均成功，绑定恢复及设备settle **是否保留：** 待确认；通过某项检查不自动等于优化保留。
 
 ## 未记录
 

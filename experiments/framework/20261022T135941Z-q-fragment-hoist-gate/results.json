@@ -1,0 +1,1802 @@
+{
+  "status": "correctness_passed_single_layer_signal_only",
+  "accuracy": "not evaluated",
+  "official_performance": "not evaluated",
+  "timing_loops": 32,
+  "timing_method": "P2047 ABBA, 32 calls/window; prerecord events; wall includes record/submit/final sync; CPU submit clocks exclude final sync; v1 cpu.stat outside window",
+  "worker_command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/framework/20261022T135941Z-q-fragment-hoist-gate/source/gate.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261022T135941Z-q-fragment-hoist-gate",
+    "--model",
+    "/workspace/MiniCPM5-2B"
+  ],
+  "worker_command_shell": "/usr/local/bin/python3 /workspace/experiments/minicpm-s2/framework/20261022T135941Z-q-fragment-hoist-gate/source/gate.py --worker --run-dir /workspace/experiments/minicpm-s2/framework/20261022T135941Z-q-fragment-hoist-gate --model /workspace/MiniCPM5-2B",
+  "limitations": [
+    "Actual backend/builder/writer, synthetic inputs, no model runner or weights.",
+    "Only audited 2D Q dot-layout local_load hoist; BM128/T64/w8/s1, 3D C2/reducer/math/scale retained.",
+    "D1/P2047 KV16K is an upper-bound fixture, not an observed native seq_len.",
+    "Compiled IR artifacts are retained; real TTGIR and LLVM cyclic-CFG Q-read removal must pass before timing.",
+    "Submit CPU clocks include binder/descriptor checks (IR file SHA checks outside timing); only Q fragment lifetime changes, with original FP operation order.",
+    "Bitwise is a conservative gate: a mismatch stops timing, not a model-accuracy verdict. allclose 0.01 is recorded only, not a relaxed pass condition.",
+    "No graph replay, service, official-performance or model-accuracy conclusion."
+  ],
+  "c2_install": {
+    "installed": true,
+    "num_warps": 2,
+    "num_stages": 1,
+    "scope": "audited BF16 MiniCPM 3D decode only"
+  },
+  "c3_install": {
+    "installed": true,
+    "scope": "BF16 MiniCPM natural-prefix mixed Attention only",
+    "ordinary_mixed_dummy_may_split": true,
+    "accuracy": "mixed 2D to 3D remains unverified"
+  },
+  "manager_prepare_wall_ns": 6471003,
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "torch_num_threads": 56,
+  "cases": [
+    {
+      "case": "C3-P2047-KV16K",
+      "lengths": [
+        1,
+        2047
+      ],
+      "kv_len": 16384,
+      "random_physical_pages": true,
+      "reused_old_prefix_blocks": 16,
+      "negative_padding_slots": 3,
+      "correctness": {
+        "all_output_bits_equal": true,
+        "valid_output_finite": true,
+        "padding_untouched": true,
+        "entire_kv_bits_unchanged": true,
+        "rng_unchanged": true,
+        "default_scale_arguments_same": true,
+        "original_3d_preserved": true,
+        "layer_scale_values_preserved": true,
+        "actual_lowered_Q_reads_removed": true,
+        "independent_jit_cache": true,
+        "original_jit_cache_unchanged": true,
+        "new_q_pointer": true,
+        "new_output_pointer": true,
+        "nondefault_stream": true,
+        "new_pointer_output_bits_equal": true,
+        "new_pointer_output_finite": true,
+        "new_pointer_padding_untouched": true,
+        "selected_on_new_pointer": true,
+        "other_2d_fallbacks": true,
+        "original_3d_new_pointer_preserved": true,
+        "kv_unchanged_after_new_pointer": true,
+        "rng_unchanged_after_new_pointer": true,
+        "unsupported_output_scales_original_error": true,
+        "unsupported_output_scales_fallback": true,
+        "layer_scale_identity_preserved": true
+      },
+      "bootstrap_before": {
+        "selected_calls": 0,
+        "fallback_calls": 0,
+        "original_3d_calls": 0,
+        "compiled_resources": null,
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": null,
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      },
+      "bootstrap_after": {
+        "selected_calls": 1,
+        "fallback_calls": 0,
+        "original_3d_calls": 1,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+            "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+            "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+            "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+          },
+          "asm_files": {
+            "source": "candidate.source.txt",
+            "ttir": "candidate.ttir.txt",
+            "ttgir": "candidate.ttgir.txt",
+            "llir": "candidate.llir.txt",
+            "asm": "candidate.asm.txt",
+            "cubin": "candidate.cubin.bin"
+          }
+        },
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph62",
+            "240",
+            "249",
+            "253",
+            "257",
+            "261",
+            "265",
+            "269",
+            "273",
+            "277",
+            "281",
+            "285",
+            "289",
+            "293",
+            "297",
+            "301",
+            "305"
+          ],
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      },
+      "hot_before": {
+        "selected_calls": 1,
+        "fallback_calls": 0,
+        "original_3d_calls": 1,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+            "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+            "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+            "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+          },
+          "asm_files": {
+            "source": "candidate.source.txt",
+            "ttir": "candidate.ttir.txt",
+            "ttgir": "candidate.ttgir.txt",
+            "llir": "candidate.llir.txt",
+            "asm": "candidate.asm.txt",
+            "cubin": "candidate.cubin.bin"
+          }
+        },
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph62",
+            "240",
+            "249",
+            "253",
+            "257",
+            "261",
+            "265",
+            "269",
+            "273",
+            "277",
+            "281",
+            "285",
+            "289",
+            "293",
+            "297",
+            "301",
+            "305"
+          ],
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      },
+      "hot_after": {
+        "selected_calls": 2,
+        "fallback_calls": 0,
+        "original_3d_calls": 2,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+            "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+            "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+            "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+          },
+          "asm_files": {
+            "source": "candidate.source.txt",
+            "ttir": "candidate.ttir.txt",
+            "ttgir": "candidate.ttgir.txt",
+            "llir": "candidate.llir.txt",
+            "asm": "candidate.asm.txt",
+            "cubin": "candidate.cubin.bin"
+          }
+        },
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph62",
+            "240",
+            "249",
+            "253",
+            "257",
+            "261",
+            "265",
+            "269",
+            "273",
+            "277",
+            "281",
+            "285",
+            "289",
+            "293",
+            "297",
+            "301",
+            "305"
+          ],
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      },
+      "nondefault_stream_handle": 94248459139584,
+      "layer_scale_values": [
+        0.75,
+        1.25,
+        0.5
+      ],
+      "output_scale_guard": {
+        "errors": [
+          [
+            "NotImplementedError",
+            "fused block_scale output quantization is not yet supported for TritonAttentionImpl",
+            true
+          ],
+          [
+            "NotImplementedError",
+            "fused block_scale output quantization is not yet supported for TritonAttentionImpl",
+            true
+          ]
+        ],
+        "before": {
+          "selected_calls": 2,
+          "fallback_calls": 0,
+          "original_3d_calls": 2,
+          "compiled_resources": {
+            "compiled_type": "CompiledKernel",
+            "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+            "n_regs": 114,
+            "n_spills": 0,
+            "metadata": {
+              "num_warps": 8,
+              "num_stages": 1,
+              "shared": 32768,
+              "use_sme": 234881027,
+              "warp_size": 64
+            },
+            "asm_sha256": {
+              "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+              "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+              "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+              "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+              "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+              "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+            },
+            "asm_files": {
+              "source": "candidate.source.txt",
+              "ttir": "candidate.ttir.txt",
+              "ttgir": "candidate.ttgir.txt",
+              "llir": "candidate.llir.txt",
+              "asm": "candidate.asm.txt",
+              "cubin": "candidate.cubin.bin"
+            }
+          },
+          "baseline_compiled_resources": {
+            "compiled_type": "CompiledKernel",
+            "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+            "n_regs": 102,
+            "n_spills": 0,
+            "metadata": {
+              "num_warps": 8,
+              "num_stages": 1,
+              "shared": 65536,
+              "use_sme": 234881027,
+              "warp_size": 64
+            },
+            "asm_sha256": {
+              "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+              "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+              "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+              "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+              "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+              "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+            },
+            "asm_files": {
+              "source": "baseline.source.txt",
+              "ttir": "baseline.ttir.txt",
+              "ttgir": "baseline.ttgir.txt",
+              "llir": "baseline.llir.txt",
+              "asm": "baseline.asm.txt",
+              "cubin": "baseline.cubin.bin"
+            }
+          },
+          "mechanism": {
+            "ttgir_q_load_outside_loop": true,
+            "llvm_q_memory_reads_in_loop": 0,
+            "llvm_q_memory_reads_total": 32,
+            "q_read_blocks": [
+              ".lr.ph62",
+              "240",
+              "249",
+              "253",
+              "257",
+              "261",
+              "265",
+              "269",
+              "273",
+              "277",
+              "281",
+              "285",
+              "289",
+              "293",
+              "297",
+              "301",
+              "305"
+            ],
+            "barrier_calls": 3,
+            "mechanism_pass": true,
+            "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+          },
+          "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+          "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+          "independent_jit_caches": true,
+          "baseline_cache_unmodified": true
+        },
+        "after": {
+          "selected_calls": 2,
+          "fallback_calls": 0,
+          "original_3d_calls": 2,
+          "compiled_resources": {
+            "compiled_type": "CompiledKernel",
+            "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+            "n_regs": 114,
+            "n_spills": 0,
+            "metadata": {
+              "num_warps": 8,
+              "num_stages": 1,
+              "shared": 32768,
+              "use_sme": 234881027,
+              "warp_size": 64
+            },
+            "asm_sha256": {
+              "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+              "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+              "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+              "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+              "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+              "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+            },
+            "asm_files": {
+              "source": "candidate.source.txt",
+              "ttir": "candidate.ttir.txt",
+              "ttgir": "candidate.ttgir.txt",
+              "llir": "candidate.llir.txt",
+              "asm": "candidate.asm.txt",
+              "cubin": "candidate.cubin.bin"
+            }
+          },
+          "baseline_compiled_resources": {
+            "compiled_type": "CompiledKernel",
+            "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+            "n_regs": 102,
+            "n_spills": 0,
+            "metadata": {
+              "num_warps": 8,
+              "num_stages": 1,
+              "shared": 65536,
+              "use_sme": 234881027,
+              "warp_size": 64
+            },
+            "asm_sha256": {
+              "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+              "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+              "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+              "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+              "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+              "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+            },
+            "asm_files": {
+              "source": "baseline.source.txt",
+              "ttir": "baseline.ttir.txt",
+              "ttgir": "baseline.ttgir.txt",
+              "llir": "baseline.llir.txt",
+              "asm": "baseline.asm.txt",
+              "cubin": "baseline.cubin.bin"
+            }
+          },
+          "mechanism": {
+            "ttgir_q_load_outside_loop": true,
+            "llvm_q_memory_reads_in_loop": 0,
+            "llvm_q_memory_reads_total": 32,
+            "q_read_blocks": [
+              ".lr.ph62",
+              "240",
+              "249",
+              "253",
+              "257",
+              "261",
+              "265",
+              "269",
+              "273",
+              "277",
+              "281",
+              "285",
+              "289",
+              "293",
+              "297",
+              "301",
+              "305"
+            ],
+            "barrier_calls": 3,
+            "mechanism_pass": true,
+            "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+          },
+          "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+          "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+          "independent_jit_caches": true,
+          "baseline_cache_unmodified": true
+        }
+      },
+      "numerical_error": {
+        "max_abs": 0.0,
+        "max_relative_to_baseline_floor_1e_6": 0.0,
+        "candidate_nan_count": 0,
+        "baseline_nan_count": 0,
+        "allclose_atol_0_01_rtol_0_01": true
+      }
+    }
+  ],
+  "ir_verified_after_correctness": true,
+  "ir_verified_before_timing": true,
+  "timings": [
+    {
+      "calls": 32,
+      "wall_total_ms": 352.511225,
+      "wall_per_call_ms": 11.01597578125,
+      "event_total_ms": 349.8049011230469,
+      "event_per_call_ms": 10.931403160095215,
+      "submit_thread_cpu_ns": 13469241,
+      "submit_process_cpu_ns": 13548722,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 873103\nnr_throttled 4227\nthrottled_time 17172725654326",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 873103,
+          "nr_throttled": 4227,
+          "throttled_time": 17172725654326
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 873106\nnr_throttled 4227\nthrottled_time 17172725654326",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 873106,
+          "nr_throttled": 4227,
+          "throttled_time": 17172725654326
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 3,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "baseline",
+      "counters_before": {
+        "selected_calls": 4,
+        "fallback_calls": 0,
+        "original_3d_calls": 4,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+            "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+            "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+            "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+          },
+          "asm_files": {
+            "source": "candidate.source.txt",
+            "ttir": "candidate.ttir.txt",
+            "ttgir": "candidate.ttgir.txt",
+            "llir": "candidate.llir.txt",
+            "asm": "candidate.asm.txt",
+            "cubin": "candidate.cubin.bin"
+          }
+        },
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph62",
+            "240",
+            "249",
+            "253",
+            "257",
+            "261",
+            "265",
+            "269",
+            "273",
+            "277",
+            "281",
+            "285",
+            "289",
+            "293",
+            "297",
+            "301",
+            "305"
+          ],
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      },
+      "counters_after": {
+        "selected_calls": 4,
+        "fallback_calls": 0,
+        "original_3d_calls": 4,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+            "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+            "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+            "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+          },
+          "asm_files": {
+            "source": "candidate.source.txt",
+            "ttir": "candidate.ttir.txt",
+            "ttgir": "candidate.ttgir.txt",
+            "llir": "candidate.llir.txt",
+            "asm": "candidate.asm.txt",
+            "cubin": "candidate.cubin.bin"
+          }
+        },
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph62",
+            "240",
+            "249",
+            "253",
+            "257",
+            "261",
+            "265",
+            "269",
+            "273",
+            "277",
+            "281",
+            "285",
+            "289",
+            "293",
+            "297",
+            "301",
+            "305"
+          ],
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      }
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 282.25702,
+      "wall_per_call_ms": 8.820531875,
+      "event_total_ms": 275.4742126464844,
+      "event_per_call_ms": 8.608569145202637,
+      "submit_thread_cpu_ns": 27165258,
+      "submit_process_cpu_ns": 27255215,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 873106\nnr_throttled 4227\nthrottled_time 17172725654326",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 873106,
+          "nr_throttled": 4227,
+          "throttled_time": 17172725654326
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 873109\nnr_throttled 4227\nthrottled_time 17172725654326",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 873109,
+          "nr_throttled": 4227,
+          "throttled_time": 17172725654326
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 3,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "candidate",
+      "counters_before": {
+        "selected_calls": 4,
+        "fallback_calls": 0,
+        "original_3d_calls": 4,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+            "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+            "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+            "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+          },
+          "asm_files": {
+            "source": "candidate.source.txt",
+            "ttir": "candidate.ttir.txt",
+            "ttgir": "candidate.ttgir.txt",
+            "llir": "candidate.llir.txt",
+            "asm": "candidate.asm.txt",
+            "cubin": "candidate.cubin.bin"
+          }
+        },
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph62",
+            "240",
+            "249",
+            "253",
+            "257",
+            "261",
+            "265",
+            "269",
+            "273",
+            "277",
+            "281",
+            "285",
+            "289",
+            "293",
+            "297",
+            "301",
+            "305"
+          ],
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      },
+      "counters_after": {
+        "selected_calls": 36,
+        "fallback_calls": 0,
+        "original_3d_calls": 36,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+            "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+            "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+            "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+          },
+          "asm_files": {
+            "source": "candidate.source.txt",
+            "ttir": "candidate.ttir.txt",
+            "ttgir": "candidate.ttgir.txt",
+            "llir": "candidate.llir.txt",
+            "asm": "candidate.asm.txt",
+            "cubin": "candidate.cubin.bin"
+          }
+        },
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph62",
+            "240",
+            "249",
+            "253",
+            "257",
+            "261",
+            "265",
+            "269",
+            "273",
+            "277",
+            "281",
+            "285",
+            "289",
+            "293",
+            "297",
+            "301",
+            "305"
+          ],
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      }
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 281.674669,
+      "wall_per_call_ms": 8.80233340625,
+      "event_total_ms": 275.2174072265625,
+      "event_per_call_ms": 8.600543975830078,
+      "submit_thread_cpu_ns": 26548933,
+      "submit_process_cpu_ns": 26637079,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 873109\nnr_throttled 4227\nthrottled_time 17172725654326",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 873109,
+          "nr_throttled": 4227,
+          "throttled_time": 17172725654326
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 873112\nnr_throttled 4227\nthrottled_time 17172725654326",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 873112,
+          "nr_throttled": 4227,
+          "throttled_time": 17172725654326
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 3,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "candidate",
+      "counters_before": {
+        "selected_calls": 36,
+        "fallback_calls": 0,
+        "original_3d_calls": 36,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+            "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+            "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+            "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+          },
+          "asm_files": {
+            "source": "candidate.source.txt",
+            "ttir": "candidate.ttir.txt",
+            "ttgir": "candidate.ttgir.txt",
+            "llir": "candidate.llir.txt",
+            "asm": "candidate.asm.txt",
+            "cubin": "candidate.cubin.bin"
+          }
+        },
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph62",
+            "240",
+            "249",
+            "253",
+            "257",
+            "261",
+            "265",
+            "269",
+            "273",
+            "277",
+            "281",
+            "285",
+            "289",
+            "293",
+            "297",
+            "301",
+            "305"
+          ],
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      },
+      "counters_after": {
+        "selected_calls": 68,
+        "fallback_calls": 0,
+        "original_3d_calls": 68,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+            "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+            "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+            "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+          },
+          "asm_files": {
+            "source": "candidate.source.txt",
+            "ttir": "candidate.ttir.txt",
+            "ttgir": "candidate.ttgir.txt",
+            "llir": "candidate.llir.txt",
+            "asm": "candidate.asm.txt",
+            "cubin": "candidate.cubin.bin"
+          }
+        },
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph62",
+            "240",
+            "249",
+            "253",
+            "257",
+            "261",
+            "265",
+            "269",
+            "273",
+            "277",
+            "281",
+            "285",
+            "289",
+            "293",
+            "297",
+            "301",
+            "305"
+          ],
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      }
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 353.336702,
+      "wall_per_call_ms": 11.0417719375,
+      "event_total_ms": 349.7424621582031,
+      "event_per_call_ms": 10.929451942443848,
+      "submit_thread_cpu_ns": 13588045,
+      "submit_process_cpu_ns": 13718818,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 873112\nnr_throttled 4227\nthrottled_time 17172725654326",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 873112,
+          "nr_throttled": 4227,
+          "throttled_time": 17172725654326
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 873115\nnr_throttled 4227\nthrottled_time 17172725654326",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 873115,
+          "nr_throttled": 4227,
+          "throttled_time": 17172725654326
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 3,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "policy": "baseline",
+      "counters_before": {
+        "selected_calls": 68,
+        "fallback_calls": 0,
+        "original_3d_calls": 68,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+            "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+            "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+            "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+          },
+          "asm_files": {
+            "source": "candidate.source.txt",
+            "ttir": "candidate.ttir.txt",
+            "ttgir": "candidate.ttgir.txt",
+            "llir": "candidate.llir.txt",
+            "asm": "candidate.asm.txt",
+            "cubin": "candidate.cubin.bin"
+          }
+        },
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph62",
+            "240",
+            "249",
+            "253",
+            "257",
+            "261",
+            "265",
+            "269",
+            "273",
+            "277",
+            "281",
+            "285",
+            "289",
+            "293",
+            "297",
+            "301",
+            "305"
+          ],
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      },
+      "counters_after": {
+        "selected_calls": 68,
+        "fallback_calls": 0,
+        "original_3d_calls": 68,
+        "compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+            "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+            "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+            "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+          },
+          "asm_files": {
+            "source": "candidate.source.txt",
+            "ttir": "candidate.ttir.txt",
+            "ttgir": "candidate.ttgir.txt",
+            "llir": "candidate.llir.txt",
+            "asm": "candidate.asm.txt",
+            "cubin": "candidate.cubin.bin"
+          }
+        },
+        "baseline_compiled_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+          "n_regs": 102,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+            "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+            "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+            "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+            "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+            "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+          },
+          "asm_files": {
+            "source": "baseline.source.txt",
+            "ttir": "baseline.ttir.txt",
+            "ttgir": "baseline.ttgir.txt",
+            "llir": "baseline.llir.txt",
+            "asm": "baseline.asm.txt",
+            "cubin": "baseline.cubin.bin"
+          }
+        },
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph62",
+            "240",
+            "249",
+            "253",
+            "257",
+            "261",
+            "265",
+            "269",
+            "273",
+            "277",
+            "281",
+            "285",
+            "289",
+            "293",
+            "297",
+            "301",
+            "305"
+          ],
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+        "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+        "independent_jit_caches": true,
+        "baseline_cache_unmodified": true
+      }
+    }
+  ],
+  "ir_verified_after_timing": true,
+  "summary": {
+    "wall": {
+      "baseline_ms": 11.028873859375,
+      "candidate_ms": 8.811432640625,
+      "fraction_saved": 0.2010578094394545
+    },
+    "event": {
+      "baseline_ms": 10.930427551269531,
+      "candidate_ms": 8.604556560516357,
+      "fraction_saved": 0.21278865623907195
+    }
+  },
+  "final_counters": {
+    "selected_calls": 68,
+    "fallback_calls": 0,
+    "original_3d_calls": 68,
+    "compiled_resources": {
+      "compiled_type": "CompiledKernel",
+      "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+      "n_regs": 114,
+      "n_spills": 0,
+      "metadata": {
+        "num_warps": 8,
+        "num_stages": 1,
+        "shared": 32768,
+        "use_sme": 234881027,
+        "warp_size": 64
+      },
+      "asm_sha256": {
+        "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+        "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+        "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+        "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+        "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+        "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+      },
+      "asm_files": {
+        "source": "candidate.source.txt",
+        "ttir": "candidate.ttir.txt",
+        "ttgir": "candidate.ttgir.txt",
+        "llir": "candidate.llir.txt",
+        "asm": "candidate.asm.txt",
+        "cubin": "candidate.cubin.bin"
+      }
+    },
+    "baseline_compiled_resources": {
+      "compiled_type": "CompiledKernel",
+      "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+      "n_regs": 102,
+      "n_spills": 0,
+      "metadata": {
+        "num_warps": 8,
+        "num_stages": 1,
+        "shared": 65536,
+        "use_sme": 234881027,
+        "warp_size": 64
+      },
+      "asm_sha256": {
+        "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+        "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+        "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+        "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+        "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+        "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+      },
+      "asm_files": {
+        "source": "baseline.source.txt",
+        "ttir": "baseline.ttir.txt",
+        "ttgir": "baseline.ttgir.txt",
+        "llir": "baseline.llir.txt",
+        "asm": "baseline.asm.txt",
+        "cubin": "baseline.cubin.bin"
+      }
+    },
+    "mechanism": {
+      "ttgir_q_load_outside_loop": true,
+      "llvm_q_memory_reads_in_loop": 0,
+      "llvm_q_memory_reads_total": 32,
+      "q_read_blocks": [
+        ".lr.ph62",
+        "240",
+        "249",
+        "253",
+        "257",
+        "261",
+        "265",
+        "269",
+        "273",
+        "277",
+        "281",
+        "285",
+        "289",
+        "293",
+        "297",
+        "301",
+        "305"
+      ],
+      "barrier_calls": 3,
+      "mechanism_pass": true,
+      "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+    },
+    "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+    "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+    "independent_jit_caches": true,
+    "baseline_cache_unmodified": true
+  },
+  "restored_counters": {
+    "selected_calls": 68,
+    "fallback_calls": 0,
+    "original_3d_calls": 68,
+    "compiled_resources": {
+      "compiled_type": "CompiledKernel",
+      "hash": "01716e01c6a817ec54fa6513a8d3b96106c4ffddf2c10c8a0809e77c0b4ed7c9",
+      "n_regs": 114,
+      "n_spills": 0,
+      "metadata": {
+        "num_warps": 8,
+        "num_stages": 1,
+        "shared": 32768,
+        "use_sme": 234881027,
+        "warp_size": 64
+      },
+      "asm_sha256": {
+        "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+        "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+        "ttgir": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+        "llir": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+        "asm": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+        "cubin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+      },
+      "asm_files": {
+        "source": "candidate.source.txt",
+        "ttir": "candidate.ttir.txt",
+        "ttgir": "candidate.ttgir.txt",
+        "llir": "candidate.llir.txt",
+        "asm": "candidate.asm.txt",
+        "cubin": "candidate.cubin.bin"
+      }
+    },
+    "baseline_compiled_resources": {
+      "compiled_type": "CompiledKernel",
+      "hash": "4c6a93dff54a7aab9145415a496dc24036b484fb08c73f07ab7c3fb1c5acdd1f",
+      "n_regs": 102,
+      "n_spills": 0,
+      "metadata": {
+        "num_warps": 8,
+        "num_stages": 1,
+        "shared": 65536,
+        "use_sme": 234881027,
+        "warp_size": 64
+      },
+      "asm_sha256": {
+        "source": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+        "ttir": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+        "ttgir": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+        "llir": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+        "asm": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+        "cubin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312"
+      },
+      "asm_files": {
+        "source": "baseline.source.txt",
+        "ttir": "baseline.ttir.txt",
+        "ttgir": "baseline.ttgir.txt",
+        "llir": "baseline.llir.txt",
+        "asm": "baseline.asm.txt",
+        "cubin": "baseline.cubin.bin"
+      }
+    },
+    "mechanism": {
+      "ttgir_q_load_outside_loop": true,
+      "llvm_q_memory_reads_in_loop": 0,
+      "llvm_q_memory_reads_total": 32,
+      "q_read_blocks": [
+        ".lr.ph62",
+        "240",
+        "249",
+        "253",
+        "257",
+        "261",
+        "265",
+        "269",
+        "273",
+        "277",
+        "281",
+        "285",
+        "289",
+        "293",
+        "297",
+        "301",
+        "305"
+      ],
+      "barrier_calls": 3,
+      "mechanism_pass": true,
+      "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+    },
+    "ir_sha256": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+    "ir_filename": "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir",
+    "independent_jit_caches": true,
+    "baseline_cache_unmodified": true
+  },
+  "original_forward_restored": true,
+  "original_global_bindings_retained": true,
+  "source_sha256": {
+    "gate.py": "6a7f042d91a509f5f0c6950c9856efcc9d0a4c22035f3747214c7d5e0f789853",
+    "runtime.py": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+    "mixed.py": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+    "policy.py": "80d63add1d209335ebdc2c16cc605dd5fd89e6d63d0f7b1b456990804c863097",
+    "validate_hidden_row_gather.py": "65cb8affd4ae08af877ccb4b4cfca6822eec5ba3f83770f39999ee677c546863",
+    "validate_mixed_decode.py": "b6275ee86f4fb24824091e72fccd774d174247975f8189d360400f333a20351f",
+    "bench_attention_dispatch.py": "c52caaae1b693f80dacca20473d8177c766fab5941289084f3131a52514d3294",
+    "validate_block_table_candidate.py": "6072137cfb178dd77ebf4fbf9dd5ffc46534a56bbc07cbbc03f603d8ac1cb3b1",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+    "backend.py": "1219c4d1820b56e99ef6686de8a49c8c5aa57707794bcabf3322023799a03605",
+    "attention.py": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f",
+    "helpers.py": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1",
+    "writer.py": "f18224e51162e37c14a2e2b3045bca55baf0b207b1d203ad6ee7d8ed417139eb",
+    "model-config.json": "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180",
+    "q-fragment-1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af.ttgir": "1543c2f348a96d68abda955e0333feaa1dd007eeb59593b5445d5d8a8e3f42af",
+    "baseline.source.txt": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+    "baseline.ttir.txt": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+    "baseline.ttgir.txt": "ff6456f708cca1101909e7de6896d63bfcbe8ae1f4edafb2d1cda33d93c95766",
+    "baseline.llir.txt": "32b351985f546606dc9a8e39cb25ea6395836dd44b144910737b8a6e48a0b09b",
+    "baseline.asm.txt": "9821dc9ef0868fc117f871f42dd8d8a67108051ea36e9cda4a0fab16c39b1b48",
+    "baseline.cubin.bin": "57ddc1759cbbfe578c37971ce6d4a13fa7fcef4eed701f4c20994f8808d57312",
+    "candidate.source.txt": "76b17830579084d65681011904b5da63227a818d334732c96b7f6b909627a7af",
+    "candidate.ttir.txt": "06006197ed34590a774fb976464cdf1b5125edc8ccb64b489c7fe4da19531cb5",
+    "candidate.ttgir.txt": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+    "candidate.llir.txt": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+    "candidate.asm.txt": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+    "candidate.cubin.bin": "5a78cee2c64fa01bb6849c379281bea85a70b27c88911854bc4d17e7e4282167"
+  }
+}
