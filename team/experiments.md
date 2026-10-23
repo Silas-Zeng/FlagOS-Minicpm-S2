@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共188条登记、185个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共191条登记、188个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -166,6 +166,9 @@
 | 天数 BI-V150 | 186 | 2026-10-23T04:42:18.072144+00:00 | [Attention 分流与 launch](methods/attention.md) | 已完成 | 16384/128/64/32 | 末421execute/259metadata/250mixed，q1共3000，prefix外及未入plan均759（25.3%） | [20261023T044216Z-q-gqa-mixed-coverage-only-diagnostic](runs/bi-v150/20261023T044216Z-q-gqa-mixed-coverage-only-diagnostic.md) |
 | 天数 BI-V150 | 187 | 2026-10-23T05:43:07.486932+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 已完成 | 16384/128/64/32 | 32成功0失败、exit0，104.312939462s、5065.373507102 total tok/s | [20261023T054306Z-compute-order-baseline-context16k](runs/bi-v150/20261023T054306Z-compute-order-baseline-context16k.md) |
 | 天数 BI-V150 | 188 | 2026-10-23T06:04:25+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 不可直接比较 | 16384/128/64/32 | 吞吐表观+4.7989%、耗时表观减少4.5792%；KV容量不同（基线521936、候选521840），31门仅same_KV false、gain=null，不能归因收益；061500准确率pending，不继承422结果 | [20261023T060425Z-compute-order-candidate-context16k](runs/bi-v150/20261023T060425Z-compute-order-candidate-context16k.md) |
+| 天数 BI-V150 | 189 | 2026-10-23T06:15:01.050497+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 未激活 | 未记录/未记录/8/105 | 423候选完整Math500 Level3通过101/105（96.1905%），105成功、0transport/空答案；未出现COMPUTE_ORDER_FIRST_SELECTED，本轮不外推为新排列路径的准确率证明 | [20261023T061500Z-compute-order](runs/bi-v150/20261023T061500Z-compute-order.md) |
+| 天数 BI-V150 | 190 | 2026-10-23T06:48:39.672961+00:00 | [省去无消费者的 accepted GPU fill](methods/accepted-fill.md) | 不可直接比较 | 16384/128/64/32 | 32成功0失败、exit0，104.147864725s、5073.402142188 total tok/s；与065325候选四端DB三SHA相同，但KV521840→521936不同，31门仅same_KV失败、gain=null | [20261023T064838Z-accepted-fill-baseline-context16k](runs/bi-v150/20261023T064838Z-accepted-fill-baseline-context16k.md) |
+| 天数 BI-V150 | 191 | 2026-10-23T06:53:26.559674+00:00 | [省去无消费者的 accepted GPU fill](methods/accepted-fill.md) | 不可直接比较 | 16384/128/64/32 | 吞吐表观−0.235046%、耗时表观增加0.235600%；KV521840→521936不同，31门仅same_KV失败、gain=null，不归因收益；不继承422准确率，保留代码与小负/失配证据 | [20261023T065325Z-accepted-fill-candidate-context16k](runs/bi-v150/20261023T065325Z-accepted-fill-candidate-context16k.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

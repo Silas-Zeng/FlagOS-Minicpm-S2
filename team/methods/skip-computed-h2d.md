@@ -6,7 +6,7 @@ CPU metadata成功时省略一次计数GPU副本提交，保留原回退和固�
 
 相关代码：[framework](../../patches/framework)。
 
-相关方法PR：未记录。
+相关方法PR：[computed H2D #15（草稿）](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/15)。
 
 下列是既有登记摘要，不叠加单项收益、不把诊断当端到端或完整准确率。完整条件沿每轮原件查阅。
 

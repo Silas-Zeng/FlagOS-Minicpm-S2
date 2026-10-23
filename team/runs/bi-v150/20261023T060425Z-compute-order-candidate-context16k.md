@@ -6,8 +6,8 @@
 
 ## 登记 #188 · 计算顺序与采样顺序分离
 
-- **尝试**：仅在合格混合步骤重排模型计算序，保留原请求及采样序。054306→060425两侧均32成功0失败，候选真实命中；单pair吞吐表观+4.7989%，但KV容量521936→521840不同，31项仅same_KV不通过、gain=null，不能归因收益。保留候选与失配证据，默认版本暂不采用；061500准确率仍pending，不继承422结果。
-- **改动**：相关实现 [compute-order-service-pair.json](../../../analysis/compute-order-service-pair.json)；[framework_innovation.md](../../../docs/agent-work/framework_innovation.md)；[compute_order_review.md](../../../docs/agent-work/compute_order_review.md)；[completion.json](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json)；本轮准确变体以原件源码清单为准。
+- **尝试**：仅在合格混合步骤重排模型计算序，保留原请求及采样序。054306→060425两侧均32成功0失败，候选真实命中；单pair吞吐表观+4.7989%，但KV容量521936→521840不同，31项仅same_KV不通过、gain=null，不能归因收益。保留候选与失配证据，默认版本暂不采用。061500完整Math500 Level3为101/105、通过既定门，但未出现COMPUTE_ORDER_FIRST_SELECTED，不能证明新排列路径正确；2个max_tokens、DB554/20517→558/20651及覆盖限制单列，不与旧422的103/105解释为精度退化统计。
+- **改动**：相关实现 [compute-order-service-pair.json](../../../analysis/compute-order-service-pair.json)；[compute-order-accuracy.json](../../../analysis/compute-order-accuracy.json)；[framework_innovation.md](../../../docs/agent-work/framework_innovation.md)；[compute_order_review.md](../../../docs/agent-work/compute_order_review.md)；[completion.json](../../../experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json)；本轮准确变体以原件源码清单为准。
 - **怎么测**：真实服务短负载；输入 / 输出 / 并发 / 请求数：16384 / 128 / 64 / 32。
 - **结果**：吞吐表观+4.7989%、耗时表观减少4.5792%；KV容量不同（基线521936、候选521840），31门仅same_KV false、gain=null，不能归因收益；061500准确率pending，不继承422结果
 - **是否保留**：保留作候选，仍待确认；不等于默认启用。

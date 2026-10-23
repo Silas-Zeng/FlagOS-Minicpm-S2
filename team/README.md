@@ -13,6 +13,7 @@
 
 ## 按方法
 
+- [省去无消费者的 accepted GPU fill](methods/accepted-fill.md)
 - [计算顺序与采样顺序分离](methods/compute-order.md)
 - [KV 分配器无状态快返](methods/allocator-noop.md)
 - [KV 二维 FULL 恢复](methods/kv-restore-pitched.md)

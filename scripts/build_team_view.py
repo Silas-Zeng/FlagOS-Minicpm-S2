@@ -13,10 +13,11 @@ ROOT = Path(__file__).resolve().parents[1]
 TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 GROUPS = {
-    'compute-order': ('计算顺序与采样顺序分离', '仅在合格混合步骤重排模型计算序，保留原请求及采样序。054306→060425两侧均32成功0失败，候选真实命中；单pair吞吐表观+4.7989%，但KV容量521936→521840不同，31项仅same_KV不通过、gain=null，不能归因收益。保留候选与失配证据，默认版本暂不采用；061500准确率仍pending，不继承422结果。', []),
+    'accepted-fill': ('省去无消费者的 accepted GPU fill', '固定非推测Full路径保留CPU fill，省略无消费者的accepted-count GPU fill。064838→065325两侧32成功0失败，吞吐表观−0.235046%，但KV521840→521936不同，31门仅same_KV失败、gain=null；当前不集成，保留小负及失配证据。冷ENABLED后同Engine原CPU_METADATA_FIRST_SELECTED只证明首次prepare，不证明全程/GPU数值或新准确率。', []),
+    'compute-order': ('计算顺序与采样顺序分离', '仅在合格混合步骤重排模型计算序，保留原请求及采样序。054306→060425两侧均32成功0失败，候选真实命中；单pair吞吐表观+4.7989%，但KV容量521936→521840不同，31项仅same_KV不通过、gain=null，不能归因收益。保留候选与失配证据，默认版本暂不采用。061500完整Math500 Level3为101/105、通过既定门，但未出现COMPUTE_ORDER_FIRST_SELECTED，不能证明新排列路径正确；2个max_tokens、DB554/20517→558/20651及覆盖限制单列，不与旧422的103/105解释为精度退化统计。', []),
     'allocator-noop': ('KV 分配器无状态快返', '普通decode不新增页或完整块哈希时返回原空分配结果；保留新页、哈希、恢复与非RUNNING原路径，CPU片段和服务配对分别记录。', []),
     'kv-restore-pitched': ('KV 二维 FULL 恢复', '保留原页序、私有页资格和完成事件，合并H2D提交；独立单层字节门与真实42层事务分开记录，调用数下降不当作性能收益。', []),
-    'skip-computed-h2d': ('省去无消费者的 computed H2D', 'CPU metadata成功时省略一次计数GPU副本提交，保留原回退和固定buffer/event；方法门与独立短服务单pair分别记录，不与KV组合收益相加。', []),
+    'skip-computed-h2d': ('省去无消费者的 computed H2D', 'CPU metadata成功时省略一次计数GPU副本提交，保留原回退和固定buffer/event；方法门与独立短服务单pair分别记录，不与KV组合收益相加。', ['skip-computed-h2d']),
     'finite-growth-admission': ('有限窗口增长准入', '真实服务消除本轮抢占，但共同DB对照仍有KV容量失配；默认关闭保留研究证据，不宣称确定收益。\n\n两轮原 bc51 smoke 仅作启动显存诊断：共同 observer 下，finite 的非 Torch 内存多 4 MiB，差异在 before_profile 已存在；KV 为 baseline 521936、finite 521840，与旧性能对照方向相反。四端 DB 均为 532 表、19839 行且三项 SHA 一致；文本及 32 个 token ID 相同，但未覆盖 mixed Q/GQA 命中，不算准确率或性能收益。停止追查启动差异，旧性能对照仍因 KV 容量失配而不能归因。', []),
     'admission-observer': ('有限增长准入观察', '当前Q+GQA上的稀疏CPU准入与失败状态诊断；不实现预留策略，不把页预算反事实当作吞吐收益。', []),
     'q-gqa-framework': ('Q-hoist + GQA 框架组合', '仅适配精确GQA包装的安装身份，保留两条算术路径与原服务参数；已获单pair正信号及独立101/105准确率通过，评测DB增长另列。', []),
@@ -50,7 +51,8 @@ GROUPS = {
     'other': ('其它登记与控制记录', '没有足够字段继续归类的登记；不补猜实验结论。', []),
 }
 CODE = {
-    'compute-order': ['analysis/compute-order-service-pair.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
+    'accepted-fill': ['analysis/accepted-fill-service-pair.json'],
+    'compute-order': ['analysis/compute-order-service-pair.json', 'analysis/compute-order-accuracy.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
     'allocator-noop': ['archive/ai/20261022-framework-kv/next-kv-noop-allocate/README.md', 'analysis/allocator-noop-service-pair.json'],
     'kv-restore-pitched': ['archive/ai/20261022-framework-kv/q-gqa-kv-restore-pitch/README.md', 'analysis/kv-pitched-restore-method.json'],
     'finite-growth-admission': ['analysis/finite-growth-common-db-service-pair.json', 'analysis/finite-growth-warm-service-pair.json', 'analysis/finite-growth-service-pair.json', 'analysis/current-kv-memory-smokes.json'],
@@ -79,6 +81,7 @@ def group(row):
         parent = BY_ID.get(row['run_id'].removesuffix('-control'))
         return group(parent[0]) if parent else 'other'
     for key, pattern in [
+        ('accepted-fill', r'accepted[_-]fill'),
         ('compute-order', r'compute[_-]order'),
         ('allocator-noop', r'allocator[_-]noop'),
         ('kv-restore-pitched', r'kv[_-](?:pitched[_-]restore|restore[_-]pitch)'),
@@ -283,11 +286,13 @@ def main():
     # root已实际创建的新PR；仅导航，不改变原实验的归因/依赖/准确率。
     prs.update({method: 'https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/' + str(number)
                 for method, number in [('diagnostics', 5), ('prefill', 6), ('top-p', 7),
-                                       ('sql-reflection', 8), ('decode3d', 9), ('mixed-attention', 10)]})
+                                       ('sql-reflection', 8), ('decode3d', 9), ('mixed-attention', 10),
+                                       ('skip-computed-h2d', 15)]})
     pr_labels = {'cpu-metadata': 'CPU metadata #1', 'async-token-update': '异步token更新 #2',
                  'kv-contiguous-copy': '连续页KV工具 #3', 'kv-pitched-copy': '二维SAVE工具 #4',
                  'diagnostics': '诊断配置 #5', 'prefill': 'prefill #6', 'top-p': 'top-p #7',
-                 'sql-reflection': 'SQL反射 #8', 'decode3d': '3D decode #9', 'mixed-attention': 'mixed Attention #10'}
+                 'sql-reflection': 'SQL反射 #8', 'decode3d': '3D decode #9', 'mixed-attention': 'mixed Attention #10',
+                 'skip-computed-h2d': 'computed H2D #15（草稿）'}
     run_pages, buckets = {}, {key: [] for key in GROUPS}
     for rid, records in BY_ID.items():
         slug, hardware = platform(records[0])

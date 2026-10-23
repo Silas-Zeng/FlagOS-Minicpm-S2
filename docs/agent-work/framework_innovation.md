@@ -1428,3 +1428,15 @@ root后继批准accepted-fill独立CPU实现，tmp/accepted-fill已落prepare_ac
 实际live表无hardware，故唯一新增审交team_view_final_check，410b/03a0/68def/eab62已只读通过：实际accepted GPU消费者仅asyncspec/spec-Mamba/GDN/hybrid，冷scope排除；False默认→原KVinit成功末启用，profiling/未知原路，固定Engine配置范围缓存有效，热一bool；相关0e/1bb/KV helper没有acceptedGPU消费者。未跑新旧合同或设备，README已补，无源码改动。
 
 root回报061500至99/105仍无compute-order实际命中，因此即使最终pass也只说明fallback兼容，不给P新路径资格。最短有用后继可考虑自然命中单步‘原序shadow先forward+logits、不sample→本次P生产forward+原N行logits’，再仅原sampler一次，RNG不增加draw；必须先短证本步每层当前slot完整write-before-read、prefix保持及无跨步/别名状态，确保P第二次覆盖当前KV，否则不能用此法免全KV快照。不能在P后补原序而留下baseline KV。预计局部execute/context及三锁重定15–25分钟CPU准备互审，设备一命中步仅多一次模型forward、不测吞吐；尚未实现/批准，前提难闭合则退回真实单层方法门，不把未命中的Math500称新路径准确率。
+
+shadow窄查只支持条件结论：actual llama1e10:233–243/315–330/398–431只见局部hidden/residual，1219:724–767经f182:59–66/129–137按每个有效slot完整写K/V全部2×128 BF16、负slot跳过；但060425只记录shape计数，没有实际block/slot集合，不能仅凭N17/M2048证明当前写不碰prefix或跨请求别名。若需回滚当前M2048的42层slot，字节为84MiB而非32GiB，但root明确不做此新搬运/shadow诊断，未实现。
+
+按root最新方向仅建议短端到端辅助答案门：独立bc51 owner副本保SERVER/锁/DB/监控/清理，只替一次load命令；CPU tokenizer预存相同32条约16384-token prompt（早段各异避免APC消掉prefill），末尾各放不同答案的简单加法、首个<answer>整数</answer>格式。两臂相同JSONL/并发64/max128/temperature1/top_p.95，沿原ignore_eos维持长输出几何；不加request seed/不设greedy去绕过原global RNG路径。逐条判首个完整答案真值，candidate还须同Engine实际Dprefix>0/outside>0 FIRST_SELECTED和32/0；基线若不能稳定按题答对则门本身不足，不归优化错误。它只说明真实选路整模型/采样输出可用，不是token逐位、层间数值、完整RNG状态或官方accuracy证明；预计每侧约原短筛100秒量级。尚未写client/owner、未设备。
+
+team独占accepted-fill-owner的e972c800 launcher/f7256df4 emitter已只读9/4处新增diff及实SHA通过，固定原422三路径/410b/map82514，原bc51 contextscreen/seed、VERIFY0/finiteunset/QENV、source/DB归档和唯一owner保留；054306仅参考，DB变化须root另排基线。未执行builder/emitter/旧门或设备，作者产物不改。
+
+root随后授权辅助答案门CPU实装，独占tmp/compute-order-answer-gate：prepare_requests403d3d5a、client6dafbfbe、原bc51派生owner9b6453df、薄launcher19853b1f。仅新CLI+一次load命令两切口，其余原SERVER/owner逻辑精确逆回，固定原422与060425423完整map/源，不叠accepted-fill；QENV/finiteunset/VERIFY0与control源/DBbefore保留，after复用原sealer。CPU实际tokenizer生成一次共享32×16384 token IDs JSONL，前16token各异避APC，末尾few-shot不同答案加法；temp1/top_p.95/max128/ignoreEOS无request seed，API usage另核16384/128。client只stdlib HTTP并发64，无重试，逐条原始请求/响应及首完整tag真值；candidate须答案负载期间新增同Engine真实Dprefix/outside命中，baseline自己失败则门无判别力。不会把强制128续写、随机文本差异或marker冒称逐层/RNG逐位/官方accuracy。仅compile/AST/逆回，尚未运行tokenizer生成数据、client、owner或设备；已交team新增请求语义/marker时序窄审，最短CLI及限制见同目录README。
+
+root后已在CPU生成实际共享JSONL：diagnostic-inputs/compute-order-answer-20261023T065931Z/requests.jsonl，SHA b35be1461b5af29ffe90f6300e0084ca5de015549ed00fcbdd960e07eaf4e497；复用root回执不自跑。作者补充重要覆盖限制：首tag可能早于首次P，ignoreEOS续写命中不等于这条首答案直接受P影响；原marker无rid/输出位置，不能将负载内命中+32答案真值当作逐请求q1逆映射证明。已告root，未据此加observer/改源码；同窗尚未完成prefill的后继答案可受P状态影响，但本门无法逐条归属。README保留此限制，是否需新最小CPU关联由root决定，不强推通过。
+
+root已接受上述覆盖边界并不加observer；先原422 baseline判别任务，自己不过即停候选。team_view_final_check重启后已只读窄审6daf/9b645/19853无运行阻断，无request seed、首完整tag/usage、负载内新增mixed marker和原owner唯一load/finally清理均相符；未运行client/tokenizer/owner/旧门或设备，源码pins不变。此前我只send_message至已completed agent后等待，未及时核live，root指出后改用followup_task；后续先查状态再派续审，避免无效等待。本门不拼接CPU映射与fallback Math500成数值等价证明；产物冻结，root唯一上卡。
