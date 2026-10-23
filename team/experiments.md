@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共191条登记、188个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共193条登记、190个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -169,6 +169,8 @@
 | 天数 BI-V150 | 189 | 2026-10-23T06:15:01.050497+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 未激活 | 未记录/未记录/8/105 | 423候选完整Math500 Level3通过101/105（96.1905%），105成功、0transport/空答案；未出现COMPUTE_ORDER_FIRST_SELECTED，本轮不外推为新排列路径的准确率证明 | [20261023T061500Z-compute-order](runs/bi-v150/20261023T061500Z-compute-order.md) |
 | 天数 BI-V150 | 190 | 2026-10-23T06:48:39.672961+00:00 | [省去无消费者的 accepted GPU fill](methods/accepted-fill.md) | 不可直接比较 | 16384/128/64/32 | 32成功0失败、exit0，104.147864725s、5073.402142188 total tok/s；与065325候选四端DB三SHA相同，但KV521840→521936不同，31门仅same_KV失败、gain=null | [20261023T064838Z-accepted-fill-baseline-context16k](runs/bi-v150/20261023T064838Z-accepted-fill-baseline-context16k.md) |
 | 天数 BI-V150 | 191 | 2026-10-23T06:53:26.559674+00:00 | [省去无消费者的 accepted GPU fill](methods/accepted-fill.md) | 不可直接比较 | 16384/128/64/32 | 吞吐表观−0.235046%、耗时表观增加0.235600%；KV521840→521936不同，31门仅same_KV失败、gain=null，不归因收益；不继承422准确率，保留代码与小负/失配证据 | [20261023T065325Z-accepted-fill-candidate-context16k](runs/bi-v150/20261023T065325Z-accepted-fill-candidate-context16k.md) |
+| 天数 BI-V150 | 192 | 2026-10-23T07:08:17.256099+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 结论未定 | 16384/128/64/32 | 失败 | [20261023T070816Z-compute-order-answer-baseline](runs/bi-v150/20261023T070816Z-compute-order-answer-baseline.md) |
+| 天数 BI-V150 | 193 | 2026-10-23T07:52:11.492005+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 失败/未通过 | 16384/128/64/32 | 失败：原序/P logits最大绝对差11.828125，top1仅12/17行一致，停止性能大测；shadow重复forward属于诊断，不计性能、不报收益、不作为完整准确率 | [20261023T075210Z-compute-order-shadow-context16k](runs/bi-v150/20261023T075210Z-compute-order-shadow-context16k.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

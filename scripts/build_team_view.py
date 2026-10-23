@@ -14,7 +14,7 @@ TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 GROUPS = {
     'accepted-fill': ('省去无消费者的 accepted GPU fill', '固定非推测Full路径保留CPU fill，省略无消费者的accepted-count GPU fill。064838→065325两侧32成功0失败，吞吐表观−0.235046%，但KV521840→521936不同，31门仅same_KV失败、gain=null；当前不集成，保留小负及失配证据。冷ENABLED后同Engine原CPU_METADATA_FIRST_SELECTED只证明首次prepare，不证明全程/GPU数值或新准确率。', []),
-    'compute-order': ('计算顺序与采样顺序分离', '仅在合格混合步骤重排模型计算序，保留原请求及采样序。054306→060425两侧均32成功0失败，候选真实命中；单pair吞吐表观+4.7989%，但KV容量521936→521840不同，31项仅same_KV不通过、gain=null，不能归因收益。保留候选与失配证据，默认版本暂不采用。061500完整Math500 Level3为101/105、通过既定门，但未出现COMPUTE_ORDER_FIRST_SELECTED，不能证明新排列路径正确；2个max_tokens、DB554/20517→558/20651及覆盖限制单列，不与旧422的103/105解释为精度退化统计。', []),
+    'compute-order': ('计算顺序与采样顺序分离', '075210自然混合shadow诊断出现原序/P logits大差：最大绝对差11.828125，top1仅12/17行一致；finite和采样前RNG相同不代表数值门通过。32成功0失败只说明服务结束，不计性能；当前不集成，停止性能大测，CPU定位诊断与候选根因。原0/1/16行bitexact、14个outside q1行全差只是线索。此前短筛表观+4.7989%受KV失配影响、gain=null；061500准确率101/105虽通过却未命中新排列路径，不能证明该路径正确，也不与旧422的103/105作升降统计。070816辅助答案基线仅4/32符合预设答案，提示门无判别力，候选侧未运行，不归因优化失败。', []),
     'allocator-noop': ('KV 分配器无状态快返', '普通decode不新增页或完整块哈希时返回原空分配结果；保留新页、哈希、恢复与非RUNNING原路径，CPU片段和服务配对分别记录。', []),
     'kv-restore-pitched': ('KV 二维 FULL 恢复', '保留原页序、私有页资格和完成事件，合并H2D提交；独立单层字节门与真实42层事务分开记录，调用数下降不当作性能收益。', []),
     'skip-computed-h2d': ('省去无消费者的 computed H2D', 'CPU metadata成功时省略一次计数GPU副本提交，保留原回退和固定buffer/event；方法门与独立短服务单pair分别记录，不与KV组合收益相加。', ['skip-computed-h2d']),
@@ -52,7 +52,7 @@ GROUPS = {
 }
 CODE = {
     'accepted-fill': ['analysis/accepted-fill-service-pair.json'],
-    'compute-order': ['analysis/compute-order-service-pair.json', 'analysis/compute-order-accuracy.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
+    'compute-order': ['experiments/framework/20261023T075210Z-compute-order-shadow-context16k-control/shadow-artifacts/8403/result.json', 'archive/ai/20261022-framework-kv/compute-order-shadow-gate/README.md', 'experiments/framework/20261023T070816Z-compute-order-answer-baseline/context-16k/answer-summary.json', 'analysis/compute-order-service-pair.json', 'analysis/compute-order-accuracy.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
     'allocator-noop': ['archive/ai/20261022-framework-kv/next-kv-noop-allocate/README.md', 'analysis/allocator-noop-service-pair.json'],
     'kv-restore-pitched': ['archive/ai/20261022-framework-kv/q-gqa-kv-restore-pitch/README.md', 'analysis/kv-pitched-restore-method.json'],
     'finite-growth-admission': ['analysis/finite-growth-common-db-service-pair.json', 'analysis/finite-growth-warm-service-pair.json', 'analysis/finite-growth-service-pair.json', 'analysis/current-kv-memory-smokes.json'],

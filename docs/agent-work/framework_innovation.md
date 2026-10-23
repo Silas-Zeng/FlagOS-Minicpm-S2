@@ -1440,3 +1440,9 @@ root随后授权辅助答案门CPU实装，独占tmp/compute-order-answer-gate�
 root后已在CPU生成实际共享JSONL：diagnostic-inputs/compute-order-answer-20261023T065931Z/requests.jsonl，SHA b35be1461b5af29ffe90f6300e0084ca5de015549ed00fcbdd960e07eaf4e497；复用root回执不自跑。作者补充重要覆盖限制：首tag可能早于首次P，ignoreEOS续写命中不等于这条首答案直接受P影响；原marker无rid/输出位置，不能将负载内命中+32答案真值当作逐请求q1逆映射证明。已告root，未据此加observer/改源码；同窗尚未完成prefill的后继答案可受P状态影响，但本门无法逐条归属。README保留此限制，是否需新最小CPU关联由root决定，不强推通过。
 
 root已接受上述覆盖边界并不加observer；先原422 baseline判别任务，自己不过即停候选。team_view_final_check重启后已只读窄审6daf/9b645/19853无运行阻断，无request seed、首完整tag/usage、负载内新增mixed marker和原owner唯一load/finally清理均相符；未运行client/tokenizer/owner/旧门或设备，源码pins不变。此前我只send_message至已completed agent后等待，未及时核live，root指出后改用followup_task；后续先查状态再派续审，避免无效等待。本门不拼接CPU映射与fallback Math500成数值等价证明；产物冻结，root唯一上卡。
+
+070816辅助答案基线原件已由root封存：32条transport/输入输出长度均对，仅4/32首完整tag答案正确，候选未启动。少量bad响应可见正确裸数却未按tag输出，以及先答错/复述few-shot；故此门无判别力，不视为422准确率或P失败，不重试prompt。原件578seal/579files及DB558稳定由root验收复用。
+
+root随后批准唯一一次自然P命中的最薄shadow诊断，tmp/compute-order-shadow-gate已落helper、prepare_shadow.py、runner.diff、files/五路径镜像与files-prepare.json完整424map。原422/map82514经冻结P变换，新增原序/P双prepare：原event域内原序prepare→实际slot D2H核CPU安全几何→原序forward与原N logits阻塞独立CPU快照，完成所有同流H2D后才重建P输入/metadata；dispatcher、_update_states、history、sample仍各一次。原序和P实际slot均要求唯一且不触本批所有活动请求旧prefix；42 normal KV无层间alias，actual Attention3414的writer→attention依赖及BF16无校准/量化/共享/连接器边界闭合，未知明确unsupported。shadow开始后异常直接终止，不回退/重试，不做84MiB回滚。env为BIV150_COMPUTE_ORDER_SHADOW_DIR，每PID保存完整float32 logits、strict bit/原始max/mean/finite/top1及采样前RNG是否变化；无校准容差，不冒充官方accuracy或token等价。当前helper90ad14d1、runnerf8b0a521、builder3df35b39，完整map/compile/精确逆回P已一次通过，未导入模型/设备/新mock；已交team新增双prepare/实际字段与源锁窄审，尚待最终回执。父任务owner接收emit-only镜像，不需要本地复制全树。
+
+team随后实读90ad14/f8b0/3df35及root b5fc owner五路径map/ENV，新增双prepare/slot/token-offset安全与事件、实际字段、独立CPU快照/无双状态及采样路径无当前短诊断阻断；README审阅回执由reviewer追加，代码冻结。此为静态互审，不是设备数值或性能通过；只首自然Plan，unsupported或未产result必须记未覆盖。root可复制归档并唯一排卡，作者不运行设备或再扩测试。
