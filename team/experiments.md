@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共221条登记、218个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共224条登记、221个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -199,6 +199,9 @@
 | 天数 BI-V150 | 219 | 2026-10-24T14:28:20.665952+00:00 | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 两轮基线完成，不单报收益 | 4096/16384/1024/64/256/128 | 4K两轮5396.58/5730.67、16K两轮3565.12/3992.53 total tok/s；768请求全成功，KV546432。仅本组筛选基线，非官方四轮分数或优化收益。 | [20261024T142819Z-pr25-cache-main-fullsize-two-rounds](runs/bi-v150/20261024T142819Z-pr25-cache-main-fullsize-two-rounds.md) |
 | 天数 BI-V150 | 220 | 2026-10-24T14:59:47.177576+00:00 | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | KV字节与模型路径门通过 | 16384/1024/64/32 | 32/0；R16960、每方向729415680字节一致，SAVE504/FULL2688。另同服务4/4语义正确、实际34层native图；VERIFY1不计性能或完整准确率。 | [20261024T145945Z-pr25-cache-kv-verify1-context16k-long](runs/bi-v150/20261024T145945Z-pr25-cache-kv-verify1-context16k-long.md) |
 | 天数 BI-V150 | 221 | 2026-10-24T15:12:56.985153+00:00 | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 两轮正负并存，待官方四轮 | 4096/16384/1024/64/256/128 | 候选768/0；4K5402.15/5767.57（+0.103%/+0.644%，无FULL不可归因），16K3733.69/3972.85（+4.728%/−0.493%）。未确认稳定收益，待官方四轮。 | [20261024T151255Z-pr25-cache-kv-fullsize-two-rounds](runs/bi-v150/20261024T151255Z-pr25-cache-kv-fullsize-two-rounds.md) |
+| 天数 BI-V150 | 222 | 2026-10-24T15:59:17Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | KV字节与模型路径门通过 | 16384/1024/64/32 | 32/0；R16960、每方向729415680字节一致，SAVE504/FULL2688。另同服务4/4语义正确、实际34层native图；VERIFY1不计性能或完整准确率。 | [20261024T155917Z-main0bf9-kv-verify1-context16k-long](runs/bi-v150/20261024T155917Z-main0bf9-kv-verify1-context16k-long.md) |
+| 天数 BI-V150 | 223 | 2026-10-24T16:10:30Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 四轮性能基线完成，完整105待验 | 4096/16384/1024/64/256/128 × 4 | 官方两档各4轮、1536/0；第2–4轮4K5758.72/16K4045.20 tok/s，TTFT3626.85/124212.05ms；本实例该版本完整105仍待。 | [20261024T161030Z-main0bf9-main-official-four-rounds](runs/bi-v150/20261024T161030Z-main0bf9-main-official-four-rounds.md) |
+| 天数 BI-V150 | 224 | 2026-10-24T17:11:01Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 目录门误拒，正式测量未启动 | 4096/16384/1024/64/0（正式测量未发） | 正式测量前图门误拒目录前缀；exit1，无吞吐。后验FX/FP/AOT及相对handles相同，原失败保留。 | [20261024T171101Z-main0bf9-kv-official-four-rounds](runs/bi-v150/20261024T171101Z-main0bf9-kv-official-four-rounds.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

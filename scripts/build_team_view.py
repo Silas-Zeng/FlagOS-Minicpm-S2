@@ -16,7 +16,7 @@ TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 AVAILABLE = set()
 GROUPS = {
-    'pr25-kv-current': ('PR25 与缓存修复后的 KV 保存恢复', '以7596cc0为共同基点，比较原调度与单victim KV SAVE/FULL，保留官方服务参数。VERIFY1字节门通过，关闭回读后的两轮对照同KV546432、同初始DB：4K为+0.103%/+0.644%但无FULL覆盖，16K为+4.728%/−0.493%。筛选未见明显退化，尚未确认稳定收益；两侧调优增长不同，不换算为耗时。保留候选，按用户要求完成官方四轮及最终组合准确率后再下结论、确定新基线；不把本轮结果归给后续main集成。', ['native-quant-cache', 'native-cache-identity']),
+    'pr25-kv-current': ('PR25 与缓存修复后的 KV 保存恢复', '当前性能对照基线已更新到main0bf9/tree8671（526文件、SO14f）：161030按官方4K/16K各四轮，第2–4轮5758.72/4045.20 total tok/s，TTFT3626.85/124212.05ms，1536/0；KV547536、初始DBfb035。该版本本实例完整105仍待，不能称最终合格基线。532组合155917 VERIFY1与4题语义门通过；171101正式测量前因目录前缀被图门误拒，原exit1和后验强身份相同证据保留，不记吞吐。只修测量门的重试由运行负责人维护，完成后另登记。\n\n队友[PR31](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/31)实际受测e972997、SO271327a0，暖后单轮4K/16K为5766.41/4048.28，准确率102/105；标题Draft且未合并。[原manifest](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/d79b7b1a012943dce867d1adcc29a45e0d7b79bf/docs/evidence/ragged-gqa-segments-20261024/service-final/manifest.json)与[acceptance](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/d79b7b1a012943dce867d1adcc29a45e0d7b79bf/docs/evidence/ragged-gqa-segments-20261024/service-final/acceptance.json)保留其边界。双方源码、SO、轮数及DB/KV不完全同条件，不直接算收益；#33/#36仍是局部探针，#37服务准确率仍待，#38仅调研，不当作新基线。\n\n前序7596共同基点的两轮筛选继续保留：同KV546432与DB，4K+0.103%/+0.644%但无FULL覆盖，16K+4.728%/−0.493%；仅保留候选，不确认稳定收益，不把旧组合成绩赋给新main。', ['native-quant-cache', 'native-cache-identity']),
     'native-cache-identity': ('native 编译缓存身份与重启', 'PR25叠加native编译缓存身份修复，保留默认缓存目录和官方serve参数。135749完成49项组件门但checker误拒<think>格式，原失败保留；141536复用组件证据、4个语义请求全对（含4908token），同AOT与34层native图重启成功。原首启图证据由重启前首次补存，不能伪称首轮已归档。两轮均非官方准确率或吞吐，不继承前序PR24完整准确率。', ['native-cache-identity']),
     'pr24-main': ('PR24 真实路径复验与 KV 诊断', '131603同源码隔离编译缓存后，实际新图有34个native调用（layer4..37），完整Math500 Level3为100/105通过；0请求错误/0空最终，83/99/101达到输出上限，101无可提取答案。该结果仅证明本轮路径与准确率，不报吞吐或精度提升。105037至124000六轮仍因旧AOT图失配撤回PR24模型资格；standalone9、CPU/trace观察与VERIFY1字节事实保留，旧Attention1.018秒不能作有效PR24预算，也不追溯恢复旧性能资格。默认缓存修复和PR25复验另记。', ['pr24-main']),
     'accepted-fill': ('省去无消费者的 accepted GPU fill', '固定非推测Full路径保留CPU fill，省略无消费者的accepted-count GPU fill。064838→065325两侧32成功0失败，吞吐表观−0.235046%，但KV521840→521936不同，31门仅same_KV失败、gain=null；当前不集成，保留小负及失配证据。冷ENABLED后同Engine原CPU_METADATA_FIRST_SELECTED只证明首次prepare，不证明全程/GPU数值或新准确率。', []),
@@ -57,7 +57,7 @@ GROUPS = {
     'other': ('其它登记与控制记录', '没有足够字段继续归类的登记；不补猜实验结论。', []),
 }
 CODE = {
-    'pr25-kv-current': ['analysis/pr25-kv-current-pair.json', 'experiments/framework/20261024T142819Z-pr25-cache-main-fullsize-two-rounds/result.json', 'experiments/framework/20261024T142819Z-pr25-cache-main-fullsize-two-rounds-control/archive-receipt.json', 'experiments/framework/20261024T145945Z-pr25-cache-kv-verify1-context16k-long-control/source-manifest.json', 'experiments/framework/20261024T145945Z-pr25-cache-kv-verify1-context16k-long-control/coverage.json', 'experiments/framework/20261024T145945Z-pr25-cache-kv-verify1-context16k-long/model-path/semantic-validation.json', 'experiments/framework/20261024T145945Z-pr25-cache-kv-verify1-context16k-long-control/archive-receipt.json', 'experiments/framework/20261024T151255Z-pr25-cache-kv-fullsize-two-rounds/result.json', 'experiments/framework/20261024T151255Z-pr25-cache-kv-fullsize-two-rounds-control/state.json', 'experiments/framework/20261024T151255Z-pr25-cache-kv-fullsize-two-rounds-control/archive-receipt.json'],
+    'pr25-kv-current': ['analysis/pr25-kv-current-pair.json', 'experiments/framework/20261024T142819Z-pr25-cache-main-fullsize-two-rounds/result.json', 'experiments/framework/20261024T142819Z-pr25-cache-main-fullsize-two-rounds-control/archive-receipt.json', 'experiments/framework/20261024T145945Z-pr25-cache-kv-verify1-context16k-long-control/source-manifest.json', 'experiments/framework/20261024T145945Z-pr25-cache-kv-verify1-context16k-long-control/coverage.json', 'experiments/framework/20261024T145945Z-pr25-cache-kv-verify1-context16k-long/model-path/semantic-validation.json', 'experiments/framework/20261024T145945Z-pr25-cache-kv-verify1-context16k-long-control/archive-receipt.json', 'experiments/framework/20261024T151255Z-pr25-cache-kv-fullsize-two-rounds/result.json', 'experiments/framework/20261024T151255Z-pr25-cache-kv-fullsize-two-rounds-control/state.json', 'experiments/framework/20261024T151255Z-pr25-cache-kv-fullsize-two-rounds-control/archive-receipt.json', 'experiments/framework/20261024T155917Z-main0bf9-kv-verify1-context16k-long-control/coverage.json', 'experiments/framework/20261024T155917Z-main0bf9-kv-verify1-context16k-long/model-path/semantic-validation.json', 'experiments/framework/20261024T161030Z-main0bf9-main-official-four-rounds/benchmark_results/summary_20261025_001229.csv', 'experiments/framework/20261024T161030Z-main0bf9-main-official-four-rounds-control/state.json', 'experiments/framework/20261024T161030Z-main0bf9-main-official-four-rounds-control/archive-receipt.json', 'experiments/framework/20261024T171101Z-main0bf9-kv-official-four-rounds/result.json', 'experiments/framework/20261024T171101Z-main0bf9-kv-official-four-rounds-control/postfailure-cache-audit/audit.json'],
     'native-cache-identity': ['experiments/framework/20261024T135749Z-pr25-cache-first-restart/failure.txt', 'experiments/framework/20261024T135749Z-pr25-cache-first-restart-control/gate-auto.json', 'experiments/framework/20261024T135749Z-pr25-cache-first-restart-control/cached-dispatch.json', 'experiments/framework/20261024T135749Z-pr25-cache-first-restart-control/archive-receipt.json', 'experiments/framework/20261024T141536Z-pr25-cache-restart-recheck/result.json', 'experiments/framework/20261024T141536Z-pr25-cache-restart-recheck/prior-audit/audit.json', 'experiments/framework/20261024T141536Z-pr25-cache-restart-recheck/startup-2/requests.json', 'experiments/framework/20261024T141536Z-pr25-cache-restart-recheck/startup-2/graph-evidence.json', 'experiments/framework/20261024T141536Z-pr25-cache-restart-recheck-control/archive-receipt.json'],
     'pr24-main': ['CURRENT_WORK.md', 'experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/accuracy-review.json', 'experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/active-graph-typed-assignment-check.json', 'experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/active-graph/computation_graph.py', 'experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/environment-overrides.json', 'experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/archive-receipt.json', 'experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/loaded-computation-graph.py', 'experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/early-stop-request.json', 'experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/state.json', 'experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/archive-receipt.json', 'experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds/result.json', 'experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/coverage.json', 'experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/state.json', 'experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/observer-manifest.json', 'experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/archive-receipt.json', 'analysis/pr24-kv-diagnostic.json', 'analysis/pr24-resume-native-v2-114500.json', 'analysis/pr24-resume-native-failure.json', 'analysis/pr24-resume-db-comparison.json', 'experiments/framework/20261024T105037Z-pr24-main-context16k-control/summary.json', 'experiments/framework/20261024T105037Z-pr24-main-context16k-control/native-build-manifest.json', 'experiments/framework/20261024T105037Z-pr24-main-context16k-control/operator-check.json'],
     'accepted-fill': ['analysis/accepted-fill-service-pair.json'],
@@ -167,6 +167,10 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     """只摘结果/失败原句，不把审计与库身份搬入主视图。"""
+    if row['status'] == 'official_four_rounds_baseline_completed':
+        return '官方两档各4轮、1536/0；第2–4轮4K5758.72/16K4045.20 tok/s，TTFT3626.85/124212.05ms；本实例该版本完整105仍待。'
+    if row['status'] == 'startup_gate_path_prefix_rejected':
+        return '正式测量前图门误拒目录前缀；exit1，无吞吐。后验FX/FP/AOT及相对handles相同，原失败保留。'
     if row['status'] == 'fullsize_two_rounds_baseline_completed':
         return '4K两轮5396.58/5730.67、16K两轮3565.12/3992.53 total tok/s；768请求全成功，KV546432。仅本组筛选基线，非官方四轮分数或优化收益。'
     if row['status'] == 'kv_verify1_model_path_pass':
@@ -224,6 +228,10 @@ def result(row, limit=190):
 def keep(row):
     text = row['conclusion']
     state = row['status'].lower()
+    if state == 'official_four_rounds_baseline_completed':
+        return '保留作当前性能对照基线；完整105仍待，不称最终合格基线，不跨队友条件算收益。'
+    if state == 'startup_gate_path_prefix_rejected':
+        return '保留原失败与后验身份取证；修测量目录门后另开run，不补记成绩。'
     if state == 'fullsize_two_rounds_baseline_completed':
         return '保留两档全部原轮作本组筛选基线；不丢首轮、不以第二轮变快归因优化，不自动定为新官方基线。'
     if state == 'kv_verify1_model_path_pass':
@@ -303,6 +311,10 @@ def code_links(key, page):
 
 def status(row):
     value = row['status'].lower()
+    if value == 'official_four_rounds_baseline_completed':
+        return '四轮性能基线完成，完整105待验'
+    if value == 'startup_gate_path_prefix_rejected':
+        return '目录门误拒，正式测量未启动'
     if value == 'fullsize_two_rounds_baseline_completed':
         return '两轮基线完成，不单报收益'
     if value == 'kv_verify1_model_path_pass':
