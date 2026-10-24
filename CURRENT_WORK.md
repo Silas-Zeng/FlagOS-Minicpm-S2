@@ -1,19 +1,24 @@
 # 当前工作与接续入口
 
-更新：2026-10-24（北京时间）。本阶段已确定 BI-V150 新最优基线并停止上卡。
+更新：2026-10-24（北京时间）。已恢复持续优化，当前主线为含队友 PR24 的 `1ad9a708`；已完成本实例移植短验和一次抢占观察，单次 warmed 恢复窗口 GPU 诊断 `20261024T113346Z-pr24-resume-native-context16k-long` 已启动，结束后补充结论。受测有收益的方法按用户授权提交并合并 PR。
 
-## 当前基线
+- 本实例 native SO 9项数值/Graph检查通过；16K/128 ×32请求全成功，P在ready后命中、Q无回退，KV547600。见[移植摘要](experiments/framework/20261024T105037Z-pr24-main-context16k-control/summary.json)。
+- 16K/1024 ×32请求全成功、1次抢占；准入时APC11536，随后3段重新提交，重叠旧CPU已提交前缀5446。M1441确有新调优，不能把CPU的6.265秒当GPU收益。见[诊断结论](analysis/pr24-kv-diagnostic.json)及[DB差异](analysis/pr24-resume-db-comparison.json)。
+- 该观察driver退出0；owner因monitor sleep短暂未退出而退出1，后续复核其已退出并恢复原DB，原失败与[恢复凭据](experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long-control/cleanup-recovery.json)均保留。
+- 下一步仅采一次已调优条件下的恢复窗口，再决定是否迁移KV SAVE/FULL；观察结果不是优化收益。实验分支 `codex/pr24-kv-diagnostics-20261024`，原始记录由总表与方法页导航。
+
+## 上阶段官方受测基线
 
 组合：队友 main + PR15 computed H2D + PR21 计算顺序 + Q fragment lifetime。
 
 - 框架 PR22（PR15+PR21 兼容组合）已合并。
 - 框架 PR23（Q fragment）已合并。
-- 最新 main merge commit：`1ea082f79db65a66f78fdd7b1d958335450fa9f4`。
+- 对应阶段的 main merge commit：`1ea082f79db65a66f78fdd7b1d958335450fa9f4`。
 - 实际受测运行时 commit：`4c57567d090bbb9aec1bbc2bef7847d3b4e5695a`。
 - 运行时 tree：`dd0554f3895d7ddf0691926ecd860ee1d6b3cd6c`。
 - 方法说明：[Q fragment](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/main/docs/07-prefill-q-fragment-biv150.md)；聚合证据：[qfragment-pr15-pr21-final.json](analysis/qfragment-pr15-pr21-final.json)。
 
-## 性能与准确率
+## 上阶段性能与准确率
 
 原官方 4K/16K 各 4 轮，跳过首轮并使用第 2–4 轮均值：
 
@@ -41,7 +46,7 @@
 - 方法默认由提交代码启用，不依赖环境变量或外部 IR artifact；不匹配时返回已编译 normal kernel。
 - normalized clone 首次未满足旧 C2/源码行假设时保留为非性能失败；修复后短诊断先出现真实选中，再进入官方测试。详见[适配记录](analysis/qfragment-adaptation.json)。
 
-## 边界
+## 上阶段结果边界
 
 - 两次官方吞吐使用相同起始 DB 种子 `1907e03…`，但候选 KV 为 `521840`，PR15+PR21 旧基线为 `521936`。这是实际组合的保守绝对对照，不包装成严格等 KV 的单项因果拆分。
 - 仅验证天数 BI-V150；沐曦曦云 C500 未验证，不能复制 BI-V150 成绩。
@@ -49,13 +54,11 @@
 - 不修改模型、精度、量化、投机采样、benchmark 或官方 serve 参数。
 - CJJ 的 #17–#20 未合入。
 
-## 设备与仓库
+## 上阶段设备与仓库（历史）
 
 - BI-V150 实验结束：GPU `68 MiB / 0%`、9031 关闭、无模型/benchmark/Engine 进程。
 - 标准 tuning DB 已恢复为 `207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378`。
 - 框架 main 已包含 PR22、PR23；FlagGems 本阶段无算子库内代码改动。
 - 实验记录通过 PR #2 批量同步；`experiments/registry.csv` 为唯一登记源，`scripts/build_team_view.py` 生成团队视图。
 
-## 下一步
-
-后续探索以当前 main 为唯一基线。先基于现有 profile 和实际硬件开销提出机制，再决定是否上卡；不重复已验证的 Q fragment、PR15/PR21 或旧候选测试。新方法继续按 `codex/` 分支和独立 PR 处理。
+后续运行状态以上方当前接续入口为准。新方法沿用 `codex/` 分支和独立 PR，不重复已验证且未变的代码测试。

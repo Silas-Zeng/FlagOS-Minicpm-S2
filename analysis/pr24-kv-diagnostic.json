@@ -1,0 +1,83 @@
+{
+  "method": "PR24 新主线移植与 KV 抢占诊断",
+  "source_commit": "1ad9a708ee77323372f0fa5975a04a52d294852c",
+  "diagnostic_tree": "730e4468f173b79fdd508a01be9fff87db0fa2cd",
+  "run_id": "20261024T110545Z-current-main-pr24-resume-cpu-context16k-long",
+  "kind": "CPU 因果观察，非性能对照",
+  "service": {
+    "completed": 32,
+    "failed": 0,
+    "preemptions": 1,
+    "kv_tokens": 547600
+  },
+  "victim": {
+    "confirmed_output_tokens": 598,
+    "is_prefill_chunk": false,
+    "issued_computed_tokens": 16982,
+    "known_tokens": 16982,
+    "num_preemptions": 0,
+    "output_placeholders": 1,
+    "prompt_tokens": 16384,
+    "request_id": "cmpl-bench-db387f4a-30-0-a3775408",
+    "request_object_id": 138430155148800,
+    "status": "RUNNING"
+  },
+  "first_apc_tokens": 16800,
+  "admitted_apc_tokens": 11536,
+  "waiting_attempts": 176,
+  "executed_target_rows": [
+    {
+      "M": 2048,
+      "N": 31,
+      "computed_source": "new_request_payload",
+      "execute_return_ns": 4005881636091952,
+      "execute_returned": true,
+      "execute_submit_start_ns": 4005881543919049,
+      "optimistic_after_schedule": 13554,
+      "payload_computed": 11536,
+      "scheduler_output_object_id": 138430054623776,
+      "target_q": 2018
+    },
+    {
+      "M": 2048,
+      "N": 31,
+      "computed_source": "cached_request_payload",
+      "execute_return_ns": 4005882135701108,
+      "execute_returned": true,
+      "execute_submit_start_ns": 4005881700751348,
+      "optimistic_after_schedule": 15572,
+      "payload_computed": 13554,
+      "scheduler_output_object_id": 138430592426272,
+      "target_q": 2018
+    },
+    {
+      "M": 1441,
+      "N": 31,
+      "computed_source": "cached_request_payload",
+      "execute_return_ns": 4005888404688077,
+      "execute_returned": true,
+      "execute_submit_start_ns": 4005882139561210,
+      "optimistic_after_schedule": 16983,
+      "payload_computed": 15572,
+      "scheduler_output_object_id": 138430079842016,
+      "target_q": 1411
+    }
+  ],
+  "previously_submitted_overlap_tokens": 5446,
+  "preempt_to_admitted_cpu_seconds": 9.875888055,
+  "resumed_cpu_window_seconds": 6.860769028,
+  "gpu_recompute_seconds": null,
+  "performance_gain": null,
+  "original_owner_exit": 1,
+  "cleanup_recovered": true,
+  "recovery_evidence": "experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long-control/cleanup-recovery.json",
+  "raw_evidence": "experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long",
+  "db_comparison": "analysis/pr24-resume-db-comparison.json",
+  "conclusion": "保留 KV SAVE/FULL 候选；先用已调优种子采集一次恢复窗口 GPU 轨迹，再判断传输是否划算。",
+  "limits": [
+    "5446 是与旧 CPU 已提交前缀的重叠，不代表这些 token 在抢占前已完成 GPU 计算。",
+    "3 个恢复 step 同时包含其余30个请求的 decode，不能视作可全部删除的开销。",
+    "M1441 新增调优，6.265秒 CPU 返回不能作为 GPU 重算或预期收益。",
+    "driver exit0；owner首次捕到短暂monitor sleep而exit1，随后复核退出并恢复DB，原件保留。"
+  ]
+}
