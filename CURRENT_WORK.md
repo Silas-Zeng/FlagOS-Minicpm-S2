@@ -1,27 +1,61 @@
-# 当前工作与 API 接续
+# 当前工作与接续入口
 
-## 已完成
+更新：2026-10-24（北京时间）。本阶段已确定 BI-V150 新最优基线并停止上卡。
 
-- 用户已明确要求按依赖合并并复用既有验证。框架十项 PR 已按 #5→#6→#7→#8→#9→#10→#1→#2→#3→#4 合并；#11 仅更新中文 README。当前 main：`87ed53719126208eaa9ba1cab698b14a5693eb5d`。官方上游和原公开 fork 未改，旧快照与本地实验版本保留。
-- #1/#2 的 runner 冲突使用已验证组合 `6f918ae6…`，保留两 helper、回退及 SQL→C2→C3。代码合并提交 0f2b9255 的全部 425 文件与预期组件组合相同，未重复测试。精确提交、双亲冲突解决及最终身份见[合并回执](archive/github/20261022-framework-merge.json)。后续代码与文档维护均通过 PR，不直接写 main。
-- CPU组合070004/070452短测完成，两轮64成功/0失败、同KV521936/同DB，吞吐单轮+0.6986%、平均TTFT−0.1250%；保留待确认，未补整模型准确率。两CPU PR已附中文结果。关停EngineDeadError和一次DB快照误比均已留原件，不能写成日志无异常。
-- 新一轮已收尾：085923 hot-key 门输出/KV/RNG正确但未命中，100149诊断确认默认 HookChain 对象被误当作非空 hook 拒绝；均 exit1、没有性能结论。100830 CPU组合短测64/0、38.867665s、6955.2931 tok/s，10:10:29Z exit0；随后用户要求直接合并，未再跑反序基线，不能据此形成新配对收益。三轮原件和校验包均已回收至本地 experiments/framework/，待下一实验记录批次发布。
-- 本轮设备后态已核为68MiB/0%、9031双闭、无GPU进程；现在无本任务设备作业。下一次启动仍需实时查空闲。
+## 当前基线
 
-## 团队入口
+组合：队友 main + PR15 computed H2D + PR21 计算顺序 + Q fragment lifetime。
 
-实验记录库现名为 `Silas-Zeng/FlagOS-Minicpm-S2`（GitHub ID 1427279927），原名 `FlagOS-S2-Minicpm-throughput` 的链接仍重定向。2026-10-22 本轮首次发布在名称校验处停止、未写入；适配现名后重新发布，保持三个协作库分工。
+- 框架 PR22（PR15+PR21 兼容组合）已合并。
+- 框架 PR23（Q fragment）已合并。
+- 最新 main merge commit：`1ea082f79db65a66f78fdd7b1d958335450fa9f4`。
+- 实际受测运行时 commit：`4c57567d090bbb9aec1bbc2bef7847d3b4e5695a`。
+- 运行时 tree：`dd0554f3895d7ddf0691926ecd860ee1d6b3cd6c`。
+- 方法说明：[Q fragment](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/main/docs/07-prefill-q-fragment-biv150.md)；聚合证据：[qfragment-pr15-pr21-final.json](analysis/qfragment-pr15-pr21-final.json)。
 
-[实验总表](team/experiments.md) → [按方法与平台查阅](team/README.md) → 每轮短记与原始证据。registry是唯一登记源，python scripts/build_team_view.py生成团队视图。README只负责导航及当前有效结果，详细历史从[归档入口](archive/README.md)查阅。
+## 性能与准确率
 
-团队整理已发布为实验库提交 `7362fee812b786bb38a757a3b644ca21c33d4b68`，21810 项与来源 tree 完全一致；回执为 `tmp/publish-team-rebuild-final-20261022.json`。最新合并状态与协作规则通过单独的记录库维护 PR 同步，不创建重复仓库。
+原官方 4K/16K 各 4 轮，跳过首轮并使用第 2–4 轮均值：
 
-## 当前并行工作与下一步
+| 负载 | PR15+PR21 | +Q fragment | 变化 | 比赛初始基线 |
+|---|---:|---:|---:|---:|
+| 4K | 5118.99 tok/s | **5313.59 tok/s** | **+3.80%** | 1905.46（累计 +178.86%） |
+| 16K | 3436.17 tok/s | **3764.67 tok/s** | **+9.56%** | 861.99（累计 +336.74%） |
 
-- root已完成框架 PR 合并，收尾本地证据和本次维护说明，不重复上卡验证。
-- 待后续设备队列（均未上卡的新版本）：`tmp/hot-key-v2/README.md`（a67d3add policy / 1f402c6d gate，只复用 key/cache，原 hook/launch 尾保持）；`tmp/input-prep-timing/README.md`（真实输入准备等待成本诊断，不能把诊断 TPS 当收益）；`tmp/next-c3-views/README.md`（ba085577 policy / e5eef652 gate，独立去重复 view，不叠 hot-key）。CPU 合同及定向互审已留各目录；不将其混入刚合并的十项 PR。
-- 子智能体已收口保存接续信息；新方法按适用输入大小判断，有依据就用对应最短负载实测，小收益保留，未变的验证复用。
-- 单卡实验仍由root唯一负责，始终串行。代码版本/命令/环境/原始结果自动保存，结论、失败原因、下一步只写几句话；阶段结束批量报告/PR，设备运行时CPU准备下一项。
-- 所有维护说明与PR保持自然中文，英文专有名词、命令与原证据原样保留；BI-V150与C500证据分别报告。未确认准确率的组合不冒称最终提交资格。
+- 官方 1536 请求全部成功，两档各 4 轮验证完整。
+- Math500 Level 3：`100/105 = 95.24%`，达到 `>=100/105` 门。
+- 105 请求成功，0 transport error，0 空最终答案；2 题达到输出上限（index 83、101）。
 
-[完整旧交接原文](archive/ai/CURRENT_WORK-before-team-rebuild-20261022.md)保留，旧文中的相对路径以项目根目录为基准；它是历史，当前安排以本页为准。
+原始证据：
+
+- [官方吞吐](experiments/official/20261024T061556Z-pr15-pr21-qfragment-official)
+- [完整准确率](experiments/accuracy/20261024T071802Z-pr15-pr21-qfragment)
+
+## Q fragment 实际选中
+
+官方和准确率服务均出现 `BIV150_Q_FRAGMENT_SELECTED`，fallback 为 0。
+
+- Q `ttg.local_load` 位于唯一 K 循环外。
+- LLVM Q shared read 共 32 次，循环内 0 次。
+- normal/candidate shared memory：`65536 / 32768` bytes。
+- 方法默认由提交代码启用，不依赖环境变量或外部 IR artifact；不匹配时返回已编译 normal kernel。
+- normalized clone 首次未满足旧 C2/源码行假设时保留为非性能失败；修复后短诊断先出现真实选中，再进入官方测试。详见[适配记录](analysis/qfragment-adaptation.json)。
+
+## 边界
+
+- 两次官方吞吐使用相同起始 DB 种子 `1907e03…`，但候选 KV 为 `521840`，PR15+PR21 旧基线为 `521936`。这是实际组合的保守绝对对照，不包装成严格等 KV 的单项因果拆分。
+- 仅验证天数 BI-V150；沐曦曦云 C500 未验证，不能复制 BI-V150 成绩。
+- 准确率为单次随机 105 题评测，不解释为精度提升或稳定等价证明。
+- 不修改模型、精度、量化、投机采样、benchmark 或官方 serve 参数。
+- CJJ 的 #17–#20 未合入。
+
+## 设备与仓库
+
+- BI-V150 实验结束：GPU `68 MiB / 0%`、9031 关闭、无模型/benchmark/Engine 进程。
+- 标准 tuning DB 已恢复为 `207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378`。
+- 框架 main 已包含 PR22、PR23；FlagGems 本阶段无算子库内代码改动。
+- 实验记录通过 PR #2 批量同步；`experiments/registry.csv` 为唯一登记源，`scripts/build_team_view.py` 生成团队视图。
+
+## 下一步
+
+后续探索以当前 main 为唯一基线。先基于现有 profile 和实际硬件开销提出机制，再决定是否上卡；不重复已验证的 Q fragment、PR15/PR21 或旧候选测试。新方法继续按 `codex/` 分支和独立 PR 处理。

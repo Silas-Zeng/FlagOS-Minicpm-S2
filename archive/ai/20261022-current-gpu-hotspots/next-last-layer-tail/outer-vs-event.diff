@@ -1,0 +1,213 @@
+--- scripts\remote\launch_event_wait_gate.py
++++ launch_last_layer_tail_gate.py
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env python3
+-"""独立Event等待API门外层；不导入Torch/加载库，不编译或启动模型服务。"""
++"""末层局部尾段门外层；不导入Torch，不编译或启动模型服务。"""
+ from datetime import datetime, timezone
+ import hashlib
+ import importlib.metadata
+@@ -17,10 +17,26 @@
+ 
+ ROOT = Path("/workspace/experiments/minicpm-s2")
+ DB = Path("/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db")
+-# archived name: (ROOT/scripts input name, reviewed SHA256)
++# 完整干净6f基点固定；不接C3views/gather/其它候选。
++BASE = ROOT / "code/cpu-combination-combined-20261022T100830Z"
++MODEL = Path("/workspace/MiniCPM5-2B")
++REFERENCE = ROOT / "scripts/cpu-combination-base-sha256.json"
++REFERENCE_SHA = "cd506fa2ed386df5961a188702a512351829cca59b684f2d47897e57e298c676"
+ SOURCES = {
+-    "gate.py": ("validate_event_wait_gate.py", "67090baad306b95679717a0f4b3e97d7a16abc9815317d3c885102ccac1d32ae"),
+-    "event-wait-contract.json": ("event-wait-contract.json", "41ba9a3bcc40ef826ac9fa350be134aa66a86a4e3cab4aa5c9234624c3bfe5eb"),
++    "gate.py": ("validate_last_layer_tail.py", "25d3e9cb194b9a6504db7f678f05d0f2113495e5bdd4d3829b82d813f153b650"),
++    "last_layer_tail.py": ("last_layer_tail.py", "99d5a8c86dac67b7a2c0029842576fbd1439060525d4c6789b0ddd32703fc9ec"),
++}
++INSTALLED = {
++    "llama.py": (Path("/usr/local/lib/python3.12/site-packages/vllm/model_executor/models/llama.py"), "1e1003454985bf86d3868a7755bcf5324676881548b3895809edf0b76698d384"),
++    "linear.py": (Path("/usr/local/lib/python3.12/site-packages/vllm/model_executor/layers/linear.py"), "0bd60103d85d7183791077c46e0770d0a2adc8e8811b162b9084c3cbe92ba662"),
++    "layernorm.py": (Path("/usr/local/lib/python3.12/site-packages/vllm/model_executor/layers/layernorm.py"), "696615d858292fea7a2942480803cd4c7d2d1e88d818bfe5cd9d695ac464f37c"),
++    "activation.py": (Path("/usr/local/lib/python3.12/site-packages/vllm/model_executor/layers/activation.py"), "757209cef4b5cc091d29d95b4a6b29f2511984110c9b66810c760d4499cb156c"),
++    "model-config.json": (MODEL / "config.json", "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180"),
++}
++BASE_OVERLAY = {
++    "vllm_fl/worker/model_runner.py": "6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141",
++    "vllm_fl/patches/biv150_cpu_metadata.py": "0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f",
++    "vllm_fl/patches/biv150_async_token_update.py": "1bb85e31c7b3fefa81414a54b04a1f0b6cf949c0876f87149956c821bb483adc",
+ }
+ HELPERS = {
+     "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a",
+@@ -61,6 +77,39 @@
+         path = regular(ROOT / "scripts" / name)
+         if len(expected) != 64 or sha(path) != expected:
+             raise RuntimeError("素材未审或变化：" + name)
++    for name, (path, expected) in INSTALLED.items():
++        if sha(regular(path)) != expected:
++            raise RuntimeError("actual尾段源码或模型配置变化：" + name)
++    if sha(regular(REFERENCE)) != REFERENCE_SHA:
++        raise RuntimeError("完整基点410参考变化")
++
++
++def plugin_map(folder):
++    resolved = folder.resolve(strict=True)
++    if folder.is_symlink() or not folder.is_dir():
++        raise RuntimeError("基点必须真实目录")
++    result = {}
++    for path in sorted(folder.rglob("*")):
++        rel = path.relative_to(folder)
++        if any(part in (".git", "__pycache__") for part in rel.parts) or path.suffix in (".pyc", ".pyo"):
++            continue
++        if path.is_symlink():
++            target = path.resolve(strict=True)
++            if not target.is_file() or not target.is_relative_to(resolved):
++                raise RuntimeError("拒绝外部或目录别名：" + str(rel))
++        if path.is_file():
++            result[rel.as_posix()] = sha(path)
++    return result
++
++
++def checked_base():
++    expected = read(REFERENCE)
++    if len(expected) != 410:
++        raise RuntimeError("原SQL+C3参考必须410项")
++    expected.update(BASE_OVERLAY)
++    if len(expected) != 412 or plugin_map(BASE) != expected:
++        raise RuntimeError("完整干净6f 412基点不符")
++    return expected
+ 
+ 
+ def command(control, label, argv, timeout=30):
+@@ -114,7 +163,7 @@
+ 
+ def environment():
+     packages = {}
+-    for name in ("torch",):
++    for name in ("torch", "vllm", "vllm-plugin-fl", "flag-gems", "triton", "sqlalchemy", "transformers"):
+         try:
+             packages[name] = importlib.metadata.version(name)
+         except importlib.metadata.PackageNotFoundError:
+@@ -127,7 +176,7 @@
+         if path.is_file():
+             cgroup[str(path)] = path.read_text()
+     return {"recorded_utc": utc(), "python": sys.version, "platform": platform.platform(), "packages": packages,
+-            "env": {k: os.environ.get(k) for k in ("PATH", "LD_LIBRARY_PATH", "CUDA_VISIBLE_DEVICES", "PYTHONDONTWRITEBYTECODE")},
++            "env": {k: os.environ.get(k) for k in ("PATH", "PYTHONPATH", "VLLM_PLUGINS", "LD_LIBRARY_PATH", "CUDA_VISIBLE_DEVICES", "PYTHONDONTWRITEBYTECODE", "OMP_NUM_THREADS", "MKL_NUM_THREADS")},
+             "cgroup_observation_not_peak": cgroup}
+ 
+ 
+@@ -147,10 +196,10 @@
+ def controller(run, control):
+     import fcntl
+     if (run.parent != ROOT / "framework" or control != run.with_name(run.name + "-control")
+-            or not run.name.endswith("-event-wait-gate") or not run.is_dir() or not control.is_dir()
++            or not run.name.endswith("-last-layer-tail-gate") or not run.is_dir() or not control.is_dir()
+             or run.is_symlink() or control.is_symlink()):
+         raise ValueError("只接受本launcher新建的ROOT/framework直系run/control")
+-    manifest = {"kind": "独立Event默认/typed/blocking等待API门，非模型服务性能", "started_utc": utc(),
++    manifest = {"kind": "actual末层局部eager尾段门，非生产AOT/模型服务性能", "started_utc": utc(),
+                 "controller_pid": os.getpid(), "run": str(run), "control": str(control),
+                 "controller_sha256": sha(Path(__file__)), "command": [sys.executable, *sys.argv]}
+     write(control / "started.json", manifest)
+@@ -166,6 +215,13 @@
+     signal.signal(signal.SIGTERM, interrupted)
+     try:
+         checked_assets()
++        expected_base = checked_base()
++        manifest["base_source"] = str(BASE)
++        manifest["base_aliases_dereferenced"] = {
++            path.relative_to(BASE).as_posix(): {"target": str(path.readlink()),
++                "resolved": str(path.resolve(strict=True)), "sha256": sha(path)}
++            for path in BASE.rglob("*") if path.is_symlink()
++            and not any(part in (".git", "__pycache__") for part in path.relative_to(BASE).parts)}
+         if any(k in os.environ for k in ("MINICPM_NATIVE_PROFILE_EVENTS", "MINICPM_DECODE_GAP_RUN_DIR")):
+             raise RuntimeError("禁止继承profiler环境")
+         lock = (ROOT / "framework-device.lock").open("a")
+@@ -178,22 +234,20 @@
+             shutil.copyfile(ROOT / "scripts" / name, source / target)
+         if any(sha(source / name) != expected for name, (_, expected) in SOURCES.items()):
+             raise RuntimeError("归档素材SHA不符")
++        for name, (path, expected) in INSTALLED.items():
++            shutil.copyfile(path, source / name)
++            if sha(source / name) != expected:
++                raise RuntimeError("actual源码归档不符：" + name)
+         for name in HELPERS:
+             shutil.copyfile(ROOT / "scripts" / name, control / name)
++        shutil.copyfile(REFERENCE, control / "base-reference-410.json")
++        write(control / "base-source-sha256.json", expected_base)
++        shutil.copytree(BASE, control / "plugin-source",
++                        ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc", "*.pyo"))
++        if plugin_map(control / "plugin-source") != expected_base or checked_base() != expected_base:
++            raise RuntimeError("完整412基点复制或准备后身份变化")
+         manifest["environment"] = environment()
+         write(control / "environment-before.json", manifest["environment"])
+-        contract = read(source / "event-wait-contract.json")
+-        identities = []
+-        for item in contract["files"]:
+-            if item["status"] != "read_only":
+-                continue  # wheel缺失cpp按原取证记录，不补上游或假定绑定语义。
+-            path = regular(Path(item["path"]))
+-            if sha(path) != item["sha256"] or str(path.resolve()) != item["resolved"]:
+-                raise RuntimeError("事件契约实际源变化：" + str(path))
+-            identities.append({"path": str(path), "resolved": str(path.resolve()), "sha256": item["sha256"]})
+-        write(control / "event-source-identity.json", {"files": identities,
+-              "missing_in_original_collection": contract["missing_paths"],
+-              "semantic_pass_claimed": False})
+         expected_source = source_map(source)
+         write(control / "source-sha256.json", expected_source)
+         manifest["db_before"] = snapshot(control, "db-before")
+@@ -202,10 +256,12 @@
+             raise RuntimeError("准备期间归档source变化")
+         manifest["preflight_before_worker"] = idle(control, "preflight-before-worker")
+         worker_argv = [sys.executable, str(source / "gate.py"), "--device-worker", "--output-dir", str(run),
+-                       "--source-dir", str(source)]
++                       "--source-dir", str(source), "--model", str(MODEL)]
+         env = os.environ.copy()
+         env["PYTHONDONTWRITEBYTECODE"] = "1"
+-        write(control / "worker-command.json", {"argv": worker_argv, "shell": shlex.join(worker_argv), "env": {"PYTHONDONTWRITEBYTECODE": "1"}})
++        env["PYTHONPATH"] = str(BASE)
++        env["VLLM_PLUGINS"] = "fl"
++        write(control / "worker-command.json", {"argv": worker_argv, "shell": shlex.join(worker_argv), "env": {key: env[key] for key in ("PYTHONDONTWRITEBYTECODE", "PYTHONPATH", "VLLM_PLUGINS")}})
+         manifest["worker_command"] = worker_argv
+         out = (run / "worker.log").open("xb")
+         logs.append(out)
+@@ -221,6 +277,8 @@
+         status = manifest["worker_exit_code"]
+         if status == 0 and not (run / "results.json").is_file():
+             raise RuntimeError("worker exit0但无results原件")
++        if status == 0 and read(run / "results.json").get("status") != "local_tolerance_passed_not_model_accuracy_or_production_speed":
++            raise RuntimeError("worker结果没有通过局部声明的数值门")
+     except BaseException:
+         status = 1
+         manifest["controller_error"] = traceback.format_exc()
+@@ -244,6 +302,10 @@
+                     manifest[label + "_error"] = traceback.format_exc()
+                     status = 1
+             try:
++                manifest["base_unchanged"] = checked_base() == expected_base
++                if not manifest["base_unchanged"]:
++                    raise RuntimeError("运行期间完整412基点变化")
++                checked_assets()
+                 if (run / "source").is_dir():
+                     actual = source_map(run / "source")
+                     write(control / "source-post-sha256.json", actual)
+@@ -267,9 +329,9 @@
+                     raise RuntimeError("本门封存禁止symlink：" + str(path))
+                 if path.is_file():
+                     files[str(path.relative_to(run.parent))] = {"sha256": sha(path), "bytes": path.stat().st_size}
+-        write(control / "seal.json", {"kind": "本轮API门完整字节索引，不代表设备正确性通过", "recorded_utc": utc(),
++        write(control / "seal.json", {"kind": "本轮局部尾段门完整字节索引，不代表模型正确性通过", "recorded_utc": utc(),
+                                      "run": str(run), "control": str(control), "exit_code": status, "files": files,
+-                                     "collect": [str(run), str(control)], "limits": ["worker结果/失败原件另审；exit0不冒充服务或准确率。", "事件API微门，不是模型服务性能；源声明不能证明驱动真实睡眠。"]})
++                                     "collect": [str(run), str(control)], "limits": ["worker结果/失败原件另审；exit0不冒充服务或准确率。", "随机权重actual类eager局部门，不是生产Inductor尾图或模型服务性能。"]})
+         if lock is not None:
+             lock.close()
+     return status
+@@ -282,7 +344,7 @@
+         raise ValueError("无参启动唯一UTC门；不接受源/参数覆盖")
+     checked_assets()
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+-    run = ROOT / "framework" / (stamp + "-event-wait-gate")
++    run = ROOT / "framework" / (stamp + "-last-layer-tail-gate")
+     control = run.with_name(run.name + "-control")
+     run.mkdir(exist_ok=False)
+     control.mkdir(exist_ok=False)

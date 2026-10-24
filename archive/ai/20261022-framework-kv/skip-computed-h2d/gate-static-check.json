@@ -1,0 +1,37 @@
+{
+  "kind": "必要CPU语法/import/help与旧门AST增量，未GPU/fixture执行",
+  "parent_gate_sha256": "b1240720b588dae25d92cc1c173d64c1ea5f6e34fcdcab5dd0156407ebbcb757",
+  "gate_sha256": "461676a0b6517e5c832d315fbcfe18aff059ad0bd23cf14e51da7f34cfe4af42",
+  "unchanged_functions": {
+    "utc": true,
+    "digest": true,
+    "write": true,
+    "load": true,
+    "extract_methods": true,
+    "configure": true,
+    "call": true
+  },
+  "five_CASES_AST_unchanged": true,
+  "timing_original_32call_ABBA_retained": true,
+  "timing_not_pass_gate": true,
+  "both_sides_unchanged_helpers": true,
+  "only_fixture_additions": [
+    "model.is_encoder_decoder=False",
+    "valid_sampled_token_count_gpu=None"
+  ],
+  "new_device_assertions": [
+    "candidate computed GPU stays -113 on real helper True",
+    "baseline computed matches CPU",
+    "next full-method real helper False restores computed CPU values",
+    "original four-step graph/event reads positions/seq/slots and input IDs",
+    "per-window real helper selected delta32"
+  ],
+  "CPU_checks": "syntax+runpy import+--help; no torch/triton/vllm imported",
+  "not_proven": "all device checks/timing remain unexecuted; current official is sole GPU job",
+  "revision": {
+    "previous_sha256": "d5f22ea4e90a544a296aa11780ba378f6d775f492670329b5a233b8ed687f192",
+    "only_delta": "fallback全buffer只比positions/seq；computed已有[:32]CPU当前值断言，不填平/比较无消费者尾部",
+    "syntax": true,
+    "no_suite_or_device_rerun": true
+  }
+}

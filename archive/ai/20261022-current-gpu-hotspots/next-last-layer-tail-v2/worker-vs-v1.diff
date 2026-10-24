@@ -1,0 +1,107 @@
+--- v1/validate_last_layer_tail.py
++++ v2/validate_last_layer_tail_v2.py
+@@ -3,7 +3,7 @@
+ from __future__ import annotations
+ 
+ import argparse
+-from datetime import datetime, timezone
++from datetime import datetime, timezone, timedelta
+ import hashlib
+ import importlib.util
+ import json
+@@ -17,6 +17,10 @@
+ EXPECTED_MODEL = "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180"
+ EXPECTED_HELPER = "99d5a8c86dac67b7a2c0029842576fbd1439060525d4c6789b0ddd32703fc9ec"
+ LOOPS = 32
++EXPECTED_DIST = {
++    "parallel_state.py": "1feda9ac98c1dd14cbad60a9205194d224ad7d75656c6e94cffbe3bdbcbf4003",
++    "parameter.py": "ff6054fbd19ec932c548d562c6f4cc4506383b71cbe411fcfd554c8b1d87b510",
++}
+ 
+ 
+ def sha(path):
+@@ -43,6 +47,7 @@
+                               "No server, sampler, accuracy or end-to-end speed conclusion."],
+               "cases": [], "timings": []}
+     torch, held = None, []
++    dist_state, dist_attempted = None, False
+     try:
+         path = source / "last_layer_tail.py"
+         if EXPECTED_HELPER is None or sha(path) != EXPECTED_HELPER:
+@@ -56,6 +61,13 @@
+         from vllm_fl.utils import get_flag_gems_whitelist_blacklist
+         from vllm.config import CompilationConfig, CUDAGraphMode, set_current_vllm_config
+         from vllm.engine.arg_utils import EngineArgs
++        from vllm.distributed import parallel_state as dist_state
++        from vllm.model_executor import parameter as parameter_module
++        from vllm.platforms import current_platform
++
++        for name, module in (("parallel_state.py", dist_state), ("parameter.py", parameter_module)):
++            if sha(Path(module.__file__)) != EXPECTED_DIST[name] or sha(source / name) != EXPECTED_DIST[name]:
++                raise RuntimeError("actual distributed/parameter source changed: " + name)
+ 
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("one visible accelerator required")
+@@ -77,6 +89,37 @@
+                 flag_gems.enable(unused=black, record=False, once=True)
+ 
+         with torch.inference_mode(), set_current_vllm_config(config):
++            # disable_tp只禁止shard，真实ModelWeightParameter仍要求get_tp_group。
++            # 使用原API创建真实world1/TP1组，不写_TP、不改rank函数或服务参数。
++            if torch.distributed.is_initialized() or dist_state.model_parallel_is_initialized():
++                raise RuntimeError("device child must start without an inherited distributed group")
++            pc = config.parallel_config
++            if (pc.world_size != 1 or pc.nnodes != 1 or pc.data_parallel_size != 1
++                    or pc.tensor_parallel_size != 1 or pc.pipeline_parallel_size != 1
++                    or pc.prefill_context_parallel_size != 1 or pc.decode_context_parallel_size != 1
++                    or pc.enable_elastic_ep):
++                raise RuntimeError("only actual single-rank TP/PP/DP/PCP/DCP1 supported")
++            backend = current_platform.dist_backend
++            if not torch.distributed.is_backend_available(backend):
++                raise RuntimeError("actual platform distributed backend unavailable: " + str(backend))
++            rendezvous = run / "world1-rendezvous"
++            if rendezvous.exists():
++                raise RuntimeError("fresh file rendezvous required")
++            result["distributed"] = {"backend": backend, "world_size": 1, "rank": 0,
++                "local_rank": 0, "init_method": rendezvous.resolve().as_uri(),
++                "source_sha256": EXPECTED_DIST}
++            dist_attempted = True  # 原API可能部分初始化后抛错，finally也必须清理。
++            dist_state.init_distributed_environment(
++                world_size=1, rank=0, distributed_init_method=rendezvous.resolve().as_uri(),
++                local_rank=0, backend=backend, timeout=timedelta(seconds=90))
++            dist_state.ensure_model_parallel_initialized(
++                tensor_model_parallel_size=1, pipeline_model_parallel_size=1,
++                prefill_context_model_parallel_size=1, decode_context_model_parallel_size=1)
++            if (torch.distributed.get_world_size() != 1
++                    or dist_state.get_tensor_model_parallel_rank() != 0
++                    or dist_state.get_tensor_model_parallel_world_size() != 1):
++                raise RuntimeError("real TP/WORLD identity mismatch")
++            result["distributed"]["initialized"] = True
+             tail = helper.create(config, source)
+             result["installed_sources"] = tail.sources
+             result["local_parts"] = [type(part).__module__ + "." + type(part).__name__ for part in tail.parts]
+@@ -205,6 +248,24 @@
+                 result["status"], result["settle_error"] = "failed", traceback.format_exc()
+                 # 若设备未settle，强持资源直到worker退出，不进行原路重试。
+                 globals()["_UNSETTLED_TAIL_RESOURCES"] = held
++        if dist_attempted:
++            if result.get("device_settled"):
++                errors = []
++                # 依actual API，部分初始化时各global为None可安全跳过；两个销毁均尝试。
++                for cleanup in (dist_state.destroy_model_parallel, dist_state.destroy_distributed_environment):
++                    try:
++                        cleanup()
++                    except BaseException:
++                        errors.append(traceback.format_exc())
++                result["distributed_cleanup"] = {
++                    "errors": errors,
++                    "torch_initialized_after": torch.distributed.is_initialized(),
++                    "model_parallel_initialized_after": dist_state.model_parallel_is_initialized()}
++                if errors or result["distributed_cleanup"]["torch_initialized_after"] or result["distributed_cleanup"]["model_parallel_initialized_after"]:
++                    result["status"] = "failed"
++            else:
++                result["distributed_cleanup"] = {"skipped": "device_unsettled; owner must terminate child"}
++                result["status"] = "failed"
+         result["finished_utc"] = datetime.now(timezone.utc).isoformat()
+         write(run / "results.json", result)
+     return 0 if result["status"] == "local_tolerance_passed_not_model_accuracy_or_production_speed" else 1

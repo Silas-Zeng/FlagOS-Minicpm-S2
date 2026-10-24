@@ -1,0 +1,311 @@
+{
+  "status": "pass",
+  "checks": {
+    "original_driver_exit0": true,
+    "same_Engine_DETERMINE_RETURN": true,
+    "original_profile_once": true,
+    "same_Engine_PARENT_RETURN": true,
+    "original_int_and_parent_list": true,
+    "all_three_hooks_restored": true,
+    "no_observation_rejection": true
+  },
+  "events": [
+    {
+      "default_enabled": false,
+      "event": "ARMED",
+      "new_gpu_samples": false,
+      "observational_only": true,
+      "observations_complete": false,
+      "parent_chain": [
+        {
+          "code_qualname": "Executor.determine_available_memory",
+          "first_line": 146,
+          "module": "vllm.v1.executor.abstract",
+          "qualname": "Executor.determine_available_memory",
+          "source_file": "/usr/local/lib/python3.12/site-packages/vllm/v1/executor/abstract.py"
+        }
+      ],
+      "parent_source_sha256": "419002195d13cf050c3ea9705d18a12456c890c27c470a1efadce7de27ded0b1",
+      "pid": 354886,
+      "source_files_changed": false,
+      "stdout_bypasses_worker_logger": true,
+      "same_engine_log_pid": false
+    },
+    {
+      "default_enabled": false,
+      "event": "ARMED",
+      "new_gpu_samples": false,
+      "observational_only": true,
+      "observations_complete": false,
+      "parent_chain": [
+        {
+          "code_qualname": "Executor.determine_available_memory",
+          "first_line": 146,
+          "module": "vllm.v1.executor.abstract",
+          "qualname": "Executor.determine_available_memory",
+          "source_file": "/usr/local/lib/python3.12/site-packages/vllm/v1/executor/abstract.py"
+        }
+      ],
+      "parent_source_sha256": "419002195d13cf050c3ea9705d18a12456c890c27c470a1efadce7de27ded0b1",
+      "pid": 355062,
+      "source_files_changed": false,
+      "stdout_bypasses_worker_logger": true,
+      "same_engine_log_pid": true
+    },
+    {
+      "after_profile": {
+        "auto_measure": false,
+        "cuda_memory": 6658457600,
+        "free_memory": 27701280768,
+        "non_torch_memory": 1157627904,
+        "timestamp": 1792700163.3141913,
+        "torch_memory": 5500829696,
+        "torch_peak": 5774530048,
+        "total_memory": 34359738368
+      },
+      "before_create": {
+        "auto_measure": true,
+        "cuda_memory": 153092096,
+        "free_memory": 34206646272,
+        "non_torch_memory": 153092096,
+        "timestamp": 1792700151.5917563,
+        "torch_memory": 0,
+        "torch_peak": 0,
+        "total_memory": 34359738368
+      },
+      "before_profile": {
+        "auto_measure": false,
+        "cuda_memory": 6322913280,
+        "free_memory": 28036825088,
+        "non_torch_memory": 1096810496,
+        "timestamp": 1792700156.4222863,
+        "torch_memory": 5226102784,
+        "torch_peak": 5118105088,
+        "total_memory": 34359738368
+      },
+      "caller_chain": [
+        {
+          "line": 510,
+          "qualname": "run_method",
+          "source_file": "/usr/local/lib/python3.12/site-packages/vllm/v1/serial_utils.py"
+        },
+        {
+          "line": 92,
+          "qualname": "UniProcExecutor.collective_rpc",
+          "source_file": "/usr/local/lib/python3.12/site-packages/vllm/v1/executor/uniproc_executor.py"
+        },
+        {
+          "line": 147,
+          "qualname": "Executor.determine_available_memory",
+          "source_file": "/usr/local/lib/python3.12/site-packages/vllm/v1/executor/abstract.py"
+        },
+        {
+          "line": 255,
+          "qualname": "_wrap_parent.<locals>.observed",
+          "source_file": "/workspace/experiments/minicpm-s2/code/current-kv-memory-finite-20261022T201518Z/vllm_fl/patches/biv150_kv_memory_observer.py"
+        },
+        {
+          "line": 283,
+          "qualname": "EngineCore._initialize_kv_caches",
+          "source_file": "/usr/local/lib/python3.12/site-packages/vllm/v1/engine/core.py"
+        },
+        {
+          "line": 178,
+          "qualname": "instrument_otel.<locals>.sync_wrapper",
+          "source_file": "/usr/local/lib/python3.12/site-packages/vllm/tracing/otel.py"
+        },
+        {
+          "line": 133,
+          "qualname": "EngineCore.__init__",
+          "source_file": "/usr/local/lib/python3.12/site-packages/vllm/v1/engine/core.py"
+        }
+      ],
+      "derived_only_not_new_samples": {
+        "graph_deduction_reconstructed": 0.0,
+        "profile_torch_peak_reconstructed": 5774530048
+      },
+      "error_type": null,
+      "event": "DETERMINE_RETURN",
+      "init_snapshot": {
+        "auto_measure": true,
+        "cuda_memory": 153092096,
+        "free_memory": 34206646272,
+        "non_torch_memory": 153092096,
+        "timestamp": 1792700151.5917563,
+        "torch_memory": 0,
+        "torch_peak": 0,
+        "total_memory": 34359738368
+      },
+      "logger_after": {
+        "chain": [
+          {
+            "disabled": false,
+            "filters": [],
+            "handlers": [],
+            "level": 0,
+            "name": "vllm_fl.worker.worker",
+            "propagate": true
+          },
+          {
+            "disabled": false,
+            "filters": [],
+            "handlers": [],
+            "level": 0,
+            "name": "vllm_fl",
+            "propagate": true
+          },
+          {
+            "disabled": false,
+            "filters": [],
+            "handlers": [
+              {
+                "class": "logging.StreamHandler",
+                "filters": [],
+                "level": 0
+              }
+            ],
+            "level": 30,
+            "name": "root",
+            "propagate": true
+          }
+        ],
+        "effective_level_derived": 30,
+        "filters_executed": false,
+        "info_once_function": [],
+        "log_configuration_changed": false,
+        "manager_disable": 0
+      },
+      "logger_before": {
+        "chain": [
+          {
+            "disabled": false,
+            "filters": [],
+            "handlers": [],
+            "level": 0,
+            "name": "vllm_fl.worker.worker",
+            "propagate": true
+          },
+          {
+            "disabled": false,
+            "filters": [],
+            "handlers": [],
+            "level": 0,
+            "name": "vllm_fl",
+            "propagate": true
+          },
+          {
+            "disabled": false,
+            "filters": [],
+            "handlers": [
+              {
+                "class": "logging.StreamHandler",
+                "filters": [],
+                "level": 0
+              }
+            ],
+            "level": 30,
+            "name": "root",
+            "propagate": true
+          }
+        ],
+        "effective_level_derived": 30,
+        "filters_executed": false,
+        "info_once_function": [],
+        "log_configuration_changed": false,
+        "manager_disable": 0
+      },
+      "new_gpu_samples": false,
+      "observational_only": true,
+      "original_identity": {
+        "determine_chain": [
+          {
+            "code_qualname": "managed_inference_mode.<locals>.decorator.<locals>.wrapper",
+            "first_line": 153,
+            "module": "vllm_fl.worker.worker",
+            "qualname": "WorkerFL.determine_available_memory",
+            "source_file": "/workspace/experiments/minicpm-s2/code/current-kv-memory-finite-20261022T201518Z/vllm_fl/dispatch/io_common.py"
+          },
+          {
+            "code_qualname": "WorkerFL.determine_available_memory",
+            "first_line": 494,
+            "module": "vllm_fl.worker.worker",
+            "qualname": "WorkerFL.determine_available_memory",
+            "source_file": "/workspace/experiments/minicpm-s2/code/current-kv-memory-finite-20261022T201518Z/vllm_fl/worker/worker.py"
+          }
+        ],
+        "executor_class": "vllm.v1.executor.uniproc_executor.UniProcExecutor",
+        "loaded_source_sha256": {
+          "vllm.v1.executor.uniproc_executor": "4625c8e59aef1482600b02204701d348d7f716427581d3cf23b06bff9b056abe",
+          "vllm.v1.worker.worker_base": "7da44338c2645ebf03d23394e452b31a8e3da1011fd1b42fcfcccfe99551b3fe",
+          "vllm_fl.dispatch.io_common": "6d8b4adf9ad75a5b79569e4ccc132c1ee69fd525198b3c4e25e2d6de6f3fff55",
+          "vllm_fl.worker.worker": "a8de1780d1b41bf4889c26f3d593e6ec54e91a5f61996ce64b4d79f2a97efa24"
+        },
+        "profiling_chain": [
+          {
+            "code_qualname": "contextmanager.<locals>.helper",
+            "first_line": 299,
+            "module": "vllm_fl.worker.worker",
+            "qualname": "memory_profiling_fl",
+            "source_file": "/usr/local/lib/python3.12/contextlib.py"
+          },
+          {
+            "code_qualname": "memory_profiling_fl",
+            "first_line": 155,
+            "module": "vllm_fl.worker.worker",
+            "qualname": "memory_profiling_fl",
+            "source_file": "/workspace/experiments/minicpm-s2/code/current-kv-memory-finite-20261022T201518Z/vllm_fl/worker/worker.py"
+          }
+        ]
+      },
+      "pid": 355062,
+      "profile": {
+        "non_kv_cache_memory": 6762193920,
+        "non_torch_increase": 1004535808,
+        "profile_time": 6.891905069351196,
+        "torch_peak_increase": 656424960,
+        "weights_memory": 5101233152
+      },
+      "profile_context_calls": 1,
+      "returned": 22443583692,
+      "worker_fields": {
+        "available_kv_cache_memory_bytes": 22443583692.8,
+        "cudagraph_memory_estimate": 0,
+        "non_torch_memory": 1004535808,
+        "peak_activation_memory": 656424960,
+        "requested_memory": 29205777612.8
+      },
+      "same_engine_log_pid": true
+    },
+    {
+      "error_type": null,
+      "event": "PARENT_RETURN",
+      "new_gpu_samples": false,
+      "observational_only": true,
+      "original_chain": [
+        {
+          "code_qualname": "Executor.determine_available_memory",
+          "first_line": 146,
+          "module": "vllm.v1.executor.abstract",
+          "qualname": "Executor.determine_available_memory",
+          "source_file": "/usr/local/lib/python3.12/site-packages/vllm/v1/executor/abstract.py"
+        }
+      ],
+      "pid": 355062,
+      "restored": {
+        "parent_method": true,
+        "profiling_context": true,
+        "worker_method": true
+      },
+      "returned": [
+        22443583692
+      ],
+      "returned_type": "list",
+      "same_engine_log_pid": true
+    }
+  ],
+  "performance_pair": false,
+  "limits": [
+    "不增加设备采样；不能证明分配来源或历史差的因果。",
+    "Q/GQA真实执行由root从原smoke原件读取，不在本launcher另加门。"
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "run_id": "20261022T181739Z-bq16-chunk-chain-gate",
+  "raw": "experiments/framework/20261022T181739Z-bq16-chunk-chain-gate",
+  "seal_verification": "复用root已完成的32项逐文件验收；此脚本未重验seal。",
+  "assets_sha256": {
+    "validate_bq16_chunk_chain.py": "a30c7206e31de9fb12580878bf9986e980f40515449b133b8f2c7bf410c6dc51",
+    "launch_bq16_chain_gate.sh": "a7848995e36f84913a7572a42d08efc63cb9bd2f5a6c90ae6de89ea997d78639"
+  },
+  "strict_checks_passed": 25,
+  "max_abs_target_diff": 0.0,
+  "chunks": {
+    "baseline": [
+      2019,
+      2019,
+      2019,
+      2019,
+      2019,
+      2019,
+      1646
+    ],
+    "aligned": [
+      2016,
+      2016,
+      2016,
+      2016,
+      2016,
+      2016,
+      1664
+    ]
+  },
+  "target_absolute_range": [
+    2944,
+    16704
+  ],
+  "timing_summary": {
+    "baseline": {
+      "wall_ms_per_chain": 60.16903034375,
+      "event_ms_per_chain": 60.02903747558594
+    },
+    "aligned": {
+      "wall_ms_per_chain": 60.023055234375,
+      "event_ms_per_chain": 59.8887939453125
+    }
+  },
+  "saved_pct": {
+    "wall_ms_per_chain": 0.24260837932909007,
+    "event_ms_per_chain": 0.23362615189436164
+  },
+  "windows": [
+    {
+      "index": 1,
+      "variant": "baseline",
+      "chains": 32,
+      "wall_ms_per_chain": 60.14130890625,
+      "event_ms_per_chain": 60.002723693847656,
+      "wall_change_pct_vs_baseline_mean": -0.04607260137253766,
+      "event_change_pct_vs_baseline_mean": -0.043835088558574764,
+      "cpu_stat_delta": {
+        "nr_periods": 19,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "throttled_periods_pct": 0.0
+    },
+    {
+      "index": 2,
+      "variant": "aligned",
+      "chains": 32,
+      "wall_ms_per_chain": 60.02001415625,
+      "event_ms_per_chain": 59.88474655151367,
+      "wall_change_pct_vs_baseline_mean": -0.2476626042478336,
+      "event_change_pct_vs_baseline_mean": -0.24036854519106088,
+      "cpu_stat_delta": {
+        "nr_periods": 19,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "throttled_periods_pct": 0.0
+    },
+    {
+      "index": 3,
+      "variant": "aligned",
+      "chains": 32,
+      "wall_ms_per_chain": 60.0260963125,
+      "event_ms_per_chain": 59.89284133911133,
+      "wall_change_pct_vs_baseline_mean": -0.23755415441034655,
+      "event_change_pct_vs_baseline_mean": -0.2268837585976624,
+      "cpu_stat_delta": {
+        "nr_periods": 19,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "throttled_periods_pct": 0.0
+    },
+    {
+      "index": 4,
+      "variant": "baseline",
+      "chains": 32,
+      "wall_ms_per_chain": 60.19675178125,
+      "event_ms_per_chain": 60.05535125732422,
+      "wall_change_pct_vs_baseline_mean": 0.04607260137254876,
+      "event_change_pct_vs_baseline_mean": 0.04383508855856366,
+      "cpu_stat_delta": {
+        "nr_periods": 20,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "throttled_periods_pct": 0.0
+    }
+  ],
+  "all_windows_without_cgroup_throttle": true,
+  "decision": "保留单层七段链局部正信号，暂停scheduler实现，不接真实服务。",
+  "limits": [
+    "仅BI-V150实际Attention七段合成链，D29与目标2944→16704；decode起始KV16384为构造值，非恢复时真实逐请求长度。",
+    "计时包含builder、原writer和forward；排除输入打包、分配、slot构造，不含GEMM/完整模型/采样。",
+    "未改scheduler或算子；严格bits与不变性通过不等于整模型准确率。",
+    "32 chains/window的单次ABBA及每窗相对基线均值只作描述，不是独立统计重复或端到端吞吐收益。",
+    "root结合实际全轮暴露量估算仅约0.003–0.004%的条件量级，非实测服务收益或严格上限；当前不承担调度改动成本。"
+  ]
+}

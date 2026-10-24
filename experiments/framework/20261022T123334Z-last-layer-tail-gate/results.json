@@ -1,0 +1,24 @@
+{
+  "status": "failed",
+  "kind": "actual-class local eager tail only",
+  "limitations": [
+    "Synthetic attention output/residual and random BF16 weights; no 2B model weights.",
+    "No Attention/QKV/KV calls: this does not validate the full model cache or hook.",
+    "Actual class/native RMSNorm calls, not production Inductor/AOT tail timing.",
+    "M2048/N2 is one upper-bound fixture, not full workload coverage.",
+    "Tolerance gate is local only; bitwise and error values are retained separately.",
+    "No server, sampler, accuracy or end-to-end speed conclusion."
+  ],
+  "cases": [],
+  "timings": [],
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "torch_num_threads": 56,
+  "flaggems": {
+    "enabled": true,
+    "whitelist": null,
+    "blacklist": null
+  },
+  "error": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/framework/20261022T123334Z-last-layer-tail-gate/source/gate.py\", line 80, in worker\n    tail = helper.create(config, source)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/experiments/minicpm-s2/framework/20261022T123334Z-last-layer-tail-gate/source/last_layer_tail.py\", line 64, in create\n    output_projection = modules[\"linear\"].RowParallelLinear(\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/vllm/model_executor/layers/linear.py\", line 1565, in __init__\n    self.quant_method.create_weights(\n  File \"/usr/local/lib/python3.12/site-packages/vllm/model_executor/layers/linear.py\", line 197, in create_weights\n    weight = ModelWeightParameter(\n             ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/vllm/model_executor/parameter.py\", line 142, in __init__\n    super().__init__(**kwargs)\n  File \"/usr/local/lib/python3.12/site-packages/vllm/model_executor/parameter.py\", line 214, in __init__\n    super().__init__(**kwargs)\n  File \"/usr/local/lib/python3.12/site-packages/vllm/model_executor/parameter.py\", line 65, in __init__\n    self.tp_rank = get_tensor_model_parallel_rank()\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/vllm/distributed/parallel_state.py\", line 2019, in get_tensor_model_parallel_rank\n    return get_tp_group().rank_in_group\n           ^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/vllm/distributed/parallel_state.py\", line 1350, in get_tp_group\n    assert _TP is not None, \"tensor model parallel group is not initialized\"\n           ^^^^^^^^^^^^^^^\nAssertionError: tensor model parallel group is not initialized\n",
+  "device_settled": true,
+  "finished_utc": "2026-10-22T12:33:50.066350+00:00"
+}

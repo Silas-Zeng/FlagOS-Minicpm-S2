@@ -1,6 +1,6 @@
 # 方法 PR 协作安排
 
-GitHub 框架以比赛原始源码 13eb9be 为起点，以下十项 PR 已按依赖顺序合并：#5→#6→#7→#8→#9→#10→#1→#2→#3→#4。随后通过 #11 更新中文 README。当前 main 为 `87ed53719126208eaa9ba1cab698b14a5693eb5d`；旧 SQL+C3 快照及历史继续保留。
+GitHub 框架以比赛原始源码 13eb9be 为起点，以下十项 PR 已按依赖顺序合并：#5→#6→#7→#8→#9→#10→#1→#2→#3→#4。后续又合入 GQA #12、prefill normalization #16、PR15+PR21 兼容组合 #22 与 Q fragment #23；当前 main 为 `1ea082f79db65a66f78fdd7b1d958335450fa9f4`。旧 SQL+C3 快照及历史继续保留。
 
 | PR | 方法 | 审阅基线 / 依赖 |
 |---|---|---|
@@ -14,6 +14,13 @@ GitHub 框架以比赛原始源码 13eb9be 为起点，以下十项 PR 已按依
 | [#2](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/2) | async token更新 | #10；与#1并列，合并时保留两条helper import |
 | [#3](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/3) | KV连续页复制工具 | main；独立新增文件 |
 | [#4](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/4) | KV二维SAVE工具 | main；与#3无代码依赖，未默认接入服务 |
+
+当前最优组合的增量 PR：
+
+| PR | 方法 | 依赖 / 结果边界 |
+|---|---|---|
+| [#22](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/22) | PR15 computed H2D + PR21计算顺序兼容组合 | 组合绝对官方 4K/16K为5118.99/3436.17 tok/s；为避免 runner/helper 身份失配作为一个PR处理，取代分别合并#15/#21 |
+| [#23](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/23) | prefill Q fragment跨K循环保持 | 基于#22；官方1536请求，4K/16K为5313.59/3764.67 tok/s，Math500 L3为100/105；同DB种子但KV521840对521936，不包装成严格等KV单项因果 |
 
 六项历史增量重建后的vllm_fl源码逐字节等于原受测SQL+C3快照；这只是拆包核对，不是新模型验证。CPU两PR各自仍仅3个变更文件，KV两PR分别2/3个，未把旧整包重新带入独立PR。
 

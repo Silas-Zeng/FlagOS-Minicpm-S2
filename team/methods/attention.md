@@ -21,6 +21,8 @@ prefill、3D decode、mixed分流、可见prefix及重叠等路径；相关PR不
 - [20261021T054922Z-c3-mixed-screen](../runs/bi-v150/20261021T054922Z-c3-mixed-screen.md)（登记#27）：64 completed；no stable/official performance or accuracy claim **是否保留：** 待确认；通过某项检查不自动等于优化保留。
 - [20261021T113727Z-mixed-attention-overlap-gate](../runs/bi-v150/20261021T113727Z-mixed-attention-overlap-gate.md)（登记#66）：bitwise/padding/KV/RNG pass fallbackpass **是否保留：** 待确认；通过某项检查不自动等于优化保留。
 - [20261021T114553Z-mixed-attention-overlap-gate](../runs/bi-v150/20261021T114553Z-mixed-attention-overlap-gate.md)（登记#68）：Independent14sourceSHA **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261022T120226Z-prefill-w16-gate](../runs/bi-v150/20261022T120226Z-prefill-w16-gate.md)（登记#136）：wall11.089565→14.605917ms（慢31.7087%），event10.983371→14.497282ms（慢31.9930%） **是否保留：** 未集成；失败或无收益记录保留。
+- [20261023T044216Z-q-gqa-mixed-coverage-only-diagnostic](../runs/bi-v150/20261023T044216Z-q-gqa-mixed-coverage-only-diagnostic.md)（登记#186）：末421execute/259metadata/250mixed，q1共3000，prefix外及未入plan均759（25.3%） **是否保留：** 待确认；通过某项检查不自动等于优化保留。
 
 ## 未记录
 

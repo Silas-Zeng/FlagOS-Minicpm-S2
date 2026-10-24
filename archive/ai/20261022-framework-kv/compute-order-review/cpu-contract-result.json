@@ -1,0 +1,126 @@
+{
+  "gate": "新增非单调 ends_by_original 与真实原异步输入方法的 CPU 合同",
+  "baseline_sha256": "cc442e54e66c81f4375ac7b3311953441245f53bd0a576d27798528ce02e2663",
+  "candidate_sha256": "ea64a59cff6197c42babbc190246ab24dce4f540874b2025c0f4ebfee02195ac",
+  "helper_sha256": "5ce6f7b6a815ab54d9d9965c30f37362fd1d271c82d442caa76829e01f4938ce",
+  "cases": [
+    {
+      "name": "new_requests",
+      "rows": 4,
+      "tokens": 10,
+      "ends_by_original": [
+        1,
+        10,
+        2,
+        3
+      ],
+      "used_fused_guard_fallback": false,
+      "pass": true
+    },
+    {
+      "name": "mixed_identity_slice_with_nonmonotonic_ends",
+      "rows": 4,
+      "tokens": 10,
+      "ends_by_original": [
+        1,
+        10,
+        2,
+        3
+      ],
+      "used_fused_guard_fallback": false,
+      "pass": true
+    },
+    {
+      "name": "previous_rows_permuted",
+      "rows": 4,
+      "tokens": 10,
+      "ends_by_original": [
+        1,
+        10,
+        2,
+        3
+      ],
+      "used_fused_guard_fallback": true,
+      "pass": true
+    },
+    {
+      "name": "new_decode_and_continuing_prefill",
+      "rows": 4,
+      "tokens": 10,
+      "ends_by_original": [
+        1,
+        10,
+        2,
+        3
+      ],
+      "used_fused_guard_fallback": true,
+      "pass": true
+    },
+    {
+      "name": "multiple_prefill_segments",
+      "rows": 5,
+      "tokens": 10,
+      "ends_by_original": [
+        1,
+        6,
+        2,
+        10,
+        3
+      ],
+      "used_fused_guard_fallback": true,
+      "pass": true
+    },
+    {
+      "name": "observed_n17_geometry",
+      "rows": 17,
+      "tokens": 249,
+      "ends_by_original": [
+        1,
+        249,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "used_fused_guard_fallback": true,
+      "pass": true
+    }
+  ],
+  "plan_cases": [
+    {
+      "rows": 5,
+      "tokens": 10,
+      "full_table_stride": 8192,
+      "no_padding_rejections": 6,
+      "original_sampler_rows": 5,
+      "pass": true
+    },
+    {
+      "rows": 17,
+      "tokens": 249,
+      "full_table_stride": 8192,
+      "no_padding_rejections": 6,
+      "original_sampler_rows": 17,
+      "pass": true
+    }
+  ],
+  "scope": "仅执行原 _prepare_input_ids AST 与 NumPy/Tensor 替身；fused helper 故意回退原 scatter；没有执行 CUDA、Attention、sampler 或性能测试。",
+  "not_proven": [
+    "冷scope/source资格与完整prepare接线",
+    "真实 fused helper 动态接受率",
+    "pinned H2D 生命周期/真实设备次序",
+    "logits 数值与准确率",
+    "性能收益"
+  ]
+}

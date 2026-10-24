@@ -1,0 +1,48 @@
+{
+  "run_id": "20261023T100604Z-compute-order-structure-context16k",
+  "status": "structure_and_actual_sample_link_completed",
+  "change": "完整token排列和logits索引、原采样调用的结构诊断",
+  "test": "固定原context-screen 16K/128、c64、32请求、seed721201；无额外模型forward或采样",
+  "observed": {
+    "N": 17,
+    "M": 2048,
+    "Dprefix": 1,
+    "outside": 14,
+    "full_M_input_ids_inverse_bit_equal": true,
+    "full_M_positions_inverse_bit_equal": true,
+    "actual_logits_indices_match_independent_expected": true,
+    "original_sample_calls": 1,
+    "original_sample_returned": true,
+    "sampled_shape": [
+      17,
+      1
+    ]
+  },
+  "conclusion": "本次真实命中的完整映射与原采样衔接通过；候选保留，尚不集成。",
+  "limits": [
+    "仅一个自然mixed step的结构证据，不证明多步答案准确率或token等价",
+    "诊断含额外prepare及阻塞D2H，不计吞吐或性能收益",
+    "沿用085500已核slots/seq/table/42缓存条件，没有在此重复抓取",
+    "061500官方准确率未命中P，不能与本轮结构通过合并宣称P准确率通过"
+  ],
+  "evidence": "experiments/framework/20261023T100604Z-compute-order-structure-context16k-control/structure-artifacts/11797",
+  "command": "env -u BIV150_FINITE_GROWTH_ADMISSION BIV150_COMPUTE_ORDER_STRUCTURE_DIR=/workspace/experiments/minicpm-s2/framework/20261023T100604Z-compute-order-structure-context16k-control/structure-artifacts BIV150_KV_VERIFY_RESTORE=0 BIV150_Q_FRAGMENT_SERVICE_ARTIFACT_DIR=/workspace/experiments/minicpm-s2/framework/20261023T100604Z-compute-order-structure-context16k-control/q-hoist-artifacts python3 /workspace/experiments/minicpm-s2/scripts/run_framework_screen.py /workspace/experiments/minicpm-s2/framework/20261023T100604Z-compute-order-structure-context16k --source-dir /workspace/experiments/minicpm-s2/code/compute-order-structure-20261023T100604Z --context-screen --seed 721201 --require-log-marker BIV150_KV_PROTOCOL_INSTALLED",
+  "source_count": 424,
+  "source_record": "experiments/framework/20261023T100604Z-compute-order-structure-context16k-control/source-sha256.json",
+  "transfer": {
+    "sealed_files": 495,
+    "imported_files": 496,
+    "archive_bytes": 2997053,
+    "archive_sha256": "7f7200ba9c5eacf54b4c595a7429d338a8df4fc51b5536c85751ea728f6439a7",
+    "scp_exit": 0,
+    "original_import_verified": true,
+    "repeated_verification": false
+  },
+  "exit_code": 0,
+  "device_final": "68, 0",
+  "ports_closed": {
+    "127.0.0.1": true,
+    "::1": true
+  },
+  "gain": null
+}

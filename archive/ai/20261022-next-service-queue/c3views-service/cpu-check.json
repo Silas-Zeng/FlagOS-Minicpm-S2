@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "kind": "CPU only; new install/probe risk, no GPU or previous policy retest",
+  "base_runner_sha256": "6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141",
+  "candidate_runner_sha256": "806100175e62093870adc7457920491b6836ebf7630155cb6c39696b76b6b255",
+  "policy_core_sha256": "ba085577f24684cb980cdd09c2978192ff9b8b3a70fa62aadc1cfd3efced61d4",
+  "service_policy_sha256": "c70542e65eee4a184ea79a83d16a5bd0607ae6dac4712b618840a7a3e9ef20da",
+  "changed_paths": [
+    "vllm_fl/patches/biv150_c3_view_reuse.py",
+    "vllm_fl/worker/model_runner.py"
+  ],
+  "baseline_file_count": 412,
+  "candidate_file_count": 413,
+  "preparations": [
+    {
+      "command": [
+        "C:\\Users\\Administrator\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\tmp\\c3views-service\\prepare_c3views_service.py",
+        "--base-dir",
+        "C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\experiments\\framework\\20261022T070452Z-cpu-combination-combined-decode4k-control\\plugin-source",
+        "--output-dir",
+        "C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\tmp\\c3views-service\\prepared-baseline",
+        "--variant",
+        "baseline"
+      ],
+      "stdout": "{\"prepared\": \"C:\\\\Users\\\\Administrator\\\\Documents\\\\ChatGPT\\\\MiniCPM \\u6a21\\u578b\\u63a8\\u7406\\u541e\\u5410\\u6027\\u80fd\\u4f18\\u5316\\\\tmp\\\\c3views-service\\\\prepared-baseline\", \"receipt\": \"C:\\\\Users\\\\Administrator\\\\Documents\\\\ChatGPT\\\\MiniCPM \\u6a21\\u578b\\u63a8\\u7406\\u541e\\u5410\\u6027\\u80fd\\u4f18\\u5316\\\\tmp\\\\c3views-service\\\\prepared-baseline-preparation.json\", \"variant\": \"baseline\", \"runner_sha256\": \"6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141\"}"
+    },
+    {
+      "command": [
+        "C:\\Users\\Administrator\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\tmp\\c3views-service\\prepare_c3views_service.py",
+        "--base-dir",
+        "C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\experiments\\framework\\20261022T070452Z-cpu-combination-combined-decode4k-control\\plugin-source",
+        "--output-dir",
+        "C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\tmp\\c3views-service\\prepared-candidate",
+        "--variant",
+        "candidate"
+      ],
+      "stdout": "{\"prepared\": \"C:\\\\Users\\\\Administrator\\\\Documents\\\\ChatGPT\\\\MiniCPM \\u6a21\\u578b\\u63a8\\u7406\\u541e\\u5410\\u6027\\u80fd\\u4f18\\u5316\\\\tmp\\\\c3views-service\\\\prepared-candidate\", \"receipt\": \"C:\\\\Users\\\\Administrator\\\\Documents\\\\ChatGPT\\\\MiniCPM \\u6a21\\u578b\\u63a8\\u7406\\u541e\\u5410\\u6027\\u80fd\\u4f18\\u5316\\\\tmp\\\\c3views-service\\\\prepared-candidate-preparation.json\", \"variant\": \"candidate\", \"runner_sha256\": \"806100175e62093870adc7457920491b6836ebf7630155cb6c39696b76b6b255\"}"
+    }
+  ],
+  "checks": [
+    "exact base prefix plus C3-after install",
+    "actual ModelRunnerFL class",
+    "core policy byte identical",
+    "dummy/no-hit/exception do not report",
+    "first successful execute increment only",
+    "one marker and probe restores original",
+    "cached wrapper no repeated marker",
+    "Engine PID required",
+    "install rollback and idempotence",
+    "full isolated copies differ only declared two paths"
+  ]
+}

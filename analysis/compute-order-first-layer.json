@@ -1,0 +1,29 @@
+{
+  "run_id": "20261023T082246Z-compute-order-first-layer-context16k",
+  "status": "first_layer_attention_difference_localized",
+  "change": "同一步原序/P首层观察，保持原callee和采样行为",
+  "test": "原context-screen：16K输入/128输出、c64、32请求；仅诊断，不计性能",
+  "observed_inputs_QKV_slots_seq_effective_pages_bit_equal": true,
+  "layer0_worst": {
+    "original_row": 2,
+    "finite": true,
+    "max_abs": 0.05712890625,
+    "mean_abs": 0.001289654872380197
+  },
+  "logits_max_abs": 11.828125,
+  "logits_mean_abs": 0.6466249823570251,
+  "logits_top1_equal_rows": 12,
+  "exit_code": 0,
+  "evidence": "experiments/framework/20261023T082246Z-compute-order-first-layer-context16k-control/shadow-artifacts/9435",
+  "transfer": {
+    "scp_exit": 0,
+    "sealed_files": 498,
+    "imported_files": 499,
+    "archive_bytes": 11150710,
+    "archive_sha256": "decff52c61076f17baf21475b4c237d8658e9bccb3db9bc6554286f3593c4265",
+    "original_import_verified": true,
+    "repeated_hash_verification": false
+  },
+  "conclusion": "保留诊断证据，候选不集成；需独立参考定位哪条Attention路径偏离",
+  "limits": "额外gather/D2H同步可能掩盖竞态；只证明本诊断首层输入相同而输出不同，不证明全模型准确率，也不直接判定原序或P正确"
+}

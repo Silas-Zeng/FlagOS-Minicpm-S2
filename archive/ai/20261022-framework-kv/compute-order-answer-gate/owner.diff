@@ -1,0 +1,30 @@
+--- bc51/run_framework_screen.py
++++ answer/run_answer_gate.py
+@@ -72,7 +72,14 @@
+     parser.add_argument('--context-screen', action='store_true', help='One 16K load: 32 requests, 128 output tokens, concurrency64')
+     parser.add_argument('--context-long-screen', action='store_true', help='One 16K load: 32 requests, 1024 output tokens, concurrency64')
+     parser.add_argument('--require-log-marker', help='Fail before loads if installation evidence is absent')
++    parser.add_argument('--answer-requests', required=True, type=Path)
++    parser.add_argument('--answer-variant', required=True, choices=('baseline', 'candidate'))
+     args = parser.parse_args()
++    if not args.context_screen or args.native_profile or args.host_profile or args.smoke_only or args.decode_screen or args.context_long_screen:
++        parser.error('辅助答案门只接受原context-screen形状，不启profiler')
++    answer_client = Path(__file__).with_name('run_answer_load.py')
++    if hashlib.sha256(answer_client.read_bytes()).hexdigest() != '6dafbfbee4e3f91343ce28ecfefd55a48202e701d718184d8036556dff722c12':
++        raise ValueError('辅助client身份变化')
+     if args.context_long_screen and (args.context_screen or args.native_profile or args.host_profile or args.smoke_only or args.decode_screen):
+         parser.error('--context-long-screen requires a standalone unprofiled load')
+     if args.context_screen and (args.native_profile or args.host_profile or args.smoke_only or args.decode_screen):
+@@ -257,9 +264,9 @@
+         elif args.decode_screen or args.host_profile:
+             cases = [('decode-4k', 4096, 128, 64, 64)]
+         for offset, (label, length, output, concurrency, prompts) in enumerate(cases):
+-            command = ['bash', str(ROOT / 'scripts/run_diagnostic_load.sh'),
+-                       str(run / label), label, str(length), str(output),
+-                       str(concurrency), str(prompts), str(args.seed + offset)]
++            command = ['python3', str(answer_client), '--requests', str(args.answer_requests.resolve()),
++                       '--run-dir', str(run / label), '--variant', args.answer_variant,
++                       '--server-log', str(run / 'server.log')]
+             commands.append(command)
+             (run / 'load-commands.json').write_text(json.dumps(commands, indent=2))
+             (run / f'cpu-before-{label}.json').write_text(json.dumps(cpu_state()))

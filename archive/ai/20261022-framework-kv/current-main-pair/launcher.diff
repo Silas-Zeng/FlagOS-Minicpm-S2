@@ -1,0 +1,155 @@
+--- pr15/launch_pr15_accuracy.py
++++ current-main/launch_current_main_baseline.py
+@@ -1,4 +1,4 @@
+-"""固定PR15源码包→原35d准确率owner；不改评测、不安装包或修改已有源码。"""
++"""固定当前main完整Git树→原bc51短服务；不改生产源、SERVER或准确率。"""
+ import argparse
+ import copy
+ from datetime import datetime, timezone
+@@ -13,20 +13,16 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = Path('/workspace/experiments/minicpm-s2')
+-COMMIT = '638c4ac0f07ed98e4476a5971c849630d9cdd580'
+-BASE = '2b59d7612666452f7a1b8cca0f634af0b5e887b8'
+-TREE = 'd6a9597c34c29d06613562a40a95b91f70eeb70f'
+-ARCHIVE_SHA = 'a61e717f7d3623d558008d621e4e9b95b7c05f571e2191c79dd31541be44f25a'
+-MAP_SHA = '411f2a68b9220cc05a53719e1e8dd6c6d90171eb04303bbe7976b4ec7a2c2dcf'
++COMMIT = '3283672b92fa30f93f652b242193999836a95f88'
++BASE = 'a6e53d5219addc76700718880f86c33ab014b311'
++TREE = 'a6e53d5219addc76700718880f86c33ab014b311'
++ARCHIVE_SHA = '5cf712a06ae5098240d17e23c4c701615dcb9201a764878e707ffbd9c3e6b0a9'
++MAP_SHA = '0f054156787c216c94f24062cf2ef865369a982ff32ff76a9638fa3bfb70e222'
+ RUNNER = 'vllm_fl/worker/model_runner.py'
+-RUNNER_SHA = '195cc806a127ab4e43b6838aaee70ef70a4d8b2f02dd38df6f0e815374202b88'
+-HELPER = 'vllm_fl/patches/biv150_cpu_metadata.py'
+-HELPER_SHA = '0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f'
+-SCRIPTS = {
+-    'run_accuracy_gate.py': '35d30dfa4fc4d583c7fc62db1f18c992a7fd6a7e54fab95749710759b5df6a54',
+-    'run_math500_level3.sh': '6e045c1cda5a6379ddff1bf7c41ab1e4cbaaddd51b2ca9b4b1d2a92cfa8bb5f4',
+-    'snapshot_tuning_db.py': '0f2a57bf3bdb858756a1dedab5bd386a3a8bff384d925cf76461afb8c097e7a2',
+-}
++RUNNER_SHA = '97c78bde864cb019fe38831804f08d201a950dd2cfafd15ac5ad77b90a93879f'
++HELPER = 'vllm_fl/patches/biv150_prefill_normalized.py'
++HELPER_SHA = '24a421fa25e0ce7e21b54deb760a5bc893d3899a86ced4849bd3f3bfab50ed42'
++SCRIPTS = {'run_framework_screen.py': 'bc51ac2d9daf90205bde362f8384b1ac34238e7be932e9a6df7fc618d7350be9', 'run_diagnostic_load.sh': '621dedfc11ce21d35bdcffc9918ab4ac8bf63adc0e277fe7c2117e5f7e4ec378', 'snapshot_tuning_db.py': '0f2a57bf3bdb858756a1dedab5bd386a3a8bff384d925cf76461afb8c097e7a2', 'monitor_gpu.sh': 'af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a'}
+ 
+ 
+ def sha(raw):
+@@ -60,17 +56,14 @@
+     if sha(raw) != MAP_SHA or doc['sha'] != BASE or doc['truncated'] is not False:
+         raise ValueError('原main完整tree身份变化')
+     entries = {d['path']: dict(mode=d['mode'], sha=d['sha']) for d in doc['tree'] if d['type'] == 'blob'}
+-    if len(entries) != 432 or tree_oid(entries) != BASE or entries[RUNNER]['sha'] != 'b5b867ac5ddc0efa7cef1205f603d4c39b34d80e':
+-        raise ValueError('原main完整Git tree不符')
+-    entries[RUNNER] = dict(mode='100644', sha='08220acfc4564f68263a5cde31c08cdd42a4e5a2')
+-    if tree_oid(entries) != TREE:
+-        raise ValueError('替runner后不是PR15发布tree')
++    if len(entries) != 445 or tree_oid(entries) != TREE or entries[RUNNER]['sha'] != '03d86ca175befbb0d9928f3b0b7fcffa9a4f8197':
++        raise ValueError('当前main完整Git tree不符')
+     return entries
+ 
+ 
+ def checked_members(archive, entries, source):
+     if sha(archive.read_bytes()) != ARCHIVE_SHA:
+-        raise ValueError('不是冻结的PR15 tarball')
++        raise ValueError('不是冻结的当前main tarball')
+     members, found, prefix = [], {}, None
+     with tarfile.open(archive, 'r:gz') as tar:
+         for item in tar.getmembers():
+@@ -108,7 +101,7 @@
+             member.name = name
+             members.append(member)
+     if found != entries:
+-        raise ValueError('tar未覆盖完整PR15树')
++        raise ValueError('tar未覆盖完整当前main树')
+     return members
+ 
+ 
+@@ -138,16 +131,17 @@
+ def main():
+     p = argparse.ArgumentParser(description=__doc__)
+     p.add_argument('--archive', required=True, type=Path)
+-    p.add_argument('--source-dir', type=Path, default=ROOT / 'code/pr15-computed-h2d-638c4ac0')
++    p.add_argument('--source-dir', type=Path, default=None)
+     p.add_argument('--check-only', action='store_true', help='仅CPU核冻结tar全部blob/tree，不解包、不启动')
+     args = p.parse_args()
+-    source = args.source_dir.resolve()
++    stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
++    source = (args.source_dir or ROOT / 'code' / ('current-main-baseline-3283672b-'+stamp)).resolve()
+     entries = expected_tree()
+     members = checked_members(args.archive.resolve(strict=True), entries, source)
+     if args.check_only:
+-        print(json.dumps(dict(status='fixed_PR15_tar_tree_verified_CPU_only', commit=COMMIT, tree=TREE, files=len(entries))))
++        print(json.dumps(dict(status='fixed_current_main_tar_tree_verified_CPU_only', commit=COMMIT, tree=TREE, files=len(entries))))
+         return
+-    if source != ROOT / 'code/pr15-computed-h2d-638c4ac0' or source.exists():
++    if not source.is_relative_to(ROOT / 'code') or source.exists():
+         raise ValueError('只允许指定全新独立source目录')
+     for name, pin in SCRIPTS.items():
+         if sha((ROOT / 'scripts' / name).read_bytes()) != pin:
+@@ -157,8 +151,8 @@
+         tar.extractall(source, members=members, filter='data')
+     blobs, hashes = source_maps(source)
+     if blobs != entries or hashes[RUNNER] != RUNNER_SHA or hashes[HELPER] != HELPER_SHA:
+-        raise ValueError('解包源码与完整PR15 tree不符')
+-    run = ROOT / 'accuracy' / (datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ') + '-pr15-computed-h2d')
++        raise ValueError('解包源码与完整当前main tree不符')
++    run = ROOT / 'framework' / (stamp + '-current-main-baseline-context16k')
+     control = run.with_name(run.name + '-control')
+     control.mkdir(parents=True, exist_ok=False)
+     shutil.copytree(source, control / 'plugin-source', symlinks=True)
+@@ -166,20 +160,42 @@
+         raise ValueError('原源或control完整归档变化')
+     save(control / 'source-sha256.json', hashes)
+     save(control / 'source-git-blobs.json', blobs)
+-    shutil.copyfile(__file__, control / 'launch_pr15_accuracy.py')
++    shutil.copyfile(__file__, control / 'launch_current_main_baseline.py')
+     shutil.copyfile(HERE / 'main-tree.json', control / 'main-tree.json')
+-    save(control / 'purpose.json', dict(kind='PR15实际提交的独立完整准确率，尚未通过',
++    save(control / 'purpose.json', dict(kind='当前main完整代码的独立短服务基线；不是新准确率或优化收益',
+         source=str(source), source_count=len(hashes), commit=COMMIT, tree=TREE,
+-        archive_sha256=ARCHIVE_SHA, runner_sha256=RUNNER_SHA, metadata_helper_sha256=HELPER_SHA,
+-        removed_environment_names=['BIV150_FINITE_GROWTH_ADMISSION', 'BIV150_Q_FRAGMENT_SERVICE_ARTIFACT_DIR'],
+-        limits=['复用旧方法/短pair，不继承旧QGQA准确率或性能', 'SQL只作启动门；需同Engine原metadata FIRST_SELECTED和105题原判卷',
+-                '本轮仅BI-V150，不能代C500准确率；原35d独占/DB/cleanup不变']))
+-    command = ['python3', str(ROOT / 'scripts/run_accuracy_gate.py'), str(run), '--source-dir', str(source),
+-        '--require-log-marker', 'BIV150_SQL_REFLECTION_INSTALLED', '--database',
+-        '/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db']
++        archive_sha256=ARCHIVE_SHA, runner_sha256=RUNNER_SHA, normalization_helper_sha256=HELPER_SHA,
++        accuracy_reused='PR16已有完整105题102/105及原官方4K/16K证据；本轮不重跑',
++        limits=['只完整main，不叠PR15或实验Q/KV/P资产', '安装marker不等实际选中，真实NORMALIZATION_SELECTED须本轮后验',
++                '原bc51单锁/CPU quota观察/monitor/240s及清理不变；DB-after由原seal_framework_screen收集']))
++    command = ['python3', str(ROOT / 'scripts/run_framework_screen.py'), str(run), '--source-dir', str(source),
++        '--context-screen', '--seed', '721201', '--require-log-marker', 'BIV150_PREFILL_NORMALIZATION_INSTALL']
+     env = os.environ.copy()
+-    env.pop('BIV150_FINITE_GROWTH_ADMISSION', None)
+-    env.pop('BIV150_Q_FRAGMENT_SERVICE_ARTIFACT_DIR', None)
++    removed = {name: env.pop(name) for name in list(env) if name.startswith('BIV150_')
++        or name in ('MINICPM_NATIVE_PROFILE_EVENTS','MINICPM_DECODE_GAP_RUN_DIR')}
++    if env.get('VLLM_FL_BIV150_PREFILL_NORMALIZE','1') != '1':
++        raise ValueError('不允许关闭已合入normalization')
++    save(control / 'removed-experiment-environment.json', {'removed_names':sorted(removed)})
++    quota_root=Path('/sys/fs/cgroup/cpu,cpuacct')
++    quota={name:(quota_root/name).read_text() for name in ('cpu.cfs_quota_us','cpu.cfs_period_us','cpu.stat')}
++    if int(quota['cpu.cfs_quota_us']) != 6*int(quota['cpu.cfs_period_us']):
++        raise ValueError('不是当前6CPU quota，拒绝静默改变条件')
++    save(control / 'cpu-before.json', quota)
++    import socket
++    ports={}
++    for family,host in ((socket.AF_INET,'127.0.0.1'),(socket.AF_INET6,'::1')):
++        with socket.socket(family,socket.SOCK_STREAM) as sock:
++            sock.settimeout(2);ports[host]=sock.connect_ex((host,9031)) != 0
++    gpu=subprocess.check_output(['/usr/local/corex-4.5.0/bin/ixsmi','--query-gpu=memory.used,utilization.gpu','--format=csv,noheader,nounits'],text=True)
++    gpu_table=subprocess.check_output(['/usr/local/corex-4.5.0/bin/ixsmi'],text=True)
++    save(control / 'preflight.json', dict(ports_closed=ports,gpu=gpu,ixsmi=gpu_table,under_device_lock=False))
++    if not all(ports.values()) or gpu.strip() != '68, 0' or 'No running processes found' not in gpu_table:
++        raise RuntimeError('当前卡/端口非严格空闲；原bc51仍是唯一锁owner')
++    shutil.copyfile(ROOT / 'scripts/snapshot_tuning_db.py',control / 'snapshot_tuning_db.py')
++    with (control / 'db-before.log').open('x') as output:
++        subprocess.run(['python3',str(control / 'snapshot_tuning_db.py'),'--database',
++            '/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db','--output',str(control / 'db-before')],
++            stdout=output,stderr=subprocess.STDOUT,check=True)
+     (control / 'command.txt').write_text(shlex.join(command) + '\n', encoding='utf-8')
+     save(control / 'scripts-sha256.json', SCRIPTS)
+     with (control / 'runner.log').open('x') as log:

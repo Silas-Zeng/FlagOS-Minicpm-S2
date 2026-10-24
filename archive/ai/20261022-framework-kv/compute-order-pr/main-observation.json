@@ -1,0 +1,41 @@
+{
+  "repository": "Silas-Zeng/FlagOS-S2-vllm-plugin-FL",
+  "main_sha": "3283672b92fa30f93f652b242193999836a95f88",
+  "main_title": "Merge PR #16: fix audited BI-V150 prefill normalization",
+  "main_url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/commit/3283672b92fa30f93f652b242193999836a95f88",
+  "runner_git_blob": "03d86ca175befbb0d9928f3b0b7fcffa9a4f8197",
+  "runner_observed_footer": "\n# Enable the submitted implementation without changing serving arguments.\nfrom vllm_fl.patches.biv150_sql_reflection import install as _biv150_sql_install\n_biv150_sql_install()\n# Isolated MiniCPM decode launch candidate; install before graph capture.\nif getattr(current_platform, \"vendor_name\", None) == \"iluvatar\":\n    from vllm_fl.patches.biv150_decode_launch_runtime import install as _install_decode_launch\n    print(\"BIV150_DECODE_LAUNCH_INSTALLED\", _install_decode_launch(), flush=True)\n\nif getattr(current_platform, \"vendor_name\", None) == \"iluvatar\":\n    from vllm_fl.patches.biv150_mixed_decode import install as _install_mixed_decode\n    print(\"BIV150_MIXED_DECODE_INSTALLED\", _install_mixed_decode(), flush=True)\n\n# Dedicated GQA decode attention kernel. Installed after the mixed-decode split so\n# it wraps the function reference the split already bound; the split and the w2s1\n# launch policy stay in front of it and still serve every path this kernel declines.\nif getattr(current_platform, \"vendor_name\", None) == \"iluvatar\":\n    from vllm_fl.patches.biv150_gqa_decode import install as _install_gqa_decode\n\n    print(\"BIV150_GQA_DECODE_INSTALL\", _install_gqa_decode(), flush=True)\n\n# Correct cumulative probability mass in the audited BF16 prefill operator.\nif getattr(current_platform, \"vendor_name\", None) == \"iluvatar\":\n    from vllm_fl.patches.biv150_prefill_normalized import install as _install_prefill_normalization\n\n    print(\"BIV150_PREFILL_NORMALIZATION_INSTALL\", _install_prefill_normalization(), flush=True)",
+  "normalized_helper_git_blob": "48717c43a4ba2615ec27f61867806c32e626a4d7",
+  "normalized_helper_url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/3283672b92fa30f93f652b242193999836a95f88/vllm_fl/patches/biv150_prefill_normalized.py",
+  "PR15": {
+    "number": 15,
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "head": "638c4ac0f07ed98e4476a5971c849630d9cdd580",
+    "base": "9a43eb1e883a1ba986a4ae8052f1d00d8fd7aa5f"
+  },
+  "scope": "只读GitHub及本地迁移材料，无发布/模型/GPU",
+  "normalized_helper_sha256": "24a421fa25e0ce7e21b54deb760a5bc893d3899a86ced4849bd3f3bfab50ed42",
+  "runner_sha256": "97c78bde864cb019fe38831804f08d201a950dd2cfafd15ac5ad77b90a93879f",
+  "whole_runner_git_blob_verified": true,
+  "all_runner_class_methods_equal_main9a43": true,
+  "reference_helper_git_blob_verified": true,
+  "current_dependency_blobs_match_9a43": [
+    {
+      "path": "vllm_fl/patches/biv150_mixed_decode.py",
+      "git_blob": "01e1f165fce28503f6f11c29d2a002b868d9ae91",
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/3283672b92fa30f93f652b242193999836a95f88/vllm_fl/patches/biv150_mixed_decode.py"
+    },
+    {
+      "path": "vllm_fl/patches/biv150_gqa_decode.py",
+      "git_blob": "f598c80aa0f864d249c4a0571309dd526bcc9f85",
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/3283672b92fa30f93f652b242193999836a95f88/vllm_fl/patches/biv150_gqa_decode.py"
+    },
+    {
+      "path": "vllm_fl/patches/biv150_cpu_metadata.py",
+      "git_blob": "c800db43479ed72f3fc2919b7f2f827c8f5990c7",
+      "url": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/3283672b92fa30f93f652b242193999836a95f88/vllm_fl/patches/biv150_cpu_metadata.py"
+    }
+  ]
+}

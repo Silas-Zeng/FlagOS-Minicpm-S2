@@ -13,3 +13,4 @@
 ## 天数 BI-V150
 
 - [20261021T181041Z-kv-completion-context16k-long](../runs/bi-v150/20261021T181041Z-kv-completion-context16k-long.md)（登记#83）：32成功0失败/524288in32768out/220.345997615717s仅诊断，KV521840 **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261022T192308Z-q-gqa-resume-native-diagnostic](../runs/bi-v150/20261022T192308Z-q-gqa-resume-native-diagnostic.md)（登记#163）：32成功0失败 **是否保留：** 待确认；通过某项检查不自动等于优化保留。

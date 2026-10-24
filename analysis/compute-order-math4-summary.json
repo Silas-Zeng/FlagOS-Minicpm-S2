@@ -1,0 +1,69 @@
+{
+  "run_id": "20261023T104132Z-compute-order-math4-mixed",
+  "status": "math4_correct_but_target_path_uncovered",
+  "change": "复用原EvalScope固定前4题与16K背景，旁存原响应token IDs；实际P outside与原sample仅CPU观测",
+  "test": "单423候选加观测；背景新增FIRST_SELECTED后启动原评测limit4，保持原题/采样/判卷/服务参数，210秒期限",
+  "original_judge_correct": 4,
+  "questions": 4,
+  "actual_outside_linked_questions": 0,
+  "artifact_directory_exists": true,
+  "background_completed": 32,
+  "background_failed": 0,
+  "exit_code": 0,
+  "conclusion": "固定四题原judge全对，但没有题目进入目标P outside路径；记未覆盖，不能作为P准确率资格。此轮编排收口，不换题/时序重试。候选保留暂不集成。",
+  "limits": [
+    "不是官方105题准确率或性能结果",
+    "背景FIRST_SELECTED只证明背景激活，不证明四题覆盖",
+    "0outside跳过tokenizer/boxed解码，没有为无事件额外调用模型或复跑旧门",
+    "新增形态使DB558/20651→560/20718，不能将本轮用时当同条件性能对比"
+  ],
+  "db_before": {
+    "snapshot_sha256": "ed1b230bf4d4cc958e8f2b663736824f47c8854708ae7be45e2bf2e6eae76db3",
+    "schema_sha256": "33514ded55f320e1f6a789ce5d7f35f6056255428687e32525b1e91cd002102b",
+    "logical_content_sha256": "e9ad96912cacc1e08dfe3a76a04dbac8e81dde5930bbc08fbbc9472ade3e7396",
+    "table_count": 558,
+    "row_count": 20651
+  },
+  "db_after": {
+    "snapshot_sha256": "92dc8b68583e2ebcd86d296ae6f4e59af0e37d62a11c3de5818ff6b20cd4f041",
+    "schema_sha256": "45061fceaeab826fef4ebdd0e5ddfcadf5c75b97e3521d6f67fbc7457e64c070",
+    "logical_content_sha256": "df77298e4d247271df1cf7e53ab537ddfee7a53ed02641fa1a4dca8810d43c30",
+    "table_count": 560,
+    "row_count": 20718
+  },
+  "evidence": "experiments/framework/20261023T104132Z-compute-order-math4-mixed",
+  "review": "analysis/compute-order-math4-review.json",
+  "command": "env -u BIV150_FINITE_GROWTH_ADMISSION BIV150_COMPUTE_ORDER_MATH4_DIR=/workspace/experiments/minicpm-s2/framework/20261023T104132Z-compute-order-math4-mixed-control/math4-artifacts BIV150_KV_VERIFY_RESTORE=0 BIV150_Q_FRAGMENT_SERVICE_ARTIFACT_DIR=/workspace/experiments/minicpm-s2/framework/20261023T104132Z-compute-order-math4-mixed-control/q-hoist-artifacts python3 /workspace/experiments/minicpm-s2/scripts/compute-order-math4-20261023/run_math4_gate.py /workspace/experiments/minicpm-s2/framework/20261023T104132Z-compute-order-math4-mixed --source-dir /workspace/experiments/minicpm-s2/code/compute-order-math4-20261023T104132Z --context-screen --seed 721201 --require-log-marker BIV150_KV_PROTOCOL_INSTALLED --math4-capture /workspace/experiments/minicpm-s2/scripts/compute-order-math4-20261023/capture_evalscope.py --math4-capture-output /workspace/experiments/minicpm-s2/framework/20261023T104132Z-compute-order-math4-mixed-control/client-capture",
+  "reader_command": [
+    "python",
+    "-B",
+    "-X",
+    "utf8",
+    "archive/ai/20261022-framework-kv/compute-order-math4-gate/read_math4.py",
+    "--eval-dir",
+    "experiments/framework/20261023T104132Z-compute-order-math4-mixed/context-16k/math500-level3/20261023_184356",
+    "--raw-dir",
+    "experiments/framework/20261023T104132Z-compute-order-math4-mixed-control/client-capture",
+    "--events-dir",
+    "experiments/framework/20261023T104132Z-compute-order-math4-mixed-control/math4-artifacts",
+    "--reference-predictions",
+    "experiments/accuracy/20261023T061500Z-compute-order/math500-level3/20261023_141601/predictions/minicpm/math_500_Level 3.jsonl",
+    "--output",
+    "analysis/compute-order-math4-review.json"
+  ],
+  "transfer": {
+    "sealed_files": 505,
+    "imported_files": 506,
+    "archive_bytes": 3030741,
+    "archive_sha256": "45c7f8a233eeeeb8625f3bc5fd7f6164bf28a4475c0f5f6e2820ed77ea5a4743",
+    "scp_exit": 0,
+    "original_import_verified": true,
+    "repeated_verification": false
+  },
+  "device_final": "68, 0",
+  "ports_closed": {
+    "127.0.0.1": true,
+    "::1": true
+  },
+  "gain": null
+}

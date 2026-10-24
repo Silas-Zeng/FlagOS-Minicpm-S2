@@ -1,0 +1,26 @@
+--- df780-87a-schedule
++++ CPU-observed-schedule
+@@ -484,6 +484,7 @@
+                 # avoid deadlock and predictable preemptions.
+                 reserved_blocks = self._inflight_prefill_reserved_blocks()
+ 
++            _resume_ticket = _resume_before(self, request, num_new_tokens, num_new_local_computed_tokens, num_external_computed_tokens, new_computed_blocks, num_computed_tokens)
+             new_blocks = self.kv_cache_manager.allocate_slots(
+                 request,
+                 num_new_tokens,
+@@ -498,6 +499,7 @@
+                 has_scheduled_reqs=bool(self.running),
+             )
+ 
++            _resume_allocated(self, _resume_ticket, new_blocks)
+             if new_blocks is None:
+                 # The request cannot be scheduled.
+ 
+@@ -571,6 +573,7 @@
+             token_budget -= num_new_tokens
+             request.status = RequestStatus.RUNNING
+             request.num_computed_tokens = num_computed_tokens
++            _resume_committed(self, request, _resume_ticket)
+             # Only track requests that will still be prefilling after this chunk.
+             if num_computed_tokens + num_new_tokens < request.num_tokens:
+                 self._inflight_prefills.add(request)

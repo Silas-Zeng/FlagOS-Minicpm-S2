@@ -1,0 +1,61 @@
+{
+  "status": "仅本地Draft PR材料；未发布、未重新上卡",
+  "repository": "Silas-Zeng/FlagOS-S2-vllm-plugin-FL",
+  "base_branch": "main",
+  "base_commit": "9a43eb1e883a1ba986a4ae8052f1d00d8fd7aa5f",
+  "base_tree": "2b59d7612666452f7a1b8cca0f634af0b5e887b8",
+  "suggested_branch": "codex/skip-computed-h2d",
+  "method": "skip_computed_h2d",
+  "files": [
+    {
+      "path": "vllm_fl/worker/model_runner.py",
+      "operation": "replace",
+      "mode": "100644",
+      "base_blob": "b5b867ac5ddc0efa7cef1205f603d4c39b34d80e",
+      "base_sha256": "cc7f834d25ccbe5d839a731b8e9aa8bf7533bea6f2f937c394423b3844842dfe",
+      "target_blob": "08220acfc4564f68263a5cde31c08cdd42a4e5a2",
+      "target_sha256": "195cc806a127ab4e43b6838aaee70ef70a4d8b2f02dd38df6f0e815374202b88",
+      "package_path": "files/vllm_fl/worker/model_runner.py"
+    }
+  ],
+  "static_migration": {
+    "exact_inverse_main_bytes": true,
+    "three_edits_identical_to_tested_recipe": true,
+    "current_prepare_inputs_ast_equals_tested_baseline": true,
+    "candidate_prepare_inputs_ast_equals_tested_candidate": true,
+    "other_current_class_methods_unchanged": true,
+    "historical_class_method_differences": [],
+    "changed_methods": [
+      "ModelRunnerFL._prepare_inputs"
+    ],
+    "compile": true,
+    "cpu_metadata_helper_unchanged_sha256": "0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f",
+    "gqa_footer_and_C500_files_preserved": true
+  },
+  "historical_evidence": {
+    "recipe_sha256": "23d833a1bd3f4155652a2457b19bdaedf29b918de488e18e5b986b2cb5e08427",
+    "baseline_runner_sha256": "cc442e54e66c81f4375ac7b3311953441245f53bd0a576d27798528ce02e2663",
+    "candidate_runner_sha256": "97f41ac455cad0db7c8ddfd2b9809e77326b6472285cb14e56ce486f2f0f7443",
+    "method_gate": "20261022T214819Z-skip-computed-h2d-method",
+    "baseline_run": "20261022T215040Z-skip-computed-h2d-service-baseline-decode4k",
+    "candidate_run": "20261022T215331Z-skip-computed-h2d-service-candidate-decode4k",
+    "analysis_path": "analysis/skip-computed-h2d-service-pair.json",
+    "analysis_sha256": "fc4b391cd2082668b3215235f313a583f9638cc7f4be6afaef877bdebdbbadc9",
+    "checks_passed": 30,
+    "gain": {
+      "total_token_throughput_change": 0.6192912880981893,
+      "duration_saved": 0.6154796760841852,
+      "mean_ttft_change": -1.026463482936124,
+      "mean_tpot_change": -0.05383442575332964
+    },
+    "platform": "BI-V150",
+    "source_scope": "历史QGQA414组合；不等同当前main整树性能"
+  },
+  "limits": [
+    "单pair小幅正信号，非稳定统计或官方成绩",
+    "本次仅静态迁移；无新设备/准确率/官方性能或C500验证",
+    "helper没有vendor开关；C500若满足既有scope也可能采用本省略，需要平台负责人确认后再合并",
+    "不新增平台开关或修改原helper；不触碰队友#14草稿",
+    "发布前再核main；如前进，以新tree为基保留队友修改并重看本方法局部差异，不force或整树覆盖"
+  ]
+}

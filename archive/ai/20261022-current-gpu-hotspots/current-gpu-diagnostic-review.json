@@ -1,0 +1,226 @@
+{
+  "utc": "2026-10-22T11:53:54.343090+00:00",
+  "scope": "CPU 本地归档校验与 native 诊断读取；不 SSH/GPU/发布，不改原始文件",
+  "archive": {
+    "archive": "experiments/framework/20261022T114435Z-current-mixed-native-diagnostic.tgz",
+    "sha256": "a1faa0c4399ea02b921ac4d8cd73335254441b4c825a906fc3d060a6d31c1f27",
+    "bytes": 3126739,
+    "status": "pass",
+    "safe_members": 583,
+    "regular_files": 466,
+    "sealed_files": 465,
+    "every_sealed_file_verified": true,
+    "full_file_coverage_excluding_seal": true,
+    "seal_utc": "2026-10-22T11:50:27.208615+00:00",
+    "seal_sha256": "0c0a003f2bd9eefbce67d65f7bf263bf5b2140fa8bc9a54cb30d66ee90ade8b3",
+    "seal_exit_code": 0
+  },
+  "issues": [],
+  "run_id": "20261022T114435Z-current-mixed-native-diagnostic",
+  "platform": "BI-V150，仅此平台",
+  "native_validation": {
+    "valid": true,
+    "kernel_rows": 1656,
+    "engine_pid": 299378,
+    "profile_stop_code": 0,
+    "three_consecutive_shapes": [
+      [
+        2,
+        2048,
+        2047
+      ],
+      [
+        2,
+        2048,
+        2047
+      ],
+      [
+        2,
+        2048,
+        2047
+      ]
+    ],
+    "scheduled_tokens": [
+      [
+        1,
+        2047
+      ],
+      [
+        1,
+        2047
+      ],
+      [
+        1,
+        2047
+      ]
+    ],
+    "shape_interpretation": "每个步骤 2 个请求，共 2048 个 scheduled tokens，其中一请求 decode 1 token、另一请求 prefill 2047 tokens。此数组不是 kernel grid。",
+    "start_after_eligible_mixed_seen": 3,
+    "trace_sha256": "54e62f23f2c814b7e076a1bb9732a37b093f9d343fab7adbe2c42a2e9e56d3dd"
+  },
+  "source": {
+    "base_runner_sha256": "6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141",
+    "source_file_count": 412,
+    "changes": [
+      {
+        "path": "vllm_fl/worker/model_runner.py",
+        "baseline": "6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141",
+        "diagnostic": "29d98aeeb36079b4a5f5882ce6879a6aa6c7ddb6e93dcf965dd04c0aba781320"
+      }
+    ],
+    "original_runner_byte_prefix_unchanged": true,
+    "only_diagnostic_footer_appended": true,
+    "footer_sha256": "f0f41e303dee92b8e468f16d2c7d63cdc38a7ef24da6c38f731cb55c40b53e75",
+    "server_command_and_packages_same_as_clean_baseline": true,
+    "postflight_source_failures": []
+  },
+  "database": {
+    "before": {
+      "status": "complete",
+      "table_count": 527,
+      "row_count": 19608,
+      "snapshot_sha256": "d9ee1de13f7c1b34f2646f84b77c3482957749dd0794ad8de02b4dbe4cbab89d",
+      "logical_content_sha256": "5a21ddb63efb029f2c98378a5d269c57be6a86db037b6a6ebe346552b441b93e"
+    },
+    "after": {
+      "status": "complete",
+      "table_count": 527,
+      "row_count": 19608,
+      "snapshot_sha256": "d9ee1de13f7c1b34f2646f84b77c3482957749dd0794ad8de02b4dbe4cbab89d",
+      "logical_content_sha256": "5a21ddb63efb029f2c98378a5d269c57be6a86db037b6a6ebe346552b441b93e"
+    },
+    "physical_and_logical_unchanged": true
+  },
+  "requests": {
+    "num_prompts": 32,
+    "completed": 32,
+    "failed": 0,
+    "total_input_tokens": 524288,
+    "total_output_tokens": 4096,
+    "raw_result_path": "experiments/framework/20261022T114435Z-current-mixed-native-diagnostic/context-16k/results/context-16k-infqps-concurrency64-minicpm-20261022-194758.json",
+    "load_command": [
+      [
+        "bash",
+        "/workspace/experiments/minicpm-s2/scripts/run_diagnostic_load.sh",
+        "/workspace/experiments/minicpm-s2/framework/20261022T114435Z-current-mixed-native-diagnostic/context-16k",
+        "context-16k",
+        "16384",
+        "128",
+        "64",
+        "32",
+        "721201"
+      ]
+    ],
+    "performance_result": false
+  },
+  "hotspots": {
+    "source_table": "cuda_kernel_data",
+    "observed_kernel_calls": 1656,
+    "observed_kernel_sum_ms": 1063.1562179999999,
+    "categories": [
+      {
+        "category": "Attention-2D",
+        "calls": 126,
+        "sum_ms": 640.380398,
+        "observed_kernel_sum_percent": 60.23389480848618
+      },
+      {
+        "category": "GEMM",
+        "calls": 504,
+        "sum_ms": 337.191759,
+        "observed_kernel_sum_percent": 31.716106559986272
+      },
+      {
+        "category": "Other-or-unattributed",
+        "calls": 627,
+        "sum_ms": 48.759018999999995,
+        "observed_kernel_sum_percent": 4.586251594495212
+      },
+      {
+        "category": "Attention-3D",
+        "calls": 126,
+        "sum_ms": 28.589192999999998,
+        "observed_kernel_sum_percent": 2.689086750936916
+      },
+      {
+        "category": "KV-writer",
+        "calls": 126,
+        "sum_ms": 3.929684,
+        "observed_kernel_sum_percent": 0.36962432551939417
+      },
+      {
+        "category": "Linear-LM-head-shape-unobserved",
+        "calls": 3,
+        "sum_ms": 2.529487,
+        "observed_kernel_sum_percent": 0.2379224197887351
+      },
+      {
+        "category": "Attention-reduce",
+        "calls": 126,
+        "sum_ms": 1.32394,
+        "observed_kernel_sum_percent": 0.12452920629957692
+      },
+      {
+        "category": "Sampler-and-vocab-elementwise-name-based",
+        "calls": 18,
+        "sum_ms": 0.452738,
+        "observed_kernel_sum_percent": 0.042584334487709305
+      }
+    ],
+    "attention_launch_groups": [
+      {
+        "name": "kernel_unified_attention",
+        "grid": "(128, 2, 1)",
+        "block": "(512, 1, 1)",
+        "calls": 126,
+        "sum_ms": 640.380398
+      },
+      {
+        "name": "kernel_unified_attention",
+        "grid": "(1, 2, 16)",
+        "block": "(128, 1, 1)",
+        "calls": 126,
+        "sum_ms": 28.589192999999998
+      },
+      {
+        "name": "reduce_segments",
+        "grid": "(1, 16, 1)",
+        "block": "(256, 1, 1)",
+        "calls": 126,
+        "sum_ms": 1.32394
+      }
+    ],
+    "classification": "kernel_unified_attention 同名包含 2D 和 3D 两组，依源码对应实际 grid.z==1 / >1 区分：2D 占60.2338948%，3D占2.6890868%；同名总计62.9229816%。mm_kernel 单独归 GEMM，占31.7161066%。linear_kernel 另列且未猜测 shape；sampler 标签仅按名称，其他未知项保留未归因。",
+    "graph_visibility": {
+      "graph_table_rows": {
+        "cuda_graph_data": 0
+      },
+      "completeness": "unproven",
+      "membership_fields_present": false,
+      "kernel_share_of_graph_time": null,
+      "reason": "No validated graph-node membership/completeness relation; kernel and graph sums are not a coverage ratio."
+    },
+    "limits": [
+      "占比是该三步窗口内已观测 kernel duration 总和，非端到端 wall、吞吐、完整 GPU 利用率或全负载占比。",
+      "grid 是启动网格，不能当成张量 shape；非 Attention 的名称分类不等于完整算子语义归因。",
+      "Graph 节点可见性未证实；不能叠加 graph 汇总时间或由 uncovered span 推断 CPU/GPU 空闲。",
+      "native profiler 与窗口边界同步会扰动时序，且仅跳过两个 mixed 步骤，可能仍含冷启动/JIT 影响。"
+    ]
+  },
+  "postflight": {
+    "ports_closed": {
+      "127.0.0.1": true,
+      "::1": true
+    },
+    "gpu_used_mib_and_util": "68, 0",
+    "gpu_processes_empty": true,
+    "owner_states": {
+      "299168": "Z (zombie)",
+      "299181": "absent",
+      "299378": "absent"
+    }
+  },
+  "exit_code": 0,
+  "conclusion": "有效的当前6f自然 mixed 三步 GPU 热点诊断；2D Attention 和 GEMM 为该窗口主热点。保留证据供后续候选选择，不计入性能基线或吞吐收益。",
+  "updated_utc": "2026-10-22T11:55:25.865793+00:00"
+}

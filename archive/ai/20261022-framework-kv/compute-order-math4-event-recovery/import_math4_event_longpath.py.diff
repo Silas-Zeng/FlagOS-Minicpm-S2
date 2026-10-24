@@ -1,0 +1,32 @@
+--- tmp/import_math4_longpath.py
++++ import_math4_event_longpath.py
+@@ -9,7 +9,7 @@
+ name, expected_size, expected_sha, count = sys.argv[1:5]
+ controller_seal = sys.argv[5:] == ['--controller-seal']
+ assert not sys.argv[5:] or controller_seal
+-root = Path(__file__).resolve().parents[1]
++root = Path(__file__).resolve().parents[2]
+ if os.name == 'nt' and not str(root).startswith('\\\\?\\'):
+     root = Path('\\\\?\\' + str(root))
+ parent = root / 'experiments/framework'
+@@ -60,10 +60,15 @@
+               for p in folder.rglob('*') if p.is_file() and p != parent / seal_rel}
+     assert actual == seal['files'], '本地完整原件集合/字节不一致'
+ run = parent / name
+-assert name == '20261023T104132Z-compute-order-math4-mixed'
+-results = list((run/'context-16k/background/results').glob('*.json'))
+-assert len(results) == 1
+-result = json.loads(results[0].read_text(encoding='utf-8'))
++assert name == '20261023T125330Z-compute-order-math4-event'
++pattern = 'context-16k/background/results/*.json'
++results = sorted(run.glob(pattern))
++summary_path = run/'context-16k/math4-event-load-summary.json'
++summary = json.loads(summary_path.read_text(encoding='utf-8')) if summary_path.is_file() else None
+ print(json.dumps({'run': name, 'sealed_files': len(actual), 'added': added,
+                   'matched_existing': existing, 'exit_code': (run/'exit-code').read_text().strip(),
+-                  'result': result}, ensure_ascii=False))
++                  'background_result_glob': str(run/pattern),
++                  'background_result_paths': [str(p.relative_to(run)) for p in results],
++                  'background_results': [json.loads(p.read_text(encoding='utf-8')) for p in results],
++                  'load_summary_path': str(summary_path), 'load_summary_present': summary is not None,
++                  'load_summary': summary, 'result_missing_is_not_success': not bool(results)}, ensure_ascii=False))

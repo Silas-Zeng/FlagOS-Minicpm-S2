@@ -1,0 +1,486 @@
+{
+  "path": "/usr/local/lib/python3.12/site-packages/vllm/entrypoints/openai/completion/serving.py",
+  "sha256": "582b866dacfc74615428b89169a8fa948a4aa7326bec5a2a79455da6f50b2a90",
+  "lines": [
+    {
+      "line": 95,
+      "text": ""
+    },
+    {
+      "line": 96,
+      "text": "        Returns:"
+    },
+    {
+      "line": 97,
+      "text": "            A list of engine_inputs on success, or an ErrorResponse on failure."
+    },
+    {
+      "line": 98,
+      "text": "        \"\"\""
+    },
+    {
+      "line": 99,
+      "text": "        error_check_ret = await self._check_model(request)"
+    },
+    {
+      "line": 100,
+      "text": "        if error_check_ret is not None:"
+    },
+    {
+      "line": 141,
+      "text": "            return result"
+    },
+    {
+      "line": 142,
+      "text": ""
+    },
+    {
+      "line": 143,
+      "text": "        engine_inputs = result"
+    },
+    {
+      "line": 144,
+      "text": ""
+    },
+    {
+      "line": 145,
+      "text": "        request_id = f\"cmpl-{self._base_request_id(raw_request, request.request_id)}\""
+    },
+    {
+      "line": 146,
+      "text": "        created_time = int(time.time())"
+    },
+    {
+      "line": 147,
+      "text": ""
+    },
+    {
+      "line": 148,
+      "text": "        request_metadata = RequestResponseMetadata(request_id=request_id)"
+    },
+    {
+      "line": 149,
+      "text": "        if raw_request:"
+    },
+    {
+      "line": 150,
+      "text": "            raw_request.state.request_metadata = request_metadata"
+    },
+    {
+      "line": 151,
+      "text": ""
+    },
+    {
+      "line": 158,
+      "text": "        max_model_len = self.model_config.max_model_len"
+    },
+    {
+      "line": 159,
+      "text": "        generators: list[AsyncGenerator[RequestOutput, None]] = []"
+    },
+    {
+      "line": 160,
+      "text": "        for i, engine_input in enumerate(engine_inputs):"
+    },
+    {
+      "line": 161,
+      "text": "            max_tokens = get_max_tokens("
+    },
+    {
+      "line": 162,
+      "text": "                max_model_len,"
+    },
+    {
+      "line": 163,
+      "text": "                request.max_tokens,"
+    },
+    {
+      "line": 179,
+      "text": "                )"
+    },
+    {
+      "line": 180,
+      "text": ""
+    },
+    {
+      "line": 181,
+      "text": "            request_id_item = f\"{request_id}-{i}\""
+    },
+    {
+      "line": 182,
+      "text": ""
+    },
+    {
+      "line": 183,
+      "text": "            self._log_inputs("
+    },
+    {
+      "line": 184,
+      "text": "                request_id_item,"
+    },
+    {
+      "line": 185,
+      "text": "                engine_input,"
+    },
+    {
+      "line": 186,
+      "text": "                params=sampling_params,"
+    },
+    {
+      "line": 187,
+      "text": "                lora_request=lora_request,"
+    },
+    {
+      "line": 197,
+      "text": "                generator = self.beam_search("
+    },
+    {
+      "line": 198,
+      "text": "                    prompt=engine_input,"
+    },
+    {
+      "line": 199,
+      "text": "                    request_id=request_id,"
+    },
+    {
+      "line": 200,
+      "text": "                    params=sampling_params,"
+    },
+    {
+      "line": 201,
+      "text": "                    lora_request=lora_request,"
+    },
+    {
+      "line": 202,
+      "text": "                    trace_headers=trace_headers,"
+    },
+    {
+      "line": 203,
+      "text": "                )"
+    },
+    {
+      "line": 204,
+      "text": "            else:"
+    },
+    {
+      "line": 205,
+      "text": "                generator = self.engine_client.generate("
+    },
+    {
+      "line": 206,
+      "text": "                    engine_input,"
+    },
+    {
+      "line": 207,
+      "text": "                    sampling_params,"
+    },
+    {
+      "line": 208,
+      "text": "                    request_id_item,"
+    },
+    {
+      "line": 209,
+      "text": "                    lora_request=lora_request,"
+    },
+    {
+      "line": 210,
+      "text": "                    trace_headers=trace_headers,"
+    },
+    {
+      "line": 211,
+      "text": "                    priority=request.priority,"
+    },
+    {
+      "line": 218,
+      "text": ""
+    },
+    {
+      "line": 219,
+      "text": "        model_name = self.models.model_name(lora_request)"
+    },
+    {
+      "line": 220,
+      "text": "        num_prompts = len(engine_inputs)"
+    },
+    {
+      "line": 221,
+      "text": ""
+    },
+    {
+      "line": 222,
+      "text": "        # Streaming response"
+    },
+    {
+      "line": 223,
+      "text": "        tokenizer = self.renderer.tokenizer"
+    },
+    {
+      "line": 226,
+      "text": "            return self.completion_stream_generator("
+    },
+    {
+      "line": 227,
+      "text": "                request,"
+    },
+    {
+      "line": 228,
+      "text": "                engine_inputs,"
+    },
+    {
+      "line": 229,
+      "text": "                result_generator,"
+    },
+    {
+      "line": 230,
+      "text": "                request_id,"
+    },
+    {
+      "line": 231,
+      "text": "                created_time,"
+    },
+    {
+      "line": 232,
+      "text": "                model_name,"
+    },
+    {
+      "line": 233,
+      "text": "                num_prompts=num_prompts,"
+    },
+    {
+      "line": 249,
+      "text": "                # with the inputs token IDs"
+    },
+    {
+      "line": 250,
+      "text": "                if final_res.prompt is None:"
+    },
+    {
+      "line": 251,
+      "text": "                    final_res.prompt = self._extract_prompt_text(engine_inputs[i])"
+    },
+    {
+      "line": 252,
+      "text": ""
+    },
+    {
+      "line": 253,
+      "text": "            final_res_batch_checked = cast(list[RequestOutput], final_res_batch)"
+    },
+    {
+      "line": 254,
+      "text": ""
+    },
+    {
+      "line": 256,
+      "text": "                final_res_batch_checked,"
+    },
+    {
+      "line": 257,
+      "text": "                request,"
+    },
+    {
+      "line": 258,
+      "text": "                request_id,"
+    },
+    {
+      "line": 259,
+      "text": "                created_time,"
+    },
+    {
+      "line": 260,
+      "text": "                model_name,"
+    },
+    {
+      "line": 261,
+      "text": "                tokenizer,"
+    },
+    {
+      "line": 281,
+      "text": "        self,"
+    },
+    {
+      "line": 282,
+      "text": "        request: CompletionRequest,"
+    },
+    {
+      "line": 283,
+      "text": "        engine_inputs: list[EngineInput],"
+    },
+    {
+      "line": 284,
+      "text": "        result_generator: AsyncIterator[tuple[int, RequestOutput]],"
+    },
+    {
+      "line": 285,
+      "text": "        request_id: str,"
+    },
+    {
+      "line": 286,
+      "text": "        created_time: int,"
+    },
+    {
+      "line": 287,
+      "text": "        model_name: str,"
+    },
+    {
+      "line": 288,
+      "text": "        num_prompts: int,"
+    },
+    {
+      "line": 314,
+      "text": "                prompt_text = res.prompt"
+    },
+    {
+      "line": 315,
+      "text": "                if prompt_text is None:"
+    },
+    {
+      "line": 316,
+      "text": "                    engine_input = engine_inputs[prompt_idx]"
+    },
+    {
+      "line": 317,
+      "text": "                    prompt_text = self._extract_prompt_text(engine_input)"
+    },
+    {
+      "line": 318,
+      "text": ""
+    },
+    {
+      "line": 319,
+      "text": "                # Prompt details are excluded from later streamed outputs"
+    },
+    {
+      "line": 394,
+      "text": "                    stop_reason = output.stop_reason"
+    },
+    {
+      "line": 395,
+      "text": ""
+    },
+    {
+      "line": 396,
+      "text": "                    self._raise_if_error(finish_reason, request_id)"
+    },
+    {
+      "line": 397,
+      "text": ""
+    },
+    {
+      "line": 398,
+      "text": "                    chunk = CompletionStreamResponse("
+    },
+    {
+      "line": 399,
+      "text": "                        id=request_id,"
+    },
+    {
+      "line": 400,
+      "text": "                        object=\"text_completion\","
+    },
+    {
+      "line": 401,
+      "text": "                        created=created_time,"
+    },
+    {
+      "line": 402,
+      "text": "                        model=model_name,"
+    },
+    {
+      "line": 452,
+      "text": "            if include_usage:"
+    },
+    {
+      "line": 453,
+      "text": "                final_usage_chunk = CompletionStreamResponse("
+    },
+    {
+      "line": 454,
+      "text": "                    id=request_id,"
+    },
+    {
+      "line": 455,
+      "text": "                    created=created_time,"
+    },
+    {
+      "line": 456,
+      "text": "                    model=model_name,"
+    },
+    {
+      "line": 457,
+      "text": "                    choices=[],"
+    },
+    {
+      "line": 479,
+      "text": "        final_res_batch: list[RequestOutput],"
+    },
+    {
+      "line": 480,
+      "text": "        request: CompletionRequest,"
+    },
+    {
+      "line": 481,
+      "text": "        request_id: str,"
+    },
+    {
+      "line": 482,
+      "text": "        created_time: int,"
+    },
+    {
+      "line": 483,
+      "text": "        model_name: str,"
+    },
+    {
+      "line": 484,
+      "text": "        tokenizer: TokenizerLike | None,"
+    },
+    {
+      "line": 501,
+      "text": ""
+    },
+    {
+      "line": 502,
+      "text": "            for output in final_res.outputs:"
+    },
+    {
+      "line": 503,
+      "text": "                self._raise_if_error(output.finish_reason, request_id)"
+    },
+    {
+      "line": 504,
+      "text": ""
+    },
+    {
+      "line": 505,
+      "text": "                assert request.max_tokens is not None"
+    },
+    {
+      "line": 506,
+      "text": "                if request.echo:"
+    },
+    {
+      "line": 595,
+      "text": "            kv_transfer_params = final_res_batch[0].kv_transfer_params"
+    },
+    {
+      "line": 596,
+      "text": "        return CompletionResponse("
+    },
+    {
+      "line": 597,
+      "text": "            id=request_id,"
+    },
+    {
+      "line": 598,
+      "text": "            created=created_time,"
+    },
+    {
+      "line": 599,
+      "text": "            model=model_name,"
+    },
+    {
+      "line": 600,
+      "text": "            choices=choices,"
+    }
+  ]
+}

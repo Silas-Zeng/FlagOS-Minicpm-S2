@@ -1,0 +1,102 @@
+--- launch_combined_accuracy.py
++++ launch_combined_official.py
+@@ -1,4 +1,4 @@
+-"""复用141159受测446源码，交原35d owner运行原105题；不重建源码或评测。"""
++"""复用受测446源码及原79119官方测法；仅本轮105题通过后可由root启动。"""
+ from datetime import datetime, timezone
+ import hashlib
+ import json
+@@ -20,7 +20,9 @@
+ BLOBS_SHA = '340e2ce1254510864d2b8b8d90939a98622f70a28f10573f9a887eebface106e'
+ MANIFEST_SHA = '0b17b3a18fc89a3968f409d9e340190a19ffd4e7aadec3f456293f91281f4ec4'
+ LAUNCH_SHA = '88b35410fc49d1d259ebad0cc910c623a5cea2723220707932e38544f3c89e02'
++ACCURACY_NAME = '20261023T142019Z-current-main-compute-order'
+ SCRIPTS = {
++    'run_official_gate.py': '79119f1548b52e9fc1767ac66754272d046cb4bee8474315e9419606037ac579',
+     'run_accuracy_gate.py': '35d30dfa4fc4d583c7fc62db1f18c992a7fd6a7e54fab95749710759b5df6a54',
+     'run_math500_level3.sh': '6e045c1cda5a6379ddff1bf7c41ab1e4cbaaddd51b2ca9b4b1d2a92cfa8bb5f4',
+     'snapshot_tuning_db.py': '0f2a57bf3bdb858756a1dedab5bd386a3a8bff384d925cf76461afb8c097e7a2',
+@@ -105,11 +107,47 @@
+     return expected, hashes, sorted(selected)
+ 
+ 
++def accuracy_ready(blobs, hashes):
++    # 只读本轮原105题已封存报告；不重新判卷，不把exit0代替准确率通过。
++    run = ROOT / 'accuracy' / ACCURACY_NAME
++    control = run.with_name(ACCURACY_NAME + '-control')
++    result, review = read(run / 'result.json'), read(run / 'accuracy-review.json')
++    post, purpose = read(run / 'postflight-full.json'), read(control / 'purpose.json')
++    seal = read(control / 'evidence-seal.json')
++    if ((run / 'exit-code').read_text().strip() != '0' or result['cleanup_errors']
++            or result['evaluation_completed'] is not True
++            or review.get('validity') != 'valid' or review.get('accuracy_gate') != 'pass'
++            or review.get('samples') != 105 or review.get('expected_samples') != 105
++            or seal.get('accuracy_gate') != 'pass'
++            or seal.get('reviewer_sha256') != 'ba22e1a337b8a62c7a385ae31e0a71af148cfd0a1cab8ff3b0f84e9bf36b1010'):
++        raise ValueError('固定142019原105题尚未完整通过并封存')
++    if (purpose['source'] != str(SOURCE) or purpose['source_count'] != 446
++            or purpose['base_commit'] != COMMIT or purpose['tree'] != TREE
++            or read(control / 'source-git-blobs.json') != blobs
++            or read(control / 'source-sha256.json') != hashes
++            or post['source_count'] != 446 or post['source_failures'] or post['archived_source_failures']
++            or post['query'].strip() != '68, 0' or not all(post['ports_closed'].values())
++            or not all(value is None or '\nState:\tZ ' in value for value in post['owned_process_status'].values())):
++        raise ValueError('准确率非同一446源码或清理后态不完整')
++    checked = (run / 'result.json', run / 'accuracy-review.json', run / 'postflight-full.json',
++               run / 'method-coverage.json', control / 'purpose.json',
++               control / 'source-git-blobs.json', control / 'source-sha256.json')
++    for path in checked:
++        if seal['files'].get(path.relative_to(ROOT / 'accuracy').as_posix()) != sha(path):
++            raise ValueError('准确率封存附证变化：' + str(path))
++    return dict(run=ACCURACY_NAME, correct=review['correct'], samples=review['samples'],
++                accuracy_gate=review['accuracy_gate'], source_count=446, tree=TREE,
++                report_sha256=sha(run / 'accuracy-review.json'), seal_sha256=sha(control / 'evidence-seal.json'))
++
++
+ def main():
+     blobs, hashes, selected = reference_ready()
++    accuracy = accuracy_ready(blobs, hashes)
+     for name, pin in SCRIPTS.items():
+         if sha(ROOT / 'scripts' / name) != pin:
+-            raise ValueError('原准确率owner/评测/快照/monitor变化：' + name)
++            raise ValueError('原官方driver/owner/快照/monitor变化：' + name)
++    if sha(Path('/workspace/vllm-plugin-FL/benchmarks/benchmark_throughput_serve.py')) != '0813eba574e9d1eb50c297c515baa426da1bcb61ce8c78a398b482f246005565':
++        raise ValueError('原官方benchmark变化')
+     env = os.environ.copy()
+     removed = [name for name in env if name.startswith('BIV150_') or name in
+                ('MINICPM_NATIVE_PROFILE_EVENTS', 'MINICPM_DECODE_GAP_RUN_DIR')]
+@@ -118,7 +156,7 @@
+     for name in ('VLLM_FL_BIV150_PREFILL_NORMALIZE', 'VLLM_FL_BIV150_GQA_DECODE'):
+         if env.get(name, '1') != '1':
+             raise ValueError('不允许关闭受测normalized/GQA：' + name)
+-    run = ROOT / 'accuracy' / (datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ') + '-current-main-compute-order')
++    run = ROOT / 'official' / (datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ') + '-current-main-compute-order-official')
+     control = run.with_name(run.name + '-control')
+     if run.exists():
+         raise FileExistsError(run)
+@@ -131,17 +169,19 @@
+     save(control / 'source-git-blobs.json', blobs)
+     for name in ('candidate-git-blobs.json', 'candidate-manifest.json'):
+         shutil.copyfile(HERE / name, control / name)
+-    shutil.copyfile(__file__, control / 'launch_combined_accuracy.py')
++    shutil.copyfile(__file__, control / 'launch_combined_official.py')
++    save(control / 'accuracy-reference.json', accuracy)
+     save(control / 'reference-short-screen.json', dict(run=REFERENCE_NAME, source=str(SOURCE),
+         selected_engine_pids=selected, source_count=446, candidate_tree=TREE,
+         postflight_sha256=sha(REFERENCE / 'postflight-full.json'), server_log_sha256=sha(REFERENCE / 'server.log')))
+-    save(control / 'purpose.json', dict(kind='当前main加P的独立完整105题准确率，尚未通过',
++    save(control / 'purpose.json', dict(kind='当前main加P446的原官方4K/16K完整吞吐；非因果短pair收益结论',
+         source=str(SOURCE), source_count=446, base_commit=COMMIT, tree=TREE,
+-        reference_short_screen=REFERENCE_NAME, removed_environment_names=sorted(removed),
++        reference_short_screen=REFERENCE_NAME, accuracy_reference=accuracy, removed_environment_names=sorted(removed),
+         limits=['复用受测446源码，不重建tar、不叠PR15/旧Qservice/KV事务或诊断资产',
+-            '原35d/6e045/105题/SERVER/DB/设备锁及清理不变，非性能测试',
+-            '准确率本轮P可能0命中，须如实限定覆盖；不继承队友main102/105或旧423成绩']))
+-    command = ['python3', str(ROOT / 'scripts/run_accuracy_gate.py'), str(run), '--source-dir', str(SOURCE),
++            '原79119/35d/0813/SERVER/DB/唯一设备锁与清理不变：原两负载各4轮、首轮warmup、原第2至4轮均值',
++            '140324/141159容量521840/521936失配；gain=null，约+6.59%仅表观变化，不以此官方单臂证明因果或稳定收益',
++            '安装不等实际执行，结束后核normalization/P真实选择与scope；不得继承旧423覆盖或泛化本轮准确率命中']))
++    command = ['python3', str(ROOT / 'scripts/run_official_gate.py'), str(run), '--source-dir', str(SOURCE),
+         '--require-log-marker', 'BIV150_PREFILL_NORMALIZATION_INSTALL', '--database',
+         '/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db']
+     (control / 'command.txt').write_text(shlex.join(command) + '\n', encoding='utf-8')

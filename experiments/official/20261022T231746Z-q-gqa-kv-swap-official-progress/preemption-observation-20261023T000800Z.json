@@ -1,0 +1,50 @@
+{
+  "observation": {
+    "start_utc": "2026-10-23T00:08:00.095012+00:00",
+    "end_utc": "2026-10-23T00:08:00.175350+00:00",
+    "preempt_metric_lines": [
+      "# HELP vllm:num_preemptions_total Cumulative number of preemption from the engine.",
+      "# TYPE vllm:num_preemptions_total counter",
+      "vllm:num_preemptions_total{engine=\"0\",model_name=\"minicpm\"} 11.0",
+      "# HELP vllm:num_preemptions_created Cumulative number of preemption from the engine.",
+      "# TYPE vllm:num_preemptions_created gauge",
+      "vllm:num_preemptions_created{engine=\"0\",model_name=\"minicpm\"} 1.7927111193005784e+09"
+    ],
+    "protocol_counts": {
+      "FIRST_CHECKED": 1,
+      "RPC_ACK": 33,
+      "SAVE_ACK_FREE": 11,
+      "RESTORE_DEFERRED": 11,
+      "PRIVATE_PAGES_ORDERED": 11,
+      "RESTORE_ACK": 11,
+      "RESUME_PUBLISHED": 11,
+      "RUNNER_RESUME_STATE_CHECKED": 11,
+      "RESUME_OUTPUT_PROCESSED": 11
+    },
+    "last_protocol_event": {
+      "after_original_update": true,
+      "event": "RESUME_OUTPUT_PROCESSED",
+      "fast_rejects": 3710,
+      "host_payload_cap": 1073741824,
+      "key": [
+        "382661:1",
+        "cmpl-bench-c15c5028-91-0-b9ebd3ce",
+        11,
+        1
+      ],
+      "pid": 382661,
+      "published": 11,
+      "restore_skips": 3710,
+      "restored": 11,
+      "rollbacks": 0,
+      "save_skips": 0,
+      "saved": 11,
+      "scheduled_tokens": 16,
+      "single_victim": true
+    },
+    "scope": "running partial counter; Prometheus publication can lag core; not complete official or per-case coverage"
+  },
+  "command_kind": "root只读GET /metrics并读取同一server.log；未启动模型/benchmark/profiler",
+  "conclusion": "在途11次抢占计数与11次保存恢复输出数量相符，目前没有为扩大host槽数而改造协议的证据。不是最终完整覆盖证明；Prometheus发布可能滞后。",
+  "next": "先完成原官方与已排短诊断；不新增多槽实验。"
+}

@@ -1,0 +1,30 @@
+{
+  "status": "pre_performance_adaptation_complete",
+  "failed_attempt": {
+    "run": "experiments/framework/20261024T055622Z-qfragment-sourceproof-debug3-4k",
+    "install": "BIV150_Q_FRAGMENT_INSTALL",
+    "candidate": "BIV150_Q_FRAGMENT_FALLBACK",
+    "reason": "actual Q source location missing",
+    "interpretation": "The normalized-over-gqa clone did not match the old direct-GQA C2/source line assumption. The candidate never became the executed optimization path; this is not a performance negative result."
+  },
+  "selected_after_fix": {
+    "run": "experiments/framework/20261024T060209Z-qfragment-sourceproof-debug5-4k",
+    "marker": "BIV150_Q_FRAGMENT_SELECTED",
+    "fallback_markers": 0,
+    "candidate_hash": "0f8ce460a026514a472ace09ba0d4b2d18db0d7a3339a1e9a877f0c413452c38",
+    "override_sha256": "8ae2258568db275c2f3b5e4fc69709431744f08de43343d82a35cf312bfb405a",
+    "normal_shared_bytes": 65536,
+    "candidate_shared_bytes": 32768,
+    "llvm_q_memory_reads_total": 32,
+    "llvm_q_memory_reads_in_loop": 0,
+    "limits": [
+      "Short diagnostic only; not an official performance or accuracy result.",
+      "The run directory records exit-code 2 and is retained unchanged; selected runtime evidence remains diagnostic."
+    ]
+  },
+  "fix": [
+    "Keep C2 only for direct GQA; normalized clone uses its own exact wrapper/kernel/compiler checks.",
+    "Resolve Q source locations from both the normalized clone and pinned upstream source.",
+    "Allow the three actual DILocation nodes instead of requiring exactly one, while still requiring zero cyclic shared-memory Q reads."
+  ]
+}

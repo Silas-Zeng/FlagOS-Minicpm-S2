@@ -10,7 +10,7 @@
 
 | 仓库 | 团队查看内容 |
 |---|---|
-| [vllm-plugin-FL](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL) | 比赛原始框架＋按方法拆分的 PR；十项方法已按依赖合并，后续代码和维护继续通过 PR |
+| [vllm-plugin-FL](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL) | 比赛原始框架＋按方法拆分的 PR；PR15+PR21兼容组合与Q fragment已合入，后续代码和维护继续通过 PR |
 | [FlagGems](https://github.com/Silas-Zeng/FlagGems) | 比赛指定算子代码＋实际发生的算子改动PR；目前没有新增库内算子实现 |
 | 本实验库 | 实验总表、方法记录、每轮短记和原始证据；按硬件区分 |
 
@@ -20,10 +20,18 @@
 
 | 方法 / 版本 | 结果与处理 |
 |---|---|
+| **BI-V150当前最优：PR15+PR21+Q fragment（#22/#23）** | 官方1536请求、两档各4轮，第2–4轮均值4K `5313.59`、16K `3764.67 total tok/s`，较PR15+PR21旧基线`+3.80%/+9.56%`；Math500 L3 `100/105（95.24%）`通过。Q实际选中、fallback0，shared `65536→32768`、循环内Q read0。DB种子相同但KV `521840`对旧`521936`，不宣称严格等KV单项因果；确定为新基线 |
 | BI-V150历史SQL+C3完整组合 | 官方准确率103/105，完整两档吞吐已留档；这些结果只属于该历史组合，DB/KV对照限制见[原报告](docs/technical-report.md)。对应方法已合并，不能把历史准确率自动赋予新增 CPU 组合 |
-| [CPU metadata＋async token](team/methods/cpu-combination.md) | 两轮64/0、同KV与DB，单轮吞吐+0.6986%、平均TTFT−0.1250%；保留待确认，未做新整模型准确率 |
+| [CPU metadata＋async token](team/methods/cpu-combination.md) | 两轮64/0、同KV与DB，单轮吞吐+0.6986%、平均TTFT−0.1250%，性能信号保留待确认；完整Math500 Level 3准确率102/105（97.1429%），通过 |
+| [Q fragment循环外保留](team/methods/q-fragment-hoist.md) | 从历史局部/单轮候选推进到完整官方与准确率验证，现已合入PR23并成为当前最优组合的一部分；旧单轮结果继续保留，不覆盖新结果 |
+| [C3重复视图清理](team/methods/c3-views.md) | 短输入单层耗时降低5.97%；真实服务仅表观+0.0177%且KV容量失配，未确认端到端收益，保留局部候选 |
+| [输入准备等待](team/methods/input-prep.md) | 4K短负载与16K长输出的部分累计中，等待占预处理均低于0.1%；暂不优先改造此处同步。诊断不计吞吐收益 |
 | [KV复制](team/methods/kv-pitched.md) | 字节正确性和局部成本信号已记录，尚无稳定端到端收益；工具已合并，仍需显式调用，未启用 KV offload |
 | 沐曦－曦云C500 | 由该平台队友补充环境与实测，不能套用BI-V150结果 |
+
+当前主线是 **KV管理、请求调度、批处理与硬件及现有算子的配合**；算子优化由队友负责。已有[GPU热点](team/methods/gpu-hotspots.md)轨迹继续作为依据；必要时补最短诊断，先量清实际重算或浪费，再决定改动。CPU小收益作为并行补充。
+
+当前后继探索以`PR15+PR21+Q fragment`为新起点。V-late及其cache偏好组合无收益、末层尾段裁剪未过数值门的旧负结果继续保留。新候选仍先根据实际硬件和开销判断收益，再决定是否上卡，详见实验总表。
 
 原始日志与环境文件保留在experiments/，从短记进入即可；不需要先读审计过程。早期未证实、放弃或失败的方法仍在总表中。
 

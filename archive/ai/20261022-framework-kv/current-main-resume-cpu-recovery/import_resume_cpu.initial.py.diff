@@ -1,0 +1,59 @@
+--- tmp/current-main-baseline/import_current_main_candidate.py
++++ import_resume_cpu.py
+@@ -1,12 +1,14 @@
+-"""当前main短服务原件导入；唯一已审symlink材料化，原tgz及seal不变。"""
++"""447 CPU诊断原件导入；复用唯一symlink材料化与全部seal门，允许exit1/未覆盖。"""
+ from pathlib import Path, PurePosixPath
+ import hashlib
+ import json
+ import os
++import re
++from datetime import datetime
+ import sys
+ import tarfile
+ 
+-RUN = '20261023T141159Z-current-main-compute-order-context16k'
++RUN = None  # root取得实际run ID后可仅锁此项。
+ LINK = 'vllm_fl/configs/moe/E=256,N=512,device_name=nvidia.json'
+ LINKNAME = 'E=256,N=512,device_name=nvidia,model=Qwen3.6-35B-A3B-H100.json'
+ LINK_BLOB = 'e0f0558233316d08efb00d75dce9ff2fd1a1f530'
+@@ -15,7 +17,9 @@
+ def main():
+     name, expected_size, expected_sha, count = sys.argv[1:5]
+     controller_seal = sys.argv[5:] == ['--controller-seal']
+-    assert name == RUN and (not sys.argv[5:] or controller_seal)
++    match = re.fullmatch(r'(\d{8}T\d{6}Z)-current-main-resume-cpu-context16k-long', name)
++    assert match and (RUN is None or name == RUN) and not sys.argv[5:] and not controller_seal
++    datetime.strptime(match.group(1), '%Y%m%dT%H%M%SZ')
+     roots = [p for p in Path(__file__).resolve().parents
+              if (p / 'experiments/registry.csv').is_file() and (p / 'AGENTS.md').is_file()]
+     assert len(roots) == 1, '须唯一仓库根，拒绝猜测导入位置'
+@@ -55,7 +59,7 @@
+         git_raw = bundle.extractfile(git_rel).read()
+         assert sha(git_raw) == seal['files'][git_rel]
+         git_map = json.loads(git_raw)
+-        assert len(git_map) == 446 and git_map[LINK] == {'mode': '120000', 'sha': LINK_BLOB}
++        assert len(git_map) == 447 and git_map[LINK] == {'mode': '120000', 'sha': LINK_BLOB}
+         assert [rel for rel, item in git_map.items() if item['mode'] == '120000'] == [LINK]
+         link, target_member = by_name[link_rel], by_name[target_rel]
+         assert link.issym() and link.linkname == LINKNAME and target_member.isfile()
+@@ -95,7 +99,7 @@
+                   for p in folder.rglob('*') if p.is_file() and p != parent / seal_rel}
+         assert actual == seal['files'], '本地完整原件集合/字节不一致'
+     run = parent / name
+-    pattern = 'context-16k/results/*.json'
++    pattern = 'context-16k-long/results/*.json'
+     result_paths = sorted(run.glob(pattern))
+     result = dict(background_result_glob=pattern, paths=[str(p.relative_to(run)) for p in result_paths],
+         results=[json.loads(p.read_text(encoding='utf-8')) for p in result_paths])
+@@ -103,7 +107,9 @@
+         matched_existing=existing, original_tgz_sha256=expected_sha,
+         materialized_symlinks=[dict(path=link_rel, linkname=LINKNAME, git_blob=LINK_BLOB,
+             target=target_rel, materialized_sha256=sha(materialized))],
+-        exit_code=(run / 'exit-code').read_text().strip(), result=result), ensure_ascii=True))
++        exit_code=(run / 'exit-code').read_text().strip(), result=result,
++        cpu_events=json.loads((run / 'resume-cpu-events.json').read_text(encoding='utf-8')),
++        owner_process_group=json.loads((run / 'owner-process-group.json').read_text(encoding='utf-8'))), ensure_ascii=True))
+ 
+ 
+ if __name__ == '__main__':

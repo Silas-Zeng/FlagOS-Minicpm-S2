@@ -1,0 +1,8 @@
+本 PR 批量维护 BI-V150 实验记录；本批补充当前 main＋计算顺序候选的短对照、完整准确率和官方两档吞吐，总表 **206 条登记、203 个 run**。
+
+- **团队入口**：[实验总表](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/blob/codex/framework-experiments-20261022/team/experiments.md)、[按方法汇总](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/tree/codex/framework-experiments-20261022/team/methods)。每轮保留改动、条件、原件、正负结果与是否集成，不把组合成绩重复计入单项。
+- **当前组合官方完整结果**：144620 基于 main `3283672b`＋P，受测 tree `5c77e68c`、446项来源。原两档各4轮、共1536请求成功，按原规则丢首轮取第2–4轮均值：4K总吞吐 **5116.68 tok/s**，16K总吞吐 **3436.04 tok/s**。实际P与normalization均命中；这是当前组合的绝对结果，`gain=null`，不与旧DB/KV/source结果作归因比较。[摘要及原件](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/blob/codex/framework-experiments-20261022/analysis/compute-order-current-main-official.json)。
+- **当前组合完整准确率**：142019 原Math500 Level3全部105题，**103/105（98.0952%）**，通过原95%门；105成功、无transport/空最终答案，1题到上限。**P零命中**，这轮不能证明P分支准确率；旧130351三题实际outside的小样本信号仍单列，不拼接为完整路径验证。[准确率摘要](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/blob/codex/framework-experiments-20261022/analysis/compute-order-current-main-accuracy.json)。
+- **短对照与历史边界**：140324→141159两侧32/0、P实际命中，表观 **+6.589830%**，但KV521840→521936、`gain=null`，不认定严格因果收益。旧120949→121541的 **+5.124857%** 是另一固定来源上的可比单pair，不能外推为当前组合稳定收益。[当前对照](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/blob/codex/framework-experiments-20261022/analysis/compute-order-current-main-pair.json)。数值差异诊断、独立参考、未覆盖准确率、客户端门失败及accepted-fill负结果均沿总表保留。
+
+计算顺序代码已作为独立 [Draft PR #21](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/21) 提交，仅改runner/helper；实验同步不等待代码合并。computed H2D [PR #15](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/15)仍为独立方法，其100/105准确率与已核实际启用不移用于P。本批不合并代码PR，不代表C500结果。

@@ -1,0 +1,165 @@
+{
+  "status": "passed_qgqa_pitched_full_restore_verify1_compatibility",
+  "evidence": {
+    "run_id": "20261022T222222Z-q-gqa-kv-restore-pitched-verify1-context16k-long",
+    "started_utc": "2026-10-22T22:22:24.209711+00:00",
+    "finished_utc": "2026-10-22T22:26:50.502505+00:00",
+    "raw_sha256": "5d8d306cc9bf47a10cc545fb5a8ea37e428887335bf00fac0dd0ffa07c531386",
+    "source_count_verified": 425,
+    "worker_sha256": "cc442e54e66c81f4375ac7b3311953441245f53bd0a576d27798528ce02e2663",
+    "completed": 32,
+    "failed": 0,
+    "input_tokens": 524288,
+    "output_tokens": 32768,
+    "duration_s": 182.78152560302988,
+    "total_tokens_per_s": 3047.6603046296377,
+    "mean_ttft_ms": 54916.302003359306,
+    "kv_tokens": 521936,
+    "database": {
+      "before": {
+        "snapshot_sha256": "e2c42bf6b40c39516e0f8ba0cba60f54c253baa581b049eefeba5c52ecf96152",
+        "schema_sha256": "dd221bc69bd0d4bab1fb5f9f21091820d88d671cd1db75af1fb5aceb9de9126b",
+        "logical_content_sha256": "a00ef835df710c2cb320dbbdc31902fe8875cea83f273df51954bc709f1b5de8",
+        "table_count": 544,
+        "row_count": 20246
+      },
+      "after": {
+        "snapshot_sha256": "e2c42bf6b40c39516e0f8ba0cba60f54c253baa581b049eefeba5c52ecf96152",
+        "schema_sha256": "dd221bc69bd0d4bab1fb5f9f21091820d88d671cd1db75af1fb5aceb9de9126b",
+        "logical_content_sha256": "a00ef835df710c2cb320dbbdc31902fe8875cea83f273df51954bc709f1b5de8",
+        "table_count": 544,
+        "row_count": 20246
+      }
+    },
+    "preemptions": {
+      "before": 0.0,
+      "after": 1.0
+    },
+    "cpu_quota_cores": 6,
+    "physical_memory_mib": 32768,
+    "postflight_idle_verified": true,
+    "postflight_utc": "2026-10-22T22:27:37.895821+00:00",
+    "errors_before_shutdown": [],
+    "errors_during_shutdown": [
+      "(APIServer pid=374118) ERROR 10-23 06:26:47 [async_llm.py:704] AsyncLLM output_handler failed.",
+      "(APIServer pid=374118) ERROR 10-23 06:26:47 [async_llm.py:704] Traceback (most recent call last):",
+      "(APIServer pid=374118) ERROR 10-23 06:26:47 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/async_llm.py\", line 660, in output_handler",
+      "(APIServer pid=374118) ERROR 10-23 06:26:47 [async_llm.py:704]     outputs = await engine_core.get_output_async()",
+      "(APIServer pid=374118) ERROR 10-23 06:26:47 [async_llm.py:704]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "(APIServer pid=374118) ERROR 10-23 06:26:47 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/core_client.py\", line 1061, in get_output_async",
+      "(APIServer pid=374118) ERROR 10-23 06:26:47 [async_llm.py:704]     raise self._format_exception(outputs) from None",
+      "(APIServer pid=374118) ERROR 10-23 06:26:47 [async_llm.py:704] vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause."
+    ],
+    "shutdown_forcekill_lines": [
+      "(APIServer pid=374118) WARNING 10-23 06:26:47 [utils.py:620] [shutdown] Process manager: force killing remaining processes count=1"
+    ]
+  },
+  "geometry": {
+    "prefix_tokens": 16704,
+    "pages": 1044,
+    "nbytes": 718405632,
+    "source_runs": 24,
+    "destination_runs": 66,
+    "save_copy_calls": 210,
+    "full_copy_calls": 672,
+    "zero_calls": 0,
+    "verification_copy_calls": 2772,
+    "consumed_scheduled_tokens": 8,
+    "fast_rejects": 454,
+    "save_source_verification_bytes": 718405632,
+    "save_linear_calls": 168,
+    "save_pitched_calls": 42,
+    "save_segments_per_layer": 5,
+    "save_stream_handle": 0
+  },
+  "database_before_after_equal": true,
+  "source_manifest_sha256": "fb8b867222b7b1c867e457c4c3f7f72cb6e4dce42ad528f28aa211c8cf7734ed",
+  "validator_sha256": "d45de2f8d72d79321629b6ddcdcef5d5eaf68bc756745dfed0aa07a37bc6c6bc",
+  "reused_validator_sha256": "81f227fb4c4eca992024fc0d7cebb6416f3ffda054d8e9a536d35040011122bd",
+  "limits": [
+    "VERIFY1诊断，不计算收益/总分；DB变化据实保留。",
+    "42byte回读/runner六项/原消费不等于完整accuracy或取消/多victim证明。",
+    "copy调用几何和稀疏fast累计来自该run；不推算DMA带宽/CPU耗时或完整负载路径覆盖。"
+  ],
+  "protocol_key": [
+    "374282:1",
+    "cmpl-bench-e12e579d-30-0-b2edba2b",
+    1,
+    1
+  ],
+  "engine_pid": 374282,
+  "q_gqa_actual_markers": {
+    "BIV150_Q_FRAGMENT_SERVICE_FIRST_ACTUAL_EXECUTE_SELECTED": [
+      {
+        "actual_execute": true,
+        "complete_step_return": true,
+        "execute_call": 43,
+        "gqa_calls_in_execute": 42,
+        "gqa_calls_total": 966,
+        "gqa_python_count_excludes_graph_replay": true,
+        "not_all_steps_counted": true,
+        "not_gpu_completion_proof": true,
+        "num_requests": 2,
+        "pid": 374282,
+        "scheduled_tokens": 2048,
+        "selected_calls_in_execute": 42,
+        "selected_calls_total": 420
+      }
+    ],
+    "BIV150_Q_GQA_FIRST_ACTUAL_EXECUTE_SELECTED": [
+      {
+        "actual_execute": true,
+        "complete_step_return": true,
+        "execute_call": 43,
+        "gqa_calls_in_execute": 42,
+        "gqa_calls_total": 966,
+        "gqa_python_count_excludes_graph_replay": true,
+        "not_all_steps_counted": true,
+        "not_gpu_completion_proof": true,
+        "num_requests": 2,
+        "pid": 374282,
+        "scheduled_tokens": 2048,
+        "selected_calls_in_execute": 42,
+        "selected_calls_total": 420
+      }
+    ]
+  },
+  "legacy_protocol_validator_sha256": "2071bff34cdcd469294b406966ad86a0941d556b1d1e9ddd62dc87f927caf55b",
+  "q_gqa_marker_boundary": "两路可在不同execute首次命中；不证明恢复那一步全部层路由或graph replay逐步覆盖",
+  "safe_R_boundary": "R来自固定84be plan_snapshot与原队列/device-fence；raw无完整issued/queued/known，不能独立重算安全上界",
+  "passed_H2D_gate": {
+    "run": "/workspace/experiments/minicpm-s2/framework/20261022T222047Z-kv-pitched-restore-gate",
+    "control": "/workspace/experiments/minicpm-s2/framework/20261022T222047Z-kv-pitched-restore-gate-control",
+    "seal_sha256": "147a05b252ba2415bef174092c0575d3e848da3e077fbe30974547d885a3fb7e",
+    "seal_files": 88,
+    "results_sha256": "c4310ed2af1204a94d0894614f002aabd9cc4ce2e39f815f44088a872e2f2403",
+    "manifest_sha256": "6a5949471ac43bfba4c832aa30b80220edf7e32e2852a3d1b800c65ebdd93b12",
+    "bridge_sha256": "f9bf8757133b084cd198ea8a8b0b217af887ac03b2f2bfb9599fd806a9801d2c",
+    "source_sha256": {
+      "gate.py": "10e5ec18ea1a1ddc125362a9bf21063f59c6a196214a0873a455c1c8ed3d6df9",
+      "biv150_kv_pitched_copy.py": "818e788b282ba51017239fd9c505f9709c219a16024d4d56d1df750d3a61b4cd",
+      "biv150_kv_pitched_restore.py": "a7439c2c0b2b588dcd2af5c66b6eb62e562132ef8b5bc1d54ce54fc4b6e9804c",
+      "bridge.cpp": "48295ffde897cce988d3a8460904ab4451669e1de2fbe2bd5257d3f75e35ab20",
+      "biv150_kv_page_copy.py": "c95f59a55f5409e651085ff52d788193ea1d5901dcbc99d38fa504842b12f44c",
+      "pitched-save-gate.py": "c8c0f64e7293634a28949f4338800298b43d32daa7cbd866e64dcd59833d7dc6",
+      "restore-page-evidence.json": "55c383db7601041cbc9a0d464e2395f30b36637d22ffb65231414d17444ae308",
+      "memcpy2d-abi.json": "f9c348a60fa34469377fda671d2d57a42c108fca2554fd59963b6b7033ffb576",
+      "bridge.so": "f9bf8757133b084cd198ea8a8b0b217af887ac03b2f2bfb9599fd806a9801d2c"
+    },
+    "scope": "独立单层H2D正确性；不替代新425的42层事务/服务/accuracy"
+  },
+  "restore_submission_geometry": {
+    "segments_per_layer": 16,
+    "linear_calls": 168,
+    "pitched_calls": 504,
+    "copy_calls": 672,
+    "fallback_pitched_segments": 0,
+    "original_c95f_calls": 2772,
+    "verification_copy_calls_unchanged": 2772,
+    "actual_max_pitch_bytes": 2147483647,
+    "stream_handle": 0,
+    "boundary": "按本次真实目的页及max_pitch重算；不硬编码14段/588调用，也不从calls推速度"
+  },
+  "reader_boundary": "仅适配FULL提交几何；原c95f回读计数/事务/consumer/cleanup保持，非accuracy或收益",
+  "gain_calculated": false
+}

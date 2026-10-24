@@ -1,18 +1,38 @@
 #!/usr/bin/env python3
 """仅从既有登记生成中文团队视图；不修改/重验实验原件。"""
 import csv
+import fnmatch
 import hashlib
 import io
 import json
 import os
 from pathlib import Path
 import re
+import subprocess
 from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[1]
 TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
+AVAILABLE = set()
 GROUPS = {
+    'accepted-fill': ('省去无消费者的 accepted GPU fill', '固定非推测Full路径保留CPU fill，省略无消费者的accepted-count GPU fill。064838→065325两侧32成功0失败，吞吐表观−0.235046%，但KV521840→521936不同，31门仅same_KV失败、gain=null；当前不集成，保留小负及失配证据。冷ENABLED后同Engine原CPU_METADATA_FIRST_SELECTED只证明首次prepare，不证明全程/GPU数值或新准确率。', []),
+    'compute-order': ('计算顺序与采样顺序分离', '计算行重排以适配Attention路径，采样保持原请求顺序。PR15+PR21兼容组合已由PR22合入；142019完整105题102正确（97.1429%）通过，173454原官方8轮全部成功，第2–4轮均值4K5118.99、16K3436.17 total tok/s。该组合的官方16K KV为521936；这是组合绝对结果，不作两个方法的单项因果拆分。旧423短测、三题质量、结构映射与独立参考证据保留，不能替代新组合结果。', ['compute-order']),
+    'allocator-noop': ('KV 分配器无状态快返', '普通decode不新增页或完整块哈希时返回原空分配结果；保留新页、哈希、恢复与非RUNNING原路径，CPU片段和服务配对分别记录。', []),
+    'kv-restore-pitched': ('KV 二维 FULL 恢复', '保留原页序、私有页资格和完成事件，合并H2D提交；独立单层字节门与真实42层事务分开记录，调用数下降不当作性能收益。', []),
+    'skip-computed-h2d': ('省去无消费者的 computed H2D', 'CPU metadata成功时省略一次计数GPU副本提交，保留原回退和固定buffer/event；方法门与独立短服务单pair分别记录，不与KV组合收益相加。', ['skip-computed-h2d']),
+    'finite-growth-admission': ('有限窗口增长准入', '真实服务消除本轮抢占，但共同DB对照仍有KV容量失配；默认关闭保留研究证据，不宣称确定收益。\n\n两轮原 bc51 smoke 仅作启动显存诊断：共同 observer 下，finite 的非 Torch 内存多 4 MiB，差异在 before_profile 已存在；KV 为 baseline 521936、finite 521840，与旧性能对照方向相反。四端 DB 均为 532 表、19839 行且三项 SHA 一致；文本及 32 个 token ID 相同，但未覆盖 mixed Q/GQA 命中，不算准确率或性能收益。停止追查启动差异，旧性能对照仍因 KV 容量失配而不能归因。', []),
+    'admission-observer': ('有限增长准入观察', '当前Q+GQA上的稀疏CPU准入与失败状态诊断；不实现预留策略，不把页预算反事实当作吞吐收益。', []),
+    'q-gqa-framework': ('Q-hoist + GQA 框架组合', '仅适配精确GQA包装的安装身份，保留两条算术路径与原服务参数；已获单pair正信号及独立101/105准确率通过，评测DB增长另列。', []),
+    'async-bookkeeping': ('异步输出 CPU 批量记账', '将有效单 token 异步输出的逐行 CPU 数组更新合并，保留请求历史、事件与回退；服务对照的 KV 失配单列。', []),
+    'bq16-chunk-alignment': ('BQ16 chunk 形状对齐', '复用现有 C2/C3 与原算子，比较七段恢复链的 chunk 形状；局部正信号保留，未实现调度器或接入服务。', []),
+    'prefix-scan': ('公共前缀扫描', '在实际不支持cascade的后端中检查公共前缀统计成本；观察诊断与跳过扫描的真实服务结果分开记录。', []),
+    'q-fragment-hoist': ('Q fragment 循环外保留', '把唯一BF16 prefill Attention的Q local_load移到唯一K循环外并保持fragment活跃。默认由提交代码启用，保留normal fallback与精确源码/ABI/IR检查；PR23已合入main。官方1536请求、两档各4轮验证中4K/16K为5313.59/3764.67 total tok/s，较PR15+PR21旧基线+3.80%/+9.56%；完整Math500 L3为100/105通过。实际选中且fallback0，shared65536→32768、循环内Q read0。DB种子相同但KV521840对521936，不包装为严格等KV单项因果。', ['q-fragment-hoist']),
+    'gpu-hotspots': ('当前版本GPU热点', '复用原轨迹并按需补短native诊断；GPU路径占比只用于选择下一实验，不作吞吐成绩。', []),
+    'decode-cpu-gather': ('纯decode CPU gather跳过', '严格纯decode省略无消费者的CPU输入整理；正确性门通过，当前服务候选负收益，不集成。', []),
+    'c3-views': ('C3重复视图清理', '复用mixed Attention中的视图，减少重复slice/unbind；短输入信号与大输入、真实服务结果分别记录。', []),
+    'hot-key': ('Attention热key复用', '复用绑定后的key/cache并保留原launch尾；未命中、实际命中及负结果都保留。', []),
+    'input-prep': ('输入准备成本诊断', '当前组合的真实输入等待与预处理累计；诊断耗时不作为性能收益。', []),
     'cpu-combination': ('CPU metadata + async token 组合', '两种CPU准备方法的组合；方法正确性与短服务性能分别记录。', ['cpu-metadata', 'async-token-update']),
     'cpu-metadata': ('CPU metadata 复用', '复用已计算的CPU视图，写回原GPU缓冲区；回退和事件边界见原报告。', ['cpu-metadata']),
     'async-token': ('异步 token 更新', '整数gather/scatter更新；既有索引、stream和回退条件保留。', ['async-token-update']),
@@ -34,6 +54,21 @@ GROUPS = {
     'other': ('其它登记与控制记录', '没有足够字段继续归类的登记；不补猜实验结论。', []),
 }
 CODE = {
+    'accepted-fill': ['analysis/accepted-fill-service-pair.json'],
+    'skip-computed-h2d': ['analysis/pr15-computed-h2d-accuracy.json', 'analysis/skip-computed-h2d-service-pair.json'],
+    'compute-order': ['analysis/compute-order-current-main-official.json', 'analysis/compute-order-current-main-accuracy.json', 'analysis/compute-order-current-main-pair.json', 'archive/ai/20261022-framework-kv/compute-order-main-profile/README.md', 'analysis/compute-order-math4-event-130351.json', 'analysis/compute-order-math4-event-125330.json', 'analysis/compute-order-service-retest-pair.json', 'analysis/compute-order-math4-summary.json', 'analysis/compute-order-structure.json', 'analysis/compute-order-oracle-summary.json', 'analysis/compute-order-oracle-085500.json', 'analysis/compute-order-first-layer.json', 'experiments/framework/20261023T075210Z-compute-order-shadow-context16k-control/shadow-artifacts/8403/result.json', 'archive/ai/20261022-framework-kv/compute-order-shadow-gate/README.md', 'experiments/framework/20261023T070816Z-compute-order-answer-baseline/context-16k/answer-summary.json', 'analysis/compute-order-service-pair.json', 'analysis/compute-order-accuracy.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
+    'allocator-noop': ['archive/ai/20261022-framework-kv/next-kv-noop-allocate/README.md', 'analysis/allocator-noop-service-pair.json'],
+    'kv-restore-pitched': ['archive/ai/20261022-framework-kv/q-gqa-kv-restore-pitch/README.md', 'analysis/kv-pitched-restore-method.json'],
+    'finite-growth-admission': ['analysis/finite-growth-common-db-service-pair.json', 'analysis/finite-growth-warm-service-pair.json', 'analysis/finite-growth-service-pair.json', 'analysis/current-kv-memory-smokes.json'],
+    'admission-observer': ['experiments/framework/20261022T191047Z-q-gqa-admission-observe-context16k-long-control/biv150_admission_observer.py'],
+    'q-gqa-framework': ['archive/ai/20261022-framework-kv/q-gqa-framework/METHOD.md', 'archive/ai/20261022-framework-kv/q-gqa-framework/biv150_q_fragment_service.py', 'analysis/q-gqa-service-pair.json', 'experiments/accuracy/20261022T184819Z-q-gqa-framework/accuracy-review.json'],
+    'async-bookkeeping': ['archive/ai/20261022-framework-kv/async-bookkeeping/biv150_async_bookkeeping.py', 'archive/ai/20261022-framework-kv/async-bookkeeping/compare_service_pair.py', 'analysis/async-bookkeeping-service-pair.json'],
+    'bq16-chunk-alignment': ['archive/ai/20261022-framework-kv/bq16-chunk-alignment/validate_bq16_chunk_chain.py', 'archive/ai/20261022-framework-kv/bq16-chunk-alignment/result-review.json'],
+    'q-fragment-hoist': ['analysis/qfragment-pr15-pr21-final.json', 'analysis/qfragment-adaptation.json', 'archive/ai/20261022-current-gpu-hotspots/q-hoist-service/biv150_q_fragment_service.py', 'archive/ai/20261022-current-gpu-hotspots/q-hoist-service/compare_q_service_pair.py', 'analysis/q-fragment-service-pair.json'],
+    'decode-cpu-gather': ['archive/ai/20261022-next-service-queue/next-decode-gather/biv150_decode_cpu_gather.py'],
+    'c3-views': ['patches/framework/candidates/biv150_c3_view_reuse.py'],
+    'hot-key': ['patches/framework/candidates/biv150_attention_key_recipe_v2.py'],
+    'input-prep': ['scripts/remote/input-prep-timing-combined/prepare_input_prep_timing.py', 'scripts/remote/input-prep-timing-combined/biv150_input_prep_timing.py'],
     'cpu-combination': ['docs/pr-preparation/combination-artifacts/resolved/vllm_fl/worker/model_runner.py', 'patches/framework/biv150_cpu_metadata.py', 'patches/framework/biv150_async_token_update.py'],
     'cpu-metadata': ['patches/framework/biv150_cpu_metadata.py'],
     'async-token': ['patches/framework/biv150_async_token_update.py'],
@@ -50,11 +85,29 @@ def group(row):
         parent = BY_ID.get(row['run_id'].removesuffix('-control'))
         return group(parent[0]) if parent else 'other'
     for key, pattern in [
+        ('accepted-fill', r'accepted[_-]fill'),
+        ('compute-order', r'compute[_-]order'),
+        ('allocator-noop', r'allocator[_-]noop'),
+        ('kv-restore-pitched', r'kv[_-](?:pitched[_-]restore|restore[_-]pitch)'),
+        ('skip-computed-h2d', r'skip[_-]computed[_-]h2d'),
+        ('finite-growth-admission', r'finite[_-]growth'),
+        ('admission-observer', r'finite[_-]admission|q[_-]gqa[_-]admission[_-]observ'),
+        ('q-gqa-framework', r'q[_-]gqa[_-](?:framework|service)'),
+        ('async-bookkeeping', r'async[_-](?:cpu[_-])?bookkeeping'),
+        ('bq16-chunk-alignment', r'bq16[_-]chunk'),
+        ('prefix-scan', r'no[_-]cascade[_-]prefix|prefix[_-]cost|prefix[_-]skip'),
+        ('q-fragment-hoist', r'q[_-]?(?:fragment|hoist)'),
+        ('attention', r'prefill[_-]w16'),
+        ('gpu-hotspots', r'current[_-]mixed|q[_-]gqa[_-]puredecode'),
+        ('decode-cpu-gather', r'decode[_-](cpu[_-])?gather'),
+        ('c3-views', r'c3[_-]view|c3views'),
+        ('hot-key', r'key[_-]recipe|hot[_-]key'),
+        ('input-prep', r'input[_-]prep'),
         ('cpu-combination', r'cpu[_-]combination|cpu_metadata_async_token'),
         ('cpu-metadata', r'cpu[_-]metadata'), ('async-token', r'async[_-]token'),
         ('kv-pitched', r'kv[_-]pitched|kv_save_threeway'), ('kv-contiguous', r'kv[_-]page[_-]copy'),
         ('kv-progress', r'progress[_-]victim|preemption[_-]snapshot'), ('kv-memory', r'kv[_-](memory|startup)'),
-        ('kv-observation', r'kv[_-]completion'), ('kv-protocol', r'kv[_-]'),
+        ('kv-observation', r'kv[_-]completion|q[_-]gqa[_-]resume[_-]native'), ('kv-protocol', r'kv[_-]'),
         ('admission', r'growth'), ('mapped-attention', r'mapped[_-]decode'),
         ('mm-cta', r'cta|mm[_-]'), ('buffers', r'hidden|bucket'),
         ('event', r'event'), ('official', r'official|original13eb'),
@@ -75,6 +128,11 @@ def platform(row):
 def link(target, current, label):
     rel = Path(os.path.relpath(target, current.parent)).as_posix()
     return '[' + label.replace(']', '') + '](' + quote(rel, safe='/.-_') + ')'
+
+
+def available(path):
+    value = str(path).rstrip('/')
+    return value in AVAILABLE or any(item.startswith(value + '/') for item in AVAILABLE)
 
 
 def cell(value):
@@ -100,10 +158,18 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     """只摘结果/失败原句，不把审计与库身份搬入主视图。"""
+    if row['run_id'] == '20261023T125330Z-compute-order-math4-event':
+        return '客户端长度校验在发送前失败；背景0发送、四题未放行，本轮未评价优化。'
+    if row['run_id'] == '20261023T130351Z-compute-order-math4-event':
+        return '原四题4/4正确，3题实际覆盖且在首完整答案框前；背景32/0。仅小样本诊断，不计性能或完整准确率。'
     note = re.sub(r'\s+', ' ', row['conclusion']).strip()
     if row['profile_id'] == 'launcher_only':
         return '启动或收集记录，实验结果见对应主run。'
     clauses = [x.strip() for x in re.split(r'[。；;]', note) if x.strip()]
+    if row['status'] == 'oracle_favors_permuted_sample_only':
+        return '；'.join(x for x in clauses if x.startswith(('独立CPU FP32', '本样本P')))
+    if row['status'] == 'first_layer_attention_mismatch_localized':
+        return clauses[0] + '；仅诊断，候选暂不集成'
     positive = next((x for x in clauses if re.search(r'(?i)(?:TPS|TTFT|吞吐|耗时|wall|event)\s*(?:[+−-]\d|省\d|提升|降低)|\d+(?:\.\d+)?(?:%|pct|倍)|throughput factor\s+\d', x)), None)
     negative = next((x for x in clauses if re.search(r'无CPU下降|未见.*收益|无正信号|不支持.*收益|未激活|未命中|失败|遮蔽.*循环', x)), None)
     correctness = next((x for x in clauses if re.search(r'字段.*过|checks.*(?:过|true)|全bytes|全字节|bitwise|RNG.*(?:同|过|true)|输出.*通过|正确性.*通过', x, re.I)), None)
@@ -135,11 +201,39 @@ def result(row, limit=190):
 def keep(row):
     text = row['conclusion']
     state = row['status'].lower()
+    if state == 'official_pass_q_selected_no_fallback':
+        return '保留并已合并PR23；确认为最新BI-V150基准，KV失配边界随结果保留。'
+    if state == 'accuracy_pass' and row['profile_id'] == 'q-fragment-hoist':
+        return '保留准确率通过证据及2题输出上限边界；组合已合并。'
+    if state == 'diagnostic_selected_cleanup_exit2_not_performance':
+        return '保留适配失败/修复与选中证据；短诊断exit2，不作性能或准确率。'
+    if state == 'confounded_kv_capacity_current_main':
+        return '保留基线与候选；KV容量不同，不计归因收益，组合准确率另验。'
+    if state == 'client_validation_failed_before_requests':
+        return '保留客户端失败与修复证据；本轮未评价优化。'
+    if state == 'limited_math4_quality_signal_three_outside_questions':
+        return '保留小样本质量信号及候选，可准备独立Draft PR；暂不集成。'
+    if state == 'comparable_single_pair' and row['profile_id'] == 'compute_order':
+        if 'baseline' in row['phase']:
+            return '保留作本轮可比对照基线。'
+        return '保留单pair正信号；稳定收益与目标路径质量尚待确认，暂不集成。'
+    if state in ('first_layer_attention_mismatch_localized', 'oracle_favors_permuted_sample_only'):
+        return '保留诊断与候选；完整正确性尚未确认，暂不集成，不计性能。'
     if row['profile_id'] == 'launcher_only':
         return '保留作过程记录。'
+    if row['profile_id'] == 'finite_admission_observer':
+        return '保留作准入状态诊断；尚未实现预留策略，不提供性能收益结论。'
+    if row['profile_id'] == 'q_gqa_framework' and 'baseline' in row['phase']:
+        return '保留作GQA对照基线；组合单pair正信号与独立准确率另列。'
+    if row['profile_id'] == 'q_gqa_framework' and row['phase'] == 'official_math500_level3':
+        return '组合准确率通过；性能仍仅单pair，不据此声明稳定或完整官方成绩。'
+    if row['profile_id'] == 'async_cpu_bookkeeping' and 'baseline' in row['phase']:
+        return '保留作对照基线；KV失配，不据此判断候选收益。'
+    if 'input_prep_timing' in row['profile_id']:
+        return '保留诊断结论；当前不据此实施输入同步优化。'
     if re.search(r'baseline|reference|original13eb|^b0$', row['profile_id'], re.I):
         return '保留作对照基线；不据此判断候选收益。'
-    if re.search(r'failed|reject|error|no_.*cpu_reduction', state) or re.search(r'不集成|未集成|不启用|不服务集成|无CPU下降|未见.*收益|无正信号', text):
+    if re.search(r'failed|reject|error|no_.*cpu_reduction', state) or re.search(r'放弃|不集成|未集成|不启用|不服务集成|无CPU下降|未见.*收益|无正信号', text):
         return '未集成；失败或无收益记录保留。'
     if 'positive_signal' in state or re.search(r'信号.{0,8}保留|保留.{0,8}候选|小收益.{0,8}保留', text):
         return '保留作候选，仍待确认；不等于默认启用。'
@@ -151,6 +245,8 @@ def how(row):
     if row['profile_id'] == 'launcher_only':
         return '只记录启动、日志或封存，不单独测性能。'
     kind = next((label for pattern, label in [
+        ('cpu_oracle', '实际单行KV与独立CPU FP32/FP64参考'),
+        ('first_layer_diagnostic', '自然混合负载同一步首层对照诊断'),
         ('official', '原官方吞吐对照'), ('accuracy', '准确率门'), ('profile', '性能分析诊断'),
         ('gate|correctness|byte', '局部正确性或能力门'), ('smoke|startup|descriptor', '启动或描述符诊断'),
         ('context|screen|decode|4k|16k', '真实服务短负载')]
@@ -160,12 +256,22 @@ def how(row):
 
 
 def code_links(key, page):
-    paths = [ROOT / x for x in CODE.get(key, ['patches/framework']) if (ROOT / x).exists()]
+    paths = [ROOT / x for x in CODE.get(key, ['patches/framework']) if available(x)]
     return '；'.join(link(x, page, x.name) for x in paths) or '未单列，见原件源码清单'
 
 
 def status(row):
     value = row['status'].lower()
+    if value == 'client_validation_failed_before_requests':
+        return '客户端发送前失败'
+    if value == 'limited_math4_quality_signal_three_outside_questions':
+        return '小样本质量信号（3/4题覆盖）'
+    if value == 'diagnostic_selected_cleanup_exit2_not_performance':
+        return '适配诊断，不计性能'
+    if value == 'comparable_single_pair':
+        return '可比单对照，候选待确认'
+    if value in ('first_layer_attention_mismatch_localized', 'oracle_favors_permuted_sample_only'):
+        return '诊断完成，候选待确认'
     for needle, text in [('confounded', '不可直接比较'), ('inconclusive', '结论未定'),
                          ('not_activated', '未激活'), ('no_activation', '未激活'),
                          ('failed', '失败/未通过'), ('reject', '失败/未通过'),
@@ -189,24 +295,53 @@ def write(path, text):
 
 def evidence(rows):
     folders = [ROOT / r['artifacts'] for r in rows if r['artifacts']]
-    folders = list(dict.fromkeys(p for p in folders if p.is_dir()))
+    folders = list(
+        dict.fromkeys(
+            p
+            for p in folders
+            if available(p.relative_to(ROOT).as_posix())
+        )
+    )
     commands, manifests, raw, logs = [], [], [], []
     for folder in folders:
         control = folder.with_name(folder.name + '-control')
         for base in (folder, control):
-            if not base.is_dir():
+            base_rel = base.relative_to(ROOT).as_posix()
+            commands += [base / n for n in ('command.json', 'command.txt', 'benchmark-command.json', 'load-commands.json', 'launch-command.json', 'launch.sh') if base_rel + '/' + n in AVAILABLE]
+            manifests += [base / n for n in ('manifest.json', 'purpose.json', 'source-sha256.json', 'postflight-full.json', 'postflight.json') if base_rel + '/' + n in AVAILABLE]
+        folder_rel = folder.relative_to(ROOT).as_posix()
+        for path in sorted(AVAILABLE):
+            if not path.startswith(folder_rel + '/'):
                 continue
-            commands += [base / n for n in ('command.json', 'command.txt', 'benchmark-command.json', 'load-commands.json', 'launch-command.json', 'launch.sh') if (base / n).is_file()]
-            manifests += [base / n for n in ('manifest.json', 'purpose.json', 'source-sha256.json', 'postflight-full.json', 'postflight.json') if (base / n).is_file()]
-        raw += [folder / n for n in ('results.json', 'result.json') if (folder / n).is_file()]
-        raw += [p for pattern in ('*/results/*.json', '*/results/*.csv', '*.csv', '*/*.csv') for p in folder.glob(pattern) if p.name != 'gpu.csv' and 'source' not in p.parts]
-        logs += [folder / n for n in ('server.log', 'worker.log', 'gate.log', 'gpu.csv', 'exit-code') if (folder / n).is_file()]
+            relative = path[len(folder_rel) + 1:]
+            if relative in ('results.json', 'result.json') or any(
+                fnmatch.fnmatch(relative, pattern)
+                for pattern in ('*/results/*.json', '*/results/*.csv', '*.csv', '*/*.csv')
+            ):
+                if Path(path).name != 'gpu.csv' and '/source/' not in '/' + path:
+                    raw.append(ROOT / path)
+        logs += [folder / n for n in ('server.log', 'worker.log', 'gate.log', 'gpu.csv', 'exit-code') if folder_rel + '/' + n in AVAILABLE]
     return folders, {'原命令': commands, '环境 / 源码 / 后态': manifests, '原始结果': raw, '日志 / 采样': logs}
 
 
 def main():
-    global BY_ID, GENERATED
+    global BY_ID, GENERATED, AVAILABLE
     GENERATED = []
+    tracked = set(
+        subprocess.run(
+            ["git", "ls-tree", "-r", "--name-only", "HEAD"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.splitlines()
+    )
+    present = {
+        path.relative_to(ROOT).as_posix()
+        for path in ROOT.rglob('*')
+        if path.is_file() and '.git' not in path.parts
+    }
+    AVAILABLE = tracked | present
     registry = ROOT / 'experiments/registry.csv'
     raw = registry.read_bytes()
     rows = list(csv.DictReader(io.StringIO(raw.decode('utf-8'))))
@@ -227,11 +362,15 @@ def main():
     # root已实际创建的新PR；仅导航，不改变原实验的归因/依赖/准确率。
     prs.update({method: 'https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/' + str(number)
                 for method, number in [('diagnostics', 5), ('prefill', 6), ('top-p', 7),
-                                       ('sql-reflection', 8), ('decode3d', 9), ('mixed-attention', 10)]})
+                                       ('sql-reflection', 8), ('decode3d', 9), ('mixed-attention', 10),
+                                       ('skip-computed-h2d', 22), ('compute-order', 22),
+                                       ('q-fragment-hoist', 23)]})
     pr_labels = {'cpu-metadata': 'CPU metadata #1', 'async-token-update': '异步token更新 #2',
                  'kv-contiguous-copy': '连续页KV工具 #3', 'kv-pitched-copy': '二维SAVE工具 #4',
                  'diagnostics': '诊断配置 #5', 'prefill': 'prefill #6', 'top-p': 'top-p #7',
-                 'sql-reflection': 'SQL反射 #8', 'decode3d': '3D decode #9', 'mixed-attention': 'mixed Attention #10'}
+                 'sql-reflection': 'SQL反射 #8', 'decode3d': '3D decode #9', 'mixed-attention': 'mixed Attention #10',
+                 'skip-computed-h2d': 'computed H2D+计算顺序组合 #22', 'compute-order': 'computed H2D+计算顺序组合 #22',
+                 'q-fragment-hoist': 'Q fragment #23'}
     run_pages, buckets = {}, {key: [] for key in GROUPS}
     for rid, records in BY_ID.items():
         slug, hardware = platform(records[0])
@@ -298,7 +437,7 @@ def main():
         ('experiments/official', '官方吞吐原件'), ('experiments/accuracy', '准确率原件'),
         ('experiments/source-audits', '实际安装源码只读取证'), ('docs/pr-preparation', '早期PR材料与组合证据'),
         ('docs/pr-rebuild', '原始基线与方法PR重建材料'), ('docs/github-publications', '完整发布回执')
-    ] if (ROOT / path).exists()))
+    ] if available(path)))
     home = TEAM / 'README.md'
     write(home, '# 团队实验导航\n\n先看' + link(table, home, '唯一实验总表') + '，再打开每轮短记和原始证据。登记源保持为registry，不另造成绩或补猜缺字段。\n\n## 按平台\n\n' + '\n'.join('- ' + link(TEAM / 'platforms' / (slug + '.md'), home, label) for slug, label in [('bi-v150', '天数 BI-V150'), ('c500', '沐曦－曦云 C500'), ('cpu', 'CPU'), ('unrecorded', '设备字段未记录')]) + '\n\n## 按方法\n\n' + '\n'.join('- ' + link(TEAM / 'methods' / (key + '.md'), home, GROUPS[key][0]) for key in GROUPS if buckets[key]) + '\n\n' + link(archive, home, 'AI交接、详细SHA及过程稿归档入口') + '\n\n更新：`python scripts/build_team_view.py`。仅重建本目录自动视图，不修改登记和证据。')
     assert registry.read_bytes() == raw

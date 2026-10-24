@@ -1,0 +1,36 @@
+{
+  "kind": "仅必要语法/AST/字节逆变换，非runner mock或GPU",
+  "preparer_sha256": "23d833a1bd3f4155652a2457b19bdaedf29b918de488e18e5b986b2cb5e08427",
+  "base_runner_sha256": "cc442e54e66c81f4375ac7b3311953441245f53bd0a576d27798528ce02e2663",
+  "candidate_runner_sha256": "97f41ac455cad0db7c8ddfd2b9809e77326b6472285cb14e56ce486f2f0f7443",
+  "base_map_sha256": "bf69d06dfe8b580e3628b7ddac3c0fe68a715d709c5def2b83ea5f745ea8d392",
+  "expected_map_sha256": "425245ed4b8a0f086dc1ac99807d137f21f0128aaa1ada45a576c19bd639c0dd",
+  "changed_methods": [
+    "_prepare_inputs"
+  ],
+  "async_spec_condition_and_update_body_AST_unchanged": true,
+  "metadata_call_AST_unchanged_once": true,
+  "False_branch_original_computed_copy_and_remaining_body_AST_unchanged": true,
+  "pending_false_before_original_condition_else_true": true,
+  "synchronize_input_prep_AST_unchanged": true,
+  "original_init_execute_sample_other_methods_AST_unchanged": true,
+  "input_output_source_count": 414,
+  "only_runner_diff": true,
+  "inverse_bytes_exact": true,
+  "no_framework_import_or_mock": true,
+  "unchanged_runtime_guards": {
+    "vllm_fl/patches/biv150_cpu_metadata.py": "0e96152454a9197f65a34c2fe8805bd5073e1fa473070d59d4ec4f20a6d8846f",
+    "vllm_fl/patches/biv150_async_token_update.py": "1bb85e31c7b3fefa81414a54b04a1f0b6cf949c0876f87149956c821bb483adc",
+    "vllm_fl/patches/biv150_sql_reflection.py": "ad84c9affe0c3f4b9a4432dd2cbb3861306726f07d53328e129af41c74ea8e8e",
+    "vllm_fl/patches/biv150_decode_launch_runtime.py": "e5f68a303f991f1e5ce1145941d44350d280a85090db94045b653e3828c3ed5f",
+    "vllm_fl/patches/biv150_mixed_decode.py": "a129361f1ef1babe1ce1e6238f6b1a725050612c235201064ddeba676b420c42",
+    "vllm_fl/patches/biv150_gqa_decode.py": "1a81409ba23a149081f7fc257460ea1512cbfdceeb0af32a2698994958749b9a",
+    "vllm_fl/patches/biv150_q_fragment_service.py": "51fcaf55133124c2e51dfa0385e1939bf908b65f8444ac63f912329f6ca73800"
+  },
+  "guard_review": "CPU metadata仅锁actual InputBatch/utils；async按scope/tensor合同；SQL锁FlagGems SQL；C2/C3/GQA/Q锁Attention/helpers/backend/各自runtime及编译器，不锁当前runner文件SHA；原Q ctor只读配置。未扩大任何白名单。旧KV worker e155 guard本来不适用cc442，不启用也不修改。",
+  "not_proven": [
+    "实际helper成功时该H2D省去",
+    "图/非默认流真实数值与下一步False恢复",
+    "服务吞吐或accuracy；无新运行"
+  ]
+}

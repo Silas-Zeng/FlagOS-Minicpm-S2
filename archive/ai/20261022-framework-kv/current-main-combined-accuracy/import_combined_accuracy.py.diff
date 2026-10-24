@@ -1,0 +1,26 @@
+--- tmp/pr15-accuracy/import_pr15_accuracy.py
++++ import_combined_accuracy.py
+@@ -1,4 +1,4 @@
+-"""PR15单次准确率原件导入；唯一已审symlink材料化，原tgz及seal不变。"""
++"""当前main加P准确率原件导入；复用唯一symlink材料化与全seal门。"""
+ from pathlib import Path, PurePosixPath
+ import hashlib
+ import json
+@@ -6,7 +6,7 @@
+ import sys
+ import tarfile
+ 
+-RUN = '20261023T112356Z-pr15-computed-h2d'
++RUN = '20261023T142019Z-current-main-compute-order'
+ LINK = 'vllm_fl/configs/moe/E=256,N=512,device_name=nvidia.json'
+ LINKNAME = 'E=256,N=512,device_name=nvidia,model=Qwen3.6-35B-A3B-H100.json'
+ LINK_BLOB = 'e0f0558233316d08efb00d75dce9ff2fd1a1f530'
+@@ -55,7 +55,7 @@
+         git_raw = bundle.extractfile(git_rel).read()
+         assert sha(git_raw) == seal['files'][git_rel]
+         git_map = json.loads(git_raw)
+-        assert len(git_map) == 432 and git_map[LINK] == {'mode': '120000', 'sha': LINK_BLOB}
++        assert len(git_map) == 446 and git_map[LINK] == {'mode': '120000', 'sha': LINK_BLOB}
+         assert [rel for rel, item in git_map.items() if item['mode'] == '120000'] == [LINK]
+         link, target_member = by_name[link_rel], by_name[target_rel]
+         assert link.issym() and link.linkname == LINKNAME and target_member.isfile()

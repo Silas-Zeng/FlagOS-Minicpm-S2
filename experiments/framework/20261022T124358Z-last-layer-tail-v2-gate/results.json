@@ -1,0 +1,103 @@
+{
+  "status": "failed",
+  "kind": "actual-class local eager tail only",
+  "limitations": [
+    "Synthetic attention output/residual and random BF16 weights; no 2B model weights.",
+    "No Attention/QKV/KV calls: this does not validate the full model cache or hook.",
+    "Actual class/native RMSNorm calls, not production Inductor/AOT tail timing.",
+    "M2048/N2 is one upper-bound fixture, not full workload coverage.",
+    "Tolerance gate is local only; bitwise and error values are retained separately.",
+    "No server, sampler, accuracy or end-to-end speed conclusion."
+  ],
+  "cases": [
+    {
+      "case": "M2048-N2-default-stream",
+      "hidden": {
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs": 0.0,
+        "max_rel_floor_1e_6": 0.0,
+        "allclose_atol_0_01_rtol_0_01": true
+      },
+      "final_residual": {
+        "bitwise_equal": true,
+        "finite": true,
+        "max_abs": 0.0,
+        "max_rel_floor_1e_6": 0.0,
+        "allclose_atol_0_01_rtol_0_01": true
+      }
+    },
+    {
+      "case": "new-values-pointers-nondefault-stream",
+      "hidden": {
+        "bitwise_equal": false,
+        "finite": true,
+        "max_abs": 0.0234375,
+        "max_rel_floor_1e_6": 3.5,
+        "allclose_atol_0_01_rtol_0_01": false
+      },
+      "final_residual": {
+        "bitwise_equal": false,
+        "finite": true,
+        "max_abs": 0.017578125,
+        "max_rel_floor_1e_6": 3.5,
+        "allclose_atol_0_01_rtol_0_01": false
+      }
+    }
+  ],
+  "timings": [],
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "torch_num_threads": 56,
+  "flaggems": {
+    "enabled": true,
+    "whitelist": null,
+    "blacklist": null
+  },
+  "distributed": {
+    "backend": "nccl",
+    "world_size": 1,
+    "rank": 0,
+    "local_rank": 0,
+    "init_method": "file:///workspace/experiments/minicpm-s2/framework/20261022T124358Z-last-layer-tail-v2-gate/world1-rendezvous",
+    "source_sha256": {
+      "parallel_state.py": "1feda9ac98c1dd14cbad60a9205194d224ad7d75656c6e94cffbe3bdbcbf4003",
+      "parameter.py": "ff6054fbd19ec932c548d562c6f4cc4506383b71cbe411fcfd554c8b1d87b510"
+    },
+    "initialized": true
+  },
+  "installed_sources": {
+    "llama": {
+      "path": "/usr/local/lib/python3.12/site-packages/vllm/model_executor/models/llama.py",
+      "sha256": "1e1003454985bf86d3868a7755bcf5324676881548b3895809edf0b76698d384"
+    },
+    "linear": {
+      "path": "/usr/local/lib/python3.12/site-packages/vllm/model_executor/layers/linear.py",
+      "sha256": "0bd60103d85d7183791077c46e0770d0a2adc8e8811b162b9084c3cbe92ba662"
+    },
+    "layernorm": {
+      "path": "/usr/local/lib/python3.12/site-packages/vllm/model_executor/layers/layernorm.py",
+      "sha256": "696615d858292fea7a2942480803cd4c7d2d1e88d818bfe5cd9d695ac464f37c"
+    },
+    "activation": {
+      "path": "/usr/local/lib/python3.12/site-packages/vllm/model_executor/layers/activation.py",
+      "sha256": "757209cef4b5cc091d29d95b4a6b29f2511984110c9b66810c760d4499cb156c"
+    }
+  },
+  "local_parts": [
+    "vllm.model_executor.layers.linear.RowParallelLinear",
+    "vllm.model_executor.layers.layernorm.RMSNorm",
+    "vllm.model_executor.models.llama.LlamaMLP",
+    "vllm.model_executor.layers.layernorm.RMSNorm"
+  ],
+  "nondefault_stream_handle": 94886200959216,
+  "inputs_unchanged": true,
+  "rng_unchanged": true,
+  "error": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/framework/20261022T124358Z-last-layer-tail-v2-gate/source/gate.py\", line 194, in worker\n    raise AssertionError(\"local tail exceeds the declared tolerance; no timing\")\nAssertionError: local tail exceeds the declared tolerance; no timing\n",
+  "device_settled": true,
+  "distributed_cleanup": {
+    "errors": [],
+    "torch_initialized_after": false,
+    "model_parallel_initialized_after": false
+  },
+  "finished_utc": "2026-10-22T12:44:40.155491+00:00"
+}

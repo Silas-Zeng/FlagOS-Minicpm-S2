@@ -6,4 +6,6 @@
 
 合并顺序见[方法 PR](pr-collaboration-plan.md)。六项早期增量重建原 SQL+C3；CPU 两项的冲突使用既有受测组合 runner `6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141`；KV 两项为显式工具。代码合并提交 `0f2b925588114d47c478707afa41e58c769c2ec4` 的 425 个文件与预期组件组合完全一致；后续 #11 仅改 README。复用既有验证，未重复测试，不把历史 103/105 外推到新增 CPU 组合。
 
+20261022T105839Z 已对上述干净6f918 CPU组合补完独立Math500 Level 3准确率门：102/105（97.1429%），通过95%要求，105请求均成功，无截断或空最终答案。证据见 `experiments/accuracy/20261022T105839Z-cpu-combination-level3/accuracy-review.json`。这不是新C3views、纯decode CPU gather或显式KV工具启用后的准确率结论。
+
 [团队实验入口](../team/README.md) · [合并回执](../archive/github/20261022-framework-merge.json) · [历史迁移](../archive/github/20261022-framework-rebuild.json)

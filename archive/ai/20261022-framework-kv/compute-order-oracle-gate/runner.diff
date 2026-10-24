@@ -1,0 +1,165 @@
+--- frozen-P-ea64
++++ one-shot-shadow
+@@ -22,6 +22,7 @@
+ from vllm_fl.patches.biv150_cpu_metadata import try_cpu_metadata as _biv150_try_cpu_metadata
+ from vllm_fl.patches.biv150_async_token_update import fused_sampled_token_update as _biv150_fused_sampled_token_update
+ from vllm_fl.patches.biv150_compute_order import make_plan as _biv150_compute_order_plan
++from vllm_fl.patches.biv150_compute_order_shadow import create as _biv150_shadow_create
+ import torch.distributed
+ import torch.nn as nn
+ from tqdm import tqdm
+@@ -4234,10 +4235,12 @@
+             compute_order = _biv150_compute_order_plan(
+                 self, scheduler_output, num_scheduled_tokens_np, max_num_scheduled_tokens
+             )
++            shadow = _biv150_shadow_create(self, compute_order, scheduler_output, num_scheduled_tokens_np)
++            preparation_order = None if shadow is not None else compute_order
+             logits_indices, spec_decode_metadata = self._prepare_inputs(
+                 scheduler_output,
+                 num_scheduled_tokens_np,
+-                compute_order=compute_order,
++                compute_order=preparation_order,
+             )
+ 
+             cascade_attn_prefix_lens = None
+@@ -4378,7 +4381,7 @@
+                     num_scheduled_tokens=scheduler_output.num_scheduled_tokens,
+                     cascade_attn_prefix_lens=cascade_attn_prefix_lens,
+                     slot_mappings=slot_mappings_by_group,
+-                    compute_order=compute_order,
++                    compute_order=preparation_order,
+                 )
+             )
+ 
+@@ -4393,6 +4396,58 @@
+                 scheduler_output, num_tokens_padded, intermediate_tensors
+             )
+ 
++            if shadow is not None:
++                shadow.shadow(input_ids=input_ids, positions=positions, inputs_embeds=inputs_embeds,
++                    intermediate_tensors=intermediate_tensors, model_kwargs=model_kwargs,
++                    attn_metadata=attn_metadata, slot_mappings=slot_mappings, batch_desc=batch_desc,
++                    mode=cudagraph_mode, num_tokens=num_tokens_padded,
++                    num_tokens_across_dp=num_tokens_across_dp, ubatch_slices=ubatch_slices_padded)
++                logits_indices, spec_decode_metadata = self._prepare_inputs(
++                    scheduler_output,
++                    num_scheduled_tokens_np,
++                    compute_order=compute_order,
++                )
++
++                slot_mappings_by_group, slot_mappings = self._get_slot_mappings(
++                    num_tokens_padded=num_tokens_padded
++                    if pad_attn or has_separate_kv_update
++                    else num_tokens_unpadded,
++                    num_reqs_padded=(
++                        num_reqs_padded if pad_attn or has_separate_kv_update else num_reqs
++                    ),
++                    num_tokens_unpadded=num_tokens_unpadded,
++                    ubatch_slices=ubatch_slices_padded,
++                )
++
++                attn_metadata, spec_decode_common_attn_metadata = (
++                    self._build_attention_metadata(
++                        num_tokens=num_tokens_unpadded,
++                        num_tokens_padded=num_tokens_padded if pad_attn else None,
++                        num_reqs=num_reqs,
++                        num_reqs_padded=num_reqs_padded if pad_attn else None,
++                        max_query_len=max_num_scheduled_tokens,
++                        ubatch_slices=ubatch_slices_attn,
++                        logits_indices=logits_indices,
++                        use_spec_decode=use_spec_decode,
++                        num_scheduled_tokens=scheduler_output.num_scheduled_tokens,
++                        cascade_attn_prefix_lens=cascade_attn_prefix_lens,
++                        slot_mappings=slot_mappings_by_group,
++                        compute_order=compute_order,
++                    )
++                )
++
++                (
++                    input_ids,
++                    inputs_embeds,
++                    positions,
++                    intermediate_tensors,
++                    model_kwargs,
++                    ec_connector_output,
++                ) = self._preprocess(
++                    scheduler_output, num_tokens_padded, intermediate_tensors
++                )
++                shadow.check_slots(slot_mappings, permuted=True)
++
+         # Set cudagraph mode to none if calc_kv_scales is true.
+         # KV scales calculation involves dynamic operations that are incompatible
+         # with CUDA graph capture.
+@@ -4413,31 +4468,37 @@
+         # When spec decode is enabled, defer connector finalization
+         # (wait_for_save + clear metadata) until after draft model runs.
+         defer_kv_connector_finalize = self.speculative_config is not None
+-        with (
+-            set_forward_context(
+-                attn_metadata,
+-                self.vllm_config,
+-                num_tokens=num_tokens_padded,
+-                num_tokens_across_dp=num_tokens_across_dp,
+-                cudagraph_runtime_mode=cudagraph_mode,
+-                batch_descriptor=batch_desc,
+-                ubatch_slices=ubatch_slices_padded,
+-                slot_mapping=slot_mappings,
+-                skip_compiled=has_encoder_input,
+-            ),
+-            record_function_or_nullcontext("gpu_model_runner: forward"),
+-            self.maybe_get_kv_connector_output(
+-                scheduler_output,
+-                defer_finalize=defer_kv_connector_finalize,
+-            ) as kv_connector_output,
+-        ):
+-            model_output = self._model_forward(
+-                input_ids=input_ids,
+-                positions=positions,
+-                intermediate_tensors=intermediate_tensors,
+-                inputs_embeds=inputs_embeds,
+-                **model_kwargs,
+-            )
++        try:
++            if shadow is not None:
++                shadow.layer_probe.install()
++            with (
++                set_forward_context(
++                    attn_metadata,
++                    self.vllm_config,
++                    num_tokens=num_tokens_padded,
++                    num_tokens_across_dp=num_tokens_across_dp,
++                    cudagraph_runtime_mode=cudagraph_mode,
++                    batch_descriptor=batch_desc,
++                    ubatch_slices=ubatch_slices_padded,
++                    slot_mapping=slot_mappings,
++                    skip_compiled=has_encoder_input,
++                ),
++                record_function_or_nullcontext("gpu_model_runner: forward"),
++                self.maybe_get_kv_connector_output(
++                    scheduler_output,
++                    defer_finalize=defer_kv_connector_finalize,
++                ) as kv_connector_output,
++            ):
++                model_output = self._model_forward(
++                    input_ids=input_ids,
++                    positions=positions,
++                    intermediate_tensors=intermediate_tensors,
++                    inputs_embeds=inputs_embeds,
++                    **model_kwargs,
++                )
++        finally:
++            if shadow is not None:
++                shadow.layer_probe.restore()
+ 
+         if compute_order is not None:
+             compute_order.forward_returned()
+@@ -4499,6 +4560,9 @@
+                 )
+                 assert broadcasted is not None
+                 logits = broadcasted["logits"]
++
++        if shadow is not None:
++            shadow.finish(logits)
+ 
+         self.execute_model_state = ExecuteModelState(
+             scheduler_output,

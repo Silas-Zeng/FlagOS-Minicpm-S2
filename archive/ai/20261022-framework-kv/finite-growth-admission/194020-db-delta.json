@@ -1,0 +1,113 @@
+{
+  "kind": "194020冷候选调优DB只读差分；复用root seal，不重跑服务/validator",
+  "source_snapshot_helper_sha256": "0f2a57bf3bdb858756a1dedab5bd386a3a8bff384d925cf76461afb8c097e7a2",
+  "method": "mode=ro&immutable=1+query_only；沿既有typed JSON多重集，未变表复用已seal manifest的schema/contentSHA；仅查询3变更旧表与3新表",
+  "before": {
+    "table_count": 529,
+    "row_count": 19769,
+    "snapshot_sha256": "9ca23265e66ed170528c63b8cd9c3cdc407b5092d52a103556dcfbc3e940a92e",
+    "schema_sha256": "9535b84743b5cfb26e7443b95b4684818a212fa46b3ddd59c878fab0e462722f",
+    "logical_content_sha256": "552d3cee448acd8dd0895f11e7cfc19a73447af5f4ddfa5e31e97580b0bdc408"
+  },
+  "after": {
+    "table_count": 532,
+    "row_count": 19839,
+    "snapshot_sha256": "9d9f23601dcb41df54532f2e3ebf9a5b3f5f36af768226565e95e10502f74804",
+    "schema_sha256": "15e23e150b63d65e532202e07dfb0a0b4fbbce9bf8b3ec54e70f661d7140898d",
+    "logical_content_sha256": "a3970aaba34410eb21196506e04ee5cac84ab8a142c1ed2bbd01bc2f2e5d241f"
+  },
+  "removed_tables": [],
+  "old_tables_unchanged_count": 526,
+  "existing_table_changes": [
+    {
+      "name": "_index_linearized_jit_function_7c5bd5763d97b8c1c5c46e02e5558fb05ab00617467b154019b0867717da32ee_benchmark_v2-be4075f355600487930f16fe2a2e2b52",
+      "before_rows": 2,
+      "after_rows": 4,
+      "schema_unchanged": true,
+      "columns_unchanged": true,
+      "old_typed_rows_missing_or_replaced": 0,
+      "added_rows": 2,
+      "old_rows_multiset_preserved": true
+    },
+    {
+      "name": "mm_kernel_36ce59ddfe9157c845ec97dbe082e4199b4bb981085cde1f6da15a432167592c_benchmark_v2-45d27be3cd9525ad18861f4533a01e22",
+      "before_rows": 15063,
+      "after_rows": 15123,
+      "schema_unchanged": true,
+      "columns_unchanged": true,
+      "old_typed_rows_missing_or_replaced": 0,
+      "added_rows": 60,
+      "old_rows_multiset_preserved": true
+    },
+    {
+      "name": "mm_kernel_7ea0a6df3012d3bc5475d21d5eb156a7-45eed7266d4cc0f7be44aaaa091bc3b1",
+      "before_rows": 1017,
+      "after_rows": 1021,
+      "schema_unchanged": true,
+      "columns_unchanged": true,
+      "old_typed_rows_missing_or_replaced": 0,
+      "added_rows": 4,
+      "old_rows_multiset_preserved": true
+    }
+  ],
+  "new_tables": [
+    {
+      "name": "_index_linearized_jit_function_1828642dacb895dc54a9dcc7167539b6-9924b48a7525689bfbd1343251dd73a2",
+      "rows": 1,
+      "columns": [
+        "key_0",
+        "key_1",
+        "key_2",
+        "key_3",
+        "BLOCK_SIZE0",
+        "BLOCK_SIZE1",
+        "num_warps",
+        "num_ctas",
+        "num_stages"
+      ]
+    },
+    {
+      "name": "_index_linearized_jit_function_a4ecef0855dd9a498964c7cb369cb118-9924b48a7525689bfbd1343251dd73a2",
+      "rows": 1,
+      "columns": [
+        "key_0",
+        "key_1",
+        "key_2",
+        "key_3",
+        "BLOCK_SIZE0",
+        "BLOCK_SIZE1",
+        "num_warps",
+        "num_ctas",
+        "num_stages"
+      ]
+    },
+    {
+      "name": "_index_linearized_jit_function_ef41715e4346451cb4969f355746bc1aa887c7daca57be6d4aacf466abf3b8ce_benchmark_v2-be4075f355600487930f16fe2a2e2b52",
+      "rows": 2,
+      "columns": [
+        "key_0",
+        "key_1",
+        "key_2",
+        "key_3",
+        "key_4",
+        "key_5",
+        "key_6",
+        "BLOCK_SIZE0",
+        "BLOCK_SIZE1",
+        "num_warps",
+        "num_ctas",
+        "num_stages",
+        "p50",
+        "p20",
+        "p80"
+      ]
+    }
+  ],
+  "total_added_rows": 70,
+  "all_old_row_content_preserved": true,
+  "limits": [
+    "内容差分证明快照旧行保留，不能追溯中间SQL操作或调优花费秒数。",
+    "3新表4行＋3旧表新增66行；新增配置与KV失配仍使冷pair不可归因。",
+    "共享cgroup节流累计不等于Engine独占损失；仅root后继同源warm可描述其实际结果，不能自动修复旧baseline环境。"
+  ]
+}

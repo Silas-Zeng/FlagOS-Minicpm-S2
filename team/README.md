@@ -13,6 +13,23 @@
 
 ## 按方法
 
+- [省去无消费者的 accepted GPU fill](methods/accepted-fill.md)
+- [计算顺序与采样顺序分离](methods/compute-order.md)
+- [KV 分配器无状态快返](methods/allocator-noop.md)
+- [KV 二维 FULL 恢复](methods/kv-restore-pitched.md)
+- [省去无消费者的 computed H2D](methods/skip-computed-h2d.md)
+- [有限窗口增长准入](methods/finite-growth-admission.md)
+- [有限增长准入观察](methods/admission-observer.md)
+- [Q-hoist + GQA 框架组合](methods/q-gqa-framework.md)
+- [异步输出 CPU 批量记账](methods/async-bookkeeping.md)
+- [BQ16 chunk 形状对齐](methods/bq16-chunk-alignment.md)
+- [公共前缀扫描](methods/prefix-scan.md)
+- [Q fragment 循环外保留](methods/q-fragment-hoist.md)
+- [当前版本GPU热点](methods/gpu-hotspots.md)
+- [纯decode CPU gather跳过](methods/decode-cpu-gather.md)
+- [C3重复视图清理](methods/c3-views.md)
+- [Attention热key复用](methods/hot-key.md)
+- [输入准备成本诊断](methods/input-prep.md)
 - [CPU metadata + async token 组合](methods/cpu-combination.md)
 - [CPU metadata 复用](methods/cpu-metadata.md)
 - [异步 token 更新](methods/async-token.md)

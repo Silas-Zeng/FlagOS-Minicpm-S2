@@ -1,0 +1,99 @@
+{
+  "status": "pass_best_biv150_baseline",
+  "methods": [
+    "PR15 computed H2D",
+    "PR21 compute order",
+    "Q fragment lifetime"
+  ],
+  "framework": {
+    "pr22": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/22",
+    "pr23": "https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/23",
+    "pr23_merge_commit": "1ea082f79db65a66f78fdd7b1d958335450fa9f4",
+    "runtime_commit": "4c57567d090bbb9aec1bbc2bef7847d3b4e5695a",
+    "runtime_tree": "dd0554f3895d7ddf0691926ecd860ee1d6b3cd6c",
+    "runtime_hashes": {
+      "vllm_fl/worker/model_runner.py": "fa6f2387d258804021e53130ef8ae362ea91a9a23d9b1dcaf1c3d37cb4e0ee9f",
+      "vllm_fl/patches/biv150_compute_order.py": "0d9f2e7db1725411d587ae9ace5971ebd27747e1c2633e79f8ab618567e32565",
+      "vllm_fl/patches/biv150_q_fragment_service.py": "ea361e6b604fbd3c7e3a6b95776892a7bc9d22e9988927db3f7876412c6e310f"
+    }
+  },
+  "official": {
+    "run": "experiments/official/20261024T061556Z-pr15-pr21-qfragment-official",
+    "baseline_pr15_pr21": {
+      "4096_total_tok_s": 5118.99,
+      "16384_total_tok_s": 3436.17,
+      "16384_kv_tokens": 521936
+    },
+    "candidate": {
+      "4096_total_tok_s": 5313.59,
+      "4096_mean_ttft_ms": 4182.55,
+      "16384_total_tok_s": 3764.67,
+      "16384_mean_ttft_ms": 137191.04,
+      "16384_kv_tokens": 521840
+    },
+    "gain_vs_pr15_pr21_percent": {
+      "4096": 3.801531161420524,
+      "16384": 9.560062511458977
+    },
+    "initial_competition_baseline": {
+      "4096_total_tok_s": 1905.46,
+      "16384_total_tok_s": 861.99
+    },
+    "gain_vs_initial_competition_baseline_percent": {
+      "4096": 178.861272343686,
+      "16384": 336.74172554206
+    },
+    "database_seed_sha256": "1907e03e01190b82b75ff6aad18d5e7fd73cf596eb6c1cc694adc58bd7c5ec72",
+    "raw_rows": 8,
+    "summary_rows": 2,
+    "runs_per_case": 4,
+    "skip_first": 1,
+    "successful_requests": 1536,
+    "exit_code": 0
+  },
+  "q_fragment_actual": {
+    "selected_markers": 1,
+    "fallback_markers": 0,
+    "normal_hash": "b9eb76a9e11ca969e105c03ed932e6f8b8abc62a89551caa3b912165a6058dc7",
+    "override_sha256": "8ae2258568db275c2f3b5e4fc69709431744f08de43343d82a35cf312bfb405a",
+    "official_candidate_hash": "e894e65a1c7c0afa9ef883415ffcff93781da51c99ea47b9880e53e59caed225",
+    "accuracy_candidate_hash": "749769d74c6c8470c6a88714fd51f4e0b8fff90a02d60022f7b0b02f1b2b9d12",
+    "normal_shared_bytes": 65536,
+    "candidate_shared_bytes": 32768,
+    "ttgir_q_load_outside_loop": true,
+    "llvm_q_memory_reads_total": 32,
+    "llvm_q_memory_reads_in_loop": 0
+  },
+  "accuracy": {
+    "run": "experiments/accuracy/20261024T071802Z-pr15-pr21-qfragment",
+    "validity": "valid",
+    "accuracy_gate": "pass",
+    "correct": 100,
+    "samples": 105,
+    "exact_accuracy": 0.9523809523809523,
+    "minimum_correct": 100,
+    "transport_error_count": 0,
+    "empty_final_count": 0,
+    "output_cap_count": 2,
+    "output_cap_indices": [
+      83,
+      101
+    ],
+    "database_seed_sha256": "df2ab42beda86421586139bda8219516d31c07b61e7b7b768b879ea95dae3ebe",
+    "q_fragment_selected_markers": 1,
+    "q_fragment_fallback_markers": 0,
+    "exit_code": 0
+  },
+  "evidence_sha256": {
+    "official_raw_runs_20261024_141652.csv": "071b8ae318541146d28b7199209d41218ca5a433c4cd78258830e6856a3fe642",
+    "official_summary_20261024_141652.csv": "c4a8a22aac8db96bba99818ebf09fa38822b31a658f30ea12a6ed6ea45d06555",
+    "official_server.log": "50e8782a31be6806506dfdb6ecbc2aecdedec580b1795d373e187eca9eef135f",
+    "accuracy_server.log": "9b15f569eeb8f18e05b0dd25e1970a3a0e6ad21a0ee504469dca5c1aeffb9c2a",
+    "accuracy_review.json": "d6d29c636689c6c975f19511e38689e96a9efc4ace6fdb776bd510bd30d757f"
+  },
+  "limits": [
+    "The official comparison uses the same starting DB seed, but candidate KV is 521840 versus baseline 521936; the result is not claimed as a strict equal-KV single-method decomposition.",
+    "Only BI-V150 is validated; C500 is not inferred.",
+    "Accuracy is one stochastic 105-item evaluation; two samples reached the output cap."
+  ]
+}

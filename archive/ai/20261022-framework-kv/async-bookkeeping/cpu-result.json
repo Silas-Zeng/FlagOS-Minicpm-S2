@@ -1,0 +1,202 @@
+{
+  "runner_sha256": "6f918ae6e2f32a1244bb5ac7411a5cffdd5071b1636e899e61ab6f0f20df2141",
+  "numpy_version": "2.3.5",
+  "results": [
+    {
+      "N": 30,
+      "checks": {
+        "ids_equal": true,
+        "flags_equal": true,
+        "counts_equal": true,
+        "history_equal": true,
+        "selection_matches_scope": true,
+        "index_snapshot_separate": true
+      },
+      "windows": [
+        {
+          "label": "A1",
+          "calls": 1024,
+          "selected": 0,
+          "wall_ns_per_call": 53446.875,
+          "thread_cpu_ns_per_call": 45776.3671875
+        },
+        {
+          "label": "B1",
+          "calls": 1024,
+          "selected": 1024,
+          "wall_ns_per_call": 14682.03125,
+          "thread_cpu_ns_per_call": 15258.7890625
+        },
+        {
+          "label": "B2",
+          "calls": 1024,
+          "selected": 1024,
+          "wall_ns_per_call": 15211.9140625,
+          "thread_cpu_ns_per_call": 15258.7890625
+        },
+        {
+          "label": "A2",
+          "calls": 1024,
+          "selected": 0,
+          "wall_ns_per_call": 54162.3046875,
+          "thread_cpu_ns_per_call": 61035.15625
+        }
+      ],
+      "row_stride_bytes": 524288,
+      "dtypes": [
+        "int32",
+        "bool",
+        "int32"
+      ]
+    },
+    {
+      "N": 31,
+      "checks": {
+        "ids_equal": true,
+        "flags_equal": true,
+        "counts_equal": true,
+        "history_equal": true,
+        "selection_matches_scope": true,
+        "index_snapshot_separate": true
+      },
+      "windows": [
+        {
+          "label": "A1",
+          "calls": 1024,
+          "selected": 0,
+          "wall_ns_per_call": 57306.73828125,
+          "thread_cpu_ns_per_call": 61035.15625
+        },
+        {
+          "label": "B1",
+          "calls": 1024,
+          "selected": 1024,
+          "wall_ns_per_call": 14733.3984375,
+          "thread_cpu_ns_per_call": 15258.7890625
+        },
+        {
+          "label": "B2",
+          "calls": 1024,
+          "selected": 1024,
+          "wall_ns_per_call": 14612.98828125,
+          "thread_cpu_ns_per_call": 15258.7890625
+        },
+        {
+          "label": "A2",
+          "calls": 1024,
+          "selected": 0,
+          "wall_ns_per_call": 55400.390625,
+          "thread_cpu_ns_per_call": 45776.3671875
+        }
+      ],
+      "row_stride_bytes": 524288,
+      "dtypes": [
+        "int32",
+        "bool",
+        "int32"
+      ]
+    },
+    {
+      "N": 64,
+      "checks": {
+        "ids_equal": true,
+        "flags_equal": true,
+        "counts_equal": true,
+        "history_equal": true,
+        "selection_matches_scope": true,
+        "index_snapshot_separate": true
+      },
+      "windows": [
+        {
+          "label": "A1",
+          "calls": 1024,
+          "selected": 0,
+          "wall_ns_per_call": 113061.23046875,
+          "thread_cpu_ns_per_call": 106811.5234375
+        },
+        {
+          "label": "B1",
+          "calls": 1024,
+          "selected": 1024,
+          "wall_ns_per_call": 19776.07421875,
+          "thread_cpu_ns_per_call": 15258.7890625
+        },
+        {
+          "label": "B2",
+          "calls": 1024,
+          "selected": 1024,
+          "wall_ns_per_call": 19884.5703125,
+          "thread_cpu_ns_per_call": 30517.578125
+        },
+        {
+          "label": "A2",
+          "calls": 1024,
+          "selected": 0,
+          "wall_ns_per_call": 114840.8203125,
+          "thread_cpu_ns_per_call": 106811.5234375
+        }
+      ],
+      "row_stride_bytes": 524288,
+      "dtypes": [
+        "int32",
+        "bool",
+        "int32"
+      ]
+    },
+    {
+      "N": 1,
+      "checks": {
+        "ids_equal": true,
+        "flags_equal": true,
+        "counts_equal": true,
+        "history_equal": true,
+        "selection_matches_scope": true,
+        "index_snapshot_separate": true
+      },
+      "windows": [
+        {
+          "label": "A1",
+          "calls": 1024,
+          "selected": 0,
+          "wall_ns_per_call": 2091.69921875,
+          "thread_cpu_ns_per_call": 0.0
+        },
+        {
+          "label": "B1",
+          "calls": 1024,
+          "selected": 0,
+          "wall_ns_per_call": 2535.05859375,
+          "thread_cpu_ns_per_call": 0.0
+        },
+        {
+          "label": "B2",
+          "calls": 1024,
+          "selected": 0,
+          "wall_ns_per_call": 2373.2421875,
+          "thread_cpu_ns_per_call": 0.0
+        },
+        {
+          "label": "A2",
+          "calls": 1024,
+          "selected": 0,
+          "wall_ns_per_call": 2073.2421875,
+          "thread_cpu_ns_per_call": 15258.7890625
+        }
+      ],
+      "row_stride_bytes": 524288,
+      "dtypes": [
+        "int32",
+        "bool",
+        "int32"
+      ]
+    }
+  ],
+  "original_loop_source": "def baseline(self, n, invalid, no_spec=True, total_tokens=None):\n    num_sampled_tokens = n\n    invalid_req_indices_set = invalid\n    valid_sampled_token_ids = []\n    req_ids = self.input_batch.req_ids\n    for req_idx in range(num_sampled_tokens):\n        if self.use_async_scheduling:\n            sampled_ids = [-1] if req_idx not in invalid_req_indices_set else None\n        else:\n            sampled_ids = valid_sampled_token_ids[req_idx]\n    \n        num_sampled_ids: int = len(sampled_ids) if sampled_ids else 0\n    \n        if not sampled_ids:\n            continue\n    \n        start_idx = self.input_batch.num_tokens_no_spec[req_idx]\n        end_idx = start_idx + num_sampled_ids\n        assert end_idx <= self.max_model_len, (\n            \"Sampled token IDs exceed the max model length. \"\n            f\"Total number of tokens: {end_idx} > max_model_len: \"\n            f\"{self.max_model_len}\"\n        )\n    \n        self.input_batch.token_ids_cpu[req_idx, start_idx:end_idx] = sampled_ids\n        self.input_batch.is_token_ids[req_idx, start_idx:end_idx] = True\n        self.input_batch.num_tokens_no_spec[req_idx] = end_idx\n    \n        req_id = req_ids[req_idx]\n        req_state = self.requests[req_id]\n        req_state.output_token_ids.extend(sampled_ids)\n    return False\n",
+  "limits": [
+    "local CPU fragment; not BI-V150 service or accuracy",
+    "full guards/start copy/ends/history append included",
+    "no D2H/event/prev mapping/output snapshot changes",
+    "mutation failure must propagate; never fallback after writes",
+    "queue2 can hide CPU saving; no E2E gain inferred"
+  ]
+}

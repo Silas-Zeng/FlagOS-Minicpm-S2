@@ -1,0 +1,128 @@
+{
+  "run_id": "20261022T231746Z-q-gqa-kv-swap-official",
+  "status": "completed_official_absolute_result_no_gain_claim",
+  "source_count": 422,
+  "sealed_files": 717,
+  "validation": {
+    "complete": true,
+    "raw_rows": 8,
+    "summary_rows": 2,
+    "runs_per_case": 4,
+    "skip_first": 1,
+    "warmup_failures": [],
+    "retained_raw_metrics_checked": true,
+    "verified_cases": [
+      {
+        "case": [
+          4096,
+          1024,
+          64,
+          256
+        ],
+        "retained_runs": [
+          2,
+          3,
+          4
+        ],
+        "expected_input_tokens_per_run": 1048576,
+        "expected_output_tokens_per_run": 262144
+      },
+      {
+        "case": [
+          16384,
+          1024,
+          64,
+          128
+        ],
+        "retained_runs": [
+          2,
+          3,
+          4
+        ],
+        "expected_input_tokens_per_run": 2097152,
+        "expected_output_tokens_per_run": 131072
+      }
+    ],
+    "summary_means_verified": true,
+    "summary_rewritten": false,
+    "sha256": {
+      "benchmark_results/raw_runs_20261023_071841.csv": "2d7174387e84c4342cacf9a0ea212b8d5e5b0ce342c48158b48fb44e83716af0",
+      "benchmark_results/summary_20261023_071841.csv": "36568ea96f66d2b3ca1cbc0eac0238bc3609c7db7e9810a869df814926387792"
+    }
+  },
+  "successful_requests": 1536,
+  "summary": [
+    {
+      "Prefill": "4096",
+      "Decode": "1024",
+      "Conc": "64",
+      "Num Prompts": "256",
+      "Benchmark Duration (s)": "264.56",
+      "Total Input Tokens": "1048576.0",
+      "Total Output Tokens": "262144.0",
+      "Req/s": "0.97",
+      "Output tok/s": "991.59",
+      "Peak Output tok/s": "1856.0",
+      "Total tok/s": "4957.95",
+      "Mean TTFT (ms)": "4425.83",
+      "Median TTFT (ms)": "1591.41",
+      "P99 TTFT (ms)": "24723.91",
+      "Mean TPOT (ms)": "59.93",
+      "Median TPOT (ms)": "62.32",
+      "P99 TPOT (ms)": "65.9",
+      "Mean ITL (ms)": "59.93",
+      "Median ITL (ms)": "37.64",
+      "P99 ITL (ms)": "276.91"
+    },
+    {
+      "Prefill": "16384",
+      "Decode": "1024",
+      "Conc": "64",
+      "Num Prompts": "128",
+      "Benchmark Duration (s)": "607.19",
+      "Total Input Tokens": "2097152.0",
+      "Total Output Tokens": "131072.0",
+      "Req/s": "0.21",
+      "Output tok/s": "215.87",
+      "Peak Output tok/s": "589.0",
+      "Total tok/s": "3669.74",
+      "Mean TTFT (ms)": "140723.03",
+      "Median TTFT (ms)": "156138.78",
+      "P99 TTFT (ms)": "281281.69",
+      "Mean TPOT (ms)": "122.67",
+      "Median TPOT (ms)": "132.45",
+      "P99 TPOT (ms)": "156.19",
+      "Mean ITL (ms)": "122.67",
+      "Median ITL (ms)": "55.65",
+      "P99 ITL (ms)": "563.06"
+    }
+  ],
+  "KV_tokens": 521840,
+  "database": {
+    "before": {
+      "table_count": 544,
+      "row_count": 20246,
+      "snapshot_sha256": "e2c42bf6b40c39516e0f8ba0cba60f54c253baa581b049eefeba5c52ecf96152",
+      "schema_sha256": "dd221bc69bd0d4bab1fb5f9f21091820d88d671cd1db75af1fb5aceb9de9126b",
+      "logical_content_sha256": "a00ef835df710c2cb320dbbdc31902fe8875cea83f273df51954bc709f1b5de8"
+    },
+    "after": {
+      "table_count": 554,
+      "row_count": 20517,
+      "snapshot_sha256": "c8ba0a91080705bfff39bc3eb8808e3d44ddb6d3452e9843e2fd2928683226c4",
+      "schema_sha256": "c7699d5137252b776b6425521a512d467b6844d122fbf87a13fb337f264919bc",
+      "logical_content_sha256": "682b3a909ba9f2bde21f97db220c2d02b6b2374949d29d4373a5f878e5415bfb"
+    }
+  },
+  "recorded_key_chains": 16,
+  "transaction_analysis": "analysis/q-gqa-kv-official-transactions.json",
+  "accuracy_reference": "20261022T215836Z-q-gqa-kv-swap: 103/105；本轮未重跑",
+  "gain": null,
+  "decision": "保留原件和当前候选；没有新因果收益声明。下一步依据已完成短诊断的实际GPU区间。",
+  "limits": [
+    "原官方每case四轮、丢首轮，直接保留原第2–4轮均值。",
+    "DB544/20246→554/20517；不能与旧414跨DB及KV条件算因果收益。",
+    "16条已记录key链完整不证明全部抢占覆盖；在途11次metrics仅为局部观察。",
+    "VERIFY0不产生新的42层逐字节验证；该资格沿用独立VERIFY1。"
+  ]
+}

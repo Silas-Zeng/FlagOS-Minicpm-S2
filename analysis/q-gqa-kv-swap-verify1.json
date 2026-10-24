@@ -1,0 +1,131 @@
+{
+  "status": "passed_qgqa_swap_verify1_compatibility",
+  "evidence": {
+    "run_id": "20261022T213134Z-q-gqa-kv-swap-verify1-context16k-long",
+    "started_utc": "2026-10-22T21:31:36.129686+00:00",
+    "finished_utc": "2026-10-22T21:36:00.059008+00:00",
+    "raw_sha256": "29a40da79e3836170efcedd35e1193e07da56f0ad7eb62aace540005c8a4c3fc",
+    "source_count_verified": 422,
+    "worker_sha256": "cc442e54e66c81f4375ac7b3311953441245f53bd0a576d27798528ce02e2663",
+    "completed": 32,
+    "failed": 0,
+    "input_tokens": 524288,
+    "output_tokens": 32768,
+    "duration_s": 180.52767774183303,
+    "total_tokens_per_s": 3085.709664955799,
+    "mean_ttft_ms": 54849.31686098571,
+    "kv_tokens": 521840,
+    "database": {
+      "before": {
+        "snapshot_sha256": "9f269085e0645aea4a5ce31c0598296bdd6cecd70a3f02e7a90ba7817214cec6",
+        "schema_sha256": "818ea1231b316a77906604d8edfd411bd5e79ba598ccb1ed4c03a570790b85b8",
+        "logical_content_sha256": "18bf4c595e22933f263483fdd979cf13344b81b79281082dbd928ede34d9b95a",
+        "table_count": 540,
+        "row_count": 20112
+      },
+      "after": {
+        "snapshot_sha256": "9f269085e0645aea4a5ce31c0598296bdd6cecd70a3f02e7a90ba7817214cec6",
+        "schema_sha256": "818ea1231b316a77906604d8edfd411bd5e79ba598ccb1ed4c03a570790b85b8",
+        "logical_content_sha256": "18bf4c595e22933f263483fdd979cf13344b81b79281082dbd928ede34d9b95a",
+        "table_count": 540,
+        "row_count": 20112
+      }
+    },
+    "preemptions": {
+      "before": 0.0,
+      "after": 1.0
+    },
+    "cpu_quota_cores": 6,
+    "physical_memory_mib": 32768,
+    "postflight_idle_verified": true,
+    "postflight_utc": "2026-10-22T21:37:03.543886+00:00",
+    "errors_before_shutdown": [],
+    "errors_during_shutdown": [
+      "(APIServer pid=363865) ERROR 10-23 05:35:56 [async_llm.py:704] AsyncLLM output_handler failed.",
+      "(APIServer pid=363865) ERROR 10-23 05:35:56 [async_llm.py:704] Traceback (most recent call last):",
+      "(APIServer pid=363865) ERROR 10-23 05:35:56 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/async_llm.py\", line 660, in output_handler",
+      "(APIServer pid=363865) ERROR 10-23 05:35:56 [async_llm.py:704]     outputs = await engine_core.get_output_async()",
+      "(APIServer pid=363865) ERROR 10-23 05:35:56 [async_llm.py:704]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+      "(APIServer pid=363865) ERROR 10-23 05:35:56 [async_llm.py:704]   File \"/usr/local/lib/python3.12/site-packages/vllm/v1/engine/core_client.py\", line 1061, in get_output_async",
+      "(APIServer pid=363865) ERROR 10-23 05:35:56 [async_llm.py:704]     raise self._format_exception(outputs) from None",
+      "(APIServer pid=363865) ERROR 10-23 05:35:56 [async_llm.py:704] vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause."
+    ],
+    "shutdown_forcekill_lines": [
+      "(APIServer pid=363865) WARNING 10-23 05:35:56 [utils.py:620] [shutdown] Process manager: force killing remaining processes count=1"
+    ]
+  },
+  "geometry": {
+    "prefix_tokens": 16688,
+    "pages": 1043,
+    "nbytes": 717717504,
+    "source_runs": 23,
+    "destination_runs": 66,
+    "save_copy_calls": 210,
+    "full_copy_calls": 2772,
+    "zero_calls": 0,
+    "verification_copy_calls": 2772,
+    "consumed_scheduled_tokens": 16,
+    "fast_rejects": 462,
+    "save_source_verification_bytes": 717717504,
+    "save_linear_calls": 168,
+    "save_pitched_calls": 42,
+    "save_segments_per_layer": 5,
+    "save_stream_handle": 0
+  },
+  "database_before_after_equal": true,
+  "source_manifest_sha256": "82514a24cebdb3ae8ce8eb1562049168fa158894364d1dd87ae4b4a724f66136",
+  "validator_sha256": "6c5f73aa541ed90d1f32ed076a8b0c55520feed97fa8b80c59f80520de0ec400",
+  "reused_validator_sha256": "81f227fb4c4eca992024fc0d7cebb6416f3ffda054d8e9a536d35040011122bd",
+  "limits": [
+    "VERIFY1诊断，不计算收益/总分；DB变化据实保留。",
+    "42byte回读/runner六项/原消费不等于完整accuracy或取消/多victim证明。",
+    "copy调用几何和稀疏fast累计来自该run；不推算DMA带宽/CPU耗时或完整负载路径覆盖。"
+  ],
+  "protocol_key": [
+    "364041:1",
+    "cmpl-bench-b782012e-31-0-9063bb0e",
+    1,
+    1
+  ],
+  "engine_pid": 364041,
+  "q_gqa_actual_markers": {
+    "BIV150_Q_FRAGMENT_SERVICE_FIRST_ACTUAL_EXECUTE_SELECTED": [
+      {
+        "actual_execute": true,
+        "complete_step_return": true,
+        "execute_call": 43,
+        "gqa_calls_in_execute": 42,
+        "gqa_calls_total": 966,
+        "gqa_python_count_excludes_graph_replay": true,
+        "not_all_steps_counted": true,
+        "not_gpu_completion_proof": true,
+        "num_requests": 2,
+        "pid": 364041,
+        "scheduled_tokens": 2048,
+        "selected_calls_in_execute": 42,
+        "selected_calls_total": 420
+      }
+    ],
+    "BIV150_Q_GQA_FIRST_ACTUAL_EXECUTE_SELECTED": [
+      {
+        "actual_execute": true,
+        "complete_step_return": true,
+        "execute_call": 43,
+        "gqa_calls_in_execute": 42,
+        "gqa_calls_total": 966,
+        "gqa_python_count_excludes_graph_replay": true,
+        "not_all_steps_counted": true,
+        "not_gpu_completion_proof": true,
+        "num_requests": 2,
+        "pid": 364041,
+        "scheduled_tokens": 2048,
+        "selected_calls_in_execute": 42,
+        "selected_calls_total": 420
+      }
+    ]
+  },
+  "legacy_protocol_validator_sha256": "2071bff34cdcd469294b406966ad86a0941d556b1d1e9ddd62dc87f927caf55b",
+  "q_gqa_marker_boundary": "两路可在不同execute首次命中；不证明恢复那一步全部层路由或graph replay逐步覆盖",
+  "safe_R_boundary": "R来自固定84be plan_snapshot与原队列/device-fence；raw无完整issued/queued/known，不能独立重算安全上界",
+  "gain_calculated": false
+}

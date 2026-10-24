@@ -1,0 +1,25 @@
+--- compute-order-owner/emit_candidate.py
++++ accepted-fill-owner/emit_candidate.py
+@@ -3,10 +3,9 @@
+ from pathlib import Path
+ root=Path(__file__).resolve().parents[2]
+ files={
+- 'launch_candidate.py':(root/'tmp/compute-order-owner/launch_candidate.py','995d27bc3295bd54d90a213aeb94b0cda072c0f9b3d5f718adf8f8301056699c'),
+- 'prepare_compute_order.py':(root/'tmp/compute-order/prepare_compute_order.py','b1a804a0c6da15b7c295a4eb5b62d0a6d853fc15d104b6ddcffd36c8a7211670'),
+- 'biv150_compute_order.py':(root/'tmp/compute-order/biv150_compute_order.py','5ce6f7b6a815ab54d9d9965c30f37362fd1d271c82d442caa76829e01f4938ce'),
+- 'base-source-sha256.json':(root/'tmp/compute-order/base-source-sha256.json','82514a24cebdb3ae8ce8eb1562049168fa158894364d1dd87ae4b4a724f66136'),
++ 'launch_candidate.py':(root/'tmp/accepted-fill-owner/launch_candidate.py','e972c800915a319acbd29823e13abb590e56ced8f584bbf4fa2ddfe15c3a7960'),
++ 'prepare_accepted_fill.py':(root/'tmp/accepted-fill/prepare_accepted_fill.py','410b2c6e07018e745406cec62213fe982945edc6a29c599e3d3696bf6ff4c043'),
++ 'base-source-sha256.json':(root/'tmp/accepted-fill/base-source-sha256.json','82514a24cebdb3ae8ce8eb1562049168fa158894364d1dd87ae4b4a724f66136'),
+ }
+ payload={}
+ for name,(path,pin) in files.items():
+@@ -16,7 +15,7 @@
+ print('import base64,hashlib,json,subprocess\nfrom pathlib import Path')
+ print('payload=json.loads(base64.b64decode('+repr(encoded)+'))')
+ print("""
+-assets=Path('/workspace/experiments/minicpm-s2/scripts/compute-order-candidate-20261023')
++assets=Path('/workspace/experiments/minicpm-s2/scripts/accepted-fill-candidate-20261023')
+ assets.mkdir(exist_ok=True)
+ for name,item in payload.items():
+     assert Path(name).name==name
