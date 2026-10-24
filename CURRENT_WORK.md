@@ -1,6 +1,13 @@
 # 当前工作与接续入口
 
-更新：2026-10-24。**本实例 PR24 真实模型路径资格已撤回，先修复编译缓存身份。** 原移植短验、CPU/GPU诊断和VERIFY1的原始记录保留，但不能再作有效PR24模型性能基线、完整正确性或收益预算。修正覆盖105037、110545、113346、114500、122225及124000六轮，详见[方法汇总](team/methods/pr24-main.md)。
+更新：2026-10-24。**PR24 同源码隔离编译缓存后，本实例真实 native 路径与完整准确率通过：100/105（95.2381%）。** 这仅适用于新 run `131603`；105037 至 124000 六轮的旧 AOT 失配资格仍撤回，不能追溯恢复为有效性能基线。详见[方法汇总](team/methods/pr24-main.md)。
+
+- [准确率复核](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/accuracy-review.json)：105 评审成功、0 请求错误、0 空最终答案；index 83/99/101 达到输出上限，index 101 无可提取答案，全部仍计入 105 分母。官方预测、评审、配置与报告原件均已保留；单次评测不解释为精度提升。
+- [新运行图](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/active-graph/computation_graph.py) SHA `e4ff3193…a33` 含 layer 4–37 共 34 个 native 调用，[图检查](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/active-graph-typed-assignment-check.json)已核；源码仍为 `1ad9a708`、native SO 未变。本轮使用[隔离缓存设置](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/environment-overrides.json)，官方 serve/评测参数不变。
+- 本轮 driver/owner exit 0、DB 恢复 `207f1b…`、source/native 未变；[状态](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/state.json)及[完整原包凭据](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/archive-receipt.json)保留。此准确率运行不报吞吐或性能收益，结束后态不代表当前设备空闲。
+- 下一步由主智能体继续 PR25 与默认缓存修复的两次启动复验；该后续任务尚未在本记录中给出通过结论，不重复本轮同源码准确率。
+
+## 旧 AOT 图失配：历史六轮资格仍撤回
 
 - 114500服务直接加载旧 `f7af72be36`/AOT `7a51652d…d1c`，与PR24前日志相同。[当前缓存图](experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/loaded-computation-graph.py) SHA `ab75722cd9edd5cbd33a2bb72d3f17f090eb2796ec86386d777a852f8e9cd69c` 有42层旧gate linear、native调用0；前三个M2048恢复步骤也各有168 mm和42独立SiLU。原scope仅核类方法/SO/34层计数，不能证明编译图启用native。
 - 原standalone 9项数值/Graph检查通过事实保留；105037的32请求成功不等于答案正确，不能复用队友完整准确率证明本实例。110545的CPU重复提交和113346的wrapper误拒绝失败也保留。
