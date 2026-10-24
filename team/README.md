@@ -13,7 +13,7 @@
 
 ## 按方法
 
-- [PR24 组合基线与 KV 抢占诊断](methods/pr24-main.md)
+- [PR24 移植失配与 KV 诊断](methods/pr24-main.md)
 - [省去无消费者的 accepted GPU fill](methods/accepted-fill.md)
 - [计算顺序与采样顺序分离](methods/compute-order.md)
 - [KV 分配器无状态快返](methods/allocator-noop.md)

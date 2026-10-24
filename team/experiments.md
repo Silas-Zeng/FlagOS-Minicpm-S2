@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共213条登记、210个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共215条登记、212个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -187,10 +187,12 @@
 | 天数 BI-V150 | 207 | 2026-10-24T06:15:56Z | [Q fragment 循环外保留](methods/q-fragment-hoist.md) | 通过 | 4096/16384/1024/64/256/128 x4 | 第2–4轮均值4K5313.59、16K3764.67 total tok/s，较旧基线5118.99/3436.17为+3.80%/+9.56% | [20261024T061556Z-pr15-pr21-qfragment-official](runs/bi-v150/20261024T061556Z-pr15-pr21-qfragment-official.md) |
 | 天数 BI-V150 | 208 | 2026-10-24T07:18:02Z | [Q fragment 循环外保留](methods/q-fragment-hoist.md) | 通过 | original_math500_level3/32768/8/105 | PR15+PR21+Q fragment完整Math500 Level3为100/105（95.2381%），满足>=100门 | [20261024T071802Z-pr15-pr21-qfragment](runs/bi-v150/20261024T071802Z-pr15-pr21-qfragment.md) |
 | 天数 BI-V150 | 209 | 2026-10-24T06:02:09Z | [Q fragment 循环外保留](methods/q-fragment-hoist.md) | 适配诊断，不计性能 | 4096/128/64/64 | 前置debug3在normalized-over-gqa路径正确拒绝旧C2/源码行假设，fallback actual Q source location missing，候选未进入优化路径，不计性能负结果 | [20261024T060209Z-qfragment-sourceproof-debug5-4k](runs/bi-v150/20261024T060209Z-qfragment-sourceproof-debug5-4k.md) |
-| 天数 BI-V150 | 210 | 2026-10-24T10:53:06.794082+00:00 | [PR24 组合基线与 KV 抢占诊断](methods/pr24-main.md) | 通过 | 16384/128/64/32 | 结束exit0、源未变、GPU68MiB/0%、DB已恢复；32成功0失败，total tok/s=5121.780601，仅单臂不报性能收益 | [20261024T105037Z-pr24-main-context16k](runs/bi-v150/20261024T105037Z-pr24-main-context16k.md) |
-| 天数 BI-V150 | 211 | 2026-10-24T11:05:45Z | [PR24 组合基线与 KV 抢占诊断](methods/pr24-main.md) | 通过 | 16384/1024/64/32 | 32成功0失败，真实抢占1次 | [20261024T110545Z-current-main-pr24-resume-cpu-context16k-long](runs/bi-v150/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long.md) |
-| 天数 BI-V150 | 212 | 2026-10-24T11:33:48.506410+00:00 | [PR24 组合基线与 KV 抢占诊断](methods/pr24-main.md) | 失败/未通过 | 16384/1024/64/32 | DB由8acaab58种子恢复207f1b，source/native未变，结束时GPU68MiB/0%且9031关闭 | [20261024T113346Z-pr24-resume-native-context16k-long](runs/bi-v150/20261024T113346Z-pr24-resume-native-context16k-long.md) |
-| 天数 BI-V150 | 213 | 2026-10-24T11:45:02.454746+00:00 | [PR24 组合基线与 KV 抢占诊断](methods/pr24-main.md) | 已登记，见短记 | 16384/1024/64/32 | 32成功0失败；warmed种子仍有M457冷调优，窗口含同批decode，不报吞吐收益或完整可省预算 | [20261024T114500Z-pr24-resume-native-v2-context16k-long](runs/bi-v150/20261024T114500Z-pr24-resume-native-v2-context16k-long.md) |
+| 天数 BI-V150 | 210 | 2026-10-24T10:53:06.794082+00:00 | [PR24 移植失配与 KV 诊断](methods/pr24-main.md) | 旧AOT图失配，模型资格撤回 | 16384/128/64/32 | 后验修正：本实例加载旧AOT图，PR24真实模型路径资格撤回；仅保留standalone 9项通过和32成功0失败原始事实，不再作为PR24性能基线或完整模型正确性证据。 | [20261024T105037Z-pr24-main-context16k](runs/bi-v150/20261024T105037Z-pr24-main-context16k.md) |
+| 天数 BI-V150 | 211 | 2026-10-24T11:05:45Z | [PR24 移植失配与 KV 诊断](methods/pr24-main.md) | 旧AOT图失配，模型资格撤回 | 16384/1024/64/32 | 后验修正：本实例旧AOT图失配，PR24真实模型路径资格撤回；保留32成功0失败和1次抢占的CPU观察，不作为有效PR24模型的重算或收益预算。 | [20261024T110545Z-current-main-pr24-resume-cpu-context16k-long](runs/bi-v150/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long.md) |
+| 天数 BI-V150 | 212 | 2026-10-24T11:33:48.506410+00:00 | [PR24 移植失配与 KV 诊断](methods/pr24-main.md) | 旧AOT图失配，模型资格撤回 | 16384/1024/64/32 | 后验修正：本实例旧AOT图失配，PR24真实模型路径资格撤回；本轮原smoke HTTP500、计划32请求未发，失败证据保留。 | [20261024T113346Z-pr24-resume-native-context16k-long](runs/bi-v150/20261024T113346Z-pr24-resume-native-context16k-long.md) |
+| 天数 BI-V150 | 213 | 2026-10-24T11:45:02.454746+00:00 | [PR24 移植失配与 KV 诊断](methods/pr24-main.md) | 旧AOT图失配，模型资格撤回 | 16384/1024/64/32 | 后验修正：旧AOT图含42层旧gate linear且native调用0，PR24真实模型路径资格撤回；目标Attention 1018.292405ms仅为该失配运行的可见活动，不是有效PR24模型净预算。 | [20261024T114500Z-pr24-resume-native-v2-context16k-long](runs/bi-v150/20261024T114500Z-pr24-resume-native-v2-context16k-long.md) |
+| 天数 BI-V150 | 214 | 2026-10-24T12:22:26.664616+00:00 | [PR24 移植失配与 KV 诊断](methods/pr24-main.md) | 旧AOT图失配，模型资格撤回 | 16384/1024/64/32 | 后验修正：本实例旧AOT图失配，PR24真实模型路径资格撤回；保留VERIFY1 KV全字节通过事实，不称有效PR24组合的完整模型正确性或性能。 | [20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long](runs/bi-v150/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long.md) |
+| 天数 BI-V150 | 215 | 2026-10-24T12:40:01.348005+00:00 | [PR24 移植失配与 KV 诊断](methods/pr24-main.md) | 旧AOT图失配，模型资格撤回 | 4096/16384/1024/64/256/128 | 旧AOT图失配使完整规模对照异常中止：4K两轮2915.46/2941.09 tok/s、各256请求成功；16K首轮未完成，KV候选未启动，不计收益或有效PR24成绩。 | [20261024T124000Z-pr24-main-fullsize-two-rounds](runs/bi-v150/20261024T124000Z-pr24-main-fullsize-two-rounds.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

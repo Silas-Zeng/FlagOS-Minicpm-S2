@@ -1,14 +1,13 @@
 # 当前工作与接续入口
 
-更新：2026-10-24（北京时间）。当前主线为含队友 PR24 的 `1ad9a708`；移植短验、CPU抢占观察和GPU恢复窗口均已结束并回收。目标Attention的局部计算预算支持下一步KV SAVE/FULL最短正确性验证，尚未证明新端到端收益。受测有收益的方法按用户授权提交并合并 PR。
+更新：2026-10-24。**本实例 PR24 真实模型路径资格已撤回，先修复编译缓存身份。** 原移植短验、CPU/GPU诊断和VERIFY1的原始记录保留，但不能再作有效PR24模型性能基线、完整正确性或收益预算。修正覆盖105037、110545、113346、114500、122225及124000六轮，详见[方法汇总](team/methods/pr24-main.md)。
 
-- 首次探针误拒绝原生 `@managed_inference_mode` wrapper，smoke HTTP500、正式32请求未发；[失败原件](experiments/framework/20261024T113346Z-pr24-resume-native-context16k-long-control/state.json)保留。修正后的114500轮32成功，native窗口valid；目标Attention恰168次（4×42）、1018.292405ms。P无需重排但原owner要求FIRST标记，原exit1保留；采样子进程退出后已重新持锁复核空闲并恢复DB，见[恢复凭据](experiments/framework/20261024T114500Z-pr24-resume-native-v2-context16k-long-control/cleanup-recovery.json)。
-- 该profile的KV546528低于无profiler547600；M457冷调优污染MM和总窗口，native MLP的逐请求设备路径也未由轨迹单独证明。因此只用明确归属的目标Attention筛选候选，见[完整分析](analysis/pr24-resume-native-v2-114500.json)和[汇总结论](analysis/pr24-kv-diagnostic.json)。
-
-- 本实例 native SO 9项数值/Graph检查通过；16K/128 ×32请求全成功，P在ready后命中、Q无回退，KV547600。见[移植摘要](experiments/framework/20261024T105037Z-pr24-main-context16k-control/summary.json)。
-- 16K/1024 ×32请求全成功、1次抢占；准入时APC11536，随后3段重新提交，重叠旧CPU已提交前缀5446。M1441确有新调优，不能把CPU的6.265秒当GPU收益。见[诊断结论](analysis/pr24-kv-diagnostic.json)及[DB差异](analysis/pr24-resume-db-comparison.json)。
-- 该观察driver退出0；owner因monitor sleep短暂未退出而退出1，后续复核其已退出并恢复原DB，原失败与[恢复凭据](experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long-control/cleanup-recovery.json)均保留。
-- 下一步仅迁移已有KV SAVE/FULL到当前组合并做一次VERIFY1；通过后才做关闭profiler的可比基线/候选对照，不重复采样或旧套件。已完成结果通过[实验PR #4](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/pull/4)批量同步；框架优化仍按方法独立PR。
+- 114500服务直接加载旧 `f7af72be36`/AOT `7a51652d…d1c`，与PR24前日志相同。[当前缓存图](experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/loaded-computation-graph.py) SHA `ab75722cd9edd5cbd33a2bb72d3f17f090eb2796ec86386d777a852f8e9cd69c` 有42层旧gate linear、native调用0；前三个M2048恢复步骤也各有168 mm和42独立SiLU。原scope仅核类方法/SO/34层计数，不能证明编译图启用native。
+- 原standalone 9项数值/Graph检查通过事实保留；105037的32请求成功不等于答案正确，不能复用队友完整准确率证明本实例。110545的CPU重复提交和113346的wrapper误拒绝失败也保留。
+- 114500的168次Attention共1018.292405ms仅为失配运行可见活动，**不是有效PR24模型净预算**；M457冷调优及KV差异仍成立。原[分析](analysis/pr24-resume-native-v2-114500.json)与[汇总](analysis/pr24-kv-diagnostic.json)保留历史，模型资格和下一步结论以本修正为准。
+- 122225 VERIFY1仍保留R16960、每方向729415680字节一致、恢复消费者到达等[KV字节证据](experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/coverage.json)；消费者到达不证明答案正确，也不证明有效PR24组合的完整模型正确性。
+- 队友PR24/25验收已显式使用 `VLLM_DISABLE_COMPILE_CACHE=1` 与独立 `TORCHINDUCTOR_CACHE_DIR`；本站漏带该既有条件。正式serve参数不改，修复须验证实际编译图与权重绑定，不能只看安装标记。
+- 124000完整规模筛选因缓存失配停止：4K两轮2915.46/2941.09 tok/s、各256请求成功；16K未完成、候选未启动，不计收益。13:00:52 UTC停止driver104652，13:01:33完成该轮清理、DB恢复，source/native未变；[停止记录](experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/early-stop-request.json)、[两轮原值与退出结果](experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds/result.json)、[完整原包凭据](experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/archive-receipt.json)已归档。该后态不是当前设备空闲证明；缓存身份修复及新验证由root维护。
 
 ## 上阶段官方受测基线
 

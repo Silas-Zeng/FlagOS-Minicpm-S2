@@ -16,7 +16,7 @@ TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 AVAILABLE = set()
 GROUPS = {
-    'pr24-main': ('PR24 组合基线与 KV 抢占诊断', '本实例 SO 的9项检查通过，短服务32请求全成功。CPU观察确认抢占后的重复提交；修正探针后捕获完整GPU窗口，目标Attention恰168次（4×42）、约1.018秒。P在本轮自然decode前缀下无需重排；KV容量变化、M457冷调优及原owner失败/DB恢复证据均保留。这里只得到局部计算预算，尚无端到端收益；保留KV SAVE/FULL，下一步做一次新组合VERIFY1，暂不重复profile。', ['pr24-main']),
+    'pr24-main': ('PR24 移植失配与 KV 诊断', '本实例复用了旧AOT图：42层旧gate linear、native调用0；类绑定/SO检查不能证明真实模型路径，105037至124000六轮的PR24模型资格统一撤回。保留standalone 9项、CPU/trace原始观察和VERIFY1每方向729415680字节一致事实，均不替代完整模型正确性。Attention约1.018秒不再作为有效PR24净预算；先修复缓存身份，相关完整规模对照已停止且候选未启动。旧结论以本修正为准，原件不改。', ['pr24-main']),
     'accepted-fill': ('省去无消费者的 accepted GPU fill', '固定非推测Full路径保留CPU fill，省略无消费者的accepted-count GPU fill。064838→065325两侧32成功0失败，吞吐表观−0.235046%，但KV521840→521936不同，31门仅same_KV失败、gain=null；当前不集成，保留小负及失配证据。冷ENABLED后同Engine原CPU_METADATA_FIRST_SELECTED只证明首次prepare，不证明全程/GPU数值或新准确率。', []),
     'compute-order': ('计算顺序与采样顺序分离', '计算行重排以适配Attention路径，采样保持原请求顺序。PR15+PR21兼容组合已由PR22合入；142019完整105题102正确（97.1429%）通过，173454原官方8轮全部成功，第2–4轮均值4K5118.99、16K3436.17 total tok/s。该组合的官方16K KV为521936；这是组合绝对结果，不作两个方法的单项因果拆分。旧423短测、三题质量、结构映射与独立参考证据保留，不能替代新组合结果。', ['compute-order']),
     'allocator-noop': ('KV 分配器无状态快返', '普通decode不新增页或完整块哈希时返回原空分配结果；保留新页、哈希、恢复与非RUNNING原路径，CPU片段和服务配对分别记录。', []),
@@ -55,7 +55,7 @@ GROUPS = {
     'other': ('其它登记与控制记录', '没有足够字段继续归类的登记；不补猜实验结论。', []),
 }
 CODE = {
-    'pr24-main': ['analysis/pr24-kv-diagnostic.json', 'analysis/pr24-resume-native-v2-114500.json', 'analysis/pr24-resume-native-failure.json', 'analysis/pr24-resume-db-comparison.json', 'experiments/framework/20261024T105037Z-pr24-main-context16k-control/summary.json', 'experiments/framework/20261024T105037Z-pr24-main-context16k-control/native-build-manifest.json', 'experiments/framework/20261024T105037Z-pr24-main-context16k-control/operator-check.json'],
+    'pr24-main': ['CURRENT_WORK.md', 'experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/loaded-computation-graph.py', 'experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/early-stop-request.json', 'experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/state.json', 'experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/archive-receipt.json', 'experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds/result.json', 'experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/coverage.json', 'experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/state.json', 'experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/observer-manifest.json', 'experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/archive-receipt.json', 'analysis/pr24-kv-diagnostic.json', 'analysis/pr24-resume-native-v2-114500.json', 'analysis/pr24-resume-native-failure.json', 'analysis/pr24-resume-db-comparison.json', 'experiments/framework/20261024T105037Z-pr24-main-context16k-control/summary.json', 'experiments/framework/20261024T105037Z-pr24-main-context16k-control/native-build-manifest.json', 'experiments/framework/20261024T105037Z-pr24-main-context16k-control/operator-check.json'],
     'accepted-fill': ['analysis/accepted-fill-service-pair.json'],
     'skip-computed-h2d': ['analysis/pr15-computed-h2d-accuracy.json', 'analysis/skip-computed-h2d-service-pair.json'],
     'compute-order': ['analysis/compute-order-current-main-official.json', 'analysis/compute-order-current-main-accuracy.json', 'analysis/compute-order-current-main-pair.json', 'archive/ai/20261022-framework-kv/compute-order-main-profile/README.md', 'analysis/compute-order-math4-event-130351.json', 'analysis/compute-order-math4-event-125330.json', 'analysis/compute-order-service-retest-pair.json', 'analysis/compute-order-math4-summary.json', 'analysis/compute-order-structure.json', 'analysis/compute-order-oracle-summary.json', 'analysis/compute-order-oracle-085500.json', 'analysis/compute-order-first-layer.json', 'experiments/framework/20261023T075210Z-compute-order-shadow-context16k-control/shadow-artifacts/8403/result.json', 'archive/ai/20261022-framework-kv/compute-order-shadow-gate/README.md', 'experiments/framework/20261023T070816Z-compute-order-answer-baseline/context-16k/answer-summary.json', 'analysis/compute-order-service-pair.json', 'analysis/compute-order-accuracy.json', 'docs/agent-work/framework_innovation.md', 'docs/agent-work/compute_order_review.md', 'experiments/framework/20261023T054306Z-compute-order-baseline-context16k-progress/completion.json'],
@@ -161,6 +161,8 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     """只摘结果/失败原句，不把审计与库身份搬入主视图。"""
+    if row['profile_id'] == 'pr24-main' and row['status'].startswith('model_path_invalidated_stale_aot_'):
+        return row['conclusion'].split('。', 1)[0] + '。'
     if row['run_id'] == '20261023T125330Z-compute-order-math4-event':
         return '客户端长度校验在发送前失败；背景0发送、四题未放行，本轮未评价优化。'
     if row['run_id'] == '20261023T130351Z-compute-order-math4-event':
@@ -204,12 +206,10 @@ def result(row, limit=190):
 def keep(row):
     text = row['conclusion']
     state = row['status'].lower()
-    if state == 'portability_pass_single_arm_no_gain' and row['profile_id'] == 'pr24-main':
-        return '保留作本实例后续基线；组合已由PR24合并，短验不计性能收益或完整准确率。'
-    if state == 'diagnostic_covered_service_pass_cleanup_recovered' and row['profile_id'] == 'pr24-main':
-        return '保留抢占证据；后续GPU窗口结果见同方法记录，不把CPU返回计时当收益。'
-    if state == 'diagnostic_native_valid_p_uncovered_cleanup_recovered' and row['profile_id'] == 'pr24-main':
-        return '保留局部GPU预算，进入KV SAVE/FULL最短VERIFY1；尚未确认端到端收益。'
+    if row['profile_id'] == 'pr24-main' and state.startswith('model_path_invalidated_stale_aot_'):
+        facts = {'standalone_pass': '9项组件检查与请求原件', 'cpu_observation': 'CPU抢占及失败/恢复原件', 'smoke_failed': '探针识别失败原件', 'native_trace': '旧图运行的trace及冷调优证据', 'kv_bytes_pass': 'KV全字节与消费者到达证据', 'screen_stopped': '异常中止、两轮4K原值及缓存失配原件'}
+        fact = facts.get(state.removeprefix('model_path_invalidated_stale_aot_'), '原始诊断事实')
+        return f'保留{fact}；撤回PR24模型路径资格，不作有效基线、完整模型正确性或净收益预算。'
     if state == 'official_pass_q_selected_no_fallback':
         return '保留并已合并PR23；确认为最新BI-V150基准，KV失配边界随结果保留。'
     if state == 'accuracy_pass' and row['profile_id'] == 'q-fragment-hoist':
@@ -271,6 +271,8 @@ def code_links(key, page):
 
 def status(row):
     value = row['status'].lower()
+    if value.startswith('model_path_invalidated_stale_aot_'):
+        return '旧AOT图失配，模型资格撤回'
     if value == 'client_validation_failed_before_requests':
         return '客户端发送前失败'
     if value == 'limited_math4_quality_signal_three_outside_questions':
