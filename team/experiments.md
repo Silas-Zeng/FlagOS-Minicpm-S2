@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共227条登记、224个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共230条登记、227个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -205,6 +205,9 @@
 | 天数 BI-V150 | 225 | 2026-10-24T17:27:42Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 日志文案门误拒，正式测量未启动 | 4096/16384/1024/64/0（正式测量未发） | 正式测量前额外compiled graph文案门误拒；exit1，无吞吐。随后CPU日志回放不算本轮模型资格。 | [20261024T172742Z-main0bf9-kv-official-four-rounds](runs/bi-v150/20261024T172742Z-main0bf9-kv-official-four-rounds.md) |
 | 天数 BI-V150 | 226 | 2026-10-24T17:47:13Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 负差后主动早停，非完整成绩 | 4096/16384/1024/64/1408（已完成7轮）；16K第4轮未完整 | 主动早停：4K第2–4轮−0.98%；16K仅第2–3轮−1.94%，R4不完整。背景主机负载未完全匹配，不严格归因KV。 | [20261024T174713Z-main0bf9-kv-official-four-rounds](runs/bi-v150/20261024T174713Z-main0bf9-kv-official-four-rounds.md) |
 | 天数 BI-V150 | 227 | 2026-10-24T18:39:29Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 独立搬运毛预算，不计净收益 | 未记录/未记录/未记录/非模型请求；42层、双向各3次计时 | 独立42层双向字节门通过；碎片/连续参照毛预算0.31–0.34s，未计gather/scatter等成本，非净收益。 | [20261024T183929Z-kv-staging-budget](runs/bi-v150/20261024T183929Z-kv-staging-budget.md) |
+| 天数 BI-V150 | 228 | 2026-10-24T18:45:09Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 535字节与模型路径门通过 | 16384/1024/64/32；另4题语义 | 535 VERIFY1：32成功、双向730103808字节一致、SAVE546/FULL714；4/4语义与34层native图通过。KV547632，非性能或完整准确率。 | [20261024T184509Z-main0bf9-kv-restore-pitched-verify1-context16k-long](runs/bi-v150/20261024T184509Z-main0bf9-kv-restore-pitched-verify1-context16k-long.md) |
+| 天数 BI-V150 | 229 | 2026-10-24T18:54:39Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 两轮筛选完成，比较事后补存 | 4096/16384/1024/64/768 | 535两轮：4K5403.92/5732.73、16K3824.19/4066.32，768/0、14条FULL链。KV失配不算收益；原外层比较异常与posthoc分开保留。 | [20261024T185439Z-main0bf9-restore-pitched-kv-fullsize-screen](runs/bi-v150/20261024T185439Z-main0bf9-restore-pitched-kv-fullsize-screen.md) |
+| 天数 BI-V150 | 230 | 2026-10-24T19:26:45Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | staging微测正信号，未集成模型 | 未记录/未记录/未记录/非模型请求；42层、双向3组配对 | 42层primitive全字节门通过；含pack/scatter等事务总wall三对省322.382/347.481/314.353ms，仅独立微测，不是模型收益。 | [20261024T192645Z-kv-staging-primitive](runs/bi-v150/20261024T192645Z-kv-staging-primitive.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

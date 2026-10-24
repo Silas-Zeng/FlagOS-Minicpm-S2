@@ -1,0 +1,332 @@
+"""main0bf9+FULL批量H2D单次VERIFY1；535来源/同服务图与字节门，49组件复用，不声明N40命中。"""
+from datetime import datetime, timezone
+import argparse
+import fcntl
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import re
+import shlex
+import shutil
+import signal
+import subprocess
+import time
+import traceback
+
+HERE = Path(__file__).resolve().parent
+ROOT = Path('/workspace/experiments/minicpm-s2')
+REFERENCE = ROOT / 'framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control'
+BASE = None  # 由--base-source显式指定冻结526源码根
+HELPER = ROOT / 'scripts/pr24-kv-swap-v1-20261024122148Z/launch_kv_verify1.py'
+HELPER_SHA = 'f1e30e77162762ca0da709d8c8b2e6ed9a5fab2cb2edd058e1240e20669ea543'
+SEED_SHA = 'fb0353979939fb6cde016b826b181555aaf11cf1c9c256ddc49c532392f57cfe'
+NATIVE_BUILD = ROOT / 'scripts/pr25-cache-service-check-20261024T1340/native-build-manifest.json'
+DATABASE = Path('/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db')
+
+def sha(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def read(p):
+    return json.loads(p.read_text())
+
+def write(p, x):
+    p.write_text(json.dumps(x, ensure_ascii=False, indent=2) + '\n')
+
+def helper():
+    if sha(HELPER) != HELPER_SHA:
+        raise ValueError('受测 VERIFY1 owner 变化')
+    spec = importlib.util.spec_from_file_location('sealed_verify1', HELPER)
+    u = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(u)
+    u.COMMIT = '0bf9d2efeaa10144dd7f0ff4597298df029f9328'
+    original_maps = u.source_maps
+    def source_maps(root):
+        root = Path(root)
+        if root.is_symlink():
+            raise ValueError('源码根不可为symlink')
+        root = root.resolve(strict=True)
+        if not root.is_relative_to(ROOT):
+            raise ValueError('源码根越出实验目录')
+        blobs, hashes = original_maps(root)
+        for relative, blob in blobs.items():
+            if blob['mode'] == '120000':
+                path = root / relative
+                if not path.is_symlink() or not path.resolve(strict=True).is_relative_to(root):
+                    raise ValueError('源码链接缺失或越界: ' + relative)
+                hashes[relative] = hashlib.sha256(os.readlink(path).encode()).hexdigest()
+        return blobs, hashes
+    u.source_maps = source_maps
+    return u
+
+def qualification(u):
+    for name, pin in read(HERE / 'asset-pins.json').items():
+        if sha(HERE / name) != pin:
+            raise ValueError('筛选资产变化: ' + name)
+    manifest = read(HERE / 'base-source-manifest.json')
+    if manifest['commit'] != u.COMMIT or manifest['tree'] != '8671e2ec040601981d1533d6a09beb20b9e507db':
+        raise ValueError('当前PR25缓存修复基线身份不符')
+    blobs = {p:dict(mode=v['mode'],sha=v['git_sha']) for p,v in manifest['files'].items()}
+    hashes = {p:v['sha256'] for p,v in manifest['files'].items()}
+    if u.source_maps(BASE) != (blobs, hashes):
+        raise ValueError('当前526源码变化')
+    proof = ROOT / 'framework/20261024T141536Z-pr25-cache-restart-recheck-control'
+    state = read(proof / 'state.json')
+    if not state.get('completed') or not state.get('database_restored') or not state['service_result']['completed']:
+        raise ValueError('默认缓存重启和真实语义检查未通过')
+    build = read(NATIVE_BUILD)
+    library = Path(build['library'])
+    log = NATIVE_BUILD.with_name('native-build.log')
+    if (build['source_commit'] != '7596cc0eb14fdbfc56e42eb1cd68d0f37b890d93'
+            or build['source_tree'] != 'b37543afc3250b4bd9361a505eb9f932286667e6'
+            or build['library_sha256'] != '14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd'
+            or sha(library) != build['library_sha256'] or sha(log) != build['build_log_sha256']
+            or not state['component_checks']['passed'] or state['component_checks']['gate'] != 9
+            or state['component_checks']['cached_dispatch'] != 40):
+        raise ValueError('新二进制/49组件门不符')
+    for p,digest in build['source_sha256'].items():
+        if hashes[p] != digest:
+            raise ValueError('native构建源码不符: '+p)
+    if sha(REFERENCE / 'database-after.sqlite') != SEED_SHA:
+        raise ValueError('共同DB种子变化')
+    candidate = read(HERE / 'source-manifest.json')
+    if (candidate['base_commit'] != u.COMMIT or candidate['base_tree'] != manifest['tree']
+            or candidate['tree'] != '98f4688ae0a0edb325e5aac39647486e323b86f7' or candidate['source_count'] != 535):
+        raise ValueError('FULL H2D候选并非冻结535来源')
+    parent = read(HERE / 'parent-532-source-manifest.json')
+    if parent['tree'] != '350938b7dd507089e435b0bdc4b1980d9383567d' or parent['source_count'] != 532:
+        raise ValueError('冻结532父候选身份变化')
+    worker_name = 'vllm_fl/patches/biv150_kv_worker.py'
+    additions = {
+        'vllm_fl/patches/biv150_kv_pitched_restore.py': 'biv150_kv_pitched_restore.py',
+        'vllm_fl/patches/biv150_kv_pitched_restore_bridge.cpp': 'bridge.cpp',
+        'vllm_fl/patches/biv150_kv_pitched_restore_bridge.so': 'bridge.so',
+    }
+    if (set(candidate['files']) != set(parent['files']) | set(additions)
+            or any(candidate['files'][p] != value for p, value in parent['files'].items() if p != worker_name)
+            or candidate.get('parent_candidate_tree') != parent['tree']):
+        raise ValueError('535偏离只改FULL worker与三份旧H2D源的范围')
+    h2d = read(HERE / 'reused-h2d-evidence/gate-results.json')
+    h2d_build = read(HERE / 'reused-h2d-evidence/compile-input-identity.json')
+    if (h2d['status'] != 'pass'
+            or h2d['bridge_sha256'] != 'f9bf8757133b084cd198ea8a8b0b217af887ac03b2f2bfb9599fd806a9801d2c'
+            or h2d_build['library_sha256'] != 'd39d579627d19ddb903855ebc4859661579633a7ecc4d1ad51866d79296ba527'
+            or any(candidate['files'][p]['sha256'] != h2d['source_sha256'][name] for p, name in additions.items())):
+        raise ValueError('旧已验H2D helper/桥与SDK构建身份不符')
+    target_blobs = {p:dict(mode=v['mode'],sha=v['git_sha']) for p,v in candidate['files'].items()}
+    target_hashes = {p:v['sha256'] for p,v in candidate['files'].items()}
+    for name, pin in u.SCRIPTS.items():
+        if sha(ROOT / 'scripts' / name) != pin:
+            raise ValueError('原负载/monitor/快照脚本变化: ' + name)
+    return {'kv': (BASE, target_blobs, target_hashes, candidate['tree'])}, (build, library, log)
+
+
+def snapshot(control, phase, u):
+    script = ROOT / 'scripts/snapshot_tuning_db.py'
+    if sha(script) != u.SCRIPTS['snapshot_tuning_db.py']:
+        raise ValueError('DB快照脚本变化')
+    with (control / ('db-' + phase + '.log')).open('x') as output:
+        subprocess.run(['python3', str(script), '--database', str(DATABASE), '--output', str(control / ('db-' + phase))],
+                       stdout=output, stderr=subprocess.STDOUT, check=True, timeout=120)
+
+def observe(run):
+    log = (run / 'server.log').read_text(errors='replace')
+    tokens = sorted(set(int(x.replace(',', '')) for x in re.findall(r'GPU KV cache size:\s*([\d,]+)\s*tokens', log)))
+    return dict(kv_tokens=tokens, q_selected=log.count('BIV150_Q_FRAGMENT_SELECTED '),
+                q_fallback=log.count('BIV150_Q_FRAGMENT_FALLBACK '),
+                p_selected=log.count('BIV150_COMPUTE_ORDER_FIRST_SELECTED '),
+                native_installed=log.count('BIV150_NATIVE_W8A8_INSTALL'),
+                resolve_benchmarker_lines=sum('resolve_benchmarker' in x for x in log.splitlines()))
+
+def run_role(u, role, inputs, native):
+    stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+    run = ROOT / 'framework' / (stamp + '-main0bf9-kv-restore-pitched-verify1-context16k-long')
+    control = run.with_name(run.name + '-control')
+    source = ROOT / 'code' / (stamp + '-main0bf9-kv-restore-pitched-verify1')
+    origin, blobs, hashes, tree = inputs
+    control.mkdir(exist_ok=False)
+    shutil.copytree(origin, source, symlinks=True, ignore=shutil.ignore_patterns('.git', '__pycache__', '*.pyc', '*.pyo'))
+    for name in read(HERE / 'source-manifest.json')['changed_paths']:
+        target = source / name
+        if target.is_symlink():
+            raise ValueError('不覆盖候选payload symlink')
+        target.write_bytes((HERE / 'files' / name).read_bytes())
+        target.chmod(0o644)
+    if u.source_maps(source) != (blobs, hashes):
+        raise ValueError('新独立源码复制不符')
+    shutil.copytree(source, control / 'plugin-source', symlinks=True)
+    write(control / 'source-git-blobs.json', blobs)
+    write(control / 'source-sha256.json', hashes)
+    shutil.copyfile(__file__, control / Path(__file__).name)
+    for name in ('driver.py', 'cache_gate.py', 'verify_kv.py', 'source-manifest.json', 'base-source-manifest.json'):
+        shutil.copyfile(HERE / name, control / name)
+    shutil.copyfile(HERE / 'asset-pins.json', control / 'asset-pins.json')
+    shutil.copyfile(HERE / 'parent-532-source-manifest.json', control / 'parent-532-source-manifest.json')
+    shutil.copytree(HERE / 'reused-h2d-evidence', control / 'reused-h2d-evidence')
+    shutil.copyfile(HELPER, control / 'reused_verify1_owner.py')
+    build, library, build_log = native
+    (control / 'native').mkdir()
+    runtime = control / 'native/biv150_native_w8a8.so'
+    shutil.copyfile(library, runtime)
+    shutil.copyfile(build_log, control / 'native/build.log')
+    shutil.copyfile(NATIVE_BUILD, control / 'native/build-manifest.original.json')
+    receipt = control / 'native/runtime-receipt.json'
+    write(receipt, dict(build, runtime_library=str(runtime)))
+    if sha(runtime) != build['library_sha256']:
+        raise ValueError('native 复制不符')
+    env = os.environ.copy()
+    removed = [k for k in env if k.startswith('BIV150_') or k in ('MINICPM_NATIVE_PROFILE_EVENTS', 'MINICPM_DECODE_GAP_RUN_DIR')]
+    for k in removed:
+        env.pop(k)
+    for k in ('VLLM_FL_BIV150_PREFILL_NORMALIZE', 'VLLM_FL_BIV150_GQA_DECODE', 'VLLM_FL_BIV150_Q_FRAGMENT', 'VLLM_FL_BIV150_NATIVE_W8A8'):
+        if env.get(k, '1') != '1':
+            raise ValueError('不允许关闭当前受测方法: ' + k)
+    env.pop('VLLM_CACHE_ROOT', None)
+    env.pop('TORCHINDUCTOR_CACHE_DIR', None)
+    env['VLLM_DISABLE_COMPILE_CACHE'] = '0'
+    env.update(BIV150_KV_VERIFY_RESTORE='1', BIV150_NATIVE_W8A8_LIBRARY=str(runtime),
+               BIV150_RESUME_NATIVE_RECEIPT=str(receipt), BIV150_RESUME_NATIVE_RECEIPT_SHA256=sha(receipt))
+    (control / 'q-hoist-artifacts').mkdir()
+    env['BIV150_Q_FRAGMENT_SERVICE_ARTIFACT_DIR'] = str(control / 'q-hoist-artifacts')
+    write(control / 'environment-overrides.json', {k:v for k,v in env.items() if k.startswith(('BIV150_', 'VLLM_FL_BIV150_'))})
+    command = ['python3', str(HERE / 'driver.py'), str(run), '--source-dir', str(source),
+               '--context-long-screen', '--seed', '721201', '--require-log-marker', 'BIV150_KV_PROTOCOL_INSTALLED']
+    (control / 'command.txt').write_text(shlex.join(command) + '\n')
+    state = dict(owner_pid=os.getpid(), role=role, run=str(run), control=str(control), source=str(source),
+                 base_commit=u.COMMIT, tree=tree, source_count=len(blobs), completed=False,
+                 wave40_coverage_asserted=False, native_built_from_commit=build['source_commit'],
+                 native_built_from_tree=build['source_tree'],
+                 benchmark_kind='单次VERIFY1字节机制门和同服务语义/实际图门；不是性能或完整准确率成绩', seed_sha256=SEED_SHA,
+                 removed_environment_names=sorted(removed), driver_sha256=sha(HERE / 'driver.py'))
+    lock = (ROOT / 'framework-device.lock').open('a')
+    process, original, success, cleanup = None, None, False, False
+    backup = control / 'database-original.sqlite'
+    handlers = {}
+    try:
+        for signum in (signal.SIGTERM, signal.SIGINT):
+            handlers[signum] = signal.getsignal(signum)
+            signal.signal(signum, lambda number, frame: (_ for _ in ()).throw(KeyboardInterrupt(str(number))))
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        state['preflight'] = u.idle()
+        cpu = Path('/sys/fs/cgroup/cpu,cpuacct')
+        if int((cpu / 'cpu.cfs_quota_us').read_text()) != 6 * int((cpu / 'cpu.cfs_period_us').read_text()):
+            raise ValueError('当前非6CPU配额')
+        shutil.copyfile(DATABASE, backup)
+        original = sha(backup)
+        seed = REFERENCE / 'database-after.sqlite'
+        if sha(seed) != SEED_SHA:
+            raise ValueError('共同DB种子变化')
+        shutil.copyfile(seed, control / 'database-seed.sqlite')
+        shutil.copyfile(seed, DATABASE)
+        if sha(DATABASE) != SEED_SHA:
+            raise ValueError('DB播种失败')
+        state.update(database_original_sha256=original, database_before_sha256=SEED_SHA)
+        snapshot(control, 'before', u)
+        fcntl.flock(lock, fcntl.LOCK_UN)
+        with (control / 'runner.log').open('x') as log:
+            process = subprocess.Popen(command, cwd='/workspace', env=env, stdin=subprocess.DEVNULL,
+                                       stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+        state.update(driver_pid=process.pid, stage='running')
+        write(control / 'state.json', state)
+        (control / 'runner.pid').write_text(str(process.pid) + '\n')
+        print(json.dumps(state), flush=True)
+        code = process.wait()
+        state['driver_exit_code'] = code
+        if code != 0 or (run / 'exit-code').read_text().strip() != '0':
+            raise RuntimeError('同服务语义/图门或32请求VERIFY1未完成；保留原件')
+        spec = importlib.util.spec_from_file_location('kv_verify1_checker', HERE / 'verify_kv.py')
+        verifier = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(verifier)
+        coverage = verifier.verify_coverage(control, run)
+        semantic = read(run / 'model-path/semantic-validation.json')
+        if (semantic.get('valid') is not True or semantic.get('correct') != 4
+                or semantic.get('native_layers') != list(range(4, 38))):
+            raise ValueError('本服务语义/真实native图门不完整')
+        state['observations'] = observe(run)
+        state['coverage'] = coverage
+        state['model_path'] = semantic
+        success = True
+    except BaseException as error:
+        state['error'] = repr(error)
+        (control / 'failure.txt').write_text(traceback.format_exc())
+    finally:
+        try:
+            if process is not None and process.poll() is None:
+                # 只清理由本owner创建的driver组；子服务由driver的signal handler清理。
+                os.killpg(process.pid, signal.SIGTERM)
+                process.wait(timeout=120)
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            state['postflight'] = u.idle()
+            if process is not None:
+                owned_pids = {process.pid}
+                result_file = run / 'result.json'
+                if result_file.exists():
+                    for item in read(result_file).get('owned_processes', []):
+                        if type(item.get('pid')) is not int or item['pid'] <= 1:
+                            raise ValueError('driver声明的owned PID格式不符')
+                        owned_pids.add(item['pid'])
+                for path in [run / 'server.pid', run / 'monitor.pid', *run.glob('*-round-*/worker.pid')]:
+                    if path.exists():
+                        pid = int(path.read_text().strip())
+                        if pid <= 1:
+                            raise ValueError('本轮PID文件不符')
+                        owned_pids.add(pid)
+                groups = [u.owned_group(pid) for pid in sorted(owned_pids)]
+                deadline = time.monotonic() + 6
+                while (not any(g['errors'] for g in groups)
+                       and any(x['state'] != 'Z' for g in groups for x in g['members'])
+                       and time.monotonic() < deadline):
+                    time.sleep(.2)
+                    groups = [u.owned_group(pid) for pid in sorted(owned_pids)]
+                write(control / 'owner-process-group.json', dict(groups=groups, max_grace_seconds=6))
+                if any(g['errors'] for g in groups) or any(x['state'] != 'Z' for g in groups for x in g['members']):
+                    raise RuntimeError('本轮独立进程组未清理；保留DB不恢复')
+                state['postflight_after_grace'] = u.idle()
+            if original is not None:
+                snapshot(control, 'after', u)
+                shutil.copyfile(DATABASE, control / 'database-after.sqlite')
+                state['database_after_sha256'] = sha(control / 'database-after.sqlite')
+                shutil.copyfile(backup, DATABASE)
+                state['database_restored'] = sha(DATABASE) == original
+                if not state['database_restored']:
+                    raise RuntimeError('原DB恢复失败')
+            base_manifest = read(HERE / 'base-source-manifest.json')
+            base_blobs = {p:dict(mode=v['mode'],sha=v['git_sha']) for p,v in base_manifest['files'].items()}
+            base_hashes = {p:v['sha256'] for p,v in base_manifest['files'].items()}
+            state['source_unchanged'] = (u.source_maps(origin) == (base_blobs, base_hashes)
+                and all(u.source_maps(p) == (blobs, hashes) for p in (source, control / 'plugin-source')))
+            state['native_unchanged'] = sha(runtime) == build['library_sha256']
+            if not state['source_unchanged'] or not state['native_unchanged']:
+                raise RuntimeError('源码/native发生变化')
+            cleanup = True
+        except BaseException as error:
+            state['cleanup_error'] = repr(error)
+        state.update(completed=success and cleanup, finished_utc=datetime.now(timezone.utc).isoformat())
+        write(control / 'state.json', state)
+        (control / 'exit-code').write_text('0\n' if state['completed'] else '1\n')
+        lock.close()
+        for signum, handler in handlers.items():
+            signal.signal(signum, handler)
+    if not state['completed']:
+        raise RuntimeError('本角色未完成，停止后继: ' + str(control))
+    return state
+
+def main():
+    global BASE
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--base-source', type=Path, required=True)
+    parser.add_argument('--roles', choices=['kv'], default='kv')
+    args = parser.parse_args()
+    BASE = args.base_source
+    u = helper()
+    sources, native = qualification(u)
+    results = []
+    for role in [args.roles]:
+        # 前一角色可能运行较久；每次重新核对封存资格与执行资产。
+        sources, native = qualification(u)
+        results.append(run_role(u, role, sources[role], native))
+    print(json.dumps({'completed_roles': [s['role'] for s in results], 'controls': [s['control'] for s in results]}), flush=True)
+
+if __name__ == '__main__':
+    main()
