@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共231条登记、228个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共235条登记、232个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -209,6 +209,10 @@
 | 天数 BI-V150 | 229 | 2026-10-24T18:54:39Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 两轮筛选完成，比较事后补存 | 4096/16384/1024/64/768 | 535两轮：4K5403.92/5732.73、16K3824.19/4066.32，768/0、14条FULL链。KV失配不算收益；原外层比较异常与posthoc分开保留。 | [20261024T185439Z-main0bf9-restore-pitched-kv-fullsize-screen](runs/bi-v150/20261024T185439Z-main0bf9-restore-pitched-kv-fullsize-screen.md) |
 | 天数 BI-V150 | 230 | 2026-10-24T19:26:45Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | staging微测正信号，未集成模型 | 未记录/未记录/未记录/非模型请求；42层、双向3组配对 | 42层primitive全字节门通过；含pack/scatter等事务总wall三对省322.382/347.481/314.353ms，仅独立微测，不是模型收益。 | [20261024T192645Z-kv-staging-primitive](runs/bi-v150/20261024T192645Z-kv-staging-primitive.md) |
 | 天数 BI-V150 | 231 | 2026-10-24T19:31:00Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 535官方完成，KV失配/105待验 | 4096/16384/1024/64/1536 | 535官方两档各4轮、1536/0；第2–4轮4K5703.70/16K4060.24 tok/s，28条FULL链。KV失配、差值null；完整105未过，不设新基线。 | [20261024T193100Z-main0bf9-restore-pitched-kv-official-four-rounds](runs/bi-v150/20261024T193100Z-main0bf9-restore-pitched-kv-official-four-rounds.md) |
+| 天数 BI-V150 | 232 | 2026-10-24T20:31:35Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 538服务字节与语义门通过 | 16384/1024/64/32；另4题语义 | 538 VERIFY1：32成功、4/4语义与34native图、每向729415680字节通过，42 kernels＋43 DMA/向；KV547536，非性能/105。 | [20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long](runs/bi-v150/20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long.md) |
+| 天数 BI-V150 | 233 | 2026-10-24T20:30:32Z | [RoPE与KV写入融合](methods/rope-kv-fusion.md) | 组件记录失败，无有效case | 未记录/未记录/未记录/独立组件；非模型请求 | configs=None导致记录器TypeError，无有效case；原失败保留，不作数值或性能负结果。 | [20261024T203032Z-rope-kv-component](runs/bi-v150/20261024T203032Z-rope-kv-component.md) |
+| 天数 BI-V150 | 234 | 2026-10-24T20:38:09Z | [RoPE与KV写入融合](methods/rope-kv-fusion.md) | 组件通过并有局部正信号 | 未记录/未记录/未记录/独立组件；非模型请求 | 42层字节/guard/变输入Graph通过；M2048/32/64 Graph总wall约5.070→4.791、0.899→0.864、0.982→0.896ms，仅局部组件。 | [20261024T203809Z-rope-kv-component-config-v2](runs/bi-v150/20261024T203809Z-rope-kv-component-config-v2.md) |
+| 天数 BI-V150 | 235 | 2026-10-24T20:40:20Z | [最后层FFN前精确选行](methods/final-ffn-row-prune.md) | 执行日志守卫失败，无有效case | 未记录/未记录/未记录/独立组件；非模型请求 | 实际mm_out logger未挂入记录链，守卫停止，无有效case；清理/DB恢复通过，不是数值或性能负结果。 | [20261024T204020Z-final-ffn-row-prune](runs/bi-v150/20261024T204020Z-final-ffn-row-prune.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
