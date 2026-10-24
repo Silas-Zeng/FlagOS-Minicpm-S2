@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共206条登记、203个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共209条登记、206个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -184,6 +184,9 @@
 | 天数 BI-V150 | 204 | 2026-10-23T14:12:01.362230+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 不可直接比较 | 16384/128/64/32 | 吞吐+6.589830%，但KV容量不同（521840→521936），33项仅same_KV失败、gain=null，不能归因收益 | [20261023T141159Z-current-main-compute-order-context16k](runs/bi-v150/20261023T141159Z-current-main-compute-order-context16k.md) |
 | 天数 BI-V150 | 205 | 2026-10-23T14:20:20.133450+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 通过 | original_math500_level3/32768/8/105 | 103/105（98.0952%）达到原95%门 | [20261023T142019Z-current-main-compute-order](runs/bi-v150/20261023T142019Z-current-main-compute-order.md) |
 | 天数 BI-V150 | 206 | 2026-10-23T14:46:20.713826+00:00 | [计算顺序与采样顺序分离](methods/compute-order.md) | 已完成 | 4096/16384/1024/64/256/128 x4 | 两case各4轮全部SUCCESS，1536请求成功，原第2–4轮均值：4K5116.68、16K3436.04 total tok/s | [20261023T144620Z-current-main-compute-order-official](runs/bi-v150/20261023T144620Z-current-main-compute-order-official.md) |
+| 天数 BI-V150 | 207 | 2026-10-24T06:15:56Z | [Q fragment 循环外保留](methods/q-fragment-hoist.md) | 通过 | 4096/16384/1024/64/256/128 x4 | 第2–4轮均值4K5313.59、16K3764.67 total tok/s，较旧基线5118.99/3436.17为+3.80%/+9.56% | [20261024T061556Z-pr15-pr21-qfragment-official](runs/bi-v150/20261024T061556Z-pr15-pr21-qfragment-official.md) |
+| 天数 BI-V150 | 208 | 2026-10-24T07:18:02Z | [Q fragment 循环外保留](methods/q-fragment-hoist.md) | 通过 | original_math500_level3/32768/8/105 | PR15+PR21+Q fragment完整Math500 Level3为100/105（95.2381%），满足>=100门 | [20261024T071802Z-pr15-pr21-qfragment](runs/bi-v150/20261024T071802Z-pr15-pr21-qfragment.md) |
+| 天数 BI-V150 | 209 | 2026-10-24T06:02:09Z | [Q fragment 循环外保留](methods/q-fragment-hoist.md) | 适配诊断，不计性能 | 4096/128/64/64 | 前置debug3在normalized-over-gqa路径正确拒绝旧C2/源码行假设，fallback actual Q source location missing，候选未进入优化路径，不计性能负结果 | [20261024T060209Z-qfragment-sourceproof-debug5-4k](runs/bi-v150/20261024T060209Z-qfragment-sourceproof-debug5-4k.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

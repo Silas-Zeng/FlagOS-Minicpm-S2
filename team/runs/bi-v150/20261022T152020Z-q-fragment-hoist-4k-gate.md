@@ -6,8 +6,8 @@
 
 ## 登记 #148 · Q fragment 循环外保留
 
-- **尝试**：同一方法的KV16K/4K局部门与真实服务配对分别记录；保留单轮正信号，TTFT变化及准确率边界同时展示。
-- **改动**：相关实现 [biv150_q_fragment_service.py](../../../archive/ai/20261022-current-gpu-hotspots/q-hoist-service/biv150_q_fragment_service.py)；[compare_q_service_pair.py](../../../archive/ai/20261022-current-gpu-hotspots/q-hoist-service/compare_q_service_pair.py)；[q-fragment-service-pair.json](../../../analysis/q-fragment-service-pair.json)；本轮准确变体以原件源码清单为准。
+- **尝试**：把唯一BF16 prefill Attention的Q local_load移到唯一K循环外并保持fragment活跃。默认由提交代码启用，保留normal fallback与精确源码/ABI/IR检查；PR23已合入main。官方1536请求、两档各4轮验证中4K/16K为5313.59/3764.67 total tok/s，较PR15+PR21旧基线+3.80%/+9.56%；完整Math500 L3为100/105通过。实际选中且fallback0，shared65536→32768、循环内Q read0。DB种子相同但KV521840对521936，不包装为严格等KV单项因果。
+- **改动**：相关实现 [qfragment-pr15-pr21-final.json](../../../analysis/qfragment-pr15-pr21-final.json)；[qfragment-adaptation.json](../../../analysis/qfragment-adaptation.json)；[biv150_q_fragment_service.py](../../../archive/ai/20261022-current-gpu-hotspots/q-hoist-service/biv150_q_fragment_service.py)；[compare_q_service_pair.py](../../../archive/ai/20261022-current-gpu-hotspots/q-hoist-service/compare_q_service_pair.py)；[q-fragment-service-pair.json](../../../analysis/q-fragment-service-pair.json)；本轮准确变体以原件源码清单为准。
 - **怎么测**：具体测法未单列，见原命令；输入 / 输出 / 并发 / 请求数：未记录 / 未记录 / 未记录 / 未记录。
 - **结果**：wall2.464499437500→2.067650000000ms（缩短16.1026%），event2.358253240585→1.871338784695ms（缩短20.6473%），保留短KV局部正信号待真实服务验证
 - **是否保留**：待确认；通过某项检查不自动等于优化保留。

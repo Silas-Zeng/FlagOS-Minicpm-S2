@@ -6,7 +6,7 @@ CPU metadata成功时省略一次计数GPU副本提交，保留原回退和固�
 
 相关代码：[pr15-computed-h2d-accuracy.json](../../analysis/pr15-computed-h2d-accuracy.json)；[skip-computed-h2d-service-pair.json](../../analysis/skip-computed-h2d-service-pair.json)。
 
-相关方法PR：[computed H2D #15（草稿）](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/15)。
+相关方法PR：[computed H2D+计算顺序组合 #22](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/22)。
 
 下列是既有登记摘要，不叠加单项收益、不把诊断当端到端或完整准确率。完整条件沿每轮原件查阅。
 
