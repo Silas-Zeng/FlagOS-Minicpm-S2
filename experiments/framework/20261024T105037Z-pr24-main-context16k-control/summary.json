@@ -1,0 +1,57 @@
+{
+  "kind": "PR24移植短验，非官方成绩或单项收益",
+  "coverage": true,
+  "native_install": {
+    "installed": true,
+    "layers": [
+      "gate_up_proj"
+    ],
+    "min_rows": 17,
+    "compressed_only": true,
+    "skip_edge_layers": 4,
+    "fused_silu": true,
+    "activation_residual_rows": [
+      1,
+      16
+    ],
+    "gate_operator": "gate_silu_auto"
+  },
+  "markers": {
+    "BIV150_NATIVE_W8A8_FIRST_WEIGHT": true,
+    "BIV150_COMPUTE_ORDER_FIRST_SELECTED": true,
+    "BIV150_Q_FRAGMENT_SELECTED": true,
+    "BIV150_Q_FRAGMENT_FALLBACK": false,
+    "BIV150_COMPUTE_ORDER_SCOPE_REJECTED": false
+  },
+  "p_after_ready": [
+    {
+      "pid": 98792,
+      "N": 17,
+      "M": 2048,
+      "Dprefix": 1,
+      "Dall": 15,
+      "outside": 14,
+      "sampler_rows": 17,
+      "original_model_forward_returned": true,
+      "runtime_mode": "NONE",
+      "inverse_logits_order": "original_request_rows",
+      "token_bitwise_equivalence_claimed": false
+    }
+  ],
+  "kv_tokens": 547600,
+  "result": {
+    "completed": 32,
+    "failed": 0,
+    "total_token_throughput": 5121.780601168963,
+    "mean_ttft_ms": 53542.31800799607,
+    "mean_tpot_ms": 279.3495763973452
+  },
+  "source_commit": "1ad9a708ee77323372f0fa5975a04a52d294852c",
+  "source_tree": "d1a96e3f56723956a7902cba7e676fd285c83d0c",
+  "library_sha256": "a42f71e27197c9d6efc0ad72ef1656b0c71abbd5f5d8530cdbdd390eb2470203",
+  "database_before_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+  "limits": [
+    "native数值检查与压缩权重挂载已验证；未单独采集服务逐请求GPU trace",
+    "该短测不重做或替代队友的105题准确率验证"
+  ]
+}

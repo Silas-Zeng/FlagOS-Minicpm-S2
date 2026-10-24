@@ -1,0 +1,121 @@
+{
+  "method": "PR24 新主线移植与 KV 抢占诊断",
+  "source_commit": "1ad9a708ee77323372f0fa5975a04a52d294852c",
+  "diagnostic_tree": "730e4468f173b79fdd508a01be9fff87db0fa2cd",
+  "run_id": "20261024T110545Z-current-main-pr24-resume-cpu-context16k-long",
+  "kind": "CPU 因果观察，非性能对照",
+  "service": {
+    "completed": 32,
+    "failed": 0,
+    "preemptions": 1,
+    "kv_tokens": 547600
+  },
+  "victim": {
+    "confirmed_output_tokens": 598,
+    "is_prefill_chunk": false,
+    "issued_computed_tokens": 16982,
+    "known_tokens": 16982,
+    "num_preemptions": 0,
+    "output_placeholders": 1,
+    "prompt_tokens": 16384,
+    "request_id": "cmpl-bench-db387f4a-30-0-a3775408",
+    "request_object_id": 138430155148800,
+    "status": "RUNNING"
+  },
+  "first_apc_tokens": 16800,
+  "admitted_apc_tokens": 11536,
+  "waiting_attempts": 176,
+  "executed_target_rows": [
+    {
+      "M": 2048,
+      "N": 31,
+      "computed_source": "new_request_payload",
+      "execute_return_ns": 4005881636091952,
+      "execute_returned": true,
+      "execute_submit_start_ns": 4005881543919049,
+      "optimistic_after_schedule": 13554,
+      "payload_computed": 11536,
+      "scheduler_output_object_id": 138430054623776,
+      "target_q": 2018
+    },
+    {
+      "M": 2048,
+      "N": 31,
+      "computed_source": "cached_request_payload",
+      "execute_return_ns": 4005882135701108,
+      "execute_returned": true,
+      "execute_submit_start_ns": 4005881700751348,
+      "optimistic_after_schedule": 15572,
+      "payload_computed": 13554,
+      "scheduler_output_object_id": 138430592426272,
+      "target_q": 2018
+    },
+    {
+      "M": 1441,
+      "N": 31,
+      "computed_source": "cached_request_payload",
+      "execute_return_ns": 4005888404688077,
+      "execute_returned": true,
+      "execute_submit_start_ns": 4005882139561210,
+      "optimistic_after_schedule": 16983,
+      "payload_computed": 15572,
+      "scheduler_output_object_id": 138430079842016,
+      "target_q": 1411
+    }
+  ],
+  "previously_submitted_overlap_tokens": 5446,
+  "preempt_to_admitted_cpu_seconds": 9.875888055,
+  "resumed_cpu_window_seconds": 6.860769028,
+  "gpu_recompute_seconds": null,
+  "performance_gain": null,
+  "original_owner_exit": 1,
+  "cleanup_recovered": true,
+  "recovery_evidence": "experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long-control/cleanup-recovery.json",
+  "raw_evidence": "experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long",
+  "db_comparison": "analysis/pr24-resume-db-comparison.json",
+  "conclusion": "保留KV SAVE/FULL并进入当前PR24组合的一次最短VERIFY1；约1.018秒目标Attention显示可判别空间，尚未证明净收益。通过后才做关闭profiler的可比对照，不重复采样。",
+  "limits": [
+    "5446 是与旧 CPU 已提交前缀的重叠，不代表这些 token 在抢占前已完成 GPU 计算。",
+    "3 个恢复 step 同时包含其余30个请求的 decode，不能视作可全部删除的开销。",
+    "M1441 新增调优，6.265秒 CPU 返回不能作为 GPU 重算或预期收益。",
+    "driver exit0；owner首次捕到短暂monitor sleep而exit1，随后复核退出并恢复DB，原件保留。"
+  ],
+  "follow_up_gpu": {
+    "run_id": "20261024T114500Z-pr24-resume-native-v2-context16k-long",
+    "raw_analysis": "analysis/pr24-resume-native-v2-114500.json",
+    "service": {
+      "completed": 32,
+      "failed": 0,
+      "kv_tokens": 546528
+    },
+    "native_window_valid": true,
+    "owner_exit_code": 1,
+    "cleanup_recovered": true,
+    "target_attention": {
+      "calls": 168,
+      "layers_per_step": 42,
+      "per_step_ms": [
+        263.568761,
+        309.158509,
+        354.518186,
+        91.046949
+      ],
+      "sum_ms": 1018.292405,
+      "grids": [
+        "127x2x1",
+        "127x2x1",
+        "127x2x1",
+        "27x2x1"
+      ]
+    },
+    "p_path": "每步30个q1在目标prefill之前，prefix=dall=30，P无需重排；原owner严格要求FIRST标记而未通过，原状态保留。",
+    "limits": [
+      "profiler下KV546528，与无profiler547600不同，恢复起点10464及4步不能代替旧11536及3步。",
+      "M457有新调优；MM2299次及zeros1219次含重复，7.15秒窗口不能作为净收益预算。",
+      "native仅确认权重/函数/库绑定，trace中未辨认出native MLP核；本轮结论只使用明确归属的目标Attention。",
+      "约1.018秒是可见kernel时长和，不是吞吐收益或严格同容量可省延迟。"
+    ],
+    "cleanup_evidence": "experiments/framework/20261024T114500Z-pr24-resume-native-v2-context16k-long-control/cleanup-recovery.json",
+    "full_archive_receipt": "experiments/framework/20261024T114500Z-pr24-resume-native-v2-context16k-long-control/archive-receipt.json"
+  }
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "stage": "build",
+    "command": [
+      "/usr/local/bin/python3",
+      "/workspace/experiments/minicpm-s2/code/main-pr24-1ad9a708-20261024T105037Z/tools/build_biv150_native_w8a8.py",
+      "--build-dir",
+      "/workspace/experiments/minicpm-s2/framework/20261024T105037Z-pr24-main-context16k-control/native"
+    ]
+  },
+  {
+    "stage": "operator-check",
+    "command": [
+      "/usr/local/bin/python3",
+      "/workspace/experiments/minicpm-s2/code/main-pr24-1ad9a708-20261024T105037Z/tools/check_biv150_gate_auto.py",
+      "--library",
+      "/workspace/experiments/minicpm-s2/framework/20261024T105037Z-pr24-main-context16k-control/native/biv150_native_w8a8.so",
+      "--out",
+      "/workspace/experiments/minicpm-s2/framework/20261024T105037Z-pr24-main-context16k-control/operator-check.json"
+    ]
+  },
+  {
+    "stage": "screen",
+    "command": [
+      "/usr/local/bin/python3",
+      "/workspace/experiments/minicpm-s2/scripts/run_framework_screen.py",
+      "/workspace/experiments/minicpm-s2/framework/20261024T105037Z-pr24-main-context16k",
+      "--source-dir",
+      "/workspace/experiments/minicpm-s2/code/main-pr24-1ad9a708-20261024T105037Z",
+      "--context-screen",
+      "--seed",
+      "721201",
+      "--require-log-marker",
+      "BIV150_NATIVE_W8A8_INSTALL"
+    ]
+  }
+]
