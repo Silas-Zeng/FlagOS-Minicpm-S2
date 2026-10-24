@@ -13,6 +13,7 @@
 
 ## 按方法
 
+- [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md)
 - [native 编译缓存身份与重启](methods/native-cache-identity.md)
 - [PR24 真实路径复验与 KV 诊断](methods/pr24-main.md)
 - [省去无消费者的 accepted GPU fill](methods/accepted-fill.md)

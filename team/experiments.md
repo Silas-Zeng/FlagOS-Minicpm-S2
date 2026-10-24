@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共218条登记、215个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共221条登记、218个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -196,6 +196,9 @@
 | 天数 BI-V150 | 216 | 2026-10-24T13:16:04.368089+00:00 | [PR24 真实路径复验与 KV 诊断](methods/pr24-main.md) | 真实native路径与完整准确率通过 | original_math500_level3/32768/8/105 | 隔离缓存后实际34层native；Math500 Level3 100/105（95.2381%）通过，0请求错误/0空最终。仅本轮准确率，不恢复旧失配轮次资格、不报性能。 | [20261024T131603Z-pr24-isolated-cache-math500](runs/bi-v150/20261024T131603Z-pr24-isolated-cache-math500.md) |
 | 天数 BI-V150 | 217 | 2026-10-24T13:57:49.462019+00:00 | [native 编译缓存身份与重启](methods/native-cache-identity.md) | 检查器格式误拒，原失败保留 | 37/1024/1/1 | 49项组件通过；首启答案85被checker的think格式解析误拒，原失败保留，不记模型算术失败。 | [20261024T135749Z-pr25-cache-first-restart](runs/bi-v150/20261024T135749Z-pr25-cache-first-restart.md) |
 | 天数 BI-V150 | 218 | 2026-10-24T14:15:36.279439+00:00 | [native 编译缓存身份与重启](methods/native-cache-identity.md) | 默认缓存重启语义通过 | 37/4908/1024/1/4 | 默认缓存重启4/4语义正确（含4908token），同AOT与34层native图；仅服务验证，非官方准确率或性能。 | [20261024T141536Z-pr25-cache-restart-recheck](runs/bi-v150/20261024T141536Z-pr25-cache-restart-recheck.md) |
+| 天数 BI-V150 | 219 | 2026-10-24T14:28:20.665952+00:00 | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 两轮基线完成，不单报收益 | 4096/16384/1024/64/256/128 | 4K两轮5396.58/5730.67、16K两轮3565.12/3992.53 total tok/s；768请求全成功，KV546432。仅本组筛选基线，非官方四轮分数或优化收益。 | [20261024T142819Z-pr25-cache-main-fullsize-two-rounds](runs/bi-v150/20261024T142819Z-pr25-cache-main-fullsize-two-rounds.md) |
+| 天数 BI-V150 | 220 | 2026-10-24T14:59:47.177576+00:00 | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | KV字节与模型路径门通过 | 16384/1024/64/32 | 32/0；R16960、每方向729415680字节一致，SAVE504/FULL2688。另同服务4/4语义正确、实际34层native图；VERIFY1不计性能或完整准确率。 | [20261024T145945Z-pr25-cache-kv-verify1-context16k-long](runs/bi-v150/20261024T145945Z-pr25-cache-kv-verify1-context16k-long.md) |
+| 天数 BI-V150 | 221 | 2026-10-24T15:12:56.985153+00:00 | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 两轮正负并存，待官方四轮 | 4096/16384/1024/64/256/128 | 候选768/0；4K5402.15/5767.57（+0.103%/+0.644%，无FULL不可归因），16K3733.69/3972.85（+4.728%/−0.493%）。未确认稳定收益，待官方四轮。 | [20261024T151255Z-pr25-cache-kv-fullsize-two-rounds](runs/bi-v150/20261024T151255Z-pr25-cache-kv-fullsize-two-rounds.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

@@ -1,5 +1,15 @@
 # 当前工作与接续入口
 
+## 2026-10-25 当前接续
+
+- 框架PR35已按用户明确授权合并到main `0bf9d2ef`，四个PR文件与受审head一致。
+- [当前KV方法](team/methods/pr25-kv-current.md)的基线、VERIFY1和两轮候选原件本批同步：两侧各768请求成功，同KV546432与DB种子；16K逐轮+4.73%/−0.49%，尚不定稳定收益。旧7596+KV成绩不转移给新main。
+- 正在上卡的新组合门：`20261024T155917Z-main0bf9-kv-verify1-context16k-long`，owner132774/driver132778；run位于 `/workspace/experiments/minicpm-s2/framework/`，control为同名`-control`。source基点0bf9、候选tree350938b7，532文件，native SO14f复用真实旧构建；未完成前不能另占卡。
+- 后续main526与KV532顺序跑官方4K/16K各四轮，全部原值保留、按官方第2–4轮统计。没有明显退化或正确性/运行异常就跑完四轮再结论；最终必要准确率通过后确认新基线。
+- 旧AOT失配资格撤回与已发布负结果继续保留；本批没有重新运行已通过且未改变的组件。
+
+以下为此前状态，以上述条目及原始run证据为准。
+
 更新：2026-10-24。**PR25＋默认缓存身份修复已完成重启语义验证，完整性能尚待当前基线结果。** [方法记录](team/methods/native-cache-identity.md)与[框架 PR35](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/35)已关联；受测源码 `7596cc0`，PR head `35039443` 仅增加中文说明。
 
 - `135749` 的 49 项组件门通过，但检查器误拒带 `<think>` 的正确加法响应，原 exit 1 和失败原件保留。首启运行图是在重启前首次补存，时间与来源限制保留。
