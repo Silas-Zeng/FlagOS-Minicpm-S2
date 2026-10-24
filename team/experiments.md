@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共235条登记、232个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共238条登记、235个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -213,6 +213,9 @@
 | 天数 BI-V150 | 233 | 2026-10-24T20:30:32Z | [RoPE与KV写入融合](methods/rope-kv-fusion.md) | 组件记录失败，无有效case | 未记录/未记录/未记录/独立组件；非模型请求 | configs=None导致记录器TypeError，无有效case；原失败保留，不作数值或性能负结果。 | [20261024T203032Z-rope-kv-component](runs/bi-v150/20261024T203032Z-rope-kv-component.md) |
 | 天数 BI-V150 | 234 | 2026-10-24T20:38:09Z | [RoPE与KV写入融合](methods/rope-kv-fusion.md) | 组件通过并有局部正信号 | 未记录/未记录/未记录/独立组件；非模型请求 | 42层字节/guard/变输入Graph通过；M2048/32/64 Graph总wall约5.070→4.791、0.899→0.864、0.982→0.896ms，仅局部组件。 | [20261024T203809Z-rope-kv-component-config-v2](runs/bi-v150/20261024T203809Z-rope-kv-component-config-v2.md) |
 | 天数 BI-V150 | 235 | 2026-10-24T20:40:20Z | [最后层FFN前精确选行](methods/final-ffn-row-prune.md) | 执行日志守卫失败，无有效case | 未记录/未记录/未记录/独立组件；非模型请求 | 实际mm_out logger未挂入记录链，守卫停止，无有效case；清理/DB恢复通过，不是数值或性能负结果。 | [20261024T204020Z-final-ffn-row-prune](runs/bi-v150/20261024T204020Z-final-ffn-row-prune.md) |
+| 天数 BI-V150 | 236 | 2026-10-24T20:44:02Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 538筛选完成，KV条件失配 | 未记录/未记录/未记录/768 | 538两轮：4K5544.36/5615.02，16K3845.32/4078.31，768成功；KV失配，只观察暖轮−2.38%/＋0.82%。 | [20261024T204402Z-main0bf9-staging-kv-fullsize-screen](runs/bi-v150/20261024T204402Z-main0bf9-staging-kv-fullsize-screen.md) |
+| 天数 BI-V150 | 237 | 2026-10-24T21:14:02Z | [最后层FFN前精确选行](methods/final-ffn-row-prune.md) | 末层组件通过，局部正信号 | 未记录/未记录/未记录/四shape独立组件；非模型请求 | 四shape逐bit/变输入Graph通过；M2048→S32/64 Graph总wall约2.386→0.170/2.397→0.183ms，仅组件，不含dense回填。 | [20261024T211402Z-final-ffn-row-prune-logger-v2](runs/bi-v150/20261024T211402Z-final-ffn-row-prune-logger-v2.md) |
+| 天数 BI-V150 | 238 | 2026-10-24T21:16:06Z | [RoPE与KV写入融合](methods/rope-kv-fusion.md) | 模型门失败：源码后态与图解析 | 未记录/未记录/未记录/4语义；非官方性能/105 | 4/4语义正确，但图门跨submod误拒且新增.best_config；source_unchanged=false、completed=false，原失败保留。 | [20261024T211606Z-rope-kv-model-verify](runs/bi-v150/20261024T211606Z-rope-kv-model-verify.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

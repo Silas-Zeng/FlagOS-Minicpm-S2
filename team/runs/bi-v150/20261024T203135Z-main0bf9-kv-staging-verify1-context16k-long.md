@@ -42,7 +42,7 @@
 - 原始目录：[20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long](../../../experiments/framework/20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long)
 - 原命令：[load-commands.json](../../../experiments/framework/20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long/load-commands.json)；[launch-command.json](../../../experiments/framework/20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long/launch-command.json)；[command.txt](../../../experiments/framework/20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long-control/command.txt)
 - 环境 / 源码 / 后态：[manifest.json](../../../experiments/framework/20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long/manifest.json)；[source-sha256.json](../../../experiments/framework/20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long-control/source-sha256.json)
-- 原始结果：未单列，见原始目录
+- 原始结果：[context-16k-long-infqps-concurrency64-minicpm-20261025-043731.json](../../../experiments/framework/20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long/context-16k-long/results/context-16k-long-infqps-concurrency64-minicpm-20261025-043731.json)
 - 日志 / 采样：[server.log](../../../experiments/framework/20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long/server.log)；[gpu.csv](../../../experiments/framework/20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long/gpu.csv)；[exit-code](../../../experiments/framework/20261024T203135Z-main0bf9-kv-staging-verify1-context16k-long/exit-code)
 - 相关说明：未记录
 - 完整原登记：[registry.csv](../../../experiments/registry.csv)（登记序号见上；同一run可有多个阶段）
