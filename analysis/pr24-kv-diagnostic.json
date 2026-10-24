@@ -73,11 +73,49 @@
   "recovery_evidence": "experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long-control/cleanup-recovery.json",
   "raw_evidence": "experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long",
   "db_comparison": "analysis/pr24-resume-db-comparison.json",
-  "conclusion": "保留 KV SAVE/FULL 候选；先用已调优种子采集一次恢复窗口 GPU 轨迹，再判断传输是否划算。",
+  "conclusion": "保留KV SAVE/FULL并进入当前PR24组合的一次最短VERIFY1；约1.018秒目标Attention显示可判别空间，尚未证明净收益。通过后才做关闭profiler的可比对照，不重复采样。",
   "limits": [
     "5446 是与旧 CPU 已提交前缀的重叠，不代表这些 token 在抢占前已完成 GPU 计算。",
     "3 个恢复 step 同时包含其余30个请求的 decode，不能视作可全部删除的开销。",
     "M1441 新增调优，6.265秒 CPU 返回不能作为 GPU 重算或预期收益。",
     "driver exit0；owner首次捕到短暂monitor sleep而exit1，随后复核退出并恢复DB，原件保留。"
-  ]
+  ],
+  "follow_up_gpu": {
+    "run_id": "20261024T114500Z-pr24-resume-native-v2-context16k-long",
+    "raw_analysis": "analysis/pr24-resume-native-v2-114500.json",
+    "service": {
+      "completed": 32,
+      "failed": 0,
+      "kv_tokens": 546528
+    },
+    "native_window_valid": true,
+    "owner_exit_code": 1,
+    "cleanup_recovered": true,
+    "target_attention": {
+      "calls": 168,
+      "layers_per_step": 42,
+      "per_step_ms": [
+        263.568761,
+        309.158509,
+        354.518186,
+        91.046949
+      ],
+      "sum_ms": 1018.292405,
+      "grids": [
+        "127x2x1",
+        "127x2x1",
+        "127x2x1",
+        "27x2x1"
+      ]
+    },
+    "p_path": "每步30个q1在目标prefill之前，prefix=dall=30，P无需重排；原owner严格要求FIRST标记而未通过，原状态保留。",
+    "limits": [
+      "profiler下KV546528，与无profiler547600不同，恢复起点10464及4步不能代替旧11536及3步。",
+      "M457有新调优；MM2299次及zeros1219次含重复，7.15秒窗口不能作为净收益预算。",
+      "native仅确认权重/函数/库绑定，trace中未辨认出native MLP核；本轮结论只使用明确归属的目标Attention。",
+      "约1.018秒是可见kernel时长和，不是吞吐收益或严格同容量可省延迟。"
+    ],
+    "cleanup_evidence": "experiments/framework/20261024T114500Z-pr24-resume-native-v2-context16k-long-control/cleanup-recovery.json",
+    "full_archive_receipt": "experiments/framework/20261024T114500Z-pr24-resume-native-v2-context16k-long-control/archive-receipt.json"
+  }
 }

@@ -6,11 +6,11 @@
 
 ## 登记 #211 · PR24 组合基线与 KV 抢占诊断
 
-- **尝试**：复用队友已合并的 INT8 gate/up、PR15/PR21 与 Q fragment 组合；本实例 SO 的9项检查通过，短服务32请求全成功。长输出观察覆盖1次抢占，重复提交与旧CPU已提交前缀重叠5446 tokens；M1441冷调优影响CPU计时，尚不能推算GPU收益。原收尾失败及DB恢复证据保留，下一步仅采一次已调优的恢复窗口。
-- **改动**：相关实现 [pr24-kv-diagnostic.json](../../../analysis/pr24-kv-diagnostic.json)；[pr24-resume-db-comparison.json](../../../analysis/pr24-resume-db-comparison.json)；[summary.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/summary.json)；[native-build-manifest.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/native-build-manifest.json)；[operator-check.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/operator-check.json)；本轮准确变体以原件源码清单为准。
+- **尝试**：本实例 SO 的9项检查通过，短服务32请求全成功。CPU观察确认抢占后的重复提交；修正探针后捕获完整GPU窗口，目标Attention恰168次（4×42）、约1.018秒。P在本轮自然decode前缀下无需重排；KV容量变化、M457冷调优及原owner失败/DB恢复证据均保留。这里只得到局部计算预算，尚无端到端收益；保留KV SAVE/FULL，下一步做一次新组合VERIFY1，暂不重复profile。
+- **改动**：相关实现 [pr24-kv-diagnostic.json](../../../analysis/pr24-kv-diagnostic.json)；[pr24-resume-native-v2-114500.json](../../../analysis/pr24-resume-native-v2-114500.json)；[pr24-resume-native-failure.json](../../../analysis/pr24-resume-native-failure.json)；[pr24-resume-db-comparison.json](../../../analysis/pr24-resume-db-comparison.json)；[summary.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/summary.json)；[native-build-manifest.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/native-build-manifest.json)；[operator-check.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/operator-check.json)；本轮准确变体以原件源码清单为准。
 - **怎么测**：具体测法未单列，见原命令；输入 / 输出 / 并发 / 请求数：16384 / 1024 / 64 / 32。
 - **结果**：32成功0失败，真实抢占1次
-- **是否保留**：保留抢占证据；KV SAVE/FULL仍为候选，GPU开销待一次已调优窗口确认。
+- **是否保留**：保留抢占证据；后续GPU窗口结果见同方法记录，不把CPU返回计时当收益。
 
 <details><summary>完整原登记（含UTC、状态、过程与标识）</summary>
 
@@ -42,7 +42,7 @@
 - 原始目录：[20261024T110545Z-current-main-pr24-resume-cpu-context16k-long](../../../experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long)
 - 原命令：[load-commands.json](../../../experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long/load-commands.json)；[launch-command.json](../../../experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long/launch-command.json)；[command.txt](../../../experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long-control/command.txt)
 - 环境 / 源码 / 后态：[manifest.json](../../../experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long/manifest.json)；[purpose.json](../../../experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long-control/purpose.json)；[source-sha256.json](../../../experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long-control/source-sha256.json)
-- 原始结果：未单列，见原始目录
+- 原始结果：[context-16k-long-infqps-concurrency64-minicpm-20261024-191149.json](../../../experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long/context-16k-long/results/context-16k-long-infqps-concurrency64-minicpm-20261024-191149.json)
 - 日志 / 采样：[server.log](../../../experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long/server.log)；[gpu.csv](../../../experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long/gpu.csv)；[exit-code](../../../experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long/exit-code)
 - 相关说明：未记录
 - 完整原登记：[registry.csv](../../../experiments/registry.csv)（登记序号见上；同一run可有多个阶段）

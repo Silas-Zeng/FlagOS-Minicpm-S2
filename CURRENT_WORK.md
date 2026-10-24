@@ -1,11 +1,14 @@
 # 当前工作与接续入口
 
-更新：2026-10-24（北京时间）。已恢复持续优化，当前主线为含队友 PR24 的 `1ad9a708`；已完成本实例移植短验和一次抢占观察，单次 warmed 恢复窗口 GPU 诊断 `20261024T113346Z-pr24-resume-native-context16k-long` 已启动，结束后补充结论。受测有收益的方法按用户授权提交并合并 PR。
+更新：2026-10-24（北京时间）。当前主线为含队友 PR24 的 `1ad9a708`；移植短验、CPU抢占观察和GPU恢复窗口均已结束并回收。目标Attention的局部计算预算支持下一步KV SAVE/FULL最短正确性验证，尚未证明新端到端收益。受测有收益的方法按用户授权提交并合并 PR。
+
+- 首次探针误拒绝原生 `@managed_inference_mode` wrapper，smoke HTTP500、正式32请求未发；[失败原件](experiments/framework/20261024T113346Z-pr24-resume-native-context16k-long-control/state.json)保留。修正后的114500轮32成功，native窗口valid；目标Attention恰168次（4×42）、1018.292405ms。P无需重排但原owner要求FIRST标记，原exit1保留；采样子进程退出后已重新持锁复核空闲并恢复DB，见[恢复凭据](experiments/framework/20261024T114500Z-pr24-resume-native-v2-context16k-long-control/cleanup-recovery.json)。
+- 该profile的KV546528低于无profiler547600；M457冷调优污染MM和总窗口，native MLP的逐请求设备路径也未由轨迹单独证明。因此只用明确归属的目标Attention筛选候选，见[完整分析](analysis/pr24-resume-native-v2-114500.json)和[汇总结论](analysis/pr24-kv-diagnostic.json)。
 
 - 本实例 native SO 9项数值/Graph检查通过；16K/128 ×32请求全成功，P在ready后命中、Q无回退，KV547600。见[移植摘要](experiments/framework/20261024T105037Z-pr24-main-context16k-control/summary.json)。
 - 16K/1024 ×32请求全成功、1次抢占；准入时APC11536，随后3段重新提交，重叠旧CPU已提交前缀5446。M1441确有新调优，不能把CPU的6.265秒当GPU收益。见[诊断结论](analysis/pr24-kv-diagnostic.json)及[DB差异](analysis/pr24-resume-db-comparison.json)。
 - 该观察driver退出0；owner因monitor sleep短暂未退出而退出1，后续复核其已退出并恢复原DB，原失败与[恢复凭据](experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long-control/cleanup-recovery.json)均保留。
-- 下一步仅采一次已调优条件下的恢复窗口，再决定是否迁移KV SAVE/FULL；观察结果不是优化收益。实验分支 `codex/pr24-kv-diagnostics-20261024`，原始记录由总表与方法页导航。
+- 下一步仅迁移已有KV SAVE/FULL到当前组合并做一次VERIFY1；通过后才做关闭profiler的可比基线/候选对照，不重复采样或旧套件。已完成结果通过[实验PR #4](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/pull/4)批量同步；框架优化仍按方法独立PR。
 
 ## 上阶段官方受测基线
 
