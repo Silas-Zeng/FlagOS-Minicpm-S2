@@ -1,11 +1,19 @@
 # 当前工作与接续入口
 
-更新：2026-10-24。**PR24 同源码隔离编译缓存后，本实例真实 native 路径与完整准确率通过：100/105（95.2381%）。** 这仅适用于新 run `131603`；105037 至 124000 六轮的旧 AOT 失配资格仍撤回，不能追溯恢复为有效性能基线。详见[方法汇总](team/methods/pr24-main.md)。
+更新：2026-10-24。**PR25＋默认缓存身份修复已完成重启语义验证，完整性能尚待当前基线结果。** [方法记录](team/methods/native-cache-identity.md)与[框架 PR35](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/35)已关联；受测源码 `7596cc0`，PR head `35039443` 仅增加中文说明。
+
+- `135749` 的 49 项组件门通过，但检查器误拒带 `<think>` 的正确加法响应，原 exit 1 和失败原件保留。首启运行图是在重启前首次补存，时间与来源限制保留。
+- `141536` 复用上述组件证据，默认缓存重启后 4/4 语义请求正确（含 4908-token prefill），实际复用同一 AOT 与 34 层 native 图。源码/SO 未变，DB 恢复；这不是官方性能或完整准确率，也不把前序 PR24 的 100/105 自动转给本版本。
+- 主智能体已运行 `142819` 当前版本完整规模两轮基线，尚无完成结果；本表暂不登记进行中任务，后续设备安排由主智能体维护。
+
+## PR24 隔离缓存完整准确率（前序独立版本）
+
+**PR24 同源码隔离编译缓存后，本实例真实 native 路径与完整准确率通过：100/105（95.2381%）。** 这仅适用于新 run `131603`；105037 至 124000 六轮的旧 AOT 失配资格仍撤回，不能追溯恢复为有效性能基线。详见[方法汇总](team/methods/pr24-main.md)。
 
 - [准确率复核](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/accuracy-review.json)：105 评审成功、0 请求错误、0 空最终答案；index 83/99/101 达到输出上限，index 101 无可提取答案，全部仍计入 105 分母。官方预测、评审、配置与报告原件均已保留；单次评测不解释为精度提升。
 - [新运行图](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/active-graph/computation_graph.py) SHA `e4ff3193…a33` 含 layer 4–37 共 34 个 native 调用，[图检查](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/active-graph-typed-assignment-check.json)已核；源码仍为 `1ad9a708`、native SO 未变。本轮使用[隔离缓存设置](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/environment-overrides.json)，官方 serve/评测参数不变。
 - 本轮 driver/owner exit 0、DB 恢复 `207f1b…`、source/native 未变；[状态](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/state.json)及[完整原包凭据](experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/archive-receipt.json)保留。此准确率运行不报吞吐或性能收益，结束后态不代表当前设备空闲。
-- 下一步由主智能体继续 PR25 与默认缓存修复的两次启动复验；该后续任务尚未在本记录中给出通过结论，不重复本轮同源码准确率。
+- 本轮源码与后续 PR25＋缓存修复版本分别记录；后续重启语义结果见顶部，不重复本轮同源码准确率。
 
 ## 旧 AOT 图失配：历史六轮资格仍撤回
 

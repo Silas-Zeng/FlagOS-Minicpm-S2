@@ -13,6 +13,7 @@
 
 ## 按方法
 
+- [native 编译缓存身份与重启](methods/native-cache-identity.md)
 - [PR24 真实路径复验与 KV 诊断](methods/pr24-main.md)
 - [省去无消费者的 accepted GPU fill](methods/accepted-fill.md)
 - [计算顺序与采样顺序分离](methods/compute-order.md)

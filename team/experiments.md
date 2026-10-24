@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共216条登记、213个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共218条登记、215个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -194,6 +194,8 @@
 | 天数 BI-V150 | 214 | 2026-10-24T12:22:26.664616+00:00 | [PR24 真实路径复验与 KV 诊断](methods/pr24-main.md) | 旧AOT图失配，模型资格撤回 | 16384/1024/64/32 | 后验修正：本实例旧AOT图失配，PR24真实模型路径资格撤回；保留VERIFY1 KV全字节通过事实，不称有效PR24组合的完整模型正确性或性能。 | [20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long](runs/bi-v150/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long.md) |
 | 天数 BI-V150 | 215 | 2026-10-24T12:40:01.348005+00:00 | [PR24 真实路径复验与 KV 诊断](methods/pr24-main.md) | 旧AOT图失配，模型资格撤回 | 4096/16384/1024/64/256/128 | 旧AOT图失配使完整规模对照异常中止：4K两轮2915.46/2941.09 tok/s、各256请求成功；16K首轮未完成，KV候选未启动，不计收益或有效PR24成绩。 | [20261024T124000Z-pr24-main-fullsize-two-rounds](runs/bi-v150/20261024T124000Z-pr24-main-fullsize-two-rounds.md) |
 | 天数 BI-V150 | 216 | 2026-10-24T13:16:04.368089+00:00 | [PR24 真实路径复验与 KV 诊断](methods/pr24-main.md) | 真实native路径与完整准确率通过 | original_math500_level3/32768/8/105 | 隔离缓存后实际34层native；Math500 Level3 100/105（95.2381%）通过，0请求错误/0空最终。仅本轮准确率，不恢复旧失配轮次资格、不报性能。 | [20261024T131603Z-pr24-isolated-cache-math500](runs/bi-v150/20261024T131603Z-pr24-isolated-cache-math500.md) |
+| 天数 BI-V150 | 217 | 2026-10-24T13:57:49.462019+00:00 | [native 编译缓存身份与重启](methods/native-cache-identity.md) | 检查器格式误拒，原失败保留 | 37/1024/1/1 | 49项组件通过；首启答案85被checker的think格式解析误拒，原失败保留，不记模型算术失败。 | [20261024T135749Z-pr25-cache-first-restart](runs/bi-v150/20261024T135749Z-pr25-cache-first-restart.md) |
+| 天数 BI-V150 | 218 | 2026-10-24T14:15:36.279439+00:00 | [native 编译缓存身份与重启](methods/native-cache-identity.md) | 默认缓存重启语义通过 | 37/4908/1024/1/4 | 默认缓存重启4/4语义正确（含4908token），同AOT与34层native图；仅服务验证，非官方准确率或性能。 | [20261024T141536Z-pr25-cache-restart-recheck](runs/bi-v150/20261024T141536Z-pr25-cache-restart-recheck.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

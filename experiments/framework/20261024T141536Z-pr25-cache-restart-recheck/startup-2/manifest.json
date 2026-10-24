@@ -1,0 +1,51 @@
+{
+  "started_utc": "2026-10-24T14:15:37.517082+00:00",
+  "server_command": [
+    "vllm",
+    "serve",
+    "/workspace/MiniCPM5-2B",
+    "--port",
+    "9031",
+    "--compilation-config",
+    "{\"cudagraph_mode\": \"FULL_DECODE_ONLY\"}",
+    "--served-model-name",
+    "minicpm",
+    "--gpu-memory-utilization",
+    "0.85",
+    "--max-model-len",
+    "131072"
+  ],
+  "source_dir": "/workspace/experiments/minicpm-s2/code/7596cc0-pr25-cache-fix-20261024T1340",
+  "library": "/workspace/experiments/minicpm-s2/scripts/pr25-cache-service-check-20261024T1340/native/biv150_native_w8a8.so",
+  "identity": {
+    "source_files": 487,
+    "library_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd"
+  },
+  "preflight": {
+    "checked_utc": "2026-10-24T14:15:37.646427+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "cpu_before": {
+    "cpu.cfs_quota_us": "600000\n",
+    "cpu.cfs_period_us": "100000\n",
+    "cpu.stat": "nr_periods 341556\nnr_throttled 1790\nthrottled_time 7164803600394\n"
+  },
+  "cache_root": "/root/.cache/vllm",
+  "environment": {
+    "BIV150_NATIVE_W8A8_LIBRARY": "/workspace/experiments/minicpm-s2/scripts/pr25-cache-service-check-20261024T1340/native/biv150_native_w8a8.so",
+    "PYTHONPATH": "/workspace/experiments/minicpm-s2/code/7596cc0-pr25-cache-fix-20261024T1340",
+    "PYTHONUNBUFFERED": "1",
+    "VLLM_DISABLE_COMPILE_CACHE": "0",
+    "VLLM_PLUGINS": "fl"
+  },
+  "removed_environment": [
+    "VLLM_CACHE_ROOT",
+    "TORCHINDUCTOR_CACHE_DIR"
+  ],
+  "cpu_after": {
+    "cpu.cfs_quota_us": "600000\n",
+    "cpu.cfs_period_us": "100000\n",
+    "cpu.stat": "nr_periods 342335\nnr_throttled 1809\nthrottled_time 7230874728366\n"
+  }
+}
