@@ -16,8 +16,10 @@ TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 AVAILABLE = set()
 GROUPS = {
+    'attention-next-k': ('Attention next-K寄存器预取', '在已测affine＋Q-hoist组件上，提前加载下一tile的K以尝试覆盖PV计算。首次逐位/guard/KV/RNG/Q检查通过，原ASM定位门失败、未计时；CPU后核定位到真实load，但其8条路径均在首PV前遇wait/barrier，预期重叠机制不成立，停止本实现。不是数值或已测性能失败。', []),
+    'gqa-identity-rescale': ('GQA恒等rescale跳过', '仅当同组8头的finite最大值严格不变时省去rescale，其他分支与原reducer保留。N33/B40/S16及B32/S4分别完成8组数值/Graph检查，Graph ABBA耗时观察分别+2.308%/+1.058%；未见收益，不推进模型/官方。B32首次空padding验证器异常单列，独立v3修验证器后重测，未修改候选数学。均为随机输入组件，非实际激活重放。', []),
     'current-main-hotspot': ('当前main526热点分析', '16K自然mixed4/FULL8独立诊断，原runner/P/Q/native和服务参数保留。mixed后2步Attention约68.08%可见GPU；FULL只见整图，不能拆内部占比。用于选择优化方向，不报吞吐收益。', []),
-    'attention-affine-pages': ('Attention连续页段寻址', '保持原KV分配与数学，仅对已存在连续物理页段用仿射寻址。真实组件四布局逐位通过，16K耗时下降约6.9%、4K约5.0–5.5%；保留为候选，原四语义及三个真实串行prefill的CPU/GPU页表绑定已通过；混合/P覆盖与官方吞吐尚待。', []),
+    'attention-affine-pages': ('Attention连续页段寻址', '保持原KV分配与数学，对现存连续物理页段用仿射寻址。组件四布局逐位通过、局部耗时下降约5.0–6.9%；原四语义及三个串行prefill页表绑定通过，仅P恒等/C3prefix0。完整官方两档各四轮1536成功，弃首轮4K5741.68/16K4050.10 tok/s，相对main526观察−0.30%/+0.12%；KV546432对547536，不确认净收益、不定基线、不追加105。', []),
     'selected-query-row': ('末层Query精确选行', '仅末层Attention选择需要输出的Query，完整M行K/V仍保留；组件核P映射、metadata、全slot字节及独立参考差异，不是模型准确率或端到端收益。', []),
     'rope-kv-fusion': ('RoPE与KV写入融合', '保持526的RoPE旋转数学与Q/K输出，在同一核追加完整KV写入。生产v2外置autotune元数据，四语义及实际42融合/0旧KV/34native图通过；性能筛选6完整轮未见净正信号，按用户要求早停并封存，不更新基线或追加105。组件正信号、首轮记录/模型失败和全部原始测量分别保留。', []),
     'final-ffn-row-prune': ('末层FFN/o_proj选行与模型对照', '原FFN527及unbacked v3均遇mixed长题不完成；原main526同mixed也失败、精确同请求serial通过，不能归因选行，根因未确认。v3解决S1的AOT检查节点问题并通过三语义；不恢复模型资格、不进性能。原失败保留，不为通过候选强改框架。', []),
@@ -62,6 +64,8 @@ GROUPS = {
     'other': ('其它登记与控制记录', '没有足够字段继续归类的登记；不补猜实验结论。', []),
 }
 CODE = {
+    'attention-next-k': ['experiments/framework/20261025T085807255866Z-attention-next-k-register-component/source/kernel.diff', 'experiments/framework/20261025T085807255866Z-attention-next-k-register-component/source/worker.py', 'experiments/framework/20261025T085807255866Z-attention-next-k-register-component/analysis/posthoc-cpu/result.json'],
+    'gqa-identity-rescale': ['experiments/framework/20261025T090302472109Z-gqa-identity-rescale-v2-hotspot-component/source/kernel.diff', 'experiments/framework/20261025T090302472109Z-gqa-identity-rescale-v2-hotspot-component/source/worker.py', 'experiments/framework/20261025T090302472109Z-gqa-identity-rescale-v2-hotspot-component/source/padding-source.json', 'experiments/framework/20261025T091037578775Z-gqa-identity-rescale-v2-b32-component/source/worker.diff'],
     'current-main-hotspot': ['analysis/current-main-hotspot-20261025/072151-analysis-v2.json', 'analysis/current-main-hotspot-20261025/072151-attribution-check.json', 'analysis/current-main-hotspot-20261025/analyze.py'],
     'attention-affine-pages': ['experiments/framework/20261025T074041Z-attention-affine-pages-model-verify-control/plugin-source/vllm_fl/patches/biv150_attention_affine_pages.py', 'experiments/framework/20261025T071453655585Z-attention-affine-pages-component/source/prototype.py', 'experiments/framework/20261025T071453655585Z-attention-affine-pages-component/source/worker.py'],
     'selected-query-row': ['archive/candidates/20261025-final-rows/final-query-row-model-candidate/candidate.diff', 'experiments/framework/20261025T005351Z-final-query-row-component/state.json', 'experiments/framework/20261025T013820Z-final-query-row-component-v2/state.json', 'experiments/framework/20261025T014029Z-final-query-row-component-v3/state.json'],
@@ -95,8 +99,11 @@ CODE = {
 }
 
 
+BATCH_RESULTS = {'affine_official_no_confirmed_gain': ('官方两档各4轮、1536成功；弃首轮5741.68/4050.10 tok/s，观察−0.30%/+0.12%。KV失配，不确认净收益。', '保留完整结果及局部正信号；未确认净收益，不定新基线、不追加105。', '官方完成，净收益未确认', '原官方4K/16K各四轮、弃首轮；输入4096/16384、输出1024、并发64、每轮256/128请求；官方脚本与服务参数不变。'), 'next_k_mechanism_no_go': ('首次逐位/guard/KV/RNG/Q通过；ASM定位门失败，未计时。CPU后核发现实际PV前wait/barrier，重叠机制NO-GO。', '停止本实现；保留原失败与独立CPU后核，不宣称数值失败或性能回退。', '机制不成立，未计时', '真实affine＋Q-hoist对照；首次组件检查后在ASM定位门退出。CPU后核分析已回收IR，未启动GPU或换页复验。'), 'gqa_padding_checker_failed': ('B32无padding，验证器空切片.all()触发ZeroDivisionError；完整数值检查和计时未形成，不判候选数值失败。', '保留验证器失败；独立v3只修空padding检查，后继结果另列。', '验证器异常，未计时', '实际生产GQA＋reducer的B32/S4组件；首组padding检查异常，未执行完整Graph ABBA。'), 'gqa_rescale_hotspot_negative': ('N33/B40/S16：8组数值/Graph检查通过，event1.280913→1.310480ms（耗时+2.308%）；随机组件负信号。', '保留负结果，不推进模型或官方测试；不将局部差异外推端到端。', '组件检查通过，未见收益', '固定16384随机输入，实际生产GQA＋reducer；8组边界及变输入Graph对fresh基线，关闭profiler的16-call Graph ABBA。'), 'gqa_rescale_b32_negative': ('v3仅修空padding检查；B32/S4的8组数值/Graph通过，event1.029569→1.040463ms（+1.058%），wall+0.949%。', '两档均未见收益，收口保留原件，不推进模型或官方测试。', '组件检查通过，未见收益', '固定16384随机输入，实际生产GQA＋reducer；v3验证器保留原数学及16-call Graph ABBA。run后缀仍v2，源码pins识别v3。')}
+
+
 def group(row):
-    if row['profile_id'] in ('rope-kv-fusion', 'final-ffn-row-prune', 'selected-query-row', 'attention-affine-pages', 'current-main-hotspot'):
+    if row['profile_id'] in ('rope-kv-fusion', 'final-ffn-row-prune', 'selected-query-row', 'attention-affine-pages', 'current-main-hotspot', 'attention-next-k', 'gqa-identity-rescale'):
         return row['profile_id']
     s = (row['profile_id'] + ' ' + row['run_id']).lower()
     if row['profile_id'] == 'launcher_only':
@@ -179,6 +186,8 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     """只摘结果/失败原句，不把审计与库身份搬入主视图。"""
+    if row['status'] in BATCH_RESULTS:
+        return BATCH_RESULTS[row['status']][0][:limit]
     if row['status'] in ('model_compile_failed', 'model_semantic_failed', 'baseline_mixed_failed', 'baseline_mixed_pass', 'baseline_serial_pass', 'selected_query_model_failed', 'selected_query_model_pass'):
         return row['conclusion'][:limit]
     if row['status'] in ('query_component_tp_initialization_failed', 'rope_official_screen_early_stopped', 'query_component_pinning_construction_failed', 'query_component_completed_numerical_unassessed'):
@@ -272,6 +281,8 @@ def result(row, limit=190):
 
 
 def keep(row):
+    if row['status'] in BATCH_RESULTS:
+        return BATCH_RESULTS[row['status']][1]
     if row['status'] == 'affine_model_short_gate_pass':
         return '保留进入原官方吞吐；完整105与混合/P实际覆盖尚待，不声称已恢复旧mixed2资格。'
     if row['status'] == 'current_main_hotspot_completed':
@@ -374,6 +385,8 @@ def keep(row):
 
 
 def how(row):
+    if row['status'] in BATCH_RESULTS:
+        return BATCH_RESULTS[row['status']][3]
     phase = row['phase'].lower()
     if row['phase'] == 'kv_staging_primitive':
         return '独立42层真实页序；双向全字节/guard/event门及三组完整事务wall配对，含pack/scatter与索引，不含模型服务。'
@@ -398,6 +411,8 @@ def code_links(key, page):
 
 
 def status(row):
+    if row['status'] in BATCH_RESULTS:
+        return BATCH_RESULTS[row['status']][2]
     if row['status'] == 'affine_model_short_gate_pass':
         return '原四语义及真实页表绑定通过'
     if row['status'] == 'current_main_hotspot_completed':

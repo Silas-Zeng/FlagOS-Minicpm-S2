@@ -1,17 +1,14 @@
-# 恢复探索：模型对照与新算子候选
+# 当前进展：官方四轮及 Attention 后继已收口
 
-用户已恢复探索。本轮四次模型对照、当前main热点诊断和连续页模型短门均已结束，原件已回收；连续页原官方4K/16K各四轮正在运行，尚无新官方吞吐结论或可合并优化。
+更新：2026-10-25 09:17 UTC。本批5轮已完成，257条登记／254个run；原始结果、失败和清理证据已回收，当前没有GPU任务或自动队列。
 
-- o_proj/FFN 的 S1 首轮被 AOT 中的 `torch._check` 阻断；独立 v3 去掉图内重复边界检查后，S1 长题、加法、乘法通过，mixed 长题仍只返回 `<think>`、用满1024输出。
-- **原 main526 对同一 mixed 请求也失败；同一4652-token长题单独串行答对85（61输出token）。** 因此不能将 mixed 失败直接归因于选行；根因尚未定位，候选仍未获得模型正确性资格。
-- 按用户要求，不为让候选过关强行更改框架、调度、采样或评测口径；受影响选行方案暂停性能。selected-Q 模型门已准备，但没有启动，组件结果不等于模型通过。
-- 连续页区间的 Attention 仿射寻址省每tile四次缓存页号读取及地址依赖，数学保持；四case真实组件通过逐位输出、KV/guard/RNG、换页重提交及Q-hoist、private0/VGPRspill0；16K event耗时下降6.95%/6.93%，4K下降4.99%/5.50%。真实模型短门也已通过，正测原官方吞吐；组件百分比不是整模型收益。
+- **连续页寻址**：原官方两档各四轮、1536请求成功，4K／16K弃首轮均值5741.68／4050.10 tok/s。相对main526仅描述−0.30%／+0.12%；KV546432对547536，未确认净收益、不定基线、不启动105。此前组件和短模型正信号保留。[方法记录](team/methods/attention-affine-pages.md)
+- **next-K预取**：首次组件数值检查通过，但真实编译路径在PV前等待预取，预期重叠未形成。未计时，停止本实现，定位器问题与CPU后核分别保存。[方法记录](team/methods/attention-next-k.md)
+- **GQA恒等缩放**：S16／S4两组8项数值和Graph检查通过，组件耗时分别+2.31%／+1.06%。首次B32验证器空切片失败保留；v3仅修测试器、候选数学未变。两档未见收益，不进入模型／官方。[方法记录](team/methods/gqa-identity-rescale.md)
+- **准确率边界**：main526完整105仍未确认；原main与选行候选同mixed长题失败、同题串行答对，根因未定，不为候选强改框架。selected-Q模型门未启动。
+- **设备终态**：09:12:55 UTC实查68 MiB／0%、9031关闭，所属进程退出，标准DB恢复。[原始回执](experiments/framework/20261025T091037578775Z-gqa-identity-rescale-v2-b32-component/analysis/20261025T0912Z-affine-nextk-gqa-device-final.json)
 
-详情只保留在[末层方法记录](team/methods/final-ffn-row-prune.md)和[实验总表](team/experiments.md)。本轮252条登记/249个run，原始失败状态不改判；四轮源/native未变、DB恢复与清理通过。
-
-本轮补充：074041连续页候选原四语义与三个真实长prefill的CPU/GPU页表逐字绑定通过；实际P恒等/C3prefix0，混合与P重排覆盖尚待。072151当前main短热点诊断通过，mixed后2步Attention占可见GPU约68.08%，FULL只见整图。组件ASM的SGPR spill计数基线30/候选36，存在标量到向量lane搬运；private0与VGPRspill0不代表所有寄存器均无spill。
-
-正在运行：`official/20261025T075732Z-main0bf9-affine-affine-official-four-rounds`（同名`-control/state.json`），owner227332/driver227336，源码527/tree41449b98/native14f，入口`scripts/affine-official-20261025/owner.log`。原官方4K/16K各四轮，DB seed与161030基线同为fb035397；没有自动后继任务。设备由主智能体统一安排，完整105入口已备、未启动。
+接续先看[实验总表](team/experiments.md)与对应方法；本批没有确认可合并的新优化。用户澄清：首暖初筛已有正信号时完成该组，不因后续单轮回退提前停。后续从当前实际热点选择有可信机制的方向，不自动重开已关闭负候选。已有源码、命令与原件未变的验证不用为发布重复。
 
 ## 以下为历史交接
 

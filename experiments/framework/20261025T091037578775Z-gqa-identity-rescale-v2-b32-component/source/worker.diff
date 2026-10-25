@@ -1,0 +1,19 @@
+--- frozen-v2/worker.py
++++ empty-padding-fix-v3/worker.py
+@@ -239,9 +239,13 @@
+             checks = dict(eager_bits=all(same_bits(x, y) for x, y in zip(a.tensors, b.tensors)),
+                 finite=(bool(torch.isfinite(b.out[:B]).all()) if finite else True),
+                 guard=bool((a.out[B:] == -17).all() and (b.out[B:] == -17).all()))
+-            checks["padded_output_zero"] = all(bool((arm.out[active:B] == 0).all()) for arm in arms.values())
+-            checks["padded_partials_untouched"] = all(bool((t[active:B] == -17).all())
+-                for arm in arms.values() for t in (arm.partial, arm.maxima, arm.sums))
++            if active < B:
++                checks["padded_output_zero"] = all(bool((arm.out[active:B] == 0).all()) for arm in arms.values())
++                checks["padded_partials_untouched"] = all(bool((t[active:B] == -17).all())
++                    for arm in arms.values() for t in (arm.partial, arm.maxima, arm.sums))
++            else:
++                checks["padded_output_zero"] = True
++                checks["padded_partials_untouched"] = True
+             failed_eager = [t.cpu() for t in b.tensors] if not checks["eager_bits"] else None
+             for arm in arms.values():
+                 for tensor in arm.tensors:

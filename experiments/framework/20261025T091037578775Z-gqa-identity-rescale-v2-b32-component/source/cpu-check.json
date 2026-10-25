@@ -1,0 +1,45 @@
+{
+  "status": "CPU_ONLY_PASS",
+  "cases": [
+    {
+      "active": 32,
+      "bucket": 32,
+      "corrupt": false,
+      "all_calls": 0,
+      "checks": {
+        "padded_output_zero": true,
+        "padded_partials_untouched": true
+      }
+    },
+    {
+      "active": 33,
+      "bucket": 40,
+      "corrupt": false,
+      "all_calls": 8,
+      "checks": {
+        "padded_output_zero": true,
+        "padded_partials_untouched": true
+      }
+    },
+    {
+      "active": 33,
+      "bucket": 40,
+      "corrupt": true,
+      "all_calls": 6,
+      "checks": {
+        "padded_output_zero": false,
+        "padded_partials_untouched": false
+      }
+    }
+  ],
+  "checks": [
+    "B32零padding不调用all",
+    "B40保留8次非空检查",
+    "B40损坏padding仍拒绝",
+    "其余worker完整AST逐字语义一致",
+    "owner数学与安装生命周期原件不变",
+    "最终Python AST"
+  ],
+  "worker_sha256": "42d864bad2a579402334beaf2ba48f1d41cc1ed4c48c85348f13c50f1606cd3b",
+  "scope": "仅验证器回归；不重跑旧数值/CPU套件，不证明GPU性能"
+}

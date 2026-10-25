@@ -13,6 +13,8 @@
 
 ## 按方法
 
+- [Attention next-K寄存器预取](methods/attention-next-k.md)
+- [GQA恒等rescale跳过](methods/gqa-identity-rescale.md)
 - [当前main526热点分析](methods/current-main-hotspot.md)
 - [Attention连续页段寻址](methods/attention-affine-pages.md)
 - [末层Query精确选行](methods/selected-query-row.md)

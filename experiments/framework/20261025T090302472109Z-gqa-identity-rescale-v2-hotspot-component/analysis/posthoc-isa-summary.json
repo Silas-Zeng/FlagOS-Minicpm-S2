@@ -1,0 +1,315 @@
+{
+  "status": "CLOSED_TWO_NEGATIVE_COMPONENT_SIGNALS",
+  "hotspot_run": "tmp\\resume-exploration-20261025\\gqa-hotspot-extracted\\20261025T090302472109Z-gqa-identity-rescale-v2-hotspot-component",
+  "source_sha256": {
+    "results.json": "2789c9c27383370b3d22089cbe5cc850edeab8f38557c2b804ce6eb57f720448",
+    "ir-baseline\\asm.txt": "23f35c5542044fff6a73fb0bbed012629293a11c901b50305b46b4acc2bd0b39",
+    "ir-candidate\\asm.txt": "323fe485eb7323bfcee5c5598b7ee72a4a2a641d6149a91e90937082687a900f"
+  },
+  "hotspot_summary": {
+    "event": {
+      "baseline_ms": 1.28091299533844,
+      "candidate_ms": 1.3104798197746277,
+      "fraction_saved": -0.023082617276730444
+    },
+    "wall": {
+      "baseline_ms": 1.28671546875,
+      "candidate_ms": 1.31533165625,
+      "fraction_saved": -0.02223971670115965
+    }
+  },
+  "hotspot_checks": [
+    {
+      "case": "dense-random",
+      "all_pass": true
+    },
+    {
+      "case": "graph-changed-q-kv-pages-ragged-zero-tail",
+      "all_pass": true
+    },
+    {
+      "case": "finite-equal-max-negative-zero-v",
+      "all_pass": true
+    },
+    {
+      "case": "finite-equal-max-subnormal-cancellation-v",
+      "all_pass": true
+    },
+    {
+      "case": "finite-max-nonfinite-accumulator",
+      "all_pass": true
+    },
+    {
+      "case": "negative-infinity-max-original-path",
+      "all_pass": true
+    },
+    {
+      "case": "positive-infinity-max-original-path",
+      "all_pass": true
+    },
+    {
+      "case": "restored-dense-before-ABBA",
+      "all_pass": true
+    }
+  ],
+  "resources": {
+    "baseline": {
+      "sgpr_count": 64,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 93,
+      "vgpr_spill_count": 0,
+      "private_segment_fixed_size": 0,
+      "shared": 8192,
+      "compiled_hash": "c44ed4caa048314f475e533a47d072c8460987e9c4036a3217fbd955f644ff19",
+      "actual_occupancy_proven": false
+    },
+    "candidate": {
+      "sgpr_count": 63,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 93,
+      "vgpr_spill_count": 0,
+      "private_segment_fixed_size": 0,
+      "shared": 8192,
+      "compiled_hash": "2b76550c40948ec791fc58d89c910a69423c1332b7f2f93b0dbc40d5250a299c",
+      "actual_occupancy_proven": false
+    },
+    "production": {
+      "sgpr_count": 64,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 93,
+      "vgpr_spill_count": 0,
+      "private_segment_fixed_size": 0,
+      "shared": 8192,
+      "compiled_hash": "c44ed4caa048314f475e533a47d072c8460987e9c4036a3217fbd955f644ff19",
+      "actual_occupancy_proven": false
+    },
+    "reducer": {
+      "sgpr_count": 47,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 22,
+      "vgpr_spill_count": 0,
+      "private_segment_fixed_size": 0,
+      "shared": 1024,
+      "compiled_hash": "72f635045c91a7d03124d0f16dee1da5be8f3cf571b1c6c133dd0ceef329f473",
+      "actual_occupancy_proven": false
+    }
+  },
+  "b32_root_report": {
+    "run": "20261025T091037578775Z-gqa-identity-rescale-v2-b32-component",
+    "checks": 8,
+    "all_pass": true,
+    "event_baseline_ms": 1.029569268,
+    "event_candidate_ms": 1.04046303,
+    "wall_regression_percent": 0.949,
+    "note": "root已实测并回报；此文件分析时B32原件尚未回本代理，数值按root报告，不将S16 ISA替代S4编译。"
+  },
+  "asm_static_paths": {
+    "baseline": [
+      "BB0_3"
+    ],
+    "candidate_fast": [
+      "BB0_4",
+      "BB0_6",
+      "BB0_7",
+      "BB0_3"
+    ],
+    "candidate_slow": [
+      "BB0_4",
+      "BB0_5",
+      "BB0_6",
+      "BB0_3"
+    ]
+  },
+  "asm_static_instruction_counts": {
+    "baseline": 310,
+    "candidate_fast": 309,
+    "candidate_slow": 343
+  },
+  "asm_op_counts": {
+    "baseline": {
+      "sl_sra_b32": 3,
+      "sl_shl_b64": 4,
+      "sl_add_i64": 35,
+      "ml_lsa_load_dword": 1,
+      "sl_mov_b64": 3,
+      "ml_mov_b32": 7,
+      "sl_wait": 42,
+      "ml_mov_v2s_b32": 1,
+      "sl_mul_u64_u32": 2,
+      "sl_mull_u32": 4,
+      "sl_add_i32": 5,
+      "ml_lsa_blkload_x1": 32,
+      "sl_barrier": 2,
+      "ml_slb_store_b32x4": 4,
+      "ml_byte_permute_b32": 17,
+      "ml_slb_store_b32x2": 8,
+      "ml_slb_load_b32x1": 24,
+      "sl_cmp_lt_i32": 1,
+      "ml_matrix_mad_f32_bf16_m16n16k16": 16,
+      "ml_mul_f32": 34,
+      "ml_slb_shuffle_rtn_b32": 18,
+      "ml_max_f32": 10,
+      "ml_sub_f32": 4,
+      "ml_exp_f32": 4,
+      "ml_cvt_bf16_f32": 2,
+      "ml_csel_b32": 4,
+      "ml_cvt_i32_i16": 2,
+      "ml_slb_blkload_x1": 8,
+      "ml_and_b32": 2,
+      "ml_add_f32": 8,
+      "ml_fma_f32": 2,
+      "sl_cbr_wcrnz": 1
+    },
+    "candidate_fast": {
+      "sl_sra_b32": 3,
+      "sl_shl_b64": 4,
+      "sl_add_i64": 35,
+      "ml_lsa_load_dword": 1,
+      "sl_blocl_b64": 1,
+      "sl_mov_b64": 10,
+      "sl_wait": 45,
+      "ml_mov_v2s_b32": 1,
+      "sl_mul_u64_u32": 2,
+      "sl_mull_u32": 4,
+      "sl_add_i32": 5,
+      "ml_lsa_blkload_x1": 32,
+      "sl_barrier": 2,
+      "ml_slb_store_b32x4": 4,
+      "ml_byte_permute_b32": 17,
+      "ml_slb_store_b32x2": 8,
+      "ml_slb_load_b32x1": 24,
+      "ml_mov_b32": 7,
+      "ml_matrix_mad_f32_bf16_m16n16k16": 16,
+      "ml_mul_f32": 2,
+      "ml_slb_shuffle_rtn_b32": 20,
+      "ml_max_f32": 10,
+      "ml_cmp_eq_f32": 2,
+      "ml_abs_f32": 2,
+      "ml_sub_f32": 2,
+      "ml_exp_f32": 2,
+      "ml_cmp_ne_f32": 2,
+      "sl_and_b64": 2,
+      "ml_cvt_bf16_f32": 2,
+      "ml_csel_b32": 6,
+      "ml_add_i32": 3,
+      "ml_cmp_ne_u32": 1,
+      "ml_cvt_i32_i16": 2,
+      "sl_and_savetmsk_b64": 1,
+      "sl_xor_b64": 1,
+      "sl_cbr_tmskaz": 2,
+      "sl_or_savetmsk_b64": 1,
+      "sl_xor_savetmsk_b64": 1,
+      "ml_slb_blkload_x1": 8,
+      "ml_and_b32": 2,
+      "ml_add_f32": 10,
+      "sl_jump": 1,
+      "sl_or_b64": 1,
+      "sl_cmp_lt_i32": 1,
+      "sl_cbr_wcrz": 1
+    },
+    "candidate_slow": {
+      "sl_sra_b32": 3,
+      "sl_shl_b64": 4,
+      "sl_add_i64": 35,
+      "ml_lsa_load_dword": 1,
+      "sl_blocl_b64": 1,
+      "sl_mov_b64": 10,
+      "sl_wait": 44,
+      "ml_mov_v2s_b32": 1,
+      "sl_mul_u64_u32": 2,
+      "sl_mull_u32": 4,
+      "sl_add_i32": 5,
+      "ml_lsa_blkload_x1": 32,
+      "sl_barrier": 2,
+      "ml_slb_store_b32x4": 4,
+      "ml_byte_permute_b32": 17,
+      "ml_slb_store_b32x2": 8,
+      "ml_slb_load_b32x1": 24,
+      "ml_mov_b32": 7,
+      "ml_matrix_mad_f32_bf16_m16n16k16": 16,
+      "ml_mul_f32": 34,
+      "ml_slb_shuffle_rtn_b32": 20,
+      "ml_max_f32": 10,
+      "ml_cmp_eq_f32": 2,
+      "ml_abs_f32": 2,
+      "ml_sub_f32": 4,
+      "ml_exp_f32": 4,
+      "ml_cmp_ne_f32": 2,
+      "sl_and_b64": 2,
+      "ml_cvt_bf16_f32": 2,
+      "ml_csel_b32": 6,
+      "ml_add_i32": 3,
+      "ml_cmp_ne_u32": 1,
+      "ml_cvt_i32_i16": 2,
+      "sl_and_savetmsk_b64": 1,
+      "sl_xor_b64": 1,
+      "sl_cbr_tmskaz": 2,
+      "ml_slb_blkload_x1": 8,
+      "ml_and_b32": 2,
+      "ml_add_f32": 8,
+      "ml_fma_f32": 2,
+      "sl_or_savetmsk_b64": 1,
+      "sl_xor_savetmsk_b64": 1,
+      "sl_or_b64": 1,
+      "sl_cmp_lt_i32": 1,
+      "sl_cbr_wcrz": 1
+    }
+  },
+  "asm_op_deltas": {
+    "candidate_fast": {
+      "ml_abs_f32": 2,
+      "ml_add_f32": 2,
+      "ml_add_i32": 3,
+      "ml_cmp_eq_f32": 2,
+      "ml_cmp_ne_f32": 2,
+      "ml_cmp_ne_u32": 1,
+      "ml_csel_b32": 2,
+      "ml_exp_f32": -2,
+      "ml_fma_f32": -2,
+      "ml_mul_f32": -32,
+      "ml_slb_shuffle_rtn_b32": 2,
+      "ml_sub_f32": -2,
+      "sl_and_b64": 2,
+      "sl_and_savetmsk_b64": 1,
+      "sl_blocl_b64": 1,
+      "sl_cbr_tmskaz": 2,
+      "sl_cbr_wcrnz": -1,
+      "sl_cbr_wcrz": 1,
+      "sl_jump": 1,
+      "sl_mov_b64": 7,
+      "sl_or_b64": 1,
+      "sl_or_savetmsk_b64": 1,
+      "sl_wait": 3,
+      "sl_xor_b64": 1,
+      "sl_xor_savetmsk_b64": 1
+    },
+    "candidate_slow": {
+      "ml_abs_f32": 2,
+      "ml_add_i32": 3,
+      "ml_cmp_eq_f32": 2,
+      "ml_cmp_ne_f32": 2,
+      "ml_cmp_ne_u32": 1,
+      "ml_csel_b32": 2,
+      "ml_slb_shuffle_rtn_b32": 2,
+      "sl_and_b64": 2,
+      "sl_and_savetmsk_b64": 1,
+      "sl_blocl_b64": 1,
+      "sl_cbr_tmskaz": 2,
+      "sl_cbr_wcrnz": -1,
+      "sl_cbr_wcrz": 1,
+      "sl_mov_b64": 7,
+      "sl_or_b64": 1,
+      "sl_or_savetmsk_b64": 1,
+      "sl_wait": 2,
+      "sl_xor_b64": 1,
+      "sl_xor_savetmsk_b64": 1
+    }
+  },
+  "conclusion": "S16实际fast路径省32mul+2exp但增加比较/归约/mask控制流，稳态路径静态指令约309对原310；slow343。静态条数不是周期或吞吐，不能量化退化归因。当前两档实测负，不接生产，不扩矩阵。",
+  "unknown": [
+    "实际条件命中率",
+    "每种指令时延/吞吐和重叠",
+    "mask分支是否在运行时有lane分歧（标量逻辑并不证明真实分歧）",
+    "指令布局/代码体积变化的实际贡献"
+  ]
+}

@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共252条登记、249个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共257条登记、254个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -230,6 +230,11 @@
 | 天数 BI-V150 | 250 | 20261025T071453655585Z | [Attention连续页段寻址](methods/attention-affine-pages.md) | 组件逐位通过，存在局部正信号 | 未记录/未记录/未记录/未记录 | event耗时下降6.95%/6.93%，4K下降4.99%/5.50% | [20261025T071453655585Z-attention-affine-pages-component](runs/bi-v150/20261025T071453655585Z-attention-affine-pages-component.md) |
 | 天数 BI-V150 | 251 | 2026-10-25T07:21:51.426355+00:00 | [当前main526热点分析](methods/current-main-hotspot.md) | 当前路径诊断完成，非吞吐成绩 | 未记录/未记录/未记录/未记录 | mixed4中2D Attention总763.40ms，后2步均236.74ms/约68.08%可见GPU，GEMM稳定80.26ms/步 | [20261025T072151Z-current-main-hotspot-16384](runs/bi-v150/20261025T072151Z-current-main-hotspot-16384.md) |
 | 天数 BI-V150 | 252 | 2026-10-25T07:40:41.842514+00:00 | [Attention连续页段寻址](methods/attention-affine-pages.md) | 原四语义及真实页表绑定通过 | 未记录/未记录/未记录/未记录 | 连续页寻址527/tree41449b98，仅worker安装入口+新helper | [20261025T074041Z-attention-affine-pages-model-verify](runs/bi-v150/20261025T074041Z-attention-affine-pages-model-verify.md) |
+| 天数 BI-V150 | 253 | 2026-10-25T07:57:32+00:00 | [Attention连续页段寻址](methods/attention-affine-pages.md) | 官方完成，净收益未确认 | 未记录/未记录/未记录/未记录 | 官方两档各4轮、1536成功；弃首轮5741.68/4050.10 tok/s，观察−0.30%/+0.12%。KV失配，不确认净收益。 | [20261025T075732Z-main0bf9-affine-affine-official-four-rounds](runs/bi-v150/20261025T075732Z-main0bf9-affine-affine-official-four-rounds.md) |
+| 天数 BI-V150 | 254 | 2026-10-25T08:58:07.255866+00:00 | [Attention next-K寄存器预取](methods/attention-next-k.md) | 机制不成立，未计时 | 未记录/未记录/未记录/未记录 | 首次逐位/guard/KV/RNG/Q通过；ASM定位门失败，未计时。CPU后核发现实际PV前wait/barrier，重叠机制NO-GO。 | [20261025T085807255866Z-attention-next-k-register-component](runs/bi-v150/20261025T085807255866Z-attention-next-k-register-component.md) |
+| 天数 BI-V150 | 255 | 2026-10-25T09:05:42.870699+00:00 | [GQA恒等rescale跳过](methods/gqa-identity-rescale.md) | 验证器异常，未计时 | 未记录/未记录/未记录/未记录 | B32无padding，验证器空切片.all()触发ZeroDivisionError；完整数值检查和计时未形成，不判候选数值失败。 | [20261025T090542870699Z-gqa-identity-rescale-v2-b32-component](runs/bi-v150/20261025T090542870699Z-gqa-identity-rescale-v2-b32-component.md) |
+| 天数 BI-V150 | 256 | 2026-10-25T09:03:02.472109+00:00 | [GQA恒等rescale跳过](methods/gqa-identity-rescale.md) | 组件检查通过，未见收益 | 未记录/未记录/未记录/未记录 | N33/B40/S16：8组数值/Graph检查通过，event1.280913→1.310480ms（耗时+2.308%）；随机组件负信号。 | [20261025T090302472109Z-gqa-identity-rescale-v2-hotspot-component](runs/bi-v150/20261025T090302472109Z-gqa-identity-rescale-v2-hotspot-component.md) |
+| 天数 BI-V150 | 257 | 2026-10-25T09:10:37.578775+00:00 | [GQA恒等rescale跳过](methods/gqa-identity-rescale.md) | 组件检查通过，未见收益 | 未记录/未记录/未记录/未记录 | v3仅修空padding检查；B32/S4的8组数值/Graph通过，event1.029569→1.040463ms（+1.058%），wall+0.949%。 | [20261025T091037578775Z-gqa-identity-rescale-v2-b32-component](runs/bi-v150/20261025T091037578775Z-gqa-identity-rescale-v2-b32-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
