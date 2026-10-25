@@ -18,7 +18,7 @@ AVAILABLE = set()
 GROUPS = {
     'selected-query-row': ('末层Query精确选行', '仅末层Attention选择需要输出的Query，完整M行K/V仍保留；组件核P映射、metadata、全slot字节及独立参考差异，不是模型准确率或端到端收益。', []),
     'rope-kv-fusion': ('RoPE与KV写入融合', '保持526的RoPE旋转数学与Q/K输出，在同一核追加完整KV写入。生产v2外置autotune元数据，四语义及实际42融合/0旧KV/34native图通过；性能筛选6完整轮未见净正信号，按用户要求早停并封存，不更新基线或追加105。组件正信号、首轮记录/模型失败和全部原始测量分别保留。', []),
-    'final-ffn-row-prune': ('最后层FFN前精确选行', '仅在末层FFN前按原GPU logits_indices同步选择hidden与residual，保留全部Attention/KV并dense回填供原runner采样。组件有逐bit与局部耗时信号，但527真实mixed已出现语义失败，不进入性能或代码PR；失败后FX只读取回，不追溯恢复资格。o_proj、pure-prefill与S1派生原型只封存，未上卡。', []),
+    'final-ffn-row-prune': ('末层FFN/o_proj选行与模型对照', '原FFN527及unbacked v3均遇mixed长题不完成；原main526同mixed也失败、精确同请求serial通过，不能归因选行，根因未确认。v3解决S1的AOT检查节点问题并通过三语义；不恢复模型资格、不进性能。原失败保留，不为通过候选强改框架。', []),
     'pr25-kv-current': ('PR25 与缓存修复后的 KV 保存恢复', '当前性能对照基线已更新到main0bf9/tree8671（526文件、SO14f）：161030按官方4K/16K各四轮，第2–4轮5758.72/4045.20 total tok/s，TTFT3626.85/124212.05ms，1536/0；KV547536、初始DBfb035。该版本本实例完整105仍待，不能称最终合格基线。532组合155917 VERIFY1与4题语义门通过；171101正式测量前因目录前缀被图门误拒，原exit1和后验强身份相同证据保留，不记吞吐。172742第二次启动因额外compiled graph日志文案门误拒，仍未发正式benchmark；原exit1与随后failed-log-replay分开保留，CPU回放不算本轮模型资格。174713按更新的筛选规则主动早停：4K第2–4轮5702.26（−0.98%）；16K第2–3轮3966.86对基线同轮4045.15（−1.94%），第4轮不完整，不计官方完整结果或新基线。18:38:01 UTC清理/source/native/DB恢复通过。候选期间另有远端证据归档、背景主机负载未完全匹配，负差仅为实测观察，不严格归因KV，不重复跑解释负差。183929独立42层搬运诊断给出0.31–0.34s毛预算，未计gather/scatter、索引与scratch，不代表staging净收益。535的184509 VERIFY1字节与4题语义门通过；185439两轮4K5403.92/5732.73、16K3824.19/4066.32，768/0、14条完整FULL链。KV546432对526的547536，gain_calculated=false，不确认稳定收益。原测量/清理成功，但外层比较state结构异常，原日志与另存posthoc均保留。192645真实staging primitive三对wall净省322.382/347.481/314.353ms，仅独立微测、不计模型收益。535官方193100已完成两档各四轮、1536/0，第2–4轮4K5703.70/16K4060.24 tok/s，TTFT3635.20/123213.90ms；28条完整FULL链、VERIFY0。20:29:16 UTC清理/source/native/DB恢复通过；KV546432对526547536，比较仅actual_kv失配、gain_calculated=false，差值null，只记组合绝对观察。完整105尚未通过，不设新基线；不含staging primitive。 538 staging的203135已通过真实服务VERIFY1、4/4语义及34native新图，32请求、每向729415680字节、42 kernels＋43 DMA与临时释放通过，KV547536；含回读、非性能或完整105。\n\n队友[PR31](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/31)实际受测e972997、SO271327a0，暖后单轮4K/16K为5766.41/4048.28，准确率102/105；标题Draft且未合并。[原manifest](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/d79b7b1a012943dce867d1adcc29a45e0d7b79bf/docs/evidence/ragged-gqa-segments-20261024/service-final/manifest.json)与[acceptance](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/d79b7b1a012943dce867d1adcc29a45e0d7b79bf/docs/evidence/ragged-gqa-segments-20261024/service-final/acceptance.json)保留其边界。双方源码、SO、轮数及DB/KV不完全同条件，不直接算收益；上述队友状态来自当时读取的固定证据，不代表其后续PR实时状态，不自动更新本实例基线。\n\n前序7596共同基点的两轮筛选继续保留：同KV546432与DB，4K+0.103%/+0.644%但无FULL覆盖，16K+4.728%/−0.493%；仅保留候选，不确认稳定收益，不把旧组合成绩赋给新main。\n\n538的204402两轮筛选：4K5544.36/5615.02、16K3845.32/4078.31，768成功；暖轮对526 R2观察−2.38%/＋0.82%。KV546528≠547536，gain_calculated=false，非因果/稳定收益。清理、source/native与DB恢复通过；保留进入完整测量，本批不提前写其结果或更新基线。\n\n最新收尾：538 staging原官方4K/16K各四轮、1536请求全成功；原后三轮均5724.16/4079.71 tok/s，相对526观察−0.60%/+0.85%。KV546528对547536，比较器actual_kv失配/gain_calculated=false，不称严格因果或稳定净收益。22:31:50 UTC源码/native未变、DB恢复、清理成功。保留长输入信号，暂不定新基线、不追加105。', ['native-quant-cache', 'native-cache-identity']),
     'native-cache-identity': ('native 编译缓存身份与重启', 'PR25叠加native编译缓存身份修复，保留默认缓存目录和官方serve参数。135749完成49项组件门但checker误拒<think>格式，原失败保留；141536复用组件证据、4个语义请求全对（含4908token），同AOT与34层native图重启成功。原首启图证据由重启前首次补存，不能伪称首轮已归档。两轮均非官方准确率或吞吐，不继承前序PR24完整准确率。', ['native-cache-identity']),
     'pr24-main': ('PR24 真实路径复验与 KV 诊断', '131603同源码隔离编译缓存后，实际新图有34个native调用（layer4..37），完整Math500 Level3为100/105通过；0请求错误/0空最终，83/99/101达到输出上限，101无可提取答案。该结果仅证明本轮路径与准确率，不报吞吐或精度提升。105037至124000六轮仍因旧AOT图失配撤回PR24模型资格；standalone9、CPU/trace观察与VERIFY1字节事实保留，旧Attention1.018秒不能作有效PR24预算，也不追溯恢复旧性能资格。默认缓存修复和PR25复验另记。', ['pr24-main']),
@@ -175,6 +175,8 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     """只摘结果/失败原句，不把审计与库身份搬入主视图。"""
+    if row['status'] in ('model_compile_failed', 'model_semantic_failed', 'baseline_mixed_failed', 'baseline_mixed_pass', 'baseline_serial_pass', 'selected_query_model_failed', 'selected_query_model_pass'):
+        return row['conclusion'][:limit]
     if row['status'] in ('query_component_tp_initialization_failed', 'rope_official_screen_early_stopped', 'query_component_pinning_construction_failed', 'query_component_completed_numerical_unassessed'):
         return row['conclusion'][:limit]
     if row['status'] in ('official_staging_completed_kv_mismatch', 'rope_v2_model_gate_pass', 'final_ffn_mixed_semantic_failed'):
@@ -266,6 +268,8 @@ def result(row, limit=190):
 
 
 def keep(row):
+    if row['status'] in ('model_compile_failed', 'model_semantic_failed', 'baseline_mixed_failed', 'baseline_mixed_pass', 'baseline_serial_pass', 'selected_query_model_failed', 'selected_query_model_pass'):
+        return '保留原始结果；模型门失败不进入性能验证，对照结论与候选收益分开。'
     text = row['conclusion']
     state = row['status'].lower()
     if row['status'] in ('query_component_tp_initialization_failed', 'rope_official_screen_early_stopped', 'query_component_pinning_construction_failed', 'query_component_completed_numerical_unassessed'):
@@ -384,6 +388,8 @@ def code_links(key, page):
 
 
 def status(row):
+    if row['status'] in ('model_compile_failed', 'model_semantic_failed', 'baseline_mixed_failed', 'baseline_mixed_pass', 'baseline_serial_pass', 'selected_query_model_failed', 'selected_query_model_pass'):
+        return '真实模型诊断完成，结论与限制见本轮'
     value = row['status'].lower()
     if row['status'] in ('query_component_tp_initialization_failed', 'rope_official_screen_early_stopped', 'query_component_pinning_construction_failed', 'query_component_completed_numerical_unassessed'):
         return '阶段收尾，原始结果及限制已保存'

@@ -1,0 +1,12 @@
+--- v2/runtime
++++ v3/runtime
+@@ -45,9 +45,6 @@
+ 
+     def forward(self, input_ids: torch.Tensor, positions: torch.Tensor,
+                 tail_logits_indices: torch.Tensor) -> torch.Tensor:
+-        torch._check(tail_logits_indices.shape[0] >= 1)
+-        torch._check(tail_logits_indices.shape[0] <= 64)
+-        torch._check(tail_logits_indices.shape[0] < input_ids.shape[0])
+         hidden = self.embed_tokens(input_ids)
+         residual = None
+         for index in range(41):

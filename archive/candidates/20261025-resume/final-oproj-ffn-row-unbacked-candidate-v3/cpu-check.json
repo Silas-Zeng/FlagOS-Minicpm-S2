@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "checked_utc": "2026-10-25T06:28:05.088260+00:00",
+  "checks": [
+    "仅删除forward三条torch._check，剩余forward/装饰器逐AST不变；527中只有runtime变化",
+    "原_cpu_plan实函数：S1/S2/S64合法边界接受，S0/S65/S=M/M超2048拒绝；图外覆盖1<=S<=64、S<M",
+    "原_can_forward实函数将tensor实际M/S强等于CPU证明；错S/错M拒绝，唯一dense调用仍受其控制",
+    "门v3只变候选tree和完整manifest身份，修复parser/请求/owner其余部分/清理逐字复用，AOT缓存仍强制开启"
+  ],
+  "tree": "1efc53c2e47683f3e62c36992dcb49ac31f912dc",
+  "runtime_sha256": "82e18552d748f4e8ba630025217f7d5c09a00cbd2aaa462b8fbfd2816a467f7e",
+  "torch_imported": false,
+  "gpu_used": false,
+  "limitation": "CPU仅证明去除图内重复约束不扩大生产入口输入域；unbacked符号范围与真实Inductor/AOT仍待下一次设备门，旧失败不恢复。"
+}

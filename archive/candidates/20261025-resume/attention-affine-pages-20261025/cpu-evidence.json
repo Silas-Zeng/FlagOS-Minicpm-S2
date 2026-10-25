@@ -1,0 +1,73 @@
+{
+  "status": "CPU_PASS_ONLY",
+  "device_compile": false,
+  "gpu_run": false,
+  "main_commit": "0bf9d2efeaa10144dd7f0ff4597298df029f9328",
+  "source_exact_inverse": true,
+  "normalization_initial_mass": 0,
+  "preparation_correction": "首次 CPU 检查误写 Q 源行 347，未通过；改为当前 main 的 _q_debug_lines 从受控源码定位后重跑。",
+  "old_saved_q_hoist_proof": {
+    "ttgir_q_load_outside_loop": true,
+    "llvm_q_memory_reads_in_loop": 0,
+    "llvm_q_memory_reads_total": 32,
+    "q_read_blocks": [
+      ".lr.ph62",
+      "240",
+      "249",
+      "253",
+      "257",
+      "261",
+      "265",
+      "269",
+      "273",
+      "277",
+      "281",
+      "285",
+      "289",
+      "293",
+      "297",
+      "301",
+      "305"
+    ],
+    "q_debug_nodes": 3,
+    "barrier_calls": 3,
+    "mechanism_pass": true,
+    "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+  },
+  "old_saved_table_reads": {
+    "ttgir_distributed_layouts": 2,
+    "llvm_instructions": 16,
+    "unique_machine_page_loads_per_tile": 4,
+    "machine_loop_header": "BB0_38",
+    "machine_page_loads": [
+      "ml_lsa_load_dword v79, s[20:23], noreg, noreg, #0, ca",
+      "ml_lsa_load_dword v81, s[20:23], noreg, noreg, #0, ca",
+      "ml_lsa_load_dword v83, s[20:23], noreg, noreg, #0, ca",
+      "ml_lsa_load_dword v85, s[20:23], noreg, noreg, #0, ca"
+    ],
+    "cache_modifier": "ca",
+    "uniform_address_and_scalar_reuse": true,
+    "vgpr": 114,
+    "sgpr": 104,
+    "private_bytes": 0,
+    "caveat": "旧真实产物证明去重及循环依赖；不证明新 candidate 资源/收益或当前主线 stall。"
+  },
+  "cpu_mapping": {
+    "fixture_rows": 85,
+    "tokens_checked": 472784,
+    "affine_tiles": 2358,
+    "fallback_tiles": 5136,
+    "P_page_mutation_epoch_reorder_and_shared_prefix_checks": true
+  },
+  "sha256": {
+    "tmp/remote-source/triton_unified_attention.py": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f",
+    "tmp/framework-cache-fix-20261024/vllm_fl/patches/biv150_q_fragment_service.py": "ea361e6b604fbd3c7e3a6b95776892a7bc9d22e9988927db3f7876412c6e310f",
+    "experiments/framework/20261022T135941Z-q-fragment-hoist-gate/source/candidate.ttgir.txt": "e14f459760d505268aa5a6b871c95556f11c1eb009db97fe845c11a2f90f1334",
+    "experiments/framework/20261022T135941Z-q-fragment-hoist-gate/source/candidate.llir.txt": "755d0d17e66437e850328f61b4686957aaa33ff5b1b021c977b2ee1e79678ce9",
+    "experiments/framework/20261022T135941Z-q-fragment-hoist-gate/source/candidate.asm.txt": "16f3c32e66a68f2675350d2d08c50ea7de8fe17a7c4eaabf471fee2377f811c9",
+    "tmp/attention-affine-pages-20261025/prototype.py": "ee253af6d865e644bf75ee31ea7a55b2915bdebb2ecff62c3d59856207df127a",
+    "tmp/attention-affine-pages-20261025/component.patch": "3e5235e6b4ab4db6dc0927efa2fd3500c4255c3bdf2257b9fa9a527a79f0cad6"
+  },
+  "seconds": 0.1324845002964139,
+  "next": "root 审阅后才准备设备组件；必须两臂均用当前 Q-hoist 并含 metadata 完整成本。"
+}

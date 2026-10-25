@@ -15,7 +15,7 @@
 
 - [末层Query精确选行](methods/selected-query-row.md)
 - [RoPE与KV写入融合](methods/rope-kv-fusion.md)
-- [最后层FFN前精确选行](methods/final-ffn-row-prune.md)
+- [末层FFN/o_proj选行与模型对照](methods/final-ffn-row-prune.md)
 - [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md)
 - [native 编译缓存身份与重启](methods/native-cache-identity.md)
 - [PR24 真实路径复验与 KV 诊断](methods/pr24-main.md)

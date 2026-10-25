@@ -1,0 +1,46 @@
+--- main0bf9-normalized-kernel.py
++++ affine-pages-component-kernel.py
+@@ -10,6 +10,7 @@
+     value_cache_ptr,
+     sink_ptr,
+     block_tables_ptr,
++    affine_pages_ptr,
+     seq_lens_ptr,
+     alibi_slopes_ptr,
+     qq_bias_ptr,
+@@ -178,6 +179,12 @@
+         )
+ 
+     block_table_offset = seq_idx * block_table_stride
++    # 每个 CTA 读一次，只消费本批次当前页表的描述符。
++    tl.static_assert(not IS_3D and BLOCK_SIZE == 16 and TILE_SIZE == 64)
++    tl.static_assert(not USE_TD and not USE_TD_QO and KV_QUANT_MODE == 0)
++    affine_lo = tl.load(affine_pages_ptr + seq_idx * 3)
++    affine_hi = tl.load(affine_pages_ptr + seq_idx * 3 + 1)
++    affine_base = tl.load(affine_pages_ptr + seq_idx * 3 + 2)
+ 
+     M = init_softmax_M(
+         sink_ptr, query_offset_1, query_mask_1, segm_idx, BLOCK_M, USE_SINKS, IS_3D
+@@ -226,9 +233,19 @@
+         seq_offset = j * TILE_SIZE + offs_t
+         tile_mask = seq_offset < max_seq_prefix_len
+ 
+-        physical_block_idx = tl.load(
+-            block_tables_ptr + block_table_offset + seq_offset // BLOCK_SIZE
+-        ).to(tl.int64)
++        first_page = j * (TILE_SIZE // BLOCK_SIZE)
++        if (first_page >= affine_lo) & (
++            first_page + TILE_SIZE // BLOCK_SIZE <= affine_hi
++        ):
++            physical_block_idx = (
++                affine_base.to(tl.int64)
++                + seq_offset // BLOCK_SIZE
++                - affine_lo.to(tl.int64)
++            )
++        else:
++            physical_block_idx = tl.load(
++                block_tables_ptr + block_table_offset + seq_offset // BLOCK_SIZE
++            ).to(tl.int64)
+ 
+         if USE_TD:
+             # All TILE_SIZE slots within a single KV tile map to one
