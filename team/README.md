@@ -13,6 +13,9 @@
 
 ## 按方法
 
+- [GQA grouped SIMT页内归约](methods/gqa-grouped-simt.md)
+- [夜间单核硬件计数尝试](methods/night-kernel-counters.md)
+- [Prefill stride常量特化](methods/prefill-stride.md)
 - [Prefill log2域换底](methods/prefill-log2.md)
 - [GQA四页T64计算块](methods/gqa-four-page-t64.md)
 - [native SiLU相邻两列访存](methods/native-silu-vec2.md)

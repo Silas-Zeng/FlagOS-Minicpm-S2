@@ -1,15 +1,14 @@
-# 当前进展：四页T64收口，闭合.cg官方首暖仍负
+# 当前进展：长输入小幅信号，正在新main上配对确认
 
-更新：2026-10-25 16:06 UTC。现 **280条登记／277个run**；PR5已发布head `59c6954`（278条），本批新增N4与闭合.cg官方两轮，准备统一同步。
+更新：2026-10-25 18:23 UTC（北京时间10月26日）。本批 **285条登记／282个run**，通过实验PR5同步；完整结论与原件以[实验总表](team/experiments.md)为入口。
 
-- **Prefill log2仅保留局部信号**：[原件与短记](team/runs/bi-v150/20261025T152608409713Z-prefill-log2-component.md) 的FP64抽样、writer、换值Graph与inputs/RNG通过。Event **8.358478→8.334337ms（省0.2888%）**，wall慢0.9317%；候选第二次submit CPU4.58ms，其余约1.4ms，原轮保留。ASM换底乘法20→0、n_regs114→116/shared32K不变；qmod仅runtime0，不能外推所有精度模式。15:26:34 clean exit0，source/native/DB通过。模型收益未确认，不授官方或105资格；随后固定w4结果见下。
+- **Prefill stride保留待确认**：[方法记录](team/methods/prefill-stride.md)。原组件FP64/Graph/换布局门通过，旧main0915/603的原官方两档各四轮、1536请求全部成功；4K/16K暖均 **5726.63/4052.78 tok/s**，对旧参考 **−0.56%/+0.19%**。实际KV547648对547536，不能称严格因果收益；未跑该候选105，不合并、不更新比赛基线。
+- **固定GQA SIMT停止**：[方法记录](team/methods/gqa-grouped-simt.md)。8类数值/FP64/Graph与真实w8/noMMA门通过，但完整producer+reducer Event **1.279744→44.634184ms（34.8774倍）**，wall同向。性能负结果，不是正确性错误；不进入模型/105、不扫参数，预备生产包不执行。
+- **计数工具失败已留证**：[方法记录](team/methods/night-kernel-counters.md)。Prefill wrapper异常、CLI不能导入；原SQLite有有限来源匹配的57条EVENT，缺定义不换算利用率。GQA参数被拒、未采样。两轮全部timing不作成绩，完整原件已在GPU空窗封存，旧记录未改。
+- **团队main已更新**：[PR51](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/51)合入`34942f7`，修小行BF16不稳定，队友mixed与101/105通过。其不同native/DB/暖法结果不代用本机。旧main的99/105、100/105与mixed失败原件仍保留，不能套给新源码。
+- **当前唯一设备任务**：干净34942/618原官方基线，run `official/20261025T181612Z-main34942f7-official-baseline-four-rounds`，owner293009/driver293024；实际PR51安装与原优化栈已见，尚无完整成绩。完成后仅做一次同条件A配对，有可信净益再跑同源105。PID、日志与操作入口以本地根`CURRENT_WORK.md`和`NIGHT_PLAN.md`为准，避免重复占卡。B已停止，无自动后继。
 
-- **四页T64路线全部收口**：[方法记录](team/methods/gqa-four-page-t64.md)保存三轮；原T64 Event慢126.9037%、固定w4慢64.7108%，最后[真实N4补测](team/runs/bi-v150/20261025T154256643502Z-gqa-four-page-t64-n4-hotspot-component.md) 8类数值/Graph/FP64门通过、mma确为`[1,4]`，但Event **1.278378→1.827178ms（慢42.9294%）**，wall慢42.5630%。SGPR99/spill68、VGPR88/shared32K，实际occupancy未证明。15:43:28 clean exit0、source/native/DB通过。机制实现仍负，不再扫参或进入4K/模型，完整原件留远端、小包62份原字节已回收。
-
-- **当期原main对照已结束**：[140749原件与短记](team/runs/bi-v150/20261025T140749Z-team-main0915-current-official-four-rounds.md)：0915/tree766b完整603、native14f及原官方参数，无`.cg`或stride。4K冷/首暖 **5404.31/5761.99 tok/s**，TTFT5869.37/3729.51ms，512成功；用户提醒已有同生产代码完整基线后主动停止。14:18:14 source/native/DB恢复/清理通过，owner270149/driver270152已结束。run名four-rounds与原failed/SIGTERM/stale stage保留；**只有两轮，16K未测**，不是完整官方成绩，不覆盖旧基线。
-- **GQA `.cg`修正集成后仍未见净收益**：[最新官方短记](team/runs/bi-v150/20261025T154544Z-main0915-gqa-kv-cg-closed-four-rounds.md) 已确认Q-fragment install+selected及compute-order selected，4K冷/首暖 **5073.26/5362.19 tok/s**、两轮512 SUCCESS；首暖对历史5751.88/当期5761.99观察−6.7750%/−6.9386%。按既有策略15:58:19主动SIGTERM，第三轮中断，16K/105不跑。15:58:24 source/native/DB及设备清理通过，原failed/error/stale stage保留。KV547648对547536，非严格因果；无新基线或可合并收益。旧4944.66混有两项优化失活的结论与原件继续保留，不能混同两轮候选。
-- **其余结论不变**：stride、LM-head与head-major组件无净收益并收口；团队main本轮100/105与旧99/105、mixed专项异常并列保留；PR48仍Draft备用，既有成绩沿[总表](team/experiments.md)查阅。
-- **SiLU新结果与接续**：[相邻两列组件](team/methods/native-silu-vec2.md) 15case数值/Graph及独立CPU参考通过，但隔离Event慢6.9849%、完整gate慢2.4404%，14:40:00干净结束、DB207f未变，停止模型推进。[实验PR52](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/52)于15:01:05 UTC已关闭、未合并（head `0e753664`）；冻结16文件及15pins原样保存，生产csrc不改。本次CPU导入不占GPU，设备/PID由根CURRENT统一记录；此前三轮及.cg更正已发布；本批N4与闭合.cg官方结果统一同步，不为上传重测。
+旧负结果、被放弃的实现及原数据沿方法页查阅；本批不制造新的优化代码PR，也不把组合成绩计成独立收益。下文仅为历史交接。
 
 ## 以下为历史交接
 

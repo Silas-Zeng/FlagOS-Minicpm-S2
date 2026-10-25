@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共280条登记、277个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共285条登记、282个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -258,6 +258,11 @@
 | 天数 BI-V150 | 278 | 2026-10-25T15:29:40.014266+00:00 | [GQA四页T64计算块](methods/gqa-four-page-t64.md) | 固定w4仍负，预期布局未形成 | 未记录/未记录/未记录/未记录 | 8类数值/Graph/FP64门通过；Event1.278072→2.105123ms慢64.7108%，wall慢64.3265%；SGPR spill92/shared32K。 | [20261025T152940014266Z-gqa-four-page-t64-w4-hotspot-component](runs/bi-v150/20261025T152940014266Z-gqa-four-page-t64-w4-hotspot-component.md) |
 | 天数 BI-V150 | 279 | 2026-10-25T15:42:56.643502+00:00 | [GQA四页T64计算块](methods/gqa-four-page-t64.md) | N4布局实现，但仍明显负 | 未记录/未记录/未记录/未记录 | 8类数值/Graph/FP64门通过，实际mma=[1,4]；Event1.278378→1.827178ms慢42.9294%，wall慢42.5630%。 | [20261025T154256643502Z-gqa-four-page-t64-n4-hotspot-component](runs/bi-v150/20261025T154256643502Z-gqa-four-page-t64-n4-hotspot-component.md) |
 | 天数 BI-V150 | 280 | 2026-10-25T15:45:44+00:00 | [GQA KV读取缓存策略](methods/gqa-kv-cg.md) | 优化组合恢复，官方首暖仍负 | 未记录/未记录/未记录/未记录 | Q-fragment与compute-order均实际选中；4K冷/首暖5073.26/5362.19 tok/s，512成功，首暖对历史/当期观察−6.7750%/−6.9386%。 | [20261025T154544Z-main0915-gqa-kv-cg-closed-four-rounds](runs/bi-v150/20261025T154544Z-main0915-gqa-kv-cg-closed-four-rounds.md) |
+| 天数 BI-V150 | 281 | 2026-10-25T16:11:35.828367+00:00 | [Prefill stride常量特化](methods/prefill-stride.md) | SGPR spill减少，局部微小正信号 | 未记录/未记录/未记录/未记录 | 旧数值/FP64/Graph与alternate17项通过，跨臂初始/换值逐位；Event8.371886→8.328763ms省0.5151%，wall慢0.5676%。 | [20261025T161135828367Z-prefill-stride-constexpr-component](runs/bi-v150/20261025T161135828367Z-prefill-stride-constexpr-component.md) |
+| 天数 BI-V150 | 282 | 2026-10-25T17:02:35.660423+00:00 | [夜间单核硬件计数尝试](methods/night-kernel-counters.md) | profiler异常，报告无法导入 | 未记录/未记录/未记录/未记录 | wrapper exit -11；worker写完results并有61440B ixkn-rep，离线导入rc255/Unknown device name（空），CLI指标不可用；SQLite原事件只作有限来源核对。 | [20261025T170235660423Z-prefill-one-kernel-counters](runs/bi-v150/20261025T170235660423Z-prefill-one-kernel-counters.md) |
+| 天数 BI-V150 | 283 | 2026-10-25T17:06:52.502004+00:00 | [夜间单核硬件计数尝试](methods/night-kernel-counters.md) | profiler参数被拒，未采样 | 未记录/未记录/未记录/未记录 | ixkn立即exit255：launch-skip参数0无效；未生成results.json或报告，未进入采样。 | [20261025T170652502004Z-gqa-one-kernel-counters](runs/bi-v150/20261025T170652502004Z-gqa-one-kernel-counters.md) |
+| 天数 BI-V150 | 284 | 2026-10-25T17:08:31+00:00 | [Prefill stride常量特化](methods/prefill-stride.md) | 官方完成，净收益未确认 | 未记录/未记录/未记录/未记录 | 原官方两档各4轮、1536成功，实际激活闭合；弃首轮5726.63/4052.78 tok/s，TTFT3637.47/124103.35ms。 | [20261025T170831Z-main0915-prefill-stride-four-rounds](runs/bi-v150/20261025T170831Z-main0915-prefill-stride-four-rounds.md) |
+| 天数 BI-V150 | 285 | 2026-10-25T18:10:07.536717+00:00 | [GQA grouped SIMT页内归约](methods/gqa-grouped-simt.md) | 机制落地，SIMT明显变慢 | 未记录/未记录/未记录/未记录 | 8类原数值/FP64/Graph及实际SIMT机制通过；Event1.279744→44.634184ms（34.8774倍），wall34.6878倍。 | [20261025T181007536717Z-gqa-grouped-simt-hotspot-component](runs/bi-v150/20261025T181007536717Z-gqa-grouped-simt-hotspot-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

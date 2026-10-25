@@ -1,0 +1,5660 @@
+{
+  "status": "component_only_passed",
+  "kind": "\u771f\u5b9e\u540c\u5f62\u72b6 prefill kernel \u7ec4\u4ef6\uff1b\u65e0\u6a21\u578b\u6743\u91cd/\u5b98\u65b9\u6027\u80fd\u7ed3\u8bba",
+  "shape": {
+    "M": 2047,
+    "KV": 16384,
+    "Q_heads": 16,
+    "KV_heads": 2,
+    "D": 128,
+    "page": 16,
+    "page_table_stride": 8192
+  },
+  "candidate": "\u539fnormalized+Q-hoist\u53ea\u5c0611\u9879runtime stride\u7279\u5316constexpr\u5e76\u4fdd\u6301int64\u5730\u5740\uff1b\u6570\u5b66\u4e0d\u53d8",
+  "limitations": [
+    "\u53ea\u6709\u4e00\u4e2a\u5408\u6210\u5f62\u72b6\uff1b\u4e0d\u662f\u5b9e\u9645\u6a21\u578b\u8f93\u51fa\u6216\u5b8c\u6574\u5b98\u65b9\u57fa\u7ebf\u3002",
+    "\u4ec5stride\u7279\u5316\uff1b\u539f\u6d6e\u70b9\u8868\u8fbe\u5f0f\u4e0d\u53d8\uff0c\u72ec\u7acbFP64\u53ca\u6bcf\u81c2Graph\u95e8\u590d\u7528\u3002",
+    "\u8ba1\u65f6\u4e24\u81c2\u76f4\u63a5\u5df2\u6696 Q-hoist \u79c1\u6709 JIT \u7684\u5b8c\u65742D\u8f93\u51fa\uff1b\u5171\u540cwriter/metadata\u4e0d\u8ba1\u5dee\u989d\u3002",
+    "\u4e24\u81c2\u540c\u8f93\u5165\u7f13\u5b58/\u8fdb\u7a0b/ABI\uff0c\u65e2\u65e0affine/next-K\uff0c\u4e5f\u4e0d\u6269\u5927tile\u6216\u51cf\u5c11KV\u5b57\u8282\u3002"
+  ],
+  "timings": [
+    {
+      "calls": 16,
+      "wall_total_ms": 135.476595,
+      "wall_per_call_ms": 8.4672871875,
+      "event_total_ms": 133.947021484375,
+      "event_per_call_ms": 8.371688842773438,
+      "submit_thread_cpu_ns": 1404074,
+      "submit_process_cpu_ns": 1402923,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 771350\nnr_throttled 4214\nthrottled_time 16606199609221",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 771350,
+          "nr_throttled": 4214,
+          "throttled_time": 16606199609221
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 771351\nnr_throttled 4214\nthrottled_time 16606199609221",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 771351,
+          "nr_throttled": 4214,
+          "throttled_time": 16606199609221
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 1,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "current",
+      "pair": "candidate"
+    },
+    {
+      "calls": 16,
+      "wall_total_ms": 134.684041,
+      "wall_per_call_ms": 8.4177525625,
+      "event_total_ms": 133.24156188964844,
+      "event_per_call_ms": 8.327597618103027,
+      "submit_thread_cpu_ns": 1324247,
+      "submit_process_cpu_ns": 1324064,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 771351\nnr_throttled 4214\nthrottled_time 16606199609221",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 771351,
+          "nr_throttled": 4214,
+          "throttled_time": 16606199609221
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 771352\nnr_throttled 4214\nthrottled_time 16606199609221",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 771352,
+          "nr_throttled": 4214,
+          "throttled_time": 16606199609221
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 1,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "stride",
+      "pair": "candidate"
+    },
+    {
+      "calls": 16,
+      "wall_total_ms": 137.883062,
+      "wall_per_call_ms": 8.617691375,
+      "event_total_ms": 133.2788543701172,
+      "event_per_call_ms": 8.329928398132324,
+      "submit_thread_cpu_ns": 4338163,
+      "submit_process_cpu_ns": 4378953,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 771352\nnr_throttled 4214\nthrottled_time 16606199609221",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 771352,
+          "nr_throttled": 4214,
+          "throttled_time": 16606199609221
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 771354\nnr_throttled 4214\nthrottled_time 16606199609221",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 771354,
+          "nr_throttled": 4214,
+          "throttled_time": 16606199609221
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 2,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "stride",
+      "pair": "candidate"
+    },
+    {
+      "calls": 16,
+      "wall_total_ms": 135.552175,
+      "wall_per_call_ms": 8.4720109375,
+      "event_total_ms": 133.95333862304688,
+      "event_per_call_ms": 8.37208366394043,
+      "submit_thread_cpu_ns": 1469916,
+      "submit_process_cpu_ns": 1490588,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 771354\nnr_throttled 4214\nthrottled_time 16606199609221",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 771354,
+          "nr_throttled": 4214,
+          "throttled_time": 16606199609221
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 771355\nnr_throttled 4214\nthrottled_time 16606199609221",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 771355,
+          "nr_throttled": 4214,
+          "throttled_time": 16606199609221
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 1,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "current",
+      "pair": "candidate"
+    }
+  ],
+  "ir": {
+    "current": {
+      "resources": {
+        "compiled_type": "CompiledKernel",
+        "hash": "580e013d517099bd33b98314a90d386e511b6fad8a17285fa314582cf7ca05f2",
+        "n_regs": 114,
+        "n_spills": 0,
+        "metadata": {
+          "num_warps": 8,
+          "num_stages": 1,
+          "shared": 32768,
+          "use_sme": 234881027,
+          "warp_size": 64
+        },
+        "asm_sha256": {
+          "source": "7ce556b4140398858e614632230c09d19c354eebd118213bc920db98bda7ec10",
+          "ttir": "8f048f8590d4b8e6c0987797621d768aed75d4b35b66a7cb0cec3c938dd5e915",
+          "ttgir": "ff570052d4c28486f67eaefebc19bdd4f941a23758ec47aaf62b6590d134ba32",
+          "llir": "c4cccdb9bb04e4a7743844edf52924efc057eea26e829f366616274ad3252771",
+          "asm": "ff0723cd1c29c7e7dd8815344d8cf2e26b5938d16657202eb4079ce919aefede",
+          "cubin": "58d789cbbecbb19d7ec1f0c7a44b3f8e87b2f9130d78ac7d96abadd2eee94ab0"
+        }
+      },
+      "private_bytes": 0
+    },
+    "stride": {
+      "resources": {
+        "compiled_type": "CompiledKernel",
+        "hash": "e1b5e2b24be7801f2c1c57c6d10f78acca0a88cf65a81156b8f6edb8e165caed",
+        "n_regs": 114,
+        "n_spills": 0,
+        "metadata": {
+          "num_warps": 8,
+          "num_stages": 1,
+          "shared": 32768,
+          "use_sme": 114691,
+          "warp_size": 64
+        },
+        "asm_sha256": {
+          "source": "4c1424bfda4aea2e557f7c0c841c96d26d5ff2fb3e84bebf33ba8f569abbf8b6",
+          "ttir": "2780981ac40bff6550032a08ade66d7d2643d4400d1cae9b88a70c2ef8a8a734",
+          "ttgir": "4c256ab1ab40e98043b37ea3b9cf72b1d9ea151b8e80002fe77097107df256ec",
+          "llir": "2ce64e3924328aa8f92af3cdc826ccd035211691d2564f9130572bb9136474cc",
+          "asm": "b346f8d263ff61eb37afb80da6b09a7094b6e8bbaf01fe12a5f6fd7c6f0d5e77",
+          "cubin": "d07c11c29995df21c9c2921de3f615cfeafdcb0072beabe0cde3f3455813df86"
+        }
+      },
+      "private_bytes": 0
+    }
+  },
+  "dispatch": {
+    "index_source_sha256": "47a7108bcf8424a96651021703f8731f1866a0e2eff88a1ac647e574ccf7e61d",
+    "registered": true,
+    "exclude_ops": []
+  },
+  "native_install": {
+    "installed": true,
+    "already": true
+  },
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "initial_writer_exact": {
+    "key": true,
+    "value": true
+  },
+  "actual_abi": {
+    "q": {
+      "shape": [
+        2047,
+        16,
+        128
+      ],
+      "stride": [
+        2048,
+        128,
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "data_ptr": 137807324512256,
+      "storage_offset": 0
+    },
+    "k": {
+      "shape": [
+        1024,
+        16,
+        2,
+        128
+      ],
+      "stride": [
+        8192,
+        256,
+        128,
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "data_ptr": 137807339192320,
+      "storage_offset": 0
+    },
+    "v": {
+      "shape": [
+        1024,
+        16,
+        2,
+        128
+      ],
+      "stride": [
+        8192,
+        256,
+        128,
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "data_ptr": 137807339200512,
+      "storage_offset": 4096
+    },
+    "table": {
+      "shape": [
+        1,
+        8192
+      ],
+      "stride": [
+        8192,
+        1
+      ],
+      "dtype": "torch.int32",
+      "data_ptr": 137807337265664,
+      "storage_offset": 0
+    }
+  },
+  "configs": {
+    "current": {
+      "BLOCK_M": 128,
+      "BLOCK_Q": 16,
+      "TILE_SIZE": 64,
+      "num_warps": 8,
+      "num_stages": 1
+    },
+    "stride": {
+      "BLOCK_M": 128,
+      "BLOCK_Q": 16,
+      "TILE_SIZE": 64,
+      "num_warps": 8,
+      "num_stages": 1
+    }
+  },
+  "q_hoist": {
+    "current": {
+      "ttgir_q_load_outside_loop": true,
+      "llvm_q_memory_reads_in_loop": 0,
+      "llvm_q_memory_reads_total": 32,
+      "q_read_blocks": [
+        ".lr.ph62",
+        "240",
+        "249",
+        "253",
+        "257",
+        "261",
+        "265",
+        "269",
+        "273",
+        "277",
+        "281",
+        "285",
+        "289",
+        "293",
+        "297",
+        "301",
+        "305"
+      ],
+      "q_debug_nodes": 3,
+      "barrier_calls": 3,
+      "mechanism_pass": true,
+      "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+    },
+    "stride": {
+      "ttgir_q_load_outside_loop": true,
+      "llvm_q_memory_reads_in_loop": 0,
+      "llvm_q_memory_reads_total": 32,
+      "q_read_blocks": [
+        ".lr.ph86",
+        "215",
+        "223",
+        "227",
+        "231",
+        "235",
+        "239",
+        "243",
+        "247",
+        "251",
+        "255",
+        "259",
+        "263",
+        "267",
+        "271",
+        "275",
+        "279"
+      ],
+      "q_debug_nodes": 3,
+      "barrier_calls": 3,
+      "mechanism_pass": true,
+      "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+    }
+  },
+  "machine_diagnostic": {
+    "current": {
+      "sgpr": 104,
+      "vgpr": 114,
+      "sgpr_spill": 30,
+      "vgpr_spill": 0,
+      "integer_mul": 103,
+      "limits": "\u5b9e\u9645ASM\u8d44\u6e90/\u6574\u6570\u4e58\u6cd5\u4ec5\u8bca\u65ad\uff0c\u4e0d\u7b49\u4e8e\u52a8\u6001\u603b\u6210\u672c\u6216\u6536\u76ca\u786c\u95e8"
+    },
+    "stride": {
+      "sgpr": 104,
+      "vgpr": 114,
+      "sgpr_spill": 6,
+      "vgpr_spill": 0,
+      "integer_mul": 30,
+      "limits": "\u5b9e\u9645ASM\u8d44\u6e90/\u6574\u6570\u4e58\u6cd5\u4ec5\u8bca\u65ad\uff0c\u4e0d\u7b49\u4e8e\u52a8\u6001\u603b\u6210\u672c\u6216\u6536\u76ca\u786c\u95e8"
+    }
+  },
+  "active_arms": [
+    "current",
+    "stride"
+  ],
+  "specialized_stride_values": {
+    "block_table_stride": 8192,
+    "query_stride_0": 2048,
+    "query_stride_1": 128,
+    "output_stride_0": 2048,
+    "output_stride_1": 128,
+    "stride_k_cache_0": 8192,
+    "stride_k_cache_1": 256,
+    "stride_k_cache_2": 128,
+    "stride_v_cache_0": 8192,
+    "stride_v_cache_1": 256,
+    "stride_v_cache_2": 128
+  },
+  "initial_oracle": {
+    "criteria": "\u6bcf\u81c2 finite \u4e14 max_abs\u22645e-4\u3001relative_l2\u22640.01\uff1b\u4ec5\u672c\u5408\u6210\u8f93\u5165",
+    "arms": {
+      "current": {
+        "max_abs": 0.0001364723083135816,
+        "rms_abs": 3.0695905011833144e-05,
+        "relative_l2": 0.0022837951317542346,
+        "finite": true,
+        "passed": true
+      },
+      "stride": {
+        "max_abs": 0.0001364723083135816,
+        "rms_abs": 3.0695905011833144e-05,
+        "relative_l2": 0.0022837951317542346,
+        "finite": true,
+        "passed": true
+      }
+    }
+  },
+  "initial_sanity": {
+    "current": {
+      "finite": true,
+      "guard": true
+    },
+    "stride": {
+      "finite": true,
+      "guard": true
+    }
+  },
+  "initial_cross_arm": {
+    "bitwise": true,
+    "max_abs": 0.0,
+    "diagnostic_only": true
+  },
+  "changed_writer_exact": {
+    "key": true,
+    "value": true
+  },
+  "changed_input_graph": {
+    "current": {
+      "replay_eager_bits": true,
+      "changed": true,
+      "finite": true,
+      "guard": true
+    },
+    "stride": {
+      "replay_eager_bits": true,
+      "changed": true,
+      "finite": true,
+      "guard": true
+    }
+  },
+  "changed_oracle": {
+    "criteria": "\u6bcf\u81c2 finite \u4e14 max_abs\u22645e-4\u3001relative_l2\u22640.01\uff1b\u4ec5\u672c\u5408\u6210\u8f93\u5165",
+    "arms": {
+      "current": {
+        "max_abs": 4.9663431700840144e-05,
+        "rms_abs": 1.1231169332807277e-05,
+        "relative_l2": 0.002352117474808797,
+        "finite": true,
+        "passed": true
+      },
+      "stride": {
+        "max_abs": 4.9663431700840144e-05,
+        "rms_abs": 1.1231169332807277e-05,
+        "relative_l2": 0.002352117474808797,
+        "finite": true,
+        "passed": true
+      }
+    }
+  },
+  "changed_cross_arm": {
+    "bitwise": true,
+    "max_abs": 0.0,
+    "diagnostic_only": true
+  },
+  "read_only_checks": {
+    "kv": true,
+    "query": true,
+    "key": true,
+    "value": true,
+    "rng": true,
+    "guards": true
+  },
+  "alternate_stride": {
+    "checks": {
+      "current_same_logical_output": true,
+      "current_alternate_graph_hash": true,
+      "current_alternate_graph_bits": true,
+      "stride_same_logical_output": true,
+      "stride_alternate_graph_hash": true,
+      "stride_alternate_graph_bits": true,
+      "new_candidate_identity": true,
+      "five_allowed_strides_changed": true,
+      "source_values_unchanged": true,
+      "padding_unchanged": true,
+      "rng_unchanged": true,
+      "current_original_jit_hash": true,
+      "current_original_eager_bits": true,
+      "current_original_graph_bits": true,
+      "stride_original_jit_hash": true,
+      "stride_original_eager_bits": true,
+      "stride_original_graph_bits": true
+    },
+    "ir": {
+      "current": {
+        "resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "580e013d517099bd33b98314a90d386e511b6fad8a17285fa314582cf7ca05f2",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 234881027,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "7ce556b4140398858e614632230c09d19c354eebd118213bc920db98bda7ec10",
+            "ttir": "8f048f8590d4b8e6c0987797621d768aed75d4b35b66a7cb0cec3c938dd5e915",
+            "ttgir": "ff570052d4c28486f67eaefebc19bdd4f941a23758ec47aaf62b6590d134ba32",
+            "llir": "c4cccdb9bb04e4a7743844edf52924efc057eea26e829f366616274ad3252771",
+            "asm": "ff0723cd1c29c7e7dd8815344d8cf2e26b5938d16657202eb4079ce919aefede",
+            "cubin": "58d789cbbecbb19d7ec1f0c7a44b3f8e87b2f9130d78ac7d96abadd2eee94ab0"
+          }
+        },
+        "private_bytes": 0
+      },
+      "stride": {
+        "resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "90d1ca84ec10d26f1789c70fffe098333ceb368062aac776b24512fca51746d4",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 114688,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "a0f90f6e3c7a4bba4314c2ffd1997f8fc5f14b022a58d94bd156c34cdf59f62e",
+            "ttir": "58cb8bf41acba7591387ab9779b7df7b5ef0b0769c72296377f6d3e2a0b47440",
+            "ttgir": "a755ced18ea2b51502abe9647ef8a6d3a9cecd5dcee672544392a7435c19cadc",
+            "llir": "d0fa8635116b7288582c30f95fc188f91da0754fe4ad57bc1bf903df241d78ed",
+            "asm": "13dc3dadc6c521fe0f030b7c72e0f35f5ed62df3426a7df0187c8ec53d65c654",
+            "cubin": "638d8e7c857802ba1ab9605013b9592756f570a60a4f36c5270d4417bd9fbadd"
+          }
+        },
+        "private_bytes": 0
+      }
+    },
+    "original_candidate_hash": "e1b5e2b24be7801f2c1c57c6d10f78acca0a88cf65a81156b8f6edb8e165caed",
+    "alternate_candidate_hash": "90d1ca84ec10d26f1789c70fffe098333ceb368062aac776b24512fca51746d4",
+    "changed_stride_values": {
+      "query_stride_0": {
+        "original": 2048,
+        "alternate": 4096
+      },
+      "output_stride_0": {
+        "original": 2048,
+        "alternate": 4096
+      },
+      "stride_k_cache_0": {
+        "original": 8192,
+        "alternate": 16384
+      },
+      "stride_v_cache_0": {
+        "original": 8192,
+        "alternate": 16384
+      },
+      "block_table_stride": {
+        "original": 8192,
+        "alternate": 16384
+      }
+    },
+    "limit": "11\u9879\u7279\u5316\uff1b\u539feligible\u5185\u4ec55\u9879\u5141\u8bb8\u6539\u53d8\uff0c\u5176\u4f596\u9879\u56fa\u5b9a\u51e0\u4f55\u4e0d\u653e\u5bbd\uff1b\u5355\u5e8f\u5217seq_idx=0\uff0ctable\u884cstride\u53ea\u8986\u76d6\u7279\u5316\u8eab\u4efd\uff0c\u672a\u6570\u503c\u8986\u76d6\u975e\u96f6\u884c\u504f\u79fb"
+  },
+  "database_unchanged_during_ABBA": true,
+  "summary": {
+    "candidate": {
+      "event": {
+        "current_ms": 8.371886253356934,
+        "other_ms": 8.328763008117676,
+        "fraction_saved": 0.005150959286142509
+      },
+      "wall": {
+        "current_ms": 8.4696490625,
+        "other_ms": 8.51772196875,
+        "fraction_saved": -0.005675902967791746
+      }
+    }
+  },
+  "decision": "\u7ec4\u4ef6\u4fe1\u53f7\uff1b\u5b9e\u9645\u673a\u5668\u7801\u4ec5\u8bca\u65ad\uff0c\u51c0\u6b63\u624d\u7531root\u51b3\u5b9a\u6a21\u578b\u540e\u7ee7\uff1b\u8d1f\u5219\u6536\u53e3",
+  "candidate_manager": {
+    "selected_calls": 2,
+    "fallback_calls": 0,
+    "original_3d_calls": 0,
+    "selected_compiles": 2,
+    "fallback_compiles": 0,
+    "compile_records": [
+      {
+        "normal_hash": "199f45d0ab309a6e3b5e8e96201ba6f6601df96d4624e6e977f3d3b3e582678e",
+        "mode": "selected",
+        "reason": "exact audited Q fragment transform",
+        "ttgir_sha256": "d999e3d2d42314adad2cec33924bc94a2ec4afb70e6e68cf885563eb87cdc6cd",
+        "target": "GPUTarget(backend='corex', arch=71, warp_size=64)",
+        "abi": [
+          [
+            "dict",
+            [
+              [
+                [
+                  "str",
+                  "BLOCK_M"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "BLOCK_Q"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "BLOCK_SIZE"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "CHUNK_LOOKBACK"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "CHUNK_SIZE"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "FP8_MAX"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "FP8_MIN"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "HEAD_SIZE"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "HEAD_SIZE_PADDED"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "IS_3D"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "KV_QUANT_MODE"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "MAX_MM_RANGES"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "NUM_SEGMENTS_PER_SEQ"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "Q_IS_FP8"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "SLIDING_WINDOW"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "TILE_SIZE"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_ALIBI_SLOPES"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_ALIBI_SQRT"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_CAUSAL"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_FP8"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_MM_PREFIX"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_PER_SEQ_CAUSAL"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_QQ_BIAS"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_SINKS"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_SOFTCAP"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_TD"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_TD_QO"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "alibi_slopes_ptr"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "block_table_stride"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "block_tables_ptr"
+                ],
+                [
+                  "str",
+                  "*i32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "k_scale"
+                ],
+                [
+                  "str",
+                  "*fp32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "k_scale_cache_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "key_cache_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "mm_prefix_range_ptr"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "num_queries_per_kv"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "num_query_heads"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "num_seqs"
+                ],
+                [
+                  "str",
+                  "i32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "out_scale"
+                ],
+                [
+                  "str",
+                  "fp32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "output_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "output_stride_0"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "output_stride_1"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "per_seq_causal_ptr"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "q_scale"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "qq_bias_ptr"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "qq_bias_stride_0"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "query_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "query_start_len_ptr"
+                ],
+                [
+                  "str",
+                  "*i32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "query_stride_0"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "query_stride_1"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "scale"
+                ],
+                [
+                  "str",
+                  "fp32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "segm_expsum_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "segm_max_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "segm_output_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "seq_lens_ptr"
+                ],
+                [
+                  "str",
+                  "*i32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "sink_ptr"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "softcap"
+                ],
+                [
+                  "str",
+                  "i32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_k_cache_0"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_k_cache_1"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_k_cache_2"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_k_cache_3"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_ks_blk"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_ks_head"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_ks_slot"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_v_cache_0"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_v_cache_1"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_v_cache_2"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_v_cache_3"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_vs_blk"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_vs_head"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_vs_slot"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "v_scale"
+                ],
+                [
+                  "str",
+                  "*fp32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "v_scale_cache_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "value_cache_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ]
+            ]
+          ],
+          [
+            "dict",
+            [
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      4
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      7
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      8
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      10
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      15
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  16
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      16
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  8
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      17
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  8192
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      18
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  2048
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      19
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      20
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  2048
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      21
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      23
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  16
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      24
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  64
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      25
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      26
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      27
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      28
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      29
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      30
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      31
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      32
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  0
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      33
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  true
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      34
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      35
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      36
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      37
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  0
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      38
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      39
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  8192
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      40
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  256
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      41
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      42
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  1
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      43
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  8192
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      44
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  256
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      45
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      46
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  1
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      48
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  16
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      50
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      51
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  1
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      52
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      53
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      65
+                    ]
+                  ]
+                ],
+                [
+                  "KVQuantMode",
+                  0
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      66
+                    ]
+                  ]
+                ],
+                [
+                  "float",
+                  -448.0
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      67
+                    ]
+                  ]
+                ],
+                [
+                  "float",
+                  448.0
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      68
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  -1
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      69
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  -1
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      70
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      71
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      72
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ]
+            ]
+          ],
+          [
+            "dict",
+            [
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      0
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      1
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      2
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      3
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      5
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      6
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      11
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      12
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      14
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      22
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      47
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      54
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      55
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      56
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      57
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      58
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      59
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      60
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      61
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      62
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      63
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      64
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "options": [
+          "dict",
+          [
+            [
+              [
+                "str",
+                "allowed_dot_input_precisions"
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "str",
+                    "tf32"
+                  ],
+                  [
+                    "str",
+                    "tf32x3"
+                  ],
+                  [
+                    "str",
+                    "ieee"
+                  ],
+                  [
+                    "str",
+                    "bf16x3"
+                  ],
+                  [
+                    "str",
+                    "bf16x6"
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                "str",
+                "arch"
+              ],
+              [
+                "str",
+                "sm71"
+              ]
+            ],
+            [
+              [
+                "str",
+                "backend_name"
+              ],
+              [
+                "str",
+                "corex"
+              ]
+            ],
+            [
+              [
+                "str",
+                "debug"
+              ],
+              [
+                "bool",
+                false
+              ]
+            ],
+            [
+              [
+                "str",
+                "default_dot_input_precision"
+              ],
+              [
+                "str",
+                "tf32"
+              ]
+            ],
+            [
+              [
+                "str",
+                "deprecated_fp8_dot_operand_dtypes"
+              ],
+              [
+                "tuple",
+                []
+              ]
+            ],
+            [
+              [
+                "str",
+                "enable_fp_fusion"
+              ],
+              [
+                "bool",
+                true
+              ]
+            ],
+            [
+              [
+                "str",
+                "enable_reflect_ftz"
+              ],
+              [
+                "bool",
+                true
+              ]
+            ],
+            [
+              [
+                "str",
+                "extern_libs"
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "tuple",
+                    [
+                      [
+                        "str",
+                        "libdevice"
+                      ],
+                      [
+                        "str",
+                        "/usr/local/corex-4.5.0/nvvm/libdevice/libdevice.compute_bi.10.bc"
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                "str",
+                "instrumentation_mode"
+              ],
+              [
+                "str",
+                ""
+              ]
+            ],
+            [
+              [
+                "str",
+                "ir_override"
+              ],
+              [
+                "NoneType",
+                null
+              ]
+            ],
+            [
+              [
+                "str",
+                "launch_cooperative_grid"
+              ],
+              [
+                "bool",
+                false
+              ]
+            ],
+            [
+              [
+                "str",
+                "launch_pdl"
+              ],
+              [
+                "bool",
+                false
+              ]
+            ],
+            [
+              [
+                "str",
+                "max_num_imprecise_acc_default"
+              ],
+              [
+                "int",
+                0
+              ]
+            ],
+            [
+              [
+                "str",
+                "maxnreg"
+              ],
+              [
+                "NoneType",
+                null
+              ]
+            ],
+            [
+              [
+                "str",
+                "num_ctas"
+              ],
+              [
+                "int",
+                1
+              ]
+            ],
+            [
+              [
+                "str",
+                "num_stages"
+              ],
+              [
+                "int",
+                1
+              ]
+            ],
+            [
+              [
+                "str",
+                "num_warps"
+              ],
+              [
+                "int",
+                8
+              ]
+            ],
+            [
+              [
+                "str",
+                "ptx_options"
+              ],
+              [
+                "NoneType",
+                null
+              ]
+            ],
+            [
+              [
+                "str",
+                "ptx_version"
+              ],
+              [
+                "NoneType",
+                null
+              ]
+            ],
+            [
+              [
+                "str",
+                "sanitize_overflow"
+              ],
+              [
+                "bool",
+                true
+              ]
+            ],
+            [
+              [
+                "str",
+                "supported_fp8_dtypes"
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "str",
+                    "fp8e4nv"
+                  ],
+                  [
+                    "str",
+                    "fp8e5"
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                "str",
+                "use_sme"
+              ],
+              [
+                "int",
+                114691
+              ]
+            ],
+            [
+              [
+                "str",
+                "warp_size"
+              ],
+              [
+                "int",
+                64
+              ]
+            ]
+          ]
+        ],
+        "normal_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "199f45d0ab309a6e3b5e8e96201ba6f6601df96d4624e6e977f3d3b3e582678e",
+          "n_regs": null,
+          "n_spills": null,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 114691,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "4c1424bfda4aea2e557f7c0c841c96d26d5ff2fb3e84bebf33ba8f569abbf8b6",
+            "ttir": "2780981ac40bff6550032a08ade66d7d2643d4400d1cae9b88a70c2ef8a8a734",
+            "ttgir": "d999e3d2d42314adad2cec33924bc94a2ec4afb70e6e68cf885563eb87cdc6cd",
+            "llir": "9d6fb4bb8e95de48062d5bd5d649c25a6cc955a7fb206cd24b54f52abad4600d",
+            "asm": "330e02585f9dbe70c11736563b61adf0ea046af28ac3577056c6b4839de3e685",
+            "cubin": "70b47730c0a64e50c4a10f95d43dd83566d2df9418549523e885f99fbf83cbd4"
+          }
+        },
+        "candidate_hash": "e1b5e2b24be7801f2c1c57c6d10f78acca0a88cf65a81156b8f6edb8e165caed",
+        "override_sha256": "6c3ccbec65c8caf229802b4063094bfc3c4c2c9df0c75a9252424985536b5862",
+        "override_filename": "q-fragment-6c3ccbec65c8caf229802b4063094bfc3c4c2c9df0c75a9252424985536b5862.ttgir",
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph86",
+            "215",
+            "223",
+            "227",
+            "231",
+            "235",
+            "239",
+            "243",
+            "247",
+            "251",
+            "255",
+            "259",
+            "263",
+            "267",
+            "271",
+            "275",
+            "279"
+          ],
+          "q_debug_nodes": 3,
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "candidate_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "e1b5e2b24be7801f2c1c57c6d10f78acca0a88cf65a81156b8f6edb8e165caed",
+          "n_regs": null,
+          "n_spills": null,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 114691,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "4c1424bfda4aea2e557f7c0c841c96d26d5ff2fb3e84bebf33ba8f569abbf8b6",
+            "ttir": "2780981ac40bff6550032a08ade66d7d2643d4400d1cae9b88a70c2ef8a8a734",
+            "ttgir": "4c256ab1ab40e98043b37ea3b9cf72b1d9ea151b8e80002fe77097107df256ec",
+            "llir": "2ce64e3924328aa8f92af3cdc826ccd035211691d2564f9130572bb9136474cc",
+            "asm": "b346f8d263ff61eb37afb80da6b09a7094b6e8bbaf01fe12a5f6fd7c6f0d5e77",
+            "cubin": "d07c11c29995df21c9c2921de3f615cfeafdcb0072beabe0cde3f3455813df86"
+          }
+        },
+        "loaded_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "e1b5e2b24be7801f2c1c57c6d10f78acca0a88cf65a81156b8f6edb8e165caed",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 114691,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "4c1424bfda4aea2e557f7c0c841c96d26d5ff2fb3e84bebf33ba8f569abbf8b6",
+            "ttir": "2780981ac40bff6550032a08ade66d7d2643d4400d1cae9b88a70c2ef8a8a734",
+            "ttgir": "4c256ab1ab40e98043b37ea3b9cf72b1d9ea151b8e80002fe77097107df256ec",
+            "llir": "2ce64e3924328aa8f92af3cdc826ccd035211691d2564f9130572bb9136474cc",
+            "asm": "b346f8d263ff61eb37afb80da6b09a7094b6e8bbaf01fe12a5f6fd7c6f0d5e77",
+            "cubin": "d07c11c29995df21c9c2921de3f615cfeafdcb0072beabe0cde3f3455813df86"
+          }
+        }
+      },
+      {
+        "normal_hash": "c63113f6a85f811f3186c9568c94c523ad544d30a07a250d5816e3a5b29bbc9f",
+        "mode": "selected",
+        "reason": "exact audited Q fragment transform",
+        "ttgir_sha256": "cc2fcec8970dec9deecb60885cb41a84a132c67f03ceddac9278f57b666cd674",
+        "target": "GPUTarget(backend='corex', arch=71, warp_size=64)",
+        "abi": [
+          [
+            "dict",
+            [
+              [
+                [
+                  "str",
+                  "BLOCK_M"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "BLOCK_Q"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "BLOCK_SIZE"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "CHUNK_LOOKBACK"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "CHUNK_SIZE"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "FP8_MAX"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "FP8_MIN"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "HEAD_SIZE"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "HEAD_SIZE_PADDED"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "IS_3D"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "KV_QUANT_MODE"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "MAX_MM_RANGES"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "NUM_SEGMENTS_PER_SEQ"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "Q_IS_FP8"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "SLIDING_WINDOW"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "TILE_SIZE"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_ALIBI_SLOPES"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_ALIBI_SQRT"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_CAUSAL"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_FP8"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_MM_PREFIX"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_PER_SEQ_CAUSAL"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_QQ_BIAS"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_SINKS"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_SOFTCAP"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_TD"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "USE_TD_QO"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "alibi_slopes_ptr"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "block_table_stride"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "block_tables_ptr"
+                ],
+                [
+                  "str",
+                  "*i32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "k_scale"
+                ],
+                [
+                  "str",
+                  "*fp32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "k_scale_cache_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "key_cache_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "mm_prefix_range_ptr"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "num_queries_per_kv"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "num_query_heads"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "num_seqs"
+                ],
+                [
+                  "str",
+                  "i32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "out_scale"
+                ],
+                [
+                  "str",
+                  "fp32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "output_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "output_stride_0"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "output_stride_1"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "per_seq_causal_ptr"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "q_scale"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "qq_bias_ptr"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "qq_bias_stride_0"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "query_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "query_start_len_ptr"
+                ],
+                [
+                  "str",
+                  "*i32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "query_stride_0"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "query_stride_1"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "scale"
+                ],
+                [
+                  "str",
+                  "fp32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "segm_expsum_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "segm_max_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "segm_output_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "seq_lens_ptr"
+                ],
+                [
+                  "str",
+                  "*i32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "sink_ptr"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "softcap"
+                ],
+                [
+                  "str",
+                  "i32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_k_cache_0"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_k_cache_1"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_k_cache_2"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_k_cache_3"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_ks_blk"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_ks_head"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_ks_slot"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_v_cache_0"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_v_cache_1"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_v_cache_2"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_v_cache_3"
+                ],
+                [
+                  "str",
+                  "constexpr"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_vs_blk"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_vs_head"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "stride_vs_slot"
+                ],
+                [
+                  "str",
+                  "i64"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "v_scale"
+                ],
+                [
+                  "str",
+                  "*fp32"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "v_scale_cache_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ],
+              [
+                [
+                  "str",
+                  "value_cache_ptr"
+                ],
+                [
+                  "str",
+                  "*bf16"
+                ]
+              ]
+            ]
+          ],
+          [
+            "dict",
+            [
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      4
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      7
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      8
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      10
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      15
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  16
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      16
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  8
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      17
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  16384
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      18
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  4096
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      19
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      20
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  4096
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      21
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      23
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  16
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      24
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  64
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      25
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      26
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      27
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      28
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      29
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      30
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      31
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      32
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  0
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      33
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  true
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      34
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      35
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      36
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      37
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  0
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      38
+                    ]
+                  ]
+                ],
+                [
+                  "NoneType",
+                  null
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      39
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  16384
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      40
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  256
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      41
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      42
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  1
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      43
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  16384
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      44
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  256
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      45
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      46
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  1
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      48
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  16
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      50
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  128
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      51
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  1
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      52
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      53
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      65
+                    ]
+                  ]
+                ],
+                [
+                  "KVQuantMode",
+                  0
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      66
+                    ]
+                  ]
+                ],
+                [
+                  "float",
+                  -448.0
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      67
+                    ]
+                  ]
+                ],
+                [
+                  "float",
+                  448.0
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      68
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  -1
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      69
+                    ]
+                  ]
+                ],
+                [
+                  "int",
+                  -1
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      70
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      71
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      72
+                    ]
+                  ]
+                ],
+                [
+                  "bool",
+                  false
+                ]
+              ]
+            ]
+          ],
+          [
+            "dict",
+            [
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      0
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      1
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      2
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      3
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      5
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      6
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      11
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      12
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      14
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      22
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      47
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      54
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      55
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      56
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      57
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      58
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      59
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      60
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      61
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      62
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      63
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  "tuple",
+                  [
+                    [
+                      "int",
+                      64
+                    ]
+                  ]
+                ],
+                [
+                  "list",
+                  [
+                    [
+                      "list",
+                      [
+                        [
+                          "str",
+                          "tt.divisibility"
+                        ],
+                        [
+                          "int",
+                          4
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "options": [
+          "dict",
+          [
+            [
+              [
+                "str",
+                "allowed_dot_input_precisions"
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "str",
+                    "tf32"
+                  ],
+                  [
+                    "str",
+                    "tf32x3"
+                  ],
+                  [
+                    "str",
+                    "ieee"
+                  ],
+                  [
+                    "str",
+                    "bf16x3"
+                  ],
+                  [
+                    "str",
+                    "bf16x6"
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                "str",
+                "arch"
+              ],
+              [
+                "str",
+                "sm71"
+              ]
+            ],
+            [
+              [
+                "str",
+                "backend_name"
+              ],
+              [
+                "str",
+                "corex"
+              ]
+            ],
+            [
+              [
+                "str",
+                "debug"
+              ],
+              [
+                "bool",
+                false
+              ]
+            ],
+            [
+              [
+                "str",
+                "default_dot_input_precision"
+              ],
+              [
+                "str",
+                "tf32"
+              ]
+            ],
+            [
+              [
+                "str",
+                "deprecated_fp8_dot_operand_dtypes"
+              ],
+              [
+                "tuple",
+                []
+              ]
+            ],
+            [
+              [
+                "str",
+                "enable_fp_fusion"
+              ],
+              [
+                "bool",
+                true
+              ]
+            ],
+            [
+              [
+                "str",
+                "enable_reflect_ftz"
+              ],
+              [
+                "bool",
+                true
+              ]
+            ],
+            [
+              [
+                "str",
+                "extern_libs"
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "tuple",
+                    [
+                      [
+                        "str",
+                        "libdevice"
+                      ],
+                      [
+                        "str",
+                        "/usr/local/corex-4.5.0/nvvm/libdevice/libdevice.compute_bi.10.bc"
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                "str",
+                "instrumentation_mode"
+              ],
+              [
+                "str",
+                ""
+              ]
+            ],
+            [
+              [
+                "str",
+                "ir_override"
+              ],
+              [
+                "NoneType",
+                null
+              ]
+            ],
+            [
+              [
+                "str",
+                "launch_cooperative_grid"
+              ],
+              [
+                "bool",
+                false
+              ]
+            ],
+            [
+              [
+                "str",
+                "launch_pdl"
+              ],
+              [
+                "bool",
+                false
+              ]
+            ],
+            [
+              [
+                "str",
+                "max_num_imprecise_acc_default"
+              ],
+              [
+                "int",
+                0
+              ]
+            ],
+            [
+              [
+                "str",
+                "maxnreg"
+              ],
+              [
+                "NoneType",
+                null
+              ]
+            ],
+            [
+              [
+                "str",
+                "num_ctas"
+              ],
+              [
+                "int",
+                1
+              ]
+            ],
+            [
+              [
+                "str",
+                "num_stages"
+              ],
+              [
+                "int",
+                1
+              ]
+            ],
+            [
+              [
+                "str",
+                "num_warps"
+              ],
+              [
+                "int",
+                8
+              ]
+            ],
+            [
+              [
+                "str",
+                "ptx_options"
+              ],
+              [
+                "NoneType",
+                null
+              ]
+            ],
+            [
+              [
+                "str",
+                "ptx_version"
+              ],
+              [
+                "NoneType",
+                null
+              ]
+            ],
+            [
+              [
+                "str",
+                "sanitize_overflow"
+              ],
+              [
+                "bool",
+                true
+              ]
+            ],
+            [
+              [
+                "str",
+                "supported_fp8_dtypes"
+              ],
+              [
+                "tuple",
+                [
+                  [
+                    "str",
+                    "fp8e4nv"
+                  ],
+                  [
+                    "str",
+                    "fp8e5"
+                  ]
+                ]
+              ]
+            ],
+            [
+              [
+                "str",
+                "use_sme"
+              ],
+              [
+                "int",
+                114688
+              ]
+            ],
+            [
+              [
+                "str",
+                "warp_size"
+              ],
+              [
+                "int",
+                64
+              ]
+            ]
+          ]
+        ],
+        "normal_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "c63113f6a85f811f3186c9568c94c523ad544d30a07a250d5816e3a5b29bbc9f",
+          "n_regs": null,
+          "n_spills": null,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 65536,
+            "use_sme": 114688,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "a0f90f6e3c7a4bba4314c2ffd1997f8fc5f14b022a58d94bd156c34cdf59f62e",
+            "ttir": "58cb8bf41acba7591387ab9779b7df7b5ef0b0769c72296377f6d3e2a0b47440",
+            "ttgir": "cc2fcec8970dec9deecb60885cb41a84a132c67f03ceddac9278f57b666cd674",
+            "llir": "a7a2a93ef9dd10a1a876022da8f889cd7bb26ff2bd03926e3b9aa111c66fd7e7",
+            "asm": "05d6d3d2667c46cdaf132be24f6930907bd3b7ac82d69da52e2bd4e71fe1f417",
+            "cubin": "8b2068591916b0f9028cba7532138e6cbdd2e2e6bb2a63ce59151f1b4f80b650"
+          }
+        },
+        "candidate_hash": "90d1ca84ec10d26f1789c70fffe098333ceb368062aac776b24512fca51746d4",
+        "override_sha256": "715c09c19e633e34c57fc33df41c9fae410b3ed908114f790f0900e7beb9ba2f",
+        "override_filename": "q-fragment-715c09c19e633e34c57fc33df41c9fae410b3ed908114f790f0900e7beb9ba2f.ttgir",
+        "mechanism": {
+          "ttgir_q_load_outside_loop": true,
+          "llvm_q_memory_reads_in_loop": 0,
+          "llvm_q_memory_reads_total": 32,
+          "q_read_blocks": [
+            ".lr.ph86",
+            "215",
+            "223",
+            "227",
+            "231",
+            "235",
+            "239",
+            "243",
+            "247",
+            "251",
+            "255",
+            "259",
+            "263",
+            "267",
+            "271",
+            "275",
+            "279"
+          ],
+          "q_debug_nodes": 3,
+          "barrier_calls": 3,
+          "mechanism_pass": true,
+          "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+        },
+        "candidate_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "90d1ca84ec10d26f1789c70fffe098333ceb368062aac776b24512fca51746d4",
+          "n_regs": null,
+          "n_spills": null,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 114688,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "a0f90f6e3c7a4bba4314c2ffd1997f8fc5f14b022a58d94bd156c34cdf59f62e",
+            "ttir": "58cb8bf41acba7591387ab9779b7df7b5ef0b0769c72296377f6d3e2a0b47440",
+            "ttgir": "a755ced18ea2b51502abe9647ef8a6d3a9cecd5dcee672544392a7435c19cadc",
+            "llir": "d0fa8635116b7288582c30f95fc188f91da0754fe4ad57bc1bf903df241d78ed",
+            "asm": "13dc3dadc6c521fe0f030b7c72e0f35f5ed62df3426a7df0187c8ec53d65c654",
+            "cubin": "638d8e7c857802ba1ab9605013b9592756f570a60a4f36c5270d4417bd9fbadd"
+          }
+        },
+        "loaded_resources": {
+          "compiled_type": "CompiledKernel",
+          "hash": "90d1ca84ec10d26f1789c70fffe098333ceb368062aac776b24512fca51746d4",
+          "n_regs": 114,
+          "n_spills": 0,
+          "metadata": {
+            "num_warps": 8,
+            "num_stages": 1,
+            "shared": 32768,
+            "use_sme": 114688,
+            "warp_size": 64
+          },
+          "asm_sha256": {
+            "source": "a0f90f6e3c7a4bba4314c2ffd1997f8fc5f14b022a58d94bd156c34cdf59f62e",
+            "ttir": "58cb8bf41acba7591387ab9779b7df7b5ef0b0769c72296377f6d3e2a0b47440",
+            "ttgir": "a755ced18ea2b51502abe9647ef8a6d3a9cecd5dcee672544392a7435c19cadc",
+            "llir": "d0fa8635116b7288582c30f95fc188f91da0754fe4ad57bc1bf903df241d78ed",
+            "asm": "13dc3dadc6c521fe0f030b7c72e0f35f5ed62df3426a7df0187c8ec53d65c654",
+            "cubin": "638d8e7c857802ba1ab9605013b9592756f570a60a4f36c5270d4417bd9fbadd"
+          }
+        }
+      }
+    ],
+    "record_errors": [],
+    "omitted_records": 0,
+    "private_jit_cache": true,
+    "active": true,
+    "pid": 280779,
+    "temporary_ir_directory": "/tmp/biv150-q-fragment-0kqz__hr"
+  }
+}

@@ -1,0 +1,81 @@
+--- baseline.py
++++ candidate.py
+@@ -142,6 +142,7 @@
+         + offs_dim[None, :]
+     )
+     Q = tl.load(query_ptr + query_offsets, mask=row_valid[:, None], other=0.0)
++    Qf = Q.to(tl.float32)
+ 
+     block_table_row = block_table_ptr + seq_idx * block_table_stride
+     column_slot = offs_step % PAGE_SIZE
+@@ -158,9 +159,9 @@
+         page = tl.load(block_table_row + position // PAGE_SIZE).to(tl.int64)
+         k_offsets = (
+             page * k_stride_block
+-            + column_slot[None, :] * k_stride_slot
++            + column_slot[:, None] * k_stride_slot
+             + kv_head_idx * k_stride_head
+-            + offs_dim[:, None]
++            + offs_dim[None, :]
+         )
+         v_offsets = (
+             page * v_stride_block
+@@ -171,14 +172,16 @@
+         K = tl.load(key_cache_ptr + k_offsets)
+         V = tl.load(value_cache_ptr + v_offsets)
+ 
+-        scores = tl.dot(Q, K) * softmax_scale_log2e
++        scores = tl.sum(Qf[:, None, :] * K.to(tl.float32)[None, :, :], 2)
++        scores = scores * softmax_scale_log2e
+         new_max = tl.maximum(running_max, tl.max(scores, 1))
+         probability = tl.math.exp2(scores - new_max[:, None])
+         rescale = tl.math.exp2(running_max - new_max)
+         running_sum = running_sum * rescale + tl.sum(probability, 1)
+-        accumulator = accumulator * rescale[:, None] + tl.dot(
+-            probability.to(V.dtype), V
+-        )
++        probability_bf16 = probability.to(V.dtype)
++        pv = tl.sum(probability_bf16.to(tl.float32)[:, :, None]
++                    * V.to(tl.float32)[None, :, :], 1)
++        accumulator = accumulator * rescale[:, None] + pv
+         running_max = new_max
+         position += PAGE_SIZE
+ 
+@@ -189,9 +192,9 @@
+         column_valid = full_upper + offs_step < upper
+         k_offsets = (
+             page * k_stride_block
+-            + column_slot[None, :] * k_stride_slot
++            + column_slot[:, None] * k_stride_slot
+             + kv_head_idx * k_stride_head
+-            + offs_dim[:, None]
++            + offs_dim[None, :]
+         )
+         v_offsets = (
+             page * v_stride_block
+@@ -199,18 +202,20 @@
+             + kv_head_idx * v_stride_head
+             + offs_dim[None, :]
+         )
+-        K = tl.load(key_cache_ptr + k_offsets, mask=column_valid[None, :], other=0.0)
++        K = tl.load(key_cache_ptr + k_offsets, mask=column_valid[:, None], other=0.0)
+         V = tl.load(value_cache_ptr + v_offsets, mask=column_valid[:, None], other=0.0)
+ 
+-        scores = tl.dot(Q, K) * softmax_scale_log2e
++        scores = tl.sum(Qf[:, None, :] * K.to(tl.float32)[None, :, :], 2)
++        scores = scores * softmax_scale_log2e
+         scores = tl.where(column_valid[None, :], scores, float("-inf"))
+         new_max = tl.maximum(running_max, tl.max(scores, 1))
+         probability = tl.math.exp2(scores - new_max[:, None])
+         rescale = tl.math.exp2(running_max - new_max)
+         running_sum = running_sum * rescale + tl.sum(probability, 1)
+-        accumulator = accumulator * rescale[:, None] + tl.dot(
+-            probability.to(V.dtype), V
+-        )
++        probability_bf16 = probability.to(V.dtype)
++        pv = tl.sum(probability_bf16.to(tl.float32)[:, :, None]
++                    * V.to(tl.float32)[None, :, :], 1)
++        accumulator = accumulator * rescale[:, None] + pv
+         running_max = new_max
+ 
+     output_offsets = (

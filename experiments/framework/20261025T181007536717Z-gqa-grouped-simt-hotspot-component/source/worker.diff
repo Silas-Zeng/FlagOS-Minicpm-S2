@@ -1,0 +1,50 @@
+--- template/worker.py
++++ simt/worker.py
+@@ -54,7 +54,7 @@
+ def worker(run, model, shape="hotspot"):
+     result = dict(status="started", kind="生产 kernel+reducer 的随机输入组件", checks=[], timings=[],
+                   limitations=["没有模型权重或实际激活采样；不是模型资格或官方收益",
+-                               "仅 N33/bucket40/S16；page16与split保持，candidate计算tile64",
++                               "仅 N33/bucket40/S16；page16与split保持，candidate固定w8的SIMT广播归约",
+                                "性能仅关闭 profiler 的同输入 CUDA Graph ABBA"])
+     gqa = producer_capture = reducer_capture = None
+     original_producer = original_reducer = None
+@@ -89,7 +89,7 @@
+         if digest(Path(gqa.__file__)) != SOURCE_SHA or digest(HERE / "baseline.py") != SOURCE_SHA:
+             raise RuntimeError("实际 GQA 不是冻结 main526 原件")
+         backend = importlib.import_module("vllm.v1.attention.backends.triton_attn")
+-        candidate = load("gqa_four_page_t64_candidate", HERE / "candidate.py")
++        candidate = load("gqa_grouped_simt_candidate", HERE / "candidate.py")
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("非单卡")
+         torch.cuda.set_device(0)
+@@ -153,7 +153,7 @@
+             grid=grid, reducer_grid=rgrid, builder_segments=metadata.num_par_softmax_segments,
+             source_q_shape=list(kwargs["query_ptr"].shape), source_k_shape=list(kwargs["key_cache_ptr"].shape),
+             source_k_stride=list(kwargs["key_cache_ptr"].stride()), block_table_stride=8192,
+-            rows=8, segments=segments, head_size=128, page_size=16, candidate_compute_tile=64, num_warps=1, num_stages=1,
++            rows=8, segments=segments, head_size=128, page_size=16, candidate_compute_tile=16, candidate_num_warps=8, num_warps=1, num_stages=1,
+             query_start_loc=common.query_start_loc_cpu.tolist(), seq_lens=common.seq_lens.cpu().tolist(),
+             padded_slot_values=common.slot_mapping[active:].cpu().tolist())
+         original_inputs = (query.clone(), cache.clone(), common.seq_lens.clone(), common.block_table_tensor.clone())
+@@ -165,7 +165,7 @@
+             sums = torch.full_like(metadata.softmax_segm_expsum, -17)
+             pk = dict(kwargs, segm_output_ptr=partial.narrow(2, 0, segments), segm_max_ptr=maxima.narrow(2, 0, segments),
+                       segm_expsum_ptr=sums.narrow(2, 0, segments))
+-            if name == "candidate": pk["TILE_SIZE"] = 64
++            if name == "candidate": pk["num_warps"] = 8
+             rk = dict(rkwargs, output_ptr=out[:B], segm_output_ptr=pk["segm_output_ptr"],
+                       segm_max_ptr=pk["segm_max_ptr"], segm_expsum_ptr=pk["segm_expsum_ptr"])
+             def call(kernel=kernel, pk=pk, rk=rk):
+@@ -179,7 +179,11 @@
+         result["resources"] = {name: dump(compiled, run / ("ir-" + name)) for name, compiled in first.items()}
+         result["resources"]["production"] = dump(production_compiled, run / "ir-production")
+         result["resources"]["reducer"] = dump(reducer_compiled, run / "ir-reducer")
++        from simt_evidence import evidence
++        result["simt_mechanism"] = {name: evidence(compiled, name) for name, compiled in first.items()}
+         write(run / "results.json", result)
++        if not result["simt_mechanism"]["candidate"]["valid"]:
++            raise RuntimeError("新SIMT机制未闭合；保留实际IR/ASM并停止")
+         same_bits = lambda a, b: torch.equal(a.view(torch.int16 if a.element_size() == 2 else torch.int32),
+                                             b.view(torch.int16 if b.element_size() == 2 else torch.int32))
+         if not same_bits(production_output, arms["baseline"].out):
