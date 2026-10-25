@@ -1,0 +1,91 @@
+--- f72e/run_component.py
++++ selected-Q/run_component.py
+@@ -1,4 +1,4 @@
+-"""末层FFN选行独立组件owner：复用设备锁、实时空闲门和有界子进程清理。"""
++"""末层selected-Q独立组件owner：复用设备锁、实时空闲门和有界子进程清理。"""
+ import argparse
+ from datetime import datetime, timezone
+ import hashlib
+@@ -50,30 +50,33 @@
+ 
+ def check_assets():
+     pins = read(HERE / 'asset-pins.json')
+-    require({'run_component.py', 'component.py', 'exact_suffix.py'}.issubset(pins), '必要资产未固定')
++    require({'run_component.py', 'component.py', 'query_candidate.py', 'source_identity.py', 'base-source-manifest.json'}.issubset(pins), '必要资产未固定')
+     for name, digest in pins.items():
+         require(sha(HERE / name) == digest, '资产变化: ' + name)
+     return pins
+ 
+ 
+-def worker(run_dir):
++def worker(run_dir, plugin_source, native_library):
+     check_assets()
+-    component = module(HERE / 'component.py', 'final_ffn_row_component')
+-    component.run(Path(run_dir), Path('/workspace/MiniCPM5-2B'))
++    component = module(HERE / 'component.py', 'final_query_row_component')
++    component.run(Path(run_dir), Path('/workspace/MiniCPM5-2B'), Path(plugin_source), Path(native_library))
+ 
+ 
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument('--run-dir', type=Path, required=True)
++    parser.add_argument('--plugin-source', type=Path, required=True)
++    parser.add_argument('--native-library', type=Path, required=True)
+     parser.add_argument('--worker', action='store_true', help=argparse.SUPPRESS)
+     args = parser.parse_args()
+     if args.worker:
+-        return worker(args.run_dir)
++        return worker(args.run_dir, args.plugin_source, args.native_library)
+     import fcntl
+     check_assets()
+     common_path = ROOT / 'scripts/run_accuracy_gate.py'
+     require(sha(common_path) == COMMON_SHA, '原设备清理helper变化')
+-    common = module(common_path, 'final_ffn_common')
++    common = module(common_path, 'final_query_common')
++    identity = module(HERE / 'source_identity.py', 'selected_query_source_identity')
+     run = args.run_dir.resolve()
+     require(run.is_relative_to(ROOT / 'diagnostics') and run != ROOT / 'diagnostics', '只允许独立diagnostics目录')
+     run.mkdir(parents=True, exist_ok=False)
+@@ -89,6 +92,12 @@
+         signal.signal(sig, stop)
+     try:
+         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
++        source = args.plugin_source.resolve(strict=True)
++        library = args.native_library.resolve(strict=True)
++        require(source.is_relative_to(ROOT / 'code') and not args.plugin_source.is_symlink(), '只接受独立code目录')
++        state['framework_source_before'] = identity.check(source, library)
++        state['plugin_source'] = str(source)
++        state['native_library'] = str(library)
+         state['preflight'] = common.preflight()
+         table = subprocess.check_output([common.IXSMI], text=True, timeout=10)
+         query = subprocess.check_output([common.IXSMI, '--query-gpu=memory.used,utilization.gpu', '--format=csv,noheader,nounits'], text=True, timeout=10)
+@@ -100,6 +109,9 @@
+         env = {k: v for k, v in os.environ.items() if not k.startswith(('BIV150_', 'VLLM_FL_BIV150_', 'MINICPM_NATIVE_', 'MINICPM_DECODE_GAP_'))}
+         env.pop('PYTHONPATH', None)
+         env['PYTHONUNBUFFERED'] = '1'
++        env['PYTHONPATH'] = str(source)
++        env['VLLM_PLUGINS'] = 'fl'
++        env['BIV150_NATIVE_W8A8_LIBRARY'] = str(library)
+         state['assets'] = check_assets()
+         (run / 'source').mkdir()
+         for name in [*state['assets'], 'asset-pins.json']:
+@@ -107,7 +119,7 @@
+             shutil.copyfile(HERE / name, run / 'source' / name)
+         save(run / 'manifest.json', state)
+         with (run / 'worker.log').open('x') as log:
+-            process = subprocess.Popen([sys.executable, '-B', str(Path(__file__).resolve()), '--run-dir', str(run), '--worker'],
++            process = subprocess.Popen([sys.executable, '-B', str(Path(__file__).resolve()), '--run-dir', str(run), '--plugin-source', str(source), '--native-library', str(library), '--worker'],
+                                        env=env, stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+         state['worker_pid'] = process.pid
+         save(run / 'manifest.json', state)
+@@ -138,7 +150,9 @@
+                 shutil.copyfile(run / 'database-original.sqlite', DATABASE)
+                 state['database_restored'] = sha(DATABASE) == original
+                 require(state['database_restored'], '原DB恢复失败')
+-            state['source_unchanged'] = check_assets() == state.get('assets')
++            state['framework_source_after'] = identity.check(args.plugin_source, args.native_library)
++            state['framework_unchanged'] = state['framework_source_after'] == state.get('framework_source_before')
++            state['source_unchanged'] = check_assets() == state.get('assets') and state['framework_unchanged']
+             require(state['source_unchanged'], '资产变化')
+         except BaseException:
+             state.update(completed=False, cleanup_error=traceback.format_exc())

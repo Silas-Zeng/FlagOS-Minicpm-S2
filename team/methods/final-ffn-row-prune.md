@@ -2,9 +2,7 @@
 
 # 最后层FFN前精确选行
 
-保留全部Attention/KV，末层FFN前按原GPU logits_indices同步选hidden与residual；211402四shape组件逐bit/变输入Graph通过，有局部正信号，不含后继dense回填成本，模型资格与收益仍待。首次日志失败保留。
-
-最新收尾：FFN527四串行语义均正确但均fallback，随后真实mixed已选择M2048/S2；并发长prefill响应只见未闭合think，1024输出token耗尽/finish_reason=length，未得到85，模型门失败。22:37:26 UTCsource/native未变、DB恢复和清理通过。保留原SSE/响应/源码，不进入性能或优化PR；组件逐bit通过不能替代模型验证，具体根因尚未定位。
+仅在末层FFN前按原GPU logits_indices同步选择hidden与residual，保留全部Attention/KV并dense回填供原runner采样。组件有逐bit与局部耗时信号，但527真实mixed已出现语义失败，不进入性能或代码PR；失败后FX只读取回，不追溯恢复资格。o_proj、pure-prefill与S1派生原型只封存，未上卡。
 
 相关代码：[results.json](../../experiments/framework/20261024T204020Z-final-ffn-row-prune/results.json)；[state.json](../../experiments/framework/20261024T204020Z-final-ffn-row-prune/state.json)；[archive-receipt.json](../../experiments/framework/20261024T204020Z-final-ffn-row-prune/archive-receipt.json)；[results.json](../../experiments/framework/20261024T211402Z-final-ffn-row-prune-logger-v2/results.json)；[state.json](../../experiments/framework/20261024T211402Z-final-ffn-row-prune-logger-v2/state.json)；[archive-receipt.json](../../experiments/framework/20261024T211402Z-final-ffn-row-prune-logger-v2/archive-receipt.json)；[state.json](../../experiments/framework/20261024T223346Z-final-ffn-row-model-verify-control/state.json)；[archive-receipt.json](../../experiments/framework/20261024T223346Z-final-ffn-row-model-verify-control/archive-receipt.json)。
 

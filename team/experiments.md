@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共241条登记、238个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共245条登记、242个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -219,6 +219,10 @@
 | 天数 BI-V150 | 239 | 2026-10-24T21:33:46Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 已完成，结论及限制见本轮 | 未记录/未记录/未记录/1536 | 538 staging原官方4K/16K各四轮、1536请求全成功；原后三轮均5724.16/4079.71 tok/s，相对526观察−0.60%/+0.85%。KV546528对547536，比较器actual_kv | [20261024T213346Z-main0bf9-staging-kv-official-four-rounds](runs/bi-v150/20261024T213346Z-main0bf9-staging-kv-official-four-rounds.md) |
 | 天数 BI-V150 | 240 | 2026-10-24T22:31:55Z | [RoPE与KV写入融合](methods/rope-kv-fusion.md) | 已完成，结论及限制见本轮 | 未记录/未记录/未记录/4语义 | RoPE生产v2/tree4e2f52ce四题语义正确（含4908-token prefill），实际42层融合、0旧KV writer、同fusion Q/K/dep与34层native图/FP/AOT通过。22:33 | [20261024T223155Z-rope-kv-model-verify-v2](runs/bi-v150/20261024T223155Z-rope-kv-model-verify-v2.md) |
 | 天数 BI-V150 | 241 | 2026-10-24T22:33:46Z | [最后层FFN前精确选行](methods/final-ffn-row-prune.md) | 已完成，结论及限制见本轮 | 未记录/未记录/未记录/4串行+2并发 | FFN527四串行语义均正确但均fallback，随后真实mixed已选择M2048/S2；并发长prefill响应只见未闭合think，1024输出token耗尽/finish_reason=length，未得到85， | [20261024T223346Z-final-ffn-row-model-verify](runs/bi-v150/20261024T223346Z-final-ffn-row-model-verify.md) |
+| 天数 BI-V150 | 242 | 2026-10-25T00:53:51Z | [末层Query精确选行](methods/selected-query-row.md) | 阶段收尾，原始结果及限制已保存 | 未记录/未记录/未记录/独立组件，未执行有效case | selected-Q首次组件在原526 native安装链因TP组未初始化而失败，无有效case或双臂数值。00:54:11 UTC源码/native保持、DB恢复、设备清理通过。保留原失败；不将初始化问题算作算法数值负 | [20261025T005351Z-final-query-row-component](runs/bi-v150/20261025T005351Z-final-query-row-component.md) |
+| 天数 BI-V150 | 243 | 2026-10-25T00:56:29Z | [RoPE与KV写入融合](methods/rope-kv-fusion.md) | 阶段收尾，原始结果及限制已保存 | 未记录/未记录/未记录/1280完整请求；后续不完整轮不计 | RoPE528原官方参数完成4K四轮5183.64/5678.16/5777.01/5777.66，暖均5744.28 tok/s，对526暖均约−0.25%；16K已完成3439.95/4008.32，首暖对对应404 | [20261025T005629Z-main0bf9-rope-rope-official-four-rounds](runs/bi-v150/20261025T005629Z-main0bf9-rope-rope-official-four-rounds.md) |
+| 天数 BI-V150 | 244 | 2026-10-25T01:38:20Z | [末层Query精确选行](methods/selected-query-row.md) | 阶段收尾，原始结果及限制已保存 | 未记录/未记录/未记录/首case，双臂未执行 | selected-Q v2真实world1/TP1建立及finally清理成功，但首case在torch.tensor(numpy,pin_memory=True)构造处失败，双臂尚未执行，无数值结论。01:38:40  | [20261025T013820Z-final-query-row-component-v2](runs/bi-v150/20261025T013820Z-final-query-row-component-v2.md) |
+| 天数 BI-V150 | 245 | 2026-10-25T01:40:29Z | [末层Query精确选行](methods/selected-query-row.md) | 阶段收尾，原始结果及限制已保存 | 未记录/未记录/未记录/4独立shape×双臂，非模型请求 | selected-Q v3四shape双臂完整：S32/40/64、M2048及S5/M141；两臂均写完整M行K/V，全部slot逐字、guard、输出guard、P与请求顺序通过，真实GQA/Q路径有调用证据。输出均 | [20261025T014029Z-final-query-row-component-v3](runs/bi-v150/20261025T014029Z-final-query-row-component-v3.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

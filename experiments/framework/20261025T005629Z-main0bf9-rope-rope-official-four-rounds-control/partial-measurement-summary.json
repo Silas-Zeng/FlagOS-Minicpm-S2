@@ -1,0 +1,124 @@
+{
+  "kind": "原benchmark.log事后提取，不改写原CSV或补齐未完成轮次",
+  "original_log_sha256": "a4f30b23e02b1ba3bf11141d4332a747734374de00bf4dfe66bcb79760bd1928",
+  "full_official_completed": false,
+  "completed_runs": [
+    {
+      "input_len": 4096,
+      "output_len": 1024,
+      "concurrency": 64,
+      "round": 1,
+      "metrics": {
+        "successful": 256.0,
+        "failed": 0.0,
+        "total_tok_s": 5183.64,
+        "ttft_ms": 9183.21,
+        "duration_s": 252.86
+      }
+    },
+    {
+      "input_len": 4096,
+      "output_len": 1024,
+      "concurrency": 64,
+      "round": 2,
+      "metrics": {
+        "successful": 256.0,
+        "failed": 0.0,
+        "total_tok_s": 5678.16,
+        "ttft_ms": 3610.96,
+        "duration_s": 230.84
+      }
+    },
+    {
+      "input_len": 4096,
+      "output_len": 1024,
+      "concurrency": 64,
+      "round": 3,
+      "metrics": {
+        "successful": 256.0,
+        "failed": 0.0,
+        "total_tok_s": 5777.01,
+        "ttft_ms": 3580.31,
+        "duration_s": 226.89
+      }
+    },
+    {
+      "input_len": 4096,
+      "output_len": 1024,
+      "concurrency": 64,
+      "round": 4,
+      "metrics": {
+        "successful": 256.0,
+        "failed": 0.0,
+        "total_tok_s": 5777.66,
+        "ttft_ms": 3584.77,
+        "duration_s": 226.86
+      }
+    },
+    {
+      "input_len": 16384,
+      "output_len": 1024,
+      "concurrency": 64,
+      "round": 1,
+      "metrics": {
+        "successful": 128.0,
+        "failed": 0.0,
+        "total_tok_s": 3439.95,
+        "ttft_ms": 142738.65,
+        "duration_s": 647.75
+      }
+    },
+    {
+      "input_len": 16384,
+      "output_len": 1024,
+      "concurrency": 64,
+      "round": 2,
+      "metrics": {
+        "successful": 128.0,
+        "failed": 0.0,
+        "total_tok_s": 4008.32,
+        "ttft_ms": 124305.88,
+        "duration_s": 555.9
+      }
+    }
+  ],
+  "incomplete_runs": [
+    {
+      "input_len": 16384,
+      "output_len": 1024,
+      "concurrency": 64,
+      "round": 3,
+      "metrics": {}
+    }
+  ],
+  "successful_in_complete_runs": 1280,
+  "decision": {
+    "requested_utc": "2026-10-25T01:37:15.535774+00:00",
+    "action": "SIGTERM owned top owner; original finally cleans children and restores DB",
+    "owner_pid": 195607,
+    "owner_command": "/usr/local/bin/python3 -B /workspace/experiments/minicpm-s2/scripts/20261025T005628Z-rope-kv-followups-v2/official/owner.py --verification-control /workspace/experiments/minicpm-s2/framework/20261024T223155Z-rope-kv-model-verify-v2-control --comparison-control /workspace/experiments/minicpm-s2/official/20261024T161030Z-main0bf9-main-official-four-rounds-control ",
+    "completed_4k_rounds": [
+      5183.64,
+      5678.16,
+      5777.01,
+      5777.66
+    ],
+    "completed_16k_rounds": [
+      3439.95,
+      4008.32
+    ],
+    "complete_request_count": 1280,
+    "partial_later_round_counted": false,
+    "baseline_control": "/workspace/experiments/minicpm-s2/official/20261024T161030Z-main0bf9-main-official-four-rounds-control",
+    "candidate_4k_warm_mean": 5744.276666666668,
+    "baseline_4k_warm_mean": 5758.716666666666,
+    "candidate_16k_first_warm": 4008.32,
+    "baseline_16k_first_warm": 4045.32,
+    "reason": "已测4K暖均约-0.25%，16K首暖约-0.91%，没有净正信号；按前几轮筛选策略及用户收尾要求停止，不追加105/新方法。",
+    "limitations": [
+      "KV546432对547536不等，不作严格因果或稳定负差结论。",
+      "本轮不是完整官方两档各四轮；全部已测轮与后续不完整部分原样保留。"
+    ]
+  },
+  "derived_utc": "2026-10-25T01:38:19.176333+00:00"
+}

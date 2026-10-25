@@ -13,6 +13,7 @@
 
 ## 按方法
 
+- [末层Query精确选行](methods/selected-query-row.md)
 - [RoPE与KV写入融合](methods/rope-kv-fusion.md)
 - [最后层FFN前精确选行](methods/final-ffn-row-prune.md)
 - [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md)
