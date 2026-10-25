@@ -16,7 +16,7 @@ TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 AVAILABLE = set()
 GROUPS = {
-    'main-correctness': ('当前基线正确性与恢复', '恢复候选PR48的f2ca8a7/tree5e07、527文件默认关闭native并同步缓存身份；原官方完整105为103/105（98.0952%），105 success/stop、0传输错误/空输出/cap。同源码原mixed也通过：4652输入、15tokens答85，计数299tokens正确。两轮均未设native关闭环境覆盖，实际FP关闭/installed False/FX0native，源码未变、DB与清理通过。PR48仍Draft，尚未合入main；原官方两档各四轮正在量化吞吐代价，未发布成绩或性能基线。\n\n旧main526的99/105 reject和mixed特殊token错误保留；旧467/a42也复现，关闭旧版native后仅该边界恢复，排查范围收敛native路径及执行/内存差异，尚未定位具体kernel或单PR。新恢复候选通过不撤销历史失败，不恢复淘汰候选，不靠重复运行取最好成绩；raw诊断的main526来源标签保留，actual版本以各run state/manifest为准。', ['native-safe-default']),
+    'main-correctness': ('主线复核与native备用方案', 'PR48备用f2ca/tree5e07默认关闭native：原完整105为103/105，原mixed长题答85且计数正确；原官方4K/16K各四轮1536请求成功，弃首轮5271.89/3763.84 tok/s，Mean TTFT4281.63/137244.33ms。实际KV521936，FX0native，源码未变、DB恢复和清理通过。高于官方公告基线2028.01/915.15并满足TTFT要求；低于native-on性能参考5758.72/4045.20，但DB/KV不匹配，不能拆成单内核因果收益。保留备用，PR48仍Draft，不替换性能主线。\n\n官方105使用temperature1/top_p.95，旧main99/105仅说明该轮未达门槛，不能据此认定代码缺陷；temperature0专项重复token另行保留，尚未定位具体kernel/PR。旧1ad9不含PR25也复现，不能直接撤回24/25。用户要求主力继续吞吐探索；团队main0915的原105复核独立进行，不用后续高分抹去旧轮。', ['native-safe-default']),
     'attention-next-k': ('Attention next-K寄存器预取', '在已测affine＋Q-hoist组件上，提前加载下一tile的K以尝试覆盖PV计算。首次逐位/guard/KV/RNG/Q检查通过，原ASM定位门失败、未计时；CPU后核定位到真实load，但其8条路径均在首PV前遇wait/barrier，预期重叠机制不成立，停止本实现。不是数值或已测性能失败。', []),
     'gqa-identity-rescale': ('GQA恒等rescale跳过', '仅当同组8头的finite最大值严格不变时省去rescale，其他分支与原reducer保留。N33/B40/S16及B32/S4分别完成8组数值/Graph检查，Graph ABBA耗时观察分别+2.308%/+1.058%；未见收益，不推进模型/官方。B32首次空padding验证器异常单列，独立v3修验证器后重测，未修改候选数学。均为随机输入组件，非实际激活重放。', []),
     'current-main-hotspot': ('当前main526热点分析', '16K自然mixed4/FULL8独立诊断，原runner/P/Q/native和服务参数保留。mixed后2步Attention约68.08%可见GPU；FULL只见整图，不能拆内部占比。用于选择优化方向，不报吞吐收益。', []),
@@ -114,6 +114,8 @@ BATCH_RESULTS.update({'old467_mixed_token_failed': ('旧467/a42完整组合也�
 BATCH_RESULTS.update({'old467_native_off_mixed_pass': ('旧467仅关闭native后双请求通过：实际图0 native、installed False；长题57tokens答85，计数299tokens正确。', '保留正确性隔离证据，重点收敛native路径及执行/内存差异；不归因具体kernel/PR，不作优化或提交资格，当前main99/105 reject不变。', '关闭native后本边界恢复，仅诊断', '旧467源码/SO不改，沿相同新隔离缓存、原双请求/采样，仅环境清洗后设既有native开关0；保存实际0 native图与installed False证据。')})
 
 BATCH_RESULTS.update({'native_safe_default_accuracy_pass': ('f2ca/527默认关闭native：原完整105为103/105（98.0952%），105 success/stop，0传输错误/空输出/cap；actual FX0native。', '保留本恢复候选完整准确率通过；不继承给未合并main，不恢复旧失败，吞吐代价仍在原官方测量中。', '恢复候选完整105通过', '原105题/采样/服务与评分器不变；清native环境覆盖，实际提交默认关闭及FP/FX/AOT身份、完整源码后态和DB恢复闭合。'), 'native_safe_default_mixed_pass': ('同f2ca/527默认关闭路径：原mixed长题4652输入、15tokens答85，计数299tokens正确，actual FX0native。', '保留同源码边界通过并与本候选103/105配套；PR48仍Draft，不表示全部根因已定位或获得新性能基线。', '恢复候选原mixed通过', 'freshserver原双请求及token返回字段不变；无native覆盖、默认共享cache0，核实际FP/installed False/FX0native及源码/DB/清理。')})
+
+BATCH_RESULTS.update({'native_safe_default_official_complete': ('原官方两档各四轮1536请求全部成功；弃首轮4K/16K为5271.89/3763.84 tok/s，Mean TTFT4281.63/137244.33ms。', '结合同源103/105与mixed通过，保留备用，不替换性能主线；PR48仍Draft。', '备用方案完整官方性能完成', '原0813脚本/官方服务参数与四轮弃首轮口径不变；actual KV521936/FX0native。相对native-on的DB/KV不同，不作单内核因果结论。')})
 
 def group(row):
     if row['profile_id'] in ('rope-kv-fusion', 'final-ffn-row-prune', 'selected-query-row', 'attention-affine-pages', 'current-main-hotspot', 'attention-next-k', 'gqa-identity-rescale', 'main-correctness'):

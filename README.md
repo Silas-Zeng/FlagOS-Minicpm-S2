@@ -20,7 +20,7 @@
 
 | 方法 / 版本 | 结果与处理 |
 |---|---|
-| [当前基线正确性与恢复](team/methods/main-correctness.md) | [PR48](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/48)候选f2ca/527默认关闭native：**103/105（98.0952%）**，原mixed同源码也通过（15tokens答85）。实际0 native、无环境强制覆盖；PR仍Draft未合并。原官方两档各四轮正在测恢复吞吐代价，暂无成绩。旧main99/105 reject、旧mixed及开关对照完整保留；未定位具体kernel/PR，不撤销历史失败 |
+| [主线复核与native备用方案](team/methods/main-correctness.md) | PR48备用f2ca：103/105与原mixed通过；完整官方4K/16K弃首轮 **5271.89/3763.84 tok/s**，TTFT **4281.63/137244.33ms**，1536请求成功。保留备用，PR仍Draft；旧99/105采样结果和temperature0专项异常分别保留，根因未定。主力继续吞吐探索，团队main0915原105复核进行中 |
 | [Attention连续页段寻址](team/methods/attention-affine-pages.md) | 原四语义及串行prefill绑定通过；官方两档各4轮、1536成功，弃首轮4K **5741.68** / 16K **4050.10 tok/s**，相对main526仅观察−0.30%/+0.12%。KV546432对547536，未确认净收益，不定基线/105；组件约5.0–6.9%局部省时保留 |
 | [Attention next-K预取](team/methods/attention-next-k.md) | 首次逐位等检查通过，ASM定位门失败、未计时；CPU后核发现真实PV前wait/barrier，预期重叠机制不成立，停止本实现 |
 | [GQA恒等rescale跳过](team/methods/gqa-identity-rescale.md) | N33/B40/S16及B32/S4各8组数值/Graph通过，组件耗时分别+2.308%/+1.058%；未见收益，不推进模型/官方。B32首次空padding验证器失败单列保留 |

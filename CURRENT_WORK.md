@@ -1,15 +1,11 @@
-# 当前进展：恢复候选准确率及mixed通过，官方吞吐进行中
+# 当前进展：备用测量收尾，主力恢复吞吐探索
 
-更新：2026-10-25 11:30 UTC。现263条登记／260个run。本批追加同一f2ca8a7/tree5e07、527文件恢复候选的完整105与原mixed，原始预测、评审、图和请求证据已回收。
+更新：2026-10-25 12:42 UTC。现264条登记／261个run。
 
-- **完整准确率**：原官方105为 **103/105（98.0952%）**，105 success/stop、0传输错误/空最终或提取/输出cap，11:25:44 UTC完成。[原始判分](experiments/accuracy/20261025T110044Z-native-safe-default-math500-control/accuracy-review.json)
-- **同源mixed**：4652输入、15tokens答85，计数299tokens正确，11:28:09 UTC completed/all_correct通过。两轮均清native环境覆盖而不显式设0，实际提交默认关闭，FP一致、installed False、FX0native，源码未变、DB恢复及清理通过。[原件](experiments/framework/20261025T112705Z-native-safe-default-mixed/diagnostic-summary.json)
-- **代码状态**：[PR48](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/48)仍为Draft，head f2ca，尚未合入main。本轮通过只属于该受测候选；旧main99/105 reject、旧mixed及旧467开关对照保留，不能宣称全部根因已定位。[方法记录](team/methods/main-correctness.md)
-- **进行中**：同源码原官方4K/16K各四轮正在量化恢复吞吐代价；run `official/20261025T113044Z-native-safe-default-throughput`，owner251478／driver251481，入口日志 `scripts/native-safe-default-official/owner.log`。无自动后继，尚无终态成绩，不编造吞吐或确认新性能基线。
-
-按用户最新要求停止继续优化和新增研究；只收尾当前官方测量，再结合历史已验证版本选择准确率可靠、吞吐高的基线，结果出齐前不预设性能基线。
-
-原件中的main526诊断标签是复用模块来源，实际版本以本run state/manifest为准。历史原件及登记不改写，未加载native按实际图证据记录，不伪造native_unchanged字段。以下为历史交接，当前状态以上文为准。
+- **备用版本完整结果**：f2ca/tree5e07默认关闭native，原105为103/105，原mixed通过；原官方4K/16K各四轮1536请求成功，弃首轮5271.89/3763.84 tok/s、TTFT4281.63/137244.33ms。12:32:31 UTC源码/DB/清理通过。actual KV521936，完整原件见实验表；PR48保留Draft备用，不替换性能主线。
+- **当前唯一GPU任务**：团队main0915原官方105复核，run `accuracy/20261025T123523Z-team-main0915-math500`，owner255339/driver255342，日志 `/workspace/experiments/minicpm-s2/scripts/team-main-0915-accuracy/owner.log`，12:35启动，尚无评分。原native14f与采样参数不变，没有新增优化或自动后继。
+- **探索主线**：用户要求将主力转向吞吐。CPU并行准备未重复的Attention分页/缓存策略及LM-head组件；未测方案不写成收益，不占队友PR38/33/36/37/44线路。异常只保留一次有边界的薄诊断，当前未启动。
+- **解释边界**：旧main99/105是temperature1采样评测该轮未达标，不单独证明代码缺陷；temperature0专项异常独立保留。没有证据直接判PR24/25错误，不撤销历史结果。官方公告性能基线2028.01/915.15与TTFT11573.53/599262.03已核；历史1905.46/861.99仅为本方原版复测。
 
 ## 以下为历史交接
 
