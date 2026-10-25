@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共278条登记、275个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共280条登记、277个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -256,6 +256,8 @@
 | 天数 BI-V150 | 276 | 2026-10-25T15:13:03.364296+00:00 | [GQA四页T64计算块](methods/gqa-four-page-t64.md) | 组件数值通过，T64明显更慢 | 未记录/未记录/未记录/未记录 | 8类数值/Graph/FP64抽样门通过；Event1.276535→2.896506ms，慢126.9037%；SGPR spill0→138、shared8K→32K。 | [20261025T151303364296Z-gqa-four-page-t64-hotspot-component](runs/bi-v150/20261025T151303364296Z-gqa-four-page-t64-hotspot-component.md) |
 | 天数 BI-V150 | 277 | 2026-10-25T15:26:08.409713+00:00 | [Prefill log2域换底](methods/prefill-log2.md) | 微小GPU正信号，wall未改善 | 未记录/未记录/未记录/未记录 | FP64/writer/换值Graph/inputs/RNG通过；Event8.358478→8.334337ms省0.2888%，wall8.453647→8.532408ms慢0.9317%。 | [20261025T152608409713Z-prefill-log2-component](runs/bi-v150/20261025T152608409713Z-prefill-log2-component.md) |
 | 天数 BI-V150 | 278 | 2026-10-25T15:29:40.014266+00:00 | [GQA四页T64计算块](methods/gqa-four-page-t64.md) | 固定w4仍负，预期布局未形成 | 未记录/未记录/未记录/未记录 | 8类数值/Graph/FP64门通过；Event1.278072→2.105123ms慢64.7108%，wall慢64.3265%；SGPR spill92/shared32K。 | [20261025T152940014266Z-gqa-four-page-t64-w4-hotspot-component](runs/bi-v150/20261025T152940014266Z-gqa-four-page-t64-w4-hotspot-component.md) |
+| 天数 BI-V150 | 279 | 2026-10-25T15:42:56.643502+00:00 | [GQA四页T64计算块](methods/gqa-four-page-t64.md) | N4布局实现，但仍明显负 | 未记录/未记录/未记录/未记录 | 8类数值/Graph/FP64门通过，实际mma=[1,4]；Event1.278378→1.827178ms慢42.9294%，wall慢42.5630%。 | [20261025T154256643502Z-gqa-four-page-t64-n4-hotspot-component](runs/bi-v150/20261025T154256643502Z-gqa-four-page-t64-n4-hotspot-component.md) |
+| 天数 BI-V150 | 280 | 2026-10-25T15:45:44+00:00 | [GQA KV读取缓存策略](methods/gqa-kv-cg.md) | 优化组合恢复，官方首暖仍负 | 未记录/未记录/未记录/未记录 | Q-fragment与compute-order均实际选中；4K冷/首暖5073.26/5362.19 tok/s，512成功，首暖对历史/当期观察−6.7750%/−6.9386%。 | [20261025T154544Z-main0915-gqa-kv-cg-closed-four-rounds](runs/bi-v150/20261025T154544Z-main0915-gqa-kv-cg-closed-four-rounds.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
