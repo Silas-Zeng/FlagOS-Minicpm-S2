@@ -13,6 +13,7 @@
 
 ## 按方法
 
+- [Attention连续页段寻址](methods/attention-affine-pages.md)
 - [末层Query精确选行](methods/selected-query-row.md)
 - [RoPE与KV写入融合](methods/rope-kv-fusion.md)
 - [末层FFN/o_proj选行与模型对照](methods/final-ffn-row-prune.md)

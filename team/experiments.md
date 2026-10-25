@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共249条登记、246个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共250条登记、247个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -227,6 +227,7 @@
 | 天数 BI-V150 | 247 | 2026-10-25T06:30:30.380114+00:00 | [末层FFN/o_proj选行与模型对照](methods/final-ffn-row-prune.md) | 真实模型诊断完成，结论与限制见本轮 | 未记录/未记录/未记录/未记录 | v3 tree1efc53c2仅去掉三条图内重复torch._check，保留模型外范围校验/AOT开启；S1长prefill95、加85、乘323及实际新图通过。真实mixed M2048/S2命中后长题仅<think | [20261025T063030Z-final-oproj-ffn-unbacked-model-verify](runs/bi-v150/20261025T063030Z-final-oproj-ffn-unbacked-model-verify.md) |
 | 天数 BI-V150 | 248 | 2026-10-25T06:40:55.344190+00:00 | [末层FFN/o_proj选行与模型对照](methods/final-ffn-row-prune.md) | 真实模型诊断完成，结论与限制见本轮 | 未记录/未记录/未记录/未记录 | 原main526/tree8671、native14f及实际34native/backbone/AOT，原同mixed双请求未改；长题同样仅<think>且1024token耗尽。旧FFN527与新v3失败不能据此归因选 | [20261025T064055Z-final-row-main526-mixed-control](runs/bi-v150/20261025T064055Z-final-row-main526-mixed-control.md) |
 | 天数 BI-V150 | 249 | 2026-10-25T06:47:33.860201+00:00 | [末层FFN/o_proj选行与模型对照](methods/final-ffn-row-prune.md) | 真实模型诊断完成，结论与限制见本轮 | 未记录/未记录/未记录/未记录 | 原main526/native14f单独提交同一个原始长请求（SHA b863ee85），4652输入/61输出token，答案85正确，原请求与采样不变；实际backbone/34native/AOT及源/native | [20261025T064733Z-final-row-main526-exact-serial-control](runs/bi-v150/20261025T064733Z-final-row-main526-exact-serial-control.md) |
+| 天数 BI-V150 | 250 | 20261025T071453655585Z | [Attention连续页段寻址](methods/attention-affine-pages.md) | 组件逐位通过，存在局部正信号 | 未记录/未记录/未记录/未记录 | event耗时下降6.95%/6.93%，4K下降4.99%/5.50% | [20261025T071453655585Z-attention-affine-pages-component](runs/bi-v150/20261025T071453655585Z-attention-affine-pages-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

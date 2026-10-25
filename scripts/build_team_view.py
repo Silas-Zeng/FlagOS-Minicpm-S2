@@ -16,6 +16,7 @@ TEAM = ROOT / 'team'
 MARK = '<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->\n\n'
 AVAILABLE = set()
 GROUPS = {
+    'attention-affine-pages': ('Attention连续页段寻址', '保持原KV分配与数学，仅对已存在连续物理页段用仿射寻址。真实组件四布局逐位通过，16K耗时下降约6.9%、4K约5.0–5.5%；保留为候选，真实服务覆盖和官方吞吐尚待。', []),
     'selected-query-row': ('末层Query精确选行', '仅末层Attention选择需要输出的Query，完整M行K/V仍保留；组件核P映射、metadata、全slot字节及独立参考差异，不是模型准确率或端到端收益。', []),
     'rope-kv-fusion': ('RoPE与KV写入融合', '保持526的RoPE旋转数学与Q/K输出，在同一核追加完整KV写入。生产v2外置autotune元数据，四语义及实际42融合/0旧KV/34native图通过；性能筛选6完整轮未见净正信号，按用户要求早停并封存，不更新基线或追加105。组件正信号、首轮记录/模型失败和全部原始测量分别保留。', []),
     'final-ffn-row-prune': ('末层FFN/o_proj选行与模型对照', '原FFN527及unbacked v3均遇mixed长题不完成；原main526同mixed也失败、精确同请求serial通过，不能归因选行，根因未确认。v3解决S1的AOT检查节点问题并通过三语义；不恢复模型资格、不进性能。原失败保留，不为通过候选强改框架。', []),
@@ -60,6 +61,7 @@ GROUPS = {
     'other': ('其它登记与控制记录', '没有足够字段继续归类的登记；不补猜实验结论。', []),
 }
 CODE = {
+    'attention-affine-pages': ['experiments/framework/20261025T071453655585Z-attention-affine-pages-component/source/prototype.py', 'experiments/framework/20261025T071453655585Z-attention-affine-pages-component/source/worker.py'],
     'selected-query-row': ['archive/candidates/20261025-final-rows/final-query-row-model-candidate/candidate.diff', 'experiments/framework/20261025T005351Z-final-query-row-component/state.json', 'experiments/framework/20261025T013820Z-final-query-row-component-v2/state.json', 'experiments/framework/20261025T014029Z-final-query-row-component-v3/state.json'],
     'rope-kv-fusion': ['experiments/framework/20261024T203032Z-rope-kv-component/results.json', 'experiments/framework/20261024T203032Z-rope-kv-component/state.json', 'experiments/framework/20261024T203032Z-rope-kv-component/archive-receipt.json', 'experiments/framework/20261024T203809Z-rope-kv-component-config-v2/results.json', 'experiments/framework/20261024T203809Z-rope-kv-component-config-v2/state.json', 'experiments/framework/20261024T203809Z-rope-kv-component-config-v2/archive-receipt.json', 'experiments/framework/20261024T211606Z-rope-kv-model-verify-control/state.json', 'experiments/framework/20261024T211606Z-rope-kv-model-verify-control/failed-posthoc/source-diff.json', 'experiments/framework/20261024T211606Z-rope-kv-model-verify-control/failed-posthoc/0-computation_graph.py', 'experiments/framework/20261024T211606Z-rope-kv-model-verify-control/archive-receipt.json', 'experiments/framework/20261024T223155Z-rope-kv-model-verify-v2-control/state.json', 'experiments/framework/20261024T223155Z-rope-kv-model-verify-v2-control/archive-receipt.json'],
     'final-ffn-row-prune': ['experiments/framework/20261024T204020Z-final-ffn-row-prune/results.json', 'experiments/framework/20261024T204020Z-final-ffn-row-prune/state.json', 'experiments/framework/20261024T204020Z-final-ffn-row-prune/archive-receipt.json', 'experiments/framework/20261024T211402Z-final-ffn-row-prune-logger-v2/results.json', 'experiments/framework/20261024T211402Z-final-ffn-row-prune-logger-v2/state.json', 'experiments/framework/20261024T211402Z-final-ffn-row-prune-logger-v2/archive-receipt.json', 'experiments/framework/20261024T223346Z-final-ffn-row-model-verify-control/state.json', 'experiments/framework/20261024T223346Z-final-ffn-row-model-verify-control/archive-receipt.json'],
@@ -92,7 +94,7 @@ CODE = {
 
 
 def group(row):
-    if row['profile_id'] in ('rope-kv-fusion', 'final-ffn-row-prune', 'selected-query-row'):
+    if row['profile_id'] in ('rope-kv-fusion', 'final-ffn-row-prune', 'selected-query-row', 'attention-affine-pages'):
         return row['profile_id']
     s = (row['profile_id'] + ' ' + row['run_id']).lower()
     if row['profile_id'] == 'launcher_only':
@@ -268,6 +270,8 @@ def result(row, limit=190):
 
 
 def keep(row):
+    if row['status'] == 'affine_component_positive_signal':
+        return '保留候选；真实服务页段覆盖、P索引接入及模型准确率待验，组件收益不代替官方吞吐。'
     if row['status'] in ('model_compile_failed', 'model_semantic_failed', 'baseline_mixed_failed', 'baseline_mixed_pass', 'baseline_serial_pass', 'selected_query_model_failed', 'selected_query_model_pass'):
         return '保留原始结果；模型门失败不进入性能验证，对照结论与候选收益分开。'
     text = row['conclusion']
@@ -388,6 +392,8 @@ def code_links(key, page):
 
 
 def status(row):
+    if row['status'] == 'affine_component_positive_signal':
+        return '组件逐位通过，存在局部正信号'
     if row['status'] in ('model_compile_failed', 'model_semantic_failed', 'baseline_mixed_failed', 'baseline_mixed_pass', 'baseline_serial_pass', 'selected_query_model_failed', 'selected_query_model_pass'):
         return '真实模型诊断完成，结论与限制见本轮'
     value = row['status'].lower()
