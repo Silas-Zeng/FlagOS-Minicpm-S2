@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共259条登记、256个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共261条登记、258个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -237,6 +237,8 @@
 | 天数 BI-V150 | 257 | 2026-10-25T09:10:37.578775+00:00 | [GQA恒等rescale跳过](methods/gqa-identity-rescale.md) | 组件检查通过，未见收益 | 未记录/未记录/未记录/未记录 | v3仅修空padding检查；B32/S4的8组数值/Graph通过，event1.029569→1.040463ms（+1.058%），wall+0.949%。 | [20261025T091037578775Z-gqa-identity-rescale-v2-b32-component](runs/bi-v150/20261025T091037578775Z-gqa-identity-rescale-v2-b32-component.md) |
 | 天数 BI-V150 | 258 | 2026-10-25T09:47:56.069484+00:00 | [当前main基线正确性](methods/main-correctness.md) | 主基线mixed语义失败，根因待定位 | 未记录/未记录/未记录/未记录 | 原main mixed再次失败：长题ID8一次＋ID0重复1023次，词表为<think>＋<s>；计数正常。根因未定位，原exit1保留。 | [20261025T094755Z-main526-mixed-token-diagnostic](runs/bi-v150/20261025T094755Z-main526-mixed-token-diagnostic.md) |
 | 天数 BI-V150 | 259 | 2026-10-25T09:50:54+00:00 | [当前main基线正确性](methods/main-correctness.md) | 完整105未达标，基线资格不通过 | 未记录/未记录/未记录/未记录 | 原官方完整105题99/105（94.2857%），valid/reject；105请求成功、0传输错误，4题达到输出上限，0空最终/提取。 | [20261025T095054Z-main0bf9-main-math500](runs/bi-v150/20261025T095054Z-main0bf9-main-math500.md) |
+| 天数 BI-V150 | 260 | 2026-10-25T10:32:26.675229+00:00 | [当前main基线正确性](methods/main-correctness.md) | 旧完整组合也复现mixed失败 | 未记录/未记录/未记录/未记录 | 旧467/a42完整组合也失败：长题ID8、220后ID0重复1022次，length耗尽1024；计数正常，实际34native通过。 | [20261025T103226Z-pr24-467-mixed-token-diagnostic](runs/bi-v150/20261025T103226Z-pr24-467-mixed-token-diagnostic.md) |
+| 天数 BI-V150 | 261 | 2026-10-25T10:42:11.660782+00:00 | [当前main基线正确性](methods/main-correctness.md) | 关闭native后本边界恢复，仅诊断 | 未记录/未记录/未记录/未记录 | 旧467仅关闭native后双请求通过：实际图0 native、installed False；长题57tokens答85，计数299tokens正确。 | [20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic](runs/bi-v150/20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

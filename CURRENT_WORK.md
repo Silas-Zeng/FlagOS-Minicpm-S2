@@ -1,13 +1,15 @@
 # 当前进展：main526 完整准确率未达标
 
-更新：2026-10-25 10:17 UTC。本批追加原main mixed token诊断及完整官方105，共259条登记／256个run；原始预测、评审和失败输出均保留。
+更新：2026-10-25 10:44 UTC。当前main完整105及mixed/native隔离对照已登记，共261条登记／258个run；原始预测、评审和失败输出均保留。
 
 - **完整准确率**：main0bf9／tree8671、526文件／native14f，原官方Math500 Level 3为 **99/105（94.2857%）**；原reviewer判valid/reject，至少100正确才过门槛。105请求成功、0传输错误、0空最终／提取；索引72、83、101、104达到输出上限，仍保留在分母。**当前main不具比赛基线准确率资格**；不能把owner exit0和清理成功当作准确率通过。[原始判分](experiments/accuracy/20261025T095054Z-main0bf9-main-math500-control/accuracy-review.json)
 - **mixed错误**：freshserver原双请求只新增return_token_ids；长题4652输入生成`<think>`后1023个`<s>`，计数请求正常，精确同题历史串行正确。根因未定位；与本次105结果分别留证，不直接归因某PR、不靠反复运行取最好成绩。[方法与证据](team/methods/main-correctness.md)
+- **旧版对照**：恢复131603的完整467/a42组合与新隔离缓存，实际34native图通过；原mixed长题仍输出ID8、220后1022个ID0并耗尽1024，计数正常。不能认为直接回退该版本即可解决或据此归因单PR。原diagnostic模块的main526标签逐字保留，实际版本以本run state为准。[旧版原件](experiments/framework/20261025T103226Z-pr24-467-mixed-token-diagnostic-control/state.json)
+- **native隔离**：同一旧467源码/SO保持不变，仅关闭既有native开关；实际新图0 native、installed False，长题57tokens答85、计数299tokens正确。本边界恢复，重点收敛到native路径及执行/内存差异，但还不能锁定具体kernel或PR；仅正确性诊断，非完整准确率、性能或合规优化。[原件](experiments/framework/20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic/model-path/evidence.json)
 - **此前性能与候选**：161030的5758.72／4045.20 tok/s继续作为该版本性能实测记录，不能当作合格提交基线。affine官方未确认净收益，next-K机制未成立，GQA两档无收益，已收口；不恢复淘汰候选、不新增优化PR。[实验总表](team/experiments.md)
-- **本轮终态**：10:17:05 UTC owner完成；driver0、源码/native未变、DB恢复及清理通过，9031关闭、GPU68 MiB／0%。原owner state与独立准确率判分分别保存。[终态原件](experiments/accuracy/20261025T095054Z-main0bf9-main-math500-control/state.json)
+- **本轮终态**：native-off于10:44:35 UTC completed true，源码/native文件未变、DB恢复及清理通过。旧native-on的10:35:06语义失败exit1不改写，完整105的owner exit0与独立准确率reject分别保存。
 
-后续先用最近达标版本的完整源码、native与缓存策略复验同一mixed请求，判断异常是否也存在于旧版，再决定定位或回退方案；暂停新增性能优化。该版本对照正在准备，尚未上卡，不能跨版本继承准确率资格。以下为历史交接，当前状态以上文为准。
+旧native-on/off已形成一组对照；后续围绕native路径做有区分力的原因定位，再决定隔离或回退方案。不能跨版本继承准确率资格，也不能用当前边界通过宣称全部修复。暂停新增性能优化，本轮结果成组发布。以下为历史交接，当前状态以上文为准。
 
 ## 以下为历史交接
 
