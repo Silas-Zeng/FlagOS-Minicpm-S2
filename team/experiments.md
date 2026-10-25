@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共238条登记、235个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共241条登记、238个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -216,6 +216,9 @@
 | 天数 BI-V150 | 236 | 2026-10-24T20:44:02Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 538筛选完成，KV条件失配 | 未记录/未记录/未记录/768 | 538两轮：4K5544.36/5615.02，16K3845.32/4078.31，768成功；KV失配，只观察暖轮−2.38%/＋0.82%。 | [20261024T204402Z-main0bf9-staging-kv-fullsize-screen](runs/bi-v150/20261024T204402Z-main0bf9-staging-kv-fullsize-screen.md) |
 | 天数 BI-V150 | 237 | 2026-10-24T21:14:02Z | [最后层FFN前精确选行](methods/final-ffn-row-prune.md) | 末层组件通过，局部正信号 | 未记录/未记录/未记录/四shape独立组件；非模型请求 | 四shape逐bit/变输入Graph通过；M2048→S32/64 Graph总wall约2.386→0.170/2.397→0.183ms，仅组件，不含dense回填。 | [20261024T211402Z-final-ffn-row-prune-logger-v2](runs/bi-v150/20261024T211402Z-final-ffn-row-prune-logger-v2.md) |
 | 天数 BI-V150 | 238 | 2026-10-24T21:16:06Z | [RoPE与KV写入融合](methods/rope-kv-fusion.md) | 模型门失败：源码后态与图解析 | 未记录/未记录/未记录/4语义；非官方性能/105 | 4/4语义正确，但图门跨submod误拒且新增.best_config；source_unchanged=false、completed=false，原失败保留。 | [20261024T211606Z-rope-kv-model-verify](runs/bi-v150/20261024T211606Z-rope-kv-model-verify.md) |
+| 天数 BI-V150 | 239 | 2026-10-24T21:33:46Z | [PR25 与缓存修复后的 KV 保存恢复](methods/pr25-kv-current.md) | 已完成，结论及限制见本轮 | 未记录/未记录/未记录/1536 | 538 staging原官方4K/16K各四轮、1536请求全成功；原后三轮均5724.16/4079.71 tok/s，相对526观察−0.60%/+0.85%。KV546528对547536，比较器actual_kv | [20261024T213346Z-main0bf9-staging-kv-official-four-rounds](runs/bi-v150/20261024T213346Z-main0bf9-staging-kv-official-four-rounds.md) |
+| 天数 BI-V150 | 240 | 2026-10-24T22:31:55Z | [RoPE与KV写入融合](methods/rope-kv-fusion.md) | 已完成，结论及限制见本轮 | 未记录/未记录/未记录/4语义 | RoPE生产v2/tree4e2f52ce四题语义正确（含4908-token prefill），实际42层融合、0旧KV writer、同fusion Q/K/dep与34层native图/FP/AOT通过。22:33 | [20261024T223155Z-rope-kv-model-verify-v2](runs/bi-v150/20261024T223155Z-rope-kv-model-verify-v2.md) |
+| 天数 BI-V150 | 241 | 2026-10-24T22:33:46Z | [最后层FFN前精确选行](methods/final-ffn-row-prune.md) | 已完成，结论及限制见本轮 | 未记录/未记录/未记录/4串行+2并发 | FFN527四串行语义均正确但均fallback，随后真实mixed已选择M2048/S2；并发长prefill响应只见未闭合think，1024输出token耗尽/finish_reason=length，未得到85， | [20261024T223346Z-final-ffn-row-model-verify](runs/bi-v150/20261024T223346Z-final-ffn-row-model-verify.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

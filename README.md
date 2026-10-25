@@ -22,8 +22,8 @@
 |---|---|
 | **[当前main0bf9性能对照基线](team/methods/pr25-kv-current.md)** | 161030官方4K/16K各4轮、1536/0，第2–4轮 `5758.72/4045.20 tok/s`，TTFT `3626.85/124212.05ms`；526文件/tree8671、SO14f、KV547536、DBfb035。本实例该版本完整105仍待；532 VERIFY1通过；171101/172742启动图门误拒，174713因已完成轮次负差主动早停（4K−0.98%、16K部分暖轮−1.94%，背景负载未完全匹配，不严格归因KV），不设新基线。183929仅有0.31–0.34s搬运毛预算。队友PR31单轮与102/105条件单列，不跨条件算收益 |
 | [535 KV＋H2D 完整官方观察](team/methods/pr25-kv-current.md) | 193100两档各4轮、1536/0，第2–4轮4K **5703.70**、16K **4060.24 total tok/s**，TTFT `3635.20/123213.90ms`，28条FULL链。KV546432对基线547536，`gain_calculated=false`、差值null；完整105尚未通过，不设新基线。前序VERIFY1与两轮筛选原件保留；staging primitive不在此组合内 |
-| [538 staging筛选](team/methods/pr25-kv-current.md) | 203135服务字节/语义门保留；204402两轮4K5544.36/5615.02、16K3845.32/4078.31，768成功。暖轮对526 R2观察−2.38%/＋0.82%，KV546528对547536，非因果；后继完整测量结果待，不换基线 |
-| [RoPE→KV](team/methods/rope-kv-fusion.md)／[末层FFN选行](team/methods/final-ffn-row-prune.md) | FFN211402四shape逐bit/Graph通过，仅局部组件、不含dense回填；RoPE211606四语义正确，但source新增.best_config和图解析门失败，source_unchanged=false/completed=false不改判。两方法模型完整资格/收益仍待，首次记录失败均保留 |
+| [538 staging完整四轮](team/methods/pr25-kv-current.md) | 1536成功，官方后三轮均4K5724.16/16K4079.71 tok/s（观察−0.60%/+0.85%）；KV546528对547536，非严格因果，不设新基线/105 |
+| [RoPE→KV](team/methods/rope-kv-fusion.md)／[末层FFN选行](team/methods/final-ffn-row-prune.md) | RoPE v2四语义、42融合/0旧KV及34native真实图通过，性能待后继；FFN527真实mixed语义失败，1024输出耗尽仍未有答案，停止性能路径。原组件信号和失败均保留 |
 | **BI-V150前序已完成四轮与准确率的版本：PR15+PR21+Q fragment（#22/#23）** | 官方1536请求、两档各4轮，第2–4轮均值4K `5313.59`、16K `3764.67 total tok/s`，较PR15+PR21旧基线`+3.80%/+9.56%`；Math500 L3 `100/105（95.24%）`通过。Q实际选中、fallback0，shared `65536→32768`、循环内Q read0。DB种子相同但KV `521840`对旧`521936`，不宣称严格等KV单项因果 |
 | [PR25＋缓存修复后的KV对照](team/methods/pr25-kv-current.md) | `7596cc0`基点关闭VERIFY回读后的两轮对照，双方768请求全成功、同KV546432与初始DB。候选4K `5402.15/5767.57`（`+0.103%/+0.644%`，无FULL覆盖，不归因KV收益）；16K `3733.69/3972.85`（`+4.728%/−0.493%`）。未见明显退化但收益未稳定；保留当时筛选结果；后继main与535状态见上方，不把旧两轮转为新版本成绩。VERIFY1字节与4题语义门单独保留 |
 | [PR24真实路径复验](team/methods/pr24-main.md) | 131603隔离缓存后，实际34层native图、Math500 L3 `100/105`通过。此前六轮因旧AOT图失配撤回模型资格；旧约1.018秒Attention仅为失配运行的活动，不能作为当前预算。组件与KV字节原件保留，不追溯恢复旧成绩 |
