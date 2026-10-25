@@ -13,6 +13,7 @@
 
 ## 按方法
 
+- [当前main526热点分析](methods/current-main-hotspot.md)
 - [Attention连续页段寻址](methods/attention-affine-pages.md)
 - [末层Query精确选行](methods/selected-query-row.md)
 - [RoPE与KV写入融合](methods/rope-kv-fusion.md)

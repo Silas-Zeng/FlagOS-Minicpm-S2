@@ -1,13 +1,17 @@
 # 恢复探索：模型对照与新算子候选
 
-用户已恢复探索。本轮四次模型诊断均已结束，原件已回收；没有新增吞吐成绩或可合并优化。
+用户已恢复探索。本轮四次模型对照、当前main热点诊断和连续页模型短门均已结束，原件已回收；连续页原官方4K/16K各四轮正在运行，尚无新官方吞吐结论或可合并优化。
 
 - o_proj/FFN 的 S1 首轮被 AOT 中的 `torch._check` 阻断；独立 v3 去掉图内重复边界检查后，S1 长题、加法、乘法通过，mixed 长题仍只返回 `<think>`、用满1024输出。
 - **原 main526 对同一 mixed 请求也失败；同一4652-token长题单独串行答对85（61输出token）。** 因此不能将 mixed 失败直接归因于选行；根因尚未定位，候选仍未获得模型正确性资格。
 - 按用户要求，不为让候选过关强行更改框架、调度、采样或评测口径；受影响选行方案暂停性能。selected-Q 模型门已准备，但没有启动，组件结果不等于模型通过。
-- 并行新方向：现存连续页区间的 Attention 仿射寻址。只可能省每tile四次缓存页号读取及地址依赖，数学保持；四case真实组件通过逐位输出、KV/guard/RNG、换页重提交及Q-hoist/无spill；16K event耗时下降6.95%/6.93%，4K下降4.99%/5.50%。保留局部正信号，下一步核真实页段覆盖与最小接入；不是整模型吞吐。
+- 连续页区间的 Attention 仿射寻址省每tile四次缓存页号读取及地址依赖，数学保持；四case真实组件通过逐位输出、KV/guard/RNG、换页重提交及Q-hoist、private0/VGPRspill0；16K event耗时下降6.95%/6.93%，4K下降4.99%/5.50%。真实模型短门也已通过，正测原官方吞吐；组件百分比不是整模型收益。
 
-详情只保留在[末层方法记录](team/methods/final-ffn-row-prune.md)和[实验总表](team/experiments.md)。本轮250条登记/247个run，原始失败状态不改判；四轮源/native未变、DB恢复与清理通过。
+详情只保留在[末层方法记录](team/methods/final-ffn-row-prune.md)和[实验总表](team/experiments.md)。本轮252条登记/249个run，原始失败状态不改判；四轮源/native未变、DB恢复与清理通过。
+
+本轮补充：074041连续页候选原四语义与三个真实长prefill的CPU/GPU页表逐字绑定通过；实际P恒等/C3prefix0，混合与P重排覆盖尚待。072151当前main短热点诊断通过，mixed后2步Attention占可见GPU约68.08%，FULL只见整图。组件ASM的SGPR spill计数基线30/候选36，存在标量到向量lane搬运；private0与VGPRspill0不代表所有寄存器均无spill。
+
+正在运行：`official/20261025T075732Z-main0bf9-affine-affine-official-four-rounds`（同名`-control/state.json`），owner227332/driver227336，源码527/tree41449b98/native14f，入口`scripts/affine-official-20261025/owner.log`。原官方4K/16K各四轮，DB seed与161030基线同为fb035397；没有自动后继任务。设备由主智能体统一安排，完整105入口已备、未启动。
 
 ## 以下为历史交接
 

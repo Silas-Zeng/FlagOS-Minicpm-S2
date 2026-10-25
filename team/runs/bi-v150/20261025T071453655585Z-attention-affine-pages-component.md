@@ -6,8 +6,8 @@
 
 ## 登记 #250 · Attention连续页段寻址
 
-- **尝试**：保持原KV分配与数学，仅对已存在连续物理页段用仿射寻址。真实组件四布局逐位通过，16K耗时下降约6.9%、4K约5.0–5.5%；保留为候选，真实服务覆盖和官方吞吐尚待。
-- **改动**：相关实现 [prototype.py](../../../experiments/framework/20261025T071453655585Z-attention-affine-pages-component/source/prototype.py)；[worker.py](../../../experiments/framework/20261025T071453655585Z-attention-affine-pages-component/source/worker.py)；本轮准确变体以原件源码清单为准。
+- **尝试**：保持原KV分配与数学，仅对已存在连续物理页段用仿射寻址。真实组件四布局逐位通过，16K耗时下降约6.9%、4K约5.0–5.5%；保留为候选，原四语义及三个真实串行prefill的CPU/GPU页表绑定已通过；混合/P覆盖与官方吞吐尚待。
+- **改动**：相关实现 [biv150_attention_affine_pages.py](../../../experiments/framework/20261025T074041Z-attention-affine-pages-model-verify-control/plugin-source/vllm_fl/patches/biv150_attention_affine_pages.py)；[prototype.py](../../../experiments/framework/20261025T071453655585Z-attention-affine-pages-component/source/prototype.py)；[worker.py](../../../experiments/framework/20261025T071453655585Z-attention-affine-pages-component/source/worker.py)；本轮准确变体以原件源码清单为准。
 - **怎么测**：具体测法未单列，见原命令；输入 / 输出 / 并发 / 请求数：未记录 / 未记录 / 未记录 / 未记录。
 - **结果**：event耗时下降6.95%/6.93%，4K下降4.99%/5.50%
 - **是否保留**：保留候选；真实服务页段覆盖、P索引接入及模型准确率待验，组件收益不代替官方吞吐。
