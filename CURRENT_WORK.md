@@ -1,14 +1,11 @@
-# 当前进展：局部与官方结果不一致，当期main对照正在运行
+# 当前进展：当期main两轮已归档，转下一项高潜力优化
 
-更新：2026-10-25 14:09 UTC。现 **273条登记／270个run**；本批9个已结束run的记录及证据随实验PR5统一更新。
+更新：2026-10-25 15:04 UTC。现 **275条登记／272个run**；PR5已发布head `6c3fe653`（273条），新增当期main对照及SiLU组件两轮将随本地提交交主线程发布。
 
-- **当前唯一GPU任务**：原团队main0915当期官方对照 `official/20261025T140749Z-team-main0915-current-official-four-rounds`，owner **270149**、driver **270152**；日志 `/workspace/experiments/minicpm-s2/scripts/team-main-0915-official-control-20261025/owner.log`，检查同名 `-control/state.json`。原603源码/native14f/cache0/DB207f/官方四轮参数不变，无cg或stride，解释新出现的局部与整模差异；不覆盖旧参考或解释mixed。无自动后继，不重复占卡。
-
-- **官方终态**：[GQA `.cg`](team/runs/bi-v150/20261025T132239Z-main0915-gqa-kv-cg-four-rounds.md) 原4K冷/首暖4722.73/4944.66 tok/s，对参考同轮4713.78/5751.88，首暖观察−14.03%；已完成两轮512请求成功，第三轮启动后主动SIGTERM停止，16K未测。owner261961/driver261964所属任务13:37:37结束，source/native/DB恢复/清理通过。原state残留stage=running及SIGTERM错误保留，不是仍在运行；非完整官方成绩，不定基线/PR。KV547648对547536，不能直接归因内核；[独立DB后分析](experiments/framework/20261025T132239Z-main0915-gqa-kv-cg-four-rounds-control/analysis/posthoc-db-comparison.json) 311非benchmark表共同key配置0变，但新增/缺少key与shape不同，不称DB完全可比。
-- **局部结果**：GQA 16K两形状Event省2.6666%/1.3662%保留为组件信号。[4K/B64/S2补充组件](team/runs/bi-v150/20261025T135551248816Z-gqa-kv-cg-b64-4k-component.md) 原8组数值/Graph通过，Event省1.2912%、wall省1.4224%。三个局部形状均正，不支持短输入局部负猜想，不做长短gating；当前`.cg`不能合并或定基线，也未永久淘汰，待新当期原main control解释差异。[stride常量折叠](team/methods/gqa-kv-stride.md) 原8组数值/Graph与alternate13项通过、整数mul27→13，但Event省−0.0410%/wall省+0.0454%，无净收益，收口。[LM-head双行GEMV](team/methods/lm-head-paired-gemv.md) 0.835→2.046ms、[head-major分页读取](team/methods/attention-head-major.md) 8.366→82.944ms均明确负，停止，不扩调参或建优化PR。
-- **准确率与专项分别保留**：[团队main0915完整105](team/runs/bi-v150/20261025T123523Z-team-main0915-math500.md) 本轮100/105（95.2381%），105成功、102 stop＋3 cap（94/99/101），0传输错误/空答案；actual34native及源码/native/DB/清理通过。旧99/105与mixed异常不删除，不据新高分宣称异常已修复。[有界logits诊断](team/runs/bi-v150/20261025T131054Z-main526-mixed-logits-boundary.md) 复现ID8＋ID0×1023但缺快照，原exit1/FileNotFoundError保留，不扩大或重跑。
-- **备用版本**：[PR48 f2ca](team/methods/main-correctness.md) 原105为103/105、mixed通过；官方4K/16K弃首轮5271.89/3763.84 tok/s、TTFT4281.63/137244.33ms，1536请求成功。仍保留Draft备用，不替换性能主线。
-- **证据与下一步**：8个瘦包及968个原文件均逐件核SHA，完整包远端封存；下载中断的完整tar不作证据，DB后分析独立追加，不改原封包。原件沿[总表](team/experiments.md)进入；本批已齐，主线程统一更新PR5；新当期main0915官方control已按上方PID运行，复用原source/CLI/native/Graph与四轮口径，不覆盖旧参考。未完成或未合并项为该control及`.cg`候选；不为上传重复测试。当前GPU状态以主线程根CURRENT为准，本快照不授权重启旧任务。
+- **当期原main对照已结束**：[140749原件与短记](team/runs/bi-v150/20261025T140749Z-team-main0915-current-official-four-rounds.md)：0915/tree766b完整603、native14f及原官方参数，无`.cg`或stride。4K冷/首暖 **5404.31/5761.99 tok/s**，TTFT5869.37/3729.51ms，512成功；用户提醒已有同生产代码完整基线后主动停止。14:18:14 source/native/DB恢复/清理通过，owner270149/driver270152已结束。run名four-rounds与原failed/SIGTERM/stale stage保留；**只有两轮，16K未测**，不是完整官方成绩，不覆盖旧基线。
+- **GQA `.cg`暂搁置**：[同方法对照](team/methods/gqa-kv-cg.md)保留三个局部形状正信号及官方首暖4944.66的负结果；本轮原main首暖5761.99并列供团队阅读，未定位内核因果。不能合并或定新基线，不做长短gating、不新增profile；优先复用历史数据，主线转下一高潜力方向。
+- **其余结论不变**：stride、LM-head与head-major组件无净收益并收口；团队main本轮100/105与旧99/105、mixed专项异常并列保留；PR48仍Draft备用，既有成绩沿[总表](team/experiments.md)查阅。
+- **SiLU新结果与接续**：[相邻两列组件](team/methods/native-silu-vec2.md) 15case数值/Graph及独立CPU参考通过，但隔离Event慢6.9849%、完整gate慢2.4404%，14:40:00干净结束、DB207f未变，停止模型推进。[实验PR52](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/52)于15:01:05 UTC已关闭、未合并（head `0e753664`）；冻结16文件及15pins原样保存，生产csrc不改。主线转大关键路径，GQA多页组件仍在CPU准备、未上卡，不纳入登记；本次CPU导入不占GPU，设备/PID由根CURRENT统一记录。两轮原件齐备，下一批统一更新PR5，不为上传重测。
 
 ## 以下为历史交接
 

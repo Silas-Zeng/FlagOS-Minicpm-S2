@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共273条登记、270个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共275条登记、272个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -251,6 +251,8 @@
 | 天数 BI-V150 | 271 | 2026-10-25T13:22:39+00:00 | [GQA KV读取缓存策略](methods/gqa-kv-cg.md) | 官方首暖负，主动早停 | 未记录/未记录/未记录/未记录 | 4K冷/首暖4722.73/4944.66 tok/s，首暖对同轮5751.88为−14.03%；512成功，第三轮主动中断、16K未测。 | [20261025T132239Z-main0915-gqa-kv-cg-four-rounds](runs/bi-v150/20261025T132239Z-main0915-gqa-kv-cg-four-rounds.md) |
 | 天数 BI-V150 | 272 | 2026-10-25T13:44:07.482450+00:00 | [GQA stride常量折叠](methods/gqa-kv-stride.md) | 指令减少，未见净收益 | 未记录/未记录/未记录/未记录 | 8组数值/Graph及alternate-stride13项通过；整数mul27→13，Event1.277992→1.278517ms，wall1.284104→1.283520ms，无净收益。 | [20261025T134407482450Z-gqa-kv-stride-main-hotspot-component](runs/bi-v150/20261025T134407482450Z-gqa-kv-stride-main-hotspot-component.md) |
 | 天数 BI-V150 | 273 | 2026-10-25T13:55:51.248816+00:00 | [GQA KV读取缓存策略](methods/gqa-kv-cg.md) | 4K组件局部正，官方差异待解 | 未记录/未记录/未记录/未记录 | 4K/B64/S2：原8组数值/Graph通过，Event0.528390→0.521568ms省1.2912%，wall省1.4224%。 | [20261025T135551248816Z-gqa-kv-cg-b64-4k-component](runs/bi-v150/20261025T135551248816Z-gqa-kv-cg-b64-4k-component.md) |
+| 天数 BI-V150 | 274 | 2026-10-25T14:07:49+00:00 | [GQA KV读取缓存策略](methods/gqa-kv-cg.md) | 原main两轮对照，主动停止 | 未记录/未记录/未记录/未记录 | 原main4K冷/首暖5404.31/5761.99 tok/s、512成功；因已有完整基线主动停止，仅两轮，16K未测。 | [20261025T140749Z-team-main0915-current-official-four-rounds](runs/bi-v150/20261025T140749Z-team-main0915-current-official-four-rounds.md) |
+| 天数 BI-V150 | 275 | 2026-10-25T14:39:42.955934+00:00 | [native SiLU相邻两列访存](methods/native-silu-vec2.md) | 数值检查通过，性能负 | 未记录/未记录/未记录/未记录 | 15case逐位/finite/guard与Graph通过；隔离Event0.216360→0.231472ms慢6.9849%，完整gate0.712861→0.730258ms慢2.4404%。 | [20261025T143942955934Z-native-silu-vec2-component](runs/bi-v150/20261025T143942955934Z-native-silu-vec2-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

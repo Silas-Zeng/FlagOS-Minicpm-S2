@@ -13,6 +13,7 @@
 
 ## 按方法
 
+- [native SiLU相邻两列访存](methods/native-silu-vec2.md)
 - [GQA stride常量折叠](methods/gqa-kv-stride.md)
 - [GQA KV读取缓存策略](methods/gqa-kv-cg.md)
 - [LM-head双行GEMV](methods/lm-head-paired-gemv.md)
