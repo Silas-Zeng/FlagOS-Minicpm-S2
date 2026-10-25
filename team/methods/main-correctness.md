@@ -1,0 +1,16 @@
+<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
+
+# 当前main基线正确性
+
+固定main526/0bf9、native14f。完整官方105题为99/105（94.2857%），原review valid/reject，未达到至少100正确的门槛，当前main不具比赛基线准确率资格。105请求均成功、0传输错误，4题达到输出上限但不剔除分母。另有freshserver原mixed长题生成<think>后1023个<s>的已知错误，计数正常、精确同题旧串行正确。两类问题分别留证，根因尚未定位，不据此归因某条PR，不靠反复运行取最好成绩，也不恢复淘汰候选。
+
+相关代码：[prefill-response.json](../../experiments/framework/20261025T094755Z-main526-mixed-token-diagnostic/mixed-requests/prefill-response.json)；[prefill-tokens.json](../../experiments/framework/20261025T094755Z-main526-mixed-token-diagnostic/mixed-requests/prefill-tokens.json)；[diagnostic-summary.json](../../experiments/framework/20261025T094755Z-main526-mixed-token-diagnostic/diagnostic-summary.json)；[tokenizer-special-ids.json](../../experiments/framework/20261025T094755Z-main526-mixed-token-diagnostic/analysis/tokenizer-special-ids.json)；[diagnostic_requests.py](../../experiments/framework/20261025T094755Z-main526-mixed-token-diagnostic-control/diagnostic_requests.py)；[accuracy-review.json](../../experiments/accuracy/20261025T095054Z-main0bf9-main-math500-control/accuracy-review.json)；[state.json](../../experiments/accuracy/20261025T095054Z-main0bf9-main-math500-control/state.json)；[archive-receipt.json](../../experiments/accuracy/20261025T095054Z-main0bf9-main-math500-control/archive-receipt.json)；[math_500.json](../../experiments/accuracy/20261025T095054Z-main0bf9-main-math500/math500-level3/20261025_175201/reports/minicpm/math_500.json)。
+
+相关方法PR：未记录。
+
+下列是既有登记摘要，不叠加单项收益、不把诊断当端到端或完整准确率。完整条件沿每轮原件查阅。
+
+## 天数 BI-V150
+
+- [20261025T094755Z-main526-mixed-token-diagnostic](../runs/bi-v150/20261025T094755Z-main526-mixed-token-diagnostic.md)（登记#258）：原main mixed再次失败：长题ID8一次＋ID0重复1023次，词表为<think>＋<s>；计数正常。根因未定位，原exit1保留。 **是否保留：** 保留基线故障证据；不恢复淘汰候选，不归因M8或全部main，完整105独立判分。
+- [20261025T095054Z-main0bf9-main-math500](../runs/bi-v150/20261025T095054Z-main0bf9-main-math500.md)（登记#259）：原官方完整105题99/105（94.2857%），valid/reject；105请求成功、0传输错误，4题达到输出上限，0空最终/提取。 **是否保留：** 保留完整结果；当前main不具比赛基线准确率资格，已知mixed错误仍待定位，不归因某PR、不反复运行取最好成绩。

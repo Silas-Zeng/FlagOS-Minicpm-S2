@@ -1,14 +1,13 @@
-# 当前进展：官方四轮及 Attention 后继已收口
+# 当前进展：main526 完整准确率未达标
 
-更新：2026-10-25 09:17 UTC。本批5轮已完成，257条登记／254个run；原始结果、失败和清理证据已回收，当前没有GPU任务或自动队列。
+更新：2026-10-25 10:17 UTC。本批追加原main mixed token诊断及完整官方105，共259条登记／256个run；原始预测、评审和失败输出均保留。
 
-- **连续页寻址**：原官方两档各四轮、1536请求成功，4K／16K弃首轮均值5741.68／4050.10 tok/s。相对main526仅描述−0.30%／+0.12%；KV546432对547536，未确认净收益、不定基线、不启动105。此前组件和短模型正信号保留。[方法记录](team/methods/attention-affine-pages.md)
-- **next-K预取**：首次组件数值检查通过，但真实编译路径在PV前等待预取，预期重叠未形成。未计时，停止本实现，定位器问题与CPU后核分别保存。[方法记录](team/methods/attention-next-k.md)
-- **GQA恒等缩放**：S16／S4两组8项数值和Graph检查通过，组件耗时分别+2.31%／+1.06%。首次B32验证器空切片失败保留；v3仅修测试器、候选数学未变。两档未见收益，不进入模型／官方。[方法记录](team/methods/gqa-identity-rescale.md)
-- **准确率边界**：main526完整105仍未确认；原main与选行候选同mixed长题失败、同题串行答对，根因未定，不为候选强改框架。selected-Q模型门未启动。
-- **设备终态**：09:12:55 UTC实查68 MiB／0%、9031关闭，所属进程退出，标准DB恢复。[原始回执](experiments/framework/20261025T091037578775Z-gqa-identity-rescale-v2-b32-component/analysis/20261025T0912Z-affine-nextk-gqa-device-final.json)
+- **完整准确率**：main0bf9／tree8671、526文件／native14f，原官方Math500 Level 3为 **99/105（94.2857%）**；原reviewer判valid/reject，至少100正确才过门槛。105请求成功、0传输错误、0空最终／提取；索引72、83、101、104达到输出上限，仍保留在分母。**当前main不具比赛基线准确率资格**；不能把owner exit0和清理成功当作准确率通过。[原始判分](experiments/accuracy/20261025T095054Z-main0bf9-main-math500-control/accuracy-review.json)
+- **mixed错误**：freshserver原双请求只新增return_token_ids；长题4652输入生成`<think>`后1023个`<s>`，计数请求正常，精确同题历史串行正确。根因未定位；与本次105结果分别留证，不直接归因某PR、不靠反复运行取最好成绩。[方法与证据](team/methods/main-correctness.md)
+- **此前性能与候选**：161030的5758.72／4045.20 tok/s继续作为该版本性能实测记录，不能当作合格提交基线。affine官方未确认净收益，next-K机制未成立，GQA两档无收益，已收口；不恢复淘汰候选、不新增优化PR。[实验总表](team/experiments.md)
+- **本轮终态**：10:17:05 UTC owner完成；driver0、源码/native未变、DB恢复及清理通过，9031关闭、GPU68 MiB／0%。原owner state与独立准确率判分分别保存。[终态原件](experiments/accuracy/20261025T095054Z-main0bf9-main-math500-control/state.json)
 
-接续先看[实验总表](team/experiments.md)与对应方法；本批没有确认可合并的新优化。用户澄清：首暖初筛已有正信号时完成该组，不因后续单轮回退提前停。后续从当前实际热点选择有可信机制的方向，不自动重开已关闭负候选。已有源码、命令与原件未变的验证不用为发布重复。
+后续先用最近达标版本的完整源码、native与缓存策略复验同一mixed请求，判断异常是否也存在于旧版，再决定定位或回退方案；暂停新增性能优化。该版本对照正在准备，尚未上卡，不能跨版本继承准确率资格。以下为历史交接，当前状态以上文为准。
 
 ## 以下为历史交接
 
