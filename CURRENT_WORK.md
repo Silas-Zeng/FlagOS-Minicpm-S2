@@ -1,11 +1,15 @@
-# 当前进展：当期main两轮已归档，转下一项高潜力优化
+# 当前进展：三轮组件完成，修正旧.cg对照结论
 
-更新：2026-10-25 15:04 UTC。现 **275条登记／272个run**；PR5已发布head `6c3fe653`（273条），新增当期main对照及SiLU组件两轮将随本地提交交主线程发布。
+更新：2026-10-25 15:36 UTC。现 **278条登记／275个run**；PR5已发布head `4263d628`（275条），新增T64、log2、T64固定w4共三轮与旧.cg结论更正待统一同步。
+
+- **Prefill log2仅保留局部信号**：[原件与短记](team/runs/bi-v150/20261025T152608409713Z-prefill-log2-component.md) 的FP64抽样、writer、换值Graph与inputs/RNG通过。Event **8.358478→8.334337ms（省0.2888%）**，wall慢0.9317%；候选第二次submit CPU4.58ms，其余约1.4ms，原轮保留。ASM换底乘法20→0、n_regs114→116/shared32K不变；qmod仅runtime0，不能外推所有精度模式。15:26:34 clean exit0，source/native/DB通过。模型收益未确认，不授官方或105资格；随后固定w4结果见下。
+
+- **T64两轮均负**：[原T64短记](team/runs/bi-v150/20261025T151303364296Z-gqa-four-page-t64-hotspot-component.md) Event慢126.9037%；[固定w4补测](team/runs/bi-v150/20261025T152940014266Z-gqa-four-page-t64-w4-hotspot-component.md) 8类数值/Graph/FP64门通过，Event **1.278072→2.105123ms（慢64.7108%）**、wall慢64.3265%。w4实际mma仍`[4,1]`而非预期N方向`[1,4]`，SGPR spill92/shared32K，未实现预期布局。两轮均clean exit0、source/native/DB通过；停止模型推进，不测4K。完整包留远端、小包原字节回收，IR供CPU分析，设备安排由根CURRENT统一维护。
 
 - **当期原main对照已结束**：[140749原件与短记](team/runs/bi-v150/20261025T140749Z-team-main0915-current-official-four-rounds.md)：0915/tree766b完整603、native14f及原官方参数，无`.cg`或stride。4K冷/首暖 **5404.31/5761.99 tok/s**，TTFT5869.37/3729.51ms，512成功；用户提醒已有同生产代码完整基线后主动停止。14:18:14 source/native/DB恢复/清理通过，owner270149/driver270152已结束。run名four-rounds与原failed/SIGTERM/stale stage保留；**只有两轮，16K未测**，不是完整官方成绩，不覆盖旧基线。
-- **GQA `.cg`暂搁置**：[同方法对照](team/methods/gqa-kv-cg.md)保留三个局部形状正信号及官方首暖4944.66的负结果；本轮原main首暖5761.99并列供团队阅读，未定位内核因果。不能合并或定新基线，不做长短gating、不新增profile；优先复用历史数据，主线转下一高潜力方向。
+- **GQA `.cg`旧官方结论更正**：[同方法对照](team/methods/gqa-kv-cg.md)保留三个局部形状正信号、官方首暖4944.66及当期原main5761.99。后核原日志确认旧候选关闭了Q-hoist和compute-order，原main两者启用；候选GQA SHA变化而相应身份仍锁旧值。旧比较属优化组合不完整的混杂对照，不能据此判`.cg`本体整模无收益，待修正集成后另测；原成绩、KV/DB限制不改，不做长短gating。
 - **其余结论不变**：stride、LM-head与head-major组件无净收益并收口；团队main本轮100/105与旧99/105、mixed专项异常并列保留；PR48仍Draft备用，既有成绩沿[总表](team/experiments.md)查阅。
-- **SiLU新结果与接续**：[相邻两列组件](team/methods/native-silu-vec2.md) 15case数值/Graph及独立CPU参考通过，但隔离Event慢6.9849%、完整gate慢2.4404%，14:40:00干净结束、DB207f未变，停止模型推进。[实验PR52](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/52)于15:01:05 UTC已关闭、未合并（head `0e753664`）；冻结16文件及15pins原样保存，生产csrc不改。主线转大关键路径，GQA多页组件仍在CPU准备、未上卡，不纳入登记；本次CPU导入不占GPU，设备/PID由根CURRENT统一记录。两轮原件齐备，下一批统一更新PR5，不为上传重测。
+- **SiLU新结果与接续**：[相邻两列组件](team/methods/native-silu-vec2.md) 15case数值/Graph及独立CPU参考通过，但隔离Event慢6.9849%、完整gate慢2.4404%，14:40:00干净结束、DB207f未变，停止模型推进。[实验PR52](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/52)于15:01:05 UTC已关闭、未合并（head `0e753664`）；冻结16文件及15pins原样保存，生产csrc不改。本次CPU导入不占GPU，设备/PID由根CURRENT统一记录；三轮新记录和.cg更正统一更新PR5，不为上传重测。
 
 ## 以下为历史交接
 

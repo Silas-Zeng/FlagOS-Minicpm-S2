@@ -8,9 +8,9 @@
 
 - **尝试**：检查16K组件局部省时能否转为原官方服务收益。
 - **改动**：团队main0915完整603仅4处KV load加.cg；KV547648对547536，DB后分析作为独立原件，原failed/残留running字段不改。 版本、命令和源码见下方原件；[方法记录](../../methods/gqa-kv-cg.md)。
-- **怎么测**：原0813脚本RUNS4/SKIP_FIRST1与服务参数不变；团队main0915完整603仅4处.cg，13:37:32向所属owner SIGTERM。KV547648对547536；13:37:37 finished、source/native/DB/清理通过。
+- **怎么测**：原0813脚本RUNS4/SKIP_FIRST1与服务参数不变；团队main0915完整603仅4处.cg，13:37:32向所属owner SIGTERM。KV547648对547536；原server.log第68/398行证实Q-hoist/compute-order拒绝，13:37:37 finished、source/native/DB/清理通过。
 - **结果**：4K冷/首暖4722.73/4944.66 tok/s，首暖对同轮5751.88为−14.03%；512成功，第三轮主动中断、16K未测。
-- **是否保留**：保存全部已测及停止原件；KV/DB条件差异，不判内核因果。当期原main两轮5404.31/5761.99已归档；.cg搁置，不新增profile，当前不能合并或定新基线。
+- **是否保留**：保存全部已测及停止原件；旧候选Q-hoist/compute-order未启用而原main已启用，属优化组合不完整的混杂比较，不能判.cg本体无收益；修正集成后另作对照。
 
 <details><summary>完整原登记（含UTC、状态、过程与标识）</summary>
 
@@ -31,7 +31,7 @@
   "profiler": "false",
   "status": "gqa_cg_official_first_warm_negative",
   "artifacts": "experiments/framework/20261025T132239Z-main0915-gqa-kv-cg-four-rounds",
-  "conclusion": "main0915完整603/treefd8a，仅4处GQA KV load加.cg，实际KV547648对性能参考547536。原官方4K冷/首暖4722.73/4944.66 tok/s，同轮参考4713.78/5751.88，首暖观察-14.03%；两轮512请求成功，第三轮已启动后主动SIGTERM中断，16K未测。13:37:37 finished，源码/native/DB恢复及清理通过；原stage=running和error保留，不是仍在运行。非完整官方成绩，不定新基线/PR，不判内核因果。独立DB后分析311非benchmark表共同key配置0变化，但57基线独有/5候选独有key和形状不同，不能称完全可比。"
+  "conclusion": "main0915完整603/treefd8a，仅4处GQA KV load加.cg，实际KV547648对性能参考547536。原官方4K冷/首暖4722.73/4944.66 tok/s，同轮参考4713.78/5751.88，首暖观察-14.03%；两轮512请求成功，第三轮已启动后主动SIGTERM中断，16K未测。13:37:37 finished，源码/native/DB恢复及清理通过；原stage=running和error保留，不是仍在运行。非完整官方成绩，不定新基线/PR，不判内核因果。独立DB后分析311非benchmark表共同key配置0变化，但57基线独有/5候选独有key和形状不同，不能称完全可比。后核既有日志：132239的server.log:68 Q_FRAGMENT_INSTALL installed=False、:398 COMPUTE_ORDER_SCOPE_REJECTED；换GQA SHA1043后两项身份仍锁2596，Q-hoist与compute-order均未启用。当期原main140749的:68/186/326确认两项启用。故此为优化组合不完整的混杂比较，原负成绩保留，不能据此判.cg本体整模无收益；待修正集成后另作对照。"
 }
 ```
 

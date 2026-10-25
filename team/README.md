@@ -13,6 +13,8 @@
 
 ## 按方法
 
+- [Prefill log2域换底](methods/prefill-log2.md)
+- [GQA四页T64计算块](methods/gqa-four-page-t64.md)
 - [native SiLU相邻两列访存](methods/native-silu-vec2.md)
 - [GQA stride常量折叠](methods/gqa-kv-stride.md)
 - [GQA KV读取缓存策略](methods/gqa-kv-cg.md)

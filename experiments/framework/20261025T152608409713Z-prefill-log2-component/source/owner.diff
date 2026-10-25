@@ -1,0 +1,20 @@
+--- 受测head-major/entry.py
++++ prefill-log2/entry.py
+@@ -50,7 +50,7 @@
+     native = args.native_library.resolve(strict=True)
+     source_before = source_identity.check(source, native)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-head-major-paged-prefill-component")
++    run = ROOT / "framework" / (stamp + "-prefill-log2-component")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+@@ -80,7 +80,7 @@
+         state["database_original_sha256"] = sha(DB)
+         shutil.copyfile(args.model / "config.json", assets / "model-config.json")
+         env = dict(os.environ)
+-        # 固定三臂同一个 worker/DB/native；不继承其他实验特性覆盖。
++        # 固定两臂同一个 worker/DB/native；不继承其他实验特性覆盖。
+         for key in tuple(env):
+             if key.startswith(("VLLM_FL_BIV150_", "BIV150_", "MINICPM_NATIVE_", "MINICPM_DECODE_GAP_")):
+                 del env[key]

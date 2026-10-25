@@ -1,0 +1,145 @@
+--- old-worker
++++ worker.py
+@@ -48,13 +48,13 @@
+     return fields
+ 
+ 
+-from cache_policy import cache_evidence
++from fp_reference import sampled_reference
+ 
+ 
+ def worker(run, model, shape="hotspot"):
+     result = dict(status="started", kind="生产 kernel+reducer 的随机输入组件", checks=[], timings=[],
+                   limitations=["没有模型权重或实际激活采样；不是模型资格或官方收益",
+-                               "默认 N33/bucket40/S16，可显式选择原 B32/S4；split 由实际生产路由选择",
++                               "仅 N33/bucket40/S16；page16与split保持，candidate计算tile64",
+                                "性能仅关闭 profiler 的同输入 CUDA Graph ABBA"])
+     gqa = producer_capture = reducer_capture = None
+     original_producer = original_reducer = None
+@@ -89,7 +89,7 @@
+         if digest(Path(gqa.__file__)) != SOURCE_SHA or digest(HERE / "baseline.py") != SOURCE_SHA:
+             raise RuntimeError("实际 GQA 不是冻结 main526 原件")
+         backend = importlib.import_module("vllm.v1.attention.backends.triton_attn")
+-        candidate = load("gqa_kv_cg_candidate", HERE / "candidate.py")
++        candidate = load("gqa_four_page_t64_candidate", HERE / "candidate.py")
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("非单卡")
+         torch.cuda.set_device(0)
+@@ -101,8 +101,6 @@
+         torch.manual_seed(725013)
+         if shape == "hotspot":
+             B, active, segments = 40, 33, 16
+-        elif shape == "b32":
+-            B, active, segments = 32, 32, 4
+         else:
+             raise ValueError("未知 shape")
+         L = 16384
+@@ -110,6 +108,8 @@
+         query[B:] = -17
+         table = torch.zeros((B, 8192), dtype=torch.int32)
+         table[:, :L // 16] = torch.arange(B * (L // 16), dtype=torch.int32).reshape(B, -1)
++        table[:, :L // 16] = table[:, :L // 16].reshape(B, -1, 4).flip(-1).reshape(B, -1)
++        common.slot_mapping[:B] = table[:, L // 16 - 1].to("cuda", dtype=torch.int64) * 16 + 15
+         common.block_table_tensor = table.cuda()
+         if active < B:
+             # Actual runner: query_start_loc tail=last real token, lengths=0,
+@@ -153,7 +153,7 @@
+             grid=grid, reducer_grid=rgrid, builder_segments=metadata.num_par_softmax_segments,
+             source_q_shape=list(kwargs["query_ptr"].shape), source_k_shape=list(kwargs["key_cache_ptr"].shape),
+             source_k_stride=list(kwargs["key_cache_ptr"].stride()), block_table_stride=8192,
+-            rows=8, segments=segments, head_size=128, page_size=16, num_warps=1, num_stages=1,
++            rows=8, segments=segments, head_size=128, page_size=16, candidate_compute_tile=64, num_warps=1, num_stages=1,
+             query_start_loc=common.query_start_loc_cpu.tolist(), seq_lens=common.seq_lens.cpu().tolist(),
+             padded_slot_values=common.slot_mapping[active:].cpu().tolist())
+         original_inputs = (query.clone(), cache.clone(), common.seq_lens.clone(), common.block_table_tensor.clone())
+@@ -165,6 +165,7 @@
+             sums = torch.full_like(metadata.softmax_segm_expsum, -17)
+             pk = dict(kwargs, segm_output_ptr=partial.narrow(2, 0, segments), segm_max_ptr=maxima.narrow(2, 0, segments),
+                       segm_expsum_ptr=sums.narrow(2, 0, segments))
++            if name == "candidate": pk["TILE_SIZE"] = 64
+             rk = dict(rkwargs, output_ptr=out[:B], segm_output_ptr=pk["segm_output_ptr"],
+                       segm_max_ptr=pk["segm_max_ptr"], segm_expsum_ptr=pk["segm_expsum_ptr"])
+             def call(kernel=kernel, pk=pk, rk=rk):
+@@ -183,9 +184,9 @@
+                                             b.view(torch.int16 if b.element_size() == 2 else torch.int32))
+         if not same_bits(production_output, arms["baseline"].out):
+             raise RuntimeError("捕获 ABI 重放不同于实际 backend 输出")
+-        # 只确认 .cg 落到机器访存指令；提示被忽略时不做计时。
+-        # 寄存器/shared 仅记录，不另增资源阈值。
+-        result["cache_policy"] = cache_evidence(first["baseline"].asm["asm"], first["candidate"].asm["asm"])
++        result["numerical_contract"] = dict(source="scripts/remote/validate_mapped_decode.py:70-92",
++            atol=0.03, rtol=0.03, relative_l2_limit=0.01,
++            description="独立CPU FP64抽样；同输入族原Attention 3e-2合同，附固定relative_l2界；不是模型准确率")
+         stream = torch.cuda.Stream()
+         stream.wait_stream(torch.cuda.current_stream())
+         with torch.cuda.stream(stream):
+@@ -208,9 +209,14 @@
+                 arm.call()
+             torch.cuda.synchronize()
+             a, b = arms["baseline"], arms["candidate"]
+-            expected = tuple(t.clone() for t in a.tensors)
+-            checks = dict(eager_bits=all(same_bits(x, y) for x, y in zip(a.tensors, b.tensors)),
+-                finite=(bool(torch.isfinite(b.out[:B]).all()) if finite else True),
++            expected = {name: tuple(t.clone() for t in arm.tensors) for name, arm in arms.items()}
++            oracle = sampled_reference(torch, run, label, query, cache, common.seq_lens,
++                common.block_table_tensor, {name: arm.out for name, arm in arms.items()}, active) if finite else None
++            checks = dict(eager_numerics=(all(row["passed"] for row in oracle["arms"].values()) if finite else
++                bool(torch.equal(torch.isnan(a.out[:B]), torch.isnan(b.out[:B])) and
++                     torch.equal(torch.isposinf(a.out[:B]), torch.isposinf(b.out[:B])) and
++                     torch.equal(torch.isneginf(a.out[:B]), torch.isneginf(b.out[:B])))),
++                finite=(all(bool(torch.isfinite(arm.out[:B]).all()) for arm in arms.values()) if finite else True),
+                 guard=bool((a.out[B:] == -17).all() and (b.out[B:] == -17).all()))
+             if active < B:
+                 checks["padded_output_zero"] = all(bool((arm.out[active:B] == 0).all()) for arm in arms.values())
+@@ -219,24 +225,24 @@
+             else:
+                 checks["padded_output_zero"] = True
+                 checks["padded_partials_untouched"] = True
+-            failed_eager = [t.cpu() for t in b.tensors] if not checks["eager_bits"] else None
++            failed_eager = [t.cpu() for t in b.tensors] if not checks["eager_numerics"] else None
+             for arm in arms.values():
+                 for tensor in arm.tensors:
+                     tensor.fill_(-17)
+                 arm.graph.replay()
+             torch.cuda.synchronize()
+-            checks["graph_fresh_bits"] = all(same_bits(x, y) for arm in arms.values()
+-                for x, y in zip(expected, arm.tensors))
++            checks["graph_fresh_bits"] = all(same_bits(x, y) for name, arm in arms.items()
++                for x, y in zip(expected[name], arm.tensors))
+             checks["inputs_unchanged"] = all(same_bits(x, y) for x, y in zip(
+                 before, (query, cache, common.seq_lens, common.block_table_tensor)))
+             checks["rng_unchanged"] = torch.equal(rng_cpu, torch.get_rng_state()) and torch.equal(rng_gpu, torch.cuda.get_rng_state())
+             if changed:
+-                checks["output_changed"] = not same_bits(initial_output[:B], expected[0][:B])
+-            record = dict(case=label, checks=checks, nonfinite_diagnostic=not finite,
++                checks["output_changed"] = not same_bits(initial_output[:B], expected["baseline"][0][:B])
++            record = dict(case=label, checks=checks, independent_reference=oracle, nonfinite_diagnostic=not finite,
+                           baseline_nan=int(torch.isnan(a.out[:B]).sum().item()),
+                           candidate_nan=int(torch.isnan(b.out[:B]).sum().item()))
+             result["checks"].append(record)
+-            torch.save({"baseline": [x.cpu() for x in expected], "candidate": [x.cpu() for x in b.tensors],
++            torch.save({"baseline": [x.cpu() for x in expected["baseline"]], "candidate": [x.cpu() for x in b.tensors],
+                         "failed_eager_candidate": failed_eager,
+                         "seq_lens": common.seq_lens.cpu(), "query": query.cpu(),
+                         "block_table": common.block_table_tensor.cpu()}, run / (label + ".pt"))
+@@ -244,7 +250,7 @@
+             if not all(checks.values()):
+                 torch.save(cache.cpu(), run / (label + "-failed-kv.pt"))
+                 raise RuntimeError("新增数值/Graph 边界失败：" + label + repr(checks))
+-            return expected[0]
++            return expected["baseline"][0]
+ 
+         initial_output = check("dense-random")
+         query[:B].neg_()
+@@ -257,9 +263,8 @@
+         ragged = [ragged_pattern[i % len(ragged_pattern)] for i in range(active)] + [0] * (B - active)
+         common.seq_lens.copy_(torch.tensor(ragged, dtype=torch.int32, device="cuda"))
+         check("graph-changed-q-kv-pages-ragged-zero-tail", changed=True)
+-        # 按既定 split 造首页/三页/尾页边界，S16 也覆盖多个完整页与尾页。
+-        # B32/S4 的模式仍为原来的 0/1/15/16/17/64/160/163。
+-        boundary = [0, 1, 15, 16, 17, segments * 16, segments * 48 - 32, segments * 48 - 29]
++        # 保原page16分段，覆盖lower非64对齐及完整64+不足64的尾tile。
++        boundary = [0, 1, 15, 16, 17, segments * 16, segments * 80 - 32, segments * 80 - 29]
+         common.seq_lens.copy_(torch.tensor([boundary[i % 8] for i in range(active)] + [0] * (B - active),
+                                            dtype=torch.int32, device="cuda"))
+         query[:B].zero_()

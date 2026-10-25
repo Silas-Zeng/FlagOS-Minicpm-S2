@@ -8,9 +8,9 @@
 
 - **尝试**：补当期原main冷/首暖对照，帮助阅读.cg组件与整模结果差异。
 - **改动**：没有新增优化；原0915/603源码与native14f。run名four-rounds及原failed/SIGTERM/stage=running保持，实际只有两轮且已结束。 版本、命令和源码见下方原件；[方法记录](../../methods/gqa-kv-cg.md)。
-- **怎么测**：原团队main0915完整603/tree766b、native14f与官方参数不变，无.cg或stride；RUNS4/SKIP_FIRST1原设置保留，用户提醒已有完整基线后向所属owner SIGTERM。14:18:14 source/native/DB及清理通过。
+- **怎么测**：原团队main0915完整603/tree766b、native14f与官方参数不变，无.cg或stride；RUNS4/SKIP_FIRST1原设置保留，用户提醒已有完整基线后向所属owner SIGTERM。原server.log第68/186/326行确认Q-hoist/compute-order启用；14:18:14 source/native/DB及清理通过。
 - **结果**：原main4K冷/首暖5404.31/5761.99 tok/s、512成功；因已有完整基线主动停止，仅两轮，16K未测。
-- **是否保留**：保留当期部分对照，不覆盖旧完整基线；.cg搁置、当前不能合并，不追加profile，转下个高潜力方向。
+- **是否保留**：保留当期部分对照，不覆盖旧完整基线；本轮两项原有优化启用，与旧.cg关闭状态不同，修正后才能判断.cg本体整模收益。
 
 <details><summary>完整原登记（含UTC、状态、过程与标识）</summary>
 
@@ -31,7 +31,7 @@
   "profiler": "false",
   "status": "team_main_current_control_partial",
   "artifacts": "experiments/framework/20261025T140749Z-team-main0915-current-official-four-rounds",
-  "conclusion": "原团队main0915/tree766b完整603、native14f、原官方参数，无.cg或stride。4K冷/首暖5404.31/5761.99 tok/s，TTFT5869.37/3729.51ms，两轮512请求全部成功。用户提醒已有同生产代码完整基线，主动SIGTERM停止；14:18:14源码/native/DB恢复与清理、9031关闭和68MiB/0%后态通过。run名four-rounds与原failed/SIGTERM/stale stage保留，本次只有两轮、16K未测，不冒充完整官方成绩或覆盖旧基线。与.cg首暖4944.66并列保留，不据此定位内核因果；.cg搁置、不新增profile，主线转下个高潜力方向。"
+  "conclusion": "原团队main0915/tree766b完整603、native14f、原官方参数，无.cg或stride。4K冷/首暖5404.31/5761.99 tok/s，TTFT5869.37/3729.51ms，两轮512请求全部成功。用户提醒已有同生产代码完整基线，主动SIGTERM停止；14:18:14源码/native/DB恢复与清理、9031关闭和68MiB/0%后态通过。run名four-rounds与原failed/SIGTERM/stale stage保留，本次只有两轮、16K未测，不冒充完整官方成绩或覆盖旧基线。与.cg首暖4944.66并列保留。后核既有日志：132239的server.log:68 Q_FRAGMENT_INSTALL installed=False、:398 COMPUTE_ORDER_SCOPE_REJECTED；换GQA SHA1043后两项身份仍锁2596，Q-hoist与compute-order均未启用。当期原main140749的:68/186/326确认两项启用。故此为优化组合不完整的混杂比较，原负成绩保留，不能据此判.cg本体整模无收益；待修正集成后另作对照。"
 }
 ```
 
