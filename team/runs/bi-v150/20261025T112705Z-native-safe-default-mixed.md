@@ -1,0 +1,50 @@
+<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
+
+# 20261025T112705Z-native-safe-default-mixed
+
+平台：天数 BI-V150。本页只摘录既有登记；未记录字段不补猜。
+
+## 登记 #263 · 当前基线正确性与恢复
+
+- **尝试**：恢复候选PR48的f2ca8a7/tree5e07、527文件默认关闭native并同步缓存身份；原官方完整105为103/105（98.0952%），105 success/stop、0传输错误/空输出/cap。同源码原mixed也通过：4652输入、15tokens答85，计数299tokens正确。两轮均未设native关闭环境覆盖，实际FP关闭/installed False/FX0native，源码未变、DB与清理通过。PR48仍Draft，尚未合入main；原官方两档各四轮正在量化吞吐代价，未发布成绩或性能基线。
+
+旧main526的99/105 reject和mixed特殊token错误保留；旧467/a42也复现，关闭旧版native后仅该边界恢复，排查范围收敛native路径及执行/内存差异，尚未定位具体kernel或单PR。新恢复候选通过不撤销历史失败，不恢复淘汰候选，不靠重复运行取最好成绩；raw诊断的main526来源标签保留，actual版本以各run state/manifest为准。
+- **改动**：相关实现 [prefill-response.json](../../../experiments/framework/20261025T094755Z-main526-mixed-token-diagnostic/mixed-requests/prefill-response.json)；[prefill-tokens.json](../../../experiments/framework/20261025T094755Z-main526-mixed-token-diagnostic/mixed-requests/prefill-tokens.json)；[diagnostic-summary.json](../../../experiments/framework/20261025T094755Z-main526-mixed-token-diagnostic/diagnostic-summary.json)；[tokenizer-special-ids.json](../../../experiments/framework/20261025T094755Z-main526-mixed-token-diagnostic/analysis/tokenizer-special-ids.json)；[diagnostic_requests.py](../../../experiments/framework/20261025T094755Z-main526-mixed-token-diagnostic-control/diagnostic_requests.py)；[accuracy-review.json](../../../experiments/accuracy/20261025T095054Z-main0bf9-main-math500-control/accuracy-review.json)；[state.json](../../../experiments/accuracy/20261025T095054Z-main0bf9-main-math500-control/state.json)；[archive-receipt.json](../../../experiments/accuracy/20261025T095054Z-main0bf9-main-math500-control/archive-receipt.json)；[math_500.json](../../../experiments/accuracy/20261025T095054Z-main0bf9-main-math500/math500-level3/20261025_175201/reports/minicpm/math_500.json)；[state.json](../../../experiments/framework/20261025T103226Z-pr24-467-mixed-token-diagnostic-control/state.json)；[prefill-tokens.json](../../../experiments/framework/20261025T103226Z-pr24-467-mixed-token-diagnostic/mixed-requests/prefill-tokens.json)；[evidence.json](../../../experiments/framework/20261025T103226Z-pr24-467-mixed-token-diagnostic/model-path/evidence.json)；[state.json](../../../experiments/framework/20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic-control/state.json)；[prefill-response.json](../../../experiments/framework/20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic/mixed-requests/prefill-response.json)；[evidence.json](../../../experiments/framework/20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic/model-path/evidence.json)；[accuracy-review.json](../../../experiments/accuracy/20261025T110044Z-native-safe-default-math500-control/accuracy-review.json)；[evidence.json](../../../experiments/accuracy/20261025T110044Z-native-safe-default-math500-control/model-path/evidence.json)；[biv150_native_w8a8.py](../../../experiments/accuracy/20261025T110044Z-native-safe-default-math500/source/plugin/vllm_fl/patches/biv150_native_w8a8.py)；[prefill-response.json](../../../experiments/framework/20261025T112705Z-native-safe-default-mixed/mixed-requests/prefill-response.json)；[evidence.json](../../../experiments/framework/20261025T112705Z-native-safe-default-mixed-control/model-path/evidence.json)；本轮准确变体以原件源码清单为准。
+- **怎么测**：freshserver原双请求及token返回字段不变；无native覆盖、默认共享cache0，核实际FP/installed False/FX0native及源码/DB/清理。
+- **结果**：同f2ca/527默认关闭路径：原mixed长题4652输入、15tokens答85，计数299tokens正确，actual FX0native。
+- **是否保留**：保留同源码边界通过并与本候选103/105配套；PR48仍Draft，不表示全部根因已定位或获得新性能基线。
+
+<details><summary>完整原登记（含UTC、状态、过程与标识）</summary>
+
+```json
+{
+  "run_id": "20261025T112705Z-native-safe-default-mixed",
+  "local_date": "2026-10-25",
+  "utc_start": "2026-10-25T11:27:05.848349+00:00",
+  "profile_id": "main-correctness",
+  "phase": "新527默认关闭native原mixed复验",
+  "device": "Iluvatar BI-V150",
+  "vllm_commit": "f2ca8a7f46528c5fd4881fac466c4ba941500889",
+  "flaggems_commit": "",
+  "input_len": "",
+  "output_len": "",
+  "concurrency": "",
+  "num_prompts": "",
+  "profiler": "false",
+  "status": "native_safe_default_mixed_pass",
+  "artifacts": "experiments/framework/20261025T112705Z-native-safe-default-mixed",
+  "conclusion": "同恢复候选f2ca8a7/tree5e07、527文件，清native环境覆盖且不设0，默认共享cache0；实际FP b97b1545/native_enabled False、installed False、FX0native，与本候选完整105一致。freshserver复用原双请求和return_token_ids：长题4652输入、15输出答85，计数1至128正确、299输出；11:28:09 UTC completed/all_correct true，完整源码未变、DB恢复及清理通过，未加载native。原diagnostic limitation仍写main526，仅是逐字复用模块的来源标签；实际受测版本以state与manifest为准，不改原件。本边界和本候选103/105完整准确率均已通过，PR48仍Draft未合并；不表示所有负候选恢复或全部根因定位，当前main99/105历史不变。官方吞吐正在测量恢复代价，暂无终态结果，不宣称性能收益。"
+}
+```
+
+</details>
+
+## 原件与说明
+
+- 原始目录：[20261025T112705Z-native-safe-default-mixed](../../../experiments/framework/20261025T112705Z-native-safe-default-mixed)
+- 原命令：未单列，见原始目录
+- 环境 / 源码 / 后态：[source-sha256.json](../../../experiments/framework/20261025T112705Z-native-safe-default-mixed-control/source-sha256.json)
+- 原始结果：[result.json](../../../experiments/framework/20261025T112705Z-native-safe-default-mixed/result.json)
+- 日志 / 采样：[server.log](../../../experiments/framework/20261025T112705Z-native-safe-default-mixed/server.log)；[gpu.csv](../../../experiments/framework/20261025T112705Z-native-safe-default-mixed/gpu.csv)；[exit-code](../../../experiments/framework/20261025T112705Z-native-safe-default-mixed/exit-code)
+- 相关说明：未记录
+- 完整原登记：[registry.csv](../../../experiments/registry.csv)（登记序号见上；同一run可有多个阶段）

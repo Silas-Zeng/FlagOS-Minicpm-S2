@@ -1,15 +1,15 @@
-# 当前进展：main526 完整准确率未达标
+# 当前进展：恢复候选准确率及mixed通过，官方吞吐进行中
 
-更新：2026-10-25 10:44 UTC。当前main完整105及mixed/native隔离对照已登记，共261条登记／258个run；原始预测、评审和失败输出均保留。
+更新：2026-10-25 11:30 UTC。现263条登记／260个run。本批追加同一f2ca8a7/tree5e07、527文件恢复候选的完整105与原mixed，原始预测、评审、图和请求证据已回收。
 
-- **完整准确率**：main0bf9／tree8671、526文件／native14f，原官方Math500 Level 3为 **99/105（94.2857%）**；原reviewer判valid/reject，至少100正确才过门槛。105请求成功、0传输错误、0空最终／提取；索引72、83、101、104达到输出上限，仍保留在分母。**当前main不具比赛基线准确率资格**；不能把owner exit0和清理成功当作准确率通过。[原始判分](experiments/accuracy/20261025T095054Z-main0bf9-main-math500-control/accuracy-review.json)
-- **mixed错误**：freshserver原双请求只新增return_token_ids；长题4652输入生成`<think>`后1023个`<s>`，计数请求正常，精确同题历史串行正确。根因未定位；与本次105结果分别留证，不直接归因某PR、不靠反复运行取最好成绩。[方法与证据](team/methods/main-correctness.md)
-- **旧版对照**：恢复131603的完整467/a42组合与新隔离缓存，实际34native图通过；原mixed长题仍输出ID8、220后1022个ID0并耗尽1024，计数正常。不能认为直接回退该版本即可解决或据此归因单PR。原diagnostic模块的main526标签逐字保留，实际版本以本run state为准。[旧版原件](experiments/framework/20261025T103226Z-pr24-467-mixed-token-diagnostic-control/state.json)
-- **native隔离**：同一旧467源码/SO保持不变，仅关闭既有native开关；实际新图0 native、installed False，长题57tokens答85、计数299tokens正确。本边界恢复，重点收敛到native路径及执行/内存差异，但还不能锁定具体kernel或PR；仅正确性诊断，非完整准确率、性能或合规优化。[原件](experiments/framework/20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic/model-path/evidence.json)
-- **此前性能与候选**：161030的5758.72／4045.20 tok/s继续作为该版本性能实测记录，不能当作合格提交基线。affine官方未确认净收益，next-K机制未成立，GQA两档无收益，已收口；不恢复淘汰候选、不新增优化PR。[实验总表](team/experiments.md)
-- **本轮终态**：native-off于10:44:35 UTC completed true，源码/native文件未变、DB恢复及清理通过。旧native-on的10:35:06语义失败exit1不改写，完整105的owner exit0与独立准确率reject分别保存。
+- **完整准确率**：原官方105为 **103/105（98.0952%）**，105 success/stop、0传输错误/空最终或提取/输出cap，11:25:44 UTC完成。[原始判分](experiments/accuracy/20261025T110044Z-native-safe-default-math500-control/accuracy-review.json)
+- **同源mixed**：4652输入、15tokens答85，计数299tokens正确，11:28:09 UTC completed/all_correct通过。两轮均清native环境覆盖而不显式设0，实际提交默认关闭，FP一致、installed False、FX0native，源码未变、DB恢复及清理通过。[原件](experiments/framework/20261025T112705Z-native-safe-default-mixed/diagnostic-summary.json)
+- **代码状态**：[PR48](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/48)仍为Draft，head f2ca，尚未合入main。本轮通过只属于该受测候选；旧main99/105 reject、旧mixed及旧467开关对照保留，不能宣称全部根因已定位。[方法记录](team/methods/main-correctness.md)
+- **进行中**：同源码原官方4K/16K各四轮正在量化恢复吞吐代价；run `official/20261025T113044Z-native-safe-default-throughput`，owner251478／driver251481，入口日志 `scripts/native-safe-default-official/owner.log`。无自动后继，尚无终态成绩，不编造吞吐或确认新性能基线。
 
-旧native-on/off已形成一组对照；后续围绕native路径做有区分力的原因定位，再决定隔离或回退方案。不能跨版本继承准确率资格，也不能用当前边界通过宣称全部修复。暂停新增性能优化，本轮结果成组发布。以下为历史交接，当前状态以上文为准。
+按用户最新要求停止继续优化和新增研究；只收尾当前官方测量，再结合历史已验证版本选择准确率可靠、吞吐高的基线，结果出齐前不预设性能基线。
+
+原件中的main526诊断标签是复用模块来源，实际版本以本run state/manifest为准。历史原件及登记不改写，未加载native按实际图证据记录，不伪造native_unchanged字段。以下为历史交接，当前状态以上文为准。
 
 ## 以下为历史交接
 

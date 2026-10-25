@@ -13,7 +13,7 @@
 
 ## 按方法
 
-- [当前main基线正确性](methods/main-correctness.md)
+- [当前基线正确性与恢复](methods/main-correctness.md)
 - [Attention next-K寄存器预取](methods/attention-next-k.md)
 - [GQA恒等rescale跳过](methods/gqa-identity-rescale.md)
 - [当前main526热点分析](methods/current-main-hotspot.md)
