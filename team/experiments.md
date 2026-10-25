@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共264条登记、261个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共273条登记、270个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -242,6 +242,15 @@
 | 天数 BI-V150 | 262 | 2026-10-25T11:00:44+00:00 | [主线复核与native备用方案](methods/main-correctness.md) | 恢复候选完整105通过 | 未记录/未记录/未记录/未记录 | f2ca/527默认关闭native：原完整105为103/105（98.0952%），105 success/stop，0传输错误/空输出/cap；actual FX0native。 | [20261025T110044Z-native-safe-default-math500](runs/bi-v150/20261025T110044Z-native-safe-default-math500.md) |
 | 天数 BI-V150 | 263 | 2026-10-25T11:27:05.848349+00:00 | [主线复核与native备用方案](methods/main-correctness.md) | 恢复候选原mixed通过 | 未记录/未记录/未记录/未记录 | 同f2ca/527默认关闭路径：原mixed长题4652输入、15tokens答85，计数299tokens正确，actual FX0native。 | [20261025T112705Z-native-safe-default-mixed](runs/bi-v150/20261025T112705Z-native-safe-default-mixed.md) |
 | 天数 BI-V150 | 264 | 2026-10-25T11:30:44+00:00 | [主线复核与native备用方案](methods/main-correctness.md) | 备用方案完整官方性能完成 | 未记录/未记录/未记录/未记录 | 原官方两档各四轮1536请求全部成功；弃首轮4K/16K为5271.89/3763.84 tok/s，Mean TTFT4281.63/137244.33ms。 | [20261025T113044Z-native-safe-default-throughput](runs/bi-v150/20261025T113044Z-native-safe-default-throughput.md) |
+| 天数 BI-V150 | 265 | 2026-10-25T12:35:23+00:00 | [主线复核与native备用方案](methods/main-correctness.md) | 团队main本轮105达标，专项异常仍保留 | 未记录/未记录/未记录/未记录 | 团队main0915本轮原105为100/105（95.2381%），105 success、102 stop＋3 cap（94/99/101），0传输错误/空答案。 | [20261025T123523Z-team-main0915-math500](runs/bi-v150/20261025T123523Z-team-main0915-math500.md) |
+| 天数 BI-V150 | 266 | 2026-10-25T13:00:20.159833+00:00 | [GQA KV读取缓存策略](methods/gqa-kv-cg.md) | 16K组件局部正信号 | 未记录/未记录/未记录/未记录 | N33/B40/S16：8组数值/Graph边界通过，Event1.277376→1.243314ms，省2.6666%；wall省2.7239%。 | [20261025T130020159833Z-gqa-kv-cg-hotspot-component](runs/bi-v150/20261025T130020159833Z-gqa-kv-cg-hotspot-component.md) |
+| 天数 BI-V150 | 267 | 2026-10-25T13:02:58.500889+00:00 | [GQA KV读取缓存策略](methods/gqa-kv-cg.md) | 第二形状组件正信号 | 未记录/未记录/未记录/未记录 | B32/S4：8组数值/Graph边界通过，Event1.029731→1.015663ms，省1.3662%；wall省1.4070%。 | [20261025T130258500889Z-gqa-kv-cg-b32-component](runs/bi-v150/20261025T130258500889Z-gqa-kv-cg-b32-component.md) |
+| 天数 BI-V150 | 268 | 2026-10-25T13:04:18.879497+00:00 | [LM-head双行GEMV](methods/lm-head-paired-gemv.md) | 组件正确性通过，性能负 | 未记录/未记录/未记录/未记录 | 数值/变指针内容/guard/RNG通过；Event0.834885→2.045513ms、wall0.892245→2.076413ms，明显负。 | [20261025T130418879497Z-lm-head-paired-gemv-component](runs/bi-v150/20261025T130418879497Z-lm-head-paired-gemv-component.md) |
+| 天数 BI-V150 | 269 | 2026-10-25T13:07:35.173560+00:00 | [Attention head-major分页读取](methods/attention-head-major.md) | 三臂数值通过，候选明显负 | 未记录/未记录/未记录/未记录 | 三臂编译及数值/Graph通过；Event当前8.366/原FlagGems29.733/新loader82.944ms，候选明显负。 | [20261025T130735173560Z-head-major-paged-prefill-component](runs/bi-v150/20261025T130735173560Z-head-major-paged-prefill-component.md) |
+| 天数 BI-V150 | 270 | 2026-10-25T13:10:54.228268+00:00 | [主线复核与native备用方案](methods/main-correctness.md) | 有界观察失败，根因未定位 | 未记录/未记录/未记录/未记录 | mixed长题仍ID8＋ID0×1023耗尽上限；快照未生成、分析FileNotFoundError，无法判断logits或根因。 | [20261025T131054Z-main526-mixed-logits-boundary](runs/bi-v150/20261025T131054Z-main526-mixed-logits-boundary.md) |
+| 天数 BI-V150 | 271 | 2026-10-25T13:22:39+00:00 | [GQA KV读取缓存策略](methods/gqa-kv-cg.md) | 官方首暖负，主动早停 | 未记录/未记录/未记录/未记录 | 4K冷/首暖4722.73/4944.66 tok/s，首暖对同轮5751.88为−14.03%；512成功，第三轮主动中断、16K未测。 | [20261025T132239Z-main0915-gqa-kv-cg-four-rounds](runs/bi-v150/20261025T132239Z-main0915-gqa-kv-cg-four-rounds.md) |
+| 天数 BI-V150 | 272 | 2026-10-25T13:44:07.482450+00:00 | [GQA stride常量折叠](methods/gqa-kv-stride.md) | 指令减少，未见净收益 | 未记录/未记录/未记录/未记录 | 8组数值/Graph及alternate-stride13项通过；整数mul27→13，Event1.277992→1.278517ms，wall1.284104→1.283520ms，无净收益。 | [20261025T134407482450Z-gqa-kv-stride-main-hotspot-component](runs/bi-v150/20261025T134407482450Z-gqa-kv-stride-main-hotspot-component.md) |
+| 天数 BI-V150 | 273 | 2026-10-25T13:55:51.248816+00:00 | [GQA KV读取缓存策略](methods/gqa-kv-cg.md) | 4K组件局部正，官方差异待解 | 未记录/未记录/未记录/未记录 | 4K/B64/S2：原8组数值/Graph通过，Event0.528390→0.521568ms省1.2912%，wall省1.4224%。 | [20261025T135551248816Z-gqa-kv-cg-b64-4k-component](runs/bi-v150/20261025T135551248816Z-gqa-kv-cg-b64-4k-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

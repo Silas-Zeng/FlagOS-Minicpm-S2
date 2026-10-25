@@ -20,7 +20,11 @@
 
 | 方法 / 版本 | 结果与处理 |
 |---|---|
-| [主线复核与native备用方案](team/methods/main-correctness.md) | PR48备用f2ca：103/105与原mixed通过；完整官方4K/16K弃首轮 **5271.89/3763.84 tok/s**，TTFT **4281.63/137244.33ms**，1536请求成功。保留备用，PR仍Draft；旧99/105采样结果和temperature0专项异常分别保留，根因未定。主力继续吞吐探索，团队main0915原105复核进行中 |
+| [主线复核与native备用方案](team/methods/main-correctness.md) | PR48备用f2ca：103/105与原mixed通过；完整官方4K/16K弃首轮 **5271.89/3763.84 tok/s**，TTFT **4281.63/137244.33ms**，1536请求成功。保留备用，PR仍Draft；旧99/105采样结果和temperature0专项异常分别保留，根因未定。团队main0915本轮原105为100/105（102 stop＋3 cap，0传输错误/空答案）；与旧99/105及mixed专项异常并列保留，不宣称根因已修 |
+| [GQA KV读取缓存策略](team/methods/gqa-kv-cg.md) | 16K两形状组件Event省 **2.6666%/1.3662%**；通用候选原官方4K冷/首暖 **4722.73/4944.66 tok/s**，首暖对参考同轮5751.88为 **−14.03%**，512成功后主动早停，第三轮中断、16K未测。KV547648对547536、DB/形状也有限制。补4K/B64/S2组件仍省 **1.2912%**，不做长短gating；待当期原main control解释差异，当前不能合并/定基线，也不判`.cg`永久淘汰 |
+| [GQA stride常量折叠](team/methods/gqa-kv-stride.md) | 原8组数值/Graph及alternate-stride13项通过，整数mul27→13；Event省 **−0.0410%**、wall省 **+0.0454%**，未见净收益，收口，不进模型 |
+| [LM-head双行GEMV](team/methods/lm-head-paired-gemv.md) | 随机M2组件数值/guard/RNG通过，Event **0.835→2.046ms**；明确负，停止，不接模型或创建优化PR |
+| [Attention head-major分页读取](team/methods/attention-head-major.md) | 当前/原FlagGems/新loader三臂数值/Graph通过，Event **8.366/29.733/82.944ms**；候选明确负，停止。page16 loader与N64是组合变化 |
 | [Attention连续页段寻址](team/methods/attention-affine-pages.md) | 原四语义及串行prefill绑定通过；官方两档各4轮、1536成功，弃首轮4K **5741.68** / 16K **4050.10 tok/s**，相对main526仅观察−0.30%/+0.12%。KV546432对547536，未确认净收益，不定基线/105；组件约5.0–6.9%局部省时保留 |
 | [Attention next-K预取](team/methods/attention-next-k.md) | 首次逐位等检查通过，ASM定位门失败、未计时；CPU后核发现真实PV前wait/barrier，预期重叠机制不成立，停止本实现 |
 | [GQA恒等rescale跳过](team/methods/gqa-identity-rescale.md) | N33/B40/S16及B32/S4各8组数值/Graph通过，组件耗时分别+2.308%/+1.058%；未见收益，不推进模型/官方。B32首次空padding验证器失败单列保留 |
@@ -41,7 +45,7 @@
 | [KV复制](team/methods/kv-pitched.md) | 字节正确性和局部成本信号已记录，尚无稳定端到端收益；工具已合并，仍需显式调用，未启用 KV offload |
 | 沐曦－曦云C500 | 由该平台队友补充环境与实测，不能套用BI-V150结果 |
 
-框架与算子优化同等考虑，按实际热点、硬件和输入特点、净收益及验证成本选择；先核对队友已有实现，避免重复开发。本批Attention官方与两项组件尝试已收口，未形成可合并的新优化；KV和选行既有结果保留，后续[GPU热点](team/methods/gpu-hotspots.md)诊断须对应实际加载图和当前代码，历史轨迹不能直接代替新版本预算。CPU小收益继续保留。
+框架与算子优化同等考虑，按实际热点、硬件和输入特点、净收益及验证成本选择；先核对队友已有实现，避免重复开发。本批GQA `.cg`三个组件形状局部正、官方首暖负，待当期原main control解释差异，暂不能合并或定基线；stride、LM-head与head-major未见净收益并收口；KV和选行既有结果保留，后续[GPU热点](team/methods/gpu-hotspots.md)诊断须对应实际加载图和当前代码，历史轨迹不能直接代替新版本预算。CPU小收益继续保留。
 
 本阶段已登记受测基点为PR25＋缓存修复的`7596cc0`，KV候选的源码树与改动清单随各轮原件保存；后续main集成不自动继承这些成绩。已完成官方四轮的`4c57567d`及更早版本分别保留，旧负结果不删除。最新运行状态和下一步见[当前工作](CURRENT_WORK.md)。
 

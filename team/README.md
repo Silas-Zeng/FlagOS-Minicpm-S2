@@ -13,6 +13,10 @@
 
 ## 按方法
 
+- [GQA stride常量折叠](methods/gqa-kv-stride.md)
+- [GQA KV读取缓存策略](methods/gqa-kv-cg.md)
+- [LM-head双行GEMV](methods/lm-head-paired-gemv.md)
+- [Attention head-major分页读取](methods/attention-head-major.md)
 - [主线复核与native备用方案](methods/main-correctness.md)
 - [Attention next-K寄存器预取](methods/attention-next-k.md)
 - [GQA恒等rescale跳过](methods/gqa-identity-rescale.md)

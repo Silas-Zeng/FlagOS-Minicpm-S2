@@ -1,0 +1,77 @@
+--- frozen-main/worker
++++ stride-constexpr/worker
+@@ -48,7 +48,8 @@
+     return fields
+ 
+ 
+-from cache_policy import cache_evidence
++from stride_evidence import specialization_evidence
++from alternate_stride import check_alternate_stride
+ 
+ 
+ def worker(run, model, shape="hotspot"):
+@@ -86,10 +87,11 @@
+         if not result["native_install"].get("installed"):
+             raise RuntimeError("共同 native 安装链不符")
+         gqa = importlib.import_module("vllm_fl.patches.biv150_gqa_decode")
+-        if digest(Path(gqa.__file__)) != SOURCE_SHA or digest(HERE / "baseline.py") != SOURCE_SHA:
++        if digest(Path(gqa.__file__)) != SOURCE_SHA or digest(HERE / "baseline.py") != "2596cc09caf9b5b38b49755ae9af41ebdcf59a1d5ad889fc8e9319d1584438d1":
+             raise RuntimeError("实际 GQA 不是冻结 main526 原件")
+         backend = importlib.import_module("vllm.v1.attention.backends.triton_attn")
+-        candidate = load("gqa_kv_cg_candidate", HERE / "candidate.py")
++        baseline = load("gqa_stride_control", HERE / "baseline.py")
++        candidate = load("gqa_stride_candidate", HERE / "candidate.py")
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("非单卡")
+         torch.cuda.set_device(0)
+@@ -97,7 +99,7 @@
+         if "BI-V150" not in props.name or props.multi_processor_count != 16:
+             raise RuntimeError("不是 BI-V150 16 SM")
+         result["device"] = str(props)
+-        result["source_sha256"] = dict(baseline=SOURCE_SHA, candidate=digest(HERE / "candidate.py"))
++        result["source_sha256"] = dict(production=SOURCE_SHA, baseline=digest(HERE / "baseline.py"), candidate=digest(HERE / "candidate.py"))
+         torch.manual_seed(725013)
+         if shape == "hotspot":
+             B, active, segments = 40, 33, 16
+@@ -158,7 +160,7 @@
+             padded_slot_values=common.slot_mapping[active:].cpu().tolist())
+         original_inputs = (query.clone(), cache.clone(), common.seq_lens.clone(), common.block_table_tensor.clone())
+         arms = {}
+-        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention)):
++        for name, kernel in (("baseline", baseline._gqa_decode_attention), ("candidate", candidate._gqa_decode_attention)):
+             out = torch.full_like(query, -17)
+             partial = torch.full_like(metadata.softmax_segm_output, -17)
+             maxima = torch.full_like(metadata.softmax_segm_max, -17)
+@@ -172,7 +174,7 @@
+                 original_reducer[rgrid](**rk)
+                 return compiled
+             arms[name] = NS(call=call, out=out, partial=partial, maxima=maxima, sums=sums,
+-                            tensors=(out, partial, maxima, sums))
++                            tensors=(out, partial, maxima, sums), pk=pk, kernel=kernel)
+         first = {name: arm.call() for name, arm in arms.items()}
+         torch.cuda.synchronize()
+         result["resources"] = {name: dump(compiled, run / ("ir-" + name)) for name, compiled in first.items()}
+@@ -183,9 +185,10 @@
+                                             b.view(torch.int16 if b.element_size() == 2 else torch.int32))
+         if not same_bits(production_output, arms["baseline"].out):
+             raise RuntimeError("捕获 ABI 重放不同于实际 backend 输出")
+-        # 只确认 .cg 落到机器访存指令；提示被忽略时不做计时。
+-        # 寄存器/shared 仅记录，不另增资源阈值。
+-        result["cache_policy"] = cache_evidence(first["baseline"].asm["asm"], first["candidate"].asm["asm"])
++        # 双臂共同原生产无 cg，只度量新增 stride 特化；机器码未消除页乘法就不计时。
++        result["stride_specialization"] = specialization_evidence(
++            first["baseline"].asm["asm"], first["candidate"].asm["asm"],
++            (HERE / "baseline.py").read_text(), (HERE / "candidate.py").read_text())
+         stream = torch.cuda.Stream()
+         stream.wait_stream(torch.cuda.current_stream())
+         with torch.cuda.stream(stream):
+@@ -247,6 +250,9 @@
+             return expected[0]
+ 
+         initial_output = check("dense-random")
++        result["alternate_stride"] = check_alternate_stride(
++            torch, arms, cache, query, common, grid, first, same_bits, dump, run)
++        write(run / "results.json", result)
+         query[:B].neg_()
+         # row15 remains long in the ragged pattern; mutate pages it actually reads.
+         changed_row = 15

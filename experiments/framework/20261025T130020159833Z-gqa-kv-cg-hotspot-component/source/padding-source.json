@@ -1,0 +1,54 @@
+{
+  "source": "tmp\\resume-exploration-20261025\\20261025T072151Z-current-main-hotspot-16384-control\\plugin-source\\vllm_fl\\worker\\model_runner.py",
+  "sha256": "677def25d5391887145b0bbabb2222531887c6f7c48b6ea53c1859ad08d8ef61",
+  "snippets": [
+    {
+      "start": 2083,
+      "end": 2087,
+      "text": "        # Note: pad query_start_loc to be non-decreasing, as kernels\n        # like FlashAttention requires that\n        self.query_start_loc.np[num_reqs + 1 :].fill(cu_num_tokens[-1])\n        self.query_start_loc.copy_to_gpu()\n        query_start_loc = self.query_start_loc.gpu[: num_reqs + 1]"
+    },
+    {
+      "start": 2204,
+      "end": 2211,
+      "text": "                self.num_computed_tokens[req_indices_gpu].to(torch.int64)\n                + self.query_pos.gpu[:total_num_scheduled_tokens]\n            )\n            self.seq_lens[:num_reqs] = (\n                self.num_computed_tokens[:num_reqs] + num_scheduled_tokens_gpu\n            )\n            self.seq_lens[num_reqs:].fill_(0)\n"
+    },
+    {
+      "start": 2353,
+      "end": 2360,
+      "text": "            else:\n                blk_table = self.input_batch.block_table[kv_cache_gid]\n                blk_table_tensor = blk_table.get_device_tensor(num_reqs_padded)\n\n            # Fill unused block table entries with NULL_BLOCK_ID (null block)\n            # for CUDAGraph padding. Block 0 is reserved for padding.\n            blk_table_tensor[num_reqs:num_reqs_padded].fill_(NULL_BLOCK_ID)\n            return blk_table_tensor"
+    },
+    {
+      "start": 2429,
+      "end": 2440,
+      "text": "            query_start_loc=self.query_start_loc.gpu[: num_reqs_padded + 1],\n            query_start_loc_cpu=self.query_start_loc.cpu[: num_reqs_padded + 1],\n            seq_lens=self.seq_lens[:num_reqs_padded],\n            _seq_lens_cpu=seq_lens_cpu,\n            _num_computed_tokens_cpu=num_computed_tokens_cpu,\n            seq_lens_cpu_upper_bound=seq_lens_cpu_upper_bound,\n            num_reqs=num_reqs_padded,\n            num_actual_tokens=num_tokens_padded,\n            max_query_len=max_query_len,\n            max_seq_len=max_seq_len,\n            block_table_tensor=block_table_gid_0,\n            slot_mapping=slot_mapping_gid_0,"
+    },
+    {
+      "start": 4113,
+      "end": 4119,
+      "text": "                slot_mapping = blk_table.slot_mapping.gpu[:num_tokens_padded]\n\n            # Fill unused with -1. Needed for reshape_and_cache in full cuda\n            # graph mode. `blk_table_tensor` -1 to match mamba PAD_SLOT_ID\n            slot_mapping[num_tokens_unpadded:num_tokens_padded].fill_(-1)\n\n            return slot_mapping"
+    }
+  ],
+  "builder": {
+    "source": "tmp\\remote-source\\triton_attn.py",
+    "sha256": "1219c4d1820b56e99ef6686de8a49c8c5aa57707794bcabf3322023799a03605",
+    "lines": "188-234: build直接使用common指针与padding计数，不改原框架"
+  },
+  "trace": {
+    "source": "tmp\\resume-exploration-20261025\\20261025T072151Z-current-main-hotspot-16384\\hotspot-events.jsonl",
+    "sha256": "e58e0a3d5abb6120ba1c027965f64e9f3a61d5fa258f70b3f6be8b7b1245a115",
+    "phase": "FULL",
+    "N": 33,
+    "bucket": 40,
+    "max_seq_lens": [
+      16646,
+      16647,
+      16648,
+      16649,
+      16650,
+      16651,
+      16652,
+      16653
+    ]
+  },
+  "scope": "只复用真实bucket/padding机制；组件随机KV长度16384，原诊断完整请求长度/激活未采集，不能声称逐请求重放"
+}

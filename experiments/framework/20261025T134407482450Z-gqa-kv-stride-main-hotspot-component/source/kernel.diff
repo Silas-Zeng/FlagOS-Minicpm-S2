@@ -1,0 +1,72 @@
+--- frozen-main/kernel
++++ stride-constexpr/kernel
+@@ -100,11 +100,11 @@
+     block_table_stride: tl.int64,
+     query_stride_token: tl.int64,
+     query_stride_head: tl.constexpr,
+-    k_stride_block: tl.int64,
+-    k_stride_slot: tl.int64,
+-    k_stride_head: tl.int64,
+-    v_stride_block: tl.int64,
+-    v_stride_slot: tl.int64,
++    k_stride_block: tl.constexpr,
++    k_stride_slot: tl.constexpr,
++    k_stride_head: tl.constexpr,
++    v_stride_block: tl.constexpr,
++    v_stride_slot: tl.constexpr,
+     v_stride_head: tl.constexpr,
+     segment_stride_token: tl.constexpr,
+     segment_stride_head: tl.constexpr,
+@@ -116,6 +116,12 @@
+     ROWS: tl.constexpr,
+     SEGMENTS: tl.constexpr,
+ ):
++    # Keep the original int64 arithmetic while specializing immutable strides.
++    k_stride_block_i64 = tl.full((), k_stride_block, tl.int64)
++    k_stride_slot_i64 = tl.full((), k_stride_slot, tl.int64)
++    k_stride_head_i64 = tl.full((), k_stride_head, tl.int64)
++    v_stride_block_i64 = tl.full((), v_stride_block, tl.int64)
++    v_stride_slot_i64 = tl.full((), v_stride_slot, tl.int64)
+     seq_idx = tl.program_id(0)
+     kv_head_idx = tl.program_id(1)
+     segment_idx = tl.program_id(2)
+@@ -157,14 +163,14 @@
+         # scalar block-table entry covers the whole tile.
+         page = tl.load(block_table_row + position // PAGE_SIZE).to(tl.int64)
+         k_offsets = (
+-            page * k_stride_block
+-            + column_slot[None, :] * k_stride_slot
+-            + kv_head_idx * k_stride_head
++            page * k_stride_block_i64
++            + column_slot[None, :] * k_stride_slot_i64
++            + kv_head_idx * k_stride_head_i64
+             + offs_dim[:, None]
+         )
+         v_offsets = (
+-            page * v_stride_block
+-            + column_slot[:, None] * v_stride_slot
++            page * v_stride_block_i64
++            + column_slot[:, None] * v_stride_slot_i64
+             + kv_head_idx * v_stride_head
+             + offs_dim[None, :]
+         )
+@@ -188,14 +194,14 @@
+         page = tl.load(block_table_row + full_upper // PAGE_SIZE).to(tl.int64)
+         column_valid = full_upper + offs_step < upper
+         k_offsets = (
+-            page * k_stride_block
+-            + column_slot[None, :] * k_stride_slot
+-            + kv_head_idx * k_stride_head
++            page * k_stride_block_i64
++            + column_slot[None, :] * k_stride_slot_i64
++            + kv_head_idx * k_stride_head_i64
+             + offs_dim[:, None]
+         )
+         v_offsets = (
+-            page * v_stride_block
+-            + column_slot[:, None] * v_stride_slot
++            page * v_stride_block_i64
++            + column_slot[:, None] * v_stride_slot_i64
+             + kv_head_idx * v_stride_head
+             + offs_dim[None, :]
+         )
