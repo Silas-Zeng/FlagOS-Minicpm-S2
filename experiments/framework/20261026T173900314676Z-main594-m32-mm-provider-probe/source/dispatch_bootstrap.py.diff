@@ -1,0 +1,43 @@
+--- 150802-M64/dispatch_bootstrap.py
++++ M32-identity/dispatch_bootstrap.py
+@@ -1,6 +1,7 @@
+ """实际新main callback的默认FlagGems mm.out dispatch；不装候选。"""
+ import hashlib,importlib,inspect,os
+ from pathlib import Path
++ROWS=32
+ MM_SHA='4c2e23da2a6b65b89cbb8170967f14c5327d143e21137387f3907ccb4fcde090'
+ CALLBACK_SHA='1edfba6c9176665312962e7ea7dc9cac15132403ca4fbbd92d86fd4894325302'
+ def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+@@ -29,13 +30,16 @@
+     (run/'source/actual-small-out-lowering.py').write_bytes(cb_source.read_bytes())
+     return module,callback,dict(mm_source_sha256=MM_SHA,callback_source_sha256=CALLBACK_SHA,
+         registrar_mm_out=True,aten_dispatch='CUDA FlagGems',callback_installer_called=False,
+-        scope='原small_linear_out M64不依赖_LARGE_LINEAR策略，实际torch.mm(x,weight.t(),out=out)；不重编Inductor')
++        scope='原small_linear_out M32不依赖_LARGE_LINEAR策略，实际torch.mm(x,weight.t(),out=out)；不重编Inductor')
+ class Capture:
+     def __init__(self,original):self.original,self.records=original,[]
+     def __getitem__(self,grid):
+         def launch(*args,**kwargs):
+-            require(len(args)>=12 and tuple(int(v) for v in args[3:6])==(64,2048,6144),'实际callback没有执行M64 down MM ABI')
++            require(len(args)>=12 and tuple(int(v) for v in args[3:6])==(ROWS,2048,6144),'实际callback没有执行M32 down MM ABI')
+             require(tuple(int(v) for v in args[6:12])==(6144,1,1,6144,2048,1),'MM实际输入/原W转置/out stride不同')
++            require(tuple(args[0].shape)==(ROWS,6144) and tuple(args[0].stride())==(6144,1),'A真实M32 descriptor不同')
++            require(tuple(args[1].shape)==(6144,2048) and tuple(args[1].stride())==(1,6144),'B不是原W.t自然view')
++            require(tuple(args[2].shape)==(ROWS,2048) and tuple(args[2].stride())==(2048,1),'caller out真实descriptor不同')
+             require(kwargs.get('fp8_fast_accum') is True and kwargs.get('input_precision') is None and kwargs.get('GROUP_M')==8,'MM原数学参数变化')
+             value=self.original[grid](*args,**kwargs)
+             require(isinstance(value,tuple) and len(value)==2,'LibEntry返回ABI变化')
+@@ -44,9 +48,11 @@
+             actual_grid=tuple(grid(resolved)) if callable(grid) else tuple(grid)
+             keys=('BLOCK_M','BLOCK_N','BLOCK_K','SPLIT_K','num_warps','num_stages','num_ctas')
+             config={k:int(resolved[k]) for k in keys}
+-            self.records.append(dict(M=64,N=2048,K=6144,config=config,grid=actual_grid,kernel=kernel,
++            self.records.append(dict(M=ROWS,N=2048,K=6144,config=config,grid=actual_grid,kernel=kernel,
+                 constexprs={k:str(v) for k,v in constexprs.items()},
+                 mathematical_kwargs={k:str(v) for k,v in kwargs.items()},
+-                A_stride=[6144,1],B_transposed_W_stride=[1,6144],out_stride=[2048,1]))
++                A_shape=list(args[0].shape),A_stride=list(args[0].stride()),
++                B_transposed_W_shape=list(args[1].shape),B_transposed_W_stride=list(args[1].stride()),
++                B_storage_offset=int(args[1].storage_offset()),out_shape=list(args[2].shape),out_stride=list(args[2].stride())))
+             return value
+         return launch

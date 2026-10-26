@@ -1,13 +1,11 @@
 # 当前实验状态
 
-2026-10-26 16:44 UTC（北京时间10月27日00:44）。BI-V150由本方管理，C500由队友独立管理。本批339条登记／336个唯一run。
+2026-10-26 17:48 UTC（北京时间10月27日01:48）。BI-V150由本方管理，C500由队友独立管理。本批343条登记/340个唯一run。
 
-**SSH已恢复，正在补16K官方四轮。** 原main594控制组154111的4K四轮全部成功（1024请求），4909.31／5843.85／5767.56／5931.59 tok/s，弃首均值5847.6667；首轮16K中断、原因未确认，无完整16K成绩。原PID退出，原始日志与state保留，初始DB207f已恢复。执行路径读取器的CacheCompiledArtifact格式缺项已只读补证，不重测4K。[方法、四轮和恢复证据](team/methods/shape-gemm.md)。
+main594分服务性能控制已齐：4K暖均5847.6667、16K4192.49 tok/s，分别1024/512个请求成功。原4K随后16K中断及provider读取器补证如实保留，不冒充同run连续八轮；没有新增本方main594/native14f的105资格。
 
-唯一GPU任务：`20261026T164443Z-main594-control-16k-four-rounds`，owner314／driver317；远端 `/workspace/experiments/minicpm-s2/official/20261026T164443Z-main594-control-16k-four-rounds`，相邻`-control/state.json`，run内`server.log`、`benchmark.log`。完整main594/tree5a406f3，native14f/DB207f；仅用官方--test-cases选择16K，服务/benchmark内容和四轮弃首均值不变。不要重复启动。
+M64固定寻址组件省1.47792%，实际4K首暖5743.94对5843.85观察低1.70966%，按约定停止；两轮512个请求全部成功，实际启用与清理通过。未跑16K/105，不开优化PR，不认定稳定回退或框架错误。
 
-M64固定寻址组件8类检查/RNG通过，单组完整MM省1.47792%，无额外权重；生产三文件候选已准备、上传但未启动。[差分与已测范围](analysis/m64-fixed-address-production-20261026/README.md)。候选4K/16K分别新服务匹配控制；尚无候选官方、105或代码合并，不认定新基线。
+M32原配置探针已完成，独立固定寻址组件八项检查/RNG通过，49.417669→48.984375us，单组省0.87680%。保留准备M32-only的16K官方对照，不叠M64，无模型/105/稳定收益资格。最近owner10076/worker10079已退出、9031关闭、DB恢复；当前没有排队GPU任务。
 
-团队main594／PR59的队友native5cbb单评分与本方native14f四轮口径分开。旧main6971完整5656.77／4119.24、103/105为历史参考。历史负结果和组件局限保留，不为上传重复测试。
-
-[实验总表](team/experiments.md)／[方法导航](team/README.md)。原始证据从方法记录链接；AI接续与后台入口只在本页维护。
+[方法、命令与原始证据](team/methods/shape-gemm.md)／[实验总表](team/experiments.md)／[方法导航](team/README.md)。团队PR59/native5cbb的单评分与本方native14f四轮分开；旧main6971成绩与负结果保留，不为上传重复测试。

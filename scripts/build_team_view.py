@@ -354,6 +354,23 @@ CODE['shape-gemm'] += ['analysis/m64-fixed-address-production-20261026/README.md
 CODE['shape-gemm'] += ['experiments/official/20261026T154111Z-main594-official-control-four-rounds/benchmark_results/raw_runs_20261026_234328.csv', 'experiments/official/20261026T154111Z-main594-official-control-four-rounds-control/interruption-recovery.json', 'experiments/official/20261026T154111Z-main594-official-control-four-rounds-control/posthoc-provider-recovery/result.json']
 BATCH_RESULTS['main594_control_interrupted_4k_complete']=('main594原控制4K四轮全部SUCCESS，1024请求，4909.31/5843.85/5767.56/5931.59 tok/s，弃首均值5847.6667。首轮16K中断，无完整16K行，末尾无框架错误证据，原因未确认。原PID全部退出，原件及中断DB已保存，恢复初始207f；source/native未变。旧provider reader未识别CacheCompiledArtifact，已只读原产物补证，真实out调用1/4/3/3；旧false和原state保留，不重测4K。只作为独立4K控制，尚非完整官方基线。', '保留已完成4K控制，独立新服务补16K；候选也分负载启动，不拼接为同一连续8轮。', '4K请求全成功与实际路径证据已回收；不等于105准确率通过。', '原官方4K先跑四轮；16K首轮中断，原日志/CSV未改；同初始DB与native、无profiler。')
 
+# 20261027 main594完整16K控制
+CODE['shape-gemm'] += ['experiments/official/20261026T164443Z-main594-control-16k-four-rounds/benchmark_results/raw_runs_20261027_004556.csv', 'experiments/official/20261026T164443Z-main594-control-16k-four-rounds/benchmark_results/summary_20261027_004556.csv', 'experiments/official/20261026T164443Z-main594-control-16k-four-rounds-control/state.json']
+BATCH_RESULTS['main594_control_16k_complete']=('main594/native14f/初始DB207f独立16K官方四轮全部SUCCESS，512请求；3742.06/4194.03/4191.88/4191.56 tok/s，弃首均值4192.49。原validator四行/一summary及token数通过，实际provider/prefill/native路径闭合；源码未变、DB/设备清理通过。与原已完成4K组成分服务性能控制，不能冒充同run连续八轮或105准确率资格。', '保留同源16K性能控制，候选按相同独立新服务协议比较。', '512个请求成功与实际执行路径通过；未授新105资格。', '原官方16K参数，四轮弃首均值；新服务无先跑4K，初始DB207f/native14f，与候选分档对称。')
+
+BATCH_RESULTS['main594_m64_fixed_address_firstwarm_negative']=('M64固定寻址生产候选同main594/native14f/初始DB207f，4K冷轮5014.13、首暖5743.94 tok/s；对同档首暖5843.85观察低1.70966%，按约定提前停止，512请求全部SUCCESS，新旧实际路径通过。原组件省1.47792%未转为本次官方首暖收益；单组不证明稳定回退或纯kernel因果。未跑后两轮、16K或105，无新基线/合并资格。SIGTERM来自性能监督器，不是框架报错；source/native不变、DB与设备清理通过。', '停止当前M64生产路线；保留组件与官方负结果，不开优化PR或拼成完整四轮成绩。', '原件中已执行检查按范围保留；不继承模型准确率。', '精确命令、版本及原始结果见本轮manifest/state、source和日志。')
+CODE['shape-gemm'] += ['experiments/official/20261026T172509Z-main594-m64-fixed-address-4096-four-rounds/archive-receipt.json', 'experiments/official/20261026T172509Z-main594-m64-fixed-address-4096-four-rounds-control/supervisor-final.json']
+
+BATCH_RESULTS['main594_m32_provider_identified']=('未改main594的small_linear_out原callback仅调用一次：M32/N2048/K6144实际BM32/BN64/BK128、w8/s2、grid32、split1，hash021fc309；shared49152、regs25、spill0、async4、B useSme2。原权重与输入不变、有限性及FP64样本通过，DB/进程/9031清理通过。无计时、候选或模型/105资格，不证明当前16K的形状覆盖。', '保留真实配置，准备一个M32固定寻址组件；不能直接搬用M64配置或收益。', '原件中已执行检查按范围保留；不继承模型准确率。', '精确命令、版本及原始结果见本轮manifest/state、source和日志。')
+CODE['shape-gemm'] += ['experiments/framework/20261026T173900314676Z-main594-m32-mm-provider-probe/result.json', 'experiments/framework/20261026T173900314676Z-main594-m32-mm-provider-probe/archive-receipt.json']
+
+GROUPS['shape-gemm']=('BI-V150特定形状GEMM', 'main594分服务性能控制：4K暖均5847.6667、16K4192.49。M64固定寻址组件省1.47792%，但实际4K首暖5743.94对5843.85低1.70966%，512请求成功后按约定停止，无16K/105或合并。M32原路径配置已取得，仅作后继依据；组件收益与模型结果分别保留。', [])
+
+BATCH_RESULTS['main594_m32_fixed_address_positive']=('M32固定寻址真实原MM-out同32/64/128、w8/s2和原W；原八项逐位/FP64/换值Graph/side及RNG通过。唯一ABBA完整MM Event 49.417669→48.984375us，单组省0.87680%；实际rcp3→0，SME6/async4/shared49152/regs25/spill0保持，无额外权重或workspace。仅layer0组件正信号，尚无模型/105/官方资格；DB207f恢复、source/进程与9031清理通过。', '保留M32单组小正，准备M32-only生产及16K同版本官方对照，不叠已停M64。', '原件中已执行检查按范围保留；不继承模型准确率。', '精确命令、版本及原始结果见本轮manifest/state、source和日志。')
+CODE['shape-gemm'] += ['experiments/framework/20261026T174414509153Z-main594-m32-fixed-address-component/result.json', 'experiments/framework/20261026T174414509153Z-main594-m32-fixed-address-component/archive-receipt.json']
+
+GROUPS['shape-gemm']=('BI-V150特定形状GEMM', 'main594分服务性能控制：4K暖均5847.6667、16K4192.49。M64固定寻址组件省1.47792%，但实际4K首暖5743.94对5843.85低1.70966%，512请求成功后按约定停止，无16K/105或合并。M32固定寻址八门通过，单组组件省0.87680%，保留准备独立生产对照；组件收益与模型结果分别保留。', [])
+
 def group(row):
     if row['profile_id']=='gqa-for-scalar-i64-s2':
         return 'gqa-scalar-page-base'
@@ -460,6 +477,10 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     current_component_summary = {
+        'main594_m32_fixed_address_positive': '保留M32单组小正，准备M32-only生产及16K同版本官方对照，不叠已停M64。',
+        'main594_m32_provider_identified': '保留真实配置，准备一个M32固定寻址组件；不能直接搬用M64配置或收益。',
+        'main594_m64_fixed_address_firstwarm_negative': '停止当前M64生产路线；保留组件与官方负结果，不开优化PR或拼成完整四轮成绩。',
+        'main594_control_16k_complete': 'main594独立16K四轮暖均4192.49，512成功，清理通过；作为同档控制。',
         'main594_control_interrupted_4k_complete': 'main594控制4K四轮暖均5847.6667，16K首轮中断；已恢复并补测，非完整新基线。',
         'main594_m64_fixed_address_positive': 'M64固定寻址单组组件省1.47792%，8门过/无额外权重；待官方净收益。',
         'main594_mm_provider_identity': '新main M64已BN64/grid32，旧窄N提案停止；单次身份/资源，无性能结论。',

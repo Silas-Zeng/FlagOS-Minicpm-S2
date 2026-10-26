@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共339条登记、336个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共343条登记、340个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -317,6 +317,10 @@
 | 天数 BI-V150 | 337 | 2026-10-26T15:08:02.838380+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 单次sanity通过，不是完整数值/模型/105门。 | 未记录/未记录/未记录/未记录 | 新main M64已BN64/grid32，旧窄N提案停止；单次身份/资源，无性能结论。 | [20261026T150802838380Z-main594-m64-mm-provider-probe](runs/bi-v150/20261026T150802838380Z-main594-m64-mm-provider-probe.md) |
 | 天数 BI-V150 | 338 | 2026-10-26T15:31:34.266216+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 8类全输出逐位/有限性/输入不变及独立FP64、Graph、side/RNG通过；只覆盖M64和layer0。 | 未记录/未记录/未记录/未记录 | M64固定寻址单组组件省1.47792%，8门过/无额外权重；待官方净收益。 | [20261026T153134266216Z-main594-m64-fixed-address-component](runs/bi-v150/20261026T153134266216Z-main594-m64-fixed-address-component.md) |
 | 天数 BI-V150 | 339 | 2026-10-26T15:41:11+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 4K请求全成功与实际路径证据已回收；不等于105准确率通过。 | 未记录/未记录/未记录/未记录 | main594控制4K四轮暖均5847.6667，16K首轮中断；已恢复并补测，非完整新基线。 | [20261026T154111Z-main594-official-control-four-rounds](runs/bi-v150/20261026T154111Z-main594-official-control-four-rounds.md) |
+| 天数 BI-V150 | 340 | 2026-10-26T16:44:43+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 512个请求成功与实际执行路径通过；未授新105资格。 | 未记录/未记录/未记录/未记录 | main594独立16K四轮暖均4192.49，512成功，清理通过；作为同档控制。 | [20261026T164443Z-main594-control-16k-four-rounds](runs/bi-v150/20261026T164443Z-main594-control-16k-four-rounds.md) |
+| 天数 BI-V150 | 341 | 2026-10-26T17:25:09+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 原件中已执行检查按范围保留；不继承模型准确率。 | 未记录/未记录/未记录/未记录 | 停止当前M64生产路线；保留组件与官方负结果，不开优化PR或拼成完整四轮成绩。 | [20261026T172509Z-main594-m64-fixed-address-4096-four-rounds](runs/bi-v150/20261026T172509Z-main594-m64-fixed-address-4096-four-rounds.md) |
+| 天数 BI-V150 | 342 | 2026-10-26T17:39:00.314676+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 原件中已执行检查按范围保留；不继承模型准确率。 | 未记录/未记录/未记录/未记录 | 保留真实配置，准备一个M32固定寻址组件；不能直接搬用M64配置或收益。 | [20261026T173900314676Z-main594-m32-mm-provider-probe](runs/bi-v150/20261026T173900314676Z-main594-m32-mm-provider-probe.md) |
+| 天数 BI-V150 | 343 | 2026-10-26T17:44:14.509153+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 原件中已执行检查按范围保留；不继承模型准确率。 | 未记录/未记录/未记录/未记录 | 保留M32单组小正，准备M32-only生产及16K同版本官方对照，不叠已停M64。 | [20261026T174414509153Z-main594-m32-fixed-address-component](runs/bi-v150/20261026T174414509153Z-main594-m32-fixed-address-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
