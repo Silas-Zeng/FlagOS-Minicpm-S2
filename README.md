@@ -21,7 +21,7 @@
 | 方法 / 版本 | 结果与处理 |
 |---|---|
 | **当前合格主线：main6971／PR60** | 复用已完成的原官方4K/16K各四轮，弃首轮 **5656.77／4119.24 tok/s**；同源105题 **103/105**。QKV、down小M及O宽tile均组件正但模型负，已停止，不替换基线。最新状态见[当前工作](CURRENT_WORK.md) |
-| [BF16 down N方向分组布局](team/methods/bf16-nonly-down.md) | M64真实单层、9类逐位/FP64/Graph门通过，完整GEMM **0.085926→0.076858ms（省10.5534%）**；仅组件候选。42层重复保留packed多1008MiB／24576 KV token成本未测，无模型或官方资格 |
+| [BF16 down N方向分组布局](team/methods/bf16-nonly-down.md) | 同一N128格式：M64单层省10.5534%，M32单层省约3.63%；M2048明确BN256→128后慢约61.60%，停止。42真实权重helper/opaque/Graph门通过，非完整模型安装链或官方成绩；原W/P双份1008MiB与KV容量风险未消除，不叠加不同M收益 |
 | [GQA下一页号预取](team/methods/gqa-page-lookahead.md) | 原8门及跨臂逐位通过，完整producer＋reducer Event慢0.105735%、wall快0.06134%，无可分辨正信号，停止；实际next-page load后立即wait，未实现预期重叠 |
 | [连续流读取参考](team/methods/stream-read-reference.md) | 512MiB BF16连续读＋checksum参考 **665.432GB/s**；正确性及清理通过，非HBM或GQA硬上限，不是吞吐优化成绩；本批另补回三个实际linear缓存文本 |
 | [GQA动态for＋二维span](team/methods/gqa-for-span.md) | 真实N64/S2长度多重集组件通过8类正确性检查，但完整producer＋reducer **0.541187→0.947350ms（慢75.05%）**，停止，不进模型或替换基线 |

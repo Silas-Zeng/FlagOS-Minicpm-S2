@@ -1,0 +1,448 @@
+{
+  "status": "stopped_negative",
+  "identity": [
+    {
+      "rows": 2048,
+      "config": {
+        "BLOCK_M": 256,
+        "BLOCK_N": 256,
+        "BLOCK_K": 32,
+        "num_warps": 16,
+        "num_stages": 2,
+        "num_ctas": 1,
+        "SPLIT_K": 1
+      },
+      "constexprs": {
+        "num_warps": "16",
+        "num_stages": "2",
+        "num_ctas": "1",
+        "BLOCK_M": "256",
+        "BLOCK_N": "256",
+        "BLOCK_K": "32",
+        "EVEN_K": "True"
+      },
+      "grid": [
+        64,
+        1
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "rows": 2048,
+      "label": "eager_normal",
+      "bitwise": true,
+      "finite": true,
+      "inputs_unchanged": true
+    },
+    {
+      "rows": 2048,
+      "label": "eager_zero",
+      "bitwise": true,
+      "finite": true,
+      "inputs_unchanged": true
+    },
+    {
+      "rows": 2048,
+      "label": "eager_changed",
+      "bitwise": true,
+      "finite": true,
+      "inputs_unchanged": true
+    },
+    {
+      "rows": 2048,
+      "label": "eager_finite_extreme",
+      "bitwise": true,
+      "finite": true,
+      "inputs_unchanged": true
+    },
+    {
+      "label": "2048",
+      "rows": 2048,
+      "kind": "independent_fp64",
+      "criteria": "固定rtol=.01/atol=.001；跨臂全输出另用零容差",
+      "arms": {
+        "A": {
+          "passed": true,
+          "max_abs": 0.0
+        },
+        "B": {
+          "passed": true,
+          "max_abs": 0.0
+        }
+      }
+    },
+    {
+      "rows": 2048,
+      "label": "changed_graph_0",
+      "bitwise": true,
+      "finite": true,
+      "inputs_unchanged": true
+    },
+    {
+      "rows": 2048,
+      "label": "changed_graph_1",
+      "bitwise": true,
+      "finite": true,
+      "inputs_unchanged": true
+    },
+    {
+      "rows": 2048,
+      "label": "side_stream",
+      "bitwise": true,
+      "finite": true,
+      "inputs_unchanged": true
+    }
+  ],
+  "timings": [
+    {
+      "rows": 2048,
+      "arm": "A",
+      "mode": "完整GEMM Graph replay；输出buffer捕获，不含eager CPU分配/加载pack",
+      "calls": 16,
+      "wall_total_ms": 9.126785,
+      "wall_per_call_ms": 0.5704240625,
+      "event_total_ms": 9.036330223083496,
+      "event_per_call_ms": 0.5647706389427185,
+      "submit_thread_cpu_ns": 4548819,
+      "submit_process_cpu_ns": 4787820,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 990681\nnr_throttled 5192\nthrottled_time 20665723204917",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 990681,
+          "nr_throttled": 5192,
+          "throttled_time": 20665723204917
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 990681\nnr_throttled 5192\nthrottled_time 20665723204917",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 990681,
+          "nr_throttled": 5192,
+          "throttled_time": 20665723204917
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 0,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      }
+    },
+    {
+      "rows": 2048,
+      "arm": "B",
+      "mode": "完整GEMM Graph replay；输出buffer捕获，不含eager CPU分配/加载pack",
+      "calls": 16,
+      "wall_total_ms": 14.678661,
+      "wall_per_call_ms": 0.9174163125,
+      "event_total_ms": 14.616399765014648,
+      "event_per_call_ms": 0.9135249853134155,
+      "submit_thread_cpu_ns": 7352749,
+      "submit_process_cpu_ns": 7598006,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 990681\nnr_throttled 5192\nthrottled_time 20665723204917",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 990681,
+          "nr_throttled": 5192,
+          "throttled_time": 20665723204917
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 990681\nnr_throttled 5192\nthrottled_time 20665723204917",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 990681,
+          "nr_throttled": 5192,
+          "throttled_time": 20665723204917
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 0,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      }
+    },
+    {
+      "rows": 2048,
+      "arm": "B",
+      "mode": "完整GEMM Graph replay；输出buffer捕获，不含eager CPU分配/加载pack",
+      "calls": 16,
+      "wall_total_ms": 14.701886,
+      "wall_per_call_ms": 0.918867875,
+      "event_total_ms": 14.641022682189941,
+      "event_per_call_ms": 0.9150639176368713,
+      "submit_thread_cpu_ns": 7386724,
+      "submit_process_cpu_ns": 7612843,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 990681\nnr_throttled 5192\nthrottled_time 20665723204917",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 990681,
+          "nr_throttled": 5192,
+          "throttled_time": 20665723204917
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 990681\nnr_throttled 5192\nthrottled_time 20665723204917",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 990681,
+          "nr_throttled": 5192,
+          "throttled_time": 20665723204917
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 0,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      }
+    },
+    {
+      "rows": 2048,
+      "arm": "A",
+      "mode": "完整GEMM Graph replay；输出buffer捕获，不含eager CPU分配/加载pack",
+      "calls": 16,
+      "wall_total_ms": 9.127527,
+      "wall_per_call_ms": 0.5704704375,
+      "event_total_ms": 9.068984985351562,
+      "event_per_call_ms": 0.5668115615844727,
+      "submit_thread_cpu_ns": 4587242,
+      "submit_process_cpu_ns": 4819627,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 990681\nnr_throttled 5192\nthrottled_time 20665723204917",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 990681,
+          "nr_throttled": 5192,
+          "throttled_time": 20665723204917
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 990682\nnr_throttled 5192\nthrottled_time 20665723204917",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 990682,
+          "nr_throttled": 5192,
+          "throttled_time": 20665723204917
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 1,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      }
+    }
+  ],
+  "resources": [
+    {
+      "rows": 2048,
+      "name": "original_linear",
+      "use_sme": 15,
+      "shared": 65536,
+      "n_regs": 97,
+      "n_spills": 0,
+      "async_copy_ops": 4,
+      "B_dot_useSme_nonzero": true,
+      "B_SME_contract": {
+        "passed": true,
+        "dot_count": 1,
+        "records": [
+          {
+            "A": "%a_79",
+            "B": "%b_81",
+            "B_local_load_found": true,
+            "B_dot_op_layouts": [
+              "opIdx = 1, parent = #mma, kWidth = 2, useSme = 2"
+            ],
+            "B_useSme_values": [
+              2
+            ],
+            "B_same_layout_opIdx1_useSme_nonzero": true
+          }
+        ]
+      },
+      "asm_sme_load": true
+    },
+    {
+      "rows": 2048,
+      "name": "nonly_other_rows_linear",
+      "use_sme": 7,
+      "shared": 40960,
+      "n_regs": 56,
+      "n_spills": 0,
+      "async_copy_ops": 2,
+      "B_dot_useSme_nonzero": true,
+      "B_SME_contract": {
+        "passed": true,
+        "dot_count": 1,
+        "records": [
+          {
+            "A": "%a_67",
+            "B": "%b_69",
+            "B_local_load_found": true,
+            "B_dot_op_layouts": [
+              "opIdx = 1, parent = #mma, kWidth = 2, useSme = 2"
+            ],
+            "B_useSme_values": [
+              2
+            ],
+            "B_same_layout_opIdx1_useSme_nonzero": true
+          }
+        ]
+      },
+      "asm_sme_load": true
+    }
+  ],
+  "weights": [
+    {
+      "layer": 0,
+      "name": "model.layers.0.mlp.down_proj.weight",
+      "original_bytes": 25165824,
+      "packed_bytes": 25165824,
+      "original_sha256": "1a6e6d547d5f0ffd08fd020690ccf75323ba4dd54181617e406a84f644cee501",
+      "packed_sha256": "157a74816f10b005bd9a5b0d6ccf4158881de5f322a83a9675cd9ba2c3ac7130",
+      "pack_unpack_bitwise": true,
+      "pack_location": "CPU加载一次；pack和传输成本不计暖态GEMM，非每token"
+    }
+  ],
+  "scope": "真实layer0 down [2048,6144]，仅本次CLI选定M32或M2048；各自独立分配真实行数，唯一完整GEMM Graph ABBA",
+  "base_commit": "6971ef48615af97a1637405c71f96dd89969563e",
+  "official_qualified": false,
+  "layout": "P[N/128,K,128]；仅BF16位重排，保留三维descriptor、加载一次",
+  "limitations": [
+    "组件保留原W与packed两份，各24MiB/层，不算KV容量收益。",
+    "合成独立M32或M2048激活、单真实layer0权重；不是全M消费者资格或模型收益。",
+    "候选只用真实opaque选中配置；不符合唯一格式就停止，不自动改tile。",
+    "Graph replay不重新执行Python/allocator；Event不含每调用eager CPU输出分配或pack加载。M32来自旧16K热点，M2048为独立大M后继；组件不外推官方。"
+  ],
+  "target": "GPUTarget(backend='corex', arch=71, warp_size=64)",
+  "config_sha256": "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180",
+  "dispatch": {
+    "linear_source_sha256": "d431a4fa144ed67dc3deab46dd5beace3612858075f85c39e602447ba3bf768a",
+    "opaque_source_sha256": "c5a2dd6c69c514531fee4145621e51bd4e41c0d784f4d4e086fe48aad98104ba",
+    "registered": true,
+    "exclude_ops": [],
+    "baseline_route": "真实torch.ops.biv150_stable_small_o.linear→F.linear→原默认FlagGems linear；含分配"
+  },
+  "original_config": {
+    "BLOCK_M": 256,
+    "BLOCK_N": 256,
+    "BLOCK_K": 32,
+    "num_warps": 16,
+    "num_stages": 2,
+    "num_ctas": 1,
+    "SPLIT_K": 1
+  },
+  "candidate_config": {
+    "BLOCK_M": 256,
+    "BLOCK_N": 128,
+    "BLOCK_K": 32,
+    "num_warps": 16,
+    "num_stages": 2,
+    "num_ctas": 1,
+    "SPLIT_K": 1
+  },
+  "config_difference": {
+    "BLOCK_N": {
+      "original": 256,
+      "candidate": 128
+    }
+  },
+  "runtime_kernel_hash": "3333123aae5fefe33449a25c8744d0e94f5b160695f5edc969c8a1e5176f4361",
+  "allocation_contract": {
+    "rows": 2048,
+    "input_shape": [
+      2048,
+      6144
+    ],
+    "cpu_input_shape": [
+      2048,
+      6144
+    ],
+    "input_storage_bytes": 25165824,
+    "required_input_bytes": 25165824,
+    "independent_allocation_not_prefix_of_larger_rows": true
+  },
+  "SME_mechanism": {
+    "2048": {
+      "preserved": true,
+      "diagnostic_only": true,
+      "note": "两种B方向useSme均只诊断；保存实际B SSA关联/ASM，不把mask当生效；完整原8门通过后只计唯一ABBA"
+    }
+  },
+  "means": {
+    "2048": {
+      "A": 0.5657911002635956,
+      "B": 0.9142944514751434
+    }
+  },
+  "decision": "M2048完整生产对照不正，停止后续/权重环/模型",
+  "rng_unchanged": true
+}

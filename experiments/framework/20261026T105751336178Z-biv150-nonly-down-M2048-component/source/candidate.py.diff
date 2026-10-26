@@ -1,0 +1,71 @@
+--- M64/candidate.py
++++ other-rows/candidate.py
+@@ -1,11 +1,9 @@
+-"""单一BF16无损N分块格式；真实M64 down配置，不安装到生产。"""
++"""同一N128权重格式的新M32/M2048消费者；真实配置捕获，不装生产。"""
+ import torch
+ import triton
+ import triton.language as tl
+ 
+ PACK_N = 128
+-CONFIG = dict(BLOCK_M=64, BLOCK_N=128, BLOCK_K=64,
+-              num_warps=8, num_stages=2, num_ctas=1, SPLIT_K=1)
+ 
+ 
+ def pack_cpu(weight):
+@@ -24,7 +22,7 @@
+ 
+ 
+ @triton.jit
+-def nonly_linear(X,P,Y,M,N,K,XS0,YS0,BM:tl.constexpr,BN:tl.constexpr,BK:tl.constexpr):
++def nonly_other_rows_linear(X,P,Y,M,N,K,XS0,YS0,BM:tl.constexpr,BN:tl.constexpr,BK:tl.constexpr):
+     pid=tl.program_id(0)
+     grid_m=tl.cdiv(M,BM);grid_n=tl.cdiv(N,BN)
+     width=8*grid_n;group_id=pid//width
+@@ -36,8 +34,9 @@
+     ram=tl.max_contiguous(tl.multiple_of(rm%M,BM),BM)
+     rk=tl.arange(0,BK)
+     xp=X+ram[:,None]*XS0+rk[None,:]
+-    # 本run固定BN=PACK_N=128：每CTA完整消费一个N分块。
+-    wp=P+pn*(K*128)+rk[:,None]*128+tl.arange(0,BN)[None,:]
++    # BN整除128，CTA不跨物理N128分块；支持原BN32/64/128。
++    start_n=pn*BN
++    wp=P+(start_n//128)*(K*128)+rk[:,None]*128+(start_n%128+tl.arange(0,BN)[None,:])
+     acc=tl.zeros((BM,BN),tl.float32)
+     for block in range(0,tl.cdiv(K,BK)):
+         a=tl.load(xp);b=tl.load(wp)
+@@ -51,18 +50,27 @@
+ def launch_into(x,packed,output,config):
+     m=x.shape[0]
+     tensors=(x,packed,output)
+-    if (m not in (63,64) or tuple(x.shape)!=(m,6144)
++    if (m not in (32,2048) or tuple(x.shape)!=(m,6144)
+             or tuple(packed.shape)!=(16,6144,128) or tuple(output.shape)!=(m,2048)
+             or any(t.dtype!=torch.bfloat16 or not t.is_cuda or t.device!=x.device
+                    or not t.is_contiguous() for t in tensors)
+             or len({t.untyped_storage().data_ptr() for t in tensors})!=3):
+-        raise ValueError('固定BI-V150 M64/尾M63 down组件，须独立contiguous storage')
+-    if any(type(config.get(k)) is not int or config[k]!=v for k,v in CONFIG.items()):
+-        raise ValueError('只接受真实Graph观察配置64/128/64 w8/s2/SPLIT1；不匹配就停')
++        raise ValueError('固定BI-V150 M32/M2048 down组件，须独立contiguous storage')
++    required=('BLOCK_M','BLOCK_N','BLOCK_K','num_warps','num_stages','num_ctas','SPLIT_K')
++    if (any(type(config.get(k)) is not int or config[k]<=0 for k in required)
++            or config['BLOCK_M'] not in (32,64,128,256)
++            or config['BLOCK_N'] not in (32,64,128)
++            or config['BLOCK_K'] not in (32,64,128)
++            or config['num_warps'] not in (4,8,16)
++            or config['num_stages'] not in (1,2,3,4)
++            or config['num_ctas']!=1 or config['SPLIT_K']!=1):
++        raise ValueError('只接受原真实BM/BK/warp/stage，BN≤128且整除128；不符就停')
+     with torch.cuda.device(x.device):
+         prop=torch.cuda.get_device_properties(x.device)
+         if 'BI-V150' not in prop.name or prop.multi_processor_count!=16:
+             raise ValueError('仅BI-V150 16SM')
+-        return nonly_linear[(triton.cdiv(m,64)*16,)](
+-            x,packed,output,m,2048,6144,6144,2048,BM=64,BN=128,BK=64,
+-            num_warps=8,num_stages=2,num_ctas=1,enable_fp_fusion=True)
++        bm,bn,bk=(config[k] for k in ('BLOCK_M','BLOCK_N','BLOCK_K'))
++        return nonly_other_rows_linear[(triton.cdiv(m,bm)*triton.cdiv(2048,bn),)](
++            x,packed,output,m,2048,6144,6144,2048,BM=bm,BN=bn,BK=bk,
++            num_warps=config['num_warps'],num_stages=config['num_stages'],
++            num_ctas=1,enable_fp_fusion=True)

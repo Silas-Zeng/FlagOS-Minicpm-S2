@@ -298,7 +298,18 @@ GROUPS['bf16-nonly-down']=('BF16 down N方向分组布局', '真实生产opaque/
 CODE['bf16-nonly-down']=['experiments/framework/20261026T102808704037Z-biv150-nonly-down-component/result.json', 'experiments/framework/20261026T102808704037Z-biv150-nonly-down-component/source/worker.py', 'experiments/framework/20261026T102808704037Z-biv150-nonly-down-component/archive-receipt.json', 'experiments/framework/20261026T102808704037Z-biv150-nonly-down-component/source/candidate.py']
 BATCH_RESULTS['nonly_down_positive_component']=('真实生产opaque/F.linear的M64 down单层组件，仅改N方向BF16无损权重布局，保留实际BM64/BN128/BK64/w8/s2与SME；9类逐位/独立FP64/Graph及RNG门通过。完整GEMM Graph Event0.085926324→0.076858178ms，省10.5534%，仅保留组件正信号。原W与packed两份各24MiB；若42层重复保留将多1008MiB、等价24576 KV token，容量风险及42层交织未测。无模型/官方/105资格，未定新基线；DB/source与清理通过。', '保留单层组件候选；先解决或验证42层额外1008MiB/24576 KV token容量成本及真实交织，不能直接合并或宣称模型收益。', 'M64单层9类case、跨臂逐位/独立FP64/Graph/RNG通过，完整Event省10.5534%；未测42层或模型。', '真实layer0 down权重、合成M64激活；基线真实opaque/F.linear默认FlagGems，复用实际选中tile及SME；N-only pack/unpack/数值/尾M/Graph后唯一完整Graph ABBA。')
 
+# 20261026 N-only接线与M32/M2048批量收尾
+GROUPS['bf16-nonly-down']=('BF16 down N方向分组布局', '同一N128 BF16无损格式：M64单层省10.5534%，新M32单层省约3.63%；M2048为适应格式BN256→128后慢约61.60%，停止该大M候选。42真实权重GPU helper/opaque/Graph接线门通过，但不是完整模型安装链或官方成绩。原W/P双份1008MiB及KV容量代价未消除；不叠加各M收益。', [])
+CODE['bf16-nonly-down'] += ['experiments/framework/20261026T105246722313Z-biv150-nonly-down-integration/result.json', 'experiments/framework/20261026T105246722313Z-biv150-nonly-down-integration/source/worker.py', 'experiments/framework/20261026T105246722313Z-biv150-nonly-down-integration/archive-receipt.json']
+BATCH_RESULTS['nonly_down_integration_component_pass']=('42层真实down权重的GPU _after_loading helper/新opaque接线门通过：pack全位反解、原W保留、1056964608B nonpersistent buffer、42层完整输出逐位及独立FP64样本、两种同址换X Graph和M32原路回退通过。未调用完整Llama install-chain，无吞吐计时、官方或105资格；1008MiB常驻副本及KV容量代价仍需模型验证。', '保留新增helper/opaque/Graph接线证据；完整模型加载链和官方净性能不继承，原W/P双份容量成本未消除。', '42真实权重helper、pack全位反解/原W/FP64样本/完整跨臂逐位、42层两次换值Graph与M32回退通过。', '实际42层BF16 down权重独立调用GPU _after_loading helper及新opaque，保留原W与层buffer；不计时、不运行完整Llama安装链。')
+CODE['bf16-nonly-down'] += ['experiments/framework/20261026T105528588827Z-biv150-nonly-down-M32-component/result.json', 'experiments/framework/20261026T105528588827Z-biv150-nonly-down-M32-component/source/worker.py', 'experiments/framework/20261026T105528588827Z-biv150-nonly-down-M32-component/archive-receipt.json']
+BATCH_RESULTS['nonly_down_M32_positive_component']=('同一N128 BF16无损格式的新M32消费者，真实layer0 down权重＋实际32行独立输入，原opaque/F.linear配置实捕；8门逐位/FP64/换值Graph/side/输入不变及RNG通过。完整Graph ABBA Event0.100297115743→0.096656851470ms，省约3.63%；保留单次单层组件正信号，不授模型/官方资格，不消除原W/P双份1008MiB风险。', '保留M32组件正信号，和M64分别记录；单次ABBA不能写稳定模型收益，42层及实际Attention/KV交织尚未测。', '8门通过，实际M32独立backing；完整GEMM Graph一次ABBA省约3.63%。', '同一layer0真实权重、实际32行独立输入；运行时捕获原opaque配置，候选N128消费者按已声明边界接线，数值/Graph门后唯一完整ABBA。')
+CODE['bf16-nonly-down'] += ['experiments/framework/20261026T105751336178Z-biv150-nonly-down-M2048-component/result.json', 'experiments/framework/20261026T105751336178Z-biv150-nonly-down-M2048-component/source/worker.py', 'experiments/framework/20261026T105751336178Z-biv150-nonly-down-M2048-component/archive-receipt.json']
+BATCH_RESULTS['nonly_down_M2048_negative_component']=('同一N128格式的新M2048消费者，实际2048行独立输入；8门逐位/FP64/换值Graph/side/输入不变及RNG通过。基线真实BN256，候选为适应N128物理分块明确改BN128，完整Graph ABBA Event0.565791100264→0.914294451475ms，慢约61.60%，停止当前大M候选，不进模型。此差异包含BN256→128，不能归因为纯布局；负结果不否定独立M32/M64正信号。', '停止当前N128大M候选，保留负证据；不扩模型、不混入M32/M64收益。若研究保留原BN256的P256，应作为新独立方法验证。', '8门通过，但完整GEMM Graph一次ABBA慢约61.60%；性能负，不是正确性失败。', '实际M2048独立输入/原opaque配置实捕；原BN256→候选BN128是已声明必要差分，其余BM/BK/warps/stages沿原；原8门后一次ABBA，负即停。')
+
 def group(row):
+    if row['profile_id'] in ('bf16-nonly-down-integration','bf16-nonly-down-M32','bf16-nonly-down-M2048'):
+        return 'bf16-nonly-down'
     if row['profile_id'] in ('stream-read-reference','gqa-page-lookahead','bf16-nonly-down'):
         return row['profile_id']
     if row['profile_id'] == 'gqa-for-span':
@@ -395,6 +406,9 @@ def result(row, limit=190):
         'stream_read_reference_completed': '连续流读参考665.432GB/s，checksum/copy检查通过；不是HBM硬上限或模型吞吐收益。',
         'gqa_page_lookahead_no_positive_signal': '8类数值门与逐位通过；完整组件Event慢0.1057%、wall快0.0613%，无可分辨正信号，停止。',
         'nonly_down_positive_component': 'M64单层9类检查通过，完整GEMM Event省10.5534%；保留组件候选，42层显存成本与模型净收益未测。',
+        'nonly_down_integration_component_pass': '42真实权重helper/opaque、pack逐位、FP64、换值Graph及M32回退通过；不是完整Llama加载链，无计时或官方资格。',
+        'nonly_down_M32_positive_component': 'M32单层8门通过，同配置完整Graph Event省约3.63%；保留组件信号，非模型收益，双份权重成本未消除。',
+        'nonly_down_M2048_negative_component': 'M2048单层8门通过；P128使BN256→128，完整Graph Event慢约61.60%，停止；不能归因纯pack，不否定M32/M64。',
     }
     if row['status'] in current_component_summary:
         return current_component_summary[row['status']]
