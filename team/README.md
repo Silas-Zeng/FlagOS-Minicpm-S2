@@ -71,6 +71,8 @@
 - [早期集成、块表与 profile](methods/early.md)
 - [其它登记与控制记录](methods/other.md)
 - [BI-V150特定形状GEMM](methods/shape-gemm.md)
+- [GQA两页T32计算块](methods/gqa-two-page-t32.md)
+- [Prefill序列内CTA调序](methods/prefill-lpt.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

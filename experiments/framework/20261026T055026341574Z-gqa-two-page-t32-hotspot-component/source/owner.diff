@@ -1,0 +1,20 @@
+--- old-owner
++++ entry.py
+@@ -30,7 +30,7 @@
+     parser.add_argument("--native-library", type=Path)
+     parser.add_argument("--model", type=Path, default=Path("/workspace/MiniCPM5-2B"))
+     parser.add_argument("--run-dir", type=Path)
+-    parser.add_argument("--shape", choices=("hotspot", "b32"), default="hotspot")
++    parser.add_argument("--shape", choices=("hotspot",), default="hotspot")
+     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
+     args = parser.parse_args()
+     if args.worker:
+@@ -51,7 +51,7 @@
+     native = args.native_library.resolve(strict=True)
+     source_before = source_identity.check(source, native)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-gqa-kv-cg-" + args.shape + "-component")
++    run = ROOT / "framework" / (stamp + "-gqa-four-page-t64-" + args.shape + "-component")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()

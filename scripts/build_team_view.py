@@ -219,7 +219,26 @@ for status, verdict, decision in [
     BATCH_RESULTS[status]=('实测数据见本条结论及result.json。',decision,verdict,'真实down权重，原安装MM或当前PR51 small_o JIT对照；数值/FP64抽样/换值Graph后ABBA，完整输出和SplitK归约计入。')
     SHORT_ATTEMPTS[status]=('针对BI-V150 warp64/16SM与真实M/N/K降低净开销。','实际实现和精确固定tile见原source/candidate.py；未改官方参数或切换现成库，不承诺任意输入bitwise。')
 
+# 新批次状态只用于中文导航；原结果和失败分类不改写。
+for key,verdict,decision in [
+ ('five_test_weight_lookup_error','测试权重读取失败','修读取器后另run，保留原件；不当框架数值错误。'),
+ ('shape_gemm_integration_pass','新增接线/Graph通过','仅继承已测内核部分，模型吞吐与准确率另验。'),
+ ('gqa_t32_component_negative','组件性能负，停止','不扩形状、不进模型；寄存器spill反证保留。'),
+ ('prefill_lpt_reference_scope_mismatch','旧参考界不适用，未计时','原臂/候选逐位一致；旧FP64拒绝不改判，后继逐位组件单列。'),
+ ('prefill_lpt_component_negative','组件性能负，停止该范围','长上下文不进模型；短causal单独完成有界验证。')]:
+    BATCH_RESULTS[key]=('实际数值见本条登记和result(s).json。',decision,verdict,'复用真实生产ABI/原数值门，新增改动单独验证；不重复旧测试。')
+    SHORT_ATTEMPTS[key]=('验证本条所述固定形状和新增实现。','改动及精确命令见该run源码和manifest/command原件。')
+GROUPS['shape-gemm']=('BI-V150特定形状GEMM','组件收益与模型分开：down大M宽tile、QKV宽tile、小M SplitK8先后局部正但模型负，均停止且不定基线。新增O projection真实42层组件省20.33%，独立模型原官方在跑；保留原PR51/PR60合格基线，不将不同方法或组合比例相加。',[])
+
+# 2026-10-26四项执行：方法描述只导航，结论来自每轮原登记。
+GROUPS['gqa-two-page-t32']=('GQA两页T32计算块','保持物理page16、原split和reducer；固定T32/w1/s1检验减少online-softmax迭代能否抵消寄存器/布局成本。旧T64失败不改写，本方法实际结果以每轮短记为准。',[])
+GROUPS['prefill-lpt']=('Prefill序列内CTA调序','在当前stride与Q-hoist上反转每个序列内的query块枚举，尝试减少causal最后一波拖尾；不改变单query的K遍历/softmax/输出地址。',[])
+BATCH_RESULTS['shape_gemm_model_negative_early_stop']=('实测值见本条结论与原CSV。','已低于可比基线，停止后续；不跑105、不提收益PR、不定新基线。','模型性能负，主动停止','原官方脚本/参数不变；已测暖轮与原基线同负载/轮次比较，KV差异明示。')
+SHORT_ATTEMPTS['shape_gemm_model_negative_early_stop']=('检验真实模型中的完整净收益。','独立候选精确形状接入；组件收益不继承为模型收益。')
+
 def group(row):
+    if row['profile_id'] in ('gqa-two-page-t32','prefill-lpt'):
+        return row['profile_id']
     if row['profile_id'] == 'shape-gemm':
         return 'shape-gemm'
     if row['profile_id'] in ('rope-kv-fusion', 'final-ffn-row-prune', 'selected-query-row', 'attention-affine-pages', 'current-main-hotspot', 'attention-next-k', 'gqa-identity-rescale', 'main-correctness', 'gqa-kv-cg', 'gqa-kv-stride', 'lm-head-paired-gemv', 'attention-head-major', 'native-silu-vec2', 'gqa-four-page-t64', 'prefill-log2', 'prefill-stride', 'night-kernel-counters', 'gqa-grouped-simt'):
@@ -304,7 +323,7 @@ def brief(value, limit=220):
 
 
 def result(row, limit=190):
-    if row['profile_id'] == 'shape-gemm':
+    if row['profile_id'] in ('shape-gemm','gqa-two-page-t32','prefill-lpt'):
         return row['conclusion'][:limit]
     """只摘结果/失败原句，不把审计与库身份搬入主视图。"""
     if row['status'] in BATCH_RESULTS:
