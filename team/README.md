@@ -70,6 +70,7 @@
 - [Attention 分流与 launch](methods/attention.md)
 - [早期集成、块表与 profile](methods/early.md)
 - [其它登记与控制记录](methods/other.md)
+- [BI-V150特定形状GEMM](methods/shape-gemm.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

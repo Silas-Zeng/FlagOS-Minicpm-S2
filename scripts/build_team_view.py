@@ -209,7 +209,18 @@ SHORT_ATTEMPTS['prefill_stride_main34942_accuracy_pass'] = (
     '验证最新A组合是否满足官方准确率门槛，不继承父main或队友分数。',
     '不新增源码或改采样；复用已审冻结组合与原35d驱动/评分器，只跑这一轮，不反复抽样刷分。')
 
+GROUPS['shape-gemm'] = ('BI-V150特定形状GEMM', '按真实轨迹选形状。M2048 down占映射BF16 MM约47.10%；大M原tile静态化/减warp/加深K等6方案及M64 SplitK4均负，原件保留。宽N BM256/BN256/BK32/w16/s2单层省24.34%，42层1.057GB真实权重轮换30.371530→23.044686ms（省24.12%），84数值/尾部/FP64/换值Graph/side stream门通过。另保留M1-8 down SplitK8：M2整环3.057750→2.088810ms，M8整环3.367892→2.189718ms，分别84/336数值用例通过。均为组件结果，尚无整模型吞吐或105资格，不合并；原正确PR51及PR60主线不变。', [])
+CODE['shape-gemm'] = ['analysis/2026-10-26-gemm-target-priority.json','analysis/2026-10-26-gemm-component-results.json','experiments/framework/20261026T035139678096Z-biv150-down-wide-working-set-component/source/candidate.py','experiments/framework/20261026T034152136640Z-biv150-down-small-working-set-component/source/candidate.py']
+for status, verdict, decision in [
+    ('shape_gemm_negative','性能负结果，停止该候选','数值通过但完整组件慢，不接模型；不能把资源减少或循环减少当净收益。'),
+    ('shape_gemm_local_positive','单权重组件正，整模型未验证','保留局部信号，后继完整权重工作集结果另列，不把组件比例当整轮收益。'),
+    ('shape_gemm_working_set_positive','42层权重正，整模型未验证','保留候选；优先推进热点M2048 wide，M1-8 SplitK另列；需要实际接入、整模型性能/105和新增代码独立复核。')]:
+    BATCH_RESULTS[status]=('实测数据见本条结论及result.json。',decision,verdict,'真实down权重，原安装MM或当前PR51 small_o JIT对照；数值/FP64抽样/换值Graph后ABBA，完整输出和SplitK归约计入。')
+    SHORT_ATTEMPTS[status]=('针对BI-V150 warp64/16SM与真实M/N/K降低净开销。','实际实现和精确固定tile见原source/candidate.py；未改官方参数或切换现成库，不承诺任意输入bitwise。')
+
 def group(row):
+    if row['profile_id'] == 'shape-gemm':
+        return 'shape-gemm'
     if row['profile_id'] in ('rope-kv-fusion', 'final-ffn-row-prune', 'selected-query-row', 'attention-affine-pages', 'current-main-hotspot', 'attention-next-k', 'gqa-identity-rescale', 'main-correctness', 'gqa-kv-cg', 'gqa-kv-stride', 'lm-head-paired-gemv', 'attention-head-major', 'native-silu-vec2', 'gqa-four-page-t64', 'prefill-log2', 'prefill-stride', 'night-kernel-counters', 'gqa-grouped-simt'):
         return row['profile_id']
     s = (row['profile_id'] + ' ' + row['run_id']).lower()
@@ -292,6 +303,8 @@ def brief(value, limit=220):
 
 
 def result(row, limit=190):
+    if row['profile_id'] == 'shape-gemm':
+        return row['conclusion'][:limit]
     """只摘结果/失败原句，不把审计与库身份搬入主视图。"""
     if row['status'] in BATCH_RESULTS:
         return BATCH_RESULTS[row['status']][0][:limit]

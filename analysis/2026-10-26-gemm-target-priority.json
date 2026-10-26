@@ -1,0 +1,234 @@
+{
+  "source": "既有PR43轨迹，不是PR60新profiling",
+  "limitations": [
+    "插桩Graph节点样本只用于图内排序，不能外推整轮比例。",
+    "scheduled_tokens直方图不是所有GEMM运行时M，mixed拆分与Graph padding须分别考虑。",
+    "PR51改变小M路径、PR60改变prefill核；旧轨迹不能作为新版本精确占比。"
+  ],
+  "global_gpu_activity": {
+    "4096": {
+      "total_seconds": 227.414830286,
+      "top": [
+        {
+          "name": "opaque CUDA Graph（包含真实内核）",
+          "seconds": 122.964475114,
+          "fraction_of_gpu_activity": 0.5407056125555144,
+          "calls": 3711
+        },
+        {
+          "name": "mm_kernel",
+          "seconds": 34.031611924,
+          "fraction_of_gpu_activity": 0.149645526112793,
+          "calls": 70484
+        },
+        {
+          "name": "kernel_biv150_prefill_normalized",
+          "seconds": 27.390315008,
+          "fraction_of_gpu_activity": 0.12044207923271127,
+          "calls": 22092
+        },
+        {
+          "name": "_gqa_decode_attention",
+          "seconds": 12.268439702,
+          "fraction_of_gpu_activity": 0.053947403898730095,
+          "calls": 21714
+        },
+        {
+          "name": "void Gemm_tcu_mr_kernel::gemm_tcu_h<256u, 256u, 64u, 64u, 64u, 2u, (ixblasTrans_t)1, (ixblasTrans_t)1, (ixblasTCUGEMMCategory_t)0, (ixmma::MMEdgeCheckMode)0, (ixblasGEMMBoundary_t)2, (ixblasLtEpilogue_t)1, false, int, (ixblasLtMatmulMatrixScale_t)1002, (ixblasLtMatmulMatrixScale_t)1002, (ixblasLtMatmulMatrixScale_t)1002, false, true, 4u, 4u, false, int, int, int, signed char, signed char>(int*, int*, signed char const*, signed char const*, int, int, int, int, int, int, int, int, int, int, long, long, long, long, long, long, ixblasGEMMBatchMode_t, int, void*, void*, void*, unsigned int)",
+          "seconds": 8.293356573,
+          "fraction_of_gpu_activity": 0.0364679672058773,
+          "calls": 17884
+        },
+        {
+          "name": "linear_kernel",
+          "seconds": 4.783409724,
+          "fraction_of_gpu_activity": 0.021033851301537013,
+          "calls": 4237
+        },
+        {
+          "name": "(anonymous namespace)::silu_epilogue(int const*, float const*, float const*, __ix_bfloat16*, int)",
+          "seconds": 4.096981903,
+          "fraction_of_gpu_activity": 0.01801545615054031,
+          "calls": 17884
+        }
+      ]
+    },
+    "16384": {
+      "total_seconds": 549.859610831,
+      "top": [
+        {
+          "name": "kernel_biv150_prefill_normalized",
+          "seconds": 209.497096915,
+          "fraction_of_gpu_activity": 0.3810010642505422,
+          "calls": 44814
+        },
+        {
+          "name": "opaque CUDA Graph（包含真实内核）",
+          "seconds": 180.669045928,
+          "fraction_of_gpu_activity": 0.32857304368101486,
+          "calls": 3745
+        },
+        {
+          "name": "mm_kernel",
+          "seconds": 68.861543351,
+          "fraction_of_gpu_activity": 0.12523477264847638,
+          "calls": 142978
+        },
+        {
+          "name": "_gqa_decode_attention",
+          "seconds": 42.855412187,
+          "fraction_of_gpu_activity": 0.07793882537077569,
+          "calls": 43806
+        },
+        {
+          "name": "void Gemm_tcu_mr_kernel::gemm_tcu_h<256u, 256u, 64u, 64u, 64u, 2u, (ixblasTrans_t)1, (ixblasTrans_t)1, (ixblasTCUGEMMCategory_t)0, (ixmma::MMEdgeCheckMode)0, (ixblasGEMMBoundary_t)2, (ixblasLtEpilogue_t)1, false, int, (ixblasLtMatmulMatrixScale_t)1002, (ixblasLtMatmulMatrixScale_t)1002, (ixblasLtMatmulMatrixScale_t)1002, false, true, 4u, 4u, false, int, int, int, signed char, signed char>(int*, int*, signed char const*, signed char const*, int, int, int, int, int, int, int, int, int, int, long, long, long, long, long, long, ixblasGEMMBatchMode_t, int, void*, void*, void*, unsigned int)",
+          "seconds": 16.711487098,
+          "fraction_of_gpu_activity": 0.030392279717988403,
+          "calls": 36040
+        },
+        {
+          "name": "(anonymous namespace)::silu_epilogue(int const*, float const*, float const*, __ix_bfloat16*, int)",
+          "seconds": 8.280153168,
+          "fraction_of_gpu_activity": 0.015058667712447994,
+          "calls": 36278
+        },
+        {
+          "name": "linear_kernel",
+          "seconds": 4.506923359,
+          "fraction_of_gpu_activity": 0.00819649828833347,
+          "calls": 4812
+        }
+      ]
+    }
+  },
+  "scheduled_token_shapes": {
+    "4096": {
+      "active_steps": 4241,
+      "m1_8_steps": 16,
+      "selected": {
+        "1": 2,
+        "2": 2,
+        "8": 2,
+        "31": 2,
+        "32": 3,
+        "33": 2,
+        "63": 9,
+        "64": 3577,
+        "2048": 522
+      }
+    },
+    "16384": {
+      "active_steps": 4816,
+      "m1_8_steps": 475,
+      "selected": {
+        "1": 418,
+        "2": 8,
+        "8": 8,
+        "31": 709,
+        "32": 2139,
+        "33": 241,
+        "63": 0,
+        "64": 0,
+        "2048": 1056
+      }
+    }
+  },
+  "m2048_mm_role_time": [
+    {
+      "shape": [
+        2048,
+        2048,
+        6144
+      ],
+      "role": "down",
+      "calls": 21924,
+      "ms_per_representative_step": 30.433100996168584,
+      "fraction_within_m2048_mapped_mm": 0.4709752964454353
+    },
+    {
+      "shape": [
+        2048,
+        2560,
+        2048
+      ],
+      "role": "qkv",
+      "calls": 21924,
+      "ms_per_representative_step": 12.715088632183909,
+      "fraction_within_m2048_mapped_mm": 0.19677563054211036
+    },
+    {
+      "shape": [
+        2048,
+        12288,
+        2048
+      ],
+      "role": "bf16_edge_gate_up",
+      "calls": 4176,
+      "ms_per_representative_step": 11.208908586206897,
+      "fraction_within_m2048_mapped_mm": 0.1734663531292194
+    },
+    {
+      "shape": [
+        2048,
+        2048,
+        2048
+      ],
+      "role": "o",
+      "calls": 21924,
+      "ms_per_representative_step": 10.260093442528735,
+      "fraction_within_m2048_mapped_mm": 0.15878271988323503
+    }
+  ],
+  "graph_rankings": {
+    "4096": [
+      {
+        "name": "_gqa_decode_attention",
+        "instrumented_median_sample_sum_ms": 22.691784530878067,
+        "samples": 4
+      },
+      {
+        "name": "mm_kernel",
+        "instrumented_median_sample_sum_ms": 6.109190379269421,
+        "samples": 4
+      },
+      {
+        "name": "_ZN18Gemm_tcu_mr_kernel10gemm_tcu_hILj64ELj256ELj64ELj16ELj64ELj2EL13ixblasTrans_t1ELS1_1EL23ixblasTCUGEMMCategory_t0ELN5ixmma15MMEdgeCheckModeE0EL20ixblasGEMMBoundary_t2EL18ixblasLtEpilogue_t1ELb0EiL27ixblasLtMatmulMatrixScale_t1002ELS7_1002ELS7_1002ELb0ELb0ELj4ELj4ELb0EiiiaaEEvPT22_PT23_PKT24_PKT25_iiiiiiiiT21_SI_llllll21ixblasGEMMBatchMode_tiPvSK_SK_j",
+        "instrumented_median_sample_sum_ms": 1.7979730740189552,
+        "samples": 4
+      },
+      {
+        "name": "_reduce_partials",
+        "instrumented_median_sample_sum_ms": 0.43971730675548315,
+        "samples": 4
+      }
+    ],
+    "16384": [
+      {
+        "name": "_gqa_decode_attention",
+        "instrumented_median_sample_sum_ms": 44.10230964422226,
+        "samples": 4
+      },
+      {
+        "name": "mm_kernel",
+        "instrumented_median_sample_sum_ms": 5.541261546313763,
+        "samples": 4
+      },
+      {
+        "name": "_ZN18Gemm_tcu_mr_kernel10gemm_tcu_hILj64ELj256ELj64ELj16ELj64ELj2EL13ixblasTrans_t1ELS1_1EL23ixblasTCUGEMMCategory_t0ELN5ixmma15MMEdgeCheckModeE0EL20ixblasGEMMBoundary_t2EL18ixblasLtEpilogue_t1ELb0EiL27ixblasLtMatmulMatrixScale_t1002ELS7_1002ELS7_1002ELb0ELb0ELj4ELj4ELb0EiiiaaEEvPT22_PT23_PKT24_PKT25_iiiiiiiiT21_SI_llllll21ixblasGEMMBatchMode_tiPvSK_SK_j",
+        "instrumented_median_sample_sum_ms": 1.7439865339547396,
+        "samples": 4
+      },
+      {
+        "name": "_reduce_partials",
+        "instrumented_median_sample_sum_ms": 0.3505134633742273,
+        "samples": 4
+      }
+    ]
+  },
+  "source_sha256": {
+    "tmp\\team-main-34942f7\\source\\docs\\evidence\\baseline-profiler-20261025\\v2-timeline\\window-1\\summary.json": "15cac2b32ea55b4b23ccf4219c693fe0b0ccaa4d63fa71084181ee541af8fc56",
+    "tmp\\team-main-34942f7\\source\\docs\\evidence\\baseline-profiler-20261025\\v2-timeline\\window-1\\non_graph_kernel_hotspots.json": "bc30e7ff654eead18783dc0d3df09af16c88f51b2ee9bf1fa150b3622681efc9",
+    "tmp\\team-main-34942f7\\source\\docs\\evidence\\baseline-profiler-20261025\\v2-timeline\\window-2\\summary.json": "37820a91059620abe12473253606fb0528ee15fe8a83a04ec1afe1c6454021ed",
+    "tmp\\team-main-34942f7\\source\\docs\\evidence\\baseline-profiler-20261025\\v2-timeline\\window-2\\non_graph_kernel_hotspots.json": "26b829772d0bf65d36faab227263a83d10d1a05d1a8ff12257ccd2ad80e326bd"
+  }
+}
