@@ -1,0 +1,3257 @@
+	.text
+	.globl	kernel_biv150_prefill_stride    ; -- Begin function kernel_biv150_prefill_stride
+	.p2align	3
+	.type	kernel_biv150_prefill_stride,@function
+	.iluvatar_kernel kernel_biv150_prefill_stride
+kernel_biv150_prefill_stride:           ; @kernel_biv150_prefill_stride
+.Lfunc_begin0:
+	.file	1 "<prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>"
+	.loc	1 2 0                           ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:2:0
+	.cfi_sections .debug_frame
+	.cfi_startproc
+	.cfi_return_column 32
+	.iluvatar_kernel_code_t
+		iluvatar_code_version_major = 1
+		iluvatar_code_version_minor = 3
+		iluvatar_machine_kind = 1
+		iluvatar_machine_version_major = 1
+		iluvatar_machine_version_minor = 1
+		iluvatar_machine_version_stepping = 0
+		kernel_code_entry_byte_offset = 256
+		kernel_code_prefetch_byte_size = 0
+		granulated_workitem_vgpr_count = 28
+		granulated_warp_sgpr_count = 12
+		float_mode = 12
+		debug_mode = 0
+		has_mbar = 0
+		user_sgpr_count = 6
+		enable_sgpr_workgroup_id_x = 1
+		enable_sgpr_workgroup_id_y = 1
+		enable_sgpr_workgroup_id_z = 1
+		enable_sgpr_workgroup_info = 1
+		enable_vgpr_workitem_id = 3
+		granulated_slb_size = 0
+		enable_exception = 128
+		enable_sgpr_private_segment_buffer = 1
+		enable_sgpr_globalvariable_ptr = 0
+		enable_sgpr_kernarg_segment_ptr = 1
+		enable_sgpr_constvariable_ptr = 0
+		enable_sgpr_private_segment_size = 0
+		enable_sgpr_grid_workgroup_count_x = 0
+		enable_sgpr_grid_workgroup_count_y = 0
+		enable_sgpr_grid_workgroup_count_z = 0
+		private_element_size = 1
+		is_ptr64 = 1
+		is_dynamic_callstack = 0
+		is_debug_enabled = 0
+		enable_private_swizzle = 1
+		has_called_assert = 0
+		has_called_printf = 0
+		has_called_malloc = 0
+		enable_srf_flat_shared = 0
+		enable_srf_flat_scratch = 0
+		has_wgmma = 0
+		has_dva = 0
+		enable_dynamic_smem_size = 0
+		workitem_private_segment_byte_size = 0
+		workgroup_group_segment_byte_size = 0
+		kernarg_segment_byte_size = 232
+		workgroup_fbarrier_count = 0
+		warp_sgpr_count = 99
+		workitem_vgpr_count = 113
+		reserved_vgpr_first = 0
+		reserved_vgpr_count = 0
+		reserved_sgpr_first = 0
+		reserved_sgpr_count = 0
+		debug_warp_private_segment_offset_sgpr = 0
+		debug_private_segment_buffer_sgpr = 0
+		kernarg_segment_alignment = 3
+		group_segment_alignment = 4
+		private_segment_alignment = 4
+		warp_size = 6
+		call_convention = -1
+		runtime_loader_kernel_symbol = 0
+	.end_iluvatar_kernel_code_t
+; %bb.0:
+	; Func LiveIn Regs:
+	;  blockIdx.x : s6  blockIdx.y : s7  blockIdx.z : s8
+	sl_mov_b32 s28, tcr_lo
+	sl_mov_b32 s9, tcr_lo
+	sl_mov_b32 s29, tcr_lo
+	ml_vrf_init_u32 v52, tcr
+	sl_mov_b32 s56, s8
+.Ltmp0:
+	.loc	1 126 39 prologue_end           ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:126:39
+	sl_lsa_load_b32x16 s[12:27], s[4:5], noreg, #64, ca
+	sl_lsa_load_b32x16 s[40:55], s[4:5], noreg, #0, ca
+	sl_mov_b32 s2, 0x0
+.Ltmp1:
+	.file	2 "/usr/local/lib/python3.12/site-packages/vllm/v1/attention/ops" "triton_attention_helpers.py"
+	.loc	2 96 17                         ; triton_attention_helpers.py:96:17 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_wait smcnt(0)
+	sl_cmp_gt_i32 wcr, s20, 0x0
+	sl_cbr_wcrz BB0_3, wcr
+; %bb.1:                                ; %.lr.ph.preheader
+	.loc	2 0 17 is_stmt 0                ; triton_attention_helpers.py:0:17
+	sl_mov_b32 s3, 0xffffffff
+BB0_2:                                  ; %.lr.ph
+                                        ; =>This Inner Loop Header: Depth=1
+	.loc	2 97 22 is_stmt 1               ; triton_attention_helpers.py:97:22 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_add_i32 s0, s2, s20
+	.loc	2 97 32 is_stmt 0               ; triton_attention_helpers.py:97:32 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_srl_b32 {s1, wcr}, s0, 0x1f
+	sl_add_i32 s0, s0, s1
+	sl_sra_b32 {s12, wcr}, s0, 0x1
+	.loc	2 98 44 is_stmt 1               ; triton_attention_helpers.py:98:44 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_sra_b32 {s13, wcr}, s12, 0x1f
+	sl_shl_b64 {s[0:1], wcr}, s[12:13], 0x2
+	sl_add_i64 s[0:1], s[18:19], s[0:1]
+	.loc	2 98 22 is_stmt 0               ; triton_attention_helpers.py:98:22 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	ml_lsa_load_dword v0, s[0:3], noreg, noreg, #0, ca
+	.loc	2 101 11 is_stmt 1              ; triton_attention_helpers.py:101:11 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_add_i32 s1, s12, 0x1
+	.loc	2 98 22                         ; triton_attention_helpers.py:98:22 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s0, v0, 0x0
+	.loc	2 99 25                         ; triton_attention_helpers.py:99:25 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_sra_b32 {s8, wcr}, s0, 0x1f
+	sl_srl_b32 {s8, wcr}, s8, 0x1b
+	sl_add_i32 s0, s0, s8
+	sl_sra_b32 {s0, wcr}, s0, 0x5
+	.loc	2 99 35 is_stmt 0               ; triton_attention_helpers.py:99:35 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_add_i32 s0, s0, s12
+	.loc	2 101 22 is_stmt 1              ; triton_attention_helpers.py:101:22 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_cmp_gt_i32 wcr, s0, s6
+	.loc	2 101 11 is_stmt 0              ; triton_attention_helpers.py:101:11 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_csel_b32 s20, s12, s20, wcr
+	sl_csel_b32 s2, s2, s1, wcr
+	.loc	2 96 17 is_stmt 1               ; triton_attention_helpers.py:96:17 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_cmp_lt_i32 wcr, s2, s20
+	sl_cbr_wcrnz BB0_2, wcr
+BB0_3:                                  ; %._crit_edge
+	.loc	2 106 18                        ; triton_attention_helpers.py:106:18 @[ triton_attention_helpers.py:67:68 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ] ]
+	sl_add_i32 s12, s2, 0xffffffff
+.Ltmp2:
+	.loc	2 69 54                         ; triton_attention_helpers.py:69:54 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	sl_sra_b32 {s13, wcr}, s12, 0x1f
+	sl_mov_b32 s3, 0xffffffff
+	sl_shl_b64 {s[14:15], wcr}, s[12:13], 0x2
+	sl_add_i64 s[0:1], s[18:19], s[14:15]
+	.loc	2 69 32 is_stmt 0               ; triton_attention_helpers.py:69:32 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	ml_lsa_load_dwordx2 v[0:1], s[0:3], noreg, noreg, #0, ca
+	.loc	2 74 37 is_stmt 1               ; triton_attention_helpers.py:74:37 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	sl_add_i64 s[0:1], s[50:51], s[14:15]
+	.loc	2 69 32                         ; triton_attention_helpers.py:69:32 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s58, v0, 0x0
+	.loc	2 74 22                         ; triton_attention_helpers.py:74:22 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	ml_lsa_load_dword v0, s[0:3], noreg, noreg, #0, ca
+	.loc	2 69 76                         ; triton_attention_helpers.py:69:76 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	sl_sub_i32 s0, s6, s2
+	.loc	2 72 23                         ; triton_attention_helpers.py:72:23 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	ml_mov_v2s_b32 s1, v1, 0x0
+	.loc	2 69 66                         ; triton_attention_helpers.py:69:66 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	sl_sra_b32 {s2, wcr}, s58, 0x1f
+	sl_srl_b32 {s2, wcr}, s2, 0x1b
+	sl_add_i32 s2, s58, s2
+	sl_srl_b32 {s2, wcr}, s2, 0x5
+	.loc	2 69 76 is_stmt 0               ; triton_attention_helpers.py:69:76 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	sl_sub_i32 s0, s0, s2
+	.loc	2 70 45 is_stmt 1               ; triton_attention_helpers.py:70:45 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	sl_mull_u32 s0, s0, 0x20
+	.loc	2 73 37                         ; triton_attention_helpers.py:73:37 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	sl_sub_i32 s53, s1, s58
+.Ltmp3:
+	.loc	1 140 27                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:140:27
+	sl_add_i32 s59, s0, 0x20
+	.loc	1 140 38 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:140:38
+	sl_cmp_lt_i32 wcr, s59, s53
+.Ltmp4:
+	.loc	2 74 22 is_stmt 1               ; triton_attention_helpers.py:74:22 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:137:73 ]
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s2, v0, 0x0
+.Ltmp5:
+	.loc	1 140 38                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:140:38
+	sl_cbr_wcrz BB0_93, wcr
+; %bb.4:
+	.loc	1 156 26                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:156:26
+	sl_and_b32 {s61, wcr}, s28, 0x3c0
+	sl_bfe2_b32 s62, s28, 0x86
+	sl_add_i32 s63, s62, 0x10
+	sl_add_i32 s64, s62, 0x20
+	sl_add_i32 s65, s62, 0x30
+	.loc	1 159 56                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:159:56
+	sl_bfe2_b32 s0, s28, 0x29
+	sl_srl_b32 {s1, wcr}, s63, 0x3
+	sl_srl_b32 {s8, wcr}, s64, 0x3
+	.loc	1 159 46 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:159:46
+	sl_add_i32 s3, s59, s0
+	sl_add_i32 s6, s59, s1
+	.loc	1 162 35 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:162:35
+	sl_mull_u32 s1, s7, 0x8
+	.loc	1 162 65 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:162:65
+	sl_bfe2_b32 s0, s61, 0x66
+	ml_mov_s2v_b32 v112, s1, 0x0
+	.loc	1 162 56                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:162:56
+	sl_add_i32 s0, s0, s1
+	.loc	1 165 36 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:165:36
+	sl_mov_b32 s1, 0x0
+	.loc	1 170 40                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s3, s53
+	sl_sub_bi_u64 s[14:15], s[10:11], s[10:11], wcr
+	.loc	1 171 45                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:171:45
+	sl_cmp_lt_u32 wcr, s7, 0x2
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_sub_bi_u64 s[16:17], s[10:11], s[10:11], wcr
+	.loc	1 171 45                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:171:45
+	sl_sub_bi_u64 s[50:51], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[16:17], s[14:15]
+	.loc	1 191 24                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:24
+	sl_mull_u32 s0, s0, 0x100
+	.loc	1 191 12 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_mov_b32 v0, 0x0
+	ml_mov_b32 v1, 0x0
+	sl_cbr_tcraz BB0_6, tcr
+; %bb.5:
+	.loc	1 161 52 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:161:52
+	sl_add_i32 s14, s3, s58
+	.loc	1 164 34                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:164:34
+	sl_sra_b32 {s15, wcr}, s14, 0x1f
+	.loc	1 191 24                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:24
+	sl_shl_b64 {s[14:15], wcr}, s[14:15], 0xc
+	sl_add_i64 s[14:15], s[42:43], s[14:15]
+	sl_add_i64 s[16:17], s[14:15], s[0:1]
+	.loc	1 191 12 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v1, s[16:19], noreg, noreg, #0, ca
+BB0_6:
+	.loc	1 0 0                           ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_srl_b32 {s14, wcr}, s65, 0x3
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s6, s53
+	sl_sub_bi_u64 s[16:17], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[16:17]
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s8, s59, s8
+	sl_cbr_tcraz BB0_8, tcr
+; %bb.7:
+	sl_add_i32 s16, s6, s58
+	sl_sra_b32 {s17, wcr}, s16, 0x1f
+	sl_shl_b64 {s[16:17], wcr}, s[16:17], 0xc
+	sl_add_i64 s[16:17], s[42:43], s[16:17]
+	sl_add_i64 s[16:17], s[16:17], s[0:1]
+	.loc	1 191 12 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v0, s[16:19], noreg, noreg, #0, ca
+BB0_8:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s6, s59, s14
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s8, s53
+	sl_sub_bi_u64 s[14:15], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[14:15]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_mov_b32 v2, 0x0
+	ml_mov_b32 v3, 0x0
+	sl_cbr_tcraz BB0_10, tcr
+; %bb.9:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s8, s58
+	sl_sra_b32 {s15, wcr}, s14, 0x1f
+	sl_shl_b64 {s[14:15], wcr}, s[14:15], 0xc
+	sl_add_i64 s[14:15], s[42:43], s[14:15]
+	sl_add_i64 s[16:17], s[14:15], s[0:1]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v3, s[16:19], noreg, noreg, #0, ca
+BB0_10:
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s6, s53
+	sl_sub_bi_u64 s[14:15], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[14:15]
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s3, 0x8
+	sl_cbr_tcraz BB0_12, tcr
+; %bb.11:
+	sl_add_i32 s16, s6, s58
+	sl_sra_b32 {s17, wcr}, s16, 0x1f
+	sl_shl_b64 {s[16:17], wcr}, s[16:17], 0xc
+	sl_add_i64 s[16:17], s[42:43], s[16:17]
+	sl_add_i64 s[16:17], s[16:17], s[0:1]
+	.loc	1 191 12 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v2, s[16:19], noreg, noreg, #0, ca
+BB0_12:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_srl_b32 {s6, wcr}, s28, 0x9
+	sl_add_i32 s8, s3, 0xa
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s14, s53
+	sl_sub_bi_u64 s[16:17], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[16:17]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_mov_b32 v4, 0x0
+	ml_mov_b32 v5, 0x0
+	sl_cbr_tcraz BB0_14, tcr
+; %bb.13:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s14, s58
+	sl_sra_b32 {s15, wcr}, s14, 0x1f
+	sl_shl_b64 {s[14:15], wcr}, s[14:15], 0xc
+	sl_add_i64 s[14:15], s[42:43], s[14:15]
+	sl_add_i64 s[16:17], s[14:15], s[0:1]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v5, s[16:19], noreg, noreg, #0, ca
+BB0_14:
+	.loc	1 0 0                           ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s6, s59, s6
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s8, s53
+	sl_sub_bi_u64 s[14:15], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[14:15]
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s3, 0xc
+	sl_cbr_tcraz BB0_16, tcr
+; %bb.15:
+	sl_add_i32 s16, s8, s58
+	sl_sra_b32 {s17, wcr}, s16, 0x1f
+	sl_shl_b64 {s[16:17], wcr}, s[16:17], 0xc
+	sl_add_i64 s[16:17], s[42:43], s[16:17]
+	sl_add_i64 s[16:17], s[16:17], s[0:1]
+	.loc	1 191 12 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v4, s[16:19], noreg, noreg, #0, ca
+BB0_16:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_or_b32 {s8, wcr}, s6, 0xe
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s14, s53
+	sl_sub_bi_u64 s[16:17], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[16:17]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_mov_b32 v6, 0x0
+	ml_mov_b32 v7, 0x0
+	sl_cbr_tcraz BB0_18, tcr
+; %bb.17:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s14, s58
+	sl_sra_b32 {s15, wcr}, s14, 0x1f
+	sl_shl_b64 {s[14:15], wcr}, s[14:15], 0xc
+	sl_add_i64 s[14:15], s[42:43], s[14:15]
+	sl_add_i64 s[16:17], s[14:15], s[0:1]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v7, s[16:19], noreg, noreg, #0, ca
+BB0_18:
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s8, s53
+	sl_sub_bi_u64 s[14:15], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[14:15]
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s3, 0x10
+	sl_cbr_tcraz BB0_20, tcr
+; %bb.19:
+	sl_add_i32 s16, s8, s58
+	sl_sra_b32 {s17, wcr}, s16, 0x1f
+	sl_shl_b64 {s[16:17], wcr}, s[16:17], 0xc
+	sl_add_i64 s[16:17], s[42:43], s[16:17]
+	sl_add_i64 s[16:17], s[16:17], s[0:1]
+	.loc	1 191 12 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v6, s[16:19], noreg, noreg, #0, ca
+BB0_20:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s8, s3, 0x12
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s14, s53
+	sl_sub_bi_u64 s[16:17], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[16:17]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_mov_b32 v8, 0x0
+	ml_mov_b32 v9, 0x0
+	sl_cbr_tcraz BB0_22, tcr
+; %bb.21:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s14, s58
+	sl_sra_b32 {s15, wcr}, s14, 0x1f
+	sl_shl_b64 {s[14:15], wcr}, s[14:15], 0xc
+	sl_add_i64 s[14:15], s[42:43], s[14:15]
+	sl_add_i64 s[16:17], s[14:15], s[0:1]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v9, s[16:19], noreg, noreg, #0, ca
+BB0_22:
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s8, s53
+	sl_sub_bi_u64 s[14:15], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[14:15]
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s3, 0x14
+	sl_cbr_tcraz BB0_24, tcr
+; %bb.23:
+	sl_add_i32 s16, s8, s58
+	sl_sra_b32 {s17, wcr}, s16, 0x1f
+	sl_shl_b64 {s[16:17], wcr}, s[16:17], 0xc
+	sl_add_i64 s[16:17], s[42:43], s[16:17]
+	sl_add_i64 s[16:17], s[16:17], s[0:1]
+	.loc	1 191 12 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v8, s[16:19], noreg, noreg, #0, ca
+BB0_24:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_or_b32 {s8, wcr}, s6, 0x16
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s14, s53
+	sl_sub_bi_u64 s[16:17], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[16:17]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_mov_b32 v10, 0x0
+	ml_mov_b32 v11, 0x0
+	sl_cbr_tcraz BB0_26, tcr
+; %bb.25:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s14, s58
+	sl_sra_b32 {s15, wcr}, s14, 0x1f
+	sl_shl_b64 {s[14:15], wcr}, s[14:15], 0xc
+	sl_add_i64 s[14:15], s[42:43], s[14:15]
+	sl_add_i64 s[16:17], s[14:15], s[0:1]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v11, s[16:19], noreg, noreg, #0, ca
+BB0_26:
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s8, s53
+	sl_sub_bi_u64 s[14:15], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[14:15]
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s3, 0x18
+	sl_cbr_tcraz BB0_28, tcr
+; %bb.27:
+	sl_add_i32 s16, s8, s58
+	sl_sra_b32 {s17, wcr}, s16, 0x1f
+	sl_shl_b64 {s[16:17], wcr}, s[16:17], 0xc
+	sl_add_i64 s[16:17], s[42:43], s[16:17]
+	sl_add_i64 s[16:17], s[16:17], s[0:1]
+	.loc	1 191 12 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v10, s[16:19], noreg, noreg, #0, ca
+BB0_28:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s8, s3, 0x1a
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s14, s53
+	sl_sub_bi_u64 s[16:17], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[16:17]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_mov_b32 v12, 0x0
+	ml_mov_b32 v13, 0x0
+	sl_cbr_tcraz BB0_30, tcr
+; %bb.29:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s14, s58
+	sl_sra_b32 {s15, wcr}, s14, 0x1f
+	sl_shl_b64 {s[14:15], wcr}, s[14:15], 0xc
+	sl_add_i64 s[14:15], s[42:43], s[14:15]
+	sl_add_i64 s[16:17], s[14:15], s[0:1]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v13, s[16:19], noreg, noreg, #0, ca
+BB0_30:
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s8, s53
+	sl_sub_bi_u64 s[14:15], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[14:15]
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s3, 0x1c
+	sl_cbr_tcraz BB0_32, tcr
+; %bb.31:
+	sl_add_i32 s16, s8, s58
+	sl_sra_b32 {s17, wcr}, s16, 0x1f
+	sl_shl_b64 {s[16:17], wcr}, s[16:17], 0xc
+	sl_add_i64 s[16:17], s[42:43], s[16:17]
+	sl_add_i64 s[16:17], s[16:17], s[0:1]
+	.loc	1 191 12 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v12, s[16:19], noreg, noreg, #0, ca
+BB0_32:
+	.loc	1 0 12 is_stmt 0                ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0:12
+	ml_mov_s2v_b32 v112, s29, 0x1
+	sl_or_b32 {s3, wcr}, s6, 0x1e
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s14, s53
+	sl_sub_bi_u64 s[16:17], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[16:17]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_mov_b32 v14, 0x0
+	ml_mov_b32 v15, 0x0
+	sl_cbr_tcraz BB0_34, tcr
+; %bb.33:
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_add_i32 s14, s14, s58
+	sl_sra_b32 {s15, wcr}, s14, 0x1f
+	sl_shl_b64 {s[14:15], wcr}, s[14:15], 0xc
+	sl_add_i64 s[14:15], s[42:43], s[14:15]
+	sl_add_i64 s[16:17], s[14:15], s[0:1]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s19, 0xfff00004
+	ml_lsa_blkload_x1 v15, s[16:19], noreg, noreg, #0, ca
+BB0_34:
+	.loc	1 0 12                          ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0:12
+	sl_lsa_load_b32x16 s[24:39], s[4:5], noreg, #192, ca
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s3, s53
+	sl_sub_bi_u64 s[4:5], s[10:11], s[10:11], wcr
+	.loc	1 192 61                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:192:61
+	sl_and_b64 {tcr, wcr}, s[50:51], s[4:5]
+	sl_cbr_tcraz BB0_36, tcr
+; %bb.35:
+	.loc	1 0 61 is_stmt 0                ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0:61
+	sl_add_i32 s4, s3, s58
+	sl_sra_b32 {s5, wcr}, s4, 0x1f
+	sl_shl_b64 {s[4:5], wcr}, s[4:5], 0xc
+	sl_add_i64 s[4:5], s[42:43], s[4:5]
+	sl_add_i64 s[0:1], s[4:5], s[0:1]
+	.loc	1 191 12 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s3, 0xfff00004
+	ml_lsa_blkload_x1 v14, s[0:3], noreg, noreg, #0, ca
+BB0_36:
+	.loc	1 156 26                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:156:26
+	ml_and_b32 v16, tid, 0x30
+	.loc	1 159 56                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:159:56
+	sl_srl_b32 {s0, wcr}, s61, 0x5
+	.loc	1 159 46 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:159:46
+	sl_add_i32 s18, s59, s0
+	sl_add_i32 s17, s18, 0x1
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	sl_cmp_lt_i32 wcr, s18, s53
+	sl_sub_bi_u64 s[0:1], s[10:11], s[10:11], wcr
+	sl_cmp_lt_i32 wcr, s17, s53
+	sl_sub_bi_u64 s[4:5], s[10:11], s[10:11], wcr
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_shl_b32 v16, v16, 0x6
+	ml_shl_b32 v17, v52, 0x3
+	sl_srl_b32 {s3, wcr}, s9, 0x1
+	sl_and_b32 {s3, wcr}, s3, 0x1c0
+	ml_and_b32 v18, tid, 0x8
+	ml_cmp_eq_u32 tcr, v18, 0x0
+	ml_mov_b32 v18, 0x280
+	ml_csel_b32 v18, 0, v18, tcr
+	sl_srl_b32 {s6, wcr}, s9, 0x5
+	sl_and_b32 {s6, wcr}, s6, 0x2
+	ml_anyop3_b32 v16, v16, v17, 56, 0xffffffea
+	ml_xor_b32 v17, s3, v18
+	ml_anyop3_b32 v53, v17, v16, s6, 0xfffffffe
+	sl_wait vmcnt(0)
+	ml_slb_store_b16  v1, v53, noreg, #0, null
+	ml_srl_b32 v1, v1, 0x10
+	sl_mov_b32 s66, 0x1000
+	sl_mov_b32 s67, 0x2000
+	ml_slb_store_b16  v1, v53, noreg, #4, null
+	sl_mov_b32 s68, 0x3000
+	sl_mov_b32 s69, 0x4000
+	sl_mov_b32 s70, 0x5000
+	ml_slb_store_b16  v0, v53, s66, #0, null
+	ml_srl_b32 v0, v0, 0x10
+	sl_mov_b32 s71, 0x6000
+	sl_mov_b32 s72, 0x7000
+	ml_slb_store_b16  v0, v53, s66, #4, null
+	ml_srl_b32 v0, v3, 0x10
+	sl_mov_b32 s3, 0x8000
+	.loc	1 157 26                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:157:26
+	ml_and_b32 v56, tid, 0xf
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_slb_store_b16  v3, v53, s67, #0, null
+	.loc	1 166 10                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:166:10
+	ml_mov_b32 v57, 0x0
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_wait smcnt(0)
+	sl_mov_b32 s31, 0x0
+	sl_mov_b32 s8, 0xc000
+	ml_slb_store_b16  v0, v53, s67, #4, null
+	ml_srl_b32 v0, v2, 0x10
+	ml_srl_b32 v1, v13, 0x10
+	sl_mov_b32 s14, 0xd000
+	ml_slb_store_b16  v2, v53, s68, #0, null
+	ml_srl_b32 v2, v15, 0x10
+	sl_mov_b32 s15, 0xf000
+	ml_srl_b32 v3, v14, 0x10
+	ml_slb_store_b16  v0, v53, s68, #4, null
+	ml_srl_b32 v0, v5, 0x10
+	.loc	1 210 28                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:210:28
+	sl_sub_i32 s6, s2, s53
+	ml_mov_s2v_b32 v112, s56, 0x2
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_slb_store_b16  v5, v53, s69, #0, null
+	ml_slb_store_b16  v0, v53, s69, #4, null
+	ml_srl_b32 v0, v4, 0x10
+	ml_slb_store_b16  v4, v53, s70, #0, null
+	ml_slb_store_b16  v0, v53, s70, #4, null
+	ml_srl_b32 v0, v7, 0x10
+	ml_slb_store_b16  v7, v53, s71, #0, null
+	ml_slb_store_b16  v0, v53, s71, #4, null
+	ml_srl_b32 v0, v6, 0x10
+	ml_slb_store_b16  v6, v53, s72, #0, null
+	ml_slb_store_b16  v0, v53, s72, #4, null
+	ml_srl_b32 v0, v9, 0x10
+	ml_slb_store_b16  v9, v53, s3, #0, null
+	ml_slb_store_b16  v0, v53, s3, #4, null
+	sl_mov_b32 s3, 0x9000
+	ml_srl_b32 v0, v8, 0x10
+	ml_slb_store_b16  v8, v53, s3, #0, null
+	ml_slb_store_b16  v0, v53, s3, #4, null
+	sl_mov_b32 s3, 0xa000
+	ml_srl_b32 v0, v11, 0x10
+	ml_slb_store_b16  v11, v53, s3, #0, null
+	ml_slb_store_b16  v0, v53, s3, #4, null
+	sl_mov_b32 s3, 0xb000
+	ml_srl_b32 v0, v10, 0x10
+	ml_slb_store_b16  v10, v53, s3, #0, null
+	ml_slb_store_b16  v0, v53, s3, #4, null
+	ml_srl_b32 v0, v12, 0x10
+	sl_mov_b32 s3, 0xe000
+	ml_slb_store_b16  v13, v53, s8, #0, null
+	ml_slb_store_b16  v1, v53, s8, #4, null
+.Ltmp6:
+	.loc	2 181 10                        ; triton_attention_helpers.py:181:10 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:237:8 ]
+	sl_add_i32 s8, s59, s6
+	.loc	2 183 10                        ; triton_attention_helpers.py:183:10 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:237:8 ]
+	sl_add_i32 s8, s8, 0x20
+	.loc	2 191 60                        ; triton_attention_helpers.py:191:60 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:237:8 ]
+	sl_min_i32 s73, s8, s2
+.Ltmp7:
+	.loc	1 191 12 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_slb_store_b16  v12, v53, s14, #0, null
+.Ltmp8:
+	.loc	2 24 20 is_stmt 1               ; triton_attention_helpers.py:24:20 @[ triton_attention_helpers.py:193:44 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:237:8 ] ]
+	sl_add_i32 s8, s73, 0x3f
+	.loc	2 24 26 is_stmt 0               ; triton_attention_helpers.py:24:26 @[ triton_attention_helpers.py:193:44 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:237:8 ] ]
+	sl_sra_b32 {s16, wcr}, s8, 0x1f
+	sl_srl_b32 {s16, wcr}, s16, 0x1a
+.Ltmp9:
+	.loc	1 191 12 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_slb_store_b16  v0, v53, s14, #4, null
+.Ltmp10:
+	.loc	2 24 26                         ; triton_attention_helpers.py:24:26 @[ triton_attention_helpers.py:193:44 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:237:8 ] ]
+	sl_add_i32 s8, s8, s16
+	sl_sra_b32 {s8, wcr}, s8, 0x6
+.Ltmp11:
+	.file	3 "/usr/local/lib/python3.12/site-packages/triton/language" "standard.py"
+	.loc	3 65 17                         ; standard.py:65:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:244:35 ]
+	sl_add_i32 s2, s2, 0xff
+.Ltmp12:
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_slb_store_b16  v15, v53, s3, #0, null
+.Ltmp13:
+	.loc	3 65 30                         ; standard.py:65:30 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:244:35 ]
+	sl_sra_b32 {s14, wcr}, s2, 0x1f
+	sl_srl_b32 {s14, wcr}, s14, 0x18
+	sl_add_i32 s2, s2, s14
+.Ltmp14:
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_slb_store_b16  v2, v53, s3, #4, null
+.Ltmp15:
+	.loc	3 65 30                         ; standard.py:65:30 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:244:35 ]
+	sl_sra_b32 {s2, wcr}, s2, 0x8
+.Ltmp16:
+	.loc	1 245 46                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:245:46
+	sl_mull_u32 s3, s2, s56
+	.loc	1 245 34 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:245:34
+	sl_max_i32 s54, s3, 0x0
+	.loc	1 191 12 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_slb_store_b16  v14, v53, s15, #0, null
+	.loc	1 246 52                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:246:52
+	sl_add_i32 s2, s3, s2
+	.loc	1 246 34 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:246:34
+	sl_min_i32 s56, s8, s2
+	.loc	1 373 36 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:36
+	sl_and_b64 {s[2:3], wcr}, s[50:51], s[0:1]
+	sl_and_b64 {s[0:1], wcr}, s[50:51], s[4:5]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_slb_store_b16  v3, v53, s15, #4, null
+	sl_wait lmcnt(0)
+	sl_barrier 
+	.loc	1 249 28                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:249:28
+	sl_cmp_lt_i32 wcr, s54, s56
+	ml_mov_s2v_b32 v112, s17, 0x3
+	ml_mov_s2v_b32 v112, s18, 0x4
+	sl_cbr_wcrz BB0_55, wcr
+; %bb.37:                               ; %.lr.ph93
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mull_u32 s8, s61, 0x40
+	ml_shl_b32 v0, tid, 0x2
+	ml_add_i32 v1, s8, v0
+	ml_xor_b32 v1, v1, 0x80
+	sl_mov_b32 s74, 0xc00
+	ml_slb_load_b32x1  v37, v1, s74, #768, null
+	.loc	1 254 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:254:31
+	sl_shl_b64 {s[4:5], wcr}, s[12:13], 0xf
+	sl_add_i64 s[32:33], s[48:49], s[4:5]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s48, 0x800
+	ml_slb_load_b32x1  v36, v1, s74, #512, null
+	.loc	1 343 38                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:343:38
+	sl_add_i32 s49, s18, s6
+	sl_add_i32 s75, s17, s6
+	.loc	1 249 28                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:249:28
+	sl_mull_u32 s30, s7, 0x100
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_slb_load_b32x1  v39, v1, s48, #768, null
+	.loc	1 249 28                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:249:28
+	sl_add_i64 s[46:47], s[46:47], s[30:31]
+	sl_add_i64 s[44:45], s[44:45], s[30:31]
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	sl_mov_b32 s76, 0x400
+	ml_slb_load_b32x1  v38, v1, s48, #512, null
+	sl_add_i32 s4, s8, 0xc00
+	sl_add_i32 s5, s8, 0x800
+	sl_add_i32 s6, s8, 0x400
+	ml_slb_load_b32x1  v41, v1, s76, #768, null
+	ml_shl_b32 v2, v52, 0x6
+	ml_and_b32 v2, v2, 0xcc0
+	ml_and_b32 v3, tid, 0xc
+	ml_slb_load_b32x1  v40, v1, s76, #512, null
+	ml_shl_b32 v4, v3, 0x2
+	sl_and_b32 {s7, wcr}, s9, 0x300
+	sl_srl_b32 {s9, wcr}, s61, 0x4
+	ml_slb_load_b32x1  v43, v1, noreg, #768, null
+	sl_add_i32 s7, s9, s7
+	ml_anyop3_b32 v60, v2, v4, s7, 0x1e
+	ml_xor_b32 v59, tid, 0x8
+	ml_slb_load_b32x1  v42, v1, noreg, #512, null
+	ml_shl_b32 v1, v3, 0x6
+	ml_or_b32 v63, v1, v0
+	ml_xor_b32 v64, v63, 0x10
+	ml_slb_blkload_x1  v45, noreg, s4, #256, null
+	ml_xor_b32 v65, v63, 0x20
+	ml_xor_b32 v66, v63, 0x30
+	ml_xor_b32 v58, tid, 0x4
+	ml_slb_blkload_x1  v44, noreg, s4, #0, null
+	ml_xor_b32 v55, tid, 0x2
+	ml_xor_b32 v54, tid, 0x1
+	ml_and_b32 v1, tid, 0x10
+	ml_slb_blkload_x1  v47, noreg, s5, #256, null
+	ml_cmp_eq_u32 tcr, v1, 0x0
+	ml_mov_b32 v2, 0x7632
+	ml_mov_b32 v3, 0x5410
+	ml_slb_blkload_x1  v46, noreg, s5, #0, null
+	ml_csel_b32 v69, v3, v2, tcr
+	ml_csel_b32 v70, v2, v3, tcr
+	ml_shl_b32 v1, v1, 0x1
+	ml_slb_blkload_x1  v49, noreg, s6, #256, null
+	ml_and_b32 v4, tid, 0x20
+	ml_cmp_eq_u32 tcr, v4, 0x0
+	ml_mov_b32 v5, 0x1054
+	ml_slb_blkload_x1  v48, noreg, s6, #0, null
+	ml_csel_b32 v71, v3, v5, tcr
+	ml_mov_b32 v3, 0x3276
+	ml_csel_b32 v72, v2, v3, tcr
+	ml_slb_blkload_x1  v51, noreg, s8, #256, null
+	ml_srl_b32 v2, v4, 0x1
+	.loc	1 157 26                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:157:26
+	ml_and_b32 v3, tid, 0xf
+	ml_anyop3_b32 v73, v1, v2, v3, 0xfffffffe
+	.loc	1 191 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:191:12
+	ml_slb_blkload_x1  v50, noreg, s8, #0, null
+	ml_xor_b32 v74, v73, 0x10
+	ml_xor_b32 v75, v0, 0x80
+	.loc	1 249 28                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:249:28
+	sl_mov_b32 s55, s31
+	sl_mov_b32 s57, s31
+	ml_mov_b32 v76, 0x0
+	ml_mov_b32 v77, 0xff800000
+	sl_mov_b32 s39, 0xffffffff
+	sl_mov_b32 s43, 0xfff00004
+	sl_mov_b32 s77, 0x1000504
+	sl_mov_b32 s78, 0x2010200
+	sl_mov_b32 s79, 0x1400
+	sl_mov_b32 s80, 0x1800
+	sl_mov_b32 s81, 0x1c00
+	sl_mov_b32 s82, 0x2400
+	sl_mov_b32 s83, 0x2800
+	sl_mov_b32 s84, 0x2c00
+	sl_mov_b32 s85, 0x3400
+	sl_mov_b32 s86, 0x3800
+	sl_mov_b32 s87, 0x3c00
+	sl_mov_b32 s88, 0x4400
+	sl_mov_b32 s89, 0x5400
+	sl_mov_b32 s90, 0x6400
+	sl_mov_b32 s91, 0x7400
+	sl_mov_b32 s92, 0x4800
+	sl_mov_b32 s93, 0x5800
+	sl_mov_b32 s94, 0x6800
+	sl_mov_b32 s9, 0x7800
+	sl_mov_b32 s60, 0x4c00
+	sl_mov_b32 s38, 0x5c00
+	sl_mov_b32 s8, 0x6c00
+	sl_mov_b32 s42, 0x7c00
+	ml_mov_b32 v67, 0x0
+	ml_mov_b32 v68, 0x0
+	ml_mov_b32 v62, 0x0
+	ml_mov_b32 v61, 0x0
+	ml_mov_b32 v28, 0x0
+	ml_mov_b32 v29, 0x0
+	ml_mov_b32 v30, 0x0
+	ml_mov_b32 v31, 0x0
+	ml_mov_b32 v24, 0x0
+	ml_mov_b32 v25, 0x0
+	ml_mov_b32 v26, 0x0
+	ml_mov_b32 v27, 0x0
+	ml_mov_b32 v20, 0x0
+	ml_mov_b32 v21, 0x0
+	ml_mov_b32 v22, 0x0
+	ml_mov_b32 v23, 0x0
+	ml_mov_b32 v16, 0x0
+	ml_mov_b32 v17, 0x0
+	ml_mov_b32 v18, 0x0
+	ml_mov_b32 v19, 0x0
+	ml_mov_b32 v12, 0x0
+	ml_mov_b32 v13, 0x0
+	ml_mov_b32 v14, 0x0
+	ml_mov_b32 v15, 0x0
+	ml_mov_b32 v8, 0x0
+	ml_mov_b32 v9, 0x0
+	ml_mov_b32 v10, 0x0
+	ml_mov_b32 v11, 0x0
+	ml_mov_b32 v4, 0x0
+	ml_mov_b32 v5, 0x0
+	ml_mov_b32 v6, 0x0
+	ml_mov_b32 v7, 0x0
+	ml_mov_b32 v0, 0x0
+	ml_mov_b32 v1, 0x0
+	ml_mov_b32 v2, 0x0
+	ml_mov_b32 v3, 0x0
+	ml_mov_b32 v81, 0xff800000
+	ml_mov_b32 v80, 0xff800000
+	ml_mov_b32 v78, 0xff800000
+	ml_mov_b32 v79, 0xff800000
+	sl_jump BB0_39
+BB0_38:                                 ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	sl_wait vmcnt(0)
+	ml_slb_store_b16  v33, v53, s69, #0, null
+	ml_srl_b32 v33, v33, 0x10
+	ml_srl_b32 v82, v32, 0x10
+	ml_srl_b32 v83, v35, 0x10
+	ml_slb_store_b16  v33, v53, s69, #4, null
+	ml_srl_b32 v33, v34, 0x10
+.Ltmp17:
+	.loc	2 309 42                        ; triton_attention_helpers.py:309:42 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:357:12 ]
+	ml_add_i32 v84, s20, v56
+	ml_cmp_ge_i32 tcr, s49, v84
+.Ltmp18:
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_store_b16  v32, v53, s70, #0, null
+.Ltmp19:
+	.loc	2 309 42                        ; triton_attention_helpers.py:309:42 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:357:12 ]
+	sl_add_i32 s12, s20, 0x10
+	ml_add_i32 v32, s12, v56
+	sl_mov_b64 s[4:5], tcr
+	ml_cmp_ge_i32 tcr, s75, v84
+.Ltmp20:
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_store_b16  v82, v53, s70, #4, null
+.Ltmp21:
+	.loc	2 309 42                        ; triton_attention_helpers.py:309:42 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:357:12 ]
+	sl_add_i32 s14, s20, 0x20
+	sl_add_i32 s18, s20, 0x30
+	sl_mov_b64 s[6:7], tcr
+	ml_cmp_ge_i32 tcr, s49, v32
+.Ltmp22:
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_store_b16  v35, v53, s71, #0, null
+.Ltmp23:
+	.loc	2 309 42                        ; triton_attention_helpers.py:309:42 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:357:12 ]
+	sl_mov_b64 s[22:23], tcr
+	ml_cmp_ge_i32 tcr, s75, v32
+.Ltmp24:
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_store_b16  v83, v53, s71, #4, null
+.Ltmp25:
+	.loc	2 309 42                        ; triton_attention_helpers.py:309:42 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:357:12 ]
+	ml_add_i32 v32, s14, v56
+	sl_mov_b64 s[12:13], tcr
+	ml_cmp_ge_i32 tcr, s49, v32
+.Ltmp26:
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_store_b16  v34, v53, s72, #0, null
+.Ltmp27:
+	.loc	2 309 42                        ; triton_attention_helpers.py:309:42 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:357:12 ]
+	sl_mov_b64 s[14:15], tcr
+	ml_cmp_ge_i32 tcr, s75, v32
+	ml_add_i32 v32, s18, v56
+.Ltmp28:
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_store_b16  v33, v53, s72, #4, null
+.Ltmp29:
+	.loc	2 309 42                        ; triton_attention_helpers.py:309:42 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:357:12 ]
+	sl_mov_b64 s[16:17], tcr
+	ml_cmp_ge_i32 tcr, s49, v32
+	sl_mov_b64 s[20:21], tcr
+	ml_cmp_ge_i32 tcr, s75, v32
+	sl_mov_b64 s[18:19], tcr
+.Ltmp30:
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	sl_wait lmcnt(0)
+	sl_barrier 
+	ml_slb_load_b32x1  v86, v63, noreg, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	ml_mov_b32 v32, 0x0
+	ml_mov_b32 v33, v57
+	ml_mov_b32 v34, v57
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v87, v64, noreg, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	ml_mov_b32 v35, v57
+	.loc	1 373 60                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:60
+	sl_and_b64 {tcr, wcr}, s[2:3], s[4:5]
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_byte_permute_b32 v99, v72, v72, s78
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v90, v63, s66, #0, null
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_pk_shl_b16 v99, v99, 0x40004
+	ml_pk_srl_b8 v107, v99, 0x40004
+	.loc	1 249 28                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:249:28
+	sl_add_i64 s[54:55], s[54:55], 0x1
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v91, v64, s66, #0, null
+	ml_slb_load_b32x1  v94, v63, s67, #0, null
+	ml_slb_load_b32x1  v95, v64, s67, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[82:85], v[50:51], v[86:87], v[32:35]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v63, s68, #0, null
+	ml_slb_load_b32x1  v97, v64, s68, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[86:89], v[50:51], v[90:91], v[32:35]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v99, v75, s69, #768, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[90:93], v[50:51], v[94:95], v[32:35]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v65, noreg, #0, null
+	ml_slb_load_b32x1  v95, v66, noreg, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[50:51], v[96:97], v[32:35]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v65, s66, #0, null
+	ml_slb_load_b32x1  v97, v66, s66, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[82:85], v[42:43], v[94:95], v[82:85]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v65, s67, #0, null
+	ml_slb_load_b32x1  v95, v66, s67, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[86:89], v[42:43], v[96:97], v[86:89]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v65, s68, #0, null
+	ml_slb_load_b32x1  v97, v66, s68, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[90:93], v[42:43], v[94:95], v[90:93]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v63, s76, #0, null
+	ml_slb_load_b32x1  v95, v64, s76, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[42:43], v[96:97], v[32:35]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v63, s79, #0, null
+	ml_slb_load_b32x1  v97, v64, s79, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[82:85], v[48:49], v[94:95], v[82:85]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v63, s82, #0, null
+	ml_slb_load_b32x1  v95, v64, s82, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[86:89], v[48:49], v[96:97], v[86:89]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v63, s85, #0, null
+	ml_slb_load_b32x1  v97, v64, s85, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[90:93], v[48:49], v[94:95], v[90:93]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v65, s76, #0, null
+	ml_slb_load_b32x1  v95, v66, s76, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[48:49], v[96:97], v[32:35]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v65, s79, #0, null
+	ml_slb_load_b32x1  v97, v66, s79, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[82:85], v[40:41], v[94:95], v[82:85]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v65, s82, #0, null
+	ml_slb_load_b32x1  v95, v66, s82, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[86:89], v[40:41], v[96:97], v[86:89]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v65, s85, #0, null
+	ml_slb_load_b32x1  v97, v66, s85, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[90:93], v[40:41], v[94:95], v[90:93]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v63, s48, #0, null
+	ml_slb_load_b32x1  v95, v64, s48, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[40:41], v[96:97], v[32:35]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v63, s80, #0, null
+	ml_slb_load_b32x1  v97, v64, s80, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[82:85], v[46:47], v[94:95], v[82:85]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v63, s83, #0, null
+	ml_slb_load_b32x1  v95, v64, s83, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[86:89], v[46:47], v[96:97], v[86:89]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v63, s86, #0, null
+	ml_slb_load_b32x1  v97, v64, s86, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[90:93], v[46:47], v[94:95], v[90:93]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v65, s48, #0, null
+	ml_slb_load_b32x1  v95, v66, s48, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[46:47], v[96:97], v[32:35]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v65, s80, #0, null
+	ml_slb_load_b32x1  v97, v66, s80, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[82:85], v[38:39], v[94:95], v[82:85]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v65, s83, #0, null
+	ml_slb_load_b32x1  v95, v66, s83, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[86:89], v[38:39], v[96:97], v[86:89]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v65, s86, #0, null
+	ml_slb_load_b32x1  v97, v66, s86, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[90:93], v[38:39], v[94:95], v[90:93]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v63, s74, #0, null
+	ml_slb_load_b32x1  v95, v64, s74, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[38:39], v[96:97], v[32:35]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v63, s81, #0, null
+	ml_slb_load_b32x1  v97, v64, s81, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[82:85], v[44:45], v[94:95], v[82:85]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v63, s84, #0, null
+	ml_slb_load_b32x1  v95, v64, s84, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[86:89], v[44:45], v[96:97], v[86:89]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v63, s87, #0, null
+	ml_slb_load_b32x1  v97, v64, s87, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[90:93], v[44:45], v[94:95], v[90:93]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v65, s74, #0, null
+	ml_slb_load_b32x1  v95, v66, s74, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[44:45], v[96:97], v[32:35]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v65, s81, #0, null
+	ml_slb_load_b32x1  v97, v66, s81, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[82:85], v[36:37], v[94:95], v[82:85]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v94, v65, s84, #0, null
+	ml_slb_load_b32x1  v95, v66, s84, #0, null
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[86:89], v[36:37], v[96:97], v[86:89]
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_load_b32x1  v96, v65, s87, #0, null
+	ml_slb_load_b32x1  v97, v66, s87, #0, null
+	.loc	1 367 17                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:17
+	ml_fma_f32 v82, s52, v82, 0
+	ml_fma_f32 v83, s52, v83, 0
+	ml_fma_f32 v84, s52, v84, 0
+	ml_fma_f32 v85, s52, v85, 0
+	ml_fma_f32 v86, s52, v86, 0
+	ml_fma_f32 v87, s52, v87, 0
+	ml_fma_f32 v88, s52, v88, 0
+	ml_fma_f32 v89, s52, v89, 0
+	.loc	1 367 41 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[90:93], v[36:37], v[94:95], v[90:93]
+	.loc	1 373 73 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:73
+	ml_csel_b32 v95, v82, v77, tcr
+	.loc	1 367 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:41
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[36:37], v[96:97], v[32:35]
+	.loc	1 367 17 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:367:17
+	ml_fma_f32 v90, s52, v90, 0
+	ml_fma_f32 v91, s52, v91, 0
+	ml_fma_f32 v92, s52, v92, 0
+	ml_fma_f32 v94, s52, v93, 0
+	ml_fma_f32 v32, s52, v32, 0
+	ml_fma_f32 v33, s52, v33, 0
+	ml_fma_f32 v34, s52, v34, 0
+	ml_fma_f32 v35, s52, v35, 0
+	.loc	1 373 73 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:73
+	ml_csel_b32 v96, v83, v77, tcr
+	.loc	1 373 60 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:60
+	sl_and_b64 {tcr, wcr}, s[0:1], s[6:7]
+	.loc	1 373 73                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:73
+	ml_csel_b32 v97, v84, v77, tcr
+	ml_csel_b32 v98, v85, v77, tcr
+	.loc	1 373 60                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:60
+	sl_and_b64 {tcr, wcr}, s[2:3], s[22:23]
+	.loc	1 373 73                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:73
+	ml_csel_b32 v100, v86, v77, tcr
+	ml_csel_b32 v101, v87, v77, tcr
+	.loc	1 373 60                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:60
+	sl_and_b64 {tcr, wcr}, s[0:1], s[12:13]
+	.loc	1 373 73                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:73
+	ml_csel_b32 v102, v88, v77, tcr
+	ml_csel_b32 v103, v89, v77, tcr
+	.loc	1 373 60                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:60
+	sl_and_b64 {tcr, wcr}, s[2:3], s[14:15]
+	.loc	1 373 73                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:73
+	ml_csel_b32 v93, v90, v77, tcr
+	ml_csel_b32 v91, v91, v77, tcr
+	.loc	1 373 60                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:60
+	sl_and_b64 {tcr, wcr}, s[0:1], s[16:17]
+	.loc	1 373 73                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:73
+	ml_csel_b32 v92, v92, v77, tcr
+	ml_csel_b32 v90, v94, v77, tcr
+	.loc	1 373 60                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:60
+	sl_and_b64 {tcr, wcr}, s[2:3], s[20:21]
+	.loc	1 373 73                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:73
+	ml_csel_b32 v85, v32, v77, tcr
+	ml_csel_b32 v83, v33, v77, tcr
+	.loc	1 373 60                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:60
+	sl_and_b64 {tcr, wcr}, s[0:1], s[18:19]
+	.loc	1 373 73                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:373:73
+	ml_csel_b32 v84, v34, v77, tcr
+	ml_csel_b32 v82, v35, v77, tcr
+.Ltmp31:
+	.loc	3 192 27 is_stmt 1              ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	ml_max_f32 v32, v95, v100
+	ml_max_f32 v32, v32, v93
+	ml_max_f32 v32, v32, v85
+.Ltmp32:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v33, v32, v59
+.Ltmp33:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	ml_max_f32 v34, v96, v101
+	ml_max_f32 v34, v34, v91
+	ml_max_f32 v34, v34, v83
+.Ltmp34:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v35, v34, v59
+.Ltmp35:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	ml_max_f32 v86, v97, v102
+	ml_max_f32 v86, v86, v92
+	ml_max_f32 v86, v86, v84
+.Ltmp36:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v87, v86, v59
+.Ltmp37:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	ml_max_f32 v88, v98, v103
+	ml_max_f32 v88, v88, v90
+	ml_max_f32 v88, v88, v82
+.Ltmp38:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v89, v88, v59
+.Ltmp39:
+	.loc	1 249 28                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:249:28
+	sl_xor_b64 {s[4:5], wcr}, s[54:55], s[56:57]
+.Ltmp40:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v32, v32, v33
+.Ltmp41:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v33, v32, v58
+.Ltmp42:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v34, v34, v35
+.Ltmp43:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v35, v34, v58
+.Ltmp44:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v86, v86, v87
+.Ltmp45:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v87, v86, v58
+.Ltmp46:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v88, v88, v89
+.Ltmp47:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v89, v88, v58
+.Ltmp48:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v32, v32, v33
+.Ltmp49:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v33, v32, v55
+.Ltmp50:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v34, v34, v35
+.Ltmp51:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v35, v34, v55
+.Ltmp52:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v86, v86, v87
+.Ltmp53:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v87, v86, v55
+.Ltmp54:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v88, v88, v89
+.Ltmp55:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v89, v88, v55
+.Ltmp56:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v32, v32, v33
+.Ltmp57:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v33, v32, v54
+.Ltmp58:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v34, v34, v35
+.Ltmp59:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v35, v34, v54
+.Ltmp60:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v86, v86, v87
+.Ltmp61:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v87, v86, v54
+.Ltmp62:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v88, v88, v89
+.Ltmp63:
+	.loc	3 213 40                        ; standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v89, v88, v54
+.Ltmp64:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_max_f32 v32, v32, v33
+.Ltmp65:
+	.loc	2 406 24                        ; triton_attention_helpers.py:406:24 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_max_f32 v32, v81, v32
+	.loc	2 409 25                        ; triton_attention_helpers.py:409:25 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_cmp_ne_f32 tcr, v32, 0xff800000
+	.loc	2 409 45 is_stmt 0              ; triton_attention_helpers.py:409:45 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_csel_b32 v32, v32, v76, tcr
+.Ltmp66:
+	.loc	3 192 27 is_stmt 1              ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(2)
+	ml_max_f32 v33, v34, v35
+.Ltmp67:
+	.loc	2 406 24                        ; triton_attention_helpers.py:406:24 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_max_f32 v33, v80, v33
+	.loc	2 409 25                        ; triton_attention_helpers.py:409:25 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_cmp_ne_f32 tcr, v33, 0xff800000
+	.loc	2 409 45 is_stmt 0              ; triton_attention_helpers.py:409:45 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_csel_b32 v33, v33, v76, tcr
+.Ltmp68:
+	.loc	3 192 27 is_stmt 1              ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v34, v86, v87
+.Ltmp69:
+	.loc	2 406 24                        ; triton_attention_helpers.py:406:24 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_max_f32 v34, v78, v34
+	.loc	2 409 25                        ; triton_attention_helpers.py:409:25 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_cmp_ne_f32 tcr, v34, 0xff800000
+	.loc	2 411 19                        ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v86, v95, v32
+.Ltmp70:
+	.loc	3 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ triton_attention_helpers.py:406:31 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(0)
+	ml_max_f32 v35, v88, v89
+.Ltmp71:
+	.loc	2 406 24                        ; triton_attention_helpers.py:406:24 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_max_f32 v35, v79, v35
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v86, v86, 0x3fb8aa3b
+	.loc	2 409 45                        ; triton_attention_helpers.py:409:45 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_csel_b32 v34, v34, v76, tcr
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v86, v86
+	.loc	2 411 19 is_stmt 0              ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v87, v96, v33
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v87, v87, 0x3fb8aa3b
+	.loc	2 409 25 is_stmt 1              ; triton_attention_helpers.py:409:25 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_cmp_ne_f32 tcr, v35, 0xff800000
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v87, v87
+	.loc	2 411 19 is_stmt 0              ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v88, v97, v34
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v88, v88, 0x3fb8aa3b
+	.loc	2 409 45 is_stmt 1              ; triton_attention_helpers.py:409:45 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_csel_b32 v35, v35, v76, tcr
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v88, v88
+	.loc	2 411 19 is_stmt 0              ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v89, v98, v35
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v89, v89, 0x3fb8aa3b
+	.loc	2 415 23 is_stmt 1              ; triton_attention_helpers.py:415:23 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v81, v81, v32
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v89, v89
+	.loc	2 415 19                        ; triton_attention_helpers.py:415:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v81, v81, 0x3fb8aa3b
+	.loc	2 415 23 is_stmt 0              ; triton_attention_helpers.py:415:23 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v80, v80, v33
+	.loc	2 415 19                        ; triton_attention_helpers.py:415:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v80, v80, 0x3fb8aa3b
+	ml_exp_f32 v81, v81
+	.loc	2 415 23                        ; triton_attention_helpers.py:415:23 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v78, v78, v34
+	.loc	2 415 19                        ; triton_attention_helpers.py:415:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v78, v78, 0x3fb8aa3b
+	.loc	2 415 23                        ; triton_attention_helpers.py:415:23 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v79, v79, v35
+	.loc	2 415 19                        ; triton_attention_helpers.py:415:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v80, v80
+.Ltmp72:
+	.loc	1 409 31 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_cvt_bf16_f32  v94, v86
+	ml_cvt_bf16_f32  v95, v87
+	ml_cvt_bf16_f32  v96, v88
+.Ltmp73:
+	.loc	2 415 19                        ; triton_attention_helpers.py:415:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v78, v78
+.Ltmp74:
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_cvt_bf16_f32  v97, v89
+	ml_byte_permute_b32 v94, v95, v94, s77
+	ml_byte_permute_b32 v95, v97, v96, s77
+	ml_byte_permute_b32 v96, v69, v69, s78
+	ml_pk_shl_b16 v96, v96, 0x40004
+	ml_pk_srl_b8 v104, v96, 0x40004
+	ml_byte_permute_b32 v96, v94, v95, v104
+	ml_byte_permute_b32 v97, v70, v70, s78
+	ml_slb_shuffle_rtn_b32 v98, v96, v73
+	ml_pk_shl_b16 v96, v97, 0x40004
+	ml_pk_srl_b8 v105, v96, 0x40004
+	ml_byte_permute_b32 v94, v94, v95, v105
+	ml_slb_shuffle_rtn_b32 v97, v94, v74
+.Ltmp75:
+	.loc	2 415 19                        ; triton_attention_helpers.py:415:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v79, v79, 0x3fb8aa3b
+.Ltmp76:
+	.loc	1 387 20                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:387:20
+	ml_mul_f32 v28, v28, v81
+.Ltmp77:
+	.loc	2 415 19                        ; triton_attention_helpers.py:415:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v79, v79
+.Ltmp78:
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v94, noreg, s69, #0, null
+	.loc	1 387 20                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:387:20
+	ml_mul_f32 v29, v29, v80
+	ml_mul_f32 v30, v30, v78
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_byte_permute_b32 v96, v71, v71, s78
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v95, noreg, s69, #256, null
+	.loc	1 387 20                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:387:20
+	ml_mul_f32 v31, v31, v79
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_pk_shl_b16 v96, v96, 0x40004
+	ml_pk_srl_b8 v106, v96, 0x40004
+	.loc	1 387 20                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:387:20
+	ml_mul_f32 v24, v24, v81
+	ml_mul_f32 v25, v25, v80
+	ml_mul_f32 v26, v26, v78
+	ml_mul_f32 v27, v27, v79
+	ml_mul_f32 v20, v20, v81
+	ml_mul_f32 v21, v21, v80
+	ml_mul_f32 v22, v22, v78
+	ml_mul_f32 v23, v23, v79
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	sl_wait lmcnt(2)
+	ml_byte_permute_b32 v96, v98, v97, v106
+	ml_byte_permute_b32 v97, v98, v97, v107
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v98, v75, s69, #512, null
+	.loc	1 387 20                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:387:20
+	ml_mul_f32 v16, v16, v81
+	ml_mul_f32 v17, v17, v80
+	ml_mul_f32 v18, v18, v78
+	ml_mul_f32 v19, v19, v79
+	ml_mul_f32 v12, v12, v81
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(1)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[96:97], v[94:95], v[28:31]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v94, noreg, s88, #0, null
+	ml_slb_blkload_x1  v95, noreg, s88, #256, null
+	.loc	1 387 20                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:387:20
+	ml_mul_f32 v13, v13, v80
+	ml_mul_f32 v14, v14, v78
+	ml_mul_f32 v15, v15, v79
+	ml_mul_f32 v8, v8, v81
+	ml_mul_f32 v9, v9, v80
+	ml_mul_f32 v10, v10, v78
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[96:97], v[98:99], v[24:27]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v98, v75, s88, #512, null
+	ml_slb_load_b32x1  v99, v75, s88, #768, null
+	.loc	1 387 20                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:387:20
+	ml_mul_f32 v11, v11, v79
+	ml_mul_f32 v4, v4, v81
+	ml_mul_f32 v5, v5, v80
+	ml_mul_f32 v6, v6, v78
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[96:97], v[94:95], v[20:23]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v94, noreg, s92, #0, null
+	ml_slb_blkload_x1  v95, noreg, s92, #256, null
+	.loc	1 387 20                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:387:20
+	ml_mul_f32 v7, v7, v79
+	ml_mul_f32 v0, v0, v81
+	ml_mul_f32 v1, v1, v80
+	ml_mul_f32 v2, v2, v78
+	ml_mul_f32 v3, v3, v79
+.Ltmp79:
+	.loc	2 411 19                        ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v93, v93, v32
+.Ltmp80:
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[96:97], v[98:99], v[16:19]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v98, v75, s92, #512, null
+	ml_slb_load_b32x1  v99, v75, s92, #768, null
+.Ltmp81:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v93, v93, 0x3fb8aa3b
+	.loc	2 411 19 is_stmt 0              ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v91, v91, v33
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v91, v91, 0x3fb8aa3b
+	.loc	2 411 19                        ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v92, v92, v34
+.Ltmp82:
+	.loc	1 409 41 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[96:97], v[94:95], v[12:15]
+.Ltmp83:
+	.loc	2 411 19                        ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v94, v100, v32
+	.loc	2 411 15 is_stmt 0              ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v94, v94, 0x3fb8aa3b
+	ml_mul_f32 v92, v92, 0x3fb8aa3b
+	ml_exp_f32 v108, v94
+	.loc	2 411 19                        ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v94, v101, v33
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v94, v94, 0x3fb8aa3b
+.Ltmp84:
+	.loc	1 409 41 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[96:97], v[98:99], v[8:11]
+.Ltmp85:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v109, v94
+	.loc	2 411 19 is_stmt 0              ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v94, v102, v34
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v94, v94, 0x3fb8aa3b
+.Ltmp86:
+	.loc	1 409 31 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_cvt_bf16_f32  v98, v108
+.Ltmp87:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v102, v94
+	.loc	2 411 19 is_stmt 0              ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v94, v103, v35
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v95, v94, 0x3fb8aa3b
+.Ltmp88:
+	.loc	1 317 16 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v94, noreg, s60, #0, null
+.Ltmp89:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v103, v95
+.Ltmp90:
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_cvt_bf16_f32  v99, v109
+	ml_cvt_bf16_f32  v100, v102
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v95, noreg, s60, #256, null
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_byte_permute_b32 v98, v99, v98, s77
+.Ltmp91:
+	.loc	2 411 19                        ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v90, v90, v35
+.Ltmp92:
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_cvt_bf16_f32  v101, v103
+	ml_byte_permute_b32 v99, v101, v100, s77
+	ml_byte_permute_b32 v100, v98, v99, v104
+	ml_slb_shuffle_rtn_b32 v100, v100, v73
+	ml_byte_permute_b32 v98, v98, v99, v105
+.Ltmp93:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v90, v90, 0x3fb8aa3b
+	.loc	2 411 19 is_stmt 0              ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v85, v85, v32
+.Ltmp94:
+	.loc	1 409 31 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_slb_shuffle_rtn_b32 v101, v98, v74
+.Ltmp95:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v85, v85, 0x3fb8aa3b
+	.loc	2 411 19 is_stmt 0              ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v83, v83, v33
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v83, v83, 0x3fb8aa3b
+.Ltmp96:
+	.loc	1 317 16 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v98, noreg, s70, #0, null
+.Ltmp97:
+	.loc	2 411 19                        ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v82, v82, v35
+	.loc	2 411 15 is_stmt 0              ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v82, v82, 0x3fb8aa3b
+.Ltmp98:
+	.loc	1 317 16 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v99, noreg, s70, #256, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[96:97], v[94:95], v[4:7]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v94, v75, s60, #512, null
+	ml_slb_load_b32x1  v95, v75, s60, #768, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[96:97], v[94:95], v[0:3]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v94, v75, s70, #512, null
+	ml_slb_load_b32x1  v95, v75, s70, #768, null
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_byte_permute_b32 v96, v100, v101, v106
+	ml_byte_permute_b32 v97, v100, v101, v107
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v100, noreg, s89, #0, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[96:97], v[98:99], v[28:31]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v101, noreg, s89, #256, null
+	ml_slb_load_b32x1  v98, v75, s89, #512, null
+	ml_slb_load_b32x1  v99, v75, s89, #768, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[96:97], v[94:95], v[24:27]
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[96:97], v[100:101], v[20:23]
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[96:97], v[98:99], v[16:19]
+.Ltmp99:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v98, v93
+.Ltmp100:
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v93, v75, s93, #512, null
+.Ltmp101:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v99, v91
+.Ltmp102:
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v91, noreg, s93, #0, null
+.Ltmp103:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v100, v92
+.Ltmp104:
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v92, noreg, s93, #256, null
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_cvt_bf16_f32  v94, v99
+.Ltmp105:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v101, v90
+.Ltmp106:
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_cvt_bf16_f32  v90, v98
+	ml_cvt_bf16_f32  v95, v100
+	ml_byte_permute_b32 v110, v94, v90, s77
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v94, v75, s93, #768, null
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_cvt_bf16_f32  v90, v101
+	ml_byte_permute_b32 v95, v90, v95, s77
+	ml_byte_permute_b32 v90, v110, v95, v104
+	ml_slb_shuffle_rtn_b32 v111, v90, v73
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v90, noreg, s38, #0, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[96:97], v[91:92], v[12:15]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v91, noreg, s38, #256, null
+	ml_slb_load_b32x1  v92, v75, s38, #512, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[96:97], v[93:94], v[8:11]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v93, v75, s38, #768, null
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_byte_permute_b32 v94, v110, v95, v105
+	ml_slb_shuffle_rtn_b32 v95, v94, v74
+	.loc	1 409 41 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[96:97], v[90:91], v[4:7]
+	.loc	1 317 16 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v90, noreg, s71, #0, null
+	ml_slb_blkload_x1  v91, noreg, s71, #256, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[96:97], v[92:93], v[0:3]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v92, v75, s71, #512, null
+	ml_slb_load_b32x1  v93, v75, s71, #768, null
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	sl_wait lmcnt(4)
+	ml_byte_permute_b32 v94, v111, v95, v106
+	ml_byte_permute_b32 v95, v111, v95, v107
+.Ltmp107:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v97, v82
+.Ltmp108:
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v82, v75, s8, #512, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[94:95], v[90:91], v[28:31]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v90, noreg, s90, #0, null
+	ml_slb_blkload_x1  v91, noreg, s90, #256, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[94:95], v[92:93], v[24:27]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v92, v75, s90, #512, null
+	ml_slb_load_b32x1  v93, v75, s90, #768, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[94:95], v[90:91], v[20:23]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v90, noreg, s94, #0, null
+	ml_slb_blkload_x1  v91, noreg, s94, #256, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[94:95], v[92:93], v[16:19]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v92, v75, s94, #512, null
+	ml_slb_load_b32x1  v93, v75, s94, #768, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[94:95], v[90:91], v[12:15]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v90, noreg, s8, #0, null
+	ml_slb_blkload_x1  v91, noreg, s8, #256, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[94:95], v[92:93], v[8:11]
+.Ltmp109:
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_exp_f32 v92, v85
+	ml_exp_f32 v93, v83
+	.loc	2 411 19 is_stmt 0              ; triton_attention_helpers.py:411:19 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_sub_f32 v83, v84, v34
+	.loc	2 411 15                        ; triton_attention_helpers.py:411:15 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_mul_f32 v83, v83, 0x3fb8aa3b
+	ml_exp_f32 v96, v83
+.Ltmp110:
+	.loc	1 409 31 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_cvt_bf16_f32  v83, v92
+	.loc	1 409 41 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[94:95], v[90:91], v[4:7]
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_cvt_bf16_f32  v84, v93
+	ml_cvt_bf16_f32  v85, v96
+	ml_byte_permute_b32 v84, v84, v83, s77
+	.loc	1 317 16 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v83, v75, s8, #768, null
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	ml_cvt_bf16_f32  v90, v97
+	ml_byte_permute_b32 v85, v90, v85, s77
+	ml_byte_permute_b32 v90, v84, v85, v104
+	ml_slb_shuffle_rtn_b32 v91, v90, v73
+	ml_byte_permute_b32 v84, v84, v85, v105
+	ml_slb_shuffle_rtn_b32 v104, v84, v74
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v84, noreg, s72, #0, null
+	ml_slb_blkload_x1  v85, noreg, s72, #256, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[94:95], v[82:83], v[0:3]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v82, v75, s72, #512, null
+	ml_slb_load_b32x1  v83, v75, s72, #768, null
+	.loc	1 409 31                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:31
+	sl_wait lmcnt(4)
+	ml_byte_permute_b32 v90, v91, v104, v106
+	ml_byte_permute_b32 v91, v91, v104, v107
+	.loc	1 409 41 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[90:91], v[84:85], v[28:31]
+	.loc	1 317 16 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v84, noreg, s91, #0, null
+	ml_slb_blkload_x1  v85, noreg, s91, #256, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[90:91], v[82:83], v[24:27]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v82, v75, s91, #512, null
+	ml_slb_load_b32x1  v83, v75, s91, #768, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[90:91], v[84:85], v[20:23]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v84, noreg, s9, #0, null
+	ml_slb_blkload_x1  v85, noreg, s9, #256, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[90:91], v[82:83], v[16:19]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v82, v75, s9, #512, null
+	ml_slb_load_b32x1  v83, v75, s9, #768, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[90:91], v[84:85], v[12:15]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_blkload_x1  v84, noreg, s42, #0, null
+	ml_slb_blkload_x1  v85, noreg, s42, #256, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[90:91], v[82:83], v[8:11]
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_slb_load_b32x1  v82, v75, s42, #512, null
+	ml_slb_load_b32x1  v83, v75, s42, #768, null
+	.loc	1 409 41                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:409:41
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[90:91], v[84:85], v[4:7]
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[90:91], v[82:83], v[0:3]
+.Ltmp111:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	ml_add_f32 v82, v86, v108
+	ml_add_f32 v82, v98, v82
+	ml_add_f32 v82, v92, v82
+.Ltmp112:
+	.loc	2 417 24                        ; triton_attention_helpers.py:417:24 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_fma_f32 v67, v67, v81, v82
+.Ltmp113:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	ml_add_f32 v81, v87, v109
+	ml_add_f32 v81, v99, v81
+	ml_add_f32 v81, v93, v81
+.Ltmp114:
+	.loc	2 417 24                        ; triton_attention_helpers.py:417:24 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_fma_f32 v68, v68, v80, v81
+.Ltmp115:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	ml_add_f32 v80, v88, v102
+	ml_add_f32 v81, v89, v103
+	ml_add_f32 v80, v100, v80
+	ml_add_f32 v81, v101, v81
+	ml_add_f32 v80, v96, v80
+	ml_add_f32 v81, v97, v81
+.Ltmp116:
+	.loc	2 417 24                        ; triton_attention_helpers.py:417:24 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_fma_f32 v62, v62, v78, v80
+	ml_fma_f32 v61, v61, v79, v81
+	ml_mov_b32 v81, v32
+	ml_mov_b32 v80, v33
+	ml_mov_b32 v78, v34
+	ml_mov_b32 v79, v35
+.Ltmp117:
+	.loc	1 249 28                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:249:28
+	sl_cbr_wcrz BB0_56, wcr
+BB0_39:                                 ; =>This Inner Loop Header: Depth=1
+	.loc	1 251 33                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:251:33
+	sl_mull_u32 s20, s54, 0x40
+	sl_add_i32 s4, s20, s62
+	sl_cmp_lt_i32 wcr, s4, s73
+	sl_sub_bi_u32 s4, s10, s10, wcr
+	sl_add_i32 s5, s20, s63
+	.loc	1 254 52                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:254:52
+	sl_shl_b64 {s[6:7], wcr}, s[54:55], 0x4
+	sl_add_i64 s[36:37], s[32:33], s[6:7]
+	.loc	1 254 12 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:254:12
+	ml_lsa_load_dword v32, s[36:39], noreg, noreg, #0, ca
+	.loc	1 254 52                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:254:52
+	sl_mov_b64 s[34:35], s[38:39]
+	sl_srl_b32 {s6, wcr}, s5, 0x2
+	sl_and_b32 {s6, wcr}, s6, 0x3ffffff4
+	.loc	1 254 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:254:12
+	ml_lsa_load_dword v33, s[32:35], noreg, s6, #0, ca
+	.loc	1 251 33 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:251:33
+	sl_add_i32 s6, s20, s64
+	.loc	1 254 52                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:254:52
+	sl_srl_b32 {s7, wcr}, s6, 0x2
+	sl_and_b32 {s7, wcr}, s7, 0x3ffffffc
+	.loc	1 254 12 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:254:12
+	ml_lsa_load_dword v34, s[32:35], noreg, s7, #0, ca
+	.loc	1 251 33 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:251:33
+	sl_add_i32 s7, s20, s65
+	.loc	1 254 52                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:254:52
+	sl_srl_b32 {s12, wcr}, s7, 0x2
+	sl_and_b32 {s12, wcr}, s12, 0x3ffffffc
+	.loc	1 254 12 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:254:12
+	ml_lsa_load_dword v35, s[32:35], noreg, s12, #0, ca
+	.loc	1 311 16 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	sl_or_b32 {s4, wcr}, s4, 0x0
+	.loc	1 254 12                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:254:12
+	sl_wait vmcnt(3)
+	ml_mov_v2s_b32 s18, v32, 0x0
+	ml_mov_b32 v32, 0x0
+	sl_wait vmcnt(2)
+	ml_mov_v2s_b32 s16, v33, 0x0
+	sl_wait vmcnt(1)
+	ml_mov_v2s_b32 s14, v34, 0x0
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s12, v35, 0x0
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	sl_cbr_wcrz BB0_41, wcr
+; %bb.40:                               ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 255 13                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:255:13
+	sl_sra_b32 {s19, wcr}, s18, 0x1f
+	.loc	1 311 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:32
+	sl_shl_b64 {s[22:23], wcr}, s[18:19], 0xe
+	.loc	1 311 16 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	sl_add_i64 s[22:23], s[44:45], s[22:23]
+	sl_mull_u32 s30, s61, 0x8
+	sl_add_i64 s[40:41], s[22:23], s[30:31]
+	ml_lsa_blkload_x1 v32, s[40:43], noreg, noreg, #0, ca
+BB0_41:                                 ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 0 0                           ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_sra_b32 {s17, wcr}, s16, 0x1f
+	.loc	1 251 33 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:251:33
+	sl_cmp_lt_i32 wcr, s5, s73
+	sl_sub_bi_u32 s5, s10, s10, wcr
+	ml_mov_b32 v33, 0x0
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	sl_cbr_wcrz BB0_43, wcr
+; %bb.42:                               ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_shl_b64 {s[22:23], wcr}, s[16:17], 0xe
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	sl_add_i64 s[22:23], s[44:45], s[22:23]
+	sl_mull_u32 s30, s61, 0x8
+	sl_add_i64 s[40:41], s[22:23], s[30:31]
+	ml_lsa_blkload_x1 v33, s[40:43], noreg, noreg, #0, ca
+BB0_43:                                 ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 0 0                           ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_sra_b32 {s15, wcr}, s14, 0x1f
+	.loc	1 251 33 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:251:33
+	sl_cmp_lt_i32 wcr, s6, s73
+	sl_sub_bi_u32 s6, s10, s10, wcr
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_mov_b32 v34, 0x0
+	ml_mov_b32 v35, 0x0
+	sl_cbr_wcrz BB0_45, wcr
+; %bb.44:                               ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_shl_b64 {s[22:23], wcr}, s[14:15], 0xe
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	sl_add_i64 s[22:23], s[44:45], s[22:23]
+	sl_mull_u32 s30, s61, 0x8
+	sl_add_i64 s[40:41], s[22:23], s[30:31]
+	ml_lsa_blkload_x1 v35, s[40:43], noreg, noreg, #0, ca
+BB0_45:                                 ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 0 0                           ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_sra_b32 {s13, wcr}, s12, 0x1f
+	.loc	1 251 33 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:251:33
+	sl_cmp_lt_i32 wcr, s7, s73
+	sl_sub_bi_u32 s7, s10, s10, wcr
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	sl_cbr_wcrz BB0_47, wcr
+; %bb.46:                               ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 0 0 is_stmt 0                 ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0
+	sl_shl_b64 {s[22:23], wcr}, s[12:13], 0xe
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	sl_add_i64 s[22:23], s[44:45], s[22:23]
+	sl_mull_u32 s30, s61, 0x8
+	sl_add_i64 s[40:41], s[22:23], s[30:31]
+	ml_lsa_blkload_x1 v34, s[40:43], noreg, noreg, #0, ca
+BB0_47:                                 ;   in Loop: Header=BB0_39 Depth=1
+	sl_wait vmcnt(0) lmcnt(0)
+	sl_barrier 
+	ml_slb_store_b32x1  v32, v60, noreg, #0, null
+	.loc	1 317 16 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	ml_mov_b32 v32, 0x0
+	sl_or_b32 {s4, wcr}, s4, 0x0
+	.loc	1 311 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:311:16
+	ml_slb_store_b32x1  v33, v60, s66, #0, null
+	ml_mov_b32 v33, 0x0
+	ml_slb_store_b32x1  v35, v60, s67, #0, null
+	ml_slb_store_b32x1  v34, v60, s68, #0, null
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	sl_cbr_wcrz BB0_49, wcr
+; %bb.48:                               ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 255 13                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:255:13
+	sl_sra_b32 {s19, wcr}, s18, 0x1f
+	.loc	1 317 34                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:34
+	sl_shl_b64 {s[18:19], wcr}, s[18:19], 0xe
+	.loc	1 317 16 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	sl_add_i64 s[18:19], s[46:47], s[18:19]
+	sl_mull_u32 s30, s61, 0x8
+	sl_add_i64 s[40:41], s[18:19], s[30:31]
+	ml_lsa_blkload_x1 v33, s[40:43], noreg, noreg, #0, ca
+BB0_49:                                 ;   in Loop: Header=BB0_39 Depth=1
+	sl_or_b32 {s5, wcr}, s5, 0x0
+	sl_cbr_wcrz BB0_51, wcr
+; %bb.50:                               ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 317 0                         ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317
+	sl_shl_b64 {s[4:5], wcr}, s[16:17], 0xe
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	sl_add_i64 s[4:5], s[46:47], s[4:5]
+	sl_mull_u32 s30, s61, 0x8
+	sl_add_i64 s[40:41], s[4:5], s[30:31]
+	ml_lsa_blkload_x1 v32, s[40:43], noreg, noreg, #0, ca
+BB0_51:                                 ;   in Loop: Header=BB0_39 Depth=1
+	ml_mov_b32 v34, 0x0
+	sl_or_b32 {s6, wcr}, s6, 0x0
+	ml_mov_b32 v35, 0x0
+	sl_cbr_wcrz BB0_53, wcr
+; %bb.52:                               ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 317 0                         ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317
+	sl_shl_b64 {s[4:5], wcr}, s[14:15], 0xe
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	sl_add_i64 s[4:5], s[46:47], s[4:5]
+	sl_mull_u32 s30, s61, 0x8
+	sl_add_i64 s[40:41], s[4:5], s[30:31]
+	ml_lsa_blkload_x1 v35, s[40:43], noreg, noreg, #0, ca
+BB0_53:                                 ;   in Loop: Header=BB0_39 Depth=1
+	sl_or_b32 {s7, wcr}, s7, 0x0
+	sl_cbr_wcrz BB0_38, wcr
+; %bb.54:                               ;   in Loop: Header=BB0_39 Depth=1
+	.loc	1 317 0                         ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317
+	sl_shl_b64 {s[4:5], wcr}, s[12:13], 0xe
+	.loc	1 317 16                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:317:16
+	sl_add_i64 s[4:5], s[46:47], s[4:5]
+	sl_mull_u32 s30, s61, 0x8
+	sl_add_i64 s[40:41], s[4:5], s[30:31]
+	ml_lsa_blkload_x1 v34, s[40:43], noreg, noreg, #0, ca
+	sl_jump BB0_38
+BB0_55:                                 ; %.._crit_edge94_crit_edge
+.Ltmp118:
+	.loc	3 315 36 is_stmt 1              ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_xor_b32 v59, tid, 0x8
+	ml_xor_b32 v58, tid, 0x4
+	ml_xor_b32 v55, tid, 0x2
+	ml_xor_b32 v54, tid, 0x1
+.Ltmp119:
+	.loc	1 291 85                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:291:85
+	ml_mov_b32 v32, 0xff800000
+	ml_mov_b32 v33, 0xff800000
+	ml_mov_b32 v34, 0xff800000
+	ml_mov_b32 v35, 0xff800000
+	ml_mov_b32 v28, 0x0
+	.loc	1 166 10                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:166:10
+	ml_mov_b32 v3, 0x0
+	ml_mov_b32 v29, 0x0
+	ml_mov_b32 v30, 0x0
+	ml_mov_b32 v31, 0x0
+	ml_mov_b32 v24, 0x0
+	ml_mov_b32 v25, 0x0
+	ml_mov_b32 v26, 0x0
+	ml_mov_b32 v27, 0x0
+	ml_mov_b32 v20, 0x0
+	ml_mov_b32 v21, 0x0
+	ml_mov_b32 v22, 0x0
+	ml_mov_b32 v23, 0x0
+	ml_mov_b32 v16, 0x0
+	ml_mov_b32 v17, 0x0
+	ml_mov_b32 v18, 0x0
+	ml_mov_b32 v19, 0x0
+	ml_mov_b32 v12, 0x0
+	ml_mov_b32 v13, 0x0
+	ml_mov_b32 v14, 0x0
+	ml_mov_b32 v15, 0x0
+	ml_mov_b32 v8, 0x0
+	ml_mov_b32 v9, 0x0
+	ml_mov_b32 v10, 0x0
+	ml_mov_b32 v11, 0x0
+	ml_mov_b32 v4, 0x0
+	ml_mov_b32 v5, 0x0
+	ml_mov_b32 v6, 0x0
+	ml_mov_b32 v7, 0x0
+	ml_mov_b32 v0, 0x0
+	ml_mov_b32 v1, 0x0
+	ml_mov_b32 v2, 0x0
+	ml_mov_b32 v67, 0x0
+	ml_mov_b32 v68, 0x0
+	ml_mov_b32 v62, 0x0
+	ml_mov_b32 v61, 0x0
+BB0_56:                                 ; %._crit_edge94
+.Ltmp120:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v36, v67, v59
+.Ltmp121:
+	.loc	1 156 26                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:156:26
+	ml_and_b32 v40, tid, 0x30
+	ml_srl_b32 v40, v40, 0x4
+	.loc	1 161 52                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:161:52
+	ml_mov_v2s_b32 s4, v112, 0x4
+.Ltmp122:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v37, v68, v59
+	ml_mov_v2s_b32 s8, v112, 0x0
+.Ltmp123:
+	.loc	1 414 55                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:414:55
+	sl_mov_b32 s5, 0x0
+	.loc	1 161 52                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:161:52
+	sl_add_i32 s6, s4, s58
+.Ltmp124:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v41, v62, v59
+.Ltmp125:
+	.loc	1 162 56                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:162:56
+	ml_add_i32 v40, s8, v40
+	.loc	1 414 40                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:414:40
+	ml_mov_v2s_b32 s4, v112, 0x2
+	.loc	1 414 73 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:414:73
+	sl_sra_b32 {s7, wcr}, s6, 0x1f
+.Ltmp126:
+	.loc	3 315 36 is_stmt 1              ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v42, v61, v59
+.Ltmp127:
+	.loc	1 414 40                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:414:40
+	sl_mull_u32 s4, s4, 0x7ff
+	.loc	1 414 55 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:414:55
+	sl_add_i64 s[6:7], s[6:7], s[4:5]
+	.loc	1 415 29 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:29
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x4
+	.loc	1 415 47 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:47
+	ml_addo_u32 {v48, tcr}, s6, v40
+.Ltmp128:
+	.loc	3 285 15 is_stmt 1              ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_add_f32 v36, v67, v36
+.Ltmp129:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v38, v36, v58
+.Ltmp130:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_add_f32 v37, v68, v37
+.Ltmp131:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v39, v37, v58
+.Ltmp132:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_add_f32 v44, v62, v41
+.Ltmp133:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v45, v44, v58
+.Ltmp134:
+	.loc	1 162 56                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:162:56
+	ml_add_i32 v41, v40, 0x4
+.Ltmp135:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_add_f32 v46, v61, v42
+.Ltmp136:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v47, v46, v58
+.Ltmp137:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_add_f32 v36, v36, v38
+.Ltmp138:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v38, v36, v55
+.Ltmp139:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_add_f32 v37, v37, v39
+.Ltmp140:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v39, v37, v55
+.Ltmp141:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(2)
+	ml_add_f32 v47, v46, v47
+.Ltmp142:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v51, v47, v55
+.Ltmp143:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(2)
+	ml_add_f32 v42, v36, v38
+.Ltmp144:
+	.loc	1 415 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:47
+	ml_mov_b32 v36, s7
+.Ltmp145:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v43, v37, v39
+.Ltmp146:
+	.loc	1 415 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:47
+	ml_addc_i32 v37, 0, v36, tcr
+	ml_addo_u32 {v38, tcr}, s6, v41
+.Ltmp147:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	ml_add_f32 v39, v44, v45
+.Ltmp148:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v46, v39, v55
+.Ltmp149:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_shl_b32 v37, v37, 0x9
+	.loc	1 415 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:47
+	ml_addc_i32 v49, 0, v36, tcr
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_shl_b32 v36, v48, 0x9
+	ml_addo_u32 {v36, tcr}, s24, v36
+	ml_srl_b32 v44, v48, 0x17
+	ml_or_b32 v37, v37, v44
+	ml_mov_b32 v44, s25
+	ml_addc_i32 v37, v44, v37, tcr
+.Ltmp150:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v44, v42, v54
+.Ltmp151:
+	.loc	1 157 26                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:157:26
+	ml_and_b32 v45, tid, 0xf
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_shl_b32 v50, v45, 0x2
+	ml_addo_u32 {v36, tcr}, v50, v36
+.Ltmp152:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v45, v43, v54
+.Ltmp153:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_add_f32 v47, v47, v51
+.Ltmp154:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_shl_b32 v51, v49, 0x9
+	ml_addc_i32 v37, 0, v37, tcr
+.Ltmp155:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v49, v47, v54
+.Ltmp156:
+	.loc	3 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	sl_wait lmcnt(3)
+	ml_add_f32 v46, v39, v46
+.Ltmp157:
+	.loc	3 315 36                        ; standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ]
+	ml_slb_shuffle_rtn_b32 v48, v46, v54
+.Ltmp158:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_shl_b32 v39, v38, 0x9
+	ml_addo_u32 {v39, tcr}, s24, v39
+	ml_srl_b32 v38, v38, 0x17
+	ml_or_b32 v38, v51, v38
+	ml_mov_b32 v51, s25
+	ml_addc_i32 v51, v51, v38, tcr
+	ml_addo_u32 {v38, tcr}, v50, v39
+	ml_addc_i32 v39, 0, v51, tcr
+	.loc	1 418 47 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	sl_mov_b64 tcr, s[2:3]
+	sl_cbr_tcraz BB0_58, tcr
+; %bb.57:
+	ml_lsa_store_a64_dword  v[36:37], v28, kop=0
+	ml_lsa_store_a64_dword  v[38:39], v29, kop=0
+BB0_58:                                 ; %.critedge
+	.loc	1 161 52 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:161:52
+	ml_mov_v2s_b32 s6, v112, 0x3
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_mov_b32 v51, s25
+	.loc	1 161 52                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:161:52
+	sl_add_i32 s6, s6, s58
+	.loc	1 414 73                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:414:73
+	sl_sra_b32 {s7, wcr}, s6, 0x1f
+	.loc	1 414 55 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:414:55
+	sl_add_i64 s[6:7], s[6:7], s[4:5]
+	.loc	1 415 29 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:29
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x4
+	.loc	1 415 47 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:47
+	ml_addo_u32 {v28, tcr}, s6, v40
+	ml_mov_b32 v29, s7
+	.loc	1 418 32 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_shl_b32 v53, v28, 0x9
+	ml_srl_b32 v28, v28, 0x17
+	.loc	1 415 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:47
+	ml_addc_i32 v40, 0, v29, tcr
+	ml_addo_u32 {v41, tcr}, s6, v41
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_shl_b32 v40, v40, 0x9
+	ml_or_b32 v28, v40, v28
+	.loc	1 415 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:47
+	ml_addc_i32 v54, 0, v29, tcr
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addo_u32 {v29, tcr}, s24, v53
+	ml_shl_b32 v53, v41, 0x9
+	ml_srl_b32 v41, v41, 0x17
+	ml_addc_i32 v40, v51, v28, tcr
+	ml_addo_u32 {v28, tcr}, v50, v29
+	ml_addc_i32 v29, 0, v40, tcr
+	ml_addo_u32 {v40, tcr}, s24, v53
+	ml_shl_b32 v53, v54, 0x9
+	ml_or_b32 v41, v53, v41
+	ml_addc_i32 v41, v51, v41, tcr
+	ml_addo_u32 {v40, tcr}, v50, v40
+	ml_addc_i32 v41, 0, v41, tcr
+	.loc	1 418 47 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	sl_mov_b64 tcr, s[0:1]
+	sl_cbr_tcraz BB0_60, tcr
+; %bb.59:
+	ml_lsa_store_a64_dword  v[28:29], v30, kop=0
+	ml_lsa_store_a64_dword  v[40:41], v31, kop=0
+BB0_60:                                 ; %.critedge2
+	sl_mov_b64 tcr, s[2:3]
+	sl_cbr_tcraz BB0_62, tcr
+; %bb.61:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0x40
+	ml_addo_u32 {v30, tcr}, s5, v36
+	ml_addc_i32 v31, 0, v37, tcr
+	ml_addo_u32 {v50, tcr}, s5, v38
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[30:31], v24, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v51, 0, v39, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[50:51], v25, kop=0
+BB0_62:                                 ; %.critedge4
+	sl_mov_b64 tcr, s[0:1]
+	sl_cbr_tcraz BB0_64, tcr
+; %bb.63:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0x40
+	ml_addo_u32 {v24, tcr}, s5, v28
+	ml_addc_i32 v25, 0, v29, tcr
+	ml_addo_u32 {v30, tcr}, s5, v40
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[24:25], v26, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v31, 0, v41, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[30:31], v27, kop=0
+BB0_64:                                 ; %.critedge6
+	sl_mov_b64 tcr, s[2:3]
+	sl_cbr_tcraz BB0_66, tcr
+; %bb.65:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0x80
+	ml_addo_u32 {v24, tcr}, s5, v36
+	ml_addc_i32 v25, 0, v37, tcr
+	ml_addo_u32 {v26, tcr}, s5, v38
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[24:25], v20, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v27, 0, v39, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[26:27], v21, kop=0
+BB0_66:                                 ; %.critedge8
+	sl_mov_b64 tcr, s[0:1]
+	sl_cbr_tcraz BB0_68, tcr
+; %bb.67:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0x80
+	ml_addo_u32 {v20, tcr}, s5, v28
+	ml_addc_i32 v21, 0, v29, tcr
+	ml_addo_u32 {v24, tcr}, s5, v40
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[20:21], v22, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v25, 0, v41, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[24:25], v23, kop=0
+BB0_68:                                 ; %.critedge10
+	sl_mov_b64 tcr, s[2:3]
+	sl_cbr_tcraz BB0_70, tcr
+; %bb.69:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0xc0
+	ml_addo_u32 {v20, tcr}, s5, v36
+	ml_addc_i32 v21, 0, v37, tcr
+	ml_addo_u32 {v22, tcr}, s5, v38
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[20:21], v16, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v23, 0, v39, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[22:23], v17, kop=0
+BB0_70:                                 ; %.critedge12
+	sl_mov_b64 tcr, s[0:1]
+	sl_cbr_tcraz BB0_72, tcr
+; %bb.71:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0xc0
+	ml_addo_u32 {v16, tcr}, s5, v28
+	ml_addc_i32 v17, 0, v29, tcr
+	ml_addo_u32 {v20, tcr}, s5, v40
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[16:17], v18, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v21, 0, v41, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[20:21], v19, kop=0
+BB0_72:                                 ; %.critedge14
+	sl_mov_b64 tcr, s[2:3]
+	sl_cbr_tcraz BB0_74, tcr
+; %bb.73:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0x100
+	ml_addo_u32 {v16, tcr}, s5, v36
+	ml_addc_i32 v17, 0, v37, tcr
+	ml_addo_u32 {v18, tcr}, s5, v38
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[16:17], v12, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v19, 0, v39, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[18:19], v13, kop=0
+BB0_74:                                 ; %.critedge16
+	sl_mov_b64 tcr, s[0:1]
+	sl_cbr_tcraz BB0_76, tcr
+; %bb.75:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0x100
+	ml_addo_u32 {v12, tcr}, s5, v28
+	ml_addc_i32 v13, 0, v29, tcr
+	ml_addo_u32 {v16, tcr}, s5, v40
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[12:13], v14, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v17, 0, v41, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[16:17], v15, kop=0
+BB0_76:                                 ; %.critedge18
+	sl_mov_b64 tcr, s[2:3]
+	sl_cbr_tcraz BB0_78, tcr
+; %bb.77:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0x140
+	ml_addo_u32 {v12, tcr}, s5, v36
+	ml_addc_i32 v13, 0, v37, tcr
+	ml_addo_u32 {v14, tcr}, s5, v38
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[12:13], v8, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v15, 0, v39, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[14:15], v9, kop=0
+BB0_78:                                 ; %.critedge20
+	sl_mov_b64 tcr, s[0:1]
+	sl_cbr_tcraz BB0_80, tcr
+; %bb.79:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0x140
+	ml_addo_u32 {v8, tcr}, s5, v28
+	ml_addc_i32 v9, 0, v29, tcr
+	ml_addo_u32 {v12, tcr}, s5, v40
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[8:9], v10, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v13, 0, v41, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[12:13], v11, kop=0
+BB0_80:                                 ; %.critedge22
+	sl_mov_b64 tcr, s[2:3]
+	sl_cbr_tcraz BB0_82, tcr
+; %bb.81:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0x180
+	ml_addo_u32 {v8, tcr}, s5, v36
+	ml_addc_i32 v9, 0, v37, tcr
+	ml_addo_u32 {v10, tcr}, s5, v38
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[8:9], v4, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v11, 0, v39, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[10:11], v5, kop=0
+BB0_82:                                 ; %.critedge24
+	sl_mov_b64 tcr, s[0:1]
+	sl_cbr_tcraz BB0_84, tcr
+; %bb.83:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s5, 0x180
+	ml_addo_u32 {v4, tcr}, s5, v28
+	ml_addc_i32 v5, 0, v29, tcr
+	ml_addo_u32 {v8, tcr}, s5, v40
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[4:5], v6, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v9, 0, v41, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[8:9], v7, kop=0
+BB0_84:                                 ; %.critedge26
+	sl_mov_b64 tcr, s[2:3]
+	sl_cbr_tcraz BB0_86, tcr
+; %bb.85:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s2, 0x1c0
+	ml_addo_u32 {v4, tcr}, s2, v36
+	ml_addc_i32 v5, 0, v37, tcr
+	ml_addo_u32 {v6, tcr}, s2, v38
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[4:5], v0, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v7, 0, v39, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[6:7], v1, kop=0
+BB0_86:                                 ; %.critedge28
+	sl_mov_b64 tcr, s[0:1]
+	sl_cbr_tcraz BB0_88, tcr
+; %bb.87:
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	sl_mov_b32 s0, 0x1c0
+	ml_addo_u32 {v0, tcr}, s0, v28
+	ml_addc_i32 v1, 0, v29, tcr
+	ml_addo_u32 {v4, tcr}, s0, v40
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[0:1], v2, kop=0
+	.loc	1 418 32                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:32
+	ml_addc_i32 v5, 0, v41, tcr
+	.loc	1 418 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:418:47
+	ml_lsa_store_a64_dword  v[4:5], v3, kop=0
+BB0_88:                                 ; %.critedge30
+	.loc	1 159 56 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:159:56
+	ml_bfe2_b32 v0, v52, 0xa3
+	.loc	1 159 46 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:159:46
+	ml_add_i32 v2, s59, v0
+	.loc	1 161 52 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:161:52
+	ml_add_i32 v0, s58, v2
+	.loc	1 414 55                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:414:55
+	ml_addo_u32 {v1, tcr}, s4, v0
+	.loc	1 162 65                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:162:65
+	ml_and_b32 v3, tid, 0x7
+	.loc	1 162 56 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:162:56
+	ml_add_i32 v3, s8, v3
+	.loc	1 414 73 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:414:73
+	ml_sra_b32 v0, v0, 0x1f
+	.loc	1 414 55 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:414:55
+	ml_addc_i32 v4, 0, v0, tcr
+	.loc	1 415 29 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:29
+	ml_shl_b32 v0, v1, 0x4
+	.loc	1 415 47 is_stmt 0              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:47
+	ml_addo_u32 {v0, tcr}, v3, v0
+	.loc	1 415 29                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:29
+	ml_shl_b32 v3, v4, 0x4
+	ml_srl_b32 v1, v1, 0x1c
+	ml_or_b32 v1, v3, v1
+	.loc	1 415 47                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:415:47
+	ml_addc_i32 v1, 0, v1, tcr
+	.loc	1 170 40 is_stmt 1              ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:170:40
+	ml_cmp_gt_i32 tcr, s53, v2
+	.loc	1 420 50                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:420:50
+	sl_wait vmcnt(0) lmcnt(0)
+	sl_barrier 
+	ml_and_b32 v4, v52, 0x3f0
+	ml_slb_store_b32x4  v[32:35], v4, noreg, #0, null
+	sl_wait lmcnt(0)
+	sl_barrier 
+	ml_shl_b32 v2, v52, 0x4
+	ml_and_b32 v2, v2, 0x30
+	ml_shl_b32 v3, v52, 0x2
+	ml_and_b32 v3, v3, 0x3c0
+	ml_mov_v2s_b32 s0, v112, 0x1
+	sl_and_b32 {s0, wcr}, s0, 0x300
+	sl_sub_bi_u64 s[0:1], s[10:11], s[10:11], wcr
+	sl_andn1_b64 {s[0:1], wcr}, s[0:1], tcr
+	sl_and_b64 {s[0:1], wcr}, s[50:51], s[0:1]
+	sl_and_savetmsk_b64 {s[2:3], wcr}, s[0:1], tmsk
+	; mask branch BB0_90
+BB0_89:
+	.loc	1 0 50 is_stmt 0                ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0:50
+	ml_and_b32 v5, tid, 0xc
+	.loc	1 420 50                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:420:50
+	ml_anyop3_b32 v5, v5, v3, v2, 0xfffffffe
+	ml_slb_load_b32x1  v7, v5, noreg, #0, null
+	ml_shl_b32 v5, v0, 0x2
+	ml_shl_b32 v6, v1, 0x2
+	ml_addo_u32 {v5, tcr}, s26, v5
+	ml_srl_b32 v8, v0, 0x1e
+	ml_or_b32 v6, v6, v8
+	ml_mov_b32 v8, s27
+	ml_addc_i32 v6, v8, v6, tcr
+	sl_wait lmcnt(0)
+	ml_lsa_store_a64_dword  v[5:6], v7, kop=0
+BB0_90:
+	.loc	1 0 50                          ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0:50
+	sl_or_b64 {tmsk, wcr}, tmsk, s[2:3]
+.Ltmp159:
+	.loc	3 285 15 is_stmt 1              ; standard.py:285:15 @[ standard.py:315:36 @[ triton_attention_helpers.py:413:17 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ] ] ]
+	ml_add_f32 v5, v42, v44
+	ml_add_f32 v6, v43, v45
+	ml_add_f32 v7, v46, v48
+	ml_add_f32 v8, v47, v49
+.Ltmp160:
+	.loc	2 417 24                        ; triton_attention_helpers.py:417:24 @[ <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:386:44 ]
+	ml_add_f32 v5, v5, 0x0
+	ml_add_f32 v6, v6, 0x0
+	ml_add_f32 v7, v7, 0x0
+	ml_add_f32 v8, v8, 0x0
+.Ltmp161:
+	.loc	1 421 53                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:421:53
+	sl_wait vmcnt(0)
+	sl_barrier 
+	ml_slb_store_b32x4  v[5:8], v4, noreg, #0, null
+	sl_wait lmcnt(0)
+	sl_barrier 
+	sl_and_savetmsk_b64 {s[2:3], wcr}, s[0:1], tmsk
+	sl_xor_b64 {s[0:1], wcr}, tmsk, s[2:3]
+	; mask branch BB0_92
+BB0_91:
+	.loc	1 0 53 is_stmt 0                ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0:53
+	ml_and_b32 v4, tid, 0xc
+	.loc	1 421 53                        ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:421:53
+	ml_anyop3_b32 v2, v4, v3, v2, 0xfffffffe
+	ml_slb_load_b32x1  v3, v2, noreg, #0, null
+	ml_shl_b32 v2, v0, 0x2
+	ml_shl_b32 v4, v1, 0x2
+	ml_addo_u32 {v1, tcr}, s28, v2
+	ml_srl_b32 v0, v0, 0x1e
+	ml_or_b32 v0, v4, v0
+	ml_mov_b32 v2, s29
+	ml_addc_i32 v2, v2, v0, tcr
+	sl_wait lmcnt(0)
+	ml_lsa_store_a64_dword  v[1:2], v3, kop=0
+BB0_92:                                 ; %Flow
+	.loc	1 0 53                          ; <prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>:0:53
+	sl_or_b64 {tmsk, wcr}, tmsk, s[0:1]
+BB0_93:                                 ; %common.ret
+	sl_eop 
+.Ltmp162:
+	.section	.rodata,"a",@progbits
+	.p2align	6, 0x0
+	.globl	kernel_biv150_prefill_stride.kd
+	.type	kernel_biv150_prefill_stride.kd,@object
+	.size	kernel_biv150_prefill_stride.kd, 64
+kernel_biv150_prefill_stride.kd:
+	.asciz	"\000\000\000"
+	.long	0
+	.asciz	"\000\000\000\000\000\000\000"
+	.quad	kernel_biv150_prefill_stride@rel64-kernel_biv150_prefill_stride.kd
+	.asciz	"\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.long	537372
+	.asciz	"\003\000\364\006\211\000\000\000\000\000\000"
+	.text
+.Lfunc_end0:
+	.size	kernel_biv150_prefill_stride, .Lfunc_end0-kernel_biv150_prefill_stride
+	.cfi_endproc
+                                        ; -- End function
+	.section	.Iluvatar.csdata,"",@progbits
+; Kernel info:
+; codeLenInByte = 12720
+; NumSgprs: 99
+; NumVgprs: 113
+; ScratchSize: 0
+; MemoryBound: 0
+; FloatMode: 12
+; IeeeMode: 1
+; SLBByteSize: 0 bytes/workgroup (compile time only)
+; SGPRBlocks: 12
+; VGPRBlocks: 28
+; NumSGPRsForWarpsPerNU: 95
+; NumVGPRsForWarpsPerNR: 113
+; ReqNTIDx: 0
+; MaxNTIDx: 0
+; MinCTASm: 0
+; ActiveWarp: 2
+; WarpLimiterHint : 0
+	.section	.debug_abbrev,"",@progbits
+	.byte	1                               ; Abbreviation Code
+	.byte	17                              ; DW_TAG_compile_unit
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	37                              ; DW_AT_producer
+	.byte	8                               ; DW_FORM_string
+	.byte	19                              ; DW_AT_language
+	.byte	5                               ; DW_FORM_data2
+	.byte	3                               ; DW_AT_name
+	.byte	8                               ; DW_FORM_string
+	.byte	16                              ; DW_AT_stmt_list
+	.byte	6                               ; DW_FORM_data4
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	2                               ; Abbreviation Code
+	.byte	46                              ; DW_TAG_subprogram
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	3                               ; DW_AT_name
+	.byte	8                               ; DW_FORM_string
+	.byte	32                              ; DW_AT_inline
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	3                               ; Abbreviation Code
+	.byte	46                              ; DW_TAG_subprogram
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	4                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	11                              ; DW_FORM_data1
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	5                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	11                              ; DW_FORM_data1
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	6                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	11                              ; DW_FORM_data1
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	7                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	5                               ; DW_FORM_data2
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	8                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	5                               ; DW_FORM_data2
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	0                               ; EOM(3)
+	.section	.debug_info,"",@progbits
+	.long	330                             ; Length of Unit
+	.short	2                               ; DWARF version number
+	.long	.debug_abbrev                   ; Offset Into Abbrev. Section
+	.byte	8                               ; Address Size (in bytes)
+	.byte	1                               ; Abbrev [1] 0xb:0x143 DW_TAG_compile_unit
+	.ascii	"triton"                        ; DW_AT_producer
+	.byte	0
+	.short	2                               ; DW_AT_language
+	.ascii	"<prefill-panel4-87a64691e8cfb9e1f0b4e0c39de76ea28fab8b964cfb844b6317c8fbe0a3b7ef.py>" ; DW_AT_name
+	.byte	0
+	.long	.debug_line                     ; DW_AT_stmt_list
+	.quad	.Lfunc_begin0                   ; DW_AT_low_pc
+	.quad	.Lfunc_end0                     ; DW_AT_high_pc
+	.byte	2                               ; Abbrev [2] 0x7e:0x1f DW_TAG_subprogram
+	.ascii	"kernel_biv150_prefill_stride"  ; DW_AT_name
+	.byte	0
+	.byte	1                               ; DW_AT_inline
+	.byte	3                               ; Abbrev [3] 0x9d:0xb0 DW_TAG_subprogram
+	.quad	.Lfunc_begin0                   ; DW_AT_low_pc
+	.quad	.Lfunc_end0                     ; DW_AT_high_pc
+	.long	126                             ; DW_AT_abstract_origin
+	.byte	4                               ; Abbrev [4] 0xb2:0x25 DW_TAG_inlined_subroutine
+	.long	126                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges0                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.byte	137                             ; DW_AT_call_line
+	.byte	73                              ; DW_AT_call_column
+	.byte	5                               ; Abbrev [5] 0xbe:0x18 DW_TAG_inlined_subroutine
+	.long	126                             ; DW_AT_abstract_origin
+	.quad	.Ltmp1                          ; DW_AT_low_pc
+	.quad	.Ltmp2                          ; DW_AT_high_pc
+	.byte	2                               ; DW_AT_call_file
+	.byte	67                              ; DW_AT_call_line
+	.byte	68                              ; DW_AT_call_column
+	.byte	0                               ; End Of Children Mark
+	.byte	4                               ; Abbrev [4] 0xd7:0x19 DW_TAG_inlined_subroutine
+	.long	126                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges1                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.byte	237                             ; DW_AT_call_line
+	.byte	8                               ; DW_AT_call_column
+	.byte	6                               ; Abbrev [6] 0xe3:0xc DW_TAG_inlined_subroutine
+	.long	126                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges2                 ; DW_AT_ranges
+	.byte	2                               ; DW_AT_call_file
+	.byte	193                             ; DW_AT_call_line
+	.byte	44                              ; DW_AT_call_column
+	.byte	0                               ; End Of Children Mark
+	.byte	6                               ; Abbrev [6] 0xf0:0xc DW_TAG_inlined_subroutine
+	.long	126                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges3                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.byte	244                             ; DW_AT_call_line
+	.byte	35                              ; DW_AT_call_column
+	.byte	7                               ; Abbrev [7] 0xfc:0xd DW_TAG_inlined_subroutine
+	.long	126                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges4                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.short	357                             ; DW_AT_call_line
+	.byte	12                              ; DW_AT_call_column
+	.byte	8                               ; Abbrev [8] 0x109:0x43 DW_TAG_inlined_subroutine
+	.long	126                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges5                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.short	386                             ; DW_AT_call_line
+	.byte	44                              ; DW_AT_call_column
+	.byte	8                               ; Abbrev [8] 0x116:0x1a DW_TAG_inlined_subroutine
+	.long	126                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges6                 ; DW_AT_ranges
+	.byte	2                               ; DW_AT_call_file
+	.short	406                             ; DW_AT_call_line
+	.byte	31                              ; DW_AT_call_column
+	.byte	6                               ; Abbrev [6] 0x123:0xc DW_TAG_inlined_subroutine
+	.long	126                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges7                 ; DW_AT_ranges
+	.byte	3                               ; DW_AT_call_file
+	.byte	213                             ; DW_AT_call_line
+	.byte	40                              ; DW_AT_call_column
+	.byte	0                               ; End Of Children Mark
+	.byte	8                               ; Abbrev [8] 0x130:0x1b DW_TAG_inlined_subroutine
+	.long	126                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges8                 ; DW_AT_ranges
+	.byte	2                               ; DW_AT_call_file
+	.short	413                             ; DW_AT_call_line
+	.byte	17                              ; DW_AT_call_column
+	.byte	7                               ; Abbrev [7] 0x13d:0xd DW_TAG_inlined_subroutine
+	.long	126                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges9                 ; DW_AT_ranges
+	.byte	3                               ; DW_AT_call_file
+	.short	315                             ; DW_AT_call_line
+	.byte	36                              ; DW_AT_call_column
+	.byte	0                               ; End Of Children Mark
+	.byte	0                               ; End Of Children Mark
+	.byte	0                               ; End Of Children Mark
+	.byte	0                               ; End Of Children Mark
+	.section	.debug_ranges,"",@progbits
+.Ldebug_ranges0:
+	.quad	.Ltmp1-.Lfunc_begin0
+	.quad	.Ltmp3-.Lfunc_begin0
+	.quad	.Ltmp4-.Lfunc_begin0
+	.quad	.Ltmp5-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges1:
+	.quad	.Ltmp6-.Lfunc_begin0
+	.quad	.Ltmp7-.Lfunc_begin0
+	.quad	.Ltmp8-.Lfunc_begin0
+	.quad	.Ltmp9-.Lfunc_begin0
+	.quad	.Ltmp10-.Lfunc_begin0
+	.quad	.Ltmp11-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges2:
+	.quad	.Ltmp8-.Lfunc_begin0
+	.quad	.Ltmp9-.Lfunc_begin0
+	.quad	.Ltmp10-.Lfunc_begin0
+	.quad	.Ltmp11-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges3:
+	.quad	.Ltmp11-.Lfunc_begin0
+	.quad	.Ltmp12-.Lfunc_begin0
+	.quad	.Ltmp13-.Lfunc_begin0
+	.quad	.Ltmp14-.Lfunc_begin0
+	.quad	.Ltmp15-.Lfunc_begin0
+	.quad	.Ltmp16-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges4:
+	.quad	.Ltmp17-.Lfunc_begin0
+	.quad	.Ltmp18-.Lfunc_begin0
+	.quad	.Ltmp19-.Lfunc_begin0
+	.quad	.Ltmp20-.Lfunc_begin0
+	.quad	.Ltmp21-.Lfunc_begin0
+	.quad	.Ltmp22-.Lfunc_begin0
+	.quad	.Ltmp23-.Lfunc_begin0
+	.quad	.Ltmp24-.Lfunc_begin0
+	.quad	.Ltmp25-.Lfunc_begin0
+	.quad	.Ltmp26-.Lfunc_begin0
+	.quad	.Ltmp27-.Lfunc_begin0
+	.quad	.Ltmp28-.Lfunc_begin0
+	.quad	.Ltmp29-.Lfunc_begin0
+	.quad	.Ltmp30-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges5:
+	.quad	.Ltmp31-.Lfunc_begin0
+	.quad	.Ltmp39-.Lfunc_begin0
+	.quad	.Ltmp40-.Lfunc_begin0
+	.quad	.Ltmp72-.Lfunc_begin0
+	.quad	.Ltmp73-.Lfunc_begin0
+	.quad	.Ltmp74-.Lfunc_begin0
+	.quad	.Ltmp75-.Lfunc_begin0
+	.quad	.Ltmp76-.Lfunc_begin0
+	.quad	.Ltmp77-.Lfunc_begin0
+	.quad	.Ltmp78-.Lfunc_begin0
+	.quad	.Ltmp79-.Lfunc_begin0
+	.quad	.Ltmp80-.Lfunc_begin0
+	.quad	.Ltmp81-.Lfunc_begin0
+	.quad	.Ltmp82-.Lfunc_begin0
+	.quad	.Ltmp83-.Lfunc_begin0
+	.quad	.Ltmp84-.Lfunc_begin0
+	.quad	.Ltmp85-.Lfunc_begin0
+	.quad	.Ltmp86-.Lfunc_begin0
+	.quad	.Ltmp87-.Lfunc_begin0
+	.quad	.Ltmp88-.Lfunc_begin0
+	.quad	.Ltmp89-.Lfunc_begin0
+	.quad	.Ltmp90-.Lfunc_begin0
+	.quad	.Ltmp91-.Lfunc_begin0
+	.quad	.Ltmp92-.Lfunc_begin0
+	.quad	.Ltmp93-.Lfunc_begin0
+	.quad	.Ltmp94-.Lfunc_begin0
+	.quad	.Ltmp95-.Lfunc_begin0
+	.quad	.Ltmp96-.Lfunc_begin0
+	.quad	.Ltmp97-.Lfunc_begin0
+	.quad	.Ltmp98-.Lfunc_begin0
+	.quad	.Ltmp99-.Lfunc_begin0
+	.quad	.Ltmp100-.Lfunc_begin0
+	.quad	.Ltmp101-.Lfunc_begin0
+	.quad	.Ltmp102-.Lfunc_begin0
+	.quad	.Ltmp103-.Lfunc_begin0
+	.quad	.Ltmp104-.Lfunc_begin0
+	.quad	.Ltmp105-.Lfunc_begin0
+	.quad	.Ltmp106-.Lfunc_begin0
+	.quad	.Ltmp107-.Lfunc_begin0
+	.quad	.Ltmp108-.Lfunc_begin0
+	.quad	.Ltmp109-.Lfunc_begin0
+	.quad	.Ltmp110-.Lfunc_begin0
+	.quad	.Ltmp111-.Lfunc_begin0
+	.quad	.Ltmp117-.Lfunc_begin0
+	.quad	.Ltmp118-.Lfunc_begin0
+	.quad	.Ltmp119-.Lfunc_begin0
+	.quad	.Ltmp120-.Lfunc_begin0
+	.quad	.Ltmp121-.Lfunc_begin0
+	.quad	.Ltmp122-.Lfunc_begin0
+	.quad	.Ltmp123-.Lfunc_begin0
+	.quad	.Ltmp124-.Lfunc_begin0
+	.quad	.Ltmp125-.Lfunc_begin0
+	.quad	.Ltmp126-.Lfunc_begin0
+	.quad	.Ltmp127-.Lfunc_begin0
+	.quad	.Ltmp128-.Lfunc_begin0
+	.quad	.Ltmp134-.Lfunc_begin0
+	.quad	.Ltmp135-.Lfunc_begin0
+	.quad	.Ltmp144-.Lfunc_begin0
+	.quad	.Ltmp145-.Lfunc_begin0
+	.quad	.Ltmp146-.Lfunc_begin0
+	.quad	.Ltmp147-.Lfunc_begin0
+	.quad	.Ltmp149-.Lfunc_begin0
+	.quad	.Ltmp150-.Lfunc_begin0
+	.quad	.Ltmp151-.Lfunc_begin0
+	.quad	.Ltmp152-.Lfunc_begin0
+	.quad	.Ltmp154-.Lfunc_begin0
+	.quad	.Ltmp155-.Lfunc_begin0
+	.quad	.Ltmp158-.Lfunc_begin0
+	.quad	.Ltmp159-.Lfunc_begin0
+	.quad	.Ltmp161-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges6:
+	.quad	.Ltmp31-.Lfunc_begin0
+	.quad	.Ltmp39-.Lfunc_begin0
+	.quad	.Ltmp40-.Lfunc_begin0
+	.quad	.Ltmp65-.Lfunc_begin0
+	.quad	.Ltmp66-.Lfunc_begin0
+	.quad	.Ltmp67-.Lfunc_begin0
+	.quad	.Ltmp68-.Lfunc_begin0
+	.quad	.Ltmp69-.Lfunc_begin0
+	.quad	.Ltmp70-.Lfunc_begin0
+	.quad	.Ltmp71-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges7:
+	.quad	.Ltmp31-.Lfunc_begin0
+	.quad	.Ltmp32-.Lfunc_begin0
+	.quad	.Ltmp33-.Lfunc_begin0
+	.quad	.Ltmp34-.Lfunc_begin0
+	.quad	.Ltmp35-.Lfunc_begin0
+	.quad	.Ltmp36-.Lfunc_begin0
+	.quad	.Ltmp37-.Lfunc_begin0
+	.quad	.Ltmp38-.Lfunc_begin0
+	.quad	.Ltmp40-.Lfunc_begin0
+	.quad	.Ltmp41-.Lfunc_begin0
+	.quad	.Ltmp42-.Lfunc_begin0
+	.quad	.Ltmp43-.Lfunc_begin0
+	.quad	.Ltmp44-.Lfunc_begin0
+	.quad	.Ltmp45-.Lfunc_begin0
+	.quad	.Ltmp46-.Lfunc_begin0
+	.quad	.Ltmp47-.Lfunc_begin0
+	.quad	.Ltmp48-.Lfunc_begin0
+	.quad	.Ltmp49-.Lfunc_begin0
+	.quad	.Ltmp50-.Lfunc_begin0
+	.quad	.Ltmp51-.Lfunc_begin0
+	.quad	.Ltmp52-.Lfunc_begin0
+	.quad	.Ltmp53-.Lfunc_begin0
+	.quad	.Ltmp54-.Lfunc_begin0
+	.quad	.Ltmp55-.Lfunc_begin0
+	.quad	.Ltmp56-.Lfunc_begin0
+	.quad	.Ltmp57-.Lfunc_begin0
+	.quad	.Ltmp58-.Lfunc_begin0
+	.quad	.Ltmp59-.Lfunc_begin0
+	.quad	.Ltmp60-.Lfunc_begin0
+	.quad	.Ltmp61-.Lfunc_begin0
+	.quad	.Ltmp62-.Lfunc_begin0
+	.quad	.Ltmp63-.Lfunc_begin0
+	.quad	.Ltmp64-.Lfunc_begin0
+	.quad	.Ltmp65-.Lfunc_begin0
+	.quad	.Ltmp66-.Lfunc_begin0
+	.quad	.Ltmp67-.Lfunc_begin0
+	.quad	.Ltmp68-.Lfunc_begin0
+	.quad	.Ltmp69-.Lfunc_begin0
+	.quad	.Ltmp70-.Lfunc_begin0
+	.quad	.Ltmp71-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges8:
+	.quad	.Ltmp111-.Lfunc_begin0
+	.quad	.Ltmp112-.Lfunc_begin0
+	.quad	.Ltmp113-.Lfunc_begin0
+	.quad	.Ltmp114-.Lfunc_begin0
+	.quad	.Ltmp115-.Lfunc_begin0
+	.quad	.Ltmp116-.Lfunc_begin0
+	.quad	.Ltmp118-.Lfunc_begin0
+	.quad	.Ltmp119-.Lfunc_begin0
+	.quad	.Ltmp120-.Lfunc_begin0
+	.quad	.Ltmp121-.Lfunc_begin0
+	.quad	.Ltmp122-.Lfunc_begin0
+	.quad	.Ltmp123-.Lfunc_begin0
+	.quad	.Ltmp124-.Lfunc_begin0
+	.quad	.Ltmp125-.Lfunc_begin0
+	.quad	.Ltmp126-.Lfunc_begin0
+	.quad	.Ltmp127-.Lfunc_begin0
+	.quad	.Ltmp128-.Lfunc_begin0
+	.quad	.Ltmp134-.Lfunc_begin0
+	.quad	.Ltmp135-.Lfunc_begin0
+	.quad	.Ltmp144-.Lfunc_begin0
+	.quad	.Ltmp145-.Lfunc_begin0
+	.quad	.Ltmp146-.Lfunc_begin0
+	.quad	.Ltmp147-.Lfunc_begin0
+	.quad	.Ltmp149-.Lfunc_begin0
+	.quad	.Ltmp150-.Lfunc_begin0
+	.quad	.Ltmp151-.Lfunc_begin0
+	.quad	.Ltmp152-.Lfunc_begin0
+	.quad	.Ltmp154-.Lfunc_begin0
+	.quad	.Ltmp155-.Lfunc_begin0
+	.quad	.Ltmp158-.Lfunc_begin0
+	.quad	.Ltmp159-.Lfunc_begin0
+	.quad	.Ltmp160-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges9:
+	.quad	.Ltmp111-.Lfunc_begin0
+	.quad	.Ltmp112-.Lfunc_begin0
+	.quad	.Ltmp113-.Lfunc_begin0
+	.quad	.Ltmp114-.Lfunc_begin0
+	.quad	.Ltmp115-.Lfunc_begin0
+	.quad	.Ltmp116-.Lfunc_begin0
+	.quad	.Ltmp128-.Lfunc_begin0
+	.quad	.Ltmp129-.Lfunc_begin0
+	.quad	.Ltmp130-.Lfunc_begin0
+	.quad	.Ltmp131-.Lfunc_begin0
+	.quad	.Ltmp132-.Lfunc_begin0
+	.quad	.Ltmp133-.Lfunc_begin0
+	.quad	.Ltmp135-.Lfunc_begin0
+	.quad	.Ltmp136-.Lfunc_begin0
+	.quad	.Ltmp137-.Lfunc_begin0
+	.quad	.Ltmp138-.Lfunc_begin0
+	.quad	.Ltmp139-.Lfunc_begin0
+	.quad	.Ltmp140-.Lfunc_begin0
+	.quad	.Ltmp141-.Lfunc_begin0
+	.quad	.Ltmp142-.Lfunc_begin0
+	.quad	.Ltmp143-.Lfunc_begin0
+	.quad	.Ltmp144-.Lfunc_begin0
+	.quad	.Ltmp145-.Lfunc_begin0
+	.quad	.Ltmp146-.Lfunc_begin0
+	.quad	.Ltmp147-.Lfunc_begin0
+	.quad	.Ltmp148-.Lfunc_begin0
+	.quad	.Ltmp153-.Lfunc_begin0
+	.quad	.Ltmp154-.Lfunc_begin0
+	.quad	.Ltmp156-.Lfunc_begin0
+	.quad	.Ltmp157-.Lfunc_begin0
+	.quad	.Ltmp159-.Lfunc_begin0
+	.quad	.Ltmp160-.Lfunc_begin0
+	.quad	0
+	.quad	0
+	.section	".note.GNU-stack","",@progbits
+	.iluvatar_isa "bi-iluvatar-ilurt--ivcore-1-1-0"
+	.iluvatar_hsa_metadata
+---
+iluvatar.kernels:
+  - .args:
+      - .address_space:  global
+        .name:           KArg_0
+        .offset:         0
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_1
+        .offset:         8
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_2
+        .offset:         16
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_3
+        .offset:         24
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_4
+        .offset:         32
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_5
+        .offset:         40
+        .size:           8
+        .value_kind:     global_buffer
+      - .name:           KArg_6
+        .offset:         48
+        .size:           4
+        .value_kind:     by_value
+      - .address_space:  global
+        .name:           KArg_7
+        .offset:         56
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_8
+        .offset:         64
+        .size:           8
+        .value_kind:     global_buffer
+      - .name:           KArg_9
+        .offset:         72
+        .size:           4
+        .value_kind:     by_value
+      - .name:           KArg_10
+        .offset:         76
+        .size:           4
+        .value_kind:     by_value
+      - .name:           KArg_11
+        .offset:         80
+        .size:           8
+        .value_kind:     by_value
+      - .address_space:  global
+        .name:           KArg_12
+        .offset:         88
+        .size:           8
+        .value_kind:     global_buffer
+      - .name:           KArg_13
+        .offset:         96
+        .size:           4
+        .value_kind:     by_value
+      - .address_space:  global
+        .name:           KArg_14
+        .offset:         104
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_15
+        .offset:         112
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_16
+        .offset:         120
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_17
+        .offset:         128
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_18
+        .offset:         136
+        .size:           8
+        .value_kind:     global_buffer
+      - .name:           KArg_19
+        .offset:         144
+        .size:           8
+        .value_kind:     by_value
+      - .name:           KArg_20
+        .offset:         152
+        .size:           8
+        .value_kind:     by_value
+      - .name:           KArg_21
+        .offset:         160
+        .size:           8
+        .value_kind:     by_value
+      - .name:           KArg_22
+        .offset:         168
+        .size:           8
+        .value_kind:     by_value
+      - .name:           KArg_23
+        .offset:         176
+        .size:           8
+        .value_kind:     by_value
+      - .name:           KArg_24
+        .offset:         184
+        .size:           8
+        .value_kind:     by_value
+      - .address_space:  global
+        .name:           KArg_25
+        .offset:         192
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_26
+        .offset:         200
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_27
+        .offset:         208
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_28
+        .offset:         216
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_29
+        .offset:         224
+        .size:           8
+        .value_kind:     global_buffer
+    .group_segment_fixed_size: 0
+    .kernarg_segment_align: 8
+    .kernarg_segment_size: 232
+    .max_flat_workgroup_size: 0
+    .name:           kernel_biv150_prefill_stride
+    .private_segment_fixed_size: 0
+    .sgpr_count:     99
+    .sgpr_spill_count: 5
+    .symbol:         kernel_biv150_prefill_stride.kd
+    .vgpr_count:     113
+    .vgpr_spill_count: 0
+    .warp_size:      64
+iluvatar.version:
+  - 1
+  - 0
+...
+
+	.end_iluvatar_hsa_metadata

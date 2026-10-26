@@ -1,0 +1,133 @@
+--- a8-Q16/worker.py
++++ main241-Q32/worker.py
+@@ -1,4 +1,4 @@
+-"""真实 M2047/KV16K 原stride+Q-hoist 对 panel4完整组件。"""
++"""真实main241 Q32/w16对同形状panel4完整组件；旧Q16资格不继承。"""
+ from __future__ import annotations
+ import importlib
+ import importlib.util
+@@ -103,13 +103,13 @@
+     run = Path(run)
+     result = dict(status="started", kind="真实同形状 prefill kernel 组件；无模型权重/官方性能结论",
+         shape=dict(M=M, KV=KV, Q_heads=16, KV_heads=2, D=D, page=16, page_table_stride=8192),
+-        candidate="main594原stride/Q-hoist对照panel4 split-major producer+8-head reducer；无LPT",
++        candidate="main241实际Q32/w16/Q-hoist对panel4完整producer+reducer；无Q16生产回退",
+         limitations=["只有一个合成形状；不是实际模型输出或完整官方基线。",
+             "每panel内原数学不动；跨panel归约改变，原FP64硬门不放宽，逐位仅诊断。",
+             "计时A完整2D输出、B完整panel producer+新reducer；共同writer/metadata不计差额。",
+-            "同输入缓存/进程、BM128/Q16/T64/w8s1；新增约65MiB scratch和一个reducer，不减逻辑KV字节。"],
++            "同输入缓存/进程、BM256/Q32/T64/w16s1；新增约65MiB scratch和一个reducer，不减逻辑KV字节。"],
+         timings=[], ir={})
+-    manager = capture = candidate_manager = None
++    manager = capture = candidate_manager = actual_wrapper = None
+     try:
+         import torch
+         import vllm_fl
+@@ -134,17 +134,33 @@
+             importlib.import_module("vllm_fl.worker.model_runner")
+             native = importlib.import_module("vllm_fl.patches.biv150_native_w8a8")
+             result["native_install"] = native.install()
+-        require(result["native_install"].get("installed"), "共同main594安装链不符")
++        require(result["native_install"].get("installed"), "共同main241安装链不符")
+         attention = importlib.import_module("vllm.v1.attention.ops.triton_unified_attention")
+         backend = importlib.import_module("vllm.v1.attention.backends.triton_attn")
+         qmod = importlib.import_module("vllm_fl.patches.biv150_q_fragment_service")
+-        manager = qmod._MANAGER
+-        require(manager is not None and manager.active, "当前 main Q-hoist 未自然安装")
++        q32 = importlib.import_module("vllm_fl.patches.biv150_prefill_q32")
++        base_manager, manager = qmod._MANAGER, q32._MANAGER
++        require(base_manager is not None and manager is not None and manager.active,
++                "main241 Q32/Q-hoist未自然安装")
++        policy = base_manager.holder[base_manager.kernel_key]
++        require(type(policy) is q32._Policy and policy.manager is manager
++                and policy.base is base_manager.wrapper and not policy.disabled,
++                "原main241不是实际已启用的Q32 Policy/Manager")
++        require((manager.block_m, manager.num_warps, manager.num_stages, manager.tile_size)
++                == (256,16,1,64), "实际Q32 Manager配置不符")
+         helpers = importlib.import_module("vllm.v1.attention.ops.triton_attention_helpers")
+         raw_stride, source_stride = prototype.build(attention, manager, helpers)
+         original_source=__import__('inspect').getsource(manager.raw.fn)
+         require(source_stride==prototype.transform(original_source),"实际候选不是固定panel4变换")
+-        candidate_manager = prototype.private_manager(raw_stride, attention, backend, qmod)
++        from triton.runtime.jit import JITFunction
++        cloned = JITFunction(raw_stride.fn, version=raw_stride.version,
++            do_not_specialize=list(raw_stride.do_not_specialize),
++            do_not_specialize_on_alignment=list(raw_stride.do_not_specialize_on_alignment),
++            debug=raw_stride.debug, noinline=raw_stride.noinline, repr=raw_stride._repr,
++            launch_metadata=raw_stride.launch_metadata)
++        candidate_manager = qmod.Manager(attention, backend, {"kernel":raw_stride},
++            "kernel", raw_stride, cloned, block_m=256, num_warps=16,
++            num_stages=1, tile_size=64).install()
+         (run / "candidate.kernel.py").write_text(source_stride, encoding="utf-8")
+         import inspect
+         (run / "current.kernel.py").write_text(inspect.getsource(manager.raw.fn), encoding="utf-8")
+@@ -175,16 +191,27 @@
+         cache_before, q_before = cache.clone(), query.clone()
+         key_before, value_before = key.clone(), value.clone()
+         rng_cpu, rng_gpu = torch.get_rng_state().clone(), torch.cuda.get_rng_state().clone()
+-        capture = Capture(manager.wrapper)
+-        manager.holder[manager.kernel_key] = capture
++        actual_wrapper = manager.wrapper
++        capture = Capture(actual_wrapper)
++        # Policy直接调用manager.wrapper，不能观察generic外层BM128参数假称Q32。
++        manager.wrapper = capture
+         initial_output = torch.full_like(query, -17)
+         impl.forward(layer, query, key, value, cache, metadata, initial_output)
+-        manager.holder[manager.kernel_key] = manager.wrapper
++        manager.wrapper = actual_wrapper
+         observer, capture = capture, None
+         require(len(observer.records) == 1, "未捕获唯一真实 M2047 2D ABI")
+         grid, current_kwargs, current_compiled = observer.records[0]
+-        require(current_kwargs["query_ptr"].shape == (M, 16, D) and qmod._eligible(current_kwargs),
+-                "实际 kernel 不是当前 normalized＋Q-fragment BM128/T64/w8s1")
++        require(current_kwargs["query_ptr"].shape == (M, 16, D)
++                and qmod._eligible(current_kwargs,256,num_warps=16),
++                "实际kernel不是main241 Policy选择的BM256/Q32/T64/w16s1")
++        require(tuple(grid)==(M//32+1,2) and current_compiled.hash in manager.optimized
++                and base_manager.holder[base_manager.kernel_key] is policy and not policy.disabled,
++                "实际生产Q32 grid/编译证明/Policy绑定失败，禁止以Q16代替")
++        result["production_q32_binding"] = dict(grid=list(grid), control_hash=current_compiled.hash,
++            block_m=manager.block_m, block_q=32, num_warps=manager.num_warps,
++            num_stages=manager.num_stages, tile_size=manager.tile_size,
++            policy_type=type(policy).__name__, policy_disabled=policy.disabled,
++            observer="actual_q32_manager_wrapper", source_commit="241220723a09061c182764f8f738e5ec01190367")
+         k, v = current_kwargs["key_cache_ptr"], current_kwargs["value_cache_ptr"]
+         q = current_kwargs["query_ptr"]
+         require(tuple(k.shape) == (KV//16, 16, 2, 128) and k.shape == v.shape, "实际 KV shape 不符")
+@@ -203,7 +230,8 @@
+         outputs = {name: torch.full_like(query, -17) for name in ARMS}
+         kw_a = dict(current_kwargs, output_ptr=outputs["current"][:M])
+         kw_b = dict(current_kwargs, output_ptr=outputs["panel"][:M])
+-        require(qmod._eligible(kw_a) and qmod._eligible(kw_b), "不属于已限定普通causal/BF16无sink等scope")
++        require(qmod._eligible(kw_a,256,num_warps=16) and qmod._eligible(kw_b,256,num_warps=16),
++                "不属于新Q32普通causal/BF16无sink等scope")
+         # 先由原私有编译链生成并证明两臂Q-hoist，再直接调用同一已暖JIT；
+         # Graph capture不经外层wrapper的保守fallback，避免回放另一套内核。
+         compiled_a = manager.wrapper[grid](**kw_a)
+@@ -233,8 +261,8 @@
+             panel_reducer.reduce_panel4[rgrid](**rk)
+             return compiled
+         calls = dict(current=lambda: manager.candidate[grid](**kw_a), panel=call_panel)
+-        result["configs"] = {name: dict(BLOCK_M=128, BLOCK_Q=16, TILE_SIZE=64,
+-            num_warps=8, num_stages=1) for name in ARMS}
++        result["configs"] = {name: dict(BLOCK_M=256, BLOCK_Q=32, TILE_SIZE=64,
++            num_warps=16, num_stages=1) for name in ARMS}
+         result["ir"]["current"] = preserve(compiled_a, run / "ir-current", qmod)
+         result["ir"]["panel"] = preserve(compiled_b, run / "ir-panel", qmod)
+         result["q_hoist"] = {"current": manager.optimized[compiled_a.hash]["mechanism"],
+@@ -353,13 +381,13 @@
+                 result["summary"][group][metric] = dict(current_ms=a, other_ms=b, fraction_saved=1-b/a)
+         positive=result["summary"]["candidate"]["event"]["fraction_saved"] > 0
+         result.update(status="component_only_passed" if positive else "stopped_negative",
+-            decision="仅原long组件正，先补新增分界边界，无模型资格" if positive else "完整原long组件无益；停止，无自动后继")
++            decision="仅新Q32+panel单组件正，旧Q16边界不继承；无模型资格" if positive else "完整原long组件无益；停止，无自动后继")
+     except BaseException:
+         result.update(status="failed", error=traceback.format_exc())
+         traceback.print_exc()
+     finally:
+         if capture is not None and manager is not None:
+-            manager.holder[manager.kernel_key] = manager.wrapper
++            manager.wrapper = actual_wrapper
+         if candidate_manager is not None:
+             result["candidate_manager"] = candidate_manager.snapshot()
+             candidate_manager.restore()

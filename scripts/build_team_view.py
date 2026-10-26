@@ -366,12 +366,37 @@ CODE['shape-gemm'] += ['experiments/framework/20261026T173900314676Z-main594-m32
 
 GROUPS['shape-gemm']=('BI-V150特定形状GEMM', 'main594分服务性能控制：4K暖均5847.6667、16K4192.49。M64固定寻址组件省1.47792%，但实际4K首暖5743.94对5843.85低1.70966%，512请求成功后按约定停止，无16K/105或合并。M32原路径配置已取得，仅作后继依据；组件收益与模型结果分别保留。', [])
 
-BATCH_RESULTS['main594_m32_fixed_address_positive']=('M32固定寻址真实原MM-out同32/64/128、w8/s2和原W；原八项逐位/FP64/换值Graph/side及RNG通过。唯一ABBA完整MM Event 49.417669→48.984375us，单组省0.87680%；实际rcp3→0，SME6/async4/shared49152/regs25/spill0保持，无额外权重或workspace。仅layer0组件正信号，尚无模型/105/官方资格；DB207f恢复、source/进程与9031清理通过。', '保留M32单组小正，准备M32-only生产及16K同版本官方对照，不叠已停M64。', '原件中已执行检查按范围保留；不继承模型准确率。', '精确命令、版本及原始结果见本轮manifest/state、source和日志。')
+BATCH_RESULTS['main594_m32_fixed_address_positive']=('M32固定寻址真实原MM-out同32/64/128、w8/s2和原W；原八项逐位/FP64/换值Graph/side及RNG通过。唯一ABBA完整MM Event 49.417669→48.984375us，单组省0.87680%；实际rcp3→0，SME6/async4/shared49152/regs25/spill0保持，无额外权重或workspace。仅layer0组件正信号，尚无模型/105/官方资格；DB207f恢复、source/进程与9031清理通过。', '保留M32组件证据；后续官方16K首暖低0.23295%，本次生产路线已停止。', '原件中已执行检查按范围保留；不继承模型准确率。', '精确命令、版本及原始结果见本轮manifest/state、source和日志。')
 CODE['shape-gemm'] += ['experiments/framework/20261026T174414509153Z-main594-m32-fixed-address-component/result.json', 'experiments/framework/20261026T174414509153Z-main594-m32-fixed-address-component/archive-receipt.json']
 
 GROUPS['shape-gemm']=('BI-V150特定形状GEMM', 'main594分服务性能控制：4K暖均5847.6667、16K4192.49。M64固定寻址组件省1.47792%，但实际4K首暖5743.94对5843.85低1.70966%，512请求成功后按约定停止，无16K/105或合并。M32固定寻址八门通过，单组组件省0.87680%，保留准备独立生产对照；组件收益与模型结果分别保留。', [])
 
+CODE['prefill-panel4']=[]
+
+BATCH_RESULTS['prefill_panel4_long_positive']=('main594长prefill Q2047/KV16384/ctx14337，原BM128/Q16/T64/w8s1分四个K panel，split-major FP32 partial及8-head reducer。原writer、初始/换值独立FP64、全输出close、双核Graph换值、输入/RNG/guard通过；归约树改变，非逐位。直接暖JIT唯一ABBA完整双核Event 8.304069→8.119503ms，单组省2.222603%，wall省2.086496%。新增68124160B workspace及全部读写/归约计入；分配在计时外，不声称生产容量或L2命中已证。DB/source/native及设备清理通过。保留，先补新分界边界和单workspace生产接线；尚无模型/105/官方资格。', '保留旧Q16组件证据；新main241 Q32组合已负，停止生产接入，原边界不再排队。', '原件中已执行检查按范围保留；不继承模型准确率。', '精确命令、版本及原始结果见本轮manifest/state、source和日志。')
+CODE['prefill-panel4'] += ['experiments/framework/20261026T180225915687Z-prefill-panel4-long-component/results.json', 'experiments/framework/20261026T180225915687Z-prefill-panel4-long-component/archive-receipt.json']
+
+GROUPS['prefill-panel4']=('长prefill四面板完整Attention', 'main594长prefill Q2047/KV16384/ctx14337，原BM128/Q16/T64/w8s1分四个K panel，split-major FP32 partial及8-head reducer。原writer、初始/换值独立FP64、全输出close、双核Graph换值、输入/RNG/guard通过；归约树改变，非逐位。直接暖JIT唯一ABBA完整双核Event 8.304069→8.119503ms，单组省2.222603%，wall省2.086496%。新增68124160B workspace及全部读写/归约计入；分配在计时外，不声称生产容量或L2命中已证。DB/source/native及设备清理通过。保留，先补新分界边界和单workspace生产接线；尚无模型/105/官方资格。', [])
+
+BATCH_RESULTS['main594_m32_fixed_address_firstwarm_negative'] = ('M32-only固定寻址生产候选基于main594/native14f/初始DB207f，未叠M64。16K冷轮3581.18、首暖4184.26 tok/s，对可比首暖4194.03低0.23295%；两轮256请求全部SUCCESS，真实新核及原栈启用。按约定首暖筛选停止，未跑后两轮/4K/105；SIGTERM是性能监督器，不是框架数值错误。源码/native不变、DB与设备清理通过。组件0.8768%省时未转成这组官方净收益，小幅差异不声称稳定退化；不更新基线、不提合并优化PR。', '停止本次M32生产路线，保留全部两轮原件；不继续旧main验证或把局部收益算官方收益。', '按原件保留已测正确性范围，不继承模型准确率。', '精确命令、源码、原始CSV/日志和清理见本轮原件。')
+CODE['shape-gemm'] += ['experiments/official/20261026T180653Z-main594-m32-fixed-address-16384-four-rounds-control/supervisor-final.json', 'experiments/official/20261026T180653Z-main594-m32-fixed-address-16384-four-rounds/archive-receipt.json']
+
+BATCH_RESULTS['main241_q32_panel4_negative'] = ('PR47合并后以main241真实Q32/w16为A，Q2047/KV16384；B同tile/warp加入四个K panel及完整reducer。实际Policy/Manager/hash绑定、初始与换值独立FP64/fullclose、Graph及输入/RNG/guard通过；非逐位。暖JIT完整双核ABBA 6.559703588→7.375295639ms，耗时增加12.43337%，wall增加13.98933%；68124160B scratch读写及reducer计入。source/native/DB/9031清理通过。停止该组合，不扫参数或进生产。旧Q16组件2.2226%仅保留历史，不能覆盖新Q32或继承到组合。', '停止panel4生产接入；旧Q16三项边界未启动且暂缓，新main241成为后续研究基础。', '按原件保留已测正确性范围，不继承模型准确率。', '精确命令、源码、原始CSV/日志和清理见本轮原件。')
+CODE['prefill-panel4'] += ['experiments/framework/20261026T183816740050Z-prefill-q32-panel4-long-component/results.json', 'experiments/framework/20261026T183816740050Z-prefill-q32-panel4-long-component/archive-receipt.json']
+
+GROUPS['shape-gemm'] = ('BI-V150特定形状GEMM', 'main594控制4K暖均5847.6667、16K4192.49；M64首暖低1.70966%，但旧4K控制与候选跨容器，不能归因于方法。M32首暖低0.23295%，与16K控制同在重启后；两者按约定停止且请求全成功。后续以main241研究，原main594 4K另作重启后两轮复查。', [])
+# 环境后核只补充解释，不覆盖原始测量或当时停止记录。
+_m64_key='main594_m64_fixed_address_firstwarm_negative'
+_m64_result=BATCH_RESULTS[_m64_key]
+BATCH_RESULTS[_m64_key]=(_m64_result[0]+'新增环境限制：旧4K控制15:41早于当前PID1约16:11:13 UTC起点，M64于17:25在其后；相同6核配额但cgroup计数重置，跨容器/进程环境，不能把−1.70966%单独归因于候选。原main594重启后4K冷暖两轮已排在main241 16K清理之后，尚无新结果。', '暂不恢复M64生产路线；先复查同源码4K环境漂移，原组件和两轮记录保留。', *_m64_result[2:])
+CODE['shape-gemm'] += ['experiments/environment/20261026T185836Z-container-context/container-observation.json', 'experiments/environment/20261026T185836Z-container-context/comparison-context.json']
+
+
+GROUPS['prefill-panel4'] = ('长prefill四面板完整Attention', '旧main594 Q16组件省2.2226%；新main241 Q32/w16已合并，真实同配置panel4组合反而慢12.43337%，数值门通过但停止生产接入；旧边界准备保留未执行。', [])
+
 def group(row):
+    if row['profile_id']=='prefill-panel4':return 'prefill-panel4'
+
     if row['profile_id']=='gqa-for-scalar-i64-s2':
         return 'gqa-scalar-page-base'
     if row['profile_id']=='gqa-for-scalar-i64':
@@ -477,7 +502,10 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     current_component_summary = {
-        'main594_m32_fixed_address_positive': '保留M32单组小正，准备M32-only生产及16K同版本官方对照，不叠已停M64。',
+        'main241_q32_panel4_negative': '停止panel4生产接入；旧Q16三项边界未启动且暂缓，新main241成为后续研究基础。',
+        'main594_m32_fixed_address_firstwarm_negative': '停止本次M32生产路线，保留全部两轮原件；不继续旧main验证或把局部收益算官方收益。',
+        'prefill_panel4_long_positive': '保留旧Q16组件证据；新main241 Q32组合已负，停止生产接入，原边界不再排队。',
+        'main594_m32_fixed_address_positive': '保留M32组件证据；后续官方16K首暖低0.23295%，本次生产路线已停止。',
         'main594_m32_provider_identified': '保留真实配置，准备一个M32固定寻址组件；不能直接搬用M64配置或收益。',
         'main594_m64_fixed_address_firstwarm_negative': '停止当前M64生产路线；保留组件与官方负结果，不开优化PR或拼成完整四轮成绩。',
         'main594_control_16k_complete': 'main594独立16K四轮暖均4192.49，512成功，清理通过；作为同档控制。',
