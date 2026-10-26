@@ -180,6 +180,26 @@ SHORT_ATTEMPTS.update({'ixkn_prefill_report_import_failed': ('尝试获取当前
 BATCH_RESULTS.update({'prefill_stride_official_mixed_signal': ('原官方两档各4轮、1536成功，实际激活闭合；弃首轮5726.63/4052.78 tok/s，TTFT3637.47/124103.35ms。', '相对旧完整参考观察−0.56%/+0.19%，KV不同不判因果；保留小信号，不合并、不升基线、不继承105资格。', '官方完成，净收益未确认', '旧main0915/603/tree1127346e、native14f；原0813/RUNS4/SKIP_FIRST1，4K/16K各四轮，逐档弃首轮；日志/CSV及真实prefill、Q-fragment和compute-order激活保存。'), 'gqa_grouped_simt_negative': ('8类原数值/FP64/Graph及实际SIMT机制通过；Event1.279744→44.634184ms（34.8774倍），wall34.6878倍。', '保留明显负结果，停止整模与扫参，不推进已准备的模型入口；非数值错误，不授官方/105资格。', '机制落地，SIMT明显变慢', 'N33/B40/S16/KV16K/page16，baseline w1与candidate w8，原reducer不变；完整producer+reducer单ABBA，每窗16次Graph replay，关闭profiler。')})
 SHORT_ATTEMPTS.update({'prefill_stride_official_mixed_signal': ('检查stride常量特化的局部资源改善能否转为原官方吞吐。', '仅旧main0915的normalized stride及Q-fragment/compute-order精确依赖闭合；实际603/tree1127346e，不混新main34942或PR51。'), 'gqa_grouped_simt_negative': ('尝试避免小page16矩阵的TCU填充与布局开销。', 'QK/PV改FP32广播归约，保留P先BF16与原分页/尾mask/reducer；KV逻辑字节不减，w8增加SIMT算术和广播成本。')})
 
+BATCH_RESULTS.update({'official_baseline_complete': (
+    '干净main34942/618原官方两档各四轮、1536成功；暖均4K5638.86/16K4100.08 tok/s，TTFT3368.34/122586.38ms。',
+    '保留为本次新main/A性能对照。KV548432、DB207f；4K暖轮渐升，不将单轮差值当稳定收益；本机新源105未跑。',
+    '新main官方基线完整完成',
+    '原官方4K/16K、输出1024、并发64、请求256/128，各四轮弃首轮；34942f7/618/treee35bdbe6，原native14f及服务参数。实际PR51/Q-fragment/compute-order及Graph门通过，源码/native不变、DB恢复和清理通过。')})
+SHORT_ATTEMPTS.update({'official_baseline_complete': (
+    '为包含PR51修复的新main建立本站同条件原官方性能基线，用于本次A配对。',
+    '无本方优化补丁；完整团队34942f7/618原源码。旧wrapper control只提供native/环境原件，不继承旧main或队友成绩。')})
+
+GROUPS['prefill-stride'] = ('Prefill stride常量特化',
+    '仅11项stride改constexpr并保留int64寻址，原normalized/Q-hoist浮点表达式、tile和页序不变；代价为布局编译变体。组件SGPR spill30→6/mul103→30、Event省0.5151%、wall慢0.5676%，原数值/FP64/Graph及alternate17项通过。旧0915官方−0.56%/+0.19%保留为历史，不能混入新base。最新34942/PR51完整618配对，两档各四轮各1536请求成功；基线4K/16K暖均5638.86/4100.076667，候选5656.77/4119.24 tok/s，观察+0.3176%/+0.4674%。实际KV548432对548336，4K暖轮升速，非严格孤立因果或统计稳定收益。原实际激活与清理通过，同冻结源码105正在验证；尚未合并、不继承父main准确率。单序列组件页表行stride仅身份覆盖。', [])
+BATCH_RESULTS['prefill_stride_main34942_positive_pending_accuracy'] = (
+    '原官方4K/16K各四轮、1536成功；暖均5656.77/4119.24 tok/s，对本组新main基线观察+0.3176%/+0.4674%。',
+    '保留小幅正信号，同冻结源码105已启动但未评分；实际KV548336对548432及单组暖轮趋势需明示，不先授合并或比赛基线资格。',
+    '完整对照小幅正，准确率验证中',
+    '34942f7/618/treeaa43ea2c，原官方4K/16K各四轮弃首轮、原native14f/DB207f/服务参数；actual norm/Q/compute-order/PR51/Graph与source/native/DB恢复清理门通过。')
+SHORT_ATTEMPTS['prefill_stride_main34942_positive_pending_accuracy'] = (
+    '确认stride常量化能否在保留PR51修复的新main上改善实际吞吐。',
+    '仅normalized stride及Q-fragment/compute-order精确依赖身份闭合，共3个生产文件；PR51 runner绑定和其它615文件不变。')
+
 def group(row):
     if row['profile_id'] in ('rope-kv-fusion', 'final-ffn-row-prune', 'selected-query-row', 'attention-affine-pages', 'current-main-hotspot', 'attention-next-k', 'gqa-identity-rescale', 'main-correctness', 'gqa-kv-cg', 'gqa-kv-stride', 'lm-head-paired-gemv', 'attention-head-major', 'native-silu-vec2', 'gqa-four-page-t64', 'prefill-log2', 'prefill-stride', 'night-kernel-counters', 'gqa-grouped-simt'):
         return row['profile_id']

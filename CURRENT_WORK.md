@@ -1,12 +1,18 @@
-# 当前进展：长输入小幅信号，正在新main上配对确认
+# 当前进展：新main配对小幅正向，正在验证同源准确率
 
-更新：2026-10-25 18:23 UTC（北京时间10月26日）。本批 **285条登记／282个run**，通过实验PR5同步；完整结论与原件以[实验总表](team/experiments.md)为入口。
+更新：2026-10-26 02:33 UTC。本批 **287条登记／284个run**，通过实验PR5同步；完整结论与原件以[实验总表](team/experiments.md)为入口。
+
+- **最新配对完成**：[精确原始结果对比](analysis/main34942-prefill-stride-pair.json)。基线34942/618与A/618的原官方4K/16K各四轮均1536 SUCCESS。弃首轮基线 **5638.86/4100.076667**，A **5656.77/4119.24 tok/s**，观察 **+0.3176%/+0.4674%**。actual norm/Q/compute-order/PR51/Graph、source/native/DB恢复/清理通过。KV548432对548336、4K暖轮升速，非严格孤立kernel因果或统计稳定收益。
+- **当前唯一GPU任务**：A同冻结源码原105准确率，owner **312401**，`scripts/prefill-stride-main34942-model-20261026-accuracy/night-launch.json`及`owner-20261026T023320Z.log`。原采样/服务参数不变，未出分，不继承父main或队友资格。仅root继续；使用进程退出事件等待，不频繁查询GPU/逐轮状态。准确率和必要资格通过后按方法PR处理，未通过不合并。
+- **原始证据**：本组完整包已在GPU空窗封存，全量SHA见各control的evidence-index或full-seal补充；CSV/服务日志/代码版本和实际路径原件已回收，本地GPU运行期间批量同步。基线先前小包index保留不覆盖。
+
+下列为上一批结论，当前任务与是否合格以上述三条为准。
 
 - **Prefill stride保留待确认**：[方法记录](team/methods/prefill-stride.md)。原组件FP64/Graph/换布局门通过，旧main0915/603的原官方两档各四轮、1536请求全部成功；4K/16K暖均 **5726.63/4052.78 tok/s**，对旧参考 **−0.56%/+0.19%**。实际KV547648对547536，不能称严格因果收益；未跑该候选105，不合并、不更新比赛基线。
 - **固定GQA SIMT停止**：[方法记录](team/methods/gqa-grouped-simt.md)。8类数值/FP64/Graph与真实w8/noMMA门通过，但完整producer+reducer Event **1.279744→44.634184ms（34.8774倍）**，wall同向。性能负结果，不是正确性错误；不进入模型/105、不扫参数，预备生产包不执行。
 - **计数工具失败已留证**：[方法记录](team/methods/night-kernel-counters.md)。Prefill wrapper异常、CLI不能导入；原SQLite有有限来源匹配的57条EVENT，缺定义不换算利用率。GQA参数被拒、未采样。两轮全部timing不作成绩，完整原件已在GPU空窗封存，旧记录未改。
 - **团队main已更新**：[PR51](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/51)合入`34942f7`，修小行BF16不稳定，队友mixed与101/105通过。其不同native/DB/暖法结果不代用本机。旧main的99/105、100/105与mixed失败原件仍保留，不能套给新源码。
-- **当前唯一设备任务**：干净34942/618原官方基线，run `official/20261025T181612Z-main34942f7-official-baseline-four-rounds`，owner293009/driver293024；实际PR51安装与原优化栈已见，尚无完整成绩。完成后仅做一次同条件A配对，有可信净益再跑同源105。PID、日志与操作入口以本地根`CURRENT_WORK.md`和`NIGHT_PLAN.md`为准，避免重复占卡。B已停止，无自动后继。
+- **上一批启动的基线已完成**：干净34942/618原官方run `official/20261025T181612Z-main34942f7-official-baseline-four-rounds`，owner293009/driver293024已退出；不用重新启动。PID、日志与当前操作入口以本地根`CURRENT_WORK.md`为准，避免重复占卡。B已停止。
 
 旧负结果、被放弃的实现及原数据沿方法页查阅；本批不制造新的优化代码PR，也不把组合成绩计成独立收益。下文仅为历史交接。
 
