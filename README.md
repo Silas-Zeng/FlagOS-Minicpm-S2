@@ -21,9 +21,10 @@
 | 方法 / 版本 | 结果与处理 |
 |---|---|
 | **当前合格主线：main6971／PR60** | 复用已完成的原官方4K/16K各四轮，弃首轮 **5656.77／4119.24 tok/s**；同源105题 **103/105**。QKV、down小M及O宽tile均组件正但模型负，已停止，不替换基线。最新状态见[当前工作](CURRENT_WORK.md) |
-| [Prefill CTA调序](team/methods/prefill-lpt.md) | Q2048/KV2048与Q2048/KV4096完整Graph分别省 **12.2180%／5.7144%**，跨臂逐位；纯causal原FP64门仍两臂false，仅留诊断，middle原硬门通过。long慢3.57%，保留原核。07:16启动独立原官方，安装成功尚无选择资格或整模结论；不定新基线 |
+| [Prefill CTA调序](team/methods/prefill-lpt.md) | 两个早期chunk完整Graph省 **12.2180%／5.7144%**；纯causal原FP64两臂false仅留诊断，middle硬门通过，long慢3.57%保留原核。原官方4K暖均 **5722.48 tok/s（观察+1.1617%）**，16K首暖 **4111.36（−0.19663%）**后停；六轮1280成功，实际私有Q-hoist选中。KV不同，保留混合结果候选；16K未满/无105，不合并或定新基线 |
 | [GQA SME span](team/methods/gqa-sme-span.md)／[fresh-KV](team/methods/prefill-fresh-kv.md) | 数值/Graph等门通过，但组件分别慢 **0.3806%／30.1099%**，停止；SME mask变化不当实际传输启用证明，fresh-KV仅测long |
-| [down K256 INT8](team/methods/down-group256.md)／[QKV＋RoPE融合](team/methods/qkv-rope-fusion.md) | INT8首个精确整数门失败、未计时，停止当前错误实现；QKV融合14项通过但M2030/2048 Graph慢 **12.4198%／12.8168%**，停止。单层合成激活组件，不外推官方或准确率 |
+| [down K256 INT8](team/methods/down-group256.md)／[QKV＋RoPE融合](team/methods/qkv-rope-fusion.md) | INT8首个精确整数门失败、未计时，停止当前错误实现；QKV融合14项通过但M2030/2048 Graph慢 **12.4198%／12.8168%**，停止。其组件使用mm，未绑定生产opaque/F.linear；单层合成激活，不外推官方或准确率 |
+| [gate partial融合](team/methods/gate-partial-fusion.md) | 实际生产opaque/F.linear身份/config及M2030八项逐位/FP64/Graph等门通过，完整Graph **1.305489→1.499709ms（慢14.8772%）**。停止M2048、工作集和模型；无生产接线或新基线 |
 | [主线复核与native备用方案](team/methods/main-correctness.md) | PR48备用f2ca：103/105与原mixed通过；完整官方4K/16K弃首轮 **5271.89/3763.84 tok/s**，TTFT **4281.63/137244.33ms**，1536请求成功。保留备用，PR仍Draft；旧99/105采样结果和temperature0专项异常分别保留，根因未定。团队main0915本轮原105为100/105（102 stop＋3 cap，0传输错误/空答案）；与旧99/105及mixed专项异常并列保留，不宣称根因已修 |
 | [GQA KV读取缓存策略](team/methods/gqa-kv-cg.md) | 三个组件形状Event省 **2.6666%/1.3662%/1.2912%**。旧官方首暖4944.66混有Q-hoist/compute-order未启用，原成绩保留。修正关联身份并确认两者实际选中后，4K冷/首暖 **5073.26/5362.19 tok/s**，两轮512成功；对历史/当期首暖观察 **−6.7750%/−6.9386%** 后主动停止，第三轮中断、16K/105不跑。KV547648对547536，非严格因果；本轮无模型净收益，不合并或定基线 |
 | [GQA四页T64计算块](team/methods/gqa-four-page-t64.md) | 三轮数值/Graph/FP64通过，原T64、固定w4、真实N4布局Event分别慢126.90%/64.71%/42.93%；最后实际mma=[1,4]仍无净收益，整个路线收口，不再扫参或进模型 |

@@ -2,7 +2,7 @@
 
 # QKV GEMM与RoPE融合
 
-layer0真实权重＋合成激活，融合QKV GEMM输出和RoPE，不含KV writer。M2030/2048的14项逐位/FP64/Graph/side stream通过，Graph慢12.4198%/12.8168%，停止。单层未复现42层交织；原RoPE heuristic重新编译，不宣称服务原机器码，亦无官方资格。
+layer0真实权重＋合成激活，融合QKV GEMM输出和RoPE，不含KV writer。M2030/2048的14项逐位/FP64/Graph/side stream通过，Graph慢12.4198%/12.8168%，停止。原组件基于installed mm，未绑定生产opaque/F.linear身份，不能当生产linear的直接对照。单层未复现42层交织；原RoPE heuristic重新编译，不宣称服务原机器码，亦无官方资格。
 
 相关代码：[result.json](../../experiments/framework/20261026T064944259294Z-biv150-qkv-rope-fusion-component/result.json)；[source](../../experiments/framework/20261026T064944259294Z-biv150-qkv-rope-fusion-component/source)。
 

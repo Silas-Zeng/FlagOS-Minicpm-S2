@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共315条登记、312个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共317条登记、314个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -293,6 +293,8 @@
 | 天数 BI-V150 | 313 | 2026-10-26T06:26:10.126686+00:00 | [down K256分组INT8探索](methods/down-group256.md) | 精确整数门失败，未计时 | 未记录/未记录/未记录/未记录 | 独立down K256分组W8A8原型在group_integer_probe对CPU INT64精确参考失败，原报错为INT8 dot ABI/布局失败、精确否决；cases/timings为空，立即停止，不进入性能/ | [20261026T062610126686Z-biv150-down-group256-component](runs/bi-v150/20261026T062610126686Z-biv150-down-group256-component.md) |
 | 天数 BI-V150 | 314 | 2026-10-26T06:29:15.011626+00:00 | [Prefill当前chunk直读K/V](methods/prefill-fresh-kv.md) | 逐位/FP64通过，组件明显负 | 未记录/未记录/未记录/未记录 | 历史KV读paged cache、当前chunk直读post-RoPE BF16 K/V，保留writer、绝对T64/K顺序与softmax。Q2047/KV16384初始/换值跨臂逐位、FP64/Graph通过；修改 | [20261026T062915011626Z-prefill-fresh-kv-long-component](runs/bi-v150/20261026T062915011626Z-prefill-fresh-kv-long-component.md) |
 | 天数 BI-V150 | 315 | 2026-10-26T06:49:44.259294+00:00 | [QKV GEMM与RoPE融合](methods/qkv-rope-fusion.md) | 14项通过，Graph性能负 | 未记录/未记录/未记录/未记录 | layer0真实QKV GEMM＋原native RoPE combo对照新融合输出，M2030/2048共14项Q/K/V逐位、独立FP64、换值Graph及side stream通过，RNG不变。Graph Even | [20261026T064944259294Z-biv150-qkv-rope-fusion-component](runs/bi-v150/20261026T064944259294Z-biv150-qkv-rope-fusion-component.md) |
+| 天数 BI-V150 | 316 | 2026-10-26T07:16:18.571262+00:00 | [Prefill序列内CTA调序](methods/prefill-lpt.md) | 4K正/16K首暖微负，混合候选 | 未记录/未记录/未记录/未记录 | LPT早期chunk原官方4K四轮4863.05/5694.95/5694.17/5778.33 tok/s，弃首轮5722.4833，对main6971的5656.77观察+1.1617%；16K冷3757.10、首暖 | [20261026T071618Z-main6971-lpt-early-four-rounds](runs/bi-v150/20261026T071618Z-main6971-lpt-early-four-rounds.md) |
+| 天数 BI-V150 | 317 | 2026-10-26T07:57:00.478338+00:00 | [gate partial融合](methods/gate-partial-fusion.md) | 8项通过，完整Graph组件负 | 未记录/未记录/未记录/未记录 | 真实opaque/F.linear默认FlagGems身份与config门通过；M2030共8项output/gate逐位、FP64、换值Graph和side stream通过，RNG不变。完整Graph原linear＋ | [20261026T075700478338Z-biv150-gate-partial-fusion-component](runs/bi-v150/20261026T075700478338Z-biv150-gate-partial-fusion-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

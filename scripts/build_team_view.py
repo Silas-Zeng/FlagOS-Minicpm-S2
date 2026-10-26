@@ -237,11 +237,11 @@ BATCH_RESULTS['shape_gemm_model_negative_early_stop']=('实测值见本条结论
 SHORT_ATTEMPTS['shape_gemm_model_negative_early_stop']=('检验真实模型中的完整净收益。','独立候选精确形状接入；组件收益不继承为模型收益。')
 
 # 07:16批次：原件逐文件SHA已核；仅新增导航与短记，不改原结果。
-GROUPS['prefill-lpt']=('Prefill序列内CTA调序','保留stride/Q-hoist及每query的K顺序，只反转序列内CTA枚举。完整Graph Q2048/KV2048省12.2180%，Q2048/KV4096省5.7144%，长Q2047/KV16384慢3.57%。纯causal原FP64门两臂均false、输出逐位相同，保留原失败诊断；middle原FP64硬门通过。只保留已测早期chunk候选。07:16启动独立原官方，双Manager安装成功尚未取得实际选择资格，无整模结论；main6971基线不变。',[])
+GROUPS['prefill-lpt']=('Prefill序列内CTA调序','保留stride/Q-hoist及每query的K顺序，只反转序列内CTA枚举。完整Graph Q2048/KV2048省12.2180%，Q2048/KV4096省5.7144%，长Q2047/KV16384慢3.57%。纯causal原FP64门两臂均false、输出逐位相同，保留原失败诊断；middle原FP64硬门通过。独立原官方4K暖均5722.4833观察+1.1617%，16K首暖4111.36观察−0.19663%后停，六轮1280 SUCCESS。私有LPT Q-hoist实际selected通过；KV548432对548336，保留混合结果候选，不能称稳定整体收益或整体负。无105/合并，main6971不变。',[])
 GROUPS['gqa-sme-span']=('GQA同storage二维span','保持原KV storage，二维连续backing-span与行单位地址尝试改善SME传输资格。8类数值/Graph等门通过、mask15→63，但mask不是实际SMEcopy启用证明；producer＋原reducer Graph慢0.3806%，停止，不扩形状或接模型。',[])
 GROUPS['down-group256']=('down K256分组INT8探索','独立W8A8原型首个CPU INT64精确整数门失败，未计时；保留exit1，不推进依赖该门的gate融合，不放宽容差或改框架凑过。不是完整量化/模型方案，也不泛化其它INT8实现。',[])
 GROUPS['prefill-fresh-kv']=('Prefill当前chunk直读K/V','保留writer与原浮点顺序，历史KV走paged、当前chunk读post-RoPE BF16 K/V。长场景逐位/FP64/Graph与实际来源证明通过，但Event慢30.1099%，停止；causal未测，不叠LPT或进入模型。',[])
-GROUPS['qkv-rope-fusion']=('QKV GEMM与RoPE融合','layer0真实权重＋合成激活，融合QKV GEMM输出和RoPE，不含KV writer。M2030/2048的14项逐位/FP64/Graph/side stream通过，Graph慢12.4198%/12.8168%，停止。单层未复现42层交织；原RoPE heuristic重新编译，不宣称服务原机器码，亦无官方资格。',[])
+GROUPS['qkv-rope-fusion']=('QKV GEMM与RoPE融合','layer0真实权重＋合成激活，融合QKV GEMM输出和RoPE，不含KV writer。M2030/2048的14项逐位/FP64/Graph/side stream通过，Graph慢12.4198%/12.8168%，停止。原组件基于installed mm，未绑定生产opaque/F.linear身份，不能当生产linear的直接对照。单层未复现42层交织；原RoPE heuristic重新编译，不宣称服务原机器码，亦无官方资格。',[])
 for key, run, filename in [
  ('prefill-lpt','20261026T062007042651Z-prefill-lpt-graph-causal-component','results.json'),
  ('gqa-sme-span','20261026T061316901168Z-gqa-sme-span-hotspot-component','results.json'),
@@ -261,8 +261,17 @@ for key, verdict, decision, attempt, change, test in [
     BATCH_RESULTS[key]=('实际数值见本轮原登记及result(s).json。',decision,verdict,test)
     SHORT_ATTEMPTS[key]=(attempt,change)
 
+# 阶段末两项：LPT为混合结果，gate为数值通过的组件负结果。
+GROUPS['gate-partial-fusion']=('gate partial融合','实际opaque/F.linear默认FlagGems身份及GROUP_M8、BM256/BN256/BK32/w16/s2门通过；M2030的8项逐位/FP64/Graph/side stream通过，但完整Graph链慢14.8772%，停止M2048、8层工作集与模型。两臂均两个launch，partial_up shared64→128KiB、reg97→169；资源与退化同时观察，未隔离因果。单层合成激活，无生产/官方资格，不改主线。',[])
+CODE['gate-partial-fusion']=['experiments/framework/20261026T075700478338Z-biv150-gate-partial-fusion-component/result.json','experiments/framework/20261026T075700478338Z-biv150-gate-partial-fusion-component/source']
+CODE['prefill-lpt'] += ['experiments/framework/20261026T071618Z-main6971-lpt-early-four-rounds-control/lpt-posthoc-activation.json','experiments/framework/20261026T071618Z-main6971-lpt-early-four-rounds/benchmark_results/raw_runs_20261026_151843.csv']
+BATCH_RESULTS['prefill_lpt_official_mixed_partial_stop']=('原CSV六轮详见登记。','保留混合结果候选；停止后续测试，无105/合并或新基线，不称整体负或稳定收益。','4K正/16K首暖微负，混合候选','原官方4K四轮、16K两轮，输入4096/16384、输出1024、并发64，1280 SUCCESS；按负载及冷暖对应比较，KV548432对548336。')
+SHORT_ATTEMPTS['prefill_lpt_official_mixed_partial_stop']=('检验已测早期chunk调序的整模净影响。','新私有LPT kernel/Manager按几何选择，long原核保留；posthoc核实际私有Q-hoist选中。')
+BATCH_RESULTS['gate_partial_fusion_negative_component']=('完整Graph1.305488646→1.499709368ms，慢14.8772%，8项数值等门通过。','停止M2048、工作集和模型；不合并、不定基线，保留负结果。','8项通过，完整Graph组件负','真实layer0 gate/up权重＋合成BF16激活M2030，实际opaque/F.linear身份/config；完整output/gate逐位、FP64、换值Graph/side stream与ABBA。')
+SHORT_ATTEMPTS['gate_partial_fusion_negative_component']=('将SiLU尾合入up输出以降低完整gate链开销。','A为生产merged linear＋原SiLU；B为gate写BF16 scratch＋up保留BF16 round并融合SiLU，均两个launch。')
+
 def group(row):
-    if row['profile_id'] in ('gqa-two-page-t32','prefill-lpt','gqa-sme-span','down-group256','prefill-fresh-kv','qkv-rope-fusion'):
+    if row['profile_id'] in ('gqa-two-page-t32','prefill-lpt','gqa-sme-span','down-group256','prefill-fresh-kv','qkv-rope-fusion','gate-partial-fusion'):
         return row['profile_id']
     if row['profile_id'] == 'shape-gemm':
         return 'shape-gemm'
@@ -348,7 +357,7 @@ def brief(value, limit=220):
 
 
 def result(row, limit=190):
-    if row['profile_id'] in ('shape-gemm','gqa-two-page-t32','prefill-lpt','gqa-sme-span','down-group256','prefill-fresh-kv','qkv-rope-fusion'):
+    if row['profile_id'] in ('shape-gemm','gqa-two-page-t32','prefill-lpt','gqa-sme-span','down-group256','prefill-fresh-kv','qkv-rope-fusion','gate-partial-fusion'):
         return row['conclusion'][:limit]
     """只摘结果/失败原句，不把审计与库身份搬入主视图。"""
     if row['status'] in BATCH_RESULTS:

@@ -77,6 +77,7 @@
 - [down K256分组INT8探索](methods/down-group256.md)
 - [Prefill当前chunk直读K/V](methods/prefill-fresh-kv.md)
 - [QKV GEMM与RoPE融合](methods/qkv-rope-fusion.md)
+- [gate partial融合](methods/gate-partial-fusion.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 
