@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共297条登记、294个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共299条登记、296个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -275,6 +275,8 @@
 | 天数 BI-V150 | 295 | 2026-10-26T03:41:52.136640+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 42层权重正，整模型未验证 | 未记录/未记录/未记录/未记录 | 42层真实权重1056964608B轮换，M1-8（计时M8）；Event整环3.367891550→2.189718008ms（省34.9825%），wall3.373675094→2.194239469ms。336项 | [20261026T034152136640Z-biv150-down-small-working-set-component](runs/bi-v150/20261026T034152136640Z-biv150-down-small-working-set-component.md) |
 | 天数 BI-V150 | 296 | 2026-10-26T03:49:32.832328+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 单权重组件正，整模型未验证 | 未记录/未记录/未记录/未记录 | Event每GEMM毫秒 {"baseline": 0.7254105806350708, "wide256": 0.5488503277301788}；wall {"baseline": 0.727244015625, | [20261026T034932832328Z-biv150-down-wide-component](runs/bi-v150/20261026T034932832328Z-biv150-down-wide-component.md) |
 | 天数 BI-V150 | 297 | 2026-10-26T03:51:39.678096+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 42层权重正，整模型未验证 | 未记录/未记录/未记录/未记录 | 42层真实权重1056964608B轮换，M2048/2030；Event整环30.371529579→23.044686317ms（省24.1241%），wall30.378039625→23.050260812ms。 | [20261026T035139678096Z-biv150-down-wide-working-set-component](runs/bi-v150/20261026T035139678096Z-biv150-down-wide-working-set-component.md) |
+| 天数 BI-V150 | 298 | 2026-10-26T04:21:10+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 官方首暖负，提前收尾 | 未记录/未记录/未记录/未记录 | down wide组件42层省24.12%，实际模型M2030/2048均选中，但4K冷4914.39、首暖5451.11 tok/s，对PR60对应5533.03观察−1.4806%。512 SUCCESS后按规则主动 | [20261026T042110Z-main6971-pr61-down-wide-four-rounds](runs/bi-v150/20261026T042110Z-main6971-pr61-down-wide-four-rounds.md) |
+| 天数 BI-V150 | 299 | 2026-10-26T04:35:18.378183+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 42层权重正，整模型未验证 | 未记录/未记录/未记录/未记录 | 独立QKV M2048/2030,N2560,K2048；42层真实Q/K/V按q,k,v拼接权重。原256/128/32/w8/s2对宽256/256/32/w16/s2，84数值/FP64抽样/换值Graph/sid | [20261026T043518378183Z-biv150-qkv-wide-working-set-component](runs/bi-v150/20261026T043518378183Z-biv150-qkv-wide-working-set-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

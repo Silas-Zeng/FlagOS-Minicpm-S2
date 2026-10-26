@@ -209,10 +209,11 @@ SHORT_ATTEMPTS['prefill_stride_main34942_accuracy_pass'] = (
     '验证最新A组合是否满足官方准确率门槛，不继承父main或队友分数。',
     '不新增源码或改采样；复用已审冻结组合与原35d驱动/评分器，只跑这一轮，不反复抽样刷分。')
 
-GROUPS['shape-gemm'] = ('BI-V150特定形状GEMM', '按真实轨迹选形状。M2048 down占映射BF16 MM约47.10%；大M原tile静态化/减warp/加深K等6方案及M64 SplitK4均负，原件保留。宽N BM256/BN256/BK32/w16/s2单层省24.34%，42层1.057GB真实权重轮换30.371530→23.044686ms（省24.12%），84数值/尾部/FP64/换值Graph/side stream门通过。另保留M1-8 down SplitK8：M2整环3.057750→2.088810ms，M8整环3.367892→2.189718ms，分别84/336数值用例通过。均为组件结果，尚无整模型吞吐或105资格，不合并；原正确PR51及PR60主线不变。', [])
+GROUPS['shape-gemm'] = ('BI-V150特定形状GEMM', '按真实轨迹选形状。M2048 down占映射BF16 MM约47.10%；大M静态化/减warp/加深K及M64 SplitK均负。宽N 256/256/32/w16/s2的42层真实down组件省24.12%，但实际模型M2030/2048选中后，4K首暖5451.11对PR60对应5533.03观察−1.48%；512 SUCCESS后主动早停，16K/105未跑，KV548432对548336，不能称严格因果、完整官方或正确性失败。PR61关闭未合并，保留原件。后继独立QKV M2048/2030,N2560,K2048，42层真实Q/K/V拼接组件12.705318→12.174299ms（省4.1795%），84数值/FP64抽样/Graph换值/side stream门通过；模型筛选另列，不叠down、不把组件比例当吞吐。另保留独立M1-8 down SplitK8组件，M2/M8整环省31.69%/34.98%，尚未接模型。原正确PR51及PR60基线不变。', [])
 CODE['shape-gemm'] = ['analysis/2026-10-26-gemm-target-priority.json','analysis/2026-10-26-gemm-component-results.json','experiments/framework/20261026T035139678096Z-biv150-down-wide-working-set-component/source/candidate.py','experiments/framework/20261026T034152136640Z-biv150-down-small-working-set-component/source/candidate.py']
 for status, verdict, decision in [
     ('shape_gemm_negative','性能负结果，停止该候选','数值通过但完整组件慢，不接模型；不能把资源减少或循环减少当净收益。'),
+    ('shape_gemm_official_negative_screen','官方首暖负，提前收尾','首暖负按约定主动停止，保留已测轮次和运行条件；未测16K/105，不合并或定基线。'),
     ('shape_gemm_local_positive','单权重组件正，整模型未验证','保留局部信号，后继完整权重工作集结果另列，不把组件比例当整轮收益。'),
     ('shape_gemm_working_set_positive','42层权重正，整模型未验证','保留候选；优先推进热点M2048 wide，M1-8 SplitK另列；需要实际接入、整模型性能/105和新增代码独立复核。')]:
     BATCH_RESULTS[status]=('实测数据见本条结论及result.json。',decision,verdict,'真实down权重，原安装MM或当前PR51 small_o JIT对照；数值/FP64抽样/换值Graph后ABBA，完整输出和SplitK归约计入。')
