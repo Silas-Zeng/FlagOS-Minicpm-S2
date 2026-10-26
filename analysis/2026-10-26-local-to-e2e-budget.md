@@ -1,5 +1,11 @@
 # N-only局部收益与整模：先恢复可比性，再解释预算
 
+**最新结论：局部不是完全没传到整体。** 精确身份修复后，4K暖均观察+1.1145%，与下述约1%的条件预算接近；16K首暖−2.7652%，同时存在额外权重容量成本与形状覆盖缺口。此前把部分手工MM微测当生产F.linear、漏核新runner与旧优化栈的集成身份，确实降低了选题判断的可靠性；这些是应改进的实验设计，不用“整体复杂”概括过去。
+
+后续候选先按三项筛选：真实生产调用省多少、实际负载能覆盖多少、新增内存/搬运/同步花多少。局部Graph必须包含完整producer与reducer，形状命中不能用首次selected代替频率，指令/寄存器变化不能替代净计时。当前GQA stages2就是反例：实际async-copy生成且数值通过，但搬运没有排进主要矩阵计算窗口，并增加双缓冲和hot-loop Q读，完整组件反而慢27.6324%。该结论来自已有原件，不为解释重跑模型。
+
+用户最新建议decode小M：优先准备原权重M64 down窄N双波的单一新差分，不保留第二份权重。单份packed＋每次恢复原W虽可省容量，但恢复42层的乐观流量预算约3.18ms，远大于M64单步0.381ms的局部节省；高频fallback尚未封闭，不进入官方。既有M1–8 SplitK、宽tile与旧packed负结果不重复执行。
+
 2026-10-26，仅CPU读取既有原件，无新测试。**当前最明确的问题是新runner没有同步compute-order精确身份，实际日志出现 `BIV150_COMPUTE_ORDER_SCOPE_REJECTED`，所以本轮不是“原完整优化栈＋N-only”严格对照。** [本轮posthoc](../experiments/official/20261026T112706Z-main6971-nonly-down-four-rounds-control/posthoc-after-stop.json) 的 `prefill_valid=false`，同时42个N-only FX及新核selected存在；原normalization和Q-hoist仍有局部selected，不能说所有旧优化都关闭。[首暖筛选](../experiments/official/20261026T112706Z-main6971-nonly-down-four-rounds-control/performance-stop-decision.json) 5440.33对5533.03 tok/s（−1.6754%）是实际组合结果，但不能全归因N-only，更不否定其组件正确性。42权重helper门没有经过完整compute-order调用链，这正是其明确未覆盖的集成边界；应先修精确身份，不再为这次失配拟合缓存慢因。
 
 **收益账只有条件预算。** [M64原组件](../experiments/framework/20261026T102808704037Z-biv150-nonly-down-component/result.json) A/B为0.085926324129/0.076858177781ms，单层省0.009068146348ms；若每步42层都M64、每层保留同样差额且无其它成本，约省 **0.380862147ms/步**。[当前main6971的4K诊断](main6971-084521-nodes/summary.md) 只有一个M64 Graph的4个插桩样本：每样本GQA区间和中位23.970038ms、全部linear7.960562ms，其中[down42节点](main6971-084521-nodes/linear-breakdown.json)3.645377ms；boundary/full也分别为带计时的34.603107/37.140869ms。0.380862约为该boundary的1.1007%（条件吞吐约+1.1129%），不是10.5534%整模收益。该数字仍不是无插桩E2E预测：没有本轮所有实际M、命中频率或未插桩整图分母，不能将该窗口外推整轮或将GQA/linear中位数相加作官方总时。旧16K的M32/M40分布不是本轮4K频率；首次M64 selected也不是逐请求覆盖率。

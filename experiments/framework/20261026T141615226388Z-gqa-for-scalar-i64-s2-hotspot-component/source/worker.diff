@@ -1,0 +1,59 @@
+--- 受测s1/worker.py
++++ 单个s2/worker.py
+@@ -58,7 +58,7 @@
+ def worker(run, model, shape="hotspot"):
+     result = dict(status="started", kind="生产 kernel+reducer 的随机输入组件", checks=[], timings=[],
+                   limitations=["没有模型权重或实际激活采样；不是模型资格或官方收益",
+-                               "仅N64/B64/S2；观测长度多重集、合成激活；page16/split/FP顺序保持，仅for+标量页基址+1D i64后expand/span，原每page16数学",
++                               "仅N64/B64/S2；观测长度多重集、合成激活；page16/split/FP顺序保持，仅for+标量页基址+1D i64后expand/span的单个s2判别，原每page16数学",
+                                "性能仅关闭 profiler 的同输入 CUDA Graph ABBA"])
+     gqa = producer_capture = reducer_capture = None
+     original_producer = original_reducer = None
+@@ -168,6 +168,7 @@
+             source_q_shape=list(kwargs["query_ptr"].shape), source_k_shape=list(kwargs["key_cache_ptr"].shape),
+             source_k_stride=list(kwargs["key_cache_ptr"].stride()), block_table_stride=8192,
+             rows=8, segments=segments, head_size=128, page_size=16, candidate_compute_tile=16, num_warps=1, num_stages=1,
++            candidate_num_stages=2, baseline_num_stages=1,
+             query_start_loc=common.query_start_loc_cpu.tolist(), seq_lens=common.seq_lens.cpu().tolist(),
+             padded_slot_values=common.slot_mapping[active:].cpu().tolist())
+         original_inputs = (query.clone(), cache.clone(), common.seq_lens.clone(), common.block_table_tensor.clone())
+@@ -183,6 +184,7 @@
+             keepalive = []
+             if name == "candidate":
+                 pk, keepalive = prepare_launch_kwargs(pk)
++                pk["num_stages"] = 2
+                 for pointer, view in zip(("key_cache_ptr", "value_cache_ptr"), keepalive):
+                     logical = kwargs[pointer]
+                     view_record = dict(pointer=pointer, original_shape=list(logical.shape),
+@@ -209,6 +211,13 @@
+         result["resources"] = {name: dump(compiled, run / ("ir-" + name)) for name, compiled in first.items()}
+         result["resources"]["production"] = dump(production_compiled, run / "ir-production")
+         result["resources"]["reducer"] = dump(reducer_compiled, run / "ir-reducer")
++        expected_stages = {"baseline": 1, "candidate": 2, "production": 1}
++        for arm_name, expected_stage in expected_stages.items():
++            if result["resources"][arm_name]["num_stages"] != expected_stage:
++                raise RuntimeError("实际编译stage不符：" + arm_name)
++        if (result["resources"]["baseline"]["compiled_hash"] !=
++                "641478e6ddcd3d9c11192fbd0c6d4d472bf8ad3e3bb2fd9fa27b09f18e4dc9ff"):
++            raise RuntimeError("baseline不是已核641478原w1s1，禁止混比")
+         # Selection is diagnostic: a frontend mask is not proof of an SME copy.
+         patterns = {"sme_transport": r"sme|g2s|global_to_shared|global.*shared|cp\.async",
+                     "wait": r"waitcnt|wait_group|async_wait|wait_all|waitcnt_",
+@@ -216,7 +225,7 @@
+                     "shared_fragment": r"local_load|local_alloc|s2r|shared"}
+         selection = dict(diagnostic_only=True, no_asm_selection_claim=True,
+             expected_mask_delta_hex="0x30", masks={}, evidence={},
+-            note="生产N64/S2窄scratch预期14->62；mask不等于实际SME。须核for/标量Splat/直接ExpandDims乘真实元素stride256、实际KV copy/wait与资源。")
++            note="生产N64/S2窄scratch预期14->62；mask不等于实际SME。须核for/标量Splat/直接ExpandDims乘真实元素stride256、实际s2流水copy/wait、stride和资源；不自动试s3。")
+         for arm_name, compiled in first.items():
+             selection["masks"][arm_name] = result["resources"][arm_name]["use_sme"]
+             selection["evidence"][arm_name] = {}
+@@ -374,7 +383,7 @@
+             a = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "baseline")
+             b = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "candidate")
+             result["summary"][metric] = dict(baseline_ms=a, candidate_ms=b, fraction_saved=1 - b / a)
+-        result.update(status="component_signal_only", decision="仅实际N64/S2 for+scalar+i64-before-expand一组组件；实际SMEcopy/wait由root审，不自动扩形状或模型")
++        result.update(status="component_signal_only", decision="仅实际N64/S2 for+scalar+i64-before-expand的单个s2判别；实际流水/SMEcopy/wait由root审，不自动试s3或扩模型")
+     except BaseException:
+         result.update(status="failed", error=traceback.format_exc())
+         traceback.print_exc()

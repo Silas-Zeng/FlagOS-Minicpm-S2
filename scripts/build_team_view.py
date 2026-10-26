@@ -332,7 +332,14 @@ GROUPS['gqa-scalar-page-base']=('GQA标量KV页基址与动态for组合', 'scala
 CODE['gqa-scalar-page-base'] += ['experiments/framework/20261026T134937447894Z-gqa-for-scalar-i64-hotspot-component/source/kernel.diff', 'experiments/framework/20261026T134937447894Z-gqa-for-scalar-i64-hotspot-component/results.json', 'experiments/framework/20261026T134937447894Z-gqa-for-scalar-i64-hotspot-component/archive-receipt.json', 'analysis/main6971-084521-nodes/gqa-for-scalar-i64-134937.json']
 BATCH_RESULTS['gqa_for_scalar_i64_negative_component']=('动态for＋标量页基址＋一维int64后expand，保持原NHD/page16/FP顺序与producer＋reducer；8类门、有限跨臂逐位硬门及非有限原语义诊断通过。完整Graph Event0.541995287→0.600198209ms，慢10.73864%，wall慢10.42853%，停止不接模型。LLVM/ASM实际SME指令均0→8，完整页路径启用而tail原路；VGPR93→81、SGPR64→84、spill均0、shared8192→10240，不能仅凭资源或指令认定收益/精确慢因。无官方、105或新基线，DB/source/native和清理通过。', '停止本组合及模型扩展；保留真实SME已生成、数值通过与净性能负证据，不以指令成功或资源下降继续盲扫。', '8类原门及有限跨臂逐位硬门通过，非有限原门/bit诊断通过；原641478生产核与reducer绑定。完整组件慢10.73864%，实际SME LLVM8/ASM8。', '复用main6971实际N64/S2、4K观察长度多重集的合成Q/KV组件；只组合三个编译条件，FP/页序/reducer/参数不变。计时前完成原数值检查，再完整producer＋reducer Graph 16-call ABBA，非官方性能或模型准确率。')
 
+# 20261026 GQA stages2实际流水负结果
+GROUPS['gqa-scalar-page-base']=('GQA标量KV页基址与动态for组合', 'scalar＋while慢0.38635%且SME未生效；for＋scalar＋一维i64 stages1实际SME8却慢10.73864%；stages2实际async-copy4/SME16仍慢27.63241%。三项原8门/逐位通过，均停止不接模型，机制生成不等于净收益。', [])
+CODE['gqa-scalar-page-base'] += ['experiments/framework/20261026T141615226388Z-gqa-for-scalar-i64-s2-hotspot-component/source/kernel.diff', 'experiments/framework/20261026T141615226388Z-gqa-for-scalar-i64-s2-hotspot-component/results.json', 'experiments/framework/20261026T141615226388Z-gqa-for-scalar-i64-s2-hotspot-component/archive-receipt.json', 'analysis/main6971-084521-nodes/gqa-for-scalar-i64-s2-141615.json']
+BATCH_RESULTS['gqa_for_scalar_i64_s2_negative_component']=('在已测for＋标量页基址＋一维int64组合上仅candidate num_stages=2；原生产A保持1，reducer/数学/页序/布局不变。8类原门及跨臂逐位通过，完整producer＋reducer Graph Event0.541960925→0.691717803ms，慢27.63241%，wall慢27.18074%。实际软件流水生成TTGIR async-copy4、LLVM/ASM SME各16条，shared8192→18432，仍无净益；停止stages2，不扫stages3/不接模型。DB/source/native及设备清理通过，无官方/105或新基线。', '停止当前SME流水路线并保留数值通过、机制生成与净负结果；不以异步指令数或低寄存器替代收益。', '8类原门和跨臂bitwise通过；实际候选编译stages2、TTGIR async-copy4、LLVM/ASM SME16。未取得模型准确率资格。', '复用main6971实际N64/S2及4K观察长度的合成Q/KV组件；原8门后完整producer＋reducer 16-call Graph ABBA，baseline stages1、candidate stages2，单项非参数扫描。')
+
 def group(row):
+    if row['profile_id']=='gqa-for-scalar-i64-s2':
+        return 'gqa-scalar-page-base'
     if row['profile_id']=='gqa-for-scalar-i64':
         return 'gqa-scalar-page-base'
     if row['profile_id']=='gqa-scalar-page-base':
@@ -436,6 +443,7 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     current_component_summary = {
+        'gqa_for_scalar_i64_s2_negative_component': '8门/逐位通过；实际stages2、async-copy4/SME16，完整Graph慢27.63241%，停止不扫stage。',
         'gqa_for_scalar_i64_negative_component': '8门/逐位通过；实际SME LLVM8/ASM8，完整Graph慢10.73864%，停止。资源下降不是收益证明，无官方/105。',
         'nonly_down_identity_official_mixed_no_baseline': '4K四轮暖均5719.8133（对5656.77观察+1.1145%）；16K首暖4005.55（对4119.46观察−2.7652%）后停，六轮1280 SUCCESS。修复后旧prefill栈/FX42有效，KV516320；混合结果，无105/新基线。',
         'gqa_scalar_page_base_negative_component': '8类门及跨臂逐位通过；Event0.542196542→0.544291317ms，慢0.38635%，停止。SGPR spill75为lane保存非HBM；实际SME仍0，for＋scalar未验证。',
