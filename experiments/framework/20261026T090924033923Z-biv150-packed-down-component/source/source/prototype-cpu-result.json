@@ -1,0 +1,61 @@
+{
+  "status": "CPU_ONLY_NO_GPU_QUALIFICATION",
+  "layout": [
+    8,
+    48,
+    256,
+    128
+  ],
+  "original_shape": [
+    2048,
+    6144
+  ],
+  "supported_BN": [
+    32,
+    64,
+    128,
+    256
+  ],
+  "supported_BK": [
+    32,
+    64,
+    128
+  ],
+  "tile_cases": 360,
+  "full_uint16_pack_unpack_bitwise": true,
+  "all_65536_patterns_including_nan_payload": true,
+  "weight_bytes_original": 25165824,
+  "weight_bytes_packed": 25165824,
+  "component_holds_both": true,
+  "dot_expression_AST_identical": true,
+  "K_visit_order_preserved": true,
+  "B_SME_contract": {
+    "real_existing_IR": {
+      "passed": true,
+      "dot_count": 1,
+      "records": [
+        {
+          "A": "%a_79",
+          "B": "%b_81",
+          "B_local_load_found": true,
+          "B_dot_op_layouts": [
+            "opIdx = 1, parent = #mma, kWidth = 2, useSme = 2"
+          ],
+          "B_same_layout_opIdx1_useSme2": true
+        }
+      ]
+    },
+    "adversarial_false_cases": [
+      "A_only_sme2",
+      "unused_B_sme2",
+      "cross_layout"
+    ],
+    "alias_case_passed": true
+  },
+  "candidate_sha256": "e62a0d973d05a98eef808bdf07cb462235f0c7d13e34a035a08f82e746c8cb96",
+  "installed_linear_sha256": "d431a4fa144ed67dc3deab46dd5beace3612858075f85c39e602447ba3bf768a",
+  "unverified": [
+    "down实际opaque→linear config、编译SME是否保留、GPU数值/FP64/Graph/side stream及完整性能",
+    "仅地址窗缩小，未证实原带宽/TLB瓶颈；不声称occupancy或模型收益"
+  ]
+}

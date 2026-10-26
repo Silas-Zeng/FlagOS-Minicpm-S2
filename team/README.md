@@ -78,6 +78,9 @@
 - [Prefill当前chunk直读K/V](methods/prefill-fresh-kv.md)
 - [QKV GEMM与RoPE融合](methods/qkv-rope-fusion.md)
 - [gate partial融合](methods/gate-partial-fusion.md)
+- [main6971 Graph真实热点诊断](methods/main6971-graph-profile.md)
+- [BF16 down权重微块布局](methods/bf16-packed-down.md)
+- [Prefill历史区间与causal尾块分离](methods/prefill-history-tail.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

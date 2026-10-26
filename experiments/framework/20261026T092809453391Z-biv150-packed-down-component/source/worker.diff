@@ -1,0 +1,11 @@
+--- 受测v1/worker.py
++++ v2/worker.py
+@@ -123,7 +123,7 @@
+                 if label=='normal':
+                     resource=preserve('packed_linear',ck,m)
+                     save(run/'resources-before-timing.json',result['resources'])
+-                    assert resource['async_copy_ops']>=2 and resource['B_dot_useSme2'] and resource['asm_sme_load'], '编译未保留B SME流水；停止，不用普通load替换凑过'
++                    result.setdefault('SME_mechanism',{})[str(m)]=dict(preserved=resource['async_copy_ops']>=2 and resource['B_dot_useSme2'] and resource['asm_sme_load'], diagnostic_only=True, note='原B SME假设未保持也保留真实资源；全部原数值门通过后仅原ABBA判断净性能，不宣称SME/occupancy收益')
+             oracle(xx,wc,holders['A'],holders['B'],str(m))
+             xx.copy_(xc[:m].cuda());origin.copy_(xx)
+             graphs={};refs={};stream=torch.cuda.Stream();stream.wait_stream(torch.cuda.current_stream())

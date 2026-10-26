@@ -1,0 +1,133 @@
+--- 已测LPT-worker
++++ history-tail-worker
+@@ -15,9 +15,8 @@
+ from validate_mixed_decode import make_data
+ 
+ import prototype
+-import alternate_stride
+ M, KV, D = 2047, 16384, 128
+-ARMS = ("current", "stride")
++ARMS = ("current", "history")
+ SAMPLE_ROWS = (0, 15, 16, 127, 128, 1023, 2046)
+ SAMPLE_HEADS = (0, 7, 8, 15)
+ 
+@@ -98,14 +97,15 @@
+ 
+ def worker(run, model, case="long"):
+     global M,KV,SAMPLE_ROWS
+-    M,KV=(2048,2048) if case=="causal" else (2047,16384)
++    require(case=="long", "首轮仅原long M2047/KV16K热点；不自动扩形状")
++    M,KV=2047,16384
+     SAMPLE_ROWS=(0,15,16,127,128,1023,M-1)
+     run = Path(run)
+     result = dict(status="started", kind="真实同形状 prefill kernel 组件；无模型权重/官方性能结论",
+         shape=dict(M=M, KV=KV, Q_heads=16, KV_heads=2, D=D, page=16, page_table_stride=8192),
+-        candidate="当前stride+Q-hoist仅反转序列内query block的CTA枚举；每个query的K顺序不变",
++        candidate="原main6971 stride/Q-hoist对照完整历史热loop＋至多两个原causal尾tile；无LPT",
+         limitations=["只有一个合成形状；不是实际模型输出或完整官方基线。",
+-            "仅stride特化；原浮点表达式不变，独立FP64及每臂Graph门复用。",
++            "只改变热loop/尾tile结构和新核私有Q-hoist；原浮点顺序及原FP64门不变。",
+             "计时两臂直接已暖 Q-hoist 私有 JIT 的完整2D输出；共同writer/metadata不计差额。",
+             "两臂同输入缓存/进程/ABI，既无affine/next-K，也不扩大tile或减少KV字节。"],
+         timings=[], ir={})
+@@ -143,7 +143,7 @@
+         helpers = importlib.import_module("vllm.v1.attention.ops.triton_attention_helpers")
+         raw_stride, source_stride = prototype.build(attention, manager, helpers)
+         original_source=__import__('inspect').getsource(manager.raw.fn)
+-        require(source_stride==prototype.transform(original_source),"实际候选不是固定CTA变换")
++        require(source_stride==prototype.transform(original_source),"实际候选不是固定history/tail变换")
+         candidate_manager = prototype.private_manager(raw_stride, attention, backend, qmod)
+         (run / "candidate.kernel.py").write_text(source_stride, encoding="utf-8")
+         import inspect
+@@ -202,7 +202,7 @@
+             page_table=common.block_table_tensor.cpu(), slots=common.slot_mapping.cpu()), run / "inputs-initial.pt")
+         outputs = {name: torch.full_like(query, -17) for name in ARMS}
+         kw_a = dict(current_kwargs, output_ptr=outputs["current"][:M])
+-        kw_b = dict(current_kwargs, output_ptr=outputs["stride"][:M])
++        kw_b = dict(current_kwargs, output_ptr=outputs["history"][:M])
+         require(qmod._eligible(kw_a) and qmod._eligible(kw_b), "不属于已限定普通causal/BF16无sink等scope")
+         # 先由原私有编译链生成并证明两臂Q-hoist，再直接调用同一已暖JIT；
+         # Graph capture不经外层wrapper的保守fallback，避免回放另一套内核。
+@@ -211,17 +211,17 @@
+         require(compiled_a.hash in manager.optimized and compiled_b.hash in candidate_manager.optimized,
+                 "两臂必须真实命中Q-hoist；不能带fallback进入对照")
+         calls = dict(current=lambda: manager.candidate[grid](**kw_a),
+-                     stride=lambda: candidate_manager.candidate[grid](**kw_b))
++                     history=lambda: candidate_manager.candidate[grid](**kw_b))
+         result["configs"] = {name: dict(BLOCK_M=128, BLOCK_Q=16, TILE_SIZE=64,
+             num_warps=8, num_stages=1) for name in ARMS}
+         result["ir"]["current"] = preserve(compiled_a, run / "ir-current", qmod)
+-        result["ir"]["stride"] = preserve(compiled_b, run / "ir-stride", qmod)
++        result["ir"]["history"] = preserve(compiled_b, run / "ir-history", qmod)
+         result["q_hoist"] = {"current": manager.optimized[compiled_a.hash]["mechanism"],
+-            "stride": candidate_manager.optimized[compiled_b.hash]["mechanism"]}
++            "history": candidate_manager.optimized[compiled_b.hash]["mechanism"]}
+         result["machine_diagnostic"] = {"current": prototype.machine_summary(compiled_a),
+-            "stride": prototype.machine_summary(compiled_b)}
++            "history": prototype.machine_summary(compiled_b)}
+         active_arms = list(ARMS)
+-        expected_hashes = {"current": compiled_a.hash, "stride": compiled_b.hash}
++        expected_hashes = {"current": compiled_a.hash, "history": compiled_b.hash}
+         for name in active_arms:
+             require(calls[name]().hash == expected_hashes[name], "直接JIT没有复用已核编译产物")
+         torch.cuda.synchronize()
+@@ -239,9 +239,9 @@
+         require(all(x["passed"] for x in result["initial_oracle"]["arms"].values()), "初始独立 FP64 门未通过")
+         require(torch.equal(initial_output[:M].view(torch.int16), outputs["current"][:M].view(torch.int16)),
+                 "新直接基准调用与原生产forward结果不一致")
+-        result["initial_cross_arm"] = dict(bitwise=torch.equal(outputs["current"][:M].view(torch.int16), outputs["stride"][:M].view(torch.int16)),
+-            max_abs=float((outputs["current"][:M].float()-outputs["stride"][:M].float()).abs().max()), diagnostic_only=True)
+-        require(result["initial_cross_arm"]["bitwise"],"CTA调序不应改变每个query的数值")
++        result["initial_cross_arm"] = dict(bitwise=torch.equal(outputs["current"][:M].view(torch.int16), outputs["history"][:M].view(torch.int16)),
++            max_abs=float((outputs["current"][:M].float()-outputs["history"][:M].float()).abs().max()), diagnostic_only=False)
++        require(result["initial_cross_arm"]["bitwise"],"热loop/tail分离不应改变有效query数值")
+         initial = {name: out.clone() for name, out in outputs.items()}
+         graphs = {}
+         for name in active_arms:
+@@ -286,9 +286,9 @@
+             page_table=common.block_table_tensor.cpu(), slots=common.slot_mapping.cpu(),
+             outputs={name: out.cpu() for name, out in outputs.items()}), run / "changed-inputs-outputs.pt")
+         require(all(x["passed"] for x in result["changed_oracle"]["arms"].values()), "换值独立 FP64 门未通过")
+-        result["changed_cross_arm"] = dict(bitwise=torch.equal(outputs["current"][:M].view(torch.int16), outputs["stride"][:M].view(torch.int16)),
+-            max_abs=float((outputs["current"][:M].float()-outputs["stride"][:M].float()).abs().max()), diagnostic_only=True)
+-        require(result["changed_cross_arm"]["bitwise"],"换值后CTA调序出现数值差异")
++        result["changed_cross_arm"] = dict(bitwise=torch.equal(outputs["current"][:M].view(torch.int16), outputs["history"][:M].view(torch.int16)),
++            max_abs=float((outputs["current"][:M].float()-outputs["history"][:M].float()).abs().max()), diagnostic_only=False)
++        require(result["changed_cross_arm"]["bitwise"],"换值后history/tail出现数值差异")
+         result["read_only_checks"] = dict(kv=torch.equal(cache_before.view(torch.int16), cache.view(torch.int16)),
+             query=torch.equal(q_before.view(torch.int16), query.view(torch.int16)),
+             key=torch.equal(key_before.view(torch.int16), key.view(torch.int16)),
+@@ -296,8 +296,15 @@
+             rng=torch.equal(rng_cpu, torch.get_rng_state()) and torch.equal(rng_gpu, torch.cuda.get_rng_state()),
+             guards=all(bool((x[M:] == -17).all()) for x in outputs.values()))
+         require(all(result["read_only_checks"].values()), "读取改变输入/RNG或越过输出guard")
++        # 资源只作诊断；数值通过后跑唯一ABBA，不按寄存器分配档位提前跳过。
++        ra,rb=(result["machine_diagnostic"][name] for name in ("current","history"))
++        result["resource_mechanism"] = dict(
++            sgpr_reduced=ra["sgpr"] is not None and rb["sgpr"] is not None and rb["sgpr"] < ra["sgpr"],
++            sgpr_spill_reduced=ra["sgpr_spill"] is not None and rb["sgpr_spill"] is not None and rb["sgpr_spill"] < ra["sgpr_spill"])
++        result["resource_mechanism"]["diagnostic_only"] = True
++        result["resource_mechanism"]["limits"] = "没有实际SGPR/spill下降时不得声称该资源机制成立；指令成本仍由唯一ABBA决定"
+         # 原同形状完整producer单ABBA；无独有的输入变换或计时外计算。
+-        groups = [("candidate", "stride")]
++        groups = [("candidate", "history")]
+         order = [(group, name) for group, arm in groups for name in ("current", arm, arm, "current")]
+         pairs = [(torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)) for _ in order]
+         for start, end in pairs:
+@@ -320,7 +327,9 @@
+                 a = statistics.median(r[metric + "_per_call_ms"] for r in rows if r["arm"] == "current")
+                 b = statistics.median(r[metric + "_per_call_ms"] for r in rows if r["arm"] == arm)
+                 result["summary"][group][metric] = dict(current_ms=a, other_ms=b, fraction_saved=1-b/a)
+-        result.update(status="component_only_passed", decision="组件信号；实际机器码仅诊断，净正才由root决定模型后继；负则收口")
++        positive=result["summary"]["candidate"]["event"]["fraction_saved"] > 0
++        result.update(status="component_only_passed" if positive else "stopped_negative",
++            decision="仅原long组件正，先补新增分界边界，无模型资格" if positive else "完整原long组件无益；停止，无自动后继")
+     except BaseException:
+         result.update(status="failed", error=traceback.format_exc())
+         traceback.print_exc()
+@@ -331,4 +340,4 @@
+             result["candidate_manager"] = candidate_manager.snapshot()
+             candidate_manager.restore()
+         write(run / "results.json", result)
+-    return 0 if result["status"] == "component_only_passed" else 1
++    return 0 if result["status"] in ("component_only_passed","stopped_negative") else 1

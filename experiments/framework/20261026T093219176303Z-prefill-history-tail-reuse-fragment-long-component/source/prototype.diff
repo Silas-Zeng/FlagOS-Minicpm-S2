@@ -1,0 +1,36 @@
+--- 已测v1/prototype.py
++++ 实际IR-v2/prototype.py
+@@ -126,6 +126,33 @@
+     if len(loads) not in (1,2,3):
+         raise RuntimeError('新核Q fragment load不是1/2/3处')
+     first_i, first = loads[0]
++    # v2仅覆盖已回收的实际编译体：第一个Q fragment已在loop外，
++    # hot loop内还有相同memdesc/layout的重复读取。保留支配定义，只复用它。
++    if alloc_i < first_i < loop_i:
++        if hashlib.sha256(raw).hexdigest() != '4f544f3dbd39b3ae3ffad2d1992af25793abdf9fbb6de0863993cfe3892ce769':
++            raise RuntimeError('预存外层Q fragment不是已核真实IR；不泛化守卫')
++        if len(loads) != 2:
++            raise RuntimeError('实际v2必须外层first＋hot重复两处Q load')
++        indent = re.match(r'^\s*', lines[loop_i]).group()
++        alloc_indent = re.match(r'^\s*', lines[alloc_i]).group()
++        second_i, second = loads[1]
++        if not (alloc_indent == first.group(1) == indent
++                and second.group(1) == indent+'  ' and second_i > loop_i
++                and second.group(3) == first.group(3)
++                and second.group(4) == first.group(4)
++                and 'dot_op<{opIdx = 0' in first.group(4)):
++            raise RuntimeError('外层定义/支配/相同Q来源与layout门失败')
++        # Exact IR pin plus same outer block proves first dominates loop and both
++        # later tail ifs. The common checks above reject any write/alias to Q.
++        alias = (second.group(1)+second.group(2)+' = ttg.convert_layout '
++                 +first.group(2)+' : '+first.group(4)+' -> '+first.group(4)
++                 +(second.group(5) or '')+'\n')
++        changed = lines.copy()
++        changed[second_i] = alias
++        restored = changed.copy(); restored[second_i] = lines[second_i]
++        if restored != lines:
++            raise AssertionError('真实v2 identity替换不能逐字逆回')
++        return ''.join(changed).encode('utf-8')
+     if not alloc_i < loop_i < first_i:
+         raise RuntimeError('Q allocation/循环/首load顺序变化；不猜已优化IR')
+     indent = re.match(r'^\s*',lines[loop_i]).group()

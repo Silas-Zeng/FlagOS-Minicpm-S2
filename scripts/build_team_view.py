@@ -270,7 +270,21 @@ SHORT_ATTEMPTS['prefill_lpt_official_mixed_partial_stop']=('检验已测早期ch
 BATCH_RESULTS['gate_partial_fusion_negative_component']=('完整Graph1.305488646→1.499709368ms，慢14.8772%，8项数值等门通过。','停止M2048、工作集和模型；不合并、不定基线，保留负结果。','8项通过，完整Graph组件负','真实layer0 gate/up权重＋合成BF16激活M2030，实际opaque/F.linear身份/config；完整output/gate逐位、FP64、换值Graph/side stream与ABBA。')
 SHORT_ATTEMPTS['gate_partial_fusion_negative_component']=('将SiLU尾合入up输出以降低完整gate链开销。','A为生产merged linear＋原SiLU；B为gate写BF16 scratch＋up保留BF16 round并融合SiLU，均两个launch。')
 
+# 20261026热点诊断与布局组件：仅本轮新增记录。
+GROUPS.update({'main6971-graph-profile': ('main6971 Graph真实热点诊断', '保持生产源码，复用PR62诊断工具；Graph采样可用，fresh native FX证明缺项保留。图内插桩时间只用于排序，不作正常耗时或官方成绩。', []), 'bf16-packed-down': ('BF16 down权重微块布局', '仅加载时BF16位重排，真实opaque/F.linear同配置；先核正确性，再用完整组件判断净效果。首run停在SME机制检查，不判性能负。', []), 'prefill-history-tail': ('Prefill历史区间与causal尾块分离', '保持数学和原tile顺序；完整历史循环省去mask，至多两块尾部保留原causal处理。首run私有Q-hoist适配失败；未计时。', [])})
+CODE.update({'main6971-graph-profile': ['experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/actual/posthoc.json'], 'bf16-packed-down': ['experiments/framework/20261026T090924033923Z-biv150-packed-down-component/source'], 'prefill-history-tail': ['experiments/framework/20261026T090943131971Z-prefill-history-tail-long-component/source']})
+BATCH_RESULTS.update({'profile_preflight_symlink_failed': ('诊断adapter把Git mode120000符号链接解引用，源码身份检查在CPU阶段拒绝；未启动collector/服务/GPU。修为校验linktarget字节后另run执行，原失败保留。', '保留入口失败；v2单独登记，不当模型错误或性能负。', 'CPU启动前校验失败', '冻结main6971/618文件身份检查；原Driver未进入workloads。'), 'profile_graph_valid_missing_fresh_fx': ('4K诊断256/256成功；Graph四samples、334bindings，API/数值/别名检查通过，实际prefill栈有效。无日志指向fresh FX，posthoc仍diagnostic_incomplete；正常退出、共享DB未变。不是官方吞吐/105。', '保留可用Graph诊断，native FX缺口明示；分析实际热点，不把插桩时间当正常占比。', '诊断完成，fresh FX证明缺项', 'main6971/native14f，PR62诊断工具本站适配；3短warm＋1同负载warm＋1完整4K profile，c64、256请求、输出1024；生产源码和服务基准参数保留。'), 'packed_b_sme_not_retained': ('真实F.linear选BM256/BN256/BK32/w16/s2；pack/unpack及首normal逐位一致。B dot useSme2→0，shared64→48KiB/reg97→98，在机制检查停止；未完成全部正确性、未计时。', '原机制假设未实现；不当数学错误或性能负。后继独立v2保留数值门，以一次计时判断净效果。', 'SME机制检查停止，未计时', '真实layer0 down权重、合成M2030 BF16激活，原opaque/F.linear同配置与唯一无损微块布局；首次输入后停止。'), 'history_tail_qhoist_adapter_failed': ('完整历史loop＋至多两个causal尾块已编译；私有Q-hoist因allocation/loop/load顺序守卫fallback。两臂优化选中检查拒绝，尚未进入跨臂/FP64/Graph或计时；清理通过。', '保留编译变换适配失败；只用实际IR定位最小修正，不放宽正确性门或修改生产数学。', '私有Q-hoist适配失败，未计时', 'main6971 stride+Q-hoist对照，Q2047/KV16384/ctx14337、BM128/T64/w8s1，原长输入组件。')})
+
+# 20261026布局v2收尾
+BATCH_RESULTS.update({'packed_layout_negative_component': ('v2仅将SME机制要求改诊断，candidate字节不变；8项数值/FP64/Graph/side检查通过。M2030完整GEMM Graph ABBA原F.linear0.564831406→packed0.970907092ms，慢71.89%，停止M2048/权重环/模型。DB/source/清理成功。', '停止该布局，不合并、不定基线；局部负结果保留。', '正确性通过，组件慢71.89%', '真实layer0权重、合成M2030激活；原F.linear同配置/完整Graph16call ABBA，无profiler。不含eager CPU分配或加载pack，不是官方成绩。'), 'history_tail_bitwise_failed': ('v2按真实IR复用已有Q fragment，selected1/fallback0、两臂LLVM循环Q读0。SGPR104→90/spill6→0；两臂FP64门通过，但跨臂逐位失败，max_abs0.0001220703125。违反本方法数值不变要求，未计时，停止当前候选。', '停止当前候选，不放宽逐位门、不继续修优化或进模型；不能称主线错误/准确率下降，保留首次失败。', '数值不变要求未通过，停止', 'Q2047/KV16384/ctx14337、相同原tile/顺序；只修私有Q复用，数值/FP64/Graph门未改。初始逐位门拒绝，后续Graph/性能未跑。')})
+GROUPS['bf16-packed-down']=('BF16 down权重微块布局', '真实F.linear同配置的BF16位重排；首次停在SME假设，v2保留全部正确性后通过8项，但M2030完整Graph慢71.89%，停止。', [])
+GROUPS['prefill-history-tail']=('Prefill历史区间与causal尾块分离', '首run私有Q-hoist适配失败；v2实际消除loop Q读取及SGPR spill，但跨臂逐位门失败，未计时，停止该候选。FP64通过不覆盖数值不变要求。', [])
+CODE['bf16-packed-down'].extend(['experiments/framework/20261026T092809453391Z-biv150-packed-down-component/source', 'experiments/framework/20261026T092809453391Z-biv150-packed-down-component/result.json'])
+CODE['prefill-history-tail'].extend(['experiments/framework/20261026T093219176303Z-prefill-history-tail-reuse-fragment-long-component/source', 'experiments/framework/20261026T093219176303Z-prefill-history-tail-reuse-fragment-long-component/results.json'])
+
 def group(row):
+    if row['profile_id'] in ('main6971-graph-profile', 'bf16-packed-down', 'prefill-history-tail'):
+        return row['profile_id']
     if row['profile_id'] in ('gqa-two-page-t32','prefill-lpt','gqa-sme-span','down-group256','prefill-fresh-kv','qkv-rope-fusion','gate-partial-fusion'):
         return row['profile_id']
     if row['profile_id'] == 'shape-gemm':

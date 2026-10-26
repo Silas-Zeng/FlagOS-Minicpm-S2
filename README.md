@@ -21,6 +21,8 @@
 | 方法 / 版本 | 结果与处理 |
 |---|---|
 | **当前合格主线：main6971／PR60** | 复用已完成的原官方4K/16K各四轮，弃首轮 **5656.77／4119.24 tok/s**；同源105题 **103/105**。QKV、down小M及O宽tile均组件正但模型负，已停止，不替换基线。最新状态见[当前工作](CURRENT_WORK.md) |
+| [当前Graph热点](team/methods/main6971-graph-profile.md) | 4K诊断完成，四个Graph采样有效；采样区间以GQA decode为首、linear为次。插桩时间不作正常耗时占比；fresh native FX证明缺项保留，未改变官方基线 |
+| [BF16 down权重布局](team/methods/bf16-packed-down.md)／[Prefill历史尾部分离](team/methods/prefill-history-tail.md) | packed通过8项正确性检查，但完整组件慢 **71.89%**，停止；history-tail已消除循环Q读取和SGPR溢出，但跨臂逐位门失败，未计时，停止该候选。均未合并或替换基线 |
 | [Prefill CTA调序](team/methods/prefill-lpt.md) | 两个早期chunk完整Graph省 **12.2180%／5.7144%**；纯causal原FP64两臂false仅留诊断，middle硬门通过，long慢3.57%保留原核。原官方4K暖均 **5722.48 tok/s（观察+1.1617%）**，16K首暖 **4111.36（−0.19663%）**后停；六轮1280成功，实际私有Q-hoist选中。KV不同，保留混合结果候选；16K未满/无105，不合并或定新基线 |
 | [GQA SME span](team/methods/gqa-sme-span.md)／[fresh-KV](team/methods/prefill-fresh-kv.md) | 数值/Graph等门通过，但组件分别慢 **0.3806%／30.1099%**，停止；SME mask变化不当实际传输启用证明，fresh-KV仅测long |
 | [down K256 INT8](team/methods/down-group256.md)／[QKV＋RoPE融合](team/methods/qkv-rope-fusion.md) | INT8首个精确整数门失败、未计时，停止当前错误实现；QKV融合14项通过但M2030/2048 Graph慢 **12.4198%／12.8168%**，停止。其组件使用mm，未绑定生产opaque/F.linear；单层合成激活，不外推官方或准确率 |

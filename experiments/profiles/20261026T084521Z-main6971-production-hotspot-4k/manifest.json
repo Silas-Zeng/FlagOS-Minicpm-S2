@@ -1,0 +1,150 @@
+{
+  "bootstrap_sha256": "50bf83648be604a55b0e7fa8a0382572acdba422d2c132885cf0f638290567ee",
+  "collector_command": [
+    "/usr/local/corex/bin/ixsys",
+    "-t",
+    "cuda,nvtx",
+    "--profile-from-start",
+    "off",
+    "--cuda-trace-scope",
+    "process-tree",
+    "-o",
+    "/workspace/experiments/minicpm-s2/profiles/20261026T084521Z-main6971-production-hotspot-4k/baseline.ixsys",
+    "/usr/local/bin/python",
+    "/workspace/experiments/minicpm-s2/profiles/20261026T084521Z-main6971-production-hotspot-4k/bootstrap/owned_service.py",
+    "/workspace/experiments/minicpm-s2/profiles/20261026T084521Z-main6971-production-hotspot-4k/service-owner.json",
+    "/usr/local/bin/vllm",
+    "serve",
+    "/workspace/MiniCPM5-2B",
+    "--port",
+    "9031",
+    "--compilation-config",
+    "{\"cudagraph_mode\":\"FULL_DECODE_ONLY\"}",
+    "--served-model-name",
+    "minicpm",
+    "--gpu-memory-utilization",
+    "0.85",
+    "--max-model-len",
+    "131072",
+    "--profiler-config",
+    "{\"profiler\":\"cuda\",\"delay_iterations\":0,\"max_iterations\":0}"
+  ],
+  "commit": "6971ef48615af97a1637405c71f96dd89969563e",
+  "diagnostic_only": true,
+  "driver": "/workspace/experiments/minicpm-s2/scripts/main6971-production-hotspot-20261026/tools/run_biv150_baseline_profile.py",
+  "driver_sha256": "792a8d91d7046025f8838d4e2a58af23bf5b459d2c7fdac4495697a4a9c6420e",
+  "env_files": [
+    "service-env.json",
+    "benchmark-env.json"
+  ],
+  "installations": {
+    "BIV150_GQA_DECODE_INSTALL": {
+      "backend_rebound": true,
+      "installed": true,
+      "page_size": 16,
+      "rows": 8,
+      "scope": "BF16 MiniCPM pure-decode 3D only"
+    },
+    "BIV150_MIXED_DECODE_INSTALLED": {
+      "accuracy": "mixed 2D to 3D remains unverified",
+      "installed": true,
+      "ordinary_mixed_dummy_may_split": true,
+      "scope": "BF16 MiniCPM natural-prefix mixed Attention only"
+    },
+    "BIV150_NATIVE_W8A8_INSTALL": {
+      "activation_residual_rows": [
+        1,
+        16
+      ],
+      "cached_quantization_rows": [
+        17,
+        2048
+      ],
+      "cached_quantization_threads": 256,
+      "compressed_only": true,
+      "fused_silu": true,
+      "gate_operator": "gate_silu_auto",
+      "installed": true,
+      "layers": [
+        "gate_up_proj"
+      ],
+      "min_rows": 17,
+      "skip_edge_layers": 4
+    },
+    "BIV150_PREFILL_NORMALIZATION_INSTALL": {
+      "audited": {
+        "vllm.v1.attention.ops.triton_attention_helpers": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1",
+        "vllm.v1.attention.ops.triton_unified_attention": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f"
+      },
+      "backend_rebound": true,
+      "initial_mass": 0,
+      "installed": true,
+      "kernel_sha256": "fa6ddc420a95102d116714fcbea41bc81aa9c09379d68518af65755c015b8744",
+      "scope": "audited BF16 causal MiniCPM prefill without sinks"
+    },
+    "BIV150_Q_FRAGMENT_INSTALL": {
+      "binding": "normalization-over-gqa",
+      "installed": true,
+      "scope": "audited BI-V150 MiniCPM BF16 prefill Q fragment lifetime",
+      "temporary_ir": true
+    },
+    "BIV150_STABLE_SMALL_O_INSTALL": {
+      "block_k": 128,
+      "block_m": 16,
+      "block_n": 64,
+      "installed": true,
+      "larger_rows": "original default_unquantized_gemm F.linear route inside the opaque operation",
+      "scope": "BF16 TP1 QKV/O/down and uncompressed edge-gate projections M1-8",
+      "stages": 1,
+      "warps": 4
+    }
+  },
+  "ixsys": "/usr/local/corex/bin/ixsys",
+  "launcher_sha256": "c1942f3c9fde671ce03631010284cf87f9e797329df41086fb35bdefb9f48dac",
+  "library": "/workspace/experiments/minicpm-s2/official/20261026T013104Z-main34942f7-prefill-stride-four-rounds-control/native/biv150_native_w8a8.so",
+  "library_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+  "official_score": false,
+  "production_equivalent_to": "6971ef48615af97a1637405c71f96dd89969563e",
+  "python": "/usr/local/bin/python",
+  "receipt_sha256": "333b0a9e8677cbe3c1e5366ecfadc2f6cbe0eb69731136172e2c03bfadaef73a",
+  "service_command": [
+    "/usr/local/bin/vllm",
+    "serve",
+    "/workspace/MiniCPM5-2B",
+    "--port",
+    "9031",
+    "--compilation-config",
+    "{\"cudagraph_mode\":\"FULL_DECODE_ONLY\"}",
+    "--served-model-name",
+    "minicpm",
+    "--gpu-memory-utilization",
+    "0.85",
+    "--max-model-len",
+    "131072",
+    "--profiler-config",
+    "{\"profiler\":\"cuda\",\"delay_iterations\":0,\"max_iterations\":0}"
+  ],
+  "source": "/workspace/experiments/minicpm-s2/code/20261026T013104Z-main34942f7-prefill-stride-official",
+  "source_count": 618,
+  "source_hashes": {
+    "csrc/iluvatar/native_w8a8.cpp": "b37c84064474fe904334d7c06f473712077230f0d319df53032372b8b8111bcb",
+    "csrc/iluvatar/native_w8a8.cu": "d18191625fe45ec4aacba09d1f982bfc88a61ddd0efae32566f8a8b91f502297",
+    "tools/run_biv150_gate_team_acceptance.py": "63000d2fc5e8bd1c80f36f12346914601ecc6a7bf50858e6de516c7ab739b3bc",
+    "vllm_fl/compile_semantics.py": "66cfa4a34a4040f2334fc5c05dba782e773fa9c09a0d2750a90b56ef46cf0ef1",
+    "vllm_fl/worker/worker.py": "a8de1780d1b41bf4889c26f3d593e6ec54e91a5f61996ce64b4d79f2a97efa24"
+  },
+  "source_identity_kind": "frozen618_sha256_not_git_checkout",
+  "tree": "aa43ea2c30b76915d4f83fc383c7102946e0c10b",
+  "tuning_snapshot": {
+    "databases": [
+      {
+        "name": "TunedConfig_iluvatar_triton_3_6.db",
+        "sha256": "509de6f49aeeaaef7fc928f292f3c85e647f89b3a192e0041b23a3db53380f14"
+      }
+    ],
+    "normalized_fingerprint": "207f (file SHA is different)",
+    "snapshot_sha256": "509de6f49aeeaaef7fc928f292f3c85e647f89b3a192e0041b23a3db53380f14",
+    "source": "/workspace/experiments/minicpm-s2/official/20261026T013104Z-main34942f7-prefill-stride-four-rounds/database-before/snapshot.sqlite"
+  },
+  "workload": "4096"
+}

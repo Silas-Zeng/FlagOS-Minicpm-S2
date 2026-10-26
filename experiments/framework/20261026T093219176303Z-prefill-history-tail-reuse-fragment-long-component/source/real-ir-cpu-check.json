@@ -1,0 +1,42 @@
+{
+  "status": "CPU_REAL_IR_ADAPTATION_ONLY_NO_GPU",
+  "original_run": "20261026T090943131971Z-prefill-history-tail-long-component",
+  "original_compiled_hash": "4cb3334c5aa19b736527876d57f253fc1f95620a6507e68cf0d641bb9ab4c0a1",
+  "real_ttgir_sha256": "4f544f3dbd39b3ae3ffad2d1992af25793abdf9fbb6de0863993cfe3892ce769",
+  "changed_ttgir_sha256": "1081f22ab0de0a8ce995509a02b297b22a8f453629de9aaf922d59dee495f2a3",
+  "original_Q_allocation_line": 268,
+  "existing_outer_Q_load_line": 294,
+  "hot_loop_line": 296,
+  "replaced_loop_Q_load_line": 338,
+  "changed_instruction_count": 1,
+  "ttgir_loop_Q_reads_before": 1,
+  "ttgir_loop_Q_reads_after": 0,
+  "exact_inverse": true,
+  "negative_cases": [
+    {
+      "case": "same_shape_other_memdesc",
+      "rejected": true,
+      "message": "还存在来自其它memdesc的Q形状fragment load"
+    },
+    {
+      "case": "Q_write",
+      "rejected": true,
+      "message": "Q memdesc还有未核别名/写入/使用"
+    },
+    {
+      "case": "operand_layout",
+      "rejected": true,
+      "message": "预存外层Q fragment不是已核真实IR；不泛化守卫"
+    },
+    {
+      "case": "unknown_exact_IR",
+      "rejected": true,
+      "message": "预存外层Q fragment不是已核真实IR；不泛化守卫"
+    }
+  ],
+  "old_geometry_retested": false,
+  "candidate_math_unchanged": true,
+  "worker_and_numeric_gates_unchanged": true,
+  "owner_finally_unchanged": true,
+  "limits": "CPU仅证明实际TTGIR单指令替换和文本支配；新编译LLVM零loop-Q读、资源、完整数值/FP64/Graph/ABBA仍须主线实测。"
+}

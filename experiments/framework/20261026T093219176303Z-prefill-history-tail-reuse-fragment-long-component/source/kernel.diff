@@ -1,0 +1,331 @@
+--- 原main6971-stride
++++ history-tail
+@@ -233,9 +233,21 @@
+     )
+ 
+     # iterate through tiles (now limited to the sliding window range)
+-    for j in range(loop_lo, loop_hi):
++    # 仅独立组件的已限定普通BF16 2D。未知flags拒编译，不改生产fallback。
++    tl.static_assert(not IS_3D and not USE_TD and not USE_TD_QO)
++    tl.static_assert(not USE_FP8 and not Q_IS_FP8 and KV_QUANT_MODE == 0)
++    tl.static_assert(not USE_ALIBI_SLOPES and not USE_ALIBI_SQRT and not USE_QQ_BIAS)
++    tl.static_assert(not USE_SOFTCAP and not USE_SINKS and not USE_MM_PREFIX)
++    tl.static_assert(USE_CAUSAL and not USE_PER_SEQ_CAUSAL and SLIDING_WINDOW == 0)
++    tl.static_assert(CHUNK_LOOKBACK == -1 and CHUNK_SIZE == -1)
++    tl.static_assert(num_query_heads == 16 and num_queries_per_kv == 8)
++    tl.static_assert(BLOCK_M == 128 and BLOCK_Q == 16 and TILE_SIZE == 64)
++    tl.static_assert(BLOCK_SIZE == 16 and HEAD_SIZE == 128 and HEAD_SIZE_PADDED == 128)
++    # 对ragged末块亦成立：最早有效query界定完整历史；无效Q行不写out。
++    full_history_hi = tl.minimum(loop_hi, tl.maximum(loop_lo,
++        (context_len + q_block_local_idx * BLOCK_Q + 1) // TILE_SIZE))
++    for j in range(loop_lo, full_history_hi):
+         seq_offset = j * TILE_SIZE + offs_t
+-        tile_mask = seq_offset < max_seq_prefix_len
+ 
+         physical_block_idx = tl.load(
+             block_tables_ptr + block_table_offset + seq_offset // BLOCK_SIZE
+@@ -294,6 +306,304 @@
+                 + (seq_offset % BLOCK_SIZE)[None, :] * stride_k_cache_1_i64
+             )
+             # K : (HEAD_SIZE, TILE_SIZE)
++            K_load = tl.load(key_cache_ptr + k_offset)
++            # V : (TILE_SIZE, HEAD_SIZE)
++            V_load = tl.load(value_cache_ptr + v_offset)
++        K = _cast_kv_tile(K_load, Q, k_scale, KV_QUANT_MODE)
++        V = _cast_kv_tile(V_load, Q, v_scale, KV_QUANT_MODE)
++
++        # Per-(token, head) scales for INT8 / FP8 per-token-head modes.
++        if USE_PER_TOKEN_HEAD_SCALES:
++            scale_idx = (
++                physical_block_idx * stride_ks_blk
++                + (seq_offset % BLOCK_SIZE) * stride_ks_slot
++                + kv_head_idx * stride_ks_head
++            )
++            k_token_head_scales = tl.load(
++                k_scale_cache_ptr + scale_idx, mask=tile_mask, other=1.0
++            )
++            v_scale_idx = (
++                physical_block_idx * stride_vs_blk
++                + (seq_offset % BLOCK_SIZE) * stride_vs_slot
++                + kv_head_idx * stride_vs_head
++            )
++            v_token_head_scales = tl.load(
++                v_scale_cache_ptr + v_scale_idx, mask=tile_mask, other=1.0
++            )
++
++        # S : (BLOCK_M, TILE_SIZE)
++        S = tl.zeros(shape=(BLOCK_M, TILE_SIZE), dtype=tl.float32)
++        if USE_PER_TOKEN_HEAD_SCALES:
++            # Per-token-head quant: fuse softmax_scale with per-head k_scale
++            # to avoid a separate BLOCK_M × TILE_SIZE multiply on S.
++            S += tl.dot(Q, K) * (score_scale * k_token_head_scales[None, :])
++        else:
++            S += score_scale * tl.dot(Q, K)
++
++        if USE_SOFTCAP:
++            S = apply_softcap(S, softcap)
++
++
++        if USE_ALIBI_SLOPES:
++            S = apply_alibi_to_score(
++                S, alibi_slope, seq_offset, context_len, query_pos, USE_ALIBI_SQRT
++            )
++
++        if USE_QQ_BIAS:
++            S += load_qq_bias_tile(
++                qq_bias_row_ptrs, seq_offset, context_len, qq_bias_stride_0
++            )
++
++        M, L, P, alpha = softmax_step(S, M, L)
++        acc = acc * alpha[:, None]
++
++        if SLIDING_WINDOW:
++            qpos_lo = q_block_local_idx * BLOCK_Q
++            dist = context_len + qpos_lo - seq_offset[:, None]
++            if USE_PER_SEQ_CAUSAL:
++                is_causal_seq = tl.load(per_seq_causal_ptr + seq_idx)
++                sw_mask_v = tl.where(
++                    is_causal_seq,
++                    dist < SLIDING_WINDOW,
++                    (dist < SLIDING_WINDOW) & (dist > -SLIDING_WINDOW),
++                )
++            elif USE_CAUSAL:
++                sw_mask_v = dist < SLIDING_WINDOW
++            else:
++                sw_mask_v = (dist < SLIDING_WINDOW) & (dist > -SLIDING_WINDOW)
++            V = tl.where(sw_mask_v, V, 0.0)
++        if USE_PER_TOKEN_HEAD_SCALES:
++            # Per-token-head quant: apply v_scale to P instead of V.
++            P_v = (P * v_token_head_scales[None, :]).to(V.dtype)
++            acc += tl.dot(P_v, V)
++        else:
++            acc += tl.dot(P.to(V.dtype), V)
++
++    if full_history_hi < loop_hi:
++        j = full_history_hi
++        seq_offset = j * TILE_SIZE + offs_t
++        tile_mask = seq_offset < max_seq_prefix_len
++
++        physical_block_idx = tl.load(
++            block_tables_ptr + block_table_offset + seq_offset // BLOCK_SIZE
++        ).to(tl.int64)
++
++        if USE_TD:
++            # All TILE_SIZE slots within a single KV tile map to one
++            # physical block (guaranteed by ``BLOCK_SIZE % TILE_SIZE == 0``
++            # from the static_assert above), so load the block index as
++            # a scalar instead of a broadcast reduction.
++            offset_in_block = (j * TILE_SIZE) % BLOCK_SIZE
++            physical_block_scalar = tl.load(
++                block_tables_ptr + block_table_offset + (j * TILE_SIZE) // BLOCK_SIZE
++            ).to(tl.int64)
++            # K : (HEAD_SIZE, TILE_SIZE)
++            K_load = _load_kv_tile_td(
++                key_cache_ptr,
++                physical_block_scalar,
++                kv_head_idx,
++                offset_in_block,
++                stride_k_cache_0_i64,
++                stride_k_cache_1_i64,
++                stride_k_cache_2_i64,
++                stride_k_cache_3,
++                BLOCK_SIZE,
++                TILE_SIZE,
++                HEAD_SIZE,
++                HEAD_SIZE_PADDED,
++            ).T
++            # V : (TILE_SIZE, HEAD_SIZE)
++            V_load = _load_kv_tile_td(
++                value_cache_ptr,
++                physical_block_scalar,
++                kv_head_idx,
++                offset_in_block,
++                stride_v_cache_0_i64,
++                stride_v_cache_1_i64,
++                stride_v_cache_2_i64,
++                stride_v_cache_3,
++                BLOCK_SIZE,
++                TILE_SIZE,
++                HEAD_SIZE,
++                HEAD_SIZE_PADDED,
++            )
++        else:
++            v_offset = (
++                physical_block_idx[:, None] * stride_v_cache_0_i64
++                + kv_head_idx * stride_v_cache_2_i64
++                + offs_d[None, :] * stride_v_cache_3
++                + (seq_offset % BLOCK_SIZE)[:, None] * stride_v_cache_1_i64
++            )
++            k_offset = (
++                physical_block_idx[None, :] * stride_k_cache_0_i64
++                + kv_head_idx * stride_k_cache_2_i64
++                + offs_d[:, None] * stride_k_cache_3
++                + (seq_offset % BLOCK_SIZE)[None, :] * stride_k_cache_1_i64
++            )
++            # K : (HEAD_SIZE, TILE_SIZE)
++            K_load = tl.load(
++                key_cache_ptr + k_offset,
++                mask=dim_mask[:, None] & tile_mask[None, :],
++                other=0.0,
++            )
++            # V : (TILE_SIZE, HEAD_SIZE)
++            V_load = tl.load(
++                value_cache_ptr + v_offset,
++                mask=dim_mask[None, :] & tile_mask[:, None],
++                other=0.0,
++            )
++        K = _cast_kv_tile(K_load, Q, k_scale, KV_QUANT_MODE)
++        V = _cast_kv_tile(V_load, Q, v_scale, KV_QUANT_MODE)
++
++        # Per-(token, head) scales for INT8 / FP8 per-token-head modes.
++        if USE_PER_TOKEN_HEAD_SCALES:
++            scale_idx = (
++                physical_block_idx * stride_ks_blk
++                + (seq_offset % BLOCK_SIZE) * stride_ks_slot
++                + kv_head_idx * stride_ks_head
++            )
++            k_token_head_scales = tl.load(
++                k_scale_cache_ptr + scale_idx, mask=tile_mask, other=1.0
++            )
++            v_scale_idx = (
++                physical_block_idx * stride_vs_blk
++                + (seq_offset % BLOCK_SIZE) * stride_vs_slot
++                + kv_head_idx * stride_vs_head
++            )
++            v_token_head_scales = tl.load(
++                v_scale_cache_ptr + v_scale_idx, mask=tile_mask, other=1.0
++            )
++
++        query_abs_pos = context_len + query_pos[:, None]
++        seq_mask = compute_kv_seq_mask(
++            query_abs_pos,
++            seq_offset,
++            seq_idx,
++            seq_len,
++            mm_prefix_range_ptr,
++            SLIDING_WINDOW,
++            USE_MM_PREFIX,
++            MAX_MM_RANGES,
++            USE_CAUSAL,
++            USE_PER_SEQ_CAUSAL,
++            per_seq_causal_ptr,
++            CHUNK_LOOKBACK,
++            CHUNK_SIZE,
++        )
++
++        # S : (BLOCK_M, TILE_SIZE)
++        S = tl.zeros(shape=(BLOCK_M, TILE_SIZE), dtype=tl.float32)
++        if USE_PER_TOKEN_HEAD_SCALES:
++            # Per-token-head quant: fuse softmax_scale with per-head k_scale
++            # to avoid a separate BLOCK_M × TILE_SIZE multiply on S.
++            S += tl.dot(Q, K) * (score_scale * k_token_head_scales[None, :])
++        else:
++            S += score_scale * tl.dot(Q, K)
++
++        if USE_SOFTCAP:
++            S = apply_softcap(S, softcap)
++
++        S = tl.where(
++            query_mask_1[:, None] & query_mask_0[:, None] & seq_mask, S, float("-inf")
++        )
++
++        if USE_ALIBI_SLOPES:
++            S = apply_alibi_to_score(
++                S, alibi_slope, seq_offset, context_len, query_pos, USE_ALIBI_SQRT
++            )
++
++        if USE_QQ_BIAS:
++            S += load_qq_bias_tile(
++                qq_bias_row_ptrs, seq_offset, context_len, qq_bias_stride_0
++            )
++
++        M, L, P, alpha = softmax_step(S, M, L)
++        acc = acc * alpha[:, None]
++
++        if SLIDING_WINDOW:
++            qpos_lo = q_block_local_idx * BLOCK_Q
++            dist = context_len + qpos_lo - seq_offset[:, None]
++            if USE_PER_SEQ_CAUSAL:
++                is_causal_seq = tl.load(per_seq_causal_ptr + seq_idx)
++                sw_mask_v = tl.where(
++                    is_causal_seq,
++                    dist < SLIDING_WINDOW,
++                    (dist < SLIDING_WINDOW) & (dist > -SLIDING_WINDOW),
++                )
++            elif USE_CAUSAL:
++                sw_mask_v = dist < SLIDING_WINDOW
++            else:
++                sw_mask_v = (dist < SLIDING_WINDOW) & (dist > -SLIDING_WINDOW)
++            V = tl.where(sw_mask_v, V, 0.0)
++        if USE_PER_TOKEN_HEAD_SCALES:
++            # Per-token-head quant: apply v_scale to P instead of V.
++            P_v = (P * v_token_head_scales[None, :]).to(V.dtype)
++            acc += tl.dot(P_v, V)
++        else:
++            acc += tl.dot(P.to(V.dtype), V)
++
++    if full_history_hi + 1 < loop_hi:
++        j = full_history_hi + 1
++        seq_offset = j * TILE_SIZE + offs_t
++        tile_mask = seq_offset < max_seq_prefix_len
++
++        physical_block_idx = tl.load(
++            block_tables_ptr + block_table_offset + seq_offset // BLOCK_SIZE
++        ).to(tl.int64)
++
++        if USE_TD:
++            # All TILE_SIZE slots within a single KV tile map to one
++            # physical block (guaranteed by ``BLOCK_SIZE % TILE_SIZE == 0``
++            # from the static_assert above), so load the block index as
++            # a scalar instead of a broadcast reduction.
++            offset_in_block = (j * TILE_SIZE) % BLOCK_SIZE
++            physical_block_scalar = tl.load(
++                block_tables_ptr + block_table_offset + (j * TILE_SIZE) // BLOCK_SIZE
++            ).to(tl.int64)
++            # K : (HEAD_SIZE, TILE_SIZE)
++            K_load = _load_kv_tile_td(
++                key_cache_ptr,
++                physical_block_scalar,
++                kv_head_idx,
++                offset_in_block,
++                stride_k_cache_0_i64,
++                stride_k_cache_1_i64,
++                stride_k_cache_2_i64,
++                stride_k_cache_3,
++                BLOCK_SIZE,
++                TILE_SIZE,
++                HEAD_SIZE,
++                HEAD_SIZE_PADDED,
++            ).T
++            # V : (TILE_SIZE, HEAD_SIZE)
++            V_load = _load_kv_tile_td(
++                value_cache_ptr,
++                physical_block_scalar,
++                kv_head_idx,
++                offset_in_block,
++                stride_v_cache_0_i64,
++                stride_v_cache_1_i64,
++                stride_v_cache_2_i64,
++                stride_v_cache_3,
++                BLOCK_SIZE,
++                TILE_SIZE,
++                HEAD_SIZE,
++                HEAD_SIZE_PADDED,
++            )
++        else:
++            v_offset = (
++                physical_block_idx[:, None] * stride_v_cache_0_i64
++                + kv_head_idx * stride_v_cache_2_i64
++                + offs_d[None, :] * stride_v_cache_3
++                + (seq_offset % BLOCK_SIZE)[:, None] * stride_v_cache_1_i64
++            )
++            k_offset = (
++                physical_block_idx[None, :] * stride_k_cache_0_i64
++                + kv_head_idx * stride_k_cache_2_i64
++                + offs_d[:, None] * stride_k_cache_3
++                + (seq_offset % BLOCK_SIZE)[None, :] * stride_k_cache_1_i64
++            )
++            # K : (HEAD_SIZE, TILE_SIZE)
+             K_load = tl.load(
+                 key_cache_ptr + k_offset,
+                 mask=dim_mask[:, None] & tile_mask[None, :],
