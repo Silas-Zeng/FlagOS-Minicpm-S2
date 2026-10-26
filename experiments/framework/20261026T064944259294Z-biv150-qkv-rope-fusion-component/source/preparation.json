@@ -1,0 +1,42 @@
+{
+  "status": "prepared_cpu_only",
+  "gpu_started": false,
+  "baseline_math_AST_exact": true,
+  "original_baseline_sha256": "06cbabfa1da5533380f64a692e09b7f4cf615f5d0a0f9cd9d531a09ed6ade124",
+  "actual_wrapper_math_matches": {
+    "wrapper-subgraph-1-0.py": {
+      "kernel": "triton_poi_fused_3",
+      "source_sha256": "5613e21a0b9d72db195c580244e8e34f662d3189128c10dd2291591ab6927ae5"
+    },
+    "wrapper-subgraph-5-0.py": {
+      "kernel": "triton_poi_fused_2",
+      "source_sha256": "8d092c88fbdc863ef8cf359149e896d570fda70f9a520a2e8475ac8d735bd47d"
+    }
+  },
+  "baseline_metadata_change": "仅filename移Torch cache；未修改heuristic配置/数学/默认fp_fusion",
+  "owner_cleanup_exact": true,
+  "layer": 0,
+  "rows": [
+    2030,
+    2048
+  ],
+  "Q": 2048,
+  "K": 256,
+  "V": 256,
+  "output_strides": {
+    "q": [
+      2048,
+      1
+    ],
+    "k": [
+      256,
+      1
+    ],
+    "v": [
+      2560,
+      1
+    ]
+  },
+  "table": "GPU门调用固定已安装原API构造，非live捕获，运行时保存SHA/dtype/shape/stride",
+  "scope": "原GEMM＋实际原RoPE combo，排除共同KVwriter；未生产接线/模型资格"
+}

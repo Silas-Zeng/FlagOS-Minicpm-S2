@@ -2,7 +2,7 @@
 
 # BI-V150特定形状GEMM
 
-组件收益与模型分开：down大M宽tile、QKV宽tile、小M SplitK8先后局部正但模型负，均停止且不定基线。新增O projection真实42层组件省20.33%，独立模型原官方在跑；保留原PR51/PR60合格基线，不将不同方法或组合比例相加。
+组件收益与模型分开：down大M宽tile、QKV宽tile、小M SplitK8及O宽tile先后局部正但模型负，均停止且不定基线。O真实42层组件省20.33%，原官方4K第三轮5568.49对5677.28观察−1.9162%，三轮768 SUCCESS后早停，16K/105未跑。新增来源限制：大行wide组件直接以固定mm_kernel为对照，而当前PR51大行生产入口是opaque内部F.linear，实际kernel一致性尚待一次直接诊断，不能将组件比例视为相对真实生产路径的加速。小M SplitK8使用原PR51 small_o，区别记录。保留原PR51/PR60合格基线，不将不同方法或组合比例相加。
 
 相关代码：[2026-10-26-gemm-target-priority.json](../../analysis/2026-10-26-gemm-target-priority.json)；[2026-10-26-gemm-component-results.json](../../analysis/2026-10-26-gemm-component-results.json)；[candidate.py](../../experiments/framework/20261026T035139678096Z-biv150-down-wide-working-set-component/source/candidate.py)；[candidate.py](../../experiments/framework/20261026T034152136640Z-biv150-down-small-working-set-component/source/candidate.py)。
 
@@ -28,3 +28,4 @@
 - [20261026T053419663748Z-biv150-down-small-integration-component](../runs/bi-v150/20261026T053419663748Z-biv150-down-small-integration-component.md)（登记#302）：新增生产接线10项通过：down M1/2/8的Graph同址换值、side stream、非连续回退，M9及其它三投影保持原PR51路径。原producer/reducer AST与已测336例一致，临时FP32 scratch归单次调用/Graph池，不全局共享。复用旧数值组件，不重复336例； **是否保留：** 仅继承已测内核部分，模型吞吐与准确率另验。
 - [20261026T053835Z-main6971-down-small-split8-four-rounds](../runs/bi-v150/20261026T053835Z-main6971-down-small-split8-four-rounds.md)（登记#303）：M1–8 down SplitK8真实42层组件省32–35%，生产路由/Graph已过；原官方4K冷4889.20、首暖5513.95 tok/s，对main6971/PR60对应5533.03观察−0.34484%。512 SUCCESS后按用户低于基线就停，05:50:26 UTC清理完成；1 **是否保留：** 已低于可比基线，停止后续；不跑105、不提收益PR、不定新基线。
 - [20261026T055149633400Z-biv150-o-wide-working-set-component](../runs/bi-v150/20261026T055149633400Z-biv150-o-wide-working-set-component.md)（登记#307）：O M2030/2048,N2048,K2048，原256/128/32/w8/s2对256/256/32/w16/s2。42真实O权重352321536B轮换，84数值/FP64抽样、换值Graph/side stream/RNG通过；Event 10.210501671→8.134766102m **是否保留：** 保留候选；优先推进热点M2048 wide，M1-8 SplitK另列；需要实际接入、整模型性能/105和新增代码独立复核。
+- [20261026T055632Z-main6971-o-wide-four-rounds](../runs/bi-v150/20261026T055632Z-main6971-o-wide-four-rounds.md)（登记#308）：O宽tile真实42层组件曾省20.33%；原官方4K冷/首暖/第三轮4894.19/5538.59/5568.49 tok/s，768 SUCCESS，第三轮低于对应5677.28，观察−1.9162%后主动停止。原result exit1/SIGTERM保持；06:12:52 UTC DB恢复、 **是否保留：** 停止，不合并、不定新基线；保留全部三轮及SIGTERM原件。

@@ -228,7 +228,7 @@ for key,verdict,decision in [
  ('prefill_lpt_component_negative','组件性能负，停止该范围','长上下文不进模型；短causal单独完成有界验证。')]:
     BATCH_RESULTS[key]=('实际数值见本条登记和result(s).json。',decision,verdict,'复用真实生产ABI/原数值门，新增改动单独验证；不重复旧测试。')
     SHORT_ATTEMPTS[key]=('验证本条所述固定形状和新增实现。','改动及精确命令见该run源码和manifest/command原件。')
-GROUPS['shape-gemm']=('BI-V150特定形状GEMM','组件收益与模型分开：down大M宽tile、QKV宽tile、小M SplitK8先后局部正但模型负，均停止且不定基线。新增O projection真实42层组件省20.33%，独立模型原官方在跑；保留原PR51/PR60合格基线，不将不同方法或组合比例相加。',[])
+GROUPS['shape-gemm']=('BI-V150特定形状GEMM','组件收益与模型分开：down大M宽tile、QKV宽tile、小M SplitK8及O宽tile先后局部正但模型负，均停止且不定基线。O真实42层组件省20.33%，原官方4K第三轮5568.49对5677.28观察−1.9162%，三轮768 SUCCESS后早停，16K/105未跑。新增来源限制：大行wide组件直接以固定mm_kernel为对照，而当前PR51大行生产入口是opaque内部F.linear，实际kernel一致性尚待一次直接诊断，不能将组件比例视为相对真实生产路径的加速。小M SplitK8使用原PR51 small_o，区别记录。保留原PR51/PR60合格基线，不将不同方法或组合比例相加。',[])
 
 # 2026-10-26四项执行：方法描述只导航，结论来自每轮原登记。
 GROUPS['gqa-two-page-t32']=('GQA两页T32计算块','保持物理page16、原split和reducer；固定T32/w1/s1检验减少online-softmax迭代能否抵消寄存器/布局成本。旧T64失败不改写，本方法实际结果以每轮短记为准。',[])
@@ -236,8 +236,33 @@ GROUPS['prefill-lpt']=('Prefill序列内CTA调序','在当前stride与Q-hoist上
 BATCH_RESULTS['shape_gemm_model_negative_early_stop']=('实测值见本条结论与原CSV。','已低于可比基线，停止后续；不跑105、不提收益PR、不定新基线。','模型性能负，主动停止','原官方脚本/参数不变；已测暖轮与原基线同负载/轮次比较，KV差异明示。')
 SHORT_ATTEMPTS['shape_gemm_model_negative_early_stop']=('检验真实模型中的完整净收益。','独立候选精确形状接入；组件收益不继承为模型收益。')
 
+# 07:16批次：原件逐文件SHA已核；仅新增导航与短记，不改原结果。
+GROUPS['prefill-lpt']=('Prefill序列内CTA调序','保留stride/Q-hoist及每query的K顺序，只反转序列内CTA枚举。完整Graph Q2048/KV2048省12.2180%，Q2048/KV4096省5.7144%，长Q2047/KV16384慢3.57%。纯causal原FP64门两臂均false、输出逐位相同，保留原失败诊断；middle原FP64硬门通过。只保留已测早期chunk候选。07:16启动独立原官方，双Manager安装成功尚未取得实际选择资格，无整模结论；main6971基线不变。',[])
+GROUPS['gqa-sme-span']=('GQA同storage二维span','保持原KV storage，二维连续backing-span与行单位地址尝试改善SME传输资格。8类数值/Graph等门通过、mask15→63，但mask不是实际SMEcopy启用证明；producer＋原reducer Graph慢0.3806%，停止，不扩形状或接模型。',[])
+GROUPS['down-group256']=('down K256分组INT8探索','独立W8A8原型首个CPU INT64精确整数门失败，未计时；保留exit1，不推进依赖该门的gate融合，不放宽容差或改框架凑过。不是完整量化/模型方案，也不泛化其它INT8实现。',[])
+GROUPS['prefill-fresh-kv']=('Prefill当前chunk直读K/V','保留writer与原浮点顺序，历史KV走paged、当前chunk读post-RoPE BF16 K/V。长场景逐位/FP64/Graph与实际来源证明通过，但Event慢30.1099%，停止；causal未测，不叠LPT或进入模型。',[])
+GROUPS['qkv-rope-fusion']=('QKV GEMM与RoPE融合','layer0真实权重＋合成激活，融合QKV GEMM输出和RoPE，不含KV writer。M2030/2048的14项逐位/FP64/Graph/side stream通过，Graph慢12.4198%/12.8168%，停止。单层未复现42层交织；原RoPE heuristic重新编译，不宣称服务原机器码，亦无官方资格。',[])
+for key, run, filename in [
+ ('prefill-lpt','20261026T062007042651Z-prefill-lpt-graph-causal-component','results.json'),
+ ('gqa-sme-span','20261026T061316901168Z-gqa-sme-span-hotspot-component','results.json'),
+ ('down-group256','20261026T062610126686Z-biv150-down-group256-component','result.json'),
+ ('prefill-fresh-kv','20261026T062915011626Z-prefill-fresh-kv-long-component','results.json'),
+ ('qkv-rope-fusion','20261026T064944259294Z-biv150-qkv-rope-fusion-component','result.json')]:
+    CODE[key]=['experiments/framework/'+run+'/'+filename,'experiments/framework/'+run+'/source']
+for key, verdict, decision, attempt, change, test in [
+ ('o_wide_model_negative_early_stop','官方第三轮负，主动早停','停止，不合并、不定新基线；保留全部三轮及SIGTERM原件。','检验O宽tile局部收益是否转为官方吞吐。','只接入O宽tile，保留其它主线优化。','原官方4K已测三轮、每轮256请求；按对应冷/暖轮比较，16K/105未跑。'),
+ ('prefill_lpt_causal_bitwise_component','逐位通过，直接JIT的Event正/wall负','保留逐位依据；直接JIT不代替完整Graph或整模，FP64诊断false不改判。','核对causal CTA调序的原生产等价性及提交开销。','仅反转CTA枚举，单query数学和K顺序不变。','Q2048/KV2048，原writer、换值Graph及直接JIT ABBA；FP64原阈值保留为诊断。'),
+ ('prefill_lpt_causal_graph_positive_component','完整Graph组件正，FP64诊断仍false','保留早期chunk候选；无官方/105新资格。','隔离Python JIT提交后核完整Graph实际收益。','与逐位组件同CTA调序，完整Attention Graph回放。','Q2048/KV2048完整Graph replay ABBA，跨臂逐位；原FP64门两臂false，阈值未变。'),
+ ('prefill_lpt_middle_graph_positive_component','完整Graph组件正，FP64硬门通过','保留已测第二chunk范围；不推广long或任意形状。','验证4K第二chunk是否同样改善拖尾。','CTA调序不改变context与K遍历。','Q2048/KV4096、context2048，完整Graph ABBA及初始/换值逐位、原FP64硬门。'),
+ ('gqa_sme_span_negative_component','组件门通过，性能微负','停止，不扩形状或进模型；mask不当实际传输证明。','核二维span是否降低原page16传输成本。','同storage二维视图与行单位地址，原reducer不变。','N33/B40/S16、KV16K，8类数值/Graph/FP64适用门与完整producer+reducer Graph ABBA。'),
+ ('down_group256_integer_gate_failed','精确整数门失败，未计时','停止当前错误实现；不推进依赖融合、不放宽容差。','检验K256分组INT8 dot布局与ABI是否精确。','独立K256 W8A8核，layer20 down真实权重、合成激活。','CPU INT64精确参考前置门；失败即停，cases/timings为空。'),
+ ('prefill_fresh_kv_long_negative_component','逐位/FP64通过，组件明显负','停止，不叠LPT或接模型；causal未测。','减少当前chunk从paged KV读取的地址成本。','按context_len逐lane选择历史cache或当前post-RoPE K/V，原writer保留。','Q2047/KV16384，原数值门、换值Graph与fresh来源反事实证明；已暖直接JIT完整2D输出ABBA。'),
+ ('qkv_rope_fusion_negative_component','14项通过，Graph性能负','停止，不进官方；无生产adapter或新基线。','减少QKV到RoPE的launch和中间访存。','新GEMM输出融合RoPE，不含KV writer。','layer0真实权重＋合成激活，M2030/2048共14项；两臂完整Graph ABBA，原RoPE heuristic重新编译。')]:
+    BATCH_RESULTS[key]=('实际数值见本轮原登记及result(s).json。',decision,verdict,test)
+    SHORT_ATTEMPTS[key]=(attempt,change)
+
 def group(row):
-    if row['profile_id'] in ('gqa-two-page-t32','prefill-lpt'):
+    if row['profile_id'] in ('gqa-two-page-t32','prefill-lpt','gqa-sme-span','down-group256','prefill-fresh-kv','qkv-rope-fusion'):
         return row['profile_id']
     if row['profile_id'] == 'shape-gemm':
         return 'shape-gemm'
@@ -323,7 +348,7 @@ def brief(value, limit=220):
 
 
 def result(row, limit=190):
-    if row['profile_id'] in ('shape-gemm','gqa-two-page-t32','prefill-lpt'):
+    if row['profile_id'] in ('shape-gemm','gqa-two-page-t32','prefill-lpt','gqa-sme-span','down-group256','prefill-fresh-kv','qkv-rope-fusion'):
         return row['conclusion'][:limit]
     """只摘结果/失败原句，不把审计与库身份搬入主视图。"""
     if row['status'] in BATCH_RESULTS:

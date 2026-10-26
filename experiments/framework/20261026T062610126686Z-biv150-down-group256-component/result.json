@@ -1,0 +1,49 @@
+{
+  "status": "failed",
+  "kind": "独立K256分组W8A8组件，不是官方成绩",
+  "production_changed": false,
+  "cases": [],
+  "timings": [],
+  "resources": [
+    {
+      "rows": 2030,
+      "name": "quantize_groups",
+      "shared": 16,
+      "num_warps": 4,
+      "n_regs": 8,
+      "n_spills": 0
+    },
+    {
+      "rows": 2030,
+      "name": "down_group256",
+      "shared": 40960,
+      "num_warps": 4,
+      "n_regs": 107,
+      "n_spills": 0
+    }
+  ],
+  "real_activations": false,
+  "limitations": [
+    "仅layer20实际权重，未覆盖42层及模型真实算子交织。",
+    "保留BF16权重便于对照；本组件不能声称显存/KV收益。",
+    "工程误差淘汰线不能代替官方105题或原BF16逐位合同。"
+  ],
+  "target": "GPUTarget(backend='corex', arch=71, warp_size=64)",
+  "pid": 350587,
+  "command": [
+    "/workspace/experiments/minicpm-s2/framework/20261026T062610126686Z-biv150-down-group256-component/source/entry.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261026T062610126686Z-biv150-down-group256-component",
+    "--model",
+    "/workspace/MiniCPM5-2B"
+  ],
+  "weight": {
+    "name": "model.layers.20.mlp.down_proj.weight",
+    "sha256": "9267dc789507453f482c38d122e1f4697288eba7a1042d6eb835cd8d27d3b85d"
+  },
+  "activation_kind": "合成；不能证明真实SwiGLU误差或模型正确性",
+  "weight_pack_once_ms": 849.593505859375,
+  "packed_bytes": 12779520,
+  "error": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/framework/20261026T062610126686Z-biv150-down-group256-component/source/gpu_probe.py\", line 94, in worker\n    assert torch.equal(partial.cpu().long(),expected), 'INT8 dot ABI/布局失败，精确否决'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: INT8 dot ABI/布局失败，精确否决\n"
+}

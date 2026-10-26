@@ -1,0 +1,2593 @@
+{
+  "diagnostic_only": true,
+  "no_asm_selection_claim": true,
+  "expected_mask_delta_hex": "0x30",
+  "masks": {
+    "baseline": 15,
+    "candidate": 63
+  },
+  "evidence": {
+    "baseline": {
+      "source": {
+        "sme_transport": [],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": []
+      },
+      "ttir": {
+        "sme_transport": [],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": []
+      },
+      "ttgir": {
+        "sme_transport": [
+          {
+            "line": 1,
+            "text": "#blocked = #ttg.blocked<{sizePerThread = [1, 2], threadsPerWarp = [1, 64], warpsPerCTA = [1, 1], order = [1, 0], isSme = false, smeMask = false, smeWarpsPerCTA = [0, 0]}>"
+          },
+          {
+            "line": 2,
+            "text": "#blocked1 = #ttg.blocked<{sizePerThread = [2, 1], threadsPerWarp = [64, 1], warpsPerCTA = [1, 1], order = [0, 1], isSme = false, smeMask = false, smeWarpsPerCTA = [0, 0]}>"
+          },
+          {
+            "line": 3,
+            "text": "#blocked2 = #ttg.blocked<{sizePerThread = [1], threadsPerWarp = [64], warpsPerCTA = [1], order = [0], isSme = false, smeMask = false, smeWarpsPerCTA = [0]}>"
+          },
+          {
+            "line": 14,
+            "text": "#smem = #ttg.shared_memory"
+          },
+          {
+            "line": 130,
+            "text": "    %Q_55 = ttg.local_alloc %Q_54 : (tensor<8x128xbf16, #blocked>) -> !ttg.memdesc<8x128xbf16, #shared, #smem> loc(#loc185)"
+          },
+          {
+            "line": 160,
+            "text": "    %Q_78 = ttg.local_load %Q_55 : !ttg.memdesc<8x128xbf16, #shared, #smem> -> tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc185)"
+          },
+          {
+            "line": 185,
+            "text": "      %K_117 = ttg.local_alloc %K_116 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc216)"
+          },
+          {
+            "line": 188,
+            "text": "      %V_120 = ttg.local_alloc %V_119 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc217)"
+          },
+          {
+            "line": 189,
+            "text": "      %K_121 = ttg.local_load %K_117 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc216)"
+          },
+          {
+            "line": 190,
+            "text": "      %scores_122 = tt.dot %Q_78, %K_121, %cst_1, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x16xf32, #mma> loc(#loc218)"
+          },
+          {
+            "line": 215,
+            "text": "      %accumulator_135 = ttg.convert_layout %accumulator_134 : tensor<8x16xbf16, #mma> -> tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc231)"
+          },
+          {
+            "line": 216,
+            "text": "      %V_136 = ttg.local_load %V_120 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc217)"
+          },
+          {
+            "line": 217,
+            "text": "      %accumulator_137 = tt.dot %accumulator_135, %V_136, %accumulator_133, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x128xf32, #mma> loc(#loc232)"
+          },
+          {
+            "line": 256,
+            "text": "      %K_127 = ttg.local_alloc %K_126 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc250)"
+          },
+          {
+            "line": 261,
+            "text": "      %V_132 = ttg.local_alloc %V_131 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc253)"
+          },
+          {
+            "line": 262,
+            "text": "      %K_133 = ttg.local_load %K_127 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc250)"
+          },
+          {
+            "line": 263,
+            "text": "      %scores_134 = tt.dot %Q_78, %K_133, %cst_1, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x16xf32, #mma> loc(#loc254)"
+          },
+          {
+            "line": 290,
+            "text": "      %accumulator_148 = ttg.convert_layout %accumulator_147 : tensor<8x16xbf16, #mma> -> tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc269)"
+          },
+          {
+            "line": 291,
+            "text": "      %V_149 = ttg.local_load %V_132 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc253)"
+          },
+          {
+            "line": 292,
+            "text": "      %accumulator_150 = tt.dot %accumulator_148, %V_149, %accumulator_146, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x128xf32, #mma> loc(#loc270)"
+          }
+        ],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": [
+          {
+            "line": 12,
+            "text": "#shared = #ttg.swizzled_shared<{vec = 32, perPhase = 1, maxPhase = 1, order = [1, 0], useTcu = true}>"
+          },
+          {
+            "line": 13,
+            "text": "#shared1 = #ttg.swizzled_shared<{vec = 32, perPhase = 1, maxPhase = 1, order = [0, 1], useTcu = true}>"
+          },
+          {
+            "line": 14,
+            "text": "#smem = #ttg.shared_memory"
+          },
+          {
+            "line": 130,
+            "text": "    %Q_55 = ttg.local_alloc %Q_54 : (tensor<8x128xbf16, #blocked>) -> !ttg.memdesc<8x128xbf16, #shared, #smem> loc(#loc185)"
+          },
+          {
+            "line": 160,
+            "text": "    %Q_78 = ttg.local_load %Q_55 : !ttg.memdesc<8x128xbf16, #shared, #smem> -> tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc185)"
+          },
+          {
+            "line": 185,
+            "text": "      %K_117 = ttg.local_alloc %K_116 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc216)"
+          },
+          {
+            "line": 188,
+            "text": "      %V_120 = ttg.local_alloc %V_119 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc217)"
+          },
+          {
+            "line": 189,
+            "text": "      %K_121 = ttg.local_load %K_117 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc216)"
+          },
+          {
+            "line": 216,
+            "text": "      %V_136 = ttg.local_load %V_120 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc217)"
+          },
+          {
+            "line": 256,
+            "text": "      %K_127 = ttg.local_alloc %K_126 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc250)"
+          },
+          {
+            "line": 261,
+            "text": "      %V_132 = ttg.local_alloc %V_131 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc253)"
+          },
+          {
+            "line": 262,
+            "text": "      %K_133 = ttg.local_load %K_127 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc250)"
+          },
+          {
+            "line": 291,
+            "text": "      %V_149 = ttg.local_load %V_132 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc253)"
+          }
+        ]
+      },
+      "llir": {
+        "sme_transport": [
+          {
+            "line": 6,
+            "text": "@global_smem = external local_unnamed_addr addrspace(3) global [0 x i8], align 16"
+          },
+          {
+            "line": 95,
+            "text": "  %95 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %94, !dbg !35"
+          },
+          {
+            "line": 102,
+            "text": "  %100 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %99, !dbg !35"
+          },
+          {
+            "line": 148,
+            "text": "  %143 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %142, !dbg !35"
+          },
+          {
+            "line": 153,
+            "text": "  %148 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %147, !dbg !35"
+          },
+          {
+            "line": 158,
+            "text": "  %153 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %152, !dbg !35"
+          },
+          {
+            "line": 175,
+            "text": "  %167 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %166"
+          },
+          {
+            "line": 177,
+            "text": "  %169 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %168"
+          },
+          {
+            "line": 179,
+            "text": "  %171 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %170"
+          },
+          {
+            "line": 181,
+            "text": "  %173 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %172"
+          },
+          {
+            "line": 186,
+            "text": "  %178 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %177"
+          },
+          {
+            "line": 191,
+            "text": "  %183 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %182"
+          },
+          {
+            "line": 197,
+            "text": "  %189 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %188"
+          },
+          {
+            "line": 202,
+            "text": "  %194 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %193"
+          },
+          {
+            "line": 207,
+            "text": "  %199 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %198"
+          },
+          {
+            "line": 212,
+            "text": "  %204 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %203"
+          },
+          {
+            "line": 237,
+            "text": "  %229 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %142"
+          },
+          {
+            "line": 239,
+            "text": "  %231 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %147"
+          },
+          {
+            "line": 246,
+            "text": "  %238 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %237"
+          },
+          {
+            "line": 1009,
+            "text": "  %919 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %918, !dbg !88"
+          },
+          {
+            "line": 1016,
+            "text": "  %925 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %924, !dbg !88"
+          },
+          {
+            "line": 1022,
+            "text": "  %930 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %929, !dbg !88"
+          },
+          {
+            "line": 1028,
+            "text": "  %935 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %934, !dbg !88"
+          },
+          {
+            "line": 1206,
+            "text": "  %1052 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1051, !dbg !90"
+          },
+          {
+            "line": 1219,
+            "text": "  %1061 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1060, !dbg !90"
+          },
+          {
+            "line": 1234,
+            "text": "  %1071 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1070, !dbg !88"
+          },
+          {
+            "line": 1243,
+            "text": "  %1080 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1079, !dbg !88"
+          },
+          {
+            "line": 1252,
+            "text": "  %1089 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1088, !dbg !88"
+          },
+          {
+            "line": 1261,
+            "text": "  %1098 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1097, !dbg !88"
+          },
+          {
+            "line": 1438,
+            "text": "  %1275 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %142, !dbg !90"
+          },
+          {
+            "line": 1442,
+            "text": "  %1279 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %147, !dbg !90"
+          },
+          {
+            "line": 1455,
+            "text": "  %1292 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1291, !dbg !90"
+          }
+        ],
+        "wait": [],
+        "barrier": [
+          {
+            "line": 146,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !35"
+          },
+          {
+            "line": 374,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !54"
+          },
+          {
+            "line": 471,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !54"
+          },
+          {
+            "line": 1003,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !88"
+          },
+          {
+            "line": 1231,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !88"
+          },
+          {
+            "line": 1760,
+            "text": "declare void @llvm.nvvm.barrier.cta.sync.aligned.all(i32) #5"
+          }
+        ],
+        "shared_fragment": []
+      },
+      "asm": {
+        "sme_transport": [
+          {
+            "line": 55,
+            "text": "\t\tenable_dynamic_smem_size = 0"
+          }
+        ],
+        "wait": [],
+        "barrier": [
+          {
+            "line": 59,
+            "text": "\t\tworkgroup_fbarrier_count = 0"
+          },
+          {
+            "line": 199,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 405,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 509,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 1091,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 1295,
+            "text": "\tsl_barrier "
+          }
+        ],
+        "shared_fragment": [
+          {
+            "line": 51,
+            "text": "\t\tenable_srf_flat_shared = 0"
+          }
+        ]
+      }
+    },
+    "candidate": {
+      "source": {
+        "sme_transport": [
+          {
+            "line": 1,
+            "text": "#loc = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":7:0)"
+          },
+          {
+            "line": 36,
+            "text": "  tt.func public @_gqa_decode_attention_sme_span(%segm_output_ptr: !tt.ptr<f32> {tt.divisibility = 4 : i32} loc(\"segm_output_ptr\"(#loc)), %segm_max_ptr: !tt.ptr<f32> {tt.divisibility = 4 : i32} loc(\"segm_max_ptr\"(#loc)), %segm_expsum_ptr: !tt.ptr<f32> {tt.divisibility = 4 : i32} loc(\"segm_expsum_ptr\"(#loc)), %query_ptr: !tt.ptr<bf16> {tt.divisibility = 4 : i32} loc(\"query_ptr\"(#loc)), %key_cache_ptr: !tt.ptr<bf16> {tt.divisibility = 4 : i32} loc(\"key_cache_ptr\"(#loc)), %value_cache_ptr: !tt.ptr<bf16> {tt.divisibility = 4 : i32} loc(\"value_cache_ptr\"(#loc)), %seq_lens_ptr: !tt.ptr<i32> {tt.divisibility = 4 : i32} loc(\"seq_lens_ptr\"(#loc)), %block_table_ptr: !tt.ptr<i32> {tt.divisibility = 4 : i32} loc(\"block_table_ptr\"(#loc)), %softmax_scale_log2e: f32 loc(\"softmax_scale_log2e\"(#loc)), %block_table_stride: i64 {tt.divisibility = 4 : i32} loc(\"block_table_stride\"(#loc)), %query_stride_token: i64 {tt.divisibility = 4 : i32} loc(\"query_stride_token\"(#loc)), %k_row_stride_block: i64 {tt.div"
+          },
+          {
+            "line": 577,
+            "text": "#loc1 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":37:28)"
+          },
+          {
+            "line": 578,
+            "text": "#loc2 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":38:32)"
+          },
+          {
+            "line": 579,
+            "text": "#loc3 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":39:32)"
+          },
+          {
+            "line": 580,
+            "text": "#loc4 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":41:37)"
+          },
+          {
+            "line": 581,
+            "text": "#loc5 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":41:22)"
+          },
+          {
+            "line": 582,
+            "text": "#loc6 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":42:41)"
+          },
+          {
+            "line": 583,
+            "text": "#loc7 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":43:26)"
+          },
+          {
+            "line": 584,
+            "text": "#loc8 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":43:46)"
+          },
+          {
+            "line": 585,
+            "text": "#loc9 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":44:16)"
+          },
+          {
+            "line": 586,
+            "text": "#loc10 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":45:8)"
+          },
+          {
+            "line": 587,
+            "text": "#loc11 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":46:51)"
+          },
+          {
+            "line": 588,
+            "text": "#loc12 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":46:31)"
+          },
+          {
+            "line": 589,
+            "text": "#loc13 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":46:62)"
+          },
+          {
+            "line": 590,
+            "text": "#loc14 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":48:28)"
+          },
+          {
+            "line": 591,
+            "text": "#loc15 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":49:28)"
+          },
+          {
+            "line": 592,
+            "text": "#loc16 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":50:29)"
+          },
+          {
+            "line": 593,
+            "text": "#loc17 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":53:27)"
+          },
+          {
+            "line": 594,
+            "text": "#loc18 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":55:27)"
+          },
+          {
+            "line": 595,
+            "text": "#loc19 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":56:29)"
+          },
+          {
+            "line": 596,
+            "text": "#loc20 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":56:46)"
+          },
+          {
+            "line": 597,
+            "text": "#loc21 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":58:20)"
+          },
+          {
+            "line": 598,
+            "text": "#loc22 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":59:19)"
+          },
+          {
+            "line": 599,
+            "text": "#loc23 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":59:30)"
+          },
+          {
+            "line": 600,
+            "text": "#loc24 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":59:10)"
+          },
+          {
+            "line": 601,
+            "text": "#loc25 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":60:19)"
+          },
+          {
+            "line": 602,
+            "text": "#loc26 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":60:10)"
+          },
+          {
+            "line": 603,
+            "text": "#loc27 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":62:58)"
+          },
+          {
+            "line": 604,
+            "text": "#loc28 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":62:28)"
+          },
+          {
+            "line": 605,
+            "text": "#loc29 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":62:16)"
+          },
+          {
+            "line": 606,
+            "text": "#loc30 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":64:50)"
+          },
+          {
+            "line": 607,
+            "text": "#loc31 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":64:40)"
+          },
+          {
+            "line": 608,
+            "text": "#loc32 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":65:30)"
+          },
+          {
+            "line": 609,
+            "text": "#loc33 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":67:34)"
+          },
+          {
+            "line": 610,
+            "text": "#loc34 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":68:27)"
+          },
+          {
+            "line": 611,
+            "text": "#loc35 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":69:27)"
+          },
+          {
+            "line": 612,
+            "text": "#loc36 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:35)"
+          },
+          {
+            "line": 613,
+            "text": "#loc37 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:45)"
+          },
+          {
+            "line": 614,
+            "text": "#loc38 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:58)"
+          },
+          {
+            "line": 615,
+            "text": "#loc39 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:25)"
+          },
+          {
+            "line": 616,
+            "text": "#loc40 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":73:4)"
+          },
+          {
+            "line": 617,
+            "text": "#loc41 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":73:21)"
+          },
+          {
+            "line": 618,
+            "text": "#loc46 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:53)"
+          },
+          {
+            "line": 619,
+            "text": "#loc47 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:41)"
+          },
+          {
+            "line": 620,
+            "text": "#loc48 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:23)"
+          },
+          {
+            "line": 621,
+            "text": "#loc49 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:67)"
+          },
+          {
+            "line": 622,
+            "text": "#loc50 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":78:20)"
+          },
+          {
+            "line": 623,
+            "text": "#loc51 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":79:27)"
+          },
+          {
+            "line": 624,
+            "text": "#loc52 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":79:38)"
+          },
+          {
+            "line": 625,
+            "text": "#loc53 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":79:15)"
+          },
+          {
+            "line": 626,
+            "text": "#loc54 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":80:29)"
+          },
+          {
+            "line": 627,
+            "text": "#loc55 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":80:15)"
+          },
+          {
+            "line": 628,
+            "text": "#loc56 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":80:50)"
+          },
+          {
+            "line": 629,
+            "text": "#loc57 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":81:23)"
+          },
+          {
+            "line": 630,
+            "text": "#loc58 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":81:14)"
+          },
+          {
+            "line": 631,
+            "text": "#loc59 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":84:20)"
+          },
+          {
+            "line": 632,
+            "text": "#loc60 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":85:27)"
+          },
+          {
+            "line": 633,
+            "text": "#loc61 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":85:38)"
+          },
+          {
+            "line": 634,
+            "text": "#loc62 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":85:15)"
+          },
+          {
+            "line": 635,
+            "text": "#loc63 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":86:29)"
+          },
+          {
+            "line": 636,
+            "text": "#loc64 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":86:15)"
+          },
+          {
+            "line": 637,
+            "text": "#loc65 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":86:50)"
+          },
+          {
+            "line": 638,
+            "text": "#loc66 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":87:23)"
+          },
+          {
+            "line": 639,
+            "text": "#loc67 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":87:14)"
+          },
+          {
+            "line": 640,
+            "text": "#loc68 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":89:36)"
+          },
+          {
+            "line": 641,
+            "text": "#loc69 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":89:20)"
+          },
+          {
+            "line": 642,
+            "text": "#loc70 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":90:38)"
+          },
+          {
+            "line": 643,
+            "text": "#loc71 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":90:20)"
+          },
+          {
+            "line": 644,
+            "text": "#loc72 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":92:27)"
+          },
+          {
+            "line": 645,
+            "text": "#loc73 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":92:32)"
+          },
+          {
+            "line": 646,
+            "text": "#loc74 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":93:57)"
+          },
+          {
+            "line": 647,
+            "text": "#loc75 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":93:42)"
+          },
+          {
+            "line": 648,
+            "text": "#loc76 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":94:52)"
+          },
+          {
+            "line": 649,
+            "text": "#loc77 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":94:44)"
+          },
+          {
+            "line": 650,
+            "text": "#loc78 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":94:35)"
+          },
+          {
+            "line": 651,
+            "text": "#loc79 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":95:45)"
+          },
+          {
+            "line": 652,
+            "text": "#loc80 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":95:31)"
+          },
+          {
+            "line": 653,
+            "text": "#loc81 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":96:36)"
+          },
+          {
+            "line": 654,
+            "text": "#loc82 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":96:66)"
+          },
+          {
+            "line": 655,
+            "text": "#loc83 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":96:46)"
+          },
+          {
+            "line": 656,
+            "text": "#loc84 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":97:44)"
+          },
+          {
+            "line": 657,
+            "text": "#loc85 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":97:36)"
+          },
+          {
+            "line": 658,
+            "text": "#loc86 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":98:27)"
+          },
+          {
+            "line": 659,
+            "text": "#loc87 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":98:37)"
+          },
+          {
+            "line": 660,
+            "text": "#loc88 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":97:55)"
+          },
+          {
+            "line": 661,
+            "text": "#loc89 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":101:20)"
+          },
+          {
+            "line": 662,
+            "text": "#loc90 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":101:8)"
+          },
+          {
+            "line": 663,
+            "text": "#loc91 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":103:20)"
+          },
+          {
+            "line": 664,
+            "text": "#loc92 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":103:7)"
+          },
+          {
+            "line": 665,
+            "text": "#loc93 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:55)"
+          },
+          {
+            "line": 666,
+            "text": "#loc94 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:41)"
+          },
+          {
+            "line": 667,
+            "text": "#loc95 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:23)"
+          },
+          {
+            "line": 668,
+            "text": "#loc96 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:69)"
+          },
+          {
+            "line": 669,
+            "text": "#loc97 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":107:36)"
+          },
+          {
+            "line": 670,
+            "text": "#loc98 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":107:48)"
+          },
+          {
+            "line": 671,
+            "text": "#loc99 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":109:20)"
+          },
+          {
+            "line": 672,
+            "text": "#loc100 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":110:27)"
+          },
+          {
+            "line": 673,
+            "text": "#loc101 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":110:38)"
+          },
+          {
+            "line": 674,
+            "text": "#loc102 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":110:15)"
+          },
+          {
+            "line": 675,
+            "text": "#loc103 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":111:29)"
+          },
+          {
+            "line": 676,
+            "text": "#loc104 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":111:15)"
+          },
+          {
+            "line": 677,
+            "text": "#loc105 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":111:50)"
+          },
+          {
+            "line": 678,
+            "text": "#loc106 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":112:23)"
+          },
+          {
+            "line": 679,
+            "text": "#loc107 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":112:14)"
+          },
+          {
+            "line": 680,
+            "text": "#loc108 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":115:20)"
+          },
+          {
+            "line": 681,
+            "text": "#loc109 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":116:27)"
+          },
+          {
+            "line": 682,
+            "text": "#loc110 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":116:38)"
+          },
+          {
+            "line": 683,
+            "text": "#loc111 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":116:15)"
+          },
+          {
+            "line": 684,
+            "text": "#loc112 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":117:29)"
+          },
+          {
+            "line": 685,
+            "text": "#loc113 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":117:15)"
+          },
+          {
+            "line": 686,
+            "text": "#loc114 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":117:50)"
+          },
+          {
+            "line": 687,
+            "text": "#loc115 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":118:23)"
+          },
+          {
+            "line": 688,
+            "text": "#loc116 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":118:14)"
+          },
+          {
+            "line": 689,
+            "text": "#loc117 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":120:65)"
+          },
+          {
+            "line": 690,
+            "text": "#loc118 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":120:36)"
+          },
+          {
+            "line": 691,
+            "text": "#loc119 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":120:20)"
+          },
+          {
+            "line": 692,
+            "text": "#loc120 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":121:67)"
+          },
+          {
+            "line": 693,
+            "text": "#loc121 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":121:38)"
+          },
+          {
+            "line": 694,
+            "text": "#loc122 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":121:20)"
+          },
+          {
+            "line": 695,
+            "text": "#loc123 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":123:27)"
+          },
+          {
+            "line": 696,
+            "text": "#loc124 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":123:32)"
+          },
+          {
+            "line": 697,
+            "text": "#loc125 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":124:39)"
+          },
+          {
+            "line": 698,
+            "text": "#loc126 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":124:57)"
+          },
+          {
+            "line": 699,
+            "text": "#loc127 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":125:57)"
+          },
+          {
+            "line": 700,
+            "text": "#loc128 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":125:42)"
+          },
+          {
+            "line": 701,
+            "text": "#loc129 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":126:52)"
+          },
+          {
+            "line": 702,
+            "text": "#loc130 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":126:44)"
+          },
+          {
+            "line": 703,
+            "text": "#loc131 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":126:35)"
+          },
+          {
+            "line": 704,
+            "text": "#loc132 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":127:45)"
+          },
+          {
+            "line": 705,
+            "text": "#loc133 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":127:31)"
+          },
+          {
+            "line": 706,
+            "text": "#loc134 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":128:36)"
+          },
+          {
+            "line": 707,
+            "text": "#loc135 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":128:66)"
+          },
+          {
+            "line": 708,
+            "text": "#loc136 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":128:46)"
+          },
+          {
+            "line": 709,
+            "text": "#loc137 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":129:44)"
+          },
+          {
+            "line": 710,
+            "text": "#loc138 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":129:36)"
+          },
+          {
+            "line": 711,
+            "text": "#loc139 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":130:27)"
+          },
+          {
+            "line": 712,
+            "text": "#loc140 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":130:37)"
+          },
+          {
+            "line": 713,
+            "text": "#loc141 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":129:55)"
+          },
+          {
+            "line": 714,
+            "text": "#loc142 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":135:20)"
+          },
+          {
+            "line": 715,
+            "text": "#loc143 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":136:19)"
+          },
+          {
+            "line": 716,
+            "text": "#loc144 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":136:30)"
+          },
+          {
+            "line": 717,
+            "text": "#loc145 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":136:10)"
+          },
+          {
+            "line": 718,
+            "text": "#loc146 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":137:24)"
+          },
+          {
+            "line": 719,
+            "text": "#loc147 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":137:10)"
+          },
+          {
+            "line": 720,
+            "text": "#loc148 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":138:19)"
+          },
+          {
+            "line": 721,
+            "text": "#loc149 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":138:10)"
+          },
+          {
+            "line": 722,
+            "text": "#loc150 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":140:75)"
+          },
+          {
+            "line": 723,
+            "text": "#loc151 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":140:31)"
+          },
+          {
+            "line": 724,
+            "text": "#loc152 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":140:47)"
+          },
+          {
+            "line": 725,
+            "text": "#loc153 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:20)"
+          },
+          {
+            "line": 726,
+            "text": "#loc154 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:50)"
+          },
+          {
+            "line": 727,
+            "text": "#loc155 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:39)"
+          },
+          {
+            "line": 728,
+            "text": "#loc156 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:68)"
+          },
+          {
+            "line": 729,
+            "text": "#loc157 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":148:28)"
+          },
+          {
+            "line": 730,
+            "text": "#loc158 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":148:58)"
+          },
+          {
+            "line": 731,
+            "text": "#loc159 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":148:44)"
+          },
+          {
+            "line": 732,
+            "text": "#loc160 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":149:31)"
+          },
+          {
+            "line": 733,
+            "text": "#loc161 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":149:47)"
+          },
+          {
+            "line": 734,
+            "text": "#loc162 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":149:4)"
+          }
+        ],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": []
+      },
+      "ttir": {
+        "sme_transport": [
+          {
+            "line": 1,
+            "text": "#loc = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":7:0)"
+          },
+          {
+            "line": 7,
+            "text": "#loc73 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":93:57)"
+          },
+          {
+            "line": 8,
+            "text": "#loc83 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":96:66)"
+          },
+          {
+            "line": 9,
+            "text": "#loc125 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":125:57)"
+          },
+          {
+            "line": 10,
+            "text": "#loc133 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":128:66)"
+          },
+          {
+            "line": 36,
+            "text": "  tt.func public @_gqa_decode_attention_sme_span(%segm_output_ptr: !tt.ptr<f32> {tt.divisibility = 4 : i32} loc(\"segm_output_ptr\"(#loc)), %segm_max_ptr: !tt.ptr<f32> {tt.divisibility = 4 : i32} loc(\"segm_max_ptr\"(#loc)), %segm_expsum_ptr: !tt.ptr<f32> {tt.divisibility = 4 : i32} loc(\"segm_expsum_ptr\"(#loc)), %query_ptr: !tt.ptr<bf16> {tt.divisibility = 4 : i32} loc(\"query_ptr\"(#loc)), %key_cache_ptr: !tt.ptr<bf16> {tt.divisibility = 4 : i32} loc(\"key_cache_ptr\"(#loc)), %value_cache_ptr: !tt.ptr<bf16> {tt.divisibility = 4 : i32} loc(\"value_cache_ptr\"(#loc)), %seq_lens_ptr: !tt.ptr<i32> {tt.divisibility = 4 : i32} loc(\"seq_lens_ptr\"(#loc)), %block_table_ptr: !tt.ptr<i32> {tt.divisibility = 4 : i32} loc(\"block_table_ptr\"(#loc)), %softmax_scale_log2e: f32 loc(\"softmax_scale_log2e\"(#loc)), %block_table_stride: i64 {tt.divisibility = 4 : i32} loc(\"block_table_stride\"(#loc)), %query_stride_token: i64 {tt.divisibility = 4 : i32} loc(\"query_stride_token\"(#loc)), %k_row_stride_block: i64 {tt.div"
+          },
+          {
+            "line": 298,
+            "text": "#loc2 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":42:41)"
+          },
+          {
+            "line": 299,
+            "text": "#loc3 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":37:28)"
+          },
+          {
+            "line": 300,
+            "text": "#loc4 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":38:32)"
+          },
+          {
+            "line": 301,
+            "text": "#loc5 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":39:32)"
+          },
+          {
+            "line": 302,
+            "text": "#loc6 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":41:37)"
+          },
+          {
+            "line": 303,
+            "text": "#loc7 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":41:22)"
+          },
+          {
+            "line": 306,
+            "text": "#loc10 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":43:26)"
+          },
+          {
+            "line": 307,
+            "text": "#loc11 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":43:46)"
+          },
+          {
+            "line": 308,
+            "text": "#loc12 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":44:16)"
+          },
+          {
+            "line": 309,
+            "text": "#loc13 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":45:8)"
+          },
+          {
+            "line": 310,
+            "text": "#loc14 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":46:51)"
+          },
+          {
+            "line": 311,
+            "text": "#loc15 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":46:31)"
+          },
+          {
+            "line": 312,
+            "text": "#loc16 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":46:62)"
+          },
+          {
+            "line": 313,
+            "text": "#loc17 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":48:28)"
+          },
+          {
+            "line": 314,
+            "text": "#loc18 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":49:28)"
+          },
+          {
+            "line": 315,
+            "text": "#loc19 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":50:29)"
+          },
+          {
+            "line": 316,
+            "text": "#loc20 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":53:27)"
+          },
+          {
+            "line": 317,
+            "text": "#loc21 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":55:27)"
+          },
+          {
+            "line": 318,
+            "text": "#loc22 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":56:29)"
+          },
+          {
+            "line": 319,
+            "text": "#loc23 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":56:46)"
+          },
+          {
+            "line": 320,
+            "text": "#loc24 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":58:20)"
+          },
+          {
+            "line": 321,
+            "text": "#loc25 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":59:19)"
+          },
+          {
+            "line": 322,
+            "text": "#loc26 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":59:30)"
+          },
+          {
+            "line": 323,
+            "text": "#loc27 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":59:10)"
+          },
+          {
+            "line": 324,
+            "text": "#loc28 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":60:19)"
+          },
+          {
+            "line": 325,
+            "text": "#loc29 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":60:10)"
+          },
+          {
+            "line": 326,
+            "text": "#loc30 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":62:58)"
+          },
+          {
+            "line": 327,
+            "text": "#loc31 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":62:28)"
+          },
+          {
+            "line": 328,
+            "text": "#loc32 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":62:16)"
+          },
+          {
+            "line": 329,
+            "text": "#loc33 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":64:50)"
+          },
+          {
+            "line": 330,
+            "text": "#loc34 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":64:40)"
+          },
+          {
+            "line": 331,
+            "text": "#loc35 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":65:30)"
+          },
+          {
+            "line": 332,
+            "text": "#loc36 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:35)"
+          },
+          {
+            "line": 333,
+            "text": "#loc37 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:45)"
+          },
+          {
+            "line": 334,
+            "text": "#loc38 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:58)"
+          },
+          {
+            "line": 335,
+            "text": "#loc39 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:25)"
+          },
+          {
+            "line": 336,
+            "text": "#loc40 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":73:4)"
+          },
+          {
+            "line": 337,
+            "text": "#loc41 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":73:21)"
+          },
+          {
+            "line": 338,
+            "text": "#loc46 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:53)"
+          },
+          {
+            "line": 339,
+            "text": "#loc47 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:41)"
+          },
+          {
+            "line": 340,
+            "text": "#loc48 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:23)"
+          },
+          {
+            "line": 341,
+            "text": "#loc49 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:67)"
+          },
+          {
+            "line": 342,
+            "text": "#loc50 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":78:20)"
+          },
+          {
+            "line": 343,
+            "text": "#loc51 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":79:27)"
+          },
+          {
+            "line": 344,
+            "text": "#loc52 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":79:38)"
+          },
+          {
+            "line": 345,
+            "text": "#loc53 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":79:15)"
+          },
+          {
+            "line": 346,
+            "text": "#loc54 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":80:29)"
+          },
+          {
+            "line": 347,
+            "text": "#loc55 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":80:15)"
+          },
+          {
+            "line": 348,
+            "text": "#loc56 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":80:50)"
+          },
+          {
+            "line": 349,
+            "text": "#loc57 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":81:23)"
+          },
+          {
+            "line": 350,
+            "text": "#loc58 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":81:14)"
+          },
+          {
+            "line": 351,
+            "text": "#loc59 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":84:20)"
+          },
+          {
+            "line": 352,
+            "text": "#loc60 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":85:27)"
+          },
+          {
+            "line": 353,
+            "text": "#loc61 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":85:38)"
+          },
+          {
+            "line": 354,
+            "text": "#loc62 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":85:15)"
+          },
+          {
+            "line": 355,
+            "text": "#loc63 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":86:15)"
+          },
+          {
+            "line": 356,
+            "text": "#loc64 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":86:50)"
+          },
+          {
+            "line": 357,
+            "text": "#loc65 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":87:14)"
+          },
+          {
+            "line": 358,
+            "text": "#loc66 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":89:36)"
+          },
+          {
+            "line": 359,
+            "text": "#loc67 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":89:20)"
+          },
+          {
+            "line": 360,
+            "text": "#loc68 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":90:38)"
+          },
+          {
+            "line": 361,
+            "text": "#loc69 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":90:20)"
+          },
+          {
+            "line": 362,
+            "text": "#loc70 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":92:27)"
+          },
+          {
+            "line": 363,
+            "text": "#loc71 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":92:32)"
+          },
+          {
+            "line": 366,
+            "text": "#loc75 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":93:42)"
+          },
+          {
+            "line": 367,
+            "text": "#loc76 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":94:52)"
+          },
+          {
+            "line": 368,
+            "text": "#loc77 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":94:44)"
+          },
+          {
+            "line": 369,
+            "text": "#loc78 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":94:35)"
+          },
+          {
+            "line": 370,
+            "text": "#loc79 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":95:45)"
+          },
+          {
+            "line": 371,
+            "text": "#loc80 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":95:31)"
+          },
+          {
+            "line": 372,
+            "text": "#loc81 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":96:36)"
+          },
+          {
+            "line": 375,
+            "text": "#loc85 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":96:46)"
+          },
+          {
+            "line": 376,
+            "text": "#loc86 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":97:44)"
+          },
+          {
+            "line": 377,
+            "text": "#loc87 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":97:36)"
+          },
+          {
+            "line": 378,
+            "text": "#loc88 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":98:27)"
+          },
+          {
+            "line": 379,
+            "text": "#loc89 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":98:37)"
+          },
+          {
+            "line": 380,
+            "text": "#loc90 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":101:20)"
+          },
+          {
+            "line": 381,
+            "text": "#loc91 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":101:8)"
+          },
+          {
+            "line": 382,
+            "text": "#loc92 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":103:20)"
+          },
+          {
+            "line": 383,
+            "text": "#loc93 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":103:7)"
+          },
+          {
+            "line": 384,
+            "text": "#loc94 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:55)"
+          },
+          {
+            "line": 385,
+            "text": "#loc95 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:41)"
+          },
+          {
+            "line": 386,
+            "text": "#loc96 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:23)"
+          },
+          {
+            "line": 387,
+            "text": "#loc97 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:69)"
+          },
+          {
+            "line": 388,
+            "text": "#loc98 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":107:36)"
+          },
+          {
+            "line": 389,
+            "text": "#loc99 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":107:48)"
+          },
+          {
+            "line": 390,
+            "text": "#loc100 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":109:20)"
+          },
+          {
+            "line": 391,
+            "text": "#loc101 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":110:27)"
+          },
+          {
+            "line": 392,
+            "text": "#loc102 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":110:38)"
+          },
+          {
+            "line": 393,
+            "text": "#loc103 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":110:15)"
+          },
+          {
+            "line": 394,
+            "text": "#loc104 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":111:29)"
+          },
+          {
+            "line": 395,
+            "text": "#loc105 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":111:15)"
+          },
+          {
+            "line": 396,
+            "text": "#loc106 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":111:50)"
+          },
+          {
+            "line": 397,
+            "text": "#loc107 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":112:23)"
+          },
+          {
+            "line": 398,
+            "text": "#loc108 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":112:14)"
+          },
+          {
+            "line": 399,
+            "text": "#loc109 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":115:20)"
+          },
+          {
+            "line": 400,
+            "text": "#loc110 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":116:27)"
+          },
+          {
+            "line": 401,
+            "text": "#loc111 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":116:38)"
+          },
+          {
+            "line": 402,
+            "text": "#loc112 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":116:15)"
+          },
+          {
+            "line": 403,
+            "text": "#loc113 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":117:15)"
+          },
+          {
+            "line": 404,
+            "text": "#loc114 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":117:50)"
+          },
+          {
+            "line": 405,
+            "text": "#loc115 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":118:14)"
+          },
+          {
+            "line": 406,
+            "text": "#loc116 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":120:65)"
+          },
+          {
+            "line": 407,
+            "text": "#loc117 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":120:36)"
+          },
+          {
+            "line": 408,
+            "text": "#loc118 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":120:20)"
+          },
+          {
+            "line": 409,
+            "text": "#loc119 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":121:67)"
+          },
+          {
+            "line": 410,
+            "text": "#loc120 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":121:38)"
+          },
+          {
+            "line": 411,
+            "text": "#loc121 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":121:20)"
+          },
+          {
+            "line": 412,
+            "text": "#loc122 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":123:27)"
+          },
+          {
+            "line": 413,
+            "text": "#loc123 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":123:32)"
+          },
+          {
+            "line": 414,
+            "text": "#loc124 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":124:57)"
+          },
+          {
+            "line": 415,
+            "text": "#loc126 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":125:42)"
+          },
+          {
+            "line": 416,
+            "text": "#loc127 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":126:52)"
+          },
+          {
+            "line": 417,
+            "text": "#loc128 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":126:44)"
+          },
+          {
+            "line": 418,
+            "text": "#loc129 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":126:35)"
+          },
+          {
+            "line": 419,
+            "text": "#loc130 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":127:45)"
+          },
+          {
+            "line": 420,
+            "text": "#loc131 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":127:31)"
+          },
+          {
+            "line": 421,
+            "text": "#loc132 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":128:36)"
+          },
+          {
+            "line": 422,
+            "text": "#loc134 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":128:46)"
+          },
+          {
+            "line": 423,
+            "text": "#loc135 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":129:44)"
+          },
+          {
+            "line": 424,
+            "text": "#loc136 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":129:36)"
+          },
+          {
+            "line": 425,
+            "text": "#loc137 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":130:27)"
+          },
+          {
+            "line": 426,
+            "text": "#loc138 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":130:37)"
+          },
+          {
+            "line": 427,
+            "text": "#loc139 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":129:55)"
+          },
+          {
+            "line": 428,
+            "text": "#loc140 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":135:20)"
+          },
+          {
+            "line": 429,
+            "text": "#loc141 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":136:30)"
+          },
+          {
+            "line": 430,
+            "text": "#loc142 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":136:10)"
+          },
+          {
+            "line": 431,
+            "text": "#loc143 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":137:24)"
+          },
+          {
+            "line": 432,
+            "text": "#loc144 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":137:10)"
+          },
+          {
+            "line": 433,
+            "text": "#loc145 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":138:10)"
+          },
+          {
+            "line": 434,
+            "text": "#loc146 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":140:31)"
+          },
+          {
+            "line": 435,
+            "text": "#loc147 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":140:47)"
+          },
+          {
+            "line": 436,
+            "text": "#loc148 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:20)"
+          },
+          {
+            "line": 437,
+            "text": "#loc149 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:50)"
+          },
+          {
+            "line": 438,
+            "text": "#loc150 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:39)"
+          },
+          {
+            "line": 439,
+            "text": "#loc151 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:68)"
+          },
+          {
+            "line": 440,
+            "text": "#loc152 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":148:28)"
+          },
+          {
+            "line": 441,
+            "text": "#loc153 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":148:58)"
+          },
+          {
+            "line": 442,
+            "text": "#loc154 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":148:44)"
+          },
+          {
+            "line": 443,
+            "text": "#loc155 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":149:31)"
+          },
+          {
+            "line": 444,
+            "text": "#loc156 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":149:47)"
+          },
+          {
+            "line": 445,
+            "text": "#loc157 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":149:4)"
+          }
+        ],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": []
+      },
+      "ttgir": {
+        "sme_transport": [
+          {
+            "line": 1,
+            "text": "#blocked = #ttg.blocked<{sizePerThread = [1, 2], threadsPerWarp = [1, 64], warpsPerCTA = [1, 1], order = [1, 0], isSme = false, smeMask = false, smeWarpsPerCTA = [0, 0]}>"
+          },
+          {
+            "line": 2,
+            "text": "#blocked1 = #ttg.blocked<{sizePerThread = [2, 1], threadsPerWarp = [64, 1], warpsPerCTA = [1, 1], order = [0, 1], isSme = false, smeMask = false, smeWarpsPerCTA = [0, 0]}>"
+          },
+          {
+            "line": 3,
+            "text": "#blocked2 = #ttg.blocked<{sizePerThread = [1], threadsPerWarp = [64], warpsPerCTA = [1], order = [0], isSme = false, smeMask = false, smeWarpsPerCTA = [0]}>"
+          },
+          {
+            "line": 4,
+            "text": "#loc = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":7:0)"
+          },
+          {
+            "line": 6,
+            "text": "#loc52 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":73:4)"
+          },
+          {
+            "line": 7,
+            "text": "#loc68 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":93:57)"
+          },
+          {
+            "line": 8,
+            "text": "#loc78 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":96:66)"
+          },
+          {
+            "line": 9,
+            "text": "#loc114 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":125:57)"
+          },
+          {
+            "line": 10,
+            "text": "#loc122 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":128:66)"
+          },
+          {
+            "line": 14,
+            "text": "#smem = #ttg.shared_memory"
+          },
+          {
+            "line": 47,
+            "text": "  tt.func public @_gqa_decode_attention_sme_span(%segm_output_ptr: !tt.ptr<f32> {tt.divisibility = 4 : i32} loc(\"segm_output_ptr\"(#loc)), %segm_max_ptr: !tt.ptr<f32> {tt.divisibility = 4 : i32} loc(\"segm_max_ptr\"(#loc)), %segm_expsum_ptr: !tt.ptr<f32> {tt.divisibility = 4 : i32} loc(\"segm_expsum_ptr\"(#loc)), %query_ptr: !tt.ptr<bf16> {tt.divisibility = 4 : i32} loc(\"query_ptr\"(#loc)), %key_cache_ptr: !tt.ptr<bf16> {tt.divisibility = 4 : i32} loc(\"key_cache_ptr\"(#loc)), %value_cache_ptr: !tt.ptr<bf16> {tt.divisibility = 4 : i32} loc(\"value_cache_ptr\"(#loc)), %seq_lens_ptr: !tt.ptr<i32> {tt.divisibility = 4 : i32} loc(\"seq_lens_ptr\"(#loc)), %block_table_ptr: !tt.ptr<i32> {tt.divisibility = 4 : i32} loc(\"block_table_ptr\"(#loc)), %softmax_scale_log2e: f32 loc(\"softmax_scale_log2e\"(#loc)), %block_table_stride: i64 {tt.divisibility = 4 : i32} loc(\"block_table_stride\"(#loc)), %query_stride_token: i64 {tt.divisibility = 4 : i32} loc(\"query_stride_token\"(#loc)), %k_row_stride_block: i64 {tt.div"
+          },
+          {
+            "line": 132,
+            "text": "    %Q_57 = ttg.local_alloc %Q_56 : (tensor<8x128xbf16, #blocked>) -> !ttg.memdesc<8x128xbf16, #shared, #smem> loc(#loc188)"
+          },
+          {
+            "line": 160,
+            "text": "    %Q_78 = ttg.local_load %Q_57 : !ttg.memdesc<8x128xbf16, #shared, #smem> -> tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc188)"
+          },
+          {
+            "line": 187,
+            "text": "      %K_119 = ttg.local_alloc %K_118 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc220)"
+          },
+          {
+            "line": 190,
+            "text": "      %V_122 = ttg.local_alloc %V_121 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc221)"
+          },
+          {
+            "line": 191,
+            "text": "      %K_123 = ttg.local_load %K_119 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc220)"
+          },
+          {
+            "line": 192,
+            "text": "      %scores_124 = tt.dot %Q_78, %K_123, %cst_1, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x16xf32, #mma> loc(#loc222)"
+          },
+          {
+            "line": 217,
+            "text": "      %accumulator_137 = ttg.convert_layout %accumulator_136 : tensor<8x16xbf16, #mma> -> tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc235)"
+          },
+          {
+            "line": 218,
+            "text": "      %V_138 = ttg.local_load %V_122 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc221)"
+          },
+          {
+            "line": 219,
+            "text": "      %accumulator_139 = tt.dot %accumulator_137, %V_138, %accumulator_135, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x128xf32, #mma> loc(#loc236)"
+          },
+          {
+            "line": 260,
+            "text": "      %K_129 = ttg.local_alloc %K_128 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc256)"
+          },
+          {
+            "line": 265,
+            "text": "      %V_134 = ttg.local_alloc %V_133 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc259)"
+          },
+          {
+            "line": 266,
+            "text": "      %K_135 = ttg.local_load %K_129 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc256)"
+          },
+          {
+            "line": 267,
+            "text": "      %scores_136 = tt.dot %Q_78, %K_135, %cst_1, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x16xf32, #mma> loc(#loc260)"
+          },
+          {
+            "line": 294,
+            "text": "      %accumulator_150 = ttg.convert_layout %accumulator_149 : tensor<8x16xbf16, #mma> -> tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc275)"
+          },
+          {
+            "line": 295,
+            "text": "      %V_151 = ttg.local_load %V_134 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc259)"
+          },
+          {
+            "line": 296,
+            "text": "      %accumulator_152 = tt.dot %accumulator_150, %V_151, %accumulator_148, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x128xf32, #mma> loc(#loc276)"
+          },
+          {
+            "line": 335,
+            "text": "#loc2 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":37:28)"
+          },
+          {
+            "line": 336,
+            "text": "#loc3 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":38:32)"
+          },
+          {
+            "line": 337,
+            "text": "#loc4 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":39:32)"
+          },
+          {
+            "line": 338,
+            "text": "#loc5 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":41:37)"
+          },
+          {
+            "line": 339,
+            "text": "#loc6 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":41:22)"
+          },
+          {
+            "line": 341,
+            "text": "#loc8 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":42:41)"
+          },
+          {
+            "line": 343,
+            "text": "#loc10 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":43:26)"
+          },
+          {
+            "line": 344,
+            "text": "#loc11 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":43:46)"
+          },
+          {
+            "line": 345,
+            "text": "#loc12 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":44:16)"
+          },
+          {
+            "line": 346,
+            "text": "#loc13 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":45:8)"
+          },
+          {
+            "line": 347,
+            "text": "#loc14 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":46:51)"
+          },
+          {
+            "line": 348,
+            "text": "#loc15 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":46:31)"
+          },
+          {
+            "line": 349,
+            "text": "#loc16 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":46:62)"
+          },
+          {
+            "line": 350,
+            "text": "#loc17 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":48:28)"
+          },
+          {
+            "line": 351,
+            "text": "#loc18 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":50:29)"
+          },
+          {
+            "line": 352,
+            "text": "#loc19 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":53:27)"
+          },
+          {
+            "line": 353,
+            "text": "#loc20 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":55:27)"
+          },
+          {
+            "line": 354,
+            "text": "#loc21 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":56:29)"
+          },
+          {
+            "line": 355,
+            "text": "#loc22 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":56:46)"
+          },
+          {
+            "line": 356,
+            "text": "#loc23 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":58:20)"
+          },
+          {
+            "line": 357,
+            "text": "#loc24 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":59:19)"
+          },
+          {
+            "line": 358,
+            "text": "#loc25 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":59:30)"
+          },
+          {
+            "line": 359,
+            "text": "#loc26 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":59:10)"
+          },
+          {
+            "line": 360,
+            "text": "#loc27 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":60:19)"
+          },
+          {
+            "line": 361,
+            "text": "#loc28 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":60:10)"
+          },
+          {
+            "line": 362,
+            "text": "#loc29 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":62:58)"
+          },
+          {
+            "line": 363,
+            "text": "#loc30 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":62:28)"
+          },
+          {
+            "line": 364,
+            "text": "#loc31 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":62:16)"
+          },
+          {
+            "line": 365,
+            "text": "#loc32 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":64:50)"
+          },
+          {
+            "line": 366,
+            "text": "#loc33 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":64:40)"
+          },
+          {
+            "line": 367,
+            "text": "#loc34 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":65:30)"
+          },
+          {
+            "line": 368,
+            "text": "#loc35 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:35)"
+          },
+          {
+            "line": 369,
+            "text": "#loc36 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:45)"
+          },
+          {
+            "line": 370,
+            "text": "#loc37 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:58)"
+          },
+          {
+            "line": 371,
+            "text": "#loc38 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":71:25)"
+          },
+          {
+            "line": 372,
+            "text": "#loc39 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":79:27)"
+          },
+          {
+            "line": 373,
+            "text": "#loc40 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":79:38)"
+          },
+          {
+            "line": 374,
+            "text": "#loc41 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":80:29)"
+          },
+          {
+            "line": 375,
+            "text": "#loc42 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":80:15)"
+          },
+          {
+            "line": 376,
+            "text": "#loc43 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":81:23)"
+          },
+          {
+            "line": 377,
+            "text": "#loc44 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":81:14)"
+          },
+          {
+            "line": 378,
+            "text": "#loc45 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":85:27)"
+          },
+          {
+            "line": 379,
+            "text": "#loc46 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":85:38)"
+          },
+          {
+            "line": 380,
+            "text": "#loc47 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":86:15)"
+          },
+          {
+            "line": 381,
+            "text": "#loc48 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":87:14)"
+          },
+          {
+            "line": 382,
+            "text": "#loc49 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":89:36)"
+          },
+          {
+            "line": 383,
+            "text": "#loc50 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":90:38)"
+          },
+          {
+            "line": 384,
+            "text": "#loc51 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":92:32)"
+          },
+          {
+            "line": 385,
+            "text": "#loc53 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":73:21)"
+          },
+          {
+            "line": 386,
+            "text": "#loc54 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:53)"
+          },
+          {
+            "line": 387,
+            "text": "#loc55 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:41)"
+          },
+          {
+            "line": 388,
+            "text": "#loc56 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:23)"
+          },
+          {
+            "line": 389,
+            "text": "#loc57 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":76:67)"
+          },
+          {
+            "line": 390,
+            "text": "#loc58 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":78:20)"
+          },
+          {
+            "line": 391,
+            "text": "#loc59 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":79:15)"
+          },
+          {
+            "line": 392,
+            "text": "#loc60 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":80:50)"
+          },
+          {
+            "line": 393,
+            "text": "#loc61 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":84:20)"
+          },
+          {
+            "line": 394,
+            "text": "#loc62 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":85:15)"
+          },
+          {
+            "line": 395,
+            "text": "#loc63 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":86:50)"
+          },
+          {
+            "line": 396,
+            "text": "#loc64 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":89:20)"
+          },
+          {
+            "line": 397,
+            "text": "#loc65 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":90:20)"
+          },
+          {
+            "line": 398,
+            "text": "#loc66 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":92:27)"
+          },
+          {
+            "line": 401,
+            "text": "#loc70 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":93:42)"
+          },
+          {
+            "line": 402,
+            "text": "#loc71 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":94:52)"
+          },
+          {
+            "line": 403,
+            "text": "#loc72 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":94:44)"
+          },
+          {
+            "line": 404,
+            "text": "#loc73 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":94:35)"
+          },
+          {
+            "line": 405,
+            "text": "#loc74 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":95:45)"
+          },
+          {
+            "line": 406,
+            "text": "#loc75 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":95:31)"
+          },
+          {
+            "line": 407,
+            "text": "#loc76 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":96:36)"
+          },
+          {
+            "line": 410,
+            "text": "#loc80 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":96:46)"
+          },
+          {
+            "line": 411,
+            "text": "#loc81 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":97:44)"
+          },
+          {
+            "line": 412,
+            "text": "#loc82 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":97:36)"
+          },
+          {
+            "line": 413,
+            "text": "#loc83 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":98:27)"
+          },
+          {
+            "line": 414,
+            "text": "#loc84 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":98:37)"
+          },
+          {
+            "line": 415,
+            "text": "#loc85 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":101:20)"
+          },
+          {
+            "line": 416,
+            "text": "#loc86 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":101:8)"
+          },
+          {
+            "line": 417,
+            "text": "#loc87 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":103:20)"
+          },
+          {
+            "line": 418,
+            "text": "#loc88 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":103:7)"
+          },
+          {
+            "line": 419,
+            "text": "#loc89 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:55)"
+          },
+          {
+            "line": 420,
+            "text": "#loc90 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:41)"
+          },
+          {
+            "line": 421,
+            "text": "#loc91 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:23)"
+          },
+          {
+            "line": 422,
+            "text": "#loc92 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":106:69)"
+          },
+          {
+            "line": 423,
+            "text": "#loc93 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":107:36)"
+          },
+          {
+            "line": 424,
+            "text": "#loc94 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":107:48)"
+          },
+          {
+            "line": 425,
+            "text": "#loc95 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":109:20)"
+          },
+          {
+            "line": 426,
+            "text": "#loc96 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":110:15)"
+          },
+          {
+            "line": 427,
+            "text": "#loc97 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":111:15)"
+          },
+          {
+            "line": 428,
+            "text": "#loc98 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":111:50)"
+          },
+          {
+            "line": 429,
+            "text": "#loc99 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":112:14)"
+          },
+          {
+            "line": 430,
+            "text": "#loc100 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":115:20)"
+          },
+          {
+            "line": 431,
+            "text": "#loc101 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":116:15)"
+          },
+          {
+            "line": 432,
+            "text": "#loc102 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":117:15)"
+          },
+          {
+            "line": 433,
+            "text": "#loc103 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":117:50)"
+          },
+          {
+            "line": 434,
+            "text": "#loc104 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":118:14)"
+          },
+          {
+            "line": 435,
+            "text": "#loc105 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":120:65)"
+          },
+          {
+            "line": 436,
+            "text": "#loc106 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":120:36)"
+          },
+          {
+            "line": 437,
+            "text": "#loc107 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":120:20)"
+          },
+          {
+            "line": 438,
+            "text": "#loc108 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":121:67)"
+          },
+          {
+            "line": 439,
+            "text": "#loc109 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":121:38)"
+          },
+          {
+            "line": 440,
+            "text": "#loc110 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":121:20)"
+          },
+          {
+            "line": 441,
+            "text": "#loc111 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":123:27)"
+          },
+          {
+            "line": 442,
+            "text": "#loc112 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":123:32)"
+          },
+          {
+            "line": 443,
+            "text": "#loc113 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":124:57)"
+          },
+          {
+            "line": 444,
+            "text": "#loc115 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":125:42)"
+          },
+          {
+            "line": 445,
+            "text": "#loc116 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":126:52)"
+          },
+          {
+            "line": 446,
+            "text": "#loc117 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":126:44)"
+          },
+          {
+            "line": 447,
+            "text": "#loc118 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":126:35)"
+          },
+          {
+            "line": 448,
+            "text": "#loc119 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":127:45)"
+          },
+          {
+            "line": 449,
+            "text": "#loc120 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":127:31)"
+          },
+          {
+            "line": 450,
+            "text": "#loc121 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":128:36)"
+          },
+          {
+            "line": 451,
+            "text": "#loc123 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":128:46)"
+          },
+          {
+            "line": 452,
+            "text": "#loc124 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":129:44)"
+          },
+          {
+            "line": 453,
+            "text": "#loc125 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":129:36)"
+          },
+          {
+            "line": 454,
+            "text": "#loc126 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":130:27)"
+          },
+          {
+            "line": 455,
+            "text": "#loc127 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":130:37)"
+          },
+          {
+            "line": 456,
+            "text": "#loc128 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":129:55)"
+          },
+          {
+            "line": 457,
+            "text": "#loc129 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":135:20)"
+          },
+          {
+            "line": 458,
+            "text": "#loc130 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":136:30)"
+          },
+          {
+            "line": 459,
+            "text": "#loc131 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":136:10)"
+          },
+          {
+            "line": 460,
+            "text": "#loc132 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":137:24)"
+          },
+          {
+            "line": 461,
+            "text": "#loc133 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":137:10)"
+          },
+          {
+            "line": 462,
+            "text": "#loc134 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":138:10)"
+          },
+          {
+            "line": 463,
+            "text": "#loc135 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":140:31)"
+          },
+          {
+            "line": 464,
+            "text": "#loc136 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":140:47)"
+          },
+          {
+            "line": 465,
+            "text": "#loc137 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:20)"
+          },
+          {
+            "line": 466,
+            "text": "#loc138 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:50)"
+          },
+          {
+            "line": 467,
+            "text": "#loc139 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:39)"
+          },
+          {
+            "line": 468,
+            "text": "#loc140 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":142:68)"
+          },
+          {
+            "line": 469,
+            "text": "#loc141 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":148:28)"
+          },
+          {
+            "line": 470,
+            "text": "#loc142 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":148:58)"
+          },
+          {
+            "line": 471,
+            "text": "#loc143 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":148:44)"
+          },
+          {
+            "line": 472,
+            "text": "#loc144 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":149:31)"
+          },
+          {
+            "line": 473,
+            "text": "#loc145 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":149:47)"
+          },
+          {
+            "line": 474,
+            "text": "#loc146 = loc(\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source/candidate.py\":149:4)"
+          }
+        ],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": [
+          {
+            "line": 12,
+            "text": "#shared = #ttg.swizzled_shared<{vec = 32, perPhase = 1, maxPhase = 1, order = [1, 0], useTcu = true}>"
+          },
+          {
+            "line": 13,
+            "text": "#shared1 = #ttg.swizzled_shared<{vec = 32, perPhase = 1, maxPhase = 1, order = [0, 1], useTcu = true}>"
+          },
+          {
+            "line": 14,
+            "text": "#smem = #ttg.shared_memory"
+          },
+          {
+            "line": 132,
+            "text": "    %Q_57 = ttg.local_alloc %Q_56 : (tensor<8x128xbf16, #blocked>) -> !ttg.memdesc<8x128xbf16, #shared, #smem> loc(#loc188)"
+          },
+          {
+            "line": 160,
+            "text": "    %Q_78 = ttg.local_load %Q_57 : !ttg.memdesc<8x128xbf16, #shared, #smem> -> tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc188)"
+          },
+          {
+            "line": 187,
+            "text": "      %K_119 = ttg.local_alloc %K_118 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc220)"
+          },
+          {
+            "line": 190,
+            "text": "      %V_122 = ttg.local_alloc %V_121 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc221)"
+          },
+          {
+            "line": 191,
+            "text": "      %K_123 = ttg.local_load %K_119 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc220)"
+          },
+          {
+            "line": 218,
+            "text": "      %V_138 = ttg.local_load %V_122 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc221)"
+          },
+          {
+            "line": 260,
+            "text": "      %K_129 = ttg.local_alloc %K_128 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc256)"
+          },
+          {
+            "line": 265,
+            "text": "      %V_134 = ttg.local_alloc %V_133 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc259)"
+          },
+          {
+            "line": 266,
+            "text": "      %K_135 = ttg.local_load %K_129 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc256)"
+          },
+          {
+            "line": 295,
+            "text": "      %V_151 = ttg.local_load %V_134 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc259)"
+          }
+        ]
+      },
+      "llir": {
+        "sme_transport": [
+          {
+            "line": 6,
+            "text": "@global_smem = external local_unnamed_addr addrspace(3) global [0 x i8], align 16"
+          },
+          {
+            "line": 12,
+            "text": "define iluvatar_kernel void @_gqa_decode_attention_sme_span(ptr addrspace(1) %0, ptr addrspace(1) %1, ptr addrspace(1) %2, ptr addrspace(1) %3, ptr addrspace(1) %4, ptr addrspace(1) %5, ptr addrspace(1) %6, ptr addrspace(1) %7, float %8, i64 %9, i64 %10, i64 %11, i64 %12, i64 %13, i64 %14, i64 %15, ptr addrspace(1) readnone captures(none) %16, ptr addrspace(1) readnone captures(none) %17) local_unnamed_addr #1 !dbg !7 {"
+          },
+          {
+            "line": 95,
+            "text": "  %95 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %94, !dbg !35"
+          },
+          {
+            "line": 102,
+            "text": "  %100 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %99, !dbg !35"
+          },
+          {
+            "line": 146,
+            "text": "  %141 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %140, !dbg !35"
+          },
+          {
+            "line": 151,
+            "text": "  %146 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %145, !dbg !35"
+          },
+          {
+            "line": 156,
+            "text": "  %151 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %150, !dbg !35"
+          },
+          {
+            "line": 205,
+            "text": "  %195 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %194"
+          },
+          {
+            "line": 207,
+            "text": "  %197 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %196"
+          },
+          {
+            "line": 209,
+            "text": "  %199 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %198"
+          },
+          {
+            "line": 211,
+            "text": "  %201 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %200"
+          },
+          {
+            "line": 216,
+            "text": "  %206 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %205"
+          },
+          {
+            "line": 221,
+            "text": "  %211 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %210"
+          },
+          {
+            "line": 227,
+            "text": "  %217 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %216"
+          },
+          {
+            "line": 232,
+            "text": "  %222 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %221"
+          },
+          {
+            "line": 237,
+            "text": "  %227 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %226"
+          },
+          {
+            "line": 242,
+            "text": "  %232 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %231"
+          },
+          {
+            "line": 267,
+            "text": "  %257 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %140"
+          },
+          {
+            "line": 269,
+            "text": "  %259 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %145"
+          },
+          {
+            "line": 276,
+            "text": "  %266 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %265"
+          },
+          {
+            "line": 1101,
+            "text": "  %929 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %928, !dbg !92"
+          },
+          {
+            "line": 1108,
+            "text": "  %935 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %934, !dbg !92"
+          },
+          {
+            "line": 1114,
+            "text": "  %940 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %939, !dbg !92"
+          },
+          {
+            "line": 1120,
+            "text": "  %945 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %944, !dbg !92"
+          },
+          {
+            "line": 1298,
+            "text": "  %1046 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1045, !dbg !94"
+          },
+          {
+            "line": 1311,
+            "text": "  %1055 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1054, !dbg !94"
+          },
+          {
+            "line": 1326,
+            "text": "  %1065 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1064, !dbg !92"
+          },
+          {
+            "line": 1335,
+            "text": "  %1074 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1073, !dbg !92"
+          },
+          {
+            "line": 1344,
+            "text": "  %1083 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1082, !dbg !92"
+          },
+          {
+            "line": 1353,
+            "text": "  %1092 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1091, !dbg !92"
+          },
+          {
+            "line": 1530,
+            "text": "  %1269 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %140, !dbg !94"
+          },
+          {
+            "line": 1534,
+            "text": "  %1273 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %145, !dbg !94"
+          },
+          {
+            "line": 1547,
+            "text": "  %1286 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1285, !dbg !94"
+          },
+          {
+            "line": 1878,
+            "text": "!1 = !DIFile(filename: \"candidate.py\", directory: \"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source\")"
+          },
+          {
+            "line": 1884,
+            "text": "!7 = distinct !DISubprogram(name: \"_gqa_decode_attention_sme_span\", linkageName: \"_gqa_decode_attention_sme_span\", scope: !1, file: !1, line: 7, type: !5, scopeLine: 7, spFlags: DISPFlagDefinition | DISPFlagOptimized, unit: !0)"
+          }
+        ],
+        "wait": [],
+        "barrier": [
+          {
+            "line": 144,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !35"
+          },
+          {
+            "line": 420,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !55"
+          },
+          {
+            "line": 501,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !55"
+          },
+          {
+            "line": 1095,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !92"
+          },
+          {
+            "line": 1323,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !92"
+          },
+          {
+            "line": 1852,
+            "text": "declare void @llvm.nvvm.barrier.cta.sync.aligned.all(i32) #5"
+          }
+        ],
+        "shared_fragment": []
+      },
+      "asm": {
+        "sme_transport": [
+          {
+            "line": 2,
+            "text": "\t.globl\t_gqa_decode_attention_sme_span  ; -- Begin function _gqa_decode_attention_sme_span"
+          },
+          {
+            "line": 4,
+            "text": "\t.type\t_gqa_decode_attention_sme_span,@function"
+          },
+          {
+            "line": 5,
+            "text": "\t.iluvatar_kernel _gqa_decode_attention_sme_span"
+          },
+          {
+            "line": 6,
+            "text": "_gqa_decode_attention_sme_span:         ; @_gqa_decode_attention_sme_span"
+          },
+          {
+            "line": 8,
+            "text": "\t.file\t1 \"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source\" \"candidate.py\""
+          },
+          {
+            "line": 55,
+            "text": "\t\tenable_dynamic_smem_size = 0"
+          },
+          {
+            "line": 2049,
+            "text": "\t.globl\t_gqa_decode_attention_sme_span.kd"
+          },
+          {
+            "line": 2050,
+            "text": "\t.type\t_gqa_decode_attention_sme_span.kd,@object"
+          },
+          {
+            "line": 2051,
+            "text": "\t.size\t_gqa_decode_attention_sme_span.kd, 64"
+          },
+          {
+            "line": 2052,
+            "text": "_gqa_decode_attention_sme_span.kd:"
+          },
+          {
+            "line": 2056,
+            "text": "\t.quad\t_gqa_decode_attention_sme_span@rel64-_gqa_decode_attention_sme_span.kd"
+          },
+          {
+            "line": 2062,
+            "text": "\t.size\t_gqa_decode_attention_sme_span, .Lfunc_end0-_gqa_decode_attention_sme_span"
+          },
+          {
+            "line": 2199,
+            "text": "\t.ascii\t\"/workspace/experiments/minicpm-s2/framework/20261026T061316901168Z-gqa-sme-span-hotspot-component/source\" ; DW_AT_comp_dir"
+          },
+          {
+            "line": 2204,
+            "text": "\t.ascii\t\"_gqa_decode_attention_sme_span\" ; DW_AT_name"
+          },
+          {
+            "line": 2491,
+            "text": "    .name:           _gqa_decode_attention_sme_span"
+          },
+          {
+            "line": 2495,
+            "text": "    .symbol:         _gqa_decode_attention_sme_span.kd"
+          }
+        ],
+        "wait": [],
+        "barrier": [
+          {
+            "line": 59,
+            "text": "\t\tworkgroup_fbarrier_count = 0"
+          },
+          {
+            "line": 199,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 467,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 586,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 1236,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 1490,
+            "text": "\tsl_barrier "
+          }
+        ],
+        "shared_fragment": [
+          {
+            "line": 51,
+            "text": "\t\tenable_srf_flat_shared = 0"
+          }
+        ]
+      }
+    }
+  },
+  "note": "B40/S16 full scratch may yield15->63; narrowed S2 scratch may yield14->62. Real ASM/wait review is required.",
+  "mask_delta_matches": true
+}

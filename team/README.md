@@ -73,6 +73,10 @@
 - [BI-V150特定形状GEMM](methods/shape-gemm.md)
 - [GQA两页T32计算块](methods/gqa-two-page-t32.md)
 - [Prefill序列内CTA调序](methods/prefill-lpt.md)
+- [GQA同storage二维span](methods/gqa-sme-span.md)
+- [down K256分组INT8探索](methods/down-group256.md)
+- [Prefill当前chunk直读K/V](methods/prefill-fresh-kv.md)
+- [QKV GEMM与RoPE融合](methods/qkv-rope-fusion.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

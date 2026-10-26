@@ -1,0 +1,146 @@
+--- prior/worker.diff
++++ candidate/worker.diff
+@@ -44,17 +44,21 @@
+     meta = compiled.metadata
+     fields.update(shared=meta.get("shared") if isinstance(meta, dict) else meta.shared,
+                   compiled_hash=getattr(compiled, "hash", None),
++                  use_sme=meta.get("use_sme") if isinstance(meta, dict) else getattr(meta, "use_sme", None),
++                  num_warps=meta.get("num_warps") if isinstance(meta, dict) else getattr(meta, "num_warps", None),
++                  num_stages=meta.get("num_stages") if isinstance(meta, dict) else getattr(meta, "num_stages", None),
+                   actual_occupancy_proven=False)
+     return fields
+ 
+ 
+ from fp_reference import sampled_reference
++from descriptor import prepare_launch_kwargs
+ 
+ 
+ def worker(run, model, shape="hotspot"):
+     result = dict(status="started", kind="生产 kernel+reducer 的随机输入组件", checks=[], timings=[],
+                   limitations=["没有模型权重或实际激活采样；不是模型资格或官方收益",
+-                               "仅 N33/bucket40/S16；page16与split保持，candidate计算tile32",
++                               "仅 N33/bucket40/S16；page16与split保持，candidate维持page16/tile16，仅新SME跨度与行寻址",
+                                "性能仅关闭 profiler 的同输入 CUDA Graph ABBA"])
+     gqa = producer_capture = reducer_capture = None
+     original_producer = original_reducer = None
+@@ -87,9 +91,9 @@
+             raise RuntimeError("共同 native 安装链不符")
+         gqa = importlib.import_module("vllm_fl.patches.biv150_gqa_decode")
+         if digest(Path(gqa.__file__)) != SOURCE_SHA or digest(HERE / "baseline.py") != SOURCE_SHA:
+-            raise RuntimeError("实际 GQA 不是冻结 main526 原件")
++            raise RuntimeError("实际 GQA 不是冻结 main6971/618 原件")
+         backend = importlib.import_module("vllm.v1.attention.backends.triton_attn")
+-        candidate = load("gqa_two_page_t32_candidate", HERE / "candidate.py")
++        candidate = load("gqa_sme_span_candidate", HERE / "candidate.py")
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("非单卡")
+         torch.cuda.set_device(0)
+@@ -153,31 +157,76 @@
+             grid=grid, reducer_grid=rgrid, builder_segments=metadata.num_par_softmax_segments,
+             source_q_shape=list(kwargs["query_ptr"].shape), source_k_shape=list(kwargs["key_cache_ptr"].shape),
+             source_k_stride=list(kwargs["key_cache_ptr"].stride()), block_table_stride=8192,
+-            rows=8, segments=segments, head_size=128, page_size=16, candidate_compute_tile=32, num_warps=1, num_stages=1,
++            rows=8, segments=segments, head_size=128, page_size=16, candidate_compute_tile=16, num_warps=1, num_stages=1,
+             query_start_loc=common.query_start_loc_cpu.tolist(), seq_lens=common.seq_lens.cpu().tolist(),
+             padded_slot_values=common.slot_mapping[active:].cpu().tolist())
+         original_inputs = (query.clone(), cache.clone(), common.seq_lens.clone(), common.block_table_tensor.clone())
++        result["span_views"] = []
+         arms = {}
+-        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_two_page)):
++        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_sme_span)):
+             out = torch.full_like(query, -17)
+             partial = torch.full_like(metadata.softmax_segm_output, -17)
+             maxima = torch.full_like(metadata.softmax_segm_max, -17)
+             sums = torch.full_like(metadata.softmax_segm_expsum, -17)
+             pk = dict(kwargs, segm_output_ptr=partial.narrow(2, 0, segments), segm_max_ptr=maxima.narrow(2, 0, segments),
+                       segm_expsum_ptr=sums.narrow(2, 0, segments))
++            keepalive = []
++            if name == "candidate":
++                pk, keepalive = prepare_launch_kwargs(pk)
++                for pointer, view in zip(("key_cache_ptr", "value_cache_ptr"), keepalive):
++                    logical = kwargs[pointer]
++                    view_record = dict(pointer=pointer, original_shape=list(logical.shape),
++                        original_stride=list(logical.stride()), backing_shape=list(view.shape),
++                        storage_offset=logical.storage_offset(), span_elements=view.numel(),
++                        storage_elements=logical.untyped_storage().nbytes() // logical.element_size(),
++                        same_data_ptr=view.data_ptr() == logical.data_ptr(),
++                        same_storage=view.untyped_storage().data_ptr() == logical.untyped_storage().data_ptr(),
++                        contiguous=view.is_contiguous(),
++                        within_storage=logical.storage_offset() + view.numel() <= logical.untyped_storage().nbytes() // logical.element_size())
++                    if not all(view_record[k] for k in ("same_data_ptr", "same_storage", "contiguous", "within_storage")):
++                        raise RuntimeError("非法backing view别名或storage尾界")
++                    result["span_views"].append(view_record)
+             rk = dict(rkwargs, output_ptr=out[:B], segm_output_ptr=pk["segm_output_ptr"],
+                       segm_max_ptr=pk["segm_max_ptr"], segm_expsum_ptr=pk["segm_expsum_ptr"])
+-            def call(kernel=kernel, pk=pk, rk=rk):
++            def call(kernel=kernel, pk=pk, rk=rk, keepalive=keepalive):
+                 compiled = kernel[grid](**pk)
+                 original_reducer[rgrid](**rk)
+                 return compiled
+             arms[name] = NS(call=call, out=out, partial=partial, maxima=maxima, sums=sums,
+-                            tensors=(out, partial, maxima, sums))
++                            tensors=(out, partial, maxima, sums), keepalive=keepalive, pk_views=keepalive)
+         first = {name: arm.call() for name, arm in arms.items()}
+         torch.cuda.synchronize()
+         result["resources"] = {name: dump(compiled, run / ("ir-" + name)) for name, compiled in first.items()}
+         result["resources"]["production"] = dump(production_compiled, run / "ir-production")
+         result["resources"]["reducer"] = dump(reducer_compiled, run / "ir-reducer")
++        # Selection is diagnostic: a frontend mask is not proof of an SME copy.
++        patterns = {"sme_transport": r"sme|g2s|global_to_shared|global.*shared|cp\.async",
++                    "wait": r"waitcnt|wait_group|async_wait|wait_all|waitcnt_",
++                    "barrier": r"barrier|s_barrier|syncthreads",
++                    "shared_fragment": r"local_load|local_alloc|s2r|shared"}
++        selection = dict(diagnostic_only=True, no_asm_selection_claim=True,
++            expected_mask_delta_hex="0x30", masks={}, evidence={},
++            note="B40/S16 full scratch may yield15->63; narrowed S2 scratch may yield14->62. Real ASM/wait review is required.")
++        for arm_name, compiled in first.items():
++            selection["masks"][arm_name] = result["resources"][arm_name]["use_sme"]
++            selection["evidence"][arm_name] = {}
++            for stage, raw in compiled.asm.items():
++                if not isinstance(raw, (str, bytes)):
++                    continue
++                if isinstance(raw, bytes):
++                    try:
++                        raw = raw.decode("utf-8")
++                    except UnicodeDecodeError:
++                        continue
++                lines = raw.splitlines()
++                selection["evidence"][arm_name][stage] = {
++                    kind: [dict(line=i + 1, text=line[:1000]) for i, line in enumerate(lines)
++                           if re.search(pattern, line, re.IGNORECASE)][:256]
++                    for kind, pattern in patterns.items()}
++        a_mask, b_mask = (selection["masks"][name] for name in ("baseline", "candidate"))
++        selection["mask_delta_matches"] = (a_mask ^ b_mask == 0x30) if isinstance(a_mask, int) and isinstance(b_mask, int) else None
++        result["selection_diagnostic"] = selection
++        write(run / "sme-selection-diagnostic.json", selection)
+         write(run / "results.json", result)
+         same_bits = lambda a, b: torch.equal(a.view(torch.int16 if a.element_size() == 2 else torch.int32),
+                                             b.view(torch.int16 if b.element_size() == 2 else torch.int32))
+@@ -237,6 +286,9 @@
+             checks["rng_unchanged"] = torch.equal(rng_cpu, torch.get_rng_state()) and torch.equal(rng_gpu, torch.cuda.get_rng_state())
+             if changed:
+                 checks["output_changed"] = not same_bits(initial_output[:B], expected["baseline"][0][:B])
++            span_alias = all(arms["candidate"].pk_views[i].data_ptr() == kwargs[pointer].data_ptr()
++                for i, pointer in enumerate(("key_cache_ptr", "value_cache_ptr")))
++            checks["span_views_still_alias_original_kv"] = span_alias
+             record = dict(case=label, checks=checks, independent_reference=oracle, nonfinite_diagnostic=not finite,
+                           baseline_nan=int(torch.isnan(a.out[:B]).sum().item()),
+                           candidate_nan=int(torch.isnan(b.out[:B]).sum().item()))
+@@ -262,7 +314,7 @@
+         ragged = [ragged_pattern[i % len(ragged_pattern)] for i in range(active)] + [0] * (B - active)
+         common.seq_lens.copy_(torch.tensor(ragged, dtype=torch.int32, device="cuda"))
+         check("graph-changed-q-kv-pages-ragged-zero-tail", changed=True)
+-        # 保原page16分段，覆盖lower非32对齐及完整32+不足32的尾tile。
++        # 保原page16分段，覆盖整页、尾页、空段及零长Graph行。
+         boundary = [0, 1, 15, 16, 17, segments * 16, segments * 80 - 32, segments * 80 - 29]
+         common.seq_lens.copy_(torch.tensor([boundary[i % 8] for i in range(active)] + [0] * (B - active),
+                                            dtype=torch.int32, device="cuda"))
+@@ -309,7 +361,7 @@
+             a = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "baseline")
+             b = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "candidate")
+             result["summary"][metric] = dict(baseline_ms=a, candidate_ms=b, fraction_saved=1 - b / a)
+-        result.update(status="component_signal_only", decision="仅一组组件信号；不自动扩形状或模型，先由 root 判断真实收益")
++        result.update(status="component_signal_only", decision="仅page16 SME跨度一组组件；实际SMEcopy/wait由root审，不自动扩形状或模型")
+     except BaseException:
+         result.update(status="failed", error=traceback.format_exc())
+         traceback.print_exc()
