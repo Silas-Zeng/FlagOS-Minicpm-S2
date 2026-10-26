@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共337条登记、334个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共339条登记、336个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -315,6 +315,8 @@
 | 天数 BI-V150 | 335 | 2026-10-26T13:49:37.447894+00:00 | [GQA标量KV页基址与动态for组合](methods/gqa-scalar-page-base.md) | 8类原门及有限跨臂逐位硬门通过，非有限原门/bit诊断通过；原641478生产核与reducer绑定。完整组件慢10.73864%，实际SME LLVM8/ASM8。 | 未记录/未记录/未记录/未记录 | 8门/逐位通过；实际SME LLVM8/ASM8，完整Graph慢10.73864%，停止。资源下降不是收益证明，无官方/105。 | [20261026T134937447894Z-gqa-for-scalar-i64-hotspot-component](runs/bi-v150/20261026T134937447894Z-gqa-for-scalar-i64-hotspot-component.md) |
 | 天数 BI-V150 | 336 | 2026-10-26T14:16:15.226388+00:00 | [GQA标量KV页基址与动态for组合](methods/gqa-scalar-page-base.md) | 8类原门和跨臂bitwise通过；实际候选编译stages2、TTGIR async-copy4、LLVM/ASM SME16。未取得模型准确率资格。 | 未记录/未记录/未记录/未记录 | 8门/逐位通过；实际stages2、async-copy4/SME16，完整Graph慢27.63241%，停止不扫stage。 | [20261026T141615226388Z-gqa-for-scalar-i64-s2-hotspot-component](runs/bi-v150/20261026T141615226388Z-gqa-for-scalar-i64-s2-hotspot-component.md) |
 | 天数 BI-V150 | 337 | 2026-10-26T15:08:02.838380+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 单次sanity通过，不是完整数值/模型/105门。 | 未记录/未记录/未记录/未记录 | 新main M64已BN64/grid32，旧窄N提案停止；单次身份/资源，无性能结论。 | [20261026T150802838380Z-main594-m64-mm-provider-probe](runs/bi-v150/20261026T150802838380Z-main594-m64-mm-provider-probe.md) |
+| 天数 BI-V150 | 338 | 2026-10-26T15:31:34.266216+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 8类全输出逐位/有限性/输入不变及独立FP64、Graph、side/RNG通过；只覆盖M64和layer0。 | 未记录/未记录/未记录/未记录 | M64固定寻址单组组件省1.47792%，8门过/无额外权重；待官方净收益。 | [20261026T153134266216Z-main594-m64-fixed-address-component](runs/bi-v150/20261026T153134266216Z-main594-m64-fixed-address-component.md) |
+| 天数 BI-V150 | 339 | 2026-10-26T15:41:11+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 4K请求全成功与实际路径证据已回收；不等于105准确率通过。 | 未记录/未记录/未记录/未记录 | main594控制4K四轮暖均5847.6667，16K首轮中断；已恢复并补测，非完整新基线。 | [20261026T154111Z-main594-official-control-four-rounds](runs/bi-v150/20261026T154111Z-main594-official-control-four-rounds.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

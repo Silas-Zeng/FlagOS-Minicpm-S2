@@ -342,6 +342,18 @@ GROUPS['shape-gemm']=('BI-V150特定形状GEMM', '历史main6971的宽tile/小M 
 CODE['shape-gemm'] += ['experiments/framework/20261026T150802838380Z-main594-m64-mm-provider-probe/result.json', 'experiments/framework/20261026T150802838380Z-main594-m64-mm-provider-probe/archive-receipt.json', 'analysis/2026-10-26-team-main594-source-manifest.json', 'analysis/2026-10-26-team-main594-github-receipt.json']
 BATCH_RESULTS['main594_mm_provider_identity']=('团队PR59已合入main594，实际compiled M64走small_linear_out→MM-out。本站单次原callback证实BM64/BN64/BK128、w16/s2、grid32、shared64KiB、spill0及实际B SME；有限性/FP64抽样/输入不变sanity通过，无计时/候选/模型资格。原BN128→64窄N提案已被新main覆盖，停止旧方案，不重复开发。DB未变及所属进程/9031/设备清理通过。', '停止旧窄N提案，按新main实际MM重新选题；原探针和源码身份保留。', '单次sanity通过，不是完整数值/模型/105门。', '新main原callback唯一调用，实际registrar/SDK/stride/LibEntry配置与IR资源；无计时，不改库或DB。')
 
+# 20261026 main594 M64固定寻址
+GROUPS['shape-gemm']=('BI-V150特定形状GEMM', 'PR59合并后按main594真实MM-out继续。M64原路径已BN64/grid32，旧窄N停止；新增固定寻址仅去通用地址除余，原tile/math/自然权重保持。8门及RNG通过，单组完整MM Graph省1.47792%，无权重副本；保留组件正信号，待同main594生产官方对照，不把旧main6971数据迁为新候选收益。', [])
+CODE['shape-gemm'] += ['experiments/framework/20261026T153134266216Z-main594-m64-fixed-address-component/source/candidate.py', 'experiments/framework/20261026T153134266216Z-main594-m64-fixed-address-component/result.json', 'experiments/framework/20261026T153134266216Z-main594-m64-fixed-address-component/archive-receipt.json']
+BATCH_RESULTS['main594_m64_fixed_address_positive']=('新main594实际MM-out，固定M64/N2048网格寻址，原tile/runtime K/dot/原W不变，无额外权重。8类数值/FP64/换值Graph/side门及RNG通过；唯一ABBA完整MM Event 59.546635→58.666585us，单组省1.47792%。实际rcp3→0，SME/async/shared/regs不变。仅单层组件信号，未有42层/模型/105/官方或新基线资格；保留进入同版本生产对照。DB/source/进程与9031清理通过。', '保留组件正信号；最小生产接线后同main594官方对照，尚不合并或更新基线。', '8类全输出逐位/有限性/输入不变及独立FP64、Graph、side/RNG通过；只覆盖M64和layer0。', '实际生产MM callback对候选、同原W和预分配out，唯一ABBA各16次完整Graph；profiler关闭、DB恢复，无pack或永久副本。')
+
+# 20261026 M64生产候选差分入口
+CODE['shape-gemm'] += ['analysis/m64-fixed-address-production-20261026/README.md']
+
+# 20261027 main594中断恢复
+CODE['shape-gemm'] += ['experiments/official/20261026T154111Z-main594-official-control-four-rounds/benchmark_results/raw_runs_20261026_234328.csv', 'experiments/official/20261026T154111Z-main594-official-control-four-rounds-control/interruption-recovery.json', 'experiments/official/20261026T154111Z-main594-official-control-four-rounds-control/posthoc-provider-recovery/result.json']
+BATCH_RESULTS['main594_control_interrupted_4k_complete']=('main594原控制4K四轮全部SUCCESS，1024请求，4909.31/5843.85/5767.56/5931.59 tok/s，弃首均值5847.6667。首轮16K中断，无完整16K行，末尾无框架错误证据，原因未确认。原PID全部退出，原件及中断DB已保存，恢复初始207f；source/native未变。旧provider reader未识别CacheCompiledArtifact，已只读原产物补证，真实out调用1/4/3/3；旧false和原state保留，不重测4K。只作为独立4K控制，尚非完整官方基线。', '保留已完成4K控制，独立新服务补16K；候选也分负载启动，不拼接为同一连续8轮。', '4K请求全成功与实际路径证据已回收；不等于105准确率通过。', '原官方4K先跑四轮；16K首轮中断，原日志/CSV未改；同初始DB与native、无profiler。')
+
 def group(row):
     if row['profile_id']=='gqa-for-scalar-i64-s2':
         return 'gqa-scalar-page-base'
@@ -448,6 +460,8 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     current_component_summary = {
+        'main594_control_interrupted_4k_complete': 'main594控制4K四轮暖均5847.6667，16K首轮中断；已恢复并补测，非完整新基线。',
+        'main594_m64_fixed_address_positive': 'M64固定寻址单组组件省1.47792%，8门过/无额外权重；待官方净收益。',
         'main594_mm_provider_identity': '新main M64已BN64/grid32，旧窄N提案停止；单次身份/资源，无性能结论。',
         'gqa_for_scalar_i64_s2_negative_component': '8门/逐位通过；实际stages2、async-copy4/SME16，完整Graph慢27.63241%，停止不扫stage。',
         'gqa_for_scalar_i64_negative_component': '8门/逐位通过；实际SME LLVM8/ASM8，完整Graph慢10.73864%，停止。资源下降不是收益证明，无官方/105。',

@@ -1,0 +1,33 @@
+{
+  "status": "CPU_PREPARED_PENDING_REVIEW_GPU",
+  "base_commit": "594ae2a9d17aadc4587ad54ade2b34e17f4af990",
+  "actual_original_hash": "87fa576ed1c7527759db403f017f02d00299fdf6de6de02f32ce898893df36ed",
+  "config": {
+    "BM": 64,
+    "BN": 64,
+    "BK": 128,
+    "warps": 16,
+    "stages": 2,
+    "SPLIT_K": 1,
+    "grid": [
+      32,
+      1
+    ]
+  },
+  "config_difference": {},
+  "exact_scope": [
+    64,
+    2048,
+    6144
+  ],
+  "runtime_K": true,
+  "tail_scope": false,
+  "extra_weight_bytes": 0,
+  "difference": "只将固定M64/N2048 grid_n与rm%M/rn%N地址代数化，M/N保输出mask，K/stride仍runtime；JIT的B与原MM同为weight.t() view [6144,2048]/stride[1,6144]",
+  "math": "原MM acc=dot(a,b,acc,out_dtype=FP32,input_precision=None)，48步K128，原W，无量化/新归约",
+  "original_actual_ASM": "150802实际3个ml_rcp_f32位于prologue103/148/196；loop内无该除余",
+  "mechanism": "只省每CTA地址序言；同64KiB/shared/w16的实际occupancy未测，不承诺SME/资源或性能",
+  "gates": "8项完整逐位/FP64/poisoned changedGraph2/side/inputRNG，再唯一M64完整ABBA；错或非正停",
+  "no_GPU_SSH_Git": true,
+  "owner_finally_unchanged": true
+}
