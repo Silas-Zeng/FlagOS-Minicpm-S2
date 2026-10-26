@@ -190,15 +190,24 @@ SHORT_ATTEMPTS.update({'official_baseline_complete': (
     '无本方优化补丁；完整团队34942f7/618原源码。旧wrapper control只提供native/环境原件，不继承旧main或队友成绩。')})
 
 GROUPS['prefill-stride'] = ('Prefill stride常量特化',
-    '仅11项stride改constexpr并保留int64寻址，原normalized/Q-hoist浮点表达式、tile和页序不变；代价为布局编译变体。组件SGPR spill30→6/mul103→30、Event省0.5151%、wall慢0.5676%，原数值/FP64/Graph及alternate17项通过。旧0915官方−0.56%/+0.19%保留为历史，不能混入新base。最新34942/PR51完整618配对，两档各四轮各1536请求成功；基线4K/16K暖均5638.86/4100.076667，候选5656.77/4119.24 tok/s，观察+0.3176%/+0.4674%。实际KV548432对548336，4K暖轮升速，非严格孤立因果或统计稳定收益。原实际激活与清理通过，同冻结源码105正在验证；尚未合并、不继承父main准确率。单序列组件页表行stride仅身份覆盖。', [])
+    '仅11项stride改constexpr并保留int64寻址，原normalized/Q-hoist浮点表达式、tile和页序不变；代价为布局编译变体。组件SGPR spill30→6/mul103→30、Event省0.5151%、wall慢0.5676%，原数值/FP64/Graph及alternate17项通过。旧0915官方−0.56%/+0.19%保留为历史，不能混入新base。最新34942/PR51完整618配对，基线和候选分别两档各四轮、各1536请求成功；基线4K/16K暖均5638.86/4100.076667，候选5656.77/4119.24 tok/s，观察+0.3176%/+0.4674%。实际KV548432对548336，4K暖轮升速，非严格孤立因果或统计稳定收益。同冻结618/treeaa43原105题103/105，105 stop且0 transport/截断/空答案，实际路径和清理通过。框架PR60已合并为6971ef48，作为后继基线；不继承父main准确率。单序列组件页表行stride仅身份覆盖。', ['prefill-stride'])
 BATCH_RESULTS['prefill_stride_main34942_positive_pending_accuracy'] = (
     '原官方4K/16K各四轮、1536成功；暖均5656.77/4119.24 tok/s，对本组新main基线观察+0.3176%/+0.4674%。',
-    '保留小幅正信号，同冻结源码105已启动但未评分；实际KV548336对548432及单组暖轮趋势需明示，不先授合并或比赛基线资格。',
-    '完整对照小幅正，准确率验证中',
+    '保留小幅正信号；本条为性能结束时状态，后继同源原105已103/105通过，见同方法准确率轮次及PR60。实际KV548336对548432及单组暖轮趋势限制保留。',
+    '完整对照小幅正，后继准确率已通过',
     '34942f7/618/treeaa43ea2c，原官方4K/16K各四轮弃首轮、原native14f/DB207f/服务参数；actual norm/Q/compute-order/PR51/Graph与source/native/DB恢复清理门通过。')
 SHORT_ATTEMPTS['prefill_stride_main34942_positive_pending_accuracy'] = (
     '确认stride常量化能否在保留PR51修复的新main上改善实际吞吐。',
     '仅normalized stride及Q-fragment/compute-order精确依赖身份闭合，共3个生产文件；PR51 runner绑定和其它615文件不变。')
+
+BATCH_RESULTS['prefill_stride_main34942_accuracy_pass'] = (
+    '原105题103/105（98.0952%），valid/pass；105 stop，0 transport/截断/空答案/空提取，模型实际路径及收尾通过。',
+    '结合本组两档完整官方对照保留，PR60已合并为6971ef48；新基线5656.77/4119.24 tok/s、103/105，保留KV差异和单组小幅观察限制。',
+    '准确率通过，PR60已合并',
+    '与性能组同冻结618/treeaa43，原105/temperature1/top_p.95/batch8/max32768及服务参数未改，source/native未变，DB恢复和清理通过。')
+SHORT_ATTEMPTS['prefill_stride_main34942_accuracy_pass'] = (
+    '验证最新A组合是否满足官方准确率门槛，不继承父main或队友分数。',
+    '不新增源码或改采样；复用已审冻结组合与原35d驱动/评分器，只跑这一轮，不反复抽样刷分。')
 
 def group(row):
     if row['profile_id'] in ('rope-kv-fusion', 'final-ffn-row-prune', 'selected-query-row', 'attention-affine-pages', 'current-main-hotspot', 'attention-next-k', 'gqa-identity-rescale', 'main-correctness', 'gqa-kv-cg', 'gqa-kv-stride', 'lm-head-paired-gemv', 'attention-head-major', 'native-silu-vec2', 'gqa-four-page-t64', 'prefill-log2', 'prefill-stride', 'night-kernel-counters', 'gqa-grouped-simt'):
@@ -673,7 +682,7 @@ def main():
                                        ('sql-reflection', 8), ('decode3d', 9), ('mixed-attention', 10),
                                        ('skip-computed-h2d', 22), ('compute-order', 22),
                                        ('pr24-main', 24), ('native-quant-cache', 25), ('native-cache-identity', 35),
-                                       ('q-fragment-hoist', 23), ('native-safe-default', 48), ('native-silu-vec2', 52)]})
+                                       ('q-fragment-hoist', 23), ('native-safe-default', 48), ('native-silu-vec2', 52), ('prefill-stride', 60)]})
     pr_labels = {'cpu-metadata': 'CPU metadata #1', 'async-token-update': '异步token更新 #2',
                  'pr24-main': 'INT8 gate/up 组合 #24', 'native-quant-cache': '激活量化缓存 #25', 'native-cache-identity': 'native编译缓存身份 #35',
                  'kv-contiguous-copy': '连续页KV工具 #3', 'kv-pitched-copy': '二维SAVE工具 #4',

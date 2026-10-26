@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共287条登记、284个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共288条登记、285个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -264,7 +264,8 @@
 | 天数 BI-V150 | 284 | 2026-10-25T17:08:31+00:00 | [Prefill stride常量特化](methods/prefill-stride.md) | 官方完成，净收益未确认 | 未记录/未记录/未记录/未记录 | 原官方两档各4轮、1536成功，实际激活闭合；弃首轮5726.63/4052.78 tok/s，TTFT3637.47/124103.35ms。 | [20261025T170831Z-main0915-prefill-stride-four-rounds](runs/bi-v150/20261025T170831Z-main0915-prefill-stride-four-rounds.md) |
 | 天数 BI-V150 | 285 | 2026-10-25T18:10:07.536717+00:00 | [GQA grouped SIMT页内归约](methods/gqa-grouped-simt.md) | 机制落地，SIMT明显变慢 | 未记录/未记录/未记录/未记录 | 8类原数值/FP64/Graph及实际SIMT机制通过；Event1.279744→44.634184ms（34.8774倍），wall34.6878倍。 | [20261025T181007536717Z-gqa-grouped-simt-hotspot-component](runs/bi-v150/20261025T181007536717Z-gqa-grouped-simt-hotspot-component.md) |
 | 天数 BI-V150 | 286 | 2026-10-25T18:16:12+00:00 | [主线复核与native备用方案](methods/main-correctness.md) | 新main官方基线完整完成 | 未记录/未记录/未记录/未记录 | 干净main34942/618原官方两档各四轮、1536成功；暖均4K5638.86/16K4100.08 tok/s，TTFT3368.34/122586.38ms。 | [20261025T181612Z-main34942f7-official-baseline-four-rounds](runs/bi-v150/20261025T181612Z-main34942f7-official-baseline-four-rounds.md) |
-| 天数 BI-V150 | 287 | 2026-10-26T01:31:04+00:00 | [Prefill stride常量特化](methods/prefill-stride.md) | 完整对照小幅正，准确率验证中 | 未记录/未记录/未记录/未记录 | 原官方4K/16K各四轮、1536成功；暖均5656.77/4119.24 tok/s，对本组新main基线观察+0.3176%/+0.4674%。 | [20261026T013104Z-main34942f7-prefill-stride-four-rounds](runs/bi-v150/20261026T013104Z-main34942f7-prefill-stride-four-rounds.md) |
+| 天数 BI-V150 | 287 | 2026-10-26T01:31:04+00:00 | [Prefill stride常量特化](methods/prefill-stride.md) | 完整对照小幅正，后继准确率已通过 | 未记录/未记录/未记录/未记录 | 原官方4K/16K各四轮、1536成功；暖均5656.77/4119.24 tok/s，对本组新main基线观察+0.3176%/+0.4674%。 | [20261026T013104Z-main34942f7-prefill-stride-four-rounds](runs/bi-v150/20261026T013104Z-main34942f7-prefill-stride-four-rounds.md) |
+| 天数 BI-V150 | 288 | 2026-10-26T02:33:21+00:00 | [Prefill stride常量特化](methods/prefill-stride.md) | 准确率通过，PR60已合并 | 未记录/未记录/未记录/未记录 | 原105题103/105（98.0952%），valid/pass；105 stop，0 transport/截断/空答案/空提取，模型实际路径及收尾通过。 | [20261026T023321Z-main34942f7-prefill-stride-math500](runs/bi-v150/20261026T023321Z-main34942f7-prefill-stride-math500.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

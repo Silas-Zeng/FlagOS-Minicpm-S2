@@ -1,6 +1,12 @@
-# 当前进展：新main配对小幅正向，正在验证同源准确率
+# 当前进展：103/105通过，PR60已合并，已有队列收尾
 
-更新：2026-10-26 02:33 UTC。本批 **287条登记／284个run**，通过实验PR5同步；完整结论与原件以[实验总表](team/experiments.md)为入口。
+更新：2026-10-26 03:06 UTC。本批 **288条登记／285个run**，通过实验PR5同步；完整结论与原件以[实验总表](team/experiments.md)为入口。
+
+- **准确率完整通过**：同冻结618/treeaa43的原105题 **103/105=98.0952%**，valid/pass；105 stop，0 transport/截断/空答案/空提取。run `accuracy/20261026T023321Z-main34942f7-prefill-stride-math500`于02:50:26 UTC完成，owner312401/driver312404已退出，源码/native不变、DB恢复、实际路径与清理通过。
+- **代码已按方法合并**：[框架PR60](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/60)，head dc06b8cc、合并6971ef48，保留PR51修复。接续基线：4K5656.77/16K4119.24 tok/s、同源103/105。KV容量差异和单组暖轮趋势限制仍保留；不是统计稳定收益声明，不抹去旧源码异常。源码未变的已有验证未重跑。
+- **本阶段无后台GPU任务或待验证候选**。B性能负已停止，旧包不执行；子智能体全部停止，未启动新方向。完整包和原始证据已封存并回收发布瘦包，准确率全包远端SHA7091451b，原判卷见本run control/accuracy-review.json。当前交接入口为本文件及方法记录。
+
+以下性能结束时的状态是历史，当前状态以上述三条为准。
 
 - **最新配对完成**：[精确原始结果对比](analysis/main34942-prefill-stride-pair.json)。基线34942/618与A/618的原官方4K/16K各四轮均1536 SUCCESS。弃首轮基线 **5638.86/4100.076667**，A **5656.77/4119.24 tok/s**，观察 **+0.3176%/+0.4674%**。actual norm/Q/compute-order/PR51/Graph、source/native/DB恢复/清理通过。KV548432对548336、4K暖轮升速，非严格孤立kernel因果或统计稳定收益。
 - **当前唯一GPU任务**：A同冻结源码原105准确率，owner **312401**，`scripts/prefill-stride-main34942-model-20261026-accuracy/night-launch.json`及`owner-20261026T023320Z.log`。原采样/服务参数不变，未出分，不继承父main或队友资格。仅root继续；使用进程退出事件等待，不频繁查询GPU/逐轮状态。准确率和必要资格通过后按方法PR处理，未通过不合并。
