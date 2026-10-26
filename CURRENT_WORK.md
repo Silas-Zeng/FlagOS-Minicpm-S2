@@ -1,6 +1,9 @@
 # 当前实验状态
 
-12:04 UTC：N-only 精确身份修复独立官方已启动，run `20261026T120453Z-main6971-nonly-down-identity-fixed-four-rounds`；tree `b528adcd5273126d45676b9b3cf4c7648ec15693`。相对旧候选仅更新已审runner的精确SHA（main相对共5文件），原kernel/helper/runner不变；旧42层接线门复用。supervisor380319／owner380321／driver380324，入口 `/workspace/experiments/minicpm-s2/scripts/nonly-identity-fixed-040b7e00/official/`，看 `supervisor-final.json` 收尾。新增与原compute-order首完整轮一并核对；尚无新成绩或准确率资格，不新增未完成登记。
+13:50 UTC GQA组合收尾：原8门及逐位通过，实际SME LLVM/ASM各8条，但完整组件慢10.73864%，停止不接模型。owner389306/worker389310已退出并清理。59份原件已同步，现335条／332个唯一run；没有新基线/105/代码合并。
+
+12:46 UTC：N-only身份修复v2官方已结束，新增1轮登记，现334条／331个唯一run。4K四轮暖均5719.8133（观察+1.1145%），16K冷/首暖3642.71/4005.55（首暖观察−2.7652%）后主动停；六轮1280 SUCCESS。原prefill栈/新FX42实际闭合，KV516320；保留4K正/16K负混合结果，不合并/跑105/定新基线。289份原件逐SHA复制，source/native/DB与本轮进程清理通过；本轮supervisor/owner/driver已退出，不按旧PID重复占卡。main6971的5656.77/4119.24、103/105仍为原基线。
+
 
 [局部收益预算与限制](analysis/2026-10-26-local-to-e2e-budget.md) · [已有模型对照复核](analysis/2026-10-26-local-to-e2e-review.md)。M64组件10.55%不能外推整模；旧QKV/down/O/LPT没有本次SHA失配，不据此重跑。原结果、valid字段与失败均保留。
 

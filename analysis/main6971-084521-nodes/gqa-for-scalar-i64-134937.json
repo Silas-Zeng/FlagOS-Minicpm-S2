@@ -1,0 +1,861 @@
+{
+  "run": "C:\\Users\\Administrator\\Documents\\ChatGPT\\MiniCPM 模型推理吞吐性能优化\\archive\\hotspot-layout-20261026\\batch-134937\\framework\\20261026T134937447894Z-gqa-for-scalar-i64-hotspot-component",
+  "status": "component_signal_only",
+  "summary": {
+    "event": {
+      "baseline_ms": 0.5419952869415283,
+      "candidate_ms": 0.6001982092857361,
+      "fraction_saved": -0.10738639937746686
+    },
+    "wall": {
+      "baseline_ms": 0.54837328125,
+      "candidate_ms": 0.6055605625,
+      "fraction_saved": -0.10428531659975016
+    }
+  },
+  "resources": {
+    "baseline": {
+      "sgpr_count": 64,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 93,
+      "vgpr_spill_count": 0,
+      "private_segment_fixed_size": 0,
+      "shared": 8192,
+      "compiled_hash": "641478e6ddcd3d9c11192fbd0c6d4d472bf8ad3e3bb2fd9fa27b09f18e4dc9ff",
+      "use_sme": 14,
+      "num_warps": 1,
+      "num_stages": 1,
+      "actual_occupancy_proven": false
+    },
+    "candidate": {
+      "sgpr_count": 84,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 81,
+      "vgpr_spill_count": 0,
+      "private_segment_fixed_size": 0,
+      "shared": 10240,
+      "compiled_hash": "f9e1b0a686b0415efbd88c2c17cb4ffd7913b82e1fd9d22442a6d3a94cff90a7",
+      "use_sme": 62,
+      "num_warps": 1,
+      "num_stages": 1,
+      "actual_occupancy_proven": false
+    },
+    "production": {
+      "sgpr_count": 64,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 93,
+      "vgpr_spill_count": 0,
+      "private_segment_fixed_size": 0,
+      "shared": 8192,
+      "compiled_hash": "641478e6ddcd3d9c11192fbd0c6d4d472bf8ad3e3bb2fd9fa27b09f18e4dc9ff",
+      "use_sme": 14,
+      "num_warps": 1,
+      "num_stages": 1,
+      "actual_occupancy_proven": false
+    },
+    "reducer": {
+      "sgpr_count": 33,
+      "sgpr_spill_count": 0,
+      "vgpr_count": 11,
+      "vgpr_spill_count": 0,
+      "private_segment_fixed_size": 0,
+      "shared": 1024,
+      "compiled_hash": "124a223496b55732c94ef574dee57a81449293ecb4a405f32d9b577be07dc80d",
+      "use_sme": 13,
+      "num_warps": 4,
+      "num_stages": 3,
+      "actual_occupancy_proven": false
+    }
+  },
+  "checks": [
+    {
+      "case": "dense-random",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true,
+        "span_views_still_alias_original_kv": true
+      },
+      "independent_reference": {
+        "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+        "atol": 0.03,
+        "rtol": 0.03,
+        "relative_l2_limit": 0.01,
+        "rows": [
+          0,
+          1,
+          4,
+          8,
+          10,
+          13,
+          14,
+          15,
+          62,
+          63
+        ],
+        "heads": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "lengths": [
+          4256,
+          4253,
+          4247,
+          4239,
+          4235,
+          4229,
+          4227,
+          4225,
+          4130,
+          4128
+        ],
+        "arms": {
+          "baseline": {
+            "finite": true,
+            "max_abs": 0.00034709589823152254,
+            "relative_l2": 0.0022370483749647907,
+            "passed": true
+          },
+          "candidate": {
+            "finite": true,
+            "max_abs": 0.00034709589823152254,
+            "relative_l2": 0.0022370483749647907,
+            "passed": true
+          }
+        },
+        "scope": "合成组件抽样，不是模型准确率"
+      },
+      "nonfinite_diagnostic": false,
+      "baseline_nan": 0,
+      "candidate_nan": 0,
+      "cross_arm_bitwise_diagnostic": true
+    },
+    {
+      "case": "graph-changed-q-kv-pages-ragged-zero-tail",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true,
+        "output_changed": true,
+        "span_views_still_alias_original_kv": true
+      },
+      "independent_reference": {
+        "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+        "atol": 0.03,
+        "rtol": 0.03,
+        "relative_l2_limit": 0.01,
+        "rows": [
+          0,
+          1,
+          4,
+          8,
+          10,
+          13,
+          14,
+          15,
+          62,
+          63
+        ],
+        "heads": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "lengths": [
+          0,
+          1,
+          17,
+          63,
+          65,
+          4097,
+          16383,
+          16384,
+          16383,
+          16384
+        ],
+        "arms": {
+          "baseline": {
+            "finite": true,
+            "max_abs": 0.004196068008279097,
+            "relative_l2": 0.0008516225212780749,
+            "passed": true
+          },
+          "candidate": {
+            "finite": true,
+            "max_abs": 0.004196068008279097,
+            "relative_l2": 0.0008516225212780749,
+            "passed": true
+          }
+        },
+        "scope": "合成组件抽样，不是模型准确率"
+      },
+      "nonfinite_diagnostic": false,
+      "baseline_nan": 0,
+      "candidate_nan": 0,
+      "cross_arm_bitwise_diagnostic": true
+    },
+    {
+      "case": "finite-equal-max-negative-zero-v",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true,
+        "span_views_still_alias_original_kv": true
+      },
+      "independent_reference": {
+        "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+        "atol": 0.03,
+        "rtol": 0.03,
+        "relative_l2_limit": 0.01,
+        "rows": [
+          0,
+          1,
+          4,
+          8,
+          10,
+          13,
+          14,
+          15,
+          62,
+          63
+        ],
+        "heads": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "lengths": [
+          0,
+          1,
+          17,
+          0,
+          15,
+          32,
+          128,
+          131,
+          128,
+          131
+        ],
+        "arms": {
+          "baseline": {
+            "finite": true,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "passed": true
+          },
+          "candidate": {
+            "finite": true,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "passed": true
+          }
+        },
+        "scope": "合成组件抽样，不是模型准确率"
+      },
+      "nonfinite_diagnostic": false,
+      "baseline_nan": 0,
+      "candidate_nan": 0,
+      "cross_arm_bitwise_diagnostic": true
+    },
+    {
+      "case": "finite-equal-max-subnormal-cancellation-v",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true,
+        "span_views_still_alias_original_kv": true
+      },
+      "independent_reference": {
+        "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+        "atol": 0.03,
+        "rtol": 0.03,
+        "relative_l2_limit": 0.01,
+        "rows": [
+          0,
+          1,
+          4,
+          8,
+          10,
+          13,
+          14,
+          15,
+          62,
+          63
+        ],
+        "heads": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "lengths": [
+          0,
+          1,
+          17,
+          0,
+          15,
+          32,
+          128,
+          131,
+          128,
+          131
+        ],
+        "arms": {
+          "baseline": {
+            "finite": true,
+            "max_abs": 1.566073072319646e-53,
+            "relative_l2": 6.672892949406044e-16,
+            "passed": true
+          },
+          "candidate": {
+            "finite": true,
+            "max_abs": 1.566073072319646e-53,
+            "relative_l2": 6.672892949406044e-16,
+            "passed": true
+          }
+        },
+        "scope": "合成组件抽样，不是模型准确率"
+      },
+      "nonfinite_diagnostic": false,
+      "baseline_nan": 0,
+      "candidate_nan": 0,
+      "cross_arm_bitwise_diagnostic": true
+    },
+    {
+      "case": "finite-max-nonfinite-accumulator",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true,
+        "span_views_still_alias_original_kv": true
+      },
+      "independent_reference": null,
+      "nonfinite_diagnostic": true,
+      "baseline_nan": 112896,
+      "candidate_nan": 112896,
+      "cross_arm_bitwise_diagnostic": true
+    },
+    {
+      "case": "negative-infinity-max-original-path",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true,
+        "span_views_still_alias_original_kv": true
+      },
+      "independent_reference": null,
+      "nonfinite_diagnostic": true,
+      "baseline_nan": 114688,
+      "candidate_nan": 114688,
+      "cross_arm_bitwise_diagnostic": true
+    },
+    {
+      "case": "positive-infinity-max-original-path",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true,
+        "span_views_still_alias_original_kv": true
+      },
+      "independent_reference": null,
+      "nonfinite_diagnostic": true,
+      "baseline_nan": 114688,
+      "candidate_nan": 114688,
+      "cross_arm_bitwise_diagnostic": true
+    },
+    {
+      "case": "restored-dense-before-ABBA",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true,
+        "span_views_still_alias_original_kv": true
+      },
+      "independent_reference": {
+        "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+        "atol": 0.03,
+        "rtol": 0.03,
+        "relative_l2_limit": 0.01,
+        "rows": [
+          0,
+          1,
+          4,
+          8,
+          10,
+          13,
+          14,
+          15,
+          62,
+          63
+        ],
+        "heads": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "lengths": [
+          4256,
+          4253,
+          4247,
+          4239,
+          4235,
+          4229,
+          4227,
+          4225,
+          4130,
+          4128
+        ],
+        "arms": {
+          "baseline": {
+            "finite": true,
+            "max_abs": 0.00034709589823152254,
+            "relative_l2": 0.0022370483749647907,
+            "passed": true
+          },
+          "candidate": {
+            "finite": true,
+            "max_abs": 0.00034709589823152254,
+            "relative_l2": 0.0022370483749647907,
+            "passed": true
+          }
+        },
+        "scope": "合成组件抽样，不是模型准确率"
+      },
+      "nonfinite_diagnostic": false,
+      "baseline_nan": 0,
+      "candidate_nan": 0,
+      "cross_arm_bitwise_diagnostic": true
+    }
+  ],
+  "base_hash_expected": "641478e6ddcd3d9c11192fbd0c6d4d472bf8ad3e3bb2fd9fa27b09f18e4dc9ff",
+  "interpretation": "静态原件读取，不把mask或copy计数独自当KV传输/性能生效证明",
+  "arms": {
+    "baseline": {
+      "while_lines": [
+        106
+      ],
+      "for_lines": [],
+      "ttgir_async_copy_count": 0,
+      "llvm_sme_intrinsic_calls": 0,
+      "asm_sme_load_count": 0,
+      "dot_rows": [
+        {
+          "line": 190,
+          "text": "%scores_122 = tt.dot %Q_78, %K_121, %cst_1, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x16xf32, #mma> loc(#loc218)"
+        },
+        {
+          "line": 217,
+          "text": "%accumulator_137 = tt.dot %accumulator_135, %V_136, %accumulator_133, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x128xf32, #mma> loc(#loc232)"
+        },
+        {
+          "line": 263,
+          "text": "%scores_134 = tt.dot %Q_78, %K_133, %cst_1, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x16xf32, #mma> loc(#loc254)"
+        },
+        {
+          "line": 292,
+          "text": "%accumulator_150 = tt.dot %accumulator_148, %V_149, %accumulator_146, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x128xf32, #mma> loc(#loc270)"
+        }
+      ],
+      "page_pointer_rows": [
+        {
+          "line": 95,
+          "text": "%Q_32 = tt.splat %query_ptr : !tt.ptr<bf16> -> tensor<8x128x!tt.ptr<bf16>> loc(#loc197)"
+        },
+        {
+          "line": 96,
+          "text": "%Q_33 = tt.addptr %Q_32, %query_offsets_31 : tensor<8x128x!tt.ptr<bf16>>, tensor<8x128xi64> loc(#loc197)"
+        },
+        {
+          "line": 145,
+          "text": "%K = tt.splat %key_cache_ptr : !tt.ptr<bf16> -> tensor<128x16x!tt.ptr<bf16>> loc(#loc226)"
+        },
+        {
+          "line": 146,
+          "text": "%K_89 = tt.addptr %K, %k_offsets_75 : tensor<128x16x!tt.ptr<bf16>>, tensor<128x16xi64> loc(#loc226)"
+        },
+        {
+          "line": 148,
+          "text": "%V = tt.splat %value_cache_ptr : !tt.ptr<bf16> -> tensor<16x128x!tt.ptr<bf16>> loc(#loc228)"
+        },
+        {
+          "line": 149,
+          "text": "%V_91 = tt.addptr %V, %v_offsets_88 : tensor<16x128x!tt.ptr<bf16>>, tensor<16x128xi64> loc(#loc228)"
+        },
+        {
+          "line": 222,
+          "text": "%K_91 = tt.splat %key_cache_ptr : !tt.ptr<bf16> -> tensor<128x16x!tt.ptr<bf16>> loc(#loc269)"
+        },
+        {
+          "line": 223,
+          "text": "%K_92 = tt.addptr %K_91, %k_offsets_77 : tensor<128x16x!tt.ptr<bf16>>, tensor<128x16xi64> loc(#loc269)"
+        },
+        {
+          "line": 227,
+          "text": "%V_95 = tt.splat %value_cache_ptr : !tt.ptr<bf16> -> tensor<16x128x!tt.ptr<bf16>> loc(#loc272)"
+        },
+        {
+          "line": 228,
+          "text": "%V_96 = tt.addptr %V_95, %v_offsets_90 : tensor<16x128x!tt.ptr<bf16>>, tensor<16x128xi64> loc(#loc272)"
+        }
+      ],
+      "actual_sme_rows": []
+    },
+    "candidate": {
+      "while_lines": [],
+      "for_lines": [
+        104
+      ],
+      "ttgir_async_copy_count": 0,
+      "llvm_sme_intrinsic_calls": 8,
+      "asm_sme_load_count": 8,
+      "dot_rows": [
+        {
+          "line": 217,
+          "text": "%scores_153 = tt.dot %Q_151, %K_152, %cst_3, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 16}>> -> tensor<8x16xf32, #mma> loc(#loc226)"
+        },
+        {
+          "line": 244,
+          "text": "%accumulator_168 = tt.dot %accumulator_166, %V_167, %accumulator_164, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 32}>> -> tensor<8x128xf32, #mma> loc(#loc240)"
+        },
+        {
+          "line": 285,
+          "text": "%scores_167 = tt.dot %Q_117, %K_166, %cst_3, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x16xf32, #mma> loc(#loc259)"
+        },
+        {
+          "line": 314,
+          "text": "%accumulator_183 = tt.dot %accumulator_181, %V_182, %accumulator_179, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x128xf32, #mma> loc(#loc275)"
+        }
+      ],
+      "page_pointer_rows": [
+        {
+          "line": 92,
+          "text": "%Q_32 = tt.splat %query_ptr : !tt.ptr<bf16> -> tensor<8x128x!tt.ptr<bf16>> loc(#loc202)"
+        },
+        {
+          "line": 93,
+          "text": "%Q_33 = tt.addptr %Q_32, %query_offsets_31 : tensor<8x128x!tt.ptr<bf16>>, tensor<8x128xi64> loc(#loc202)"
+        },
+        {
+          "line": 109,
+          "text": "%k_page_base = arith.muli %page_61, %k_row_stride_block : i64 loc(#loc217)"
+        },
+        {
+          "line": 110,
+          "text": "%k_page_base_62 = arith.muli %k_page_base, %c128_i64 : i64 loc(#loc218)"
+        },
+        {
+          "line": 111,
+          "text": "%k_page_base_63 = tt.addptr %key_cache_ptr, %k_page_base_62 : !tt.ptr<bf16>, i64 loc(#loc219)"
+        },
+        {
+          "line": 126,
+          "text": "%v_page_base = arith.muli %page_61, %v_row_stride_block : i64 loc(#loc228)"
+        },
+        {
+          "line": 127,
+          "text": "%v_page_base_77 = arith.muli %v_page_base, %c128_i64 : i64 loc(#loc229)"
+        },
+        {
+          "line": 128,
+          "text": "%v_page_base_78 = tt.addptr %value_cache_ptr, %v_page_base_77 : !tt.ptr<bf16>, i64 loc(#loc230)"
+        },
+        {
+          "line": 140,
+          "text": "%K = tt.splat %k_page_base_63 : !tt.ptr<bf16> -> tensor<128x16x!tt.ptr<bf16>> loc(#loc237)"
+        },
+        {
+          "line": 141,
+          "text": "%K_89 = tt.addptr %K, %k_offsets_76 : tensor<128x16x!tt.ptr<bf16>>, tensor<128x16xi64> loc(#loc237)"
+        },
+        {
+          "line": 143,
+          "text": "%V = tt.splat %v_page_base_78 : !tt.ptr<bf16> -> tensor<16x128x!tt.ptr<bf16>> loc(#loc239)"
+        },
+        {
+          "line": 144,
+          "text": "%V_91 = tt.addptr %V, %v_offsets_88 : tensor<16x128x!tt.ptr<bf16>>, tensor<16x128xi64> loc(#loc239)"
+        },
+        {
+          "line": 185,
+          "text": "%k_page_base = arith.muli %page_60, %k_row_stride_block : i64 loc(#loc263)"
+        },
+        {
+          "line": 186,
+          "text": "%k_page_base_64 = arith.muli %k_page_base, %c128_i64 : i64 loc(#loc264)"
+        },
+        {
+          "line": 187,
+          "text": "%k_page_base_65 = tt.addptr %key_cache_ptr, %k_page_base_64 : !tt.ptr<bf16>, i64 loc(#loc265)"
+        },
+        {
+          "line": 202,
+          "text": "%v_page_base = arith.muli %page_60, %v_row_stride_block : i64 loc(#loc274)"
+        },
+        {
+          "line": 203,
+          "text": "%v_page_base_79 = arith.muli %v_page_base, %c128_i64 : i64 loc(#loc275)"
+        },
+        {
+          "line": 204,
+          "text": "%v_page_base_80 = tt.addptr %value_cache_ptr, %v_page_base_79 : !tt.ptr<bf16>, i64 loc(#loc276)"
+        },
+        {
+          "line": 217,
+          "text": "%K_91 = tt.splat %k_page_base_65 : !tt.ptr<bf16> -> tensor<128x16x!tt.ptr<bf16>> loc(#loc284)"
+        },
+        {
+          "line": 218,
+          "text": "%K_92 = tt.addptr %K_91, %k_offsets_78 : tensor<128x16x!tt.ptr<bf16>>, tensor<128x16xi64> loc(#loc284)"
+        },
+        {
+          "line": 222,
+          "text": "%V_95 = tt.splat %v_page_base_80 : !tt.ptr<bf16> -> tensor<16x128x!tt.ptr<bf16>> loc(#loc287)"
+        },
+        {
+          "line": 223,
+          "text": "%V_96 = tt.addptr %V_95, %v_offsets_90 : tensor<16x128x!tt.ptr<bf16>>, tensor<16x128xi64> loc(#loc287)"
+        },
+        {
+          "line": 486,
+          "text": "#loc217 = loc(\"k_page_base\"(#loc46))"
+        },
+        {
+          "line": 487,
+          "text": "#loc218 = loc(\"k_page_base\"(#loc47))"
+        },
+        {
+          "line": 488,
+          "text": "#loc219 = loc(\"k_page_base\"(#loc48))"
+        },
+        {
+          "line": 497,
+          "text": "#loc228 = loc(\"v_page_base\"(#loc57))"
+        },
+        {
+          "line": 498,
+          "text": "#loc229 = loc(\"v_page_base\"(#loc58))"
+        },
+        {
+          "line": 499,
+          "text": "#loc230 = loc(\"v_page_base\"(#loc59))"
+        },
+        {
+          "line": 530,
+          "text": "#loc263 = loc(\"k_page_base\"(#loc99))"
+        },
+        {
+          "line": 531,
+          "text": "#loc264 = loc(\"k_page_base\"(#loc100))"
+        },
+        {
+          "line": 532,
+          "text": "#loc265 = loc(\"k_page_base\"(#loc101))"
+        },
+        {
+          "line": 541,
+          "text": "#loc274 = loc(\"v_page_base\"(#loc110))"
+        },
+        {
+          "line": 542,
+          "text": "#loc275 = loc(\"v_page_base\"(#loc111))"
+        },
+        {
+          "line": 543,
+          "text": "#loc276 = loc(\"v_page_base\"(#loc112))"
+        }
+      ],
+      "actual_sme_rows": [
+        {
+          "stage": "llir",
+          "line": 261,
+          "text": "tail call void @llvm.bi.sme.load.16x1b64.colxfb16(i32 ptrtoint (ptr addrspace(3) @global_smem to i32), <4 x i32> %243, i32 0, i32 0), !dbg !49"
+        },
+        {
+          "stage": "llir",
+          "line": 262,
+          "text": "tail call void @llvm.bi.sme.load.16x1b64.colxfb16(i32 ptrtoint (ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 1024) to i32), <4 x i32> %243, i32 64, i32 0), !dbg !49"
+        },
+        {
+          "stage": "llir",
+          "line": 263,
+          "text": "tail call void @llvm.bi.sme.load.16x1b64.colxfb16(i32 ptrtoint (ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 2048) to i32), <4 x i32> %243, i32 128, i32 0), !dbg !49"
+        },
+        {
+          "stage": "llir",
+          "line": 264,
+          "text": "tail call void @llvm.bi.sme.load.16x1b64.colxfb16(i32 ptrtoint (ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 3072) to i32), <4 x i32> %243, i32 192, i32 0), !dbg !49"
+        },
+        {
+          "stage": "llir",
+          "line": 272,
+          "text": "tail call void @llvm.bi.sme.load.16x1b64.rowxfb16(i32 ptrtoint (ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096) to i32), <4 x i32> %248, i32 0, i32 0), !dbg !48"
+        },
+        {
+          "stage": "llir",
+          "line": 273,
+          "text": "tail call void @llvm.bi.sme.load.16x1b64.rowxfb16(i32 ptrtoint (ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 5120) to i32), <4 x i32> %248, i32 64, i32 0), !dbg !48"
+        },
+        {
+          "stage": "llir",
+          "line": 274,
+          "text": "tail call void @llvm.bi.sme.load.16x1b64.rowxfb16(i32 ptrtoint (ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 6144) to i32), <4 x i32> %248, i32 128, i32 0), !dbg !48"
+        },
+        {
+          "stage": "llir",
+          "line": 275,
+          "text": "tail call void @llvm.bi.sme.load.16x1b64.rowxfb16(i32 ptrtoint (ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 7168) to i32), <4 x i32> %248, i32 192, i32 0), !dbg !48"
+        },
+        {
+          "stage": "asm",
+          "line": 348,
+          "text": "sl_sme_load_16x1b64_col s[16:19], s[14:15], 0x0, 0x0, 0x0, 0x1"
+        },
+        {
+          "stage": "asm",
+          "line": 350,
+          "text": "sl_sme_load_16x1b64_col s[16:19], s[66:67], 0x0, 0x0, 0x100, 0x1"
+        },
+        {
+          "stage": "asm",
+          "line": 356,
+          "text": "sl_sme_load_16x1b64_col s[16:19], s[68:69], 0x0, 0x0, 0x200, 0x1"
+        },
+        {
+          "stage": "asm",
+          "line": 360,
+          "text": "sl_sme_load_16x1b64_col s[16:19], s[70:71], 0x0, 0x0, 0x300, 0x1"
+        },
+        {
+          "stage": "asm",
+          "line": 363,
+          "text": "sl_sme_load_16x1b64_rowxfb16 s[20:23], s[14:15], 0x0, 0x0, 0x400, 0x1"
+        },
+        {
+          "stage": "asm",
+          "line": 364,
+          "text": "sl_sme_load_16x1b64_rowxfb16 s[20:23], s[66:67], 0x0, 0x0, 0x500, 0x1"
+        },
+        {
+          "stage": "asm",
+          "line": 365,
+          "text": "sl_sme_load_16x1b64_rowxfb16 s[20:23], s[68:69], 0x0, 0x0, 0x600, 0x1"
+        },
+        {
+          "stage": "asm",
+          "line": 366,
+          "text": "sl_sme_load_16x1b64_rowxfb16 s[20:23], s[70:71], 0x0, 0x0, 0x700, 0x1"
+        }
+      ]
+    }
+  }
+}

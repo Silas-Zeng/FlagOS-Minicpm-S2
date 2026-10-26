@@ -85,7 +85,7 @@
 - [BI-V150连续流读取参考](methods/stream-read-reference.md)
 - [GQA下一页号预取](methods/gqa-page-lookahead.md)
 - [BF16 down N方向分组布局](methods/bf16-nonly-down.md)
-- [GQA标量KV页基址](methods/gqa-scalar-page-base.md)
+- [GQA标量KV页基址与动态for组合](methods/gqa-scalar-page-base.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

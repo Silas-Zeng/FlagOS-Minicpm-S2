@@ -322,7 +322,19 @@ GROUPS['gqa-scalar-page-base']=('GQA标量KV页基址', '标量KV页基址＋二
 CODE['gqa-scalar-page-base']=['experiments/framework/20261026T114133003627Z-gqa-scalar-page-base-hotspot-component/source/kernel.diff', 'experiments/framework/20261026T114133003627Z-gqa-scalar-page-base-hotspot-component/results.json', 'experiments/framework/20261026T114133003627Z-gqa-scalar-page-base-hotspot-component/archive-receipt.json', 'analysis/main6971-084521-nodes/gqa-scalar-page-base-114133.json']
 BATCH_RESULTS['gqa_scalar_page_base_negative_component']=('原page16 while与FP顺序不变，将KV页基址提升为标量并保留二维span；实际N64/S2、4K观测长度多重集、合成激活，8类原门及跨臂逐位通过。完整producer＋原reducer Graph一次ABBA Event0.542196542→0.544291317ms，慢0.38635%，wall慢0.18463%，停止不接模型。SGPR64→104、SGPR spill字段0→75；ASM保存于VGPR lane，private_segment=0，不能当HBM spill或独立耗时因果。真实LLVM/ASM SME传输仍0，mask14→62和TTGIR标签不是实际启用证明。动态for＋scalar只属未验证机制候选，不继承旧for或本轮资格；无官方/105/新基线，source/DB/native及清理通过。', '停止当前scalar-page-base实现，不进模型或合并；保留正确性通过及小幅负结果，不把一次ABBA写稳定因果。for＋scalar尚未实现验证，不自动列为已获益组合。', '8类原门、独立FP64适用样本、换值Graph/side/写入/输入RNG与跨臂逐位通过；完整组件Event慢0.38635%，实际SME传输0。', '沿main6971实际N64/S2及4K replay32长度多重集，合成Q/KV；原page16 while、数学/reducer不变，仅标量化KV页基址＋二维span。原数值门后完整producer＋reducer一次16-call ABBA；不修改模型或官方参数。')
 
+# 20261026 N-only身份修复官方混合收尾
+GROUPS['bf16-nonly-down']=('BF16 down N方向分组布局', 'N128单层M64省10.55%、M32省3.63%；精确身份修复后的M64-only官方4K暖均5719.8133（观察+1.1145%），16K首暖4005.55（观察−2.7652%）后停。六轮1280 SUCCESS、旧prefill栈/新FX42闭合；KV516320、1008MiB常驻副本，保留混合结果，不合并/定基线/跑105。旧v1身份失配与大M两种负布局分别保留。', [])
+CODE['bf16-nonly-down'] += ['experiments/official/20261026T120453Z-main6971-nonly-down-identity-fixed-four-rounds/benchmark_results/raw_runs_20261026_200712.csv', 'experiments/official/20261026T120453Z-main6971-nonly-down-identity-fixed-four-rounds-control/performance-stop-decision.json', 'experiments/official/20261026T120453Z-main6971-nonly-down-identity-fixed-four-rounds-control/posthoc-after-stop.json', 'experiments/official/20261026T120453Z-main6971-nonly-down-identity-fixed-four-rounds-control/prefill-activation.json', 'experiments/official/20261026T120453Z-main6971-nonly-down-identity-fixed-four-rounds-control/archive-receipt.json', 'analysis/2026-10-26-local-to-e2e-budget.md']
+BATCH_RESULTS['nonly_down_identity_official_mixed_no_baseline']=('N-only M64精确runner身份修复v2，原compute-order/normalization/Q-hoist及新42pack/FX42实际闭合，posthoc valid/prefill_valid=true。4K四轮4899.30/5700.44/5672.77/5786.23 tok/s，弃冷暖均5719.813333对5656.77观察+1.114476%；16K冷/首暖3642.71/4005.55，首暖对4119.46观察−2.765168%后主动停止，六轮1280 SUCCESS。KV516320对548336；4K日志KV最高62.6%、Running最高64，16K最高100%、Running最高31，基线前两轮最高33；双方日志未发现抢占/重算记录，无独立计数。本轮M64调用分布未采，旧16K小M窗口仅历史参考；1008MiB副本及容量/调度差异公开，不声称严格布局因果。保留4K正/16K负混合结果，停止本轮后续16K/105，不合并、不定新基线；source/native/DB/清理通过。', '保留组件及4K正信号和完整负载原件；本M64-only双权重组合16K首暖负，停止后继，不合并或定新基线。容量压力是已有日志支持的可能解释，未独立隔离因果；准确率未跑、不继承103/105。', '原官方六轮1280 SUCCESS；修复后旧prefill栈与42个新opaque实际绑定均有效，posthoc=true；按16K首暖负主动早停，SIGTERM/owner exit1原样保留，DB/source/native及清理通过。', '原官方benchmark/服务参数，4K/16K输入、1024输出、并发64、请求256/128；M64原已测kernel/helper/runner不变，只修compute-order精确runner身份。4K完成四轮，16K完成冷/首暖后按对应首暖比较停止；不重测未变基线，不继承105。')
+
+# 20261026 GQA for scalar i64实际SME负结果
+GROUPS['gqa-scalar-page-base']=('GQA标量KV页基址与动态for组合', 'scalar＋while原8门过但慢0.38635%，SME未生效；后继for＋scalar＋一维i64正确性及逐位通过，实际SME LLVM/ASM各8条，却完整组件慢10.73864%。两者停止，不接模型；机制成功不等于净收益。', [])
+CODE['gqa-scalar-page-base'] += ['experiments/framework/20261026T134937447894Z-gqa-for-scalar-i64-hotspot-component/source/kernel.diff', 'experiments/framework/20261026T134937447894Z-gqa-for-scalar-i64-hotspot-component/results.json', 'experiments/framework/20261026T134937447894Z-gqa-for-scalar-i64-hotspot-component/archive-receipt.json', 'analysis/main6971-084521-nodes/gqa-for-scalar-i64-134937.json']
+BATCH_RESULTS['gqa_for_scalar_i64_negative_component']=('动态for＋标量页基址＋一维int64后expand，保持原NHD/page16/FP顺序与producer＋reducer；8类门、有限跨臂逐位硬门及非有限原语义诊断通过。完整Graph Event0.541995287→0.600198209ms，慢10.73864%，wall慢10.42853%，停止不接模型。LLVM/ASM实际SME指令均0→8，完整页路径启用而tail原路；VGPR93→81、SGPR64→84、spill均0、shared8192→10240，不能仅凭资源或指令认定收益/精确慢因。无官方、105或新基线，DB/source/native和清理通过。', '停止本组合及模型扩展；保留真实SME已生成、数值通过与净性能负证据，不以指令成功或资源下降继续盲扫。', '8类原门及有限跨臂逐位硬门通过，非有限原门/bit诊断通过；原641478生产核与reducer绑定。完整组件慢10.73864%，实际SME LLVM8/ASM8。', '复用main6971实际N64/S2、4K观察长度多重集的合成Q/KV组件；只组合三个编译条件，FP/页序/reducer/参数不变。计时前完成原数值检查，再完整producer＋reducer Graph 16-call ABBA，非官方性能或模型准确率。')
+
 def group(row):
+    if row['profile_id']=='gqa-for-scalar-i64':
+        return 'gqa-scalar-page-base'
     if row['profile_id']=='gqa-scalar-page-base':
         return 'gqa-scalar-page-base'
     if row['profile_id']=='bf16-nonly-down-official':
@@ -424,6 +436,8 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     current_component_summary = {
+        'gqa_for_scalar_i64_negative_component': '8门/逐位通过；实际SME LLVM8/ASM8，完整Graph慢10.73864%，停止。资源下降不是收益证明，无官方/105。',
+        'nonly_down_identity_official_mixed_no_baseline': '4K四轮暖均5719.8133（对5656.77观察+1.1145%）；16K首暖4005.55（对4119.46观察−2.7652%）后停，六轮1280 SUCCESS。修复后旧prefill栈/FX42有效，KV516320；混合结果，无105/新基线。',
         'gqa_scalar_page_base_negative_component': '8类门及跨臂逐位通过；Event0.542196542→0.544291317ms，慢0.38635%，停止。SGPR spill75为lane保存非HBM；实际SME仍0，for＋scalar未验证。',
         'nonly_down_official_first_warm_negative': '4K冷/首暖4758.57/5440.33 tok/s，512 SUCCESS；首暖对5533.03观察−1.675393%后主动停。pack42/FX42/M64已证；compute-order源SHA拒绝，prefill未闭合，KV516320；无16K/105。',
         'n256_down_M2048_negative_component': '新N256布局保持原tile，8门/RNG通过；完整Graph Event0.563351333141→0.704238474369ms，慢25.01%，停止全M路线；B异步环变化未证精确因果，无官方资格。',

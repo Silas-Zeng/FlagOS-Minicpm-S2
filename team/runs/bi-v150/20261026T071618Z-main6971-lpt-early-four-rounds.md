@@ -44,5 +44,5 @@
 - 环境 / 源码 / 后态：[manifest.json](../../../experiments/framework/20261026T071618Z-main6971-lpt-early-four-rounds/manifest.json)；[source-sha256.json](../../../experiments/framework/20261026T071618Z-main6971-lpt-early-four-rounds-control/source-sha256.json)
 - 原始结果：[raw_runs_20261026_151843.csv](../../../experiments/framework/20261026T071618Z-main6971-lpt-early-four-rounds/benchmark_results/raw_runs_20261026_151843.csv)；[summary_20261026_151843.csv](../../../experiments/framework/20261026T071618Z-main6971-lpt-early-four-rounds/benchmark_results/summary_20261026_151843.csv)；[result.json](../../../experiments/framework/20261026T071618Z-main6971-lpt-early-four-rounds/result.json)
 - 日志 / 采样：[server.log](../../../experiments/framework/20261026T071618Z-main6971-lpt-early-four-rounds/server.log)；[gpu.csv](../../../experiments/framework/20261026T071618Z-main6971-lpt-early-four-rounds/gpu.csv)；[exit-code](../../../experiments/framework/20261026T071618Z-main6971-lpt-early-four-rounds/exit-code)
-- 相关说明：未记录
+- 相关说明：[2026-10-26-local-to-e2e-review](../../../analysis/2026-10-26-local-to-e2e-review.md)
 - 完整原登记：[registry.csv](../../../experiments/registry.csv)（登记序号见上；同一run可有多个阶段）
