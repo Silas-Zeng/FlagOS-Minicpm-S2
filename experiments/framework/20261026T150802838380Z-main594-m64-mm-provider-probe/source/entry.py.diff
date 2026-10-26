@@ -1,0 +1,34 @@
+--- prior-owner.py
++++ new-baseline-probe-owner.py
+@@ -34,17 +34,18 @@
+         from worker import worker
+         return worker(args.run_dir, args.model)
+     if args.source_dir is None:
+-        parser.error("需要已冻结main6971 --source-dir；不借用当前未知安装版本")
++        parser.error("需要merge594完整--source-dir；四个原生产文件SHA必须匹配")
+     source = args.source_dir.resolve(strict=True)
+-    if sha(source / "vllm_fl/patches/biv150_stable_small_o.py") != "c5a2dd6c69c514531fee4145621e51bd4e41c0d784f4d4e086fe48aad98104ba":
+-        raise RuntimeError("冻结源码的原opaque不匹配main6971")
++    for name,expected in read(HERE/'provider-source-sha256.json').items():
++        if sha(source/name)!=expected:
++            raise RuntimeError('merge594生产源不匹配：'+name)
+     import fcntl
+     import reused_helpers as owner
+     for name, expected in read(HERE / "asset-pins.json").items():
+         if sha(HERE / name) != expected:
+             raise RuntimeError("入口资产变化：" + name)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-biv150-nonly-down-component")
++    run = ROOT / "framework" / (stamp + "-main594-m64-mm-provider-probe")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+@@ -53,7 +54,7 @@
+         shutil.copyfile(HERE / name, assets / name)
+     shutil.copyfile(HERE / "asset-pins.json", assets / "asset-pins.json")
+     state = dict(started_utc=stamp, owner_pid=os.getpid(),
+-        scope="BF16 down N128唯一无损格式，真实M64 opaque F.linear固定配置完整对照；非官方成绩", run=str(run),
++        scope="merge594实际small_linear_out M64唯一MM调用，仅身份/config资源，不计时或写候选", run=str(run),
+         command=[sys.executable, *sys.argv], owned_processes=[], exit_code=1)
+     save(run / "manifest.json", state)
+     lock = child = monitor = None

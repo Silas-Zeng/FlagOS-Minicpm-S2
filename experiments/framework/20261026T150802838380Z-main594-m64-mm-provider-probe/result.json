@@ -1,0 +1,126 @@
+{
+  "status": "baseline_probe_completed",
+  "kind": "baseline_identity_only",
+  "callback_calls": 1,
+  "timings": [],
+  "source_main": "594ae2a9d17aadc4587ad54ade2b34e17f4af990",
+  "rows": 64,
+  "layer": 0,
+  "performance_qualified": false,
+  "model_path_qualified": false,
+  "accuracy_qualified": false,
+  "limitation": "仅编译路径原callback单次真实调用；没有完整Inductor/模型、候选数值门或ABBA，不证明新baseline吞吐",
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "target": "GPUTarget(backend='corex', arch=71, warp_size=64)",
+  "dispatch": {
+    "mm_source_sha256": "4c2e23da2a6b65b89cbb8170967f14c5327d143e21137387f3907ccb4fcde090",
+    "callback_source_sha256": "1edfba6c9176665312962e7ea7dc9cac15132403ca4fbbd92d86fd4894325302",
+    "registrar_mm_out": true,
+    "aten_dispatch": "CUDA FlagGems",
+    "callback_installer_called": false,
+    "scope": "原small_linear_out M64不依赖_LARGE_LINEAR策略，实际torch.mm(x,weight.t(),out=out)；不重编Inductor"
+  },
+  "weight": {
+    "name": "model.layers.0.mlp.down_proj.weight",
+    "bytes": 25165824,
+    "sha256": "1a6e6d547d5f0ffd08fd020690ccf75323ba4dd54181617e406a84f644cee501",
+    "extra_weight_bytes": 0,
+    "pack": false
+  },
+  "actual_mm": {
+    "M": 64,
+    "N": 2048,
+    "K": 6144,
+    "config": {
+      "BLOCK_M": 64,
+      "BLOCK_N": 64,
+      "BLOCK_K": 128,
+      "SPLIT_K": 1,
+      "num_warps": 16,
+      "num_stages": 2,
+      "num_ctas": 1
+    },
+    "grid": [
+      32,
+      1
+    ],
+    "constexprs": {
+      "num_warps": "16",
+      "num_stages": "2",
+      "num_ctas": "1",
+      "BLOCK_M": "64",
+      "BLOCK_N": "64",
+      "BLOCK_K": "128",
+      "SPLIT_K": "1",
+      "EVEN_K": "True",
+      "UPGRADE": "False",
+      "UPGRADE_A_OFFS": "False",
+      "UPGRADE_B_OFFS": "False",
+      "UPGRADE_C_OFFS": "False"
+    },
+    "mathematical_kwargs": {
+      "acc_dtype": "fp32",
+      "input_precision": "None",
+      "fp8_fast_accum": "True",
+      "GROUP_M": "8",
+      "AB_DTYPE": "bf16"
+    },
+    "A_stride": [
+      6144,
+      1
+    ],
+    "B_transposed_W_stride": [
+      1,
+      6144
+    ],
+    "out_stride": [
+      2048,
+      1
+    ]
+  },
+  "compiled": {
+    "hash": "87fa576ed1c7527759db403f017f02d00299fdf6de6de02f32ce898893df36ed",
+    "shared": 65536,
+    "use_sme": 7,
+    "n_regs": 25,
+    "n_spills": 0,
+    "async_copies": 4,
+    "B_SME_SSA": {
+      "passed": true,
+      "dot_count": 1,
+      "records": [
+        {
+          "A": "%a_80",
+          "B": "%b_82",
+          "B_local_load_found": true,
+          "B_dot_op_layouts": [
+            "opIdx = 1, parent = #mma, kWidth = 2, useSme = 2"
+          ],
+          "B_useSme_values": [
+            2
+          ],
+          "B_same_layout_opIdx1_useSme_nonzero": true
+        }
+      ]
+    },
+    "asm_sme_sites": 4
+  },
+  "narrow_N_decision_inputs": {
+    "BLOCK_N": 64,
+    "grid": [
+      32,
+      1
+    ],
+    "candidate_written": false,
+    "note": "只依据真实原配置重新立项；BN已64则不能沿旧BN128→64假设"
+  },
+  "single_call_sanity": {
+    "output_finite": true,
+    "sample_fp64_pass": true,
+    "sample_max_abs": 0.0,
+    "input_unchanged": true,
+    "weight_unchanged": true,
+    "not_full_correctness_gate": true
+  },
+  "decision": "保存真实MM身份/config/IR资源，未写候选/不计时，不授官方或准确率资格"
+}

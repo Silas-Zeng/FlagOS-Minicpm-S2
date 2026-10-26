@@ -20,7 +20,8 @@
 
 | 方法 / 版本 | 结果与处理 |
 |---|---|
-| **当前合格主线：main6971／PR60** | 复用已完成的原官方4K/16K各四轮，弃首轮 **5656.77／4119.24 tok/s**；同源105题 **103/105**。QKV、down小M及O宽tile均组件正但模型负，已停止，不替换基线。最新状态见[当前工作](CURRENT_WORK.md) |
+| **团队最新main594／PR59** | PR59已合并。队友同环境两臂105均102/105且逐题相同，4K单次5588.22→5623.29（+0.62749%）、16K4108.86→4188.04（+1.92698%）；其native/暖机/评分口径与本方旧成绩分开。本站一次探针已核新M64实际MM-out配置，不重复其官方/准确率验证。[PR59原证据](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/59)／[当前工作](CURRENT_WORK.md) |
+| **本方历史参考：main6971／PR60** | 已完成原官方4K/16K各四轮，弃首轮 **5656.77／4119.24 tok/s**；同源105题 **103/105**。本页旧QKV/down/O、N-only及GQA结果均按其当时版本解释，不把组件比例迁移到团队新main。 |
 | [BF16 down N方向分组布局](team/methods/bf16-nonly-down.md) | N128单层M64省10.55%、M32省3.63%；精确身份修复后的M64-only官方4K暖均5719.8133（观察+1.1145%），16K首暖4005.55（观察−2.7652%）后停。六轮1280 SUCCESS、旧prefill栈/新FX42闭合；KV516320、1008MiB常驻副本，保留混合结果，不合并/定基线/跑105。旧v1身份失配与大M两种负布局分别保留。 |
 | [GQA下一页号预取](team/methods/gqa-page-lookahead.md) | 原8门及跨臂逐位通过，完整producer＋reducer Event慢0.105735%、wall快0.06134%，无可分辨正信号，停止；实际next-page load后立即wait，未实现预期重叠 |
 | [连续流读取参考](team/methods/stream-read-reference.md) | 512MiB BF16连续读＋checksum参考 **665.432GB/s**；正确性及清理通过，非HBM或GQA硬上限，不是吞吐优化成绩；本批另补回三个实际linear缓存文本 |

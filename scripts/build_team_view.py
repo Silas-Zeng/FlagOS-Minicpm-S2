@@ -337,6 +337,11 @@ GROUPS['gqa-scalar-page-base']=('GQA标量KV页基址与动态for组合', 'scala
 CODE['gqa-scalar-page-base'] += ['experiments/framework/20261026T141615226388Z-gqa-for-scalar-i64-s2-hotspot-component/source/kernel.diff', 'experiments/framework/20261026T141615226388Z-gqa-for-scalar-i64-s2-hotspot-component/results.json', 'experiments/framework/20261026T141615226388Z-gqa-for-scalar-i64-s2-hotspot-component/archive-receipt.json', 'analysis/main6971-084521-nodes/gqa-for-scalar-i64-s2-141615.json']
 BATCH_RESULTS['gqa_for_scalar_i64_s2_negative_component']=('在已测for＋标量页基址＋一维int64组合上仅candidate num_stages=2；原生产A保持1，reducer/数学/页序/布局不变。8类原门及跨臂逐位通过，完整producer＋reducer Graph Event0.541960925→0.691717803ms，慢27.63241%，wall慢27.18074%。实际软件流水生成TTGIR async-copy4、LLVM/ASM SME各16条，shared8192→18432，仍无净益；停止stages2，不扫stages3/不接模型。DB/source/native及设备清理通过，无官方/105或新基线。', '停止当前SME流水路线并保留数值通过、机制生成与净负结果；不以异步指令数或低寄存器替代收益。', '8类原门和跨臂bitwise通过；实际候选编译stages2、TTGIR async-copy4、LLVM/ASM SME16。未取得模型准确率资格。', '复用main6971实际N64/S2及4K观察长度的合成Q/KV组件；原8门后完整producer＋reducer 16-call Graph ABBA，baseline stages1、candidate stages2，单项非参数扫描。')
 
+# 20261026 main594实际MM身份
+GROUPS['shape-gemm']=('BI-V150特定形状GEMM', '历史main6971的宽tile/小M SplitK等保留原组件正、模型负及路径不完全可比的限制。PR59合并后，main594的compiled M9–127已改为MM-out；本站M64实取BM64/BN64/BK128、w16/s2、grid32，原窄N双波提案已被覆盖而停止。旧15ef/F.linear局部收益不迁移到新基线。此轮仅身份/资源读取，无候选计时或新吞吐，后续以新main真实路径继续研究。', [])
+CODE['shape-gemm'] += ['experiments/framework/20261026T150802838380Z-main594-m64-mm-provider-probe/result.json', 'experiments/framework/20261026T150802838380Z-main594-m64-mm-provider-probe/archive-receipt.json', 'analysis/2026-10-26-team-main594-source-manifest.json', 'analysis/2026-10-26-team-main594-github-receipt.json']
+BATCH_RESULTS['main594_mm_provider_identity']=('团队PR59已合入main594，实际compiled M64走small_linear_out→MM-out。本站单次原callback证实BM64/BN64/BK128、w16/s2、grid32、shared64KiB、spill0及实际B SME；有限性/FP64抽样/输入不变sanity通过，无计时/候选/模型资格。原BN128→64窄N提案已被新main覆盖，停止旧方案，不重复开发。DB未变及所属进程/9031/设备清理通过。', '停止旧窄N提案，按新main实际MM重新选题；原探针和源码身份保留。', '单次sanity通过，不是完整数值/模型/105门。', '新main原callback唯一调用，实际registrar/SDK/stride/LibEntry配置与IR资源；无计时，不改库或DB。')
+
 def group(row):
     if row['profile_id']=='gqa-for-scalar-i64-s2':
         return 'gqa-scalar-page-base'
@@ -443,6 +448,7 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     current_component_summary = {
+        'main594_mm_provider_identity': '新main M64已BN64/grid32，旧窄N提案停止；单次身份/资源，无性能结论。',
         'gqa_for_scalar_i64_s2_negative_component': '8门/逐位通过；实际stages2、async-copy4/SME16，完整Graph慢27.63241%，停止不扫stage。',
         'gqa_for_scalar_i64_negative_component': '8门/逐位通过；实际SME LLVM8/ASM8，完整Graph慢10.73864%，停止。资源下降不是收益证明，无官方/105。',
         'nonly_down_identity_official_mixed_no_baseline': '4K四轮暖均5719.8133（对5656.77观察+1.1145%）；16K首暖4005.55（对4119.46观察−2.7652%）后停，六轮1280 SUCCESS。修复后旧prefill栈/FX42有效，KV516320；混合结果，无105/新基线。',
