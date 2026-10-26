@@ -1,0 +1,33 @@
+--- prior-span/kernel.diff
++++ for-span/kernel.diff
+@@ -1,10 +1,10 @@
+-"""研究原型：合法二维backing-span + 128元素行寻址；未GPU编译或验证。"""
++"""研究原型：动态for + 合法二维backing-span + 128元素行寻址；未GPU编译或验证。"""
+ import triton
+ import triton.language as tl
+ LN2=tl.constexpr(0.6931471805599453)
+ 
+ @triton.jit
+-def _gqa_decode_attention_sme_span(
++def _gqa_decode_attention_for_span(
+     segm_output_ptr,
+     segm_max_ptr,
+     segm_expsum_ptr,
+@@ -69,8 +69,7 @@
+     accumulator = tl.zeros([ROWS, HEAD_SIZE], dtype=tl.float32)
+ 
+     full_upper = lower + ((upper - lower) // PAGE_SIZE) * PAGE_SIZE
+-    position = lower
+-    while position < full_upper:
++    for position in range(lower, full_upper, PAGE_SIZE):
+         # A step is exactly one page and positions advance page-aligned, so one
+         # scalar block-table entry covers the whole tile.
+         page = tl.load(block_table_row + position // PAGE_SIZE).to(tl.int64)
+@@ -98,7 +97,6 @@
+             probability.to(V.dtype), V
+         )
+         running_max = new_max
+-        position += PAGE_SIZE
+ 
+     if full_upper < upper:
+         # Final partial page: bound the columns, and read the page only for the

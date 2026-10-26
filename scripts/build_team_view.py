@@ -282,7 +282,14 @@ GROUPS['prefill-history-tail']=('Prefill历史区间与causal尾块分离', '首
 CODE['bf16-packed-down'].extend(['experiments/framework/20261026T092809453391Z-biv150-packed-down-component/source', 'experiments/framework/20261026T092809453391Z-biv150-packed-down-component/result.json'])
 CODE['prefill-history-tail'].extend(['experiments/framework/20261026T093219176303Z-prefill-history-tail-reuse-fragment-long-component/source', 'experiments/framework/20261026T093219176303Z-prefill-history-tail-reuse-fragment-long-component/results.json'])
 
+# 20261026 GQA for+span实测收尾
+GROUPS['gqa-for-span']=('GQA动态for与二维span', '根据main6971真实Graph热点，保持原page16/数学顺序/reducer，仅改变循环形式与合法跨度；N64/S2八类门通过，但完整组件慢75.05%，停止。', [])
+CODE['gqa-for-span']=['experiments/framework/20261026T095708239358Z-gqa-for-span-hotspot-component/source/kernel.diff', 'experiments/framework/20261026T095708239358Z-gqa-for-span-hotspot-component/results.json', 'experiments/framework/20261026T095708239358Z-gqa-for-span-hotspot-component/ir-candidate']
+BATCH_RESULTS['gqa_for_span_negative_component']=('原page16/FP顺序的动态for＋二维span，N64/S2用真实4K观测长度多重集、合成激活。8类原数值/FP64/Graph/写入门通过，完整producer＋原reducer Event0.541187257→0.947350353ms，慢75.0504%，wall慢74.0019%。停止，不进模型。source/DB/native及9031清理通过；mask14→62不是SME启用证明。', '停止本候选，不扩形状或模型，不合并；复用原负结果，不重跑。', '8类检查通过，组件慢75.05%', '实际N64/B64/S2及replay32长度多重集，合成Q/KV；page16、原FP64/特殊值/换值Graph/side门，完整producer＋原reducer16-call ABBA。')
+
 def group(row):
+    if row['profile_id'] == 'gqa-for-span':
+        return 'gqa-for-span'
     if row['profile_id'] in ('main6971-graph-profile', 'bf16-packed-down', 'prefill-history-tail'):
         return row['profile_id']
     if row['profile_id'] in ('gqa-two-page-t32','prefill-lpt','gqa-sme-span','down-group256','prefill-fresh-kv','qkv-rope-fusion','gate-partial-fusion'):

@@ -81,6 +81,7 @@
 - [main6971 Graph真实热点诊断](methods/main6971-graph-profile.md)
 - [BF16 down权重微块布局](methods/bf16-packed-down.md)
 - [Prefill历史区间与causal尾块分离](methods/prefill-history-tail.md)
+- [GQA动态for与二维span](methods/gqa-for-span.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

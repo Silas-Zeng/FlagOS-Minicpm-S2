@@ -1,0 +1,79 @@
+--- prior-span/worker.diff
++++ for-span/worker.diff
+@@ -1,4 +1,4 @@
+-"""真实 N33/bucket40/S16 热点及原 B32/S4；每次独立组件，无模型激活或官方成绩。"""
++"""实际Graph N64/B64/S2热点；每次独立组件，无模型激活或官方成绩。"""
+ from __future__ import annotations
+ import importlib
+ import json
+@@ -58,7 +58,7 @@
+ def worker(run, model, shape="hotspot"):
+     result = dict(status="started", kind="生产 kernel+reducer 的随机输入组件", checks=[], timings=[],
+                   limitations=["没有模型权重或实际激活采样；不是模型资格或官方收益",
+-                               "仅 N33/bucket40/S16；page16与split保持，candidate维持page16/tile16，仅新SME跨度与行寻址",
++                               "仅N64/B64/S2；观测长度多重集、合成激活；page16/split/FP顺序保持，仅动态for+原span",
+                                "性能仅关闭 profiler 的同输入 CUDA Graph ABBA"])
+     gqa = producer_capture = reducer_capture = None
+     original_producer = original_reducer = None
+@@ -93,7 +93,7 @@
+         if digest(Path(gqa.__file__)) != SOURCE_SHA or digest(HERE / "baseline.py") != SOURCE_SHA:
+             raise RuntimeError("实际 GQA 不是冻结 main6971/618 原件")
+         backend = importlib.import_module("vllm.v1.attention.backends.triton_attn")
+-        candidate = load("gqa_sme_span_candidate", HERE / "candidate.py")
++        candidate = load("gqa_for_span_candidate", HERE / "candidate.py")
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("非单卡")
+         torch.cuda.set_device(0)
+@@ -104,7 +104,7 @@
+         result["source_sha256"] = dict(baseline=SOURCE_SHA, candidate=digest(HERE / "candidate.py"))
+         torch.manual_seed(725013)
+         if shape == "hotspot":
+-            B, active, segments = 40, 33, 16
++            B, active, segments = 64, 64, 2
+         else:
+             raise ValueError("未知 shape")
+         L = 16384
+@@ -115,6 +115,16 @@
+         table[:, :L // 16] = table[:, :L // 16].reshape(B, -1, 4).flip(-1).reshape(B, -1)
+         common.slot_mapping[:B] = table[:, L // 16 - 1].to("cuda", dtype=torch.int64) * 16 + 15
+         common.block_table_tensor = table.cuda()
++        timing_shape = json.loads((HERE / "timing-shape.json").read_text(encoding="utf-8"))
++        timing_lengths = timing_shape["seq_lens"]
++        if len(timing_lengths) != B or any(not (1 <= n <= L) for n in timing_lengths):
++            raise RuntimeError("诊断长度多重集越界")
++        common.seq_lens.copy_(torch.tensor(timing_lengths, dtype=torch.int32, device="cuda"))
++        common.max_seq_len = max(timing_lengths)
++        common.slot_mapping[:B] = torch.tensor([
++            int(table[row, (length - 1) // 16]) * 16 + (length - 1) % 16
++            for row, length in enumerate(timing_lengths)], dtype=torch.int64, device="cuda")
++        result["timing_shape"] = timing_shape
+         if active < B:
+             # Actual runner: query_start_loc tail=last real token, lengths=0,
+             # null block=0 (reserved), slot=-1, padded request/token counts=B.
+@@ -163,7 +173,7 @@
+         original_inputs = (query.clone(), cache.clone(), common.seq_lens.clone(), common.block_table_tensor.clone())
+         result["span_views"] = []
+         arms = {}
+-        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_sme_span)):
++        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_for_span)):
+             out = torch.full_like(query, -17)
+             partial = torch.full_like(metadata.softmax_segm_output, -17)
+             maxima = torch.full_like(metadata.softmax_segm_max, -17)
+@@ -206,7 +216,7 @@
+                     "shared_fragment": r"local_load|local_alloc|s2r|shared"}
+         selection = dict(diagnostic_only=True, no_asm_selection_claim=True,
+             expected_mask_delta_hex="0x30", masks={}, evidence={},
+-            note="B40/S16 full scratch may yield15->63; narrowed S2 scratch may yield14->62. Real ASM/wait review is required.")
++            note="生产N64/S2窄scratch预期14->62；mask不等于实际SME。须核for结构、copy/wait与资源。")
+         for arm_name, compiled in first.items():
+             selection["masks"][arm_name] = result["resources"][arm_name]["use_sme"]
+             selection["evidence"][arm_name] = {}
+@@ -361,7 +371,7 @@
+             a = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "baseline")
+             b = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "candidate")
+             result["summary"][metric] = dict(baseline_ms=a, candidate_ms=b, fraction_saved=1 - b / a)
+-        result.update(status="component_signal_only", decision="仅page16 SME跨度一组组件；实际SMEcopy/wait由root审，不自动扩形状或模型")
++        result.update(status="component_signal_only", decision="仅实际N64/S2动态for+span一组组件；实际SMEcopy/wait由root审，不自动扩形状或模型")
+     except BaseException:
+         result.update(status="failed", error=traceback.format_exc())
+         traceback.print_exc()
