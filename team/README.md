@@ -82,6 +82,9 @@
 - [BF16 down权重微块布局](methods/bf16-packed-down.md)
 - [Prefill历史区间与causal尾块分离](methods/prefill-history-tail.md)
 - [GQA动态for与二维span](methods/gqa-for-span.md)
+- [BI-V150连续流读取参考](methods/stream-read-reference.md)
+- [GQA下一页号预取](methods/gqa-page-lookahead.md)
+- [BF16 down N方向分组布局](methods/bf16-nonly-down.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

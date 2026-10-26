@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共324条登记、321个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共327条登记、324个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -302,6 +302,9 @@
 | 天数 BI-V150 | 322 | 2026-10-26T09:28:09.453391+00:00 | [BF16 down权重微块布局](methods/bf16-packed-down.md) | 正确性通过，组件慢71.89% | 未记录/未记录/未记录/未记录 | v2仅将SME机制要求改诊断，candidate字节不变；8项数值/FP64/Graph/side检查通过。M2030完整GEMM Graph ABBA原F.linear0.564831406→packed0.97090 | [20261026T092809453391Z-biv150-packed-down-component](runs/bi-v150/20261026T092809453391Z-biv150-packed-down-component.md) |
 | 天数 BI-V150 | 323 | 2026-10-26T09:32:19.176303+00:00 | [Prefill历史区间与causal尾块分离](methods/prefill-history-tail.md) | 数值不变要求未通过，停止 | 未记录/未记录/未记录/未记录 | v2按真实IR复用已有Q fragment，selected1/fallback0、两臂LLVM循环Q读0。SGPR104→90/spill6→0；两臂FP64门通过，但跨臂逐位失败，max_abs0.000122070 | [20261026T093219176303Z-prefill-history-tail-reuse-fragment-long-component](runs/bi-v150/20261026T093219176303Z-prefill-history-tail-reuse-fragment-long-component.md) |
 | 天数 BI-V150 | 324 | 2026-10-26T09:57:08.239358+00:00 | [GQA动态for与二维span](methods/gqa-for-span.md) | 8类检查通过，组件慢75.05% | 未记录/未记录/未记录/未记录 | 原page16/FP顺序的动态for＋二维span，N64/S2用真实4K观测长度多重集、合成激活。8类原数值/FP64/Graph/写入门通过，完整producer＋原reducer Event0.541187257→ | [20261026T095708239358Z-gqa-for-span-hotspot-component](runs/bi-v150/20261026T095708239358Z-gqa-for-span-hotspot-component.md) |
+| 天数 BI-V150 | 325 | 2026-10-26T10:10:34.477784+00:00 | [BI-V150连续流读取参考](methods/stream-read-reference.md) | 两次checksum、一次copy正确性和计时后checksum通过；无参数扫描。 | 未记录/未记录/未记录/未记录 | 连续流读参考665.432GB/s，checksum/copy检查通过；不是HBM硬上限或模型吞吐收益。 | [20261026T101034477784Z-biv150-stream-read-reference-hotspot-component](runs/bi-v150/20261026T101034477784Z-biv150-stream-read-reference-hotspot-component.md) |
+| 天数 BI-V150 | 326 | 2026-10-26T10:25:36.253539+00:00 | [GQA下一页号预取](methods/gqa-page-lookahead.md) | 8类原门与跨臂逐位通过；完整组件无可分辨正信号。 | 未记录/未记录/未记录/未记录 | 8类数值门与逐位通过；完整组件Event慢0.1057%、wall快0.0613%，无可分辨正信号，停止。 | [20261026T102536253539Z-gqa-page-lookahead-hotspot-component](runs/bi-v150/20261026T102536253539Z-gqa-page-lookahead-hotspot-component.md) |
+| 天数 BI-V150 | 327 | 2026-10-26T10:28:08.704037+00:00 | [BF16 down N方向分组布局](methods/bf16-nonly-down.md) | M64单层9类case、跨臂逐位/独立FP64/Graph/RNG通过，完整Event省10.5534%；未测42层或模型。 | 未记录/未记录/未记录/未记录 | M64单层9类检查通过，完整GEMM Event省10.5534%；保留组件候选，42层显存成本与模型净收益未测。 | [20261026T102808704037Z-biv150-nonly-down-component](runs/bi-v150/20261026T102808704037Z-biv150-nonly-down-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

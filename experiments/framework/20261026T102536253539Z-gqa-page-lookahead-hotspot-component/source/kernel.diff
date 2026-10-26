@@ -1,0 +1,36 @@
+--- main6971-original-page16-while
++++ page-only-lookahead
+@@ -1,4 +1,4 @@
+-def _gqa_decode_attention(
++def _gqa_decode_attention_page_lookahead(
+     segm_output_ptr,
+     segm_max_ptr,
+     segm_expsum_ptr,
+@@ -63,11 +63,18 @@
+     accumulator = tl.zeros([ROWS, HEAD_SIZE], dtype=tl.float32)
+ 
+     full_upper = lower + ((upper - lower) // PAGE_SIZE) * PAGE_SIZE
++    # 只有存在完整页才读首个页号；零页/仅tail仍用下方原尾分支。
++    page_i32 = tl.load(block_table_row + lower // PAGE_SIZE,
++                       mask=lower < full_upper, other=0)
+     position = lower
+     while position < full_upper:
+         # A step is exactly one page and positions advance page-aligned, so one
+         # scalar block-table entry covers the whole tile.
+-        page = tl.load(block_table_row + position // PAGE_SIZE).to(tl.int64)
++        page = page_i32.to(tl.int64)
++        next_position = position + PAGE_SIZE
++        # 只carry一个i32页号；不持有第二份K/V，不读最后完整页之后的表项。
++        next_page_i32 = tl.load(block_table_row + next_position // PAGE_SIZE,
++                               mask=next_position < full_upper, other=0)
+         k_offsets = (
+             page * k_stride_block
+             + column_slot[None, :] * k_stride_slot
+@@ -93,6 +100,7 @@
+         )
+         running_max = new_max
+         position += PAGE_SIZE
++        page_i32 = next_page_i32
+ 
+     if full_upper < upper:
+         # Final partial page: bound the columns, and read the page only for the

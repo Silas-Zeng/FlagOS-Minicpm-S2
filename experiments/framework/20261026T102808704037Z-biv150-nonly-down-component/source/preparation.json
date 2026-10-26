@@ -1,0 +1,55 @@
+{
+  "status": "CPU_PREPARED_PENDING_INDEPENDENT_REVIEW_AND_GPU",
+  "gpu_started": false,
+  "original_package_sha256": "fe73069143abbd0d7b5b88d9048fa7c3aef2a9224debef312db19569e72a3be8",
+  "observed_graph": {
+    "kernel_hash": "15ef15aa299d507601ce6980ee4bd56928142529471fbb7e63ea9470df04af6f",
+    "config": {
+      "BLOCK_M": 64,
+      "BLOCK_N": 128,
+      "BLOCK_K": 64,
+      "num_warps": 8,
+      "num_stages": 2,
+      "num_ctas": 1,
+      "SPLIT_K": 1
+    },
+    "dynamic_MNK_directly_captured": false,
+    "shape_inferred_from_graph_and_model": [
+      64,
+      2048,
+      6144
+    ],
+    "source_files": {
+      "archive\\hotspot-layout-20261026\\batch-101034\\profiles\\20261026T084521Z-main6971-production-hotspot-4k\\triton-cache\\CXXRLKRJTVIHMAOONGAO4S6VNEUBIJJJI4P3W7TD5KKHBXYEV5XQ\\linear_kernel.asm": "54285a3ed1be2bc7beecda1baff985261032cd813a3d7601e4a5a174acb52e54",
+      "archive\\hotspot-layout-20261026\\batch-101034\\profiles\\20261026T084521Z-main6971-production-hotspot-4k\\triton-cache\\CXXRLKRJTVIHMAOONGAO4S6VNEUBIJJJI4P3W7TD5KKHBXYEV5XQ\\linear_kernel.json": "057ef1de095877369c6fcd8fc15dbaddc516a783c12d8673e07a92f6900c38f6",
+      "archive\\hotspot-layout-20261026\\batch-101034\\profiles\\20261026T084521Z-main6971-production-hotspot-4k\\triton-cache\\CXXRLKRJTVIHMAOONGAO4S6VNEUBIJJJI4P3W7TD5KKHBXYEV5XQ\\linear_kernel.llir": "aff39391b56728593e4c48b91c22e5e229d7a774979640df32be7ed7ecb6828d",
+      "archive\\hotspot-layout-20261026\\batch-101034\\profiles\\20261026T084521Z-main6971-production-hotspot-4k\\triton-cache\\CXXRLKRJTVIHMAOONGAO4S6VNEUBIJJJI4P3W7TD5KKHBXYEV5XQ\\linear_kernel.source": "5e624ed2d190024707710e86f537a576512d0e7a714db61f02e7d264bc9377e4",
+      "archive\\hotspot-layout-20261026\\batch-101034\\profiles\\20261026T084521Z-main6971-production-hotspot-4k\\triton-cache\\CXXRLKRJTVIHMAOONGAO4S6VNEUBIJJJI4P3W7TD5KKHBXYEV5XQ\\linear_kernel.ttgir": "da9d48f0362d00adcc0562cac31449de9c390aa489b9711e4a990eb56d58cee7"
+    }
+  },
+  "run_shapes": [
+    64
+  ],
+  "extra_correctness_tail_M": 63,
+  "layer": 0,
+  "layout": [
+    16,
+    6144,
+    128
+  ],
+  "original_opaque_sha256": "c5a2dd6c69c514531fee4145621e51bd4e41c0d784f4d4e086fe48aad98104ba",
+  "actual_linear_sha256": "d431a4fa144ed67dc3deab46dd5beace3612858075f85c39e602447ba3bf768a",
+  "precision": "原GROUP8/K顺序/dot表达式/最终BF16；无量化或新归约",
+  "baseline": "真实opaque→F.linear默认FlagGems，实际捕获配置须精确匹配；非手动mm对照",
+  "ownership": "owner实质代码/DB锁/恢复/清理不变，仅run标签/scope变化",
+  "gates": "完整原4eager+FP64+2换值Graph+side+RNG/输入不变，另尾M63；错误立即停止",
+  "performance": "仅M64唯一ABBA完整GEMM Graph replay；非正停止；不自动权重环/模型",
+  "timing_excludes": [
+    "Graph capture前CPU分配",
+    "权重CPU pack/传输",
+    "42层与Attention/KV工作集交织"
+  ],
+  "extra_weight_bytes": 25165824,
+  "component_keeps_both_weights": true,
+  "SME_diagnostic_not_hard_gate": true
+}

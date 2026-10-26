@@ -1,0 +1,58 @@
+{
+  "status": "reference_only",
+  "diagnostic_only": true,
+  "official_score": false,
+  "operation": "BF16 contiguous read + per-block FP32 checksum",
+  "limitations": [
+    "逻辑读取率，非HBM counter；checksum归约有成本",
+    "连续布局与GQA散页不同，不能当严格KV读带宽上限",
+    "未导入模型/native；owner的source/native pin仅固定共同环境",
+    "copy仅一次正确性校验，不测或混同copy带宽"
+  ],
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "dtype": "bfloat16",
+  "source_bytes": 536870912,
+  "logical_read_bytes_per_call": 536870912,
+  "logical_output_write_bytes_per_call": 131072,
+  "logical_total_bytes_per_call": 537001984,
+  "checksum_elements_per_CTA": 8192,
+  "num_warps": 4,
+  "num_stages": 1,
+  "grid": 32768,
+  "checks": [
+    {
+      "value": 1.0,
+      "checksum_passed": true
+    },
+    {
+      "value": -0.5,
+      "checksum_passed": true
+    }
+  ],
+  "copy_equal": true,
+  "timings": [
+    {
+      "calls": 16,
+      "event_ms": 0.807044267654419,
+      "wall_ms": 0.810586,
+      "logical_read_GBps": 665.2310579695378
+    },
+    {
+      "calls": 16,
+      "event_ms": 0.806742787361145,
+      "wall_ms": 0.8095359375,
+      "logical_read_GBps": 665.4796552394405
+    },
+    {
+      "calls": 16,
+      "event_ms": 0.8068004846572876,
+      "wall_ms": 0.8093954375,
+      "logical_read_GBps": 665.4320643201544
+    }
+  ],
+  "event_median_ms": 0.8068004846572876,
+  "logical_read_GBps_median": 665.4320643201544,
+  "compiled_hash": "c96970686097c21a80c21d8cfb1c4677a9be8ab8650657d38b18915cb8906348",
+  "profiler": false,
+  "parameter_sweep": false
+}

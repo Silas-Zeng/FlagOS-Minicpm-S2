@@ -21,6 +21,9 @@
 | 方法 / 版本 | 结果与处理 |
 |---|---|
 | **当前合格主线：main6971／PR60** | 复用已完成的原官方4K/16K各四轮，弃首轮 **5656.77／4119.24 tok/s**；同源105题 **103/105**。QKV、down小M及O宽tile均组件正但模型负，已停止，不替换基线。最新状态见[当前工作](CURRENT_WORK.md) |
+| [BF16 down N方向分组布局](team/methods/bf16-nonly-down.md) | M64真实单层、9类逐位/FP64/Graph门通过，完整GEMM **0.085926→0.076858ms（省10.5534%）**；仅组件候选。42层重复保留packed多1008MiB／24576 KV token成本未测，无模型或官方资格 |
+| [GQA下一页号预取](team/methods/gqa-page-lookahead.md) | 原8门及跨臂逐位通过，完整producer＋reducer Event慢0.105735%、wall快0.06134%，无可分辨正信号，停止；实际next-page load后立即wait，未实现预期重叠 |
+| [连续流读取参考](team/methods/stream-read-reference.md) | 512MiB BF16连续读＋checksum参考 **665.432GB/s**；正确性及清理通过，非HBM或GQA硬上限，不是吞吐优化成绩；本批另补回三个实际linear缓存文本 |
 | [GQA动态for＋二维span](team/methods/gqa-for-span.md) | 真实N64/S2长度多重集组件通过8类正确性检查，但完整producer＋reducer **0.541187→0.947350ms（慢75.05%）**，停止，不进模型或替换基线 |
 | [当前Graph热点](team/methods/main6971-graph-profile.md) | 4K诊断完成，四个Graph采样有效；采样区间以GQA decode为首、linear为次。插桩时间不作正常耗时占比；fresh native FX证明缺项保留，未改变官方基线 |
 | [BF16 down权重布局](team/methods/bf16-packed-down.md)／[Prefill历史尾部分离](team/methods/prefill-history-tail.md) | packed通过8项正确性检查，但完整组件慢 **71.89%**，停止；history-tail已消除循环Q读取和SGPR溢出，但跨臂逐位门失败，未计时，停止该候选。均未合并或替换基线 |

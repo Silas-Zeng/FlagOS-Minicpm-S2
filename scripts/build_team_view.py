@@ -287,7 +287,20 @@ GROUPS['gqa-for-span']=('GQA动态for与二维span', '根据main6971真实Graph�
 CODE['gqa-for-span']=['experiments/framework/20261026T095708239358Z-gqa-for-span-hotspot-component/source/kernel.diff', 'experiments/framework/20261026T095708239358Z-gqa-for-span-hotspot-component/results.json', 'experiments/framework/20261026T095708239358Z-gqa-for-span-hotspot-component/ir-candidate']
 BATCH_RESULTS['gqa_for_span_negative_component']=('原page16/FP顺序的动态for＋二维span，N64/S2用真实4K观测长度多重集、合成激活。8类原数值/FP64/Graph/写入门通过，完整producer＋原reducer Event0.541187257→0.947350353ms，慢75.0504%，wall慢74.0019%。停止，不进模型。source/DB/native及9031清理通过；mask14→62不是SME启用证明。', '停止本候选，不扩形状或模型，不合并；复用原负结果，不重跑。', '8类检查通过，组件慢75.05%', '实际N64/B64/S2及replay32长度多重集，合成Q/KV；page16、原FP64/特殊值/换值Graph/side门，完整producer＋原reducer16-call ABBA。')
 
+# 20261026 连续读参考、GQA页号预取与N-only布局批量收尾
+GROUPS['stream-read-reference']=('BI-V150连续流读取参考', '固定512MiB BF16连续流读＋128KiB checksum输出，三组Event中位约0.806800ms、逻辑读665.432GB/s；两次内容checksum、一次copy正确性及计时后checksum通过。仅连续流读参考，不是物理HBM或散页GQA硬上限，不是吞吐优化/官方成绩。DB/source/native与设备清理通过。同期补回main6971三个实际linear缓存文本，仍不伪装大M实际参数采集。', [])
+CODE['stream-read-reference']=['experiments/profiles/20261026T101034477784Z-biv150-stream-read-reference-hotspot-component/results.json', 'experiments/profiles/20261026T101034477784Z-biv150-stream-read-reference-hotspot-component/source/worker.py', 'experiments/profiles/20261026T101034477784Z-biv150-stream-read-reference-hotspot-component/archive-receipt.json', 'experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/triton-cache']
+BATCH_RESULTS['stream_read_reference_completed']=('固定512MiB BF16连续流读＋128KiB checksum输出，三组Event中位约0.806800ms、逻辑读665.432GB/s；两次内容checksum、一次copy正确性及计时后checksum通过。仅连续流读参考，不是物理HBM或散页GQA硬上限，不是吞吐优化/官方成绩。DB/source/native与设备清理通过。同期补回main6971三个实际linear缓存文本，仍不伪装大M实际参数采集。', '保留带宽参考及实际linear文本，用于预算；不替换比赛基线，不从连续读参考推GQA可实现收益。', '两次checksum、一次copy正确性和计时后checksum通过；无参数扫描。', '单配置512MiB BF16连续流读＋128KiB checksum，每组16次Graph replay共三组；copy只核正确性不计带宽，profiler关闭。')
+GROUPS['gqa-page-lookahead']=('GQA下一页号预取', '原page16 while仅提前读取下一i32页号，N64/S2观测长度多重集、合成激活；原8类FP64/特殊值/Graph等门与跨臂逐位全部通过。完整producer＋原reducer Event0.542211056→0.542784363ms（慢0.105735%），wall快0.06134%，无可分辨正信号，停止不进模型。ASM下一页load后立即wait，未实现预期计算重叠；SGPR64→68、两臂spill0，源码/DB/native及清理通过。', [])
+CODE['gqa-page-lookahead']=['experiments/framework/20261026T102536253539Z-gqa-page-lookahead-hotspot-component/results.json', 'experiments/framework/20261026T102536253539Z-gqa-page-lookahead-hotspot-component/source/worker.py', 'experiments/framework/20261026T102536253539Z-gqa-page-lookahead-hotspot-component/archive-receipt.json', 'experiments/framework/20261026T102536253539Z-gqa-page-lookahead-hotspot-component/source/candidate.py']
+BATCH_RESULTS['gqa_page_lookahead_no_positive_signal']=('原page16 while仅提前读取下一i32页号，N64/S2观测长度多重集、合成激活；原8类FP64/特殊值/Graph等门与跨臂逐位全部通过。完整producer＋原reducer Event0.542211056→0.542784363ms（慢0.105735%），wall快0.06134%，无可分辨正信号，停止不进模型。ASM下一页load后立即wait，未实现预期计算重叠；SGPR64→68、两臂spill0，源码/DB/native及清理通过。', '保留数值通过但无净收益的负结果，停止，不扫参、不进模型；不将微小Event/wall反向差异写成稳定因果退化。', '8类原门与跨臂逐位通过；完整组件无可分辨正信号。', '固定N64/S2/page16原while及4D KV，同4K观测长度多重集与合成Q/KV；原reducer、FP64/换值Graph/特殊值及完整Graph ABBA。')
+GROUPS['bf16-nonly-down']=('BF16 down N方向分组布局', '真实生产opaque/F.linear的M64 down单层组件，仅改N方向BF16无损权重布局，保留实际BM64/BN128/BK64/w8/s2与SME；9类逐位/独立FP64/Graph及RNG门通过。完整GEMM Graph Event0.085926324→0.076858178ms，省10.5534%，仅保留组件正信号。原W与packed两份各24MiB；若42层重复保留将多1008MiB、等价24576 KV token，容量风险及42层交织未测。无模型/官方/105资格，未定新基线；DB/source与清理通过。', [])
+CODE['bf16-nonly-down']=['experiments/framework/20261026T102808704037Z-biv150-nonly-down-component/result.json', 'experiments/framework/20261026T102808704037Z-biv150-nonly-down-component/source/worker.py', 'experiments/framework/20261026T102808704037Z-biv150-nonly-down-component/archive-receipt.json', 'experiments/framework/20261026T102808704037Z-biv150-nonly-down-component/source/candidate.py']
+BATCH_RESULTS['nonly_down_positive_component']=('真实生产opaque/F.linear的M64 down单层组件，仅改N方向BF16无损权重布局，保留实际BM64/BN128/BK64/w8/s2与SME；9类逐位/独立FP64/Graph及RNG门通过。完整GEMM Graph Event0.085926324→0.076858178ms，省10.5534%，仅保留组件正信号。原W与packed两份各24MiB；若42层重复保留将多1008MiB、等价24576 KV token，容量风险及42层交织未测。无模型/官方/105资格，未定新基线；DB/source与清理通过。', '保留单层组件候选；先解决或验证42层额外1008MiB/24576 KV token容量成本及真实交织，不能直接合并或宣称模型收益。', 'M64单层9类case、跨臂逐位/独立FP64/Graph/RNG通过，完整Event省10.5534%；未测42层或模型。', '真实layer0 down权重、合成M64激活；基线真实opaque/F.linear默认FlagGems，复用实际选中tile及SME；N-only pack/unpack/数值/尾M/Graph后唯一完整Graph ABBA。')
+
 def group(row):
+    if row['profile_id'] in ('stream-read-reference','gqa-page-lookahead','bf16-nonly-down'):
+        return row['profile_id']
     if row['profile_id'] == 'gqa-for-span':
         return 'gqa-for-span'
     if row['profile_id'] in ('main6971-graph-profile', 'bf16-packed-down', 'prefill-history-tail'):
@@ -378,6 +391,13 @@ def brief(value, limit=220):
 
 
 def result(row, limit=190):
+    current_component_summary = {
+        'stream_read_reference_completed': '连续流读参考665.432GB/s，checksum/copy检查通过；不是HBM硬上限或模型吞吐收益。',
+        'gqa_page_lookahead_no_positive_signal': '8类数值门与逐位通过；完整组件Event慢0.1057%、wall快0.0613%，无可分辨正信号，停止。',
+        'nonly_down_positive_component': 'M64单层9类检查通过，完整GEMM Event省10.5534%；保留组件候选，42层显存成本与模型净收益未测。',
+    }
+    if row['status'] in current_component_summary:
+        return current_component_summary[row['status']]
     if row['profile_id'] in ('shape-gemm','gqa-two-page-t32','prefill-lpt','gqa-sme-span','down-group256','prefill-fresh-kv','qkv-rope-fusion','gate-partial-fusion'):
         return row['conclusion'][:limit]
     """只摘结果/失败原句，不把审计与库身份搬入主视图。"""

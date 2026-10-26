@@ -1,0 +1,167 @@
+--- old-negative/worker.py
++++ nonly/worker.py
+@@ -1,11 +1,11 @@
+-"""实际opaque F.linear对照单一无损BF16 packed down；固定格式、不扫tile。"""
++"""真实M64 opaque F.linear对照单一无损N128 down布局；不扫tile。"""
+ import hashlib
+ import json
+ from pathlib import Path
+ import statistics
+ import traceback
+ from reused_helpers import timed_batch
+-from ir_contract import b_sme2_contract
++from ir_contract import b_sme_contract
+ 
+ 
+ def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+@@ -18,13 +18,13 @@
+ def worker(run,model):
+     run,model=Path(run),Path(model)
+     result=dict(status='started',identity=[],cases=[],timings=[],resources=[],weights=[],
+-        scope='真实layer0 down [2048,6144]，M2030/2048；实际输出buffer按各调用捕获，计时完整GEMM Graph replay；正才3权重环',
++        scope='真实layer0 down [2048,6144]，M64及尾M63；实际输出buffer按各调用捕获，只计唯一M64完整GEMM Graph replay ABBA',
+         base_commit='6971ef48615af97a1637405c71f96dd89969563e',official_qualified=False,
+-        layout='P[N/256,K/128,256,128]；仅BF16位重排，加载一次',
++        layout='P[N/128,K,128]；仅BF16位重排，保留三维descriptor、加载一次',
+         limitations=['组件保留原W与packed两份，各24MiB/层，不算KV容量收益。',
+-                    '合成激活、最多3真实层权重环；未包含Attention/KV交织，不是模型收益。',
++                    '合成M64激活、单真实layer0权重；未包含42层/Attention/KV交织，不是模型收益。',
+                     '候选只用真实opaque选中配置；不符合唯一格式就停止，不自动改tile。',
+-                    'Graph replay不重新执行Python/allocator；Event不含每调用eager CPU输出分配或pack加载。该M生产可能图外，不外推官方。'])
++                    'Graph replay不重新执行Python/allocator；Event不含每调用eager CPU输出分配或pack加载。该M来自已捕获生产Graph；组件仍不外推官方。'])
+     linear_module=original_linear=None
+     try:
+         import torch,triton
+@@ -49,6 +49,7 @@
+                 wc=f.get_tensor(name).contiguous()
+             assert tuple(wc.shape)==(2048,6144) and wc.dtype==torch.bfloat16
+             pc=candidate.pack_cpu(wc)
++            assert tuple(pc.shape)==(16,6144,128) and pc.is_contiguous()
+             assert bits(candidate.unpack_cpu(pc),wc), '真实权重pack/unpack位级失败'
+             result['weights'].append(dict(layer=layer,name=name,original_bytes=wc.numel()*2,packed_bytes=pc.numel()*2,
+                 original_sha256=hashlib.sha256(wc.view(torch.uint8).numpy().tobytes()).hexdigest(),
+@@ -59,17 +60,17 @@
+         wc,w,p=load_layer(0)
+         w_copy=w.clone();p_copy=p.clone()
+         generator=torch.Generator().manual_seed(20261026)
+-        xc=(torch.randn((2048,6144),generator=generator,dtype=torch.float32)*.125).bfloat16()
++        xc=(torch.randn((64,6144),generator=generator,dtype=torch.float32)*.125).bfloat16()
+         x=xc.cuda()
+         cpu_rng=torch.get_rng_state().clone();gpu_rng=torch.cuda.get_rng_state().clone()
+         def preserve(name,compiled,m):
+             md=getattr(compiled,'metadata',None)
+             text=getattr(compiled,'asm',{}).get('ttgir','')
+             assembly=getattr(compiled,'asm',{}).get('asm','')
+-            b_contract=b_sme2_contract(text)
+-            resource=dict(rows=m,name=name,shared=getattr(md,'shared',None),n_regs=getattr(compiled,'n_regs',None),
++            b_contract=b_sme_contract(text)
++            resource=dict(rows=m,name=name,use_sme=getattr(md,'use_sme',None),shared=getattr(md,'shared',None),n_regs=getattr(compiled,'n_regs',None),
+                 n_spills=getattr(compiled,'n_spills',None),async_copy_ops=text.count('async_copy_global_to_local'),
+-                B_dot_useSme2=b_contract['passed'],B_SME_contract=b_contract,
++                B_dot_useSme_nonzero=b_contract['passed'],B_SME_contract=b_contract,
+                 asm_sme_load='sl_sme_load_' in assembly)
+             result['resources'].append(resource)
+             for kind,value in getattr(compiled,'asm',{}).items():
+@@ -77,7 +78,7 @@
+                     (run/f'{m}-{name}.{kind}').write_bytes(value.encode() if isinstance(value,str) else value)
+             return resource
+         def oracle(xx,wc,a,b,label):
+-            rows=[0,1,31,127,1023,xx.shape[0]-1];cols=[0,1,63,127,511,1023,2047]
++            rows=[0,1,7,15,31,xx.shape[0]-1];cols=[0,1,63,127,511,1023,2047]
+             reference=(xx[rows].cpu().double()@wc[cols].double().T).bfloat16().double()
+             stats={}
+             for arm,val in (('A',a),('B',b)):
+@@ -87,7 +88,7 @@
+             torch.save(dict(reference=reference,A=a[rows][:,cols].cpu(),B=b[rows][:,cols].cpu()),run/(label+'-fp64.pt'))
+             assert all(v['passed'] for v in stats.values()), '独立FP64门失败'
+         configs={}
+-        for m in (2030,2048):
++        for m in (64,):
+             xx=x[:m];origin=xx.clone();holders={}
+             capture=dispatch_bootstrap.Capture(original_linear)
+             linear_module.linear_kernel=capture
+@@ -98,6 +99,11 @@
+             rec=capture.records[0]
+             assert rec['rows']==m and tuple(identity_out.shape)==(m,2048)
+             configs[m]=config=rec['config']
++            assert config==candidate.CONFIG, '生产真实配置不符，停止而不改tile/格式'
++            assert tuple(rec['grid'])==(16,1), '原M64 down实际grid不符'
++            result['observed_graph_kernel_hash']='15ef15aa299d507601ce6980ee4bd56928142529471fbb7e63ea9470df04af6f'
++            result['runtime_kernel_hash']=getattr(rec['kernel'].metadata,'hash',None)
++            result['runtime_hash_matches_observed_graph']=result['runtime_kernel_hash']==result['observed_graph_kernel_hash']
+             result['identity'].append({k:v for k,v in rec.items() if k!='kernel'})
+             preserve('original_linear',rec['kernel'],m)
+             save(run/'identity.json',result['identity'])
+@@ -121,9 +127,9 @@
+                 xx.copy_(source.cuda());origin.copy_(xx)
+                 baseline();ck=packed();torch.cuda.synchronize();verify('eager_'+label)
+                 if label=='normal':
+-                    resource=preserve('packed_linear',ck,m)
++                    resource=preserve('nonly_linear',ck,m)
+                     save(run/'resources-before-timing.json',result['resources'])
+-                    result.setdefault('SME_mechanism',{})[str(m)]=dict(preserved=resource['async_copy_ops']>=2 and resource['B_dot_useSme2'] and resource['asm_sme_load'], diagnostic_only=True, note='原B SME假设未保持也保留真实资源；全部原数值门通过后仅原ABBA判断净性能，不宣称SME/occupancy收益')
++                    result.setdefault('SME_mechanism',{})[str(m)]=dict(preserved=resource['async_copy_ops']>=2 and resource['B_dot_useSme_nonzero'] and resource['asm_sme_load'], diagnostic_only=True, note='两种B方向useSme均只诊断；保存实际B SSA关联/ASM，不把mask当生效；完整8门及尾M通过后只计唯一ABBA')
+             oracle(xx,wc,holders['A'],holders['B'],str(m))
+             xx.copy_(xc[:m].cuda());origin.copy_(xx)
+             graphs={};refs={};stream=torch.cuda.Stream();stream.wait_stream(torch.cuda.current_stream())
+@@ -140,6 +146,17 @@
+             side=torch.cuda.Stream();side.wait_stream(torch.cuda.current_stream())
+             with torch.cuda.stream(side):baseline();packed()
+             torch.cuda.current_stream().wait_stream(side);torch.cuda.synchronize();verify('side_stream')
++            # 原BM64的尾M63：保持同一配置与K序，不增加计时组。
++            tail_x=xx[:63];tail_before=tail_x.clone()
++            tail_a=torch.ops.biv150_stable_small_o.linear(tail_x,w)
++            tail_b=torch.empty((63,2048),dtype=torch.bfloat16,device='cuda')
++            candidate.launch_into(tail_x,p,tail_b,config)
++            torch.cuda.synchronize()
++            tail_case=dict(rows=63,label='tail_M63',bitwise=bits(tail_a,tail_b),
++                finite=bool(torch.isfinite(tail_a).all() and torch.isfinite(tail_b).all()),
++                inputs_unchanged=bits(tail_x,tail_before) and bits(w,w_copy) and bits(p,p_copy))
++            result['cases'].append(tail_case)
++            assert all(tail_case[k] for k in ('bitwise','finite','inputs_unchanged')), '尾M63逐位/有限性/输入不变门失败'
+             for arm in 'ABBA':
+                 for _ in range(3):graphs[arm].replay()
+                 pair=(torch.cuda.Event(enable_timing=True),torch.cuda.Event(enable_timing=True))
+@@ -147,40 +164,11 @@
+             means={arm:statistics.mean(t['event_per_call_ms'] for t in result['timings'] if t['rows']==m and t['arm']==arm) for arm in 'AB'}
+             result.setdefault('means',{})[str(m)]=means
+             if means['B']>=means['A']:
+-                result.update(status='stopped_negative',decision=f'M{m}完整生产对照不正，停止后shape/权重环/模型')
++                result.update(status='stopped_negative',decision=f'M{m}完整生产对照不正，停止后续/权重环/模型')
+                 break
+             xx.copy_(xc[:m].cuda())
+         else:
+-            # 只在两M均正之后，最小三层真实权重环；不是42层或Attention交织。
+-            for layer in (20,41):load_layer(layer)
+-            m=2030;xx=x[:m];config=configs[m];ring={};ring_graphs={};ring_refs={}
+-            def ring_call(arm):
+-                outputs=[]
+-                for layer in (0,20,41):
+-                    cpu_weight,original,packed_weight=weights[layer]
+-                    if arm=='A':out=torch.ops.biv150_stable_small_o.linear(xx,original)
+-                    else:
+-                        out=torch.empty((m,2048),dtype=torch.bfloat16,device='cuda')
+-                        candidate.launch_into(xx,packed_weight,out,config)
+-                    outputs.append(out)
+-                ring[arm]=outputs
+-            ring_call('A');ring_call('B');torch.cuda.synchronize()
+-            for i,layer in enumerate((0,20,41)):
+-                assert bits(ring['A'][i],ring['B'][i]) and bool(torch.isfinite(ring['B'][i]).all())
+-                oracle(xx,weights[layer][0],ring['A'][i],ring['B'][i],f'ring-layer{layer}')
+-            for arm in 'AB':
+-                graph=torch.cuda.CUDAGraph()
+-                with torch.cuda.graph(graph,stream=stream):ring_call(arm)
+-                ring_graphs[arm]=graph;ring_refs[arm]=ring[arm]
+-            torch.cuda.current_stream().wait_stream(stream);torch.cuda.synchronize()
+-            for arm in 'ABBA':
+-                for _ in range(3):ring_graphs[arm].replay()
+-                pair=(torch.cuda.Event(enable_timing=True),torch.cuda.Event(enable_timing=True))
+-                result['timings'].append(dict(rows=m,arm=arm,mode='三真实权重环0/20/41',**timed_batch(torch,ring_graphs[arm].replay,pair,8)))
+-            ring_means={arm:statistics.mean(t['event_per_call_ms'] for t in result['timings'] if t['mode']=='三真实权重环0/20/41' and t['arm']==arm) for arm in 'AB'}
+-            result['ring_means']=ring_means
+-            result.update(status='component_positive' if ring_means['B']<ring_means['A'] else 'stopped_negative_ring',
+-                decision='只保留组件信号，未生产/官方资格；三权重环不正则停止')
++            result.update(status='component_positive',decision='只保留M64单层组件信号；没有权重环/模型/官方资格，不自动后继')
+         result['rng_unchanged']=bits(cpu_rng,torch.get_rng_state()) and bits(gpu_rng,torch.cuda.get_rng_state())
+         assert result['rng_unchanged']
+     except BaseException:
