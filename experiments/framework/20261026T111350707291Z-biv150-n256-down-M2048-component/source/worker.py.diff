@@ -1,0 +1,62 @@
+--- P128-negative/worker.py
++++ P256/worker.py
+@@ -1,4 +1,4 @@
+-"""真实M32或M2048 opaque F.linear对照N128共享格式；每次只一shape。"""
++"""真实M2048优先或独立M32/M64 opaque F.linear对照N256唯一格式；每次只一shape。"""
+ import hashlib
+ import json
+ from pathlib import Path
+@@ -16,14 +16,14 @@
+ 
+ 
+ def worker(run,model,rows):
+-    assert rows in (32,2048)
++    assert rows in (32,64,2048)
+     run,model=Path(run),Path(model)
+     result=dict(status='started',identity=[],cases=[],timings=[],resources=[],weights=[],
+-        scope='真实layer0 down [2048,6144]，仅本次CLI选定M32或M2048；各自独立分配真实行数，唯一完整GEMM Graph ABBA',
++        scope='真实layer0 down [2048,6144]，仅本次CLI选定M2048优先或独立M32/M64；各自独立分配真实行数，唯一完整GEMM Graph ABBA',
+         base_commit='6971ef48615af97a1637405c71f96dd89969563e',official_qualified=False,
+-        layout='P[N/128,K,128]；仅BF16位重排，保留三维descriptor、加载一次',
++        layout='P[N/256,K,256]；仅BF16位重排，保留三维descriptor、加载一次',
+         limitations=['组件保留原W与packed两份，各24MiB/层，不算KV容量收益。',
+-                    '合成独立M32或M2048激活、单真实layer0权重；不是全M消费者资格或模型收益。',
++                    '合成独立M2048优先或独立M32/M64激活、单真实layer0权重；不是全M消费者资格或模型收益。',
+                     '候选只用真实opaque选中配置；不符合唯一格式就停止，不自动改tile。',
+                     'Graph replay不重新执行Python/allocator；Event不含每调用eager CPU输出分配或pack加载。M32来自旧16K热点，M2048为独立大M后继；组件不外推官方。'])
+     linear_module=original_linear=None
+@@ -50,7 +50,7 @@
+                 wc=f.get_tensor(name).contiguous()
+             assert tuple(wc.shape)==(2048,6144) and wc.dtype==torch.bfloat16
+             pc=candidate.pack_cpu(wc)
+-            assert tuple(pc.shape)==(16,6144,128) and pc.is_contiguous()
++            assert tuple(pc.shape)==(8,6144,256) and pc.is_contiguous()
+             assert bits(candidate.unpack_cpu(pc),wc), '真实权重pack/unpack位级失败'
+             result['weights'].append(dict(layer=layer,name=name,original_bytes=wc.numel()*2,packed_bytes=pc.numel()*2,
+                 original_sha256=hashlib.sha256(wc.view(torch.uint8).numpy().tobytes()).hexdigest(),
+@@ -101,14 +101,13 @@
+             assert rec['rows']==m and tuple(identity_out.shape)==(m,2048)
+             original_config=dict(rec['config'])
+             config=dict(original_config)
+-            if config['BLOCK_N']==256:
+-                config['BLOCK_N']=128
+-            assert config['BLOCK_N'] in (32,64,128), '本格式不接BN>128，除原256→128明确差分，不自动扫描'
++            assert config['BLOCK_N'] in (32,64,128,256), '本格式仅接原BN<=256，完全不改tile、不扫描'
+             assert config['BLOCK_M'] in (32,64,128,256) and config['BLOCK_K'] in (32,64,128)
+             configs[m]=config
+             result['original_config']=original_config
+             result['candidate_config']=config
+             result['config_difference']={k:dict(original=original_config[k],candidate=v) for k,v in config.items() if original_config[k]!=v}
++            assert result['config_difference']=={}, '必须保持原BM/BN/BK/warps/stages/SPLIT配置'
+             result['runtime_kernel_hash']=getattr(rec['kernel'].metadata,'hash',None)
+             result['allocation_contract']=dict(rows=m,input_shape=list(x.shape),cpu_input_shape=list(xc.shape),
+                 input_storage_bytes=x.untyped_storage().nbytes(),required_input_bytes=m*6144*2,
+@@ -137,7 +136,7 @@
+                 xx.copy_(source.cuda());origin.copy_(xx)
+                 baseline();ck=packed();torch.cuda.synchronize();verify('eager_'+label)
+                 if label=='normal':
+-                    resource=preserve('nonly_other_rows_linear',ck,m)
++                    resource=preserve('n256_linear',ck,m)
+                     save(run/'resources-before-timing.json',result['resources'])
+                     result.setdefault('SME_mechanism',{})[str(m)]=dict(preserved=resource['async_copy_ops']>=2 and resource['B_dot_useSme_nonzero'] and resource['asm_sme_load'], diagnostic_only=True, note='两种B方向useSme均只诊断；保存实际B SSA关联/ASM，不把mask当生效；完整原8门通过后只计唯一ABBA')
+             oracle(xx,wc,holders['A'],holders['B'],str(m))

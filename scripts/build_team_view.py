@@ -307,7 +307,28 @@ BATCH_RESULTS['nonly_down_M32_positive_component']=('同一N128 BF16无损格式
 CODE['bf16-nonly-down'] += ['experiments/framework/20261026T105751336178Z-biv150-nonly-down-M2048-component/result.json', 'experiments/framework/20261026T105751336178Z-biv150-nonly-down-M2048-component/source/worker.py', 'experiments/framework/20261026T105751336178Z-biv150-nonly-down-M2048-component/archive-receipt.json']
 BATCH_RESULTS['nonly_down_M2048_negative_component']=('同一N128格式的新M2048消费者，实际2048行独立输入；8门逐位/FP64/换值Graph/side/输入不变及RNG通过。基线真实BN256，候选为适应N128物理分块明确改BN128，完整Graph ABBA Event0.565791100264→0.914294451475ms，慢约61.60%，停止当前大M候选，不进模型。此差异包含BN256→128，不能归因为纯布局；负结果不否定独立M32/M64正信号。', '停止当前N128大M候选，保留负证据；不扩模型、不混入M32/M64收益。若研究保留原BN256的P256，应作为新独立方法验证。', '8门通过，但完整GEMM Graph一次ABBA慢约61.60%；性能负，不是正确性失败。', '实际M2048独立输入/原opaque配置实捕；原BN256→候选BN128是已声明必要差分，其余BM/BK/warps/stages沿原；原8门后一次ABBA，负即停。')
 
+# 20261026 P256同tile负结果收尾
+GROUPS['bf16-nonly-down']=('BF16 down N方向分组布局', 'N128：M64单层省10.5534%、M32省约3.63%，M2048降BN后慢61.60%；新N256布局保持原tile仍慢25.01%，停止全M路线。各轮数值门通过；42层helper/Graph不是完整模型或官方成绩，双份1008MiB及KV成本未消除，不叠加各M收益。', [])
+CODE['bf16-nonly-down'] += ['experiments/framework/20261026T111350707291Z-biv150-n256-down-M2048-component/result.json', 'experiments/framework/20261026T111350707291Z-biv150-n256-down-M2048-component/2048-original_linear.ttgir', 'experiments/framework/20261026T111350707291Z-biv150-n256-down-M2048-component/2048-n256_linear.ttgir', 'experiments/framework/20261026T111350707291Z-biv150-n256-down-M2048-component/archive-receipt.json']
+BATCH_RESULTS['n256_down_M2048_negative_component']=('新P[N/256,K,256]无损布局的M2048单层组件；原opaque/F.linear实际BM256/BN256/BK32、w16/s2全部保持，config_difference为空。8门逐位/独立FP64/换值Graph/side及RNG通过。完整GEMM Graph一次ABBA Event0.563351333141→0.704238474369ms，慢约25.01%，停止后续M32/M64及单份全M生产。两臂B SME2均真；原A/B均两槽异步共享环，候选仅A异步、B同步，shared65536→49152、寄存器97→96、spill0；流水变化与回退同时观测，未隔离精确因果。性能负而非数值错误；不覆盖N128独立结果，无模型/官方资格。', '停止本P256布局与单份全M生产准备，不扫tile、不改编译器；保留8门通过及完整负性能证据，不否定N128 M32/M64的独立组件正信号。', '实际原tile完全相同；8门/RNG通过，完整Graph一次ABBA慢约25.01%；DB恢复、源码不变及所属进程清理通过。', '真实layer0 down权重、实际2048行独立输入；P[N/256,K,256]只改物理地址，原opaque/F.linear配置实捕后保持全部参数、dot/K顺序；原8门后唯一完整Graph ABBA，负即停。Event不含加载pack或eager CPU输出分配。')
+
+# 20261026 N-only M64官方首暖负收尾
+GROUPS['bf16-nonly-down']=('BF16 down N方向分组布局', 'N128单层M64省10.5534%、M32省约3.63%；M64-only官方4K首暖5440.33对5533.03观察−1.675393%后停，512 SUCCESS，无16K/105。pack42/FX42/M64已证，KV516320；compute-order固定源SHA拒绝回退使prefill栈未闭合，不能纯归因布局。N128大M慢61.60%、同tile N256慢25.01%，全M路线停止。', [])
+CODE['bf16-nonly-down'] += ['experiments/official/20261026T112706Z-main6971-nonly-down-four-rounds/benchmark_results/raw_runs_20261026_192922.csv', 'experiments/official/20261026T112706Z-main6971-nonly-down-four-rounds-control/performance-stop-decision.json', 'experiments/official/20261026T112706Z-main6971-nonly-down-four-rounds-control/posthoc-after-stop.json', 'experiments/official/20261026T112706Z-main6971-nonly-down-four-rounds-control/prefill-activation.json', 'experiments/official/20261026T112706Z-main6971-nonly-down-four-rounds-control/archive-receipt.json']
+BATCH_RESULTS['nonly_down_official_first_warm_negative']=('M64-only N128布局候选原官方4K冷/首暖4758.57/5440.33 tok/s，两轮512 SUCCESS；首暖对5533.03观察下降1.675393%，按规则主动SIGTERM早停，owner exit1不是框架错误，11:39:06清理及DB/source/native恢复通过。新路径pack42层/1056964608B、真实FX42个opaque和首次M64编译选中已证；KV516320对548336，低于理论523760。prefill全栈未闭合：compute-order因model_runner固定源SHA不匹配明确scope拒绝回原路，虽normalization/Q-hoist实际选中仍prefill_valid=false，不能作只改变N-only的严格因果比较。停止本模型候选；无16K/105/完整四轮或新基线，不继承103/105。', '停止旧v1原样运行；该组compute-order回退，不能作N-only净收益判定。保留原结果；精确身份修复作为新源码独立官方对照，尚未证明收益。', '两轮4K共512 SUCCESS；pack42/FX42/M64选中已证，但compute-order源SHA门拒绝，全prefill栈未闭合；按首暖负主动早停，清理通过。', '原官方benchmark与服务参数，4K输入/1024输出/c64/256请求，原定每档四轮；保留候选默认启用及1008MiB常驻权重，不隐去KV成本。复用未变基线，完成冷/首暖后按对应5533.03筛选，低于即停，不运行16K或105。')
+
+# 20261026 GQA scalar-page-base负结果
+GROUPS['gqa-scalar-page-base']=('GQA标量KV页基址', '标量KV页基址＋二维span，保原while/page16/FP顺序；8类门及跨臂逐位通过，完整组件Event慢0.38635%，停止。SGPR spill75为lane保存，非HBM；实际SME传输仍0。for＋scalar组合机制尚未验证。', [])
+CODE['gqa-scalar-page-base']=['experiments/framework/20261026T114133003627Z-gqa-scalar-page-base-hotspot-component/source/kernel.diff', 'experiments/framework/20261026T114133003627Z-gqa-scalar-page-base-hotspot-component/results.json', 'experiments/framework/20261026T114133003627Z-gqa-scalar-page-base-hotspot-component/archive-receipt.json', 'analysis/main6971-084521-nodes/gqa-scalar-page-base-114133.json']
+BATCH_RESULTS['gqa_scalar_page_base_negative_component']=('原page16 while与FP顺序不变，将KV页基址提升为标量并保留二维span；实际N64/S2、4K观测长度多重集、合成激活，8类原门及跨臂逐位通过。完整producer＋原reducer Graph一次ABBA Event0.542196542→0.544291317ms，慢0.38635%，wall慢0.18463%，停止不接模型。SGPR64→104、SGPR spill字段0→75；ASM保存于VGPR lane，private_segment=0，不能当HBM spill或独立耗时因果。真实LLVM/ASM SME传输仍0，mask14→62和TTGIR标签不是实际启用证明。动态for＋scalar只属未验证机制候选，不继承旧for或本轮资格；无官方/105/新基线，source/DB/native及清理通过。', '停止当前scalar-page-base实现，不进模型或合并；保留正确性通过及小幅负结果，不把一次ABBA写稳定因果。for＋scalar尚未实现验证，不自动列为已获益组合。', '8类原门、独立FP64适用样本、换值Graph/side/写入/输入RNG与跨臂逐位通过；完整组件Event慢0.38635%，实际SME传输0。', '沿main6971实际N64/S2及4K replay32长度多重集，合成Q/KV；原page16 while、数学/reducer不变，仅标量化KV页基址＋二维span。原数值门后完整producer＋reducer一次16-call ABBA；不修改模型或官方参数。')
+
 def group(row):
+    if row['profile_id']=='gqa-scalar-page-base':
+        return 'gqa-scalar-page-base'
+    if row['profile_id']=='bf16-nonly-down-official':
+        return 'bf16-nonly-down'
+    if row['profile_id']=='bf16-n256-down-M2048':
+        return 'bf16-nonly-down'
     if row['profile_id'] in ('bf16-nonly-down-integration','bf16-nonly-down-M32','bf16-nonly-down-M2048'):
         return 'bf16-nonly-down'
     if row['profile_id'] in ('stream-read-reference','gqa-page-lookahead','bf16-nonly-down'):
@@ -403,6 +424,9 @@ def brief(value, limit=220):
 
 def result(row, limit=190):
     current_component_summary = {
+        'gqa_scalar_page_base_negative_component': '8类门及跨臂逐位通过；Event0.542196542→0.544291317ms，慢0.38635%，停止。SGPR spill75为lane保存非HBM；实际SME仍0，for＋scalar未验证。',
+        'nonly_down_official_first_warm_negative': '4K冷/首暖4758.57/5440.33 tok/s，512 SUCCESS；首暖对5533.03观察−1.675393%后主动停。pack42/FX42/M64已证；compute-order源SHA拒绝，prefill未闭合，KV516320；无16K/105。',
+        'n256_down_M2048_negative_component': '新N256布局保持原tile，8门/RNG通过；完整Graph Event0.563351333141→0.704238474369ms，慢25.01%，停止全M路线；B异步环变化未证精确因果，无官方资格。',
         'stream_read_reference_completed': '连续流读参考665.432GB/s，checksum/copy检查通过；不是HBM硬上限或模型吞吐收益。',
         'gqa_page_lookahead_no_positive_signal': '8类数值门与逐位通过；完整组件Event慢0.1057%、wall快0.0613%，无可分辨正信号，停止。',
         'nonly_down_positive_component': 'M64单层9类检查通过，完整GEMM Event省10.5534%；保留组件候选，42层显存成本与模型净收益未测。',

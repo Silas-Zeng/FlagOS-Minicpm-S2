@@ -1,0 +1,85 @@
+{
+  "scope": "主动早停后只读现有日志与缓存；不重跑模型，不补成完整官方成绩",
+  "benchmark_complete": false,
+  "valid": false,
+  "nonly": {
+    "valid": true,
+    "records": {
+      "installed": [
+        {
+          "line": 71,
+          "value": {
+            "installed": true,
+            "scope": "BF16 TP1 MiniCPM down M64 only",
+            "packed_per_layer_bytes": 25165824,
+            "expected_layers": 42,
+            "expected_extra_bytes": 1056964608,
+            "other_rows": "original stable projection opaque",
+            "weight_lifetime": "layer-owned nonpersistent buffer, allocated before KV profile"
+          }
+        }
+      ],
+      "weight": [
+        {
+          "line": 86,
+          "value": {
+            "prefix": "model.layers.0.mlp.down_proj",
+            "layers": 1,
+            "packed_bytes": 25165824,
+            "allocation": "process_weights_after_loading, before KV memory profiling",
+            "keeps_original_weight": true
+          }
+        },
+        {
+          "line": 88,
+          "value": {
+            "prefix": "model.layers.41.mlp.down_proj",
+            "layers": 42,
+            "packed_bytes": 1056964608,
+            "allocation": "process_weights_after_loading, before KV memory profiling",
+            "keeps_original_weight": true
+          }
+        }
+      ],
+      "selected": [
+        {
+          "line": 175,
+          "value": {
+            "rows": 64,
+            "input_columns": 6144,
+            "output_columns": 2048,
+            "packed_shape": [
+              16,
+              6144,
+              128
+            ],
+            "config": {
+              "BLOCK_M": 64,
+              "BLOCK_N": 128,
+              "BLOCK_K": 64,
+              "num_warps": 8,
+              "num_stages": 2,
+              "num_ctas": 1,
+              "SPLIT_K": 1
+            },
+            "kernel_hash": "cd7e1cc16be7ce314fbc9dd9ed5143e393ce32cca660cc72b2b860cfc74c0a1f",
+            "use_sme": 7,
+            "shared": 49152
+          }
+        }
+      ]
+    },
+    "parse_errors": [],
+    "packed_42_layers": true,
+    "selected": true,
+    "selected_scope": "first noncapture call; can be warmup, not per-request coverage",
+    "kv_capacity_tokens": [
+      516320
+    ],
+    "baseline_KV_tokens": 548336,
+    "expected_extra_weight_bytes": 1056964608,
+    "limitation": "42个新opaque另由本run真实FX证明；M64的完整官方负载与独立GPU接线门承担实际覆盖，不把安装/暖up次数称请求命中率。"
+  },
+  "prefill_valid": false,
+  "nonly_fx_calls": 42
+}

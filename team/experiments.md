@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共330条登记、327个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共333条登记、330个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -308,6 +308,9 @@
 | 天数 BI-V150 | 328 | 2026-10-26T10:52:46.722313+00:00 | [BF16 down N方向分组布局](methods/bf16-nonly-down.md) | 42真实权重helper、pack全位反解/原W/FP64样本/完整跨臂逐位、42层两次换值Graph与M32回退通过。 | 未记录/未记录/未记录/未记录 | 42真实权重helper/opaque、pack逐位、FP64、换值Graph及M32回退通过；不是完整Llama加载链，无计时或官方资格。 | [20261026T105246722313Z-biv150-nonly-down-integration](runs/bi-v150/20261026T105246722313Z-biv150-nonly-down-integration.md) |
 | 天数 BI-V150 | 329 | 2026-10-26T10:55:28.588827+00:00 | [BF16 down N方向分组布局](methods/bf16-nonly-down.md) | 8门通过，实际M32独立backing；完整GEMM Graph一次ABBA省约3.63%。 | 未记录/未记录/未记录/未记录 | M32单层8门通过，同配置完整Graph Event省约3.63%；保留组件信号，非模型收益，双份权重成本未消除。 | [20261026T105528588827Z-biv150-nonly-down-M32-component](runs/bi-v150/20261026T105528588827Z-biv150-nonly-down-M32-component.md) |
 | 天数 BI-V150 | 330 | 2026-10-26T10:57:51.336178+00:00 | [BF16 down N方向分组布局](methods/bf16-nonly-down.md) | 8门通过，但完整GEMM Graph一次ABBA慢约61.60%；性能负，不是正确性失败。 | 未记录/未记录/未记录/未记录 | M2048单层8门通过；P128使BN256→128，完整Graph Event慢约61.60%，停止；不能归因纯pack，不否定M32/M64。 | [20261026T105751336178Z-biv150-nonly-down-M2048-component](runs/bi-v150/20261026T105751336178Z-biv150-nonly-down-M2048-component.md) |
+| 天数 BI-V150 | 331 | 2026-10-26T11:13:50.707291+00:00 | [BF16 down N方向分组布局](methods/bf16-nonly-down.md) | 实际原tile完全相同；8门/RNG通过，完整Graph一次ABBA慢约25.01%；DB恢复、源码不变及所属进程清理通过。 | 未记录/未记录/未记录/未记录 | 新N256布局保持原tile，8门/RNG通过；完整Graph Event0.563351333141→0.704238474369ms，慢25.01%，停止全M路线；B异步环变化未证精确因果，无官方资格。 | [20261026T111350707291Z-biv150-n256-down-M2048-component](runs/bi-v150/20261026T111350707291Z-biv150-n256-down-M2048-component.md) |
+| 天数 BI-V150 | 332 | 2026-10-26T11:27:06+00:00 | [BF16 down N方向分组布局](methods/bf16-nonly-down.md) | 两轮4K共512 SUCCESS；pack42/FX42/M64选中已证，但compute-order源SHA门拒绝，全prefill栈未闭合；按首暖负主动早停，清理通过。 | 4096/1024/64/256 | 4K冷/首暖4758.57/5440.33 tok/s，512 SUCCESS；首暖对5533.03观察−1.675393%后主动停。pack42/FX42/M64已证；compute-order源SHA拒绝，prefill未闭合，KV516320；无16K/105。 | [20261026T112706Z-main6971-nonly-down-four-rounds](runs/bi-v150/20261026T112706Z-main6971-nonly-down-four-rounds.md) |
+| 天数 BI-V150 | 333 | 2026-10-26T11:41:33.003627+00:00 | [GQA标量KV页基址](methods/gqa-scalar-page-base.md) | 8类原门、独立FP64适用样本、换值Graph/side/写入/输入RNG与跨臂逐位通过；完整组件Event慢0.38635%，实际SME传输0。 | 未记录/未记录/未记录/未记录 | 8类门及跨臂逐位通过；Event0.542196542→0.544291317ms，慢0.38635%，停止。SGPR spill75为lane保存非HBM；实际SME仍0，for＋scalar未验证。 | [20261026T114133003627Z-gqa-scalar-page-base-hotspot-component](runs/bi-v150/20261026T114133003627Z-gqa-scalar-page-base-hotspot-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

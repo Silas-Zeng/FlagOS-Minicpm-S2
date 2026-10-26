@@ -1,0 +1,55 @@
+--- prior/worker.diff
++++ scalar-page-base/worker.diff
+@@ -58,7 +58,7 @@
+ def worker(run, model, shape="hotspot"):
+     result = dict(status="started", kind="生产 kernel+reducer 的随机输入组件", checks=[], timings=[],
+                   limitations=["没有模型权重或实际激活采样；不是模型资格或官方收益",
+-                               "仅N64/B64/S2；观测长度多重集、合成激活；page16/split/FP顺序保持，仅动态for+原span",
++                               "仅N64/B64/S2；观测长度多重集、合成激活；page16/split/FP顺序保持，仅标量页基址拆分+原while/span",
+                                "性能仅关闭 profiler 的同输入 CUDA Graph ABBA"])
+     gqa = producer_capture = reducer_capture = None
+     original_producer = original_reducer = None
+@@ -93,7 +93,7 @@
+         if digest(Path(gqa.__file__)) != SOURCE_SHA or digest(HERE / "baseline.py") != SOURCE_SHA:
+             raise RuntimeError("实际 GQA 不是冻结 main6971/618 原件")
+         backend = importlib.import_module("vllm.v1.attention.backends.triton_attn")
+-        candidate = load("gqa_for_span_candidate", HERE / "candidate.py")
++        candidate = load("gqa_scalar_page_base_candidate", HERE / "candidate.py")
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("非单卡")
+         torch.cuda.set_device(0)
+@@ -173,7 +173,7 @@
+         original_inputs = (query.clone(), cache.clone(), common.seq_lens.clone(), common.block_table_tensor.clone())
+         result["span_views"] = []
+         arms = {}
+-        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_for_span)):
++        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_scalar_page_base)):
+             out = torch.full_like(query, -17)
+             partial = torch.full_like(metadata.softmax_segm_output, -17)
+             maxima = torch.full_like(metadata.softmax_segm_max, -17)
+@@ -216,7 +216,7 @@
+                     "shared_fragment": r"local_load|local_alloc|s2r|shared"}
+         selection = dict(diagnostic_only=True, no_asm_selection_claim=True,
+             expected_mask_delta_hex="0x30", masks={}, evidence={},
+-            note="生产N64/S2窄scratch预期14->62；mask不等于实际SME。须核for结构、copy/wait与资源。")
++            note="生产N64/S2窄scratch预期14->62；mask不等于实际SME。须核scalar page-base是否保留、实际KV copy/wait与资源。")
+         for arm_name, compiled in first.items():
+             selection["masks"][arm_name] = result["resources"][arm_name]["use_sme"]
+             selection["evidence"][arm_name] = {}
+@@ -302,6 +302,7 @@
+             record = dict(case=label, checks=checks, independent_reference=oracle, nonfinite_diagnostic=not finite,
+                           baseline_nan=int(torch.isnan(a.out[:B]).sum().item()),
+                           candidate_nan=int(torch.isnan(b.out[:B]).sum().item()))
++            record["cross_arm_bitwise_diagnostic"] = same_bits(a.out[:B], b.out[:B])
+             result["checks"].append(record)
+             torch.save({"baseline": [x.cpu() for x in expected["baseline"]], "candidate": [x.cpu() for x in b.tensors],
+                         "failed_eager_candidate": failed_eager,
+@@ -371,7 +372,7 @@
+             a = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "baseline")
+             b = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "candidate")
+             result["summary"][metric] = dict(baseline_ms=a, candidate_ms=b, fraction_saved=1 - b / a)
+-        result.update(status="component_signal_only", decision="仅实际N64/S2动态for+span一组组件；实际SMEcopy/wait由root审，不自动扩形状或模型")
++        result.update(status="component_signal_only", decision="仅实际N64/S2标量页基址+原while/span一组组件；实际SMEcopy/wait由root审，不自动扩形状或模型")
+     except BaseException:
+         result.update(status="failed", error=traceback.format_exc())
+         traceback.print_exc()

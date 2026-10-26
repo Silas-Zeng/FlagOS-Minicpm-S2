@@ -1,5 +1,15 @@
 # 当前实验状态
 
+12:04 UTC：N-only 精确身份修复独立官方已启动，run `20261026T120453Z-main6971-nonly-down-identity-fixed-four-rounds`；tree `b528adcd5273126d45676b9b3cf4c7648ec15693`。相对旧候选仅更新已审runner的精确SHA（main相对共5文件），原kernel/helper/runner不变；旧42层接线门复用。supervisor380319／owner380321／driver380324，入口 `/workspace/experiments/minicpm-s2/scripts/nonly-identity-fixed-040b7e00/official/`，看 `supervisor-final.json` 收尾。新增与原compute-order首完整轮一并核对；尚无新成绩或准确率资格，不新增未完成登记。
+
+[局部收益预算与限制](analysis/2026-10-26-local-to-e2e-budget.md) · [已有模型对照复核](analysis/2026-10-26-local-to-e2e-review.md)。M64组件10.55%不能外推整模；旧QKV/down/O/LPT没有本次SHA失配，不据此重跑。原结果、valid字段与失败均保留。
+
+11:42 UTC scalar-page-base收尾：新增1轮，现333条／330个唯一run。8类原门及跨臂逐位通过，完整producer＋reducer Event0.542196542→0.544291317ms（慢0.38635%），停止不接模型。SGPR104/spill75为lane保存非HBM，SME实际传输仍0；for＋scalar组合机制未验证，无新官方/105/基线。59份原件及分析原字节同步，DB/source/native与清理通过。
+
+11:39 UTC N-only官方收尾：新登记1轮，现332条／329个唯一run。M64-only候选4K冷/首暖4758.57/5440.33 tok/s，512 SUCCESS；对首暖5533.03观察−1.675393%后主动早停，SIGTERM/owner exit1不是框架错误。pack42/FX42/M64选中已证，KV516320对548336；compute-order因model_runner固定SHA未更新而scope拒绝回原路，prefill全栈未闭合，不能纯归因N-only。停止本模型候选；16K/105未跑，无新基线；清理及DB/source/native恢复通过。287份原件按原字节保留，不重跑或校正原valid字段。
+
+11:13 UTC P256收尾：新登记1轮，现331条／328个唯一run。新P[N/256,K,256]在M2048保原tile且8门/RNG通过，完整Graph Event0.563351333141→0.704238474369ms，慢约25.01%；停止该布局后续M32/M64及单份全M准备。原B两槽异步环、候选B同步与回退同时观测，未证明精确因果。N128历史分开保留；本批不含仍运行的M64-only官方结果，无新官方、105或基线。41份原件及回执已同步。
+
 10:57 UTC N-only批量更新：新登记3轮，现330条／327个唯一run。42真实down权重GPU helper/opaque/Graph及M32回退门通过，未调用完整Llama安装链；M32单层完整Graph省约3.63%，保留组件信号；M2048明确BN256→128后慢约61.60%，停止该大M候选，负结果不否定独立M32/M64正信号。原W/P双份1008MiB、KV容量及官方净性能仍未定；没有新官方、105或基线。原始文本和分轮回执已同步。
 
 10:28 UTC批量更新：新增连续读参考、GQA页号预取、N-only布局3轮，现327条／324个唯一run。连续读参考665.432GB/s不是HBM/GQA硬上限；page-only原8门与逐位通过但无可分辨正信号，已停；N-only M64单层Event省10.5534%、9类case通过，仅保留组件候选，42层额外1008MiB/24576 KV token风险和模型收益未测。原件142份文本（含旧profile补回的15份linear缓存）已同步；源码/DB及所属设备清理通过。无新官方成绩、105、基线或代码合并。

@@ -21,10 +21,11 @@
 | 方法 / 版本 | 结果与处理 |
 |---|---|
 | **当前合格主线：main6971／PR60** | 复用已完成的原官方4K/16K各四轮，弃首轮 **5656.77／4119.24 tok/s**；同源105题 **103/105**。QKV、down小M及O宽tile均组件正但模型负，已停止，不替换基线。最新状态见[当前工作](CURRENT_WORK.md) |
-| [BF16 down N方向分组布局](team/methods/bf16-nonly-down.md) | 同一N128格式：M64单层省10.5534%，M32单层省约3.63%；M2048明确BN256→128后慢约61.60%，停止。42真实权重helper/opaque/Graph门通过，非完整模型安装链或官方成绩；原W/P双份1008MiB与KV容量风险未消除，不叠加不同M收益 |
+| [BF16 down N方向分组布局](team/methods/bf16-nonly-down.md) | N128单层M64省10.5534%、M32省约3.63%；M64-only官方4K首暖5440.33对5533.03观察−1.675393%后停，512 SUCCESS，无16K/105。pack42/FX42/M64已证，KV516320；compute-order固定源SHA拒绝回退使prefill栈未闭合，不能纯归因布局。N128大M慢61.60%、同tile N256慢25.01%，全M路线停止。 |
 | [GQA下一页号预取](team/methods/gqa-page-lookahead.md) | 原8门及跨臂逐位通过，完整producer＋reducer Event慢0.105735%、wall快0.06134%，无可分辨正信号，停止；实际next-page load后立即wait，未实现预期重叠 |
 | [连续流读取参考](team/methods/stream-read-reference.md) | 512MiB BF16连续读＋checksum参考 **665.432GB/s**；正确性及清理通过，非HBM或GQA硬上限，不是吞吐优化成绩；本批另补回三个实际linear缓存文本 |
 | [GQA动态for＋二维span](team/methods/gqa-for-span.md) | 真实N64/S2长度多重集组件通过8类正确性检查，但完整producer＋reducer **0.541187→0.947350ms（慢75.05%）**，停止，不进模型或替换基线 |
+| [GQA标量KV页基址](team/methods/gqa-scalar-page-base.md) | 标量KV页基址＋二维span，保原while/page16/FP顺序；8类门及跨臂逐位通过，完整组件Event慢0.38635%，停止。SGPR spill75为lane保存，非HBM；实际SME传输仍0。for＋scalar组合机制尚未验证。 |
 | [当前Graph热点](team/methods/main6971-graph-profile.md) | 4K诊断完成，四个Graph采样有效；采样区间以GQA decode为首、linear为次。插桩时间不作正常耗时占比；fresh native FX证明缺项保留，未改变官方基线 |
 | [BF16 down权重布局](team/methods/bf16-packed-down.md)／[Prefill历史尾部分离](team/methods/prefill-history-tail.md) | packed通过8项正确性检查，但完整组件慢 **71.89%**，停止；history-tail已消除循环Q读取和SGPR溢出，但跨臂逐位门失败，未计时，停止该候选。均未合并或替换基线 |
 | [Prefill CTA调序](team/methods/prefill-lpt.md) | 两个早期chunk完整Graph省 **12.2180%／5.7144%**；纯causal原FP64两臂false仅留诊断，middle硬门通过，long慢3.57%保留原核。原官方4K暖均 **5722.48 tok/s（观察+1.1617%）**，16K首暖 **4111.36（−0.19663%）**后停；六轮1280成功，实际私有Q-hoist选中。KV不同，保留混合结果候选；16K未满/无105，不合并或定新基线 |

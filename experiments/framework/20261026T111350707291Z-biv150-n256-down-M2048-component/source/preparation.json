@@ -1,0 +1,23 @@
+{
+  "status": "CPU_ONLY_NOT_GPU_QUALIFIED",
+  "rows_default": 2048,
+  "explicit_positive_only_followups": [
+    32,
+    64
+  ],
+  "auto_next_shape": false,
+  "layout": [
+    8,
+    6144,
+    256
+  ],
+  "baseline": "真实原opaque→F.linear/默认FlagGems，独立捕获本M实际配置",
+  "candidate_config": "原BM/BN/BK/warps/stages/SPLIT1全部保持；BN<=256整除256，不改tiling",
+  "old_negative": "P128 M2048迫使原BN256变128，8门过但慢61.60%；该实现/全M路线停止，不当P256结果",
+  "mechanism": "同一N256权重覆盖BN64/128/256；每K步恒定BK*256，保自然3D descriptor；SME/资源只实测判断",
+  "independent_input_allocation": true,
+  "strict_original_8_numerical_gates": true,
+  "performance": "仅本M唯一ABBA；先M2048、非正即停止，正才由root另启M32/64，不自动后继",
+  "original_W_and_P_both_present": true,
+  "single_weight_production_qualified": false
+}
