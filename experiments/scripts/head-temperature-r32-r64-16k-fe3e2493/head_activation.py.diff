@@ -1,0 +1,57 @@
+--- R64-16K/head_activation.py
++++ R32-R64-16K/head_activation.py
+@@ -12,22 +12,31 @@
+             if marker not in line:continue
+             raw=line.split(marker,1)[1]
+             item=dict(line=number,raw=raw)
+-            if name=='selected':
++            if name in ('selected','sampled'):
+                 try:
+                     item['value']=ast.literal_eval(raw)
+-                    if not isinstance(item['value'],dict):raise ValueError('selected非dict')
++                    if not isinstance(item['value'],dict):raise ValueError('head回执非dict')
+                 except (ValueError,SyntaxError) as error:errors.append(dict(line=number,error=repr(error)))
+             records[name].append(item)
+-    selected=[]
++    grids={32:[2040,1],64:[510,1]};selected=[];selected_rows=set();sampled_rows=set()
+     for item in records['selected']:
+-        value=item.get('value',{});digest=value.get('hash')
+-        selected.append(value.get('rows')==64 and value.get('grid')==[510,1]
++        value=item.get('value',{});digest=value.get('hash');row=value.get('rows')
++        good=(type(row) is int and row in grids and value.get('grid')==grids[row]
+             and isinstance(digest,str) and re.fullmatch('[0-9a-f]{64}',digest) is not None)
++        selected.append(good)
++        if good:selected_rows.add(row)
++    sampled=[]
++    for item in records['sampled']:
++        value=item.get('value',{});row=value.get('rows')
++        good=(type(row) is int and row in grids and value.get('chain')=='original stats/top-p/softmax/noise; temperature consumed once')
++        sampled.append(good)
++        if good:sampled_rows.add(row)
+     abnormal=bool(errors or records['rejected'] or records['raw_fallback'])
+-    covered=bool(records['ready'] and records['selected'] and records['sampled'] and all(selected))
++    covered=bool(records['ready'] and records['selected'] and records['sampled'] and all(selected)
++        and all(sampled) and selected_rows==sampled_rows)
+     return dict(valid=bool(covered and not abnormal),covered=covered,abnormal=abnormal,
+         status='abnormal' if abnormal else 'selected_and_sampled' if covered else 'coverage_missing',
+-        records=records,parse_errors=errors,
++        records=records,parse_errors=errors,selected_rows=sorted(selected_rows),sampled_rows=sorted(sampled_rows),
+         limitation='首次实际kernel选择及原Sampler消费，非逐步计数或真实选中占比；缺覆盖不等于官方请求/数学失败。精确源码由独立809文件身份门核对。')
+ 
+ def kv_tokens(log_path):
+@@ -38,6 +47,14 @@
+ 
+ 
+ def optional_scope_valid(evidence):
+-    """16K可合法未命中R64；出现selection/sample则仍须原完整闭合。"""
++    """16K可合法未命中R32/R64；出现selection/sample则仍须原完整闭合。"""
+     observed = bool(evidence['records']['selected'] or evidence['records']['sampled'])
+     return bool(not evidence['abnormal'] and (not observed or evidence['valid']))
++
++
++def compare_kv(log_path,baseline_tokens):
++    """容量解析仍严格；匹配与否独立记录，绝不伪称严格因果收益。"""
++    actual=kv_tokens(log_path)
++    if actual<=0:raise ValueError('实际KV容量须为正数')
++    return dict(valid=True,compare_kv_match=actual==baseline_tokens,baseline=baseline_tokens,candidate=actual,
++        limitation='KV容量不一致时仍记录官方观测和首暖筛选，但不能声称相同显存条件下的严格因果收益。')

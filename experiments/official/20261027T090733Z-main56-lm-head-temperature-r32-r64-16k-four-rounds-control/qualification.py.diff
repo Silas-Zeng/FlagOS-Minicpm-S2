@@ -1,0 +1,15 @@
+--- R64-16K/qualification.py
++++ R32-R64-16K/qualification.py
+@@ -14,10 +14,10 @@
+     from baseline_reference import capture as baseline_capture
+     baseline=baseline_capture()
+     main=read(HERE/'team-source-manifest.json');candidate=read(HERE/'source-manifest.json')
+-    expected={'vllm_fl/worker/model_runner.py': '42cdf64d8af025ecd2762e586ca592daf3d760a69e204e01ce930729f74f2c6e', 'vllm_fl/compile_semantics.py': '2f7ae86405b35d6ff85e38f3f40f7d3491e4ba15673a4ffdc7d3ba8897a8d5ae', 'vllm_fl/patches/biv150_compute_order.py': '80609b3cc79933d78ed869a21c24c9c800e5423172db27c810964ffff1c444aa', 'vllm_fl/patches/biv150_lm_head_temperature.py': '560fdeaf25b92616fd073db083dee240d5857cc9a062532fbc9c76d053126afa', 'vllm_fl/patches/biv150_lm_head_temperature_kernel.py': '4c800693a2ae134fc580382d4166091b4c48e96dc2b7838ab417da7094cb2537'}
++    expected={'vllm_fl/worker/model_runner.py': '42cdf64d8af025ecd2762e586ca592daf3d760a69e204e01ce930729f74f2c6e', 'vllm_fl/compile_semantics.py': '2f7ae86405b35d6ff85e38f3f40f7d3491e4ba15673a4ffdc7d3ba8897a8d5ae', 'vllm_fl/patches/biv150_compute_order.py': '80609b3cc79933d78ed869a21c24c9c800e5423172db27c810964ffff1c444aa', 'vllm_fl/patches/biv150_lm_head_temperature.py': '0764a2c352f3eb10c02f7b7ef0339f5c76ac5536a901522dd6c81b96c1840d51', 'vllm_fl/patches/biv150_lm_head_temperature_kernel.py': '4c800693a2ae134fc580382d4166091b4c48e96dc2b7838ab417da7094cb2537'}
+     changed=sorted(p for p in main['files'].keys()|candidate['files'].keys()
+         if (main['files'].get(p) or {}).get('sha256')!=(candidate['files'].get(p) or {}).get('sha256'))
+-    require(candidate['base_commit']==COMMIT and candidate['source_count']==809 and candidate['tree']=='8125c3d9efc83afdd63f7174cea3374de2da24ac'
++    require(candidate['base_commit']==COMMIT and candidate['source_count']==809 and candidate['tree']=='8060aac6b81452a094498d9bd3fc0e637428f303'
+         and changed==sorted(expected) and all(candidate['files'][p]['sha256']==v for p,v in expected.items()),'候选须为受审809文件/5精确差分')
+     require(main['commit']==COMMIT and main['tree']==TREE and main['source_count']==807,'冻结main56控制源不符')
+     origin=Path(origin)

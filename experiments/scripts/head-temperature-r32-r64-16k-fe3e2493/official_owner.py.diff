@@ -1,0 +1,34 @@
+--- R64-16K/official_owner.py
++++ R32-R64-16K/official_owner.py
+@@ -1,4 +1,4 @@
+-"""main56 head温度epilogue候选16K的原官方四轮；不改原服务和评测参数。"""
++"""main56 head温度epilogue R32+R64候选16K的原官方四轮；不改原服务和评测参数。"""
+ import argparse
+ import datetime
+ import fcntl
+@@ -64,9 +64,9 @@
+     performance_control = Path(reference['control'])
+     origin, blobs, hashes, tree = source_identity
+     stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+-    run = ROOT / 'official' / (stamp + '-main56-lm-head-temperature-16k-four-rounds')
++    run = ROOT / 'official' / (stamp + '-main56-lm-head-temperature-r32-r64-16k-four-rounds')
+     control = run.with_name(run.name + '-control')
+-    source = ROOT / 'code' / (stamp + '-main56-lm-head-temperature-16k')
++    source = ROOT / 'code' / (stamp + '-main56-lm-head-temperature-r32-r64-16k')
+     control.mkdir(exist_ok=False)
+     shutil.copytree(origin, source, symlinks=True, ignore=shutil.ignore_patterns('.git', '__pycache__', '*.pyc', '*.pyo'))
+     if u.source_maps(source) != (blobs, hashes):
+@@ -139,9 +139,12 @@
+         state['head_coverage'] = state['model_path']['head_temperature']
+         import head_activation
+         state['head_scope'] = ('selected_and_sampled' if state['head_coverage']['covered']
+-            else 'not_exercised_R64' if head_activation.optional_scope_valid(state['head_coverage'])
++            else 'not_exercised_R32_R64' if head_activation.optional_scope_valid(state['head_coverage'])
+             else 'invalid_head_evidence')
+         q.require(head_activation.optional_scope_valid(state['head_coverage']), 'head存在拒绝/回原/解析或不完整选择；原官方成绩独立保留')
++        state['kv_comparison'] = head_activation.compare_kv(run / 'server.log', reference['matched_baseline']['kv_tokens'])
++        state['compare_kv_match'] = state['kv_comparison']['compare_kv_match']
++        save(control / 'comparison-conditions.json', state['kv_comparison'])
+         q.check_reference(reference)
+         state['benchmark_completed'] = True
+         state['accuracy_gate'] = 'not_inherited_from_component_or_parent_main' 
