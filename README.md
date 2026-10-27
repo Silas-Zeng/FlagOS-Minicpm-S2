@@ -1,9 +1,10 @@
 # FlagOS 第二季 MiniCPM5-2B 双平台实验
 
-本批原生 GQA 五轮的张量原件以无损 gzip 发布，原始 SHA 保持；[索引与恢复命令](experiments/tensor-storage-20261027.md)。
+当前有效BI-V150基线为[框架PR92](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/92)／main b3b87d2：原官方4K／16K各四轮弃首均6481.2267／4826.4467 tok/s，原105题102/105。KV容量差异与105请求分支覆盖限制保留；C500结果独立。
 
+最新批次新增七轮、725份原件：macro0/1严格同轮组件省1.0521%，direct-P近持平停止，真实mixed S4覆盖组件保留正信号。新mixed-S4原官方4K两轮首暖6168.07低于A6301.93（观察−2.1241%）后按预设主动停；512成功，KV548432对548336不同，非严格因果。候选不合并，16K／105停止，保留原基线。入口：[mixed S4方法](team/methods/native-gqa-mixed-s4.md)／[Q32方法](team/methods/native-q32-transfer.md)／[当前接续](CURRENT_WORK.md)。
 
-最新原生GQA阶段：ABI v2原官方4K暖均6481.2267，对A5971.44观察+8.5371%；1024成功、S2/S4实际覆盖。KV相差48 tokens，待16K与105，不定新基线。三轮原件以[方法记录](team/methods/corex-native-gqa-page16.md)中的原压缩包/manifest索引保存，不重复展开源码或大张量。
+原件完整保存：mixed61原gzip193MB的完整tar流无损xz14.7MB，全部105原件及tar流SHA实际通过；不裁剪张量／日志。其余五轮保原gzip分块，恢复入口见各轮raw-evidence.json。
 
 团队主要看：**尝试了什么、改了什么、怎么测、结果怎样、是否保留。**
 
@@ -21,7 +22,7 @@
 
 框架PR的顺序和依赖见[协作安排](docs/pr-collaboration-plan.md)。PR正文链接方法记录，所有维护说明使用自然中文，英文专有名词和代码标识保留。
 
-## 当前结果
+## 历史结果与方法导航（按各轮版本解释）
 
 | 方法 / 版本 | 结果与处理 |
 |---|---|
