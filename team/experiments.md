@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共346条登记、343个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共348条登记、345个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -324,6 +324,8 @@
 | 天数 BI-V150 | 344 | 2026-10-26T18:02:25.915687+00:00 | [长prefill四面板完整Attention](methods/prefill-panel4.md) | 原件中已执行检查按范围保留；不继承模型准确率。 | 未记录/未记录/未记录/未记录 | 保留旧Q16组件证据；新main241 Q32组合已负，停止生产接入，原边界不再排队。 | [20261026T180225915687Z-prefill-panel4-long-component](runs/bi-v150/20261026T180225915687Z-prefill-panel4-long-component.md) |
 | 天数 BI-V150 | 345 | 2026-10-26T18:06:53+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 按原件保留已测正确性范围，不继承模型准确率。 | 未记录/未记录/未记录/未记录 | 停止本次M32生产路线，保留全部两轮原件；不继续旧main验证或把局部收益算官方收益。 | [20261026T180653Z-main594-m32-fixed-address-16384-four-rounds](runs/bi-v150/20261026T180653Z-main594-m32-fixed-address-16384-four-rounds.md) |
 | 天数 BI-V150 | 346 | 2026-10-26T18:38:16.740050+00:00 | [长prefill四面板完整Attention](methods/prefill-panel4.md) | 按原件保留已测正确性范围，不继承模型准确率。 | 未记录/未记录/未记录/未记录 | 停止panel4生产接入；旧Q16三项边界未启动且暂缓，新main241成为后续研究基础。 | [20261026T183816740050Z-prefill-q32-panel4-long-component](runs/bi-v150/20261026T183816740050Z-prefill-q32-panel4-long-component.md) |
+| 天数 BI-V150 | 347 | 2026-10-26T19:21:08+00:00 | [基线接续与容器环境复查](methods/baseline-environment.md) | 请求及实际路径检查通过，不等于模型准确率资格。 | 4096/1024/64/256 | 原main594/native14f/初始DB207f重启后4K两轮诊断：冷5612.30对4909.31（+14.32%），首暖5726.40对5843.85（−2.0098%），512请求全部成功。旧三暖5767.5 | [20261026T192108Z-main594-postrestart-4k-two-round-diagnostic](runs/bi-v150/20261026T192108Z-main594-postrestart-4k-two-round-diagnostic.md) |
+| 天数 BI-V150 | 348 | 2026-10-26T18:41:10+00:00 | [基线接续与容器环境复查](methods/baseline-environment.md) | 请求及实际路径检查通过，不等于模型准确率资格。 | 16384/1024/64/128 | 新团队main241/native14f/初始DB207f原官方16K四轮3791.43/4489.43/4487.31/4485.73 tok/s，弃首暖均4487.49，512请求全部成功；对旧main594暖均41 | [20261026T184110Z-main241-control-16k-four-rounds](runs/bi-v150/20261026T184110Z-main241-control-16k-four-rounds.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

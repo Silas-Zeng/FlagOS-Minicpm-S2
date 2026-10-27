@@ -87,6 +87,7 @@
 - [BF16 down N方向分组布局](methods/bf16-nonly-down.md)
 - [GQA标量KV页基址与动态for组合](methods/gqa-scalar-page-base.md)
 - [长prefill四面板完整Attention](methods/prefill-panel4.md)
+- [基线接续与容器环境复查](methods/baseline-environment.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

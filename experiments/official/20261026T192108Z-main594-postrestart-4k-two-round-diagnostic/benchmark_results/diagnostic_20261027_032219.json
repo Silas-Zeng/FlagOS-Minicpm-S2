@@ -1,0 +1,86 @@
+{
+  "protocol": "two-round-diagnostic",
+  "official_qualified": false,
+  "official_four_round_complete": false,
+  "original_benchmark_sha256": "0813eba574e9d1eb50c297c515baa426da1bcb61ce8c78a398b482f246005565",
+  "original_source_RUNS": 4,
+  "original_source_SKIP_FIRST": 1,
+  "actual_max_calls": 2,
+  "completed_calls": 2,
+  "case": [
+    4096,
+    1024,
+    64,
+    256
+  ],
+  "common_args": [
+    "vllm",
+    "bench",
+    "serve",
+    "--backend",
+    "vllm",
+    "--model",
+    "minicpm",
+    "--tokenizer",
+    "/workspace/MiniCPM5-2B",
+    "--endpoint",
+    "/v1/completions",
+    "--host",
+    "localhost",
+    "--port",
+    "9031",
+    "--dataset-name",
+    "random",
+    "--ignore-eos"
+  ],
+  "calls": [
+    {
+      "run_id": 1,
+      "metrics": {
+        "successful_requests": 256.0,
+        "benchmark_duration": 233.54,
+        "total_input_tokens": 1048576.0,
+        "total_output_tokens": 262144.0,
+        "request_throughput": 1.1,
+        "output_throughput": 1122.46,
+        "peak_output_throughput": 1920.0,
+        "total_token_throughput": 5612.3,
+        "mean_ttft_ms": 5647.21,
+        "median_ttft_ms": 1201.96,
+        "p99_ttft_ms": 28499.13,
+        "mean_tpot_ms": 51.18,
+        "median_tpot_ms": 52.88,
+        "p99_tpot_ms": 54.5,
+        "mean_itl_ms": 51.18,
+        "median_itl_ms": 36.45,
+        "p99_itl_ms": 193.56,
+        "elapsed_sec": 262.26
+      }
+    },
+    {
+      "run_id": 2,
+      "metrics": {
+        "successful_requests": 256.0,
+        "benchmark_duration": 228.89,
+        "total_input_tokens": 1048576.0,
+        "total_output_tokens": 262144.0,
+        "request_throughput": 1.12,
+        "output_throughput": 1145.28,
+        "peak_output_throughput": 1920.0,
+        "total_token_throughput": 5726.4,
+        "mean_ttft_ms": 3459.67,
+        "median_ttft_ms": 1182.17,
+        "p99_ttft_ms": 19654.73,
+        "mean_tpot_ms": 52.19,
+        "median_tpot_ms": 54.3,
+        "p99_tpot_ms": 56.14,
+        "mean_itl_ms": 52.19,
+        "median_itl_ms": 36.47,
+        "p99_itl_ms": 194.58,
+        "elapsed_sec": 257.5
+      }
+    }
+  ],
+  "complete": true,
+  "limitation": "两次原run_once/原参数，无四轮summary；第1轮冷、第2轮首暖，不能估计稳定均值。"
+}
