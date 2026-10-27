@@ -446,7 +446,6 @@ GROUPS['gqa-s2-incta']=('S2同CTA归约', '首次编译失败；停止当前实�
 CODE['gqa-s2-incta']=['experiments/framework/20261027T043321686931Z-gqa-s2-incta-hotspot-component/archive-receipt.json']
 BATCH_RESULTS['gqa_s2_incta_compile_failed']=('S2两段同CTA/w2并在核内归约，拟省全局partial读写和一次启动；保持原page16、KV布局与逐段数学。实际CoreX在首个candidate的TritonGPUAccelerateMatmul阶段编译失败；checks/timings均空，未取得数值或性能结论。停止当前实现，不改编译器、门或重封包，不进入生产。main241/native14f/source2596与新main56同GQA源码；DB已恢复、源码/native不变、9031空闲及GPU清理通过。全部39份原件已回收逐SHA核验。', '停止当前实现，不进生产。', '首candidate编译失败，数值和性能均未开始。', '完整源码、命令、环境、失败日志及清理证据已回收。')
 
-GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '完整head+Sampler组件省17.31% Event/12.24% wall；保留，待生产接入验证。', [])
 CODE['lm-head-temperature']=['experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/archive-receipt.json', 'experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/result.json', 'experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/source/candidate.py']
 BATCH_RESULTS['lm_head_temperature_component_positive']=('R64真实LM-head权重130560×2048、合成hidden；保留原BF16舍入后融合FP32转换与温度除法，原stats/top-p/RNG不变。10组逐位/FP64/采样ID/RNG/换值Graph及输入不变检查通过。完整eager head+Sampler唯一ABBA含分配与提交，Event3.828030→3.165252ms（省17.3138%），wall4.165081→3.655269ms（省12.2401%），无CPU节流。寄存器31→37，shared40960B不变，两臂spill0，无候选新增持久权重副本。保留局部正信号，下一步最窄生产接入；尚非模型准确率或官方吞吐资格，不迁移为整模收益。main56/native14f，DB恢复、源码/native不变及清理通过。44份原件逐SHA核验。', '保留局部正信号，待实际服务验证；不是官方收益。', '10组逐位、独立FP64、IDs/RNG及换值Graph门通过。', 'R64真实head W/合成hidden，唯一完整eager ABBA，原采样链不变。')
 
@@ -456,18 +455,15 @@ GROUPS['baseline-environment']=('基线接续与容器环境复查', '本站main
 
 BATCH_RESULTS['lm_head_temperature_4k_positive_observation']=('head温度epilogue原官方4K暖均5921.12对A5902.77 tok/s，本组+0.3109%；同KV/native/DB，1024请求及实际启用/清理通过。保留小信号，待16K/105。', '保留单组4K小收益，待16K和105；非稳定净收益结论。', '1024请求/实际head消费与原栈通过，不等于模型准确率。', '原官方4轮弃首；同main56/native14f/DB/KV，CSV对比见原件。')
 CODE['lm-head-temperature'] += ['experiments/official/20261027T055059Z-main56-lm-head-temperature-4k-four-rounds/comparison.json', 'experiments/official/20261027T055059Z-main56-lm-head-temperature-4k-four-rounds/archive-receipt.json']
-GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '组件完整head+Sampler Event省17.31%；生产同main56/native14f/DB/KV原官方4K本组暖均5921.12对5902.77 tok/s，观察+0.3109%。保留小收益信号，尚待16K/105，不把局部组件收益迁移为模型结论。', [])
 
 BATCH_RESULTS['main56_control_16k_complete']=('main56/native14f原官方16K暖均4526.57 tok/s，512成功、KV548384、原栈/清理通过。', '保留本次16K控制；4K与105资格分开。', '原请求与路径/清理检查通过，不等于105。', '原官方四轮弃首；同版本候选须引用本run。')
 BATCH_RESULTS['lm_head_temperature_r32_component_positive']=('R32完整head+Sampler Event省10.05%、wall省11.00%；实际BM32/BN64/BK64/w8/s1，10门过。', '保留局部正信号，待最窄生产验证；不与R64相加。', '逐位/FP64/RNG/换值Graph过；不是模型准确率。', '完整eager链ABBA含分配/提交，reg21/shared12288/spill0，无节流。')
 CODE['baseline-environment'] += ['experiments/official/20261027T075834Z-main56-control-16k-four-rounds/comparison.json', 'experiments/official/20261027T075834Z-main56-control-16k-four-rounds/archive-receipt.json']
 CODE['lm-head-temperature'] += ['experiments/framework/20261027T083835962824Z-lm-head-temperature-r32-epilogue-component/comparison.json', 'experiments/framework/20261027T083835962824Z-lm-head-temperature-r32-epilogue-component/archive-receipt.json']
 GROUPS['baseline-environment']=('基线接续与容器环境复查', '本站main56/native14f两档原官方控制：4K暖均5902.77、KV548432；16K暖均4526.57、KV548384，分别1024/512成功，原栈与清理通过。两档独立服务，未继承105或候选收益；旧main241成绩按旧源单列。', [])
-GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '原BF16舍入后融合FP32转换/温度，保原Sampler。R64/R32组件完整链分别省17.31%/10.05% Event，不能相加或外推整模。R64生产4K单组暖均5921.12对5902.77 tok/s（+0.3109%），16K/105仍另行验证；R32仅局部正信号，尚未生产启用。', [])
 
 BATCH_RESULTS['lm_head_temperature_r64_16k_kv_mismatch_stopped']=('R64-only 16K首冷4029.77 tok/s、128成功；KV548288≠548384资格停止。head无覆盖/无异常，原栈及清理通过。', '停止旧R64-only无覆盖16K；非数值错误，不计算收益。', '首冷请求成功不等于105准确率，原SIGTERM状态保留。', '仅1个冷轮，非完整官方；R32+R64后继另行验证。')
 CODE['lm-head-temperature'] += ['experiments/official/20261027T084030Z-main56-lm-head-temperature-16k-four-rounds/comparison.json', 'experiments/official/20261027T084030Z-main56-lm-head-temperature-16k-four-rounds/archive-receipt.json']
-GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '原BF16舍入后融合FP32/温度，原Sampler不变。R64/R32组件完整链分别省17.31%/10.05% Event，不相加或外推整模。R64生产4K单组观察+0.3109%；16K仅冷轮，KV不匹配且R64无覆盖后停止，不计算收益。R32+R64及105另行验证。', [])
 
 GROUPS['gqa-fused-append']=('GQA尾段append融合', '只对私有尾slot省独立writer启动，不改BF16/页序/归约。实际编译VGPR增51超过预设预算后停止；数值和计时尚未运行，不称错误或实测慢，不扩展或放宽阈值。', [])
 CODE['gqa-fused-append']=['experiments/framework/20261027T090439643177Z-gqa-fused-append-hotspot-component/comparison.json', 'experiments/framework/20261027T090439643177Z-gqa-fused-append-hotspot-component/archive-receipt.json', 'experiments/framework/20261027T090439643177Z-gqa-fused-append-hotspot-component/source/candidate.py']
@@ -475,23 +471,19 @@ BATCH_RESULTS['gqa_fused_append_resource_budget_stopped']=('尾段append融合�
 
 BATCH_RESULTS['lm_head_temperature_r32_r64_16k_complete_kv_mismatch']=('新8d1a R32+R64原官方16K暖均4529.79对A4526.57 tok/s，观察+0.0710%；512成功、R32实际消费/清理通过。KV不同。', '保留完整16K微小正观察；KV不匹配，非严格因果或稳定收益。', '512请求和实际R32/原栈通过，不继承旧4K或105资格。', '原官方四轮弃首；809源8d1a，KV548432对A548384。')
 CODE['lm-head-temperature'] += ['experiments/official/20261027T090733Z-main56-lm-head-temperature-r32-r64-16k-four-rounds/comparison.json', 'experiments/official/20261027T090733Z-main56-lm-head-temperature-r32-r64-16k-four-rounds/archive-receipt.json']
-GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '组件R64/R32完整链各省17.31%/10.05% Event，不相加。旧31094098仅4K单组+0.3109%；新8d1a R32+R64完整16K暖均4529.79对4526.57，观察+0.0710%，KV不同，不能严格归因。两版资格分开；新8d1a尚无4K或105资格。', [])
 
 BATCH_RESULTS['lm_head_temperature_r32_r64_accuracy_pass_scope_limited']=('新8d1a/809源原105：103/105=98.0952%，valid/pass，105 stop、0错误/截断/空答，owner与清理通过。', '保留当前源码的完整原官方准确率；head32/64与Q32未覆盖，分支资格另列。', '未从安装/覆盖推断分支准确率；原score与原分母不变。', '353份原件逐SHA，native14f/DB207f及实际原栈闭合。')
 CODE['lm-head-temperature'] += ['experiments/accuracy/20261027T094907Z-main56-head-temperature-r32-r64-native14f-math500/coverage-summary.json', 'experiments/accuracy/20261027T094907Z-main56-head-temperature-r32-r64-native14f-math500-control/accuracy-review.json', 'experiments/accuracy/20261027T094907Z-main56-head-temperature-r32-r64-native14f-math500/archive-receipt.json']
-GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '新8d1a R32+R64原官方16K暖均4529.79对A4526.57 tok/s，单组+0.0710%、KV不同，非严格因果。完整105取得103/105（98.0952%）且运行/清理通过，但head32/64与prefill Q32未覆盖，不授分支准确率资格；本新源4K仍在跑。旧31094098的4K+0.3109%单列，组件收益不相加。', [])
 
 BATCH_RESULTS['lm_head_temperature_r32_r64_4k_complete_kv_mismatch']=('新8d1a官方4K暖均5971.44对A5902.77，观察+1.1634%；1024成功，R32/R64实际消费。KV不同。', '保留单组正观察；非严格因果或稳定收益，不定新基线。', '同源105为103/105且通过，但head32/64与Q32未覆盖。', '原四轮弃首；809源8d1a，KV548288对A548432；365原件逐SHA。')
 CODE['lm-head-temperature'] += ['experiments/official/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds/comparison.json', 'experiments/official/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds/archive-receipt.json']
-GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '新8d1a同源原官方4K/16K各四轮，暖均5971.44/4529.79 tok/s，对各自A观察+1.1634%/+0.0710%；两档KV不同，非严格因果或稳定收益，不定新基线。原105为103/105 valid/pass，但head32/64和Q32未覆盖，分支准确率未证。旧31094098与局部组件结果另列，不相加。', [])
 
 BATCH_RESULTS['lm_head_temperature_r32_bn256_nonpositive']=('R32 BN256完整链Event慢2.6150%，wall快5.7801%；十门和资源门通过。', '停止BN256，不扫参、不进模型；不取第一B当收益。', '三方全scaled/filtered/IDs/RNG、独立FP64与Graph/side通过。', '真实W＋合成hidden，完整eager ABBA；shared12→36KiB、regs21→37/spill0，无节流，73原件。')
 CODE['lm-head-temperature'] += ['experiments/framework/20261027T103846792930Z-lm-head-temperature-r32-bn256-component/comparison.json', 'experiments/framework/20261027T103846792930Z-lm-head-temperature-r32-bn256-component/archive-receipt.json']
-GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '新8d1a同源原官方4K/16K各四轮，暖均5971.44/4529.79 tok/s，对各自A观察+1.1634%/+0.0710%；两档KV不同，非严格因果或稳定收益，不定新基线。原105为103/105 valid/pass，但head32/64和Q32未覆盖，分支准确率未证。旧31094098与局部组件结果另列，不相加。\n\n同融合基线上的R32 BN256扩展已完成：十门过，但完整ABBA Event慢2.6150%、wall快5.7801%，按nonpositive停止，不影响原BN64融合生产结果。', [])
 
 BATCH_RESULTS['lm_head_temperature_same_kv_4k_control_complete']=('新A暖均5923.116667；同KV候选B观察+0.8158%，1024成功。', '支持按小收益建立代码PR；不声称稳定幅度或新基线。', '组件逐位/IDs/RNG已过；同源105通过但head分支未覆盖。', '同main56/native14f/初始DB/参数，KV548288；两A暖均漂移+0.3447%，326原件逐SHA。')
 CODE['lm-head-temperature'] += ['experiments/official/20261027T105243Z-main56-control-4k-four-rounds/comparison.json', 'experiments/official/20261027T105243Z-main56-control-4k-four-rounds/archive-receipt.json']
-GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '新8d1a同源原官方4K/16K各四轮，暖均5971.44/4529.79 tok/s，对各自A观察+1.1634%/+0.0710%；两档KV不同，非严格因果或稳定收益，不定新基线。原105为103/105 valid/pass，但head32/64和Q32未覆盖，分支准确率未证。旧31094098与局部组件结果另列，不相加。\n\n同融合基线上的R32 BN256扩展已完成：十门过，但完整ABBA Event慢2.6150%、wall快5.7801%，按nonpositive停止，不影响原BN64融合生产结果。\n\n时间相近原A已补：4K暖均5923.116667、KV548288与8d1a B一致，B观察+0.8158%；两A漂移+0.3447%。支持小收益代码PR，保留波动/105分支覆盖/16K容量差异限制，不定稳定基线。', [])
+GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '原main56+受测8d1a五文件已通过中文PR84合并，main dac1b8fb。4K同KV时间相近对照暖均5923.116667→5971.44 tok/s，单组观察+0.8158%；事后首暖−1.3314%、两A漂移+0.3447%，不称稳定幅度或新官方基线。16K暖均4529.79对4526.57（观察+0.0710%），KV不同；同源105为103/105 valid/pass，但head32/64及Q32未覆盖，组件数学资格另列。BN256扩展Event负，停止且不含在PR84。旧R64-only结果不与新组合相加。', ['lm-head-temperature'])
 
 def group(row):
     if row['profile_id']=='gqa-fused-append':return 'gqa-fused-append'
@@ -1024,8 +1016,8 @@ def main():
                                        ('sql-reflection', 8), ('decode3d', 9), ('mixed-attention', 10),
                                        ('skip-computed-h2d', 22), ('compute-order', 22),
                                        ('pr24-main', 24), ('native-quant-cache', 25), ('native-cache-identity', 35),
-                                       ('q-fragment-hoist', 23), ('native-safe-default', 48), ('native-silu-vec2', 52), ('prefill-stride', 60)]})
-    pr_labels = {'cpu-metadata': 'CPU metadata #1', 'async-token-update': '异步token更新 #2',
+                                       ('q-fragment-hoist', 23), ('native-safe-default', 48), ('native-silu-vec2', 52), ('prefill-stride', 60), ('lm-head-temperature', 84)]})
+    pr_labels = {'lm-head-temperature': 'LM-head温度融合 #84', 'cpu-metadata': 'CPU metadata #1', 'async-token-update': '异步token更新 #2',
                  'pr24-main': 'INT8 gate/up 组合 #24', 'native-quant-cache': '激活量化缓存 #25', 'native-cache-identity': 'native编译缓存身份 #35',
                  'kv-contiguous-copy': '连续页KV工具 #3', 'kv-pitched-copy': '二维SAVE工具 #4',
                  'diagnostics': '诊断配置 #5', 'prefill': 'prefill #6', 'top-p': 'top-p #7',
