@@ -446,8 +446,12 @@ GROUPS['gqa-s2-incta']=('S2同CTA归约', '首次编译失败；停止当前实�
 CODE['gqa-s2-incta']=['experiments/framework/20261027T043321686931Z-gqa-s2-incta-hotspot-component/archive-receipt.json']
 BATCH_RESULTS['gqa_s2_incta_compile_failed']=('S2两段同CTA/w2并在核内归约，拟省全局partial读写和一次启动；保持原page16、KV布局与逐段数学。实际CoreX在首个candidate的TritonGPUAccelerateMatmul阶段编译失败；checks/timings均空，未取得数值或性能结论。停止当前实现，不改编译器、门或重封包，不进入生产。main241/native14f/source2596与新main56同GQA源码；DB已恢复、源码/native不变、9031空闲及GPU清理通过。全部39份原件已回收逐SHA核验。', '停止当前实现，不进生产。', '首candidate编译失败，数值和性能均未开始。', '完整源码、命令、环境、失败日志及清理证据已回收。')
 
+GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '完整head+Sampler组件省17.31% Event/12.24% wall；保留，待生产接入验证。', [])
+CODE['lm-head-temperature']=['experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/archive-receipt.json', 'experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/result.json', 'experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/source/candidate.py']
+BATCH_RESULTS['lm_head_temperature_component_positive']=('R64真实LM-head权重130560×2048、合成hidden；保留原BF16舍入后融合FP32转换与温度除法，原stats/top-p/RNG不变。10组逐位/FP64/采样ID/RNG/换值Graph及输入不变检查通过。完整eager head+Sampler唯一ABBA含分配与提交，Event3.828030→3.165252ms（省17.3138%），wall4.165081→3.655269ms（省12.2401%），无CPU节流。寄存器31→37，shared40960B不变，两臂spill0，无候选新增持久权重副本。保留局部正信号，下一步最窄生产接入；尚非模型准确率或官方吞吐资格，不迁移为整模收益。main56/native14f，DB恢复、源码/native不变及清理通过。44份原件逐SHA核验。', '保留局部正信号，待实际服务验证；不是官方收益。', '10组逐位、独立FP64、IDs/RNG及换值Graph门通过。', 'R64真实head W/合成hidden，唯一完整eager ABBA，原采样链不变。')
+
 def group(row):
-    if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats', 'gqa-s2-incta'):
+    if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats', 'gqa-s2-incta', 'lm-head-temperature'):
         return row['profile_id']
     if row['profile_id']=='native-silu-lut':return 'native-silu-lut'
     if row['profile_id']=='kv-lossless':return 'kv-lossless'

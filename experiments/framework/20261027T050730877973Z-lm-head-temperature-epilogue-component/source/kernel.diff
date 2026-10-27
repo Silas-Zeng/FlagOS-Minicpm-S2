@@ -1,0 +1,26 @@
+--- actual-linear-kernel
++++ head-temperature-kernel
+@@ -1,4 +1,4 @@
+-def linear_kernel(
++def head_temperature_kernel(
+     input_ptr,
+     weight_ptr,
+     bias_ptr,
+@@ -13,6 +13,7 @@
+     stride_om,
+     stride_on,
+     stride_bn,
++    temperature_ptr,
+     BIAS: tl.constexpr,
+     BLOCK_M: tl.constexpr,
+     BLOCK_N: tl.constexpr,
+@@ -72,6 +73,8 @@
+     C = output_ptr + (rm[:, None] * stride_om + rn[None, :] * stride_on)
+     mask = (rm < M)[:, None] & (rn < N)[None, :]
+     if SPLIT_K == 1:
+-        tl.store(C, acc.to(output_ptr.dtype.element_ty), mask=mask)
++        temperature = tl.load(temperature_ptr + rm, mask=rm < M, other=1.0)
++        scaled = acc.to(tl.bfloat16).to(tl.float32) / temperature[:, None]
++        tl.store(C, scaled, mask=mask)
+     else:
+         tl.atomic_add(C, acc.to(output_ptr.dtype.element_ty), mask=mask)

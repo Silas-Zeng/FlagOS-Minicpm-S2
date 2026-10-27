@@ -94,6 +94,7 @@
 - [当前Q32与GQA混合双流](methods/q32-mixed-overlap.md)
 - [采样转换与首遍统计融合](methods/sampler-preprocess-stats.md)
 - [S2同CTA归约](methods/gqa-s2-incta.md)
+- [LM-head温度epilogue融合](methods/lm-head-temperature.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 
