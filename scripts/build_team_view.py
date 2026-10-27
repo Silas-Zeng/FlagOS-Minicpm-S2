@@ -473,6 +473,14 @@ GROUPS['gqa-fused-append']=('GQA尾段append融合', '只对私有尾slot省独�
 CODE['gqa-fused-append']=['experiments/framework/20261027T090439643177Z-gqa-fused-append-hotspot-component/comparison.json', 'experiments/framework/20261027T090439643177Z-gqa-fused-append-hotspot-component/archive-receipt.json', 'experiments/framework/20261027T090439643177Z-gqa-fused-append-hotspot-component/source/candidate.py']
 BATCH_RESULTS['gqa_fused_append_resource_budget_stopped']=('尾段append融合编译成功；VGPR93→144超预设+16预算，SGPR spill0→50，shared8KiB不变。数值/计时均未运行，清理通过。', '停止冻结实现，不放宽预算或扫参；非数值错误/实测慢。', '仅编译身份与资源已取得，原8门和FP64未执行。', '唯一N64/S2；完整链ABBA尚未开始，69原件保留。')
 
+BATCH_RESULTS['lm_head_temperature_r32_r64_16k_complete_kv_mismatch']=('新8d1a R32+R64原官方16K暖均4529.79对A4526.57 tok/s，观察+0.0710%；512成功、R32实际消费/清理通过。KV不同。', '保留完整16K微小正观察；KV不匹配，非严格因果或稳定收益。', '512请求和实际R32/原栈通过，不继承旧4K或105资格。', '原官方四轮弃首；809源8d1a，KV548432对A548384。')
+CODE['lm-head-temperature'] += ['experiments/official/20261027T090733Z-main56-lm-head-temperature-r32-r64-16k-four-rounds/comparison.json', 'experiments/official/20261027T090733Z-main56-lm-head-temperature-r32-r64-16k-four-rounds/archive-receipt.json']
+GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '组件R64/R32完整链各省17.31%/10.05% Event，不相加。旧31094098仅4K单组+0.3109%；新8d1a R32+R64完整16K暖均4529.79对4526.57，观察+0.0710%，KV不同，不能严格归因。两版资格分开；新8d1a尚无4K或105资格。', [])
+
+BATCH_RESULTS['lm_head_temperature_r32_r64_accuracy_pass_scope_limited']=('新8d1a/809源原105：103/105=98.0952%，valid/pass，105 stop、0错误/截断/空答，owner与清理通过。', '保留当前源码的完整原官方准确率；head32/64与Q32未覆盖，分支资格另列。', '未从安装/覆盖推断分支准确率；原score与原分母不变。', '353份原件逐SHA，native14f/DB207f及实际原栈闭合。')
+CODE['lm-head-temperature'] += ['experiments/accuracy/20261027T094907Z-main56-head-temperature-r32-r64-native14f-math500/coverage-summary.json', 'experiments/accuracy/20261027T094907Z-main56-head-temperature-r32-r64-native14f-math500-control/accuracy-review.json', 'experiments/accuracy/20261027T094907Z-main56-head-temperature-r32-r64-native14f-math500/archive-receipt.json']
+GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '新8d1a R32+R64原官方16K暖均4529.79对A4526.57 tok/s，单组+0.0710%、KV不同，非严格因果。完整105取得103/105（98.0952%）且运行/清理通过，但head32/64与prefill Q32未覆盖，不授分支准确率资格；本新源4K仍在跑。旧31094098的4K+0.3109%单列，组件收益不相加。', [])
+
 def group(row):
     if row['profile_id']=='gqa-fused-append':return 'gqa-fused-append'
     if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats', 'gqa-s2-incta', 'lm-head-temperature'):
