@@ -442,8 +442,12 @@ CODE['sampler-preprocess-stats'] += ['experiments/framework/20261027T03185817411
 
 CODE['main6971-graph-profile'] += ['experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/posthoc-20261027/summary.md']
 
+GROUPS['gqa-s2-incta']=('S2同CTA归约', '首次编译失败；停止当前实现，无数值或性能结论。', [])
+CODE['gqa-s2-incta']=['experiments/framework/20261027T043321686931Z-gqa-s2-incta-hotspot-component/archive-receipt.json']
+BATCH_RESULTS['gqa_s2_incta_compile_failed']=('S2两段同CTA/w2并在核内归约，拟省全局partial读写和一次启动；保持原page16、KV布局与逐段数学。实际CoreX在首个candidate的TritonGPUAccelerateMatmul阶段编译失败；checks/timings均空，未取得数值或性能结论。停止当前实现，不改编译器、门或重封包，不进入生产。main241/native14f/source2596与新main56同GQA源码；DB已恢复、源码/native不变、9031空闲及GPU清理通过。全部39份原件已回收逐SHA核验。', '停止当前实现，不进生产。', '首candidate编译失败，数值和性能均未开始。', '完整源码、命令、环境、失败日志及清理证据已回收。')
+
 def group(row):
-    if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats'):
+    if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats', 'gqa-s2-incta'):
         return row['profile_id']
     if row['profile_id']=='native-silu-lut':return 'native-silu-lut'
     if row['profile_id']=='kv-lossless':return 'kv-lossless'

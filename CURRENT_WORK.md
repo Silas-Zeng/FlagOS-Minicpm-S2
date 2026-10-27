@@ -26,4 +26,8 @@
 
 SSH间歇性拒绝仍存在：03:43 UTC原公钥登录成功，已回收采样v2全部原件；随后相同身份再被publickey拒绝。服务器指纹已通过用户确认和严格校验，不能归因为密码错误；无需再发送密码。服务端授权或路由原因尚未知。本轮不启动网页UI。
 
-[旧轨迹CPU分析与复现入口](experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/posthoc-20261027/summary.md)。没有新增GPU测试或候选；下一阶段仍从新main实际GQA／线性路径选择独立实现，先与队友PR去重。
+[旧轨迹CPU分析与复现入口](experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/posthoc-20261027/summary.md)。旧数据继续用于选择方案，不重复测试。
+
+04:33 UTC唯一S2同CTA归约组件在首次candidate编译中失败，LLVM报告二维与三维布局不匹配，数值/计时均未开始；不是生产main错误，也不声称性能负。当前实现停止，未改编译器、验证门或生产。DB恢复、源码/native不变、设备/9031清理通过。[全部39份原件](experiments/framework/20261027T043321686931Z-gqa-s2-incta-hotspot-component/archive-receipt.json)已回收逐SHA核验，登记现359条/356唯一run。
+
+同轮CPU筛选：Attention scratch仅8.125MiB单builder共享，不能按42层或bucket重复计算增容；末层all-discard裁剪在4243旧步骤中仅1步适用，覆盖不足，两者不新增GPU测试。当前没有后台GPU任务。SSH已按用户确认指纹恢复；Git传输间歇断开时用GitHub API补传同一分支，保留原Git对象与历史，不修改main。

@@ -1,0 +1,433 @@
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:728: DeprecationWarning: use_cuda_graph is deprecated; use benchmark_mode='replay' or benchmark_mode='event'
+  super().__init__(*args, **kwargs)
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:411: RuntimeWarning: active Triton backend does not provide a replay benchmarker; falling back to event timing
+  resolved_benchmark = resolve_benchmarker(
+INFO 10-27 12:33:26 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-27 12:33:26 [__init__.py:46] - fl -> vllm_fl:register
+INFO 10-27 12:33:26 [__init__.py:58] Loading plugin fl
+INFO 10-27 12:33:30 [__init__.py:237] Platform plugin fl is activated
+WARNING 10-27 12:33:34 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+/usr/local/lib/python3.12/site-packages/torch/jit/_script.py:362: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+WARNING 10-27 12:33:35 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+WARNING 10-27 12:33:35 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+WARNING 10-27 12:33:35 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+[2026-10-27 12:33:35] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_sampler_compile_for_iluvatar: unwrapped topk_topp_sampler.compiled_random_sample
+[2026-10-27 12:33:35] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_sampler_compile_for_iluvatar: unwrapped logprobs.batched_count_greater_than
+[2026-10-27 12:33:35] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_torch_inductor_for_iluvatar: backend '['iluvatar']' already supports target='cuda', no GPUTarget remap needed.
+INFO 10-27 12:33:35 [model.py:598] Resolved architecture: LlamaForCausalLM
+INFO 10-27 12:33:35 [model.py:1725] Using max model len 131072
+INFO 10-27 12:33:35 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=2048.
+INFO 10-27 12:33:35 [vllm.py:1006] Asynchronous scheduling is enabled.
+INFO 10-27 12:33:35 [kernel.py:276] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+BIV150_COMPILE_SEMANTICS {"native_enabled": true, "schema": 1, "sha256": "9db14f090fc665b21785fb97a0799e77f169849bcdf8c3a911258ff373a0aa4e"}
+INFO 10-27 12:33:35 [parallel_state.py:1588] world_size=1 rank=0 local_rank=0 distributed_init_method=file:///workspace/experiments/minicpm-s2/framework/20261027T043321686931Z-gqa-s2-incta-hotspot-component/world1-rendezvous backend=nccl
+INFO 10-27 12:33:35 [parallel_state.py:1923] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+/usr/local/lib/python3.12/site-packages/flag_gems/config.py:171: UserWarning: resolve_user_setting: no exclude ops found; returning empty list
+  warnings.warn(
+/usr/local/lib/python3.12/site-packages/torch/library.py:357: UserWarning: Warning only once for all operators,  other operators may also be overridden.
+  Overriding a previously registered kernel for the same operator and the same dispatch key
+  operator: aten::__ilshift__.Tensor(Tensor(a!) self, Tensor other) -> Tensor(a!)
+    registered at /home/corex/sw_home/apps/pytorch/build/aten/src/ATen/RegisterSchema.cpp:6
+  dispatch key: CUDA
+  previous kernel: registered at /home/corex/sw_home/apps/pytorch/build/aten/src/ATen/RegisterCPU_3.cpp:7148
+       new kernel: registered at /usr/local/lib/python3.12/site-packages/flag_gems/__init__.py:62 (Triggered internally at /home/corex/sw_home/apps/pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:208.)
+  self.m.impl(
+WARNING:root:Skipped registering operator: This is not allowed since there's already a kernel registered from python overriding ne_.Scalar's behavior for CUDA dispatch key and aten namespace.
+WARNING:root:Skipped registering operator: This is not allowed since there's already a kernel registered from python overriding ne_.Tensor's behavior for CUDA dispatch key and aten namespace.
+BIV150_SQL_REFLECTION_INSTALLED sqlite_targeted_only=1
+BIV150_DECODE_LAUNCH_INSTALLED {'installed': True, 'num_warps': 2, 'num_stages': 1, 'scope': 'audited BF16 MiniCPM 3D decode only'}
+BIV150_MIXED_DECODE_INSTALLED {'installed': True, 'scope': 'BF16 MiniCPM natural-prefix mixed Attention only', 'ordinary_mixed_dummy_may_split': True, 'accuracy': 'mixed 2D to 3D remains unverified'}
+BIV150_GQA_DECODE_INSTALL {'installed': True, 'scope': 'BF16 MiniCPM pure-decode 3D only', 'rows': 8, 'page_size': 16, 'backend_rebound': True}
+BIV150_PREFILL_NORMALIZATION_INSTALL {'installed': True, 'scope': 'audited BF16 causal MiniCPM prefill without sinks', 'backend_rebound': True, 'audited': {'vllm.v1.attention.ops.triton_unified_attention': '54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f', 'vllm.v1.attention.ops.triton_attention_helpers': '59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1'}, 'kernel_sha256': 'fa6ddc420a95102d116714fcbea41bc81aa9c09379d68518af65755c015b8744', 'initial_mass': 0}
+BIV150_Q_FRAGMENT_INSTALL {'installed': True, 'scope': 'audited BI-V150 MiniCPM BF16 prefill Q fragment lifetime', 'binding': 'normalization-over-gqa', 'temporary_ir': True}
+BIV150_PREFILL_Q32_INSTALL {'installed': True, 'block_m': 256, 'block_q': 32, 'num_warps': 16, 'num_stages': 1, 'tile_size': 64, 'minimum_query_rows': 1024, 'num_sequences': 1, 'fallback': 'existing verified BM128 Q fragment'}
+BIV150_NATIVE_W8A8_INSTALL {'installed': True, 'layers': ('gate_up_proj',), 'min_rows': 17, 'compressed_only': True, 'skip_edge_layers': 4, 'fused_silu': True, 'activation_residual_rows': [1, 16], 'cached_quantization_rows': [17, 2048], 'cached_quantization_threads': 256, 'gate_operator': 'gate_silu_auto'}
+BIV150_SMALL_OUT_LOWERING_INSTALL {'installed': True, 'allocation': 'Inductor out buffer', 'small_rows': 'unchanged masked BF16 kernel M1-8', 'larger_rows': 'provided linear M128-2048 when eligible; otherwise original MM', 'large_linear': True, 'provider_provenance': {'module': '_iluvatar.ops.linear', 'linear_sha256': 'd431a4fa144ed67dc3deab46dd5beace3612858075f85c39e602447ba3bf768a', 'libentry_sha256': '414e8a3f74e2522e40659e7fccd84e301f4517220837a87af0311f050bbf3025', 'kernel_type': 'flag_gems.utils.libentry.LibEntry', 'bias': False, 'group_m': 8, 'split_k': 1, 'sdk_mutated': False}, 'unsupported': 'previous functional-op fallback'}
+BIV150_STABLE_SMALL_O_INSTALL {'installed': True, 'scope': 'BF16 TP1 QKV/O/down and uncompressed edge-gate projections M1-8', 'block_m': 16, 'block_n': 64, 'block_k': 128, 'warps': 4, 'stages': 1, 'larger_rows': 'original default_unquantized_gemm F.linear route inside the opaque operation'}
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:411: RuntimeWarning: active Triton backend does not provide a replay benchmarker; falling back to event timing
+  resolved_benchmark = resolve_benchmarker(
+BIV150_GQA_DECODE_FIRST_WIDTH seqs=64 builder_segments=16 segments=2 target_programs=256
+LLVM ERROR: Dimensions must match, ignoring order, but they don't.  Got dims: ["dim1", "dim2"] and ["dim2", "dim1", "dim0"]
+module {
+  tt.func public @_gqa_decode_attention_s2_incta(%arg0: !tt.ptr<f32> {tt.divisibility = 4 : i32}, %arg1: !tt.ptr<f32> {tt.divisibility = 4 : i32}, %arg2: !tt.ptr<f32> {tt.divisibility = 4 : i32}, %arg3: !tt.ptr<bf16> {tt.divisibility = 4 : i32}, %arg4: !tt.ptr<bf16> {tt.divisibility = 4 : i32}, %arg5: !tt.ptr<bf16> {tt.divisibility = 4 : i32}, %arg6: !tt.ptr<i32> {tt.divisibility = 4 : i32}, %arg7: !tt.ptr<i32> {tt.divisibility = 4 : i32}, %arg8: f32, %arg9: i64 {tt.divisibility = 4 : i32}, %arg10: i64 {tt.divisibility = 4 : i32}, %arg11: i64 {tt.divisibility = 4 : i32}, %arg12: i64 {tt.divisibility = 4 : i32}, %arg13: i64 {tt.divisibility = 4 : i32}, %arg14: i64 {tt.divisibility = 4 : i32}, %arg15: i64 {tt.divisibility = 4 : i32}, %arg16: !tt.ptr<bf16> {tt.divisibility = 4 : i32}) attributes {noinline = false} {
+    %c31_i32 = arith.constant 31 : i32
+    %c32_i32 = arith.constant 32 : i32
+    %cst = arith.constant dense<0.000000e+00> : tensor<2x16x128xbf16>
+    %cst_0 = arith.constant dense<0.000000e+00> : tensor<2x128x16xbf16>
+    %cst_1 = arith.constant dense<0.000000e+00> : tensor<8x128xbf16>
+    %c2048_i64 = arith.constant 2048 : i64
+    %cst_2 = arith.constant dense<0.000000e+00> : tensor<8x1xf32>
+    %cst_3 = arith.constant dense<0.000000e+00> : tensor<8xf32>
+    %cst_4 = arith.constant dense<0.000000e+00> : tensor<2x8xf32>
+    %cst_5 = arith.constant dense<0.693147182> : tensor<2x8xf32>
+    %cst_6 = arith.constant dense<0xFF800000> : tensor<2x8x16xf32>
+    %c1_i32 = arith.constant 1 : i32
+    %cst_7 = arith.constant dense<0.000000e+00> : tensor<2x8x128xf32>
+    %cst_8 = arith.constant dense<0.000000e+00> : tensor<2x8x16xf32>
+    %cst_9 = arith.constant dense<0> : tensor<2xi32>
+    %c0_i32 = arith.constant 0 : i32
+    %cst_10 = arith.constant dense<0xFF800000> : tensor<2x8xf32>
+    %cst_11 = arith.constant dense<0.000000e+00> : tensor<8x128xf32>
+    %cst_12 = arith.constant dense<128> : tensor<8x1xi32>
+    %c128_i32 = arith.constant 128 : i32
+    %cst_13 = arith.constant dense<8> : tensor<8xi32>
+    %c8_i32 = arith.constant 8 : i32
+    %cst_14 = arith.constant dense<16> : tensor<2xi32>
+    %c16_i32 = arith.constant 16 : i32
+    %0 = tt.get_program_id x : i32
+    %1 = tt.get_program_id y : i32
+    %2 = tt.addptr %arg6, %0 : !tt.ptr<i32>, i32
+    %3 = tt.load %2 {boundaryCheck = array<i32>, cache = 1 : i32, evict = 1 : i32, isVolatile = false} : !tt.ptr<i32>
+    %4 = arith.addi %3, %c31_i32 : i32
+    %5 = arith.divsi %4, %c32_i32 : i32
+    %6 = tt.make_range {end = 2 : i32, start = 0 : i32} : tensor<2xi32>
+    %7 = tt.splat %5 : i32 -> tensor<2xi32>
+    %8 = arith.muli %6, %7 : tensor<2xi32>
+    %9 = arith.muli %8, %cst_14 : tensor<2xi32>
+    %10 = arith.muli %5, %c16_i32 : i32
+    %11 = tt.splat %10 : i32 -> tensor<2xi32>
+    %12 = arith.addi %9, %11 : tensor<2xi32>
+    %13 = tt.splat %3 : i32 -> tensor<2xi32>
+    %14 = arith.minsi %12, %13 : tensor<2xi32>
+    %15 = arith.maxsi %9, %14 : tensor<2xi32>
+    %16 = arith.subi %15, %9 : tensor<2xi32>
+    %17 = arith.divsi %16, %cst_14 : tensor<2xi32>
+    %18 = arith.muli %17, %cst_14 : tensor<2xi32>
+    %19 = arith.addi %9, %18 : tensor<2xi32>
+    %20 = tt.make_range {end = 8 : i32, start = 0 : i32} : tensor<8xi32>
+    %21 = tt.make_range {end = 128 : i32, start = 0 : i32} : tensor<128xi32>
+    %22 = tt.make_range {end = 16 : i32, start = 0 : i32} : tensor<16xi32>
+    %23 = arith.extsi %0 : i32 to i64
+    %24 = arith.muli %1, %c8_i32 : i32
+    %25 = tt.splat %24 : i32 -> tensor<8xi32>
+    %26 = arith.addi %25, %20 : tensor<8xi32>
+    %27 = arith.cmpi slt, %20, %cst_13 : tensor<8xi32>
+    %28 = arith.muli %23, %arg10 : i64
+    %29 = tt.expand_dims %26 {axis = 1 : i32} : tensor<8xi32> -> tensor<8x1xi32>
+    %30 = arith.muli %29, %cst_12 : tensor<8x1xi32>
+    %31 = arith.extsi %30 : tensor<8x1xi32> to tensor<8x1xi64>
+    %32 = tt.splat %28 : i64 -> tensor<8x1xi64>
+    %33 = arith.addi %32, %31 : tensor<8x1xi64>
+    %34 = tt.expand_dims %21 {axis = 0 : i32} : tensor<128xi32> -> tensor<1x128xi32>
+    %35 = arith.extsi %34 : tensor<1x128xi32> to tensor<1x128xi64>
+    %36 = tt.broadcast %33 : tensor<8x1xi64> -> tensor<8x128xi64>
+    %37 = tt.broadcast %35 : tensor<1x128xi64> -> tensor<8x128xi64>
+    %38 = arith.addi %36, %37 : tensor<8x128xi64>
+    %39 = tt.expand_dims %27 {axis = 1 : i32} : tensor<8xi1> -> tensor<8x1xi1>
+    %40 = tt.splat %arg3 : !tt.ptr<bf16> -> tensor<8x128x!tt.ptr<bf16>>
+    %41 = tt.addptr %40, %38 : tensor<8x128x!tt.ptr<bf16>>, tensor<8x128xi64>
+    %42 = tt.broadcast %39 : tensor<8x1xi1> -> tensor<8x128xi1>
+    %43 = tt.load %41, %42, %cst_1 {boundaryCheck = array<i32>, cache = 1 : i32, evict = 1 : i32, isVolatile = false} : tensor<8x128x!tt.ptr<bf16>>
+    %44 = tt.expand_dims %43 {axis = 0 : i32} : tensor<8x128xbf16> -> tensor<1x8x128xbf16>
+    %45 = tt.broadcast %44 : tensor<1x8x128xbf16> -> tensor<2x8x128xbf16>
+    %46 = arith.muli %23, %arg9 : i64
+    %47 = tt.addptr %arg7, %46 : !tt.ptr<i32>, i64
+    %48 = arith.divsi %3, %c16_i32 : i32
+    %49 = arith.minsi %5, %48 : i32
+    %50:4 = scf.while (%arg17 = %cst_10, %arg18 = %cst_4, %arg19 = %cst_7, %arg20 = %c0_i32) : (tensor<2x8xf32>, tensor<2x8xf32>, tensor<2x8x128xf32>, i32) -> (tensor<2x8xf32>, tensor<2x8xf32>, tensor<2x8x128xf32>, i32) {
+      %98 = arith.cmpi slt, %arg20, %49 : i32
+      scf.condition(%98) %arg17, %arg18, %arg19, %arg20 : tensor<2x8xf32>, tensor<2x8xf32>, tensor<2x8x128xf32>, i32
+    } do {
+    ^bb0(%arg17: tensor<2x8xf32>, %arg18: tensor<2x8xf32>, %arg19: tensor<2x8x128xf32>, %arg20: i32):
+      %98 = arith.muli %arg20, %c16_i32 : i32
+      %99 = tt.splat %98 : i32 -> tensor<2xi32>
+      %100 = arith.addi %9, %99 : tensor<2xi32>
+      %101 = arith.cmpi slt, %100, %19 : tensor<2xi32>
+      %102 = arith.divsi %100, %cst_14 : tensor<2xi32>
+      %103 = tt.splat %47 : !tt.ptr<i32> -> tensor<2x!tt.ptr<i32>>
+      %104 = tt.addptr %103, %102 : tensor<2x!tt.ptr<i32>>, tensor<2xi32>
+      %105 = tt.load %104, %101, %cst_9 {boundaryCheck = array<i32>, cache = 1 : i32, evict = 1 : i32, isVolatile = false} : tensor<2x!tt.ptr<i32>>
+      %106 = arith.extsi %105 : tensor<2xi32> to tensor<2xi64>
+      %107 = tt.expand_dims %106 {axis = 1 : i32} : tensor<2xi64> -> tensor<2x1xi64>
+      %108 = tt.expand_dims %107 {axis = 2 : i32} : tensor<2x1xi64> -> tensor<2x1x1xi64>
+      %109 = tt.splat %arg11 : i64 -> tensor<2x1x1xi64>
+      %110 = arith.muli %108, %109 : tensor<2x1x1xi64>
+      %111 = tt.expand_dims %22 {axis = 0 : i32} : tensor<16xi32> -> tensor<1x16xi32>
+      %112 = tt.expand_dims %111 {axis = 1 : i32} : tensor<1x16xi32> -> tensor<1x1x16xi32>
+      %113 = arith.extsi %112 : tensor<1x1x16xi32> to tensor<1x1x16xi64>
+      %114 = tt.splat %arg12 : i64 -> tensor<1x1x16xi64>
+      %115 = arith.muli %113, %114 : tensor<1x1x16xi64>
+      %116 = tt.broadcast %110 : tensor<2x1x1xi64> -> tensor<2x1x16xi64>
+      %117 = tt.broadcast %115 : tensor<1x1x16xi64> -> tensor<2x1x16xi64>
+      %118 = arith.addi %116, %117 : tensor<2x1x16xi64>
+      %119 = arith.extsi %1 : i32 to i64
+      %120 = arith.muli %119, %arg13 : i64
+      %121 = tt.splat %120 : i64 -> tensor<2x1x16xi64>
+      %122 = arith.addi %118, %121 : tensor<2x1x16xi64>
+      %123 = tt.expand_dims %34 {axis = 2 : i32} : tensor<1x128xi32> -> tensor<1x128x1xi32>
+      %124 = arith.extsi %123 : tensor<1x128x1xi32> to tensor<1x128x1xi64>
+      %125 = tt.broadcast %122 : tensor<2x1x16xi64> -> tensor<2x128x16xi64>
+      %126 = tt.broadcast %124 : tensor<1x128x1xi64> -> tensor<2x128x16xi64>
+      %127 = arith.addi %125, %126 : tensor<2x128x16xi64>
+      %128 = tt.splat %arg14 : i64 -> tensor<2x1x1xi64>
+      %129 = arith.muli %108, %128 : tensor<2x1x1xi64>
+      %130 = tt.expand_dims %111 {axis = 2 : i32} : tensor<1x16xi32> -> tensor<1x16x1xi32>
+      %131 = arith.extsi %130 : tensor<1x16x1xi32> to tensor<1x16x1xi64>
+      %132 = tt.splat %arg15 : i64 -> tensor<1x16x1xi64>
+      %133 = arith.muli %131, %132 : tensor<1x16x1xi64>
+      %134 = tt.broadcast %129 : tensor<2x1x1xi64> -> tensor<2x16x1xi64>
+      %135 = tt.broadcast %133 : tensor<1x16x1xi64> -> tensor<2x16x1xi64>
+      %136 = arith.addi %134, %135 : tensor<2x16x1xi64>
+      %137 = arith.muli %1, %c128_i32 : i32
+      %138 = arith.extsi %137 : i32 to i64
+      %139 = tt.splat %138 : i64 -> tensor<2x16x1xi64>
+      %140 = arith.addi %136, %139 : tensor<2x16x1xi64>
+      %141 = tt.expand_dims %34 {axis = 1 : i32} : tensor<1x128xi32> -> tensor<1x1x128xi32>
+      %142 = arith.extsi %141 : tensor<1x1x128xi32> to tensor<1x1x128xi64>
+      %143 = tt.broadcast %140 : tensor<2x16x1xi64> -> tensor<2x16x128xi64>
+      %144 = tt.broadcast %142 : tensor<1x1x128xi64> -> tensor<2x16x128xi64>
+      %145 = arith.addi %143, %144 : tensor<2x16x128xi64>
+      %146 = tt.expand_dims %101 {axis = 1 : i32} : tensor<2xi1> -> tensor<2x1xi1>
+      %147 = tt.expand_dims %146 {axis = 2 : i32} : tensor<2x1xi1> -> tensor<2x1x1xi1>
+      %148 = tt.splat %arg4 : !tt.ptr<bf16> -> tensor<2x128x16x!tt.ptr<bf16>>
+      %149 = tt.addptr %148, %127 : tensor<2x128x16x!tt.ptr<bf16>>, tensor<2x128x16xi64>
+      %150 = tt.broadcast %147 : tensor<2x1x1xi1> -> tensor<2x128x16xi1>
+      %151 = tt.load %149, %150, %cst_0 {boundaryCheck = array<i32>, cache = 1 : i32, evict = 1 : i32, isVolatile = false} : tensor<2x128x16x!tt.ptr<bf16>>
+      %152 = tt.splat %arg5 : !tt.ptr<bf16> -> tensor<2x16x128x!tt.ptr<bf16>>
+      %153 = tt.addptr %152, %145 : tensor<2x16x128x!tt.ptr<bf16>>, tensor<2x16x128xi64>
+      %154 = tt.broadcast %147 : tensor<2x1x1xi1> -> tensor<2x16x128xi1>
+      %155 = tt.load %153, %154, %cst {boundaryCheck = array<i32>, cache = 1 : i32, evict = 1 : i32, isVolatile = false} : tensor<2x16x128x!tt.ptr<bf16>>
+      %156 = tt.dot %45, %151, %cst_8, inputPrecision = tf32 : tensor<2x8x128xbf16> * tensor<2x128x16xbf16> -> tensor<2x8x16xf32>
+      %157 = tt.splat %arg8 : f32 -> tensor<2x8x16xf32>
+      %158 = arith.mulf %156, %157 : tensor<2x8x16xf32>
+      %159 = "tt.reduce"(%158) <{axis = 2 : i32}> ({
+      ^bb0(%arg21: f32, %arg22: f32):
+        %181 = arith.maxnumf %arg21, %arg22 : f32
+        tt.reduce.return %181 : f32
+      }) : (tensor<2x8x16xf32>) -> tensor<2x8xf32>
+      %160 = arith.maxnumf %arg17, %159 : tensor<2x8xf32>
+      %161 = tt.expand_dims %160 {axis = 2 : i32} : tensor<2x8xf32> -> tensor<2x8x1xf32>
+      %162 = tt.broadcast %161 : tensor<2x8x1xf32> -> tensor<2x8x16xf32>
+      %163 = arith.subf %158, %162 : tensor<2x8x16xf32>
+      %164 = math.exp2 %163 : tensor<2x8x16xf32>
+      %165 = arith.subf %arg17, %160 : tensor<2x8xf32>
+      %166 = math.exp2 %165 : tensor<2x8xf32>
+      %167 = arith.mulf %arg18, %166 : tensor<2x8xf32>
+      %168 = "tt.reduce"(%164) <{axis = 2 : i32}> ({
+      ^bb0(%arg21: f32, %arg22: f32):
+        %181 = arith.addf %arg21, %arg22 : f32
+        tt.reduce.return %181 : f32
+      }) : (tensor<2x8x16xf32>) -> tensor<2x8xf32>
+      %169 = arith.addf %167, %168 : tensor<2x8xf32>
+      %170 = tt.expand_dims %166 {axis = 2 : i32} : tensor<2x8xf32> -> tensor<2x8x1xf32>
+      %171 = tt.broadcast %170 : tensor<2x8x1xf32> -> tensor<2x8x128xf32>
+      %172 = arith.mulf %arg19, %171 : tensor<2x8x128xf32>
+      %173 = arith.truncf %164 : tensor<2x8x16xf32> to tensor<2x8x16xbf16>
+      %174 = tt.dot %173, %155, %172, inputPrecision = tf32 : tensor<2x8x16xbf16> * tensor<2x16x128xbf16> -> tensor<2x8x128xf32>
+      %175 = tt.broadcast %146 : tensor<2x1xi1> -> tensor<2x8xi1>
+      %176 = arith.select %175, %169, %arg18 : tensor<2x8xi1>, tensor<2x8xf32>
+      %177 = tt.broadcast %147 : tensor<2x1x1xi1> -> tensor<2x8x128xi1>
+      %178 = arith.select %177, %174, %arg19 : tensor<2x8x128xi1>, tensor<2x8x128xf32>
+      %179 = arith.select %175, %160, %arg17 : tensor<2x8xi1>, tensor<2x8xf32>
+      %180 = arith.addi %arg20, %c1_i32 : i32
+      scf.yield %179, %176, %178, %180 : tensor<2x8xf32>, tensor<2x8xf32>, tensor<2x8x128xf32>, i32
+    }
+    %51 = arith.remsi %3, %c16_i32 : i32
+    %52 = arith.cmpi ne, %51, %c0_i32 : i32
+    %53:3 = scf.if %52 -> (tensor<2x8xf32>, tensor<2x8xf32>, tensor<2x8x128xf32>) {
+      %98 = arith.cmpi slt, %19, %15 : tensor<2xi32>
+      %99 = arith.divsi %19, %cst_14 : tensor<2xi32>
+      %100 = tt.splat %47 : !tt.ptr<i32> -> tensor<2x!tt.ptr<i32>>
+      %101 = tt.addptr %100, %99 : tensor<2x!tt.ptr<i32>>, tensor<2xi32>
+      %102 = tt.load %101, %98, %cst_9 {boundaryCheck = array<i32>, cache = 1 : i32, evict = 1 : i32, isVolatile = false} : tensor<2x!tt.ptr<i32>>
+      %103 = arith.extsi %102 : tensor<2xi32> to tensor<2xi64>
+      %104 = tt.expand_dims %98 {axis = 1 : i32} : tensor<2xi1> -> tensor<2x1xi1>
+      %105 = tt.expand_dims %19 {axis = 1 : i32} : tensor<2xi32> -> tensor<2x1xi32>
+      %106 = tt.expand_dims %22 {axis = 0 : i32} : tensor<16xi32> -> tensor<1x16xi32>
+      %107 = tt.broadcast %105 : tensor<2x1xi32> -> tensor<2x16xi32>
+      %108 = tt.broadcast %106 : tensor<1x16xi32> -> tensor<2x16xi32>
+      %109 = arith.addi %107, %108 : tensor<2x16xi32>
+      %110 = tt.expand_dims %15 {axis = 1 : i32} : tensor<2xi32> -> tensor<2x1xi32>
+      %111 = tt.broadcast %110 : tensor<2x1xi32> -> tensor<2x16xi32>
+      %112 = arith.cmpi slt, %109, %111 : tensor<2x16xi32>
+      %113 = tt.broadcast %104 : tensor<2x1xi1> -> tensor<2x16xi1>
+      %114 = arith.andi %113, %112 : tensor<2x16xi1>
+      %115 = tt.expand_dims %103 {axis = 1 : i32} : tensor<2xi64> -> tensor<2x1xi64>
+      %116 = tt.expand_dims %115 {axis = 2 : i32} : tensor<2x1xi64> -> tensor<2x1x1xi64>
+      %117 = tt.splat %arg11 : i64 -> tensor<2x1x1xi64>
+      %118 = arith.muli %116, %117 : tensor<2x1x1xi64>
+      %119 = tt.expand_dims %106 {axis = 1 : i32} : tensor<1x16xi32> -> tensor<1x1x16xi32>
+      %120 = arith.extsi %119 : tensor<1x1x16xi32> to tensor<1x1x16xi64>
+      %121 = tt.splat %arg12 : i64 -> tensor<1x1x16xi64>
+      %122 = arith.muli %120, %121 : tensor<1x1x16xi64>
+      %123 = tt.broadcast %118 : tensor<2x1x1xi64> -> tensor<2x1x16xi64>
+      %124 = tt.broadcast %122 : tensor<1x1x16xi64> -> tensor<2x1x16xi64>
+      %125 = arith.addi %123, %124 : tensor<2x1x16xi64>
+      %126 = arith.extsi %1 : i32 to i64
+      %127 = arith.muli %126, %arg13 : i64
+      %128 = tt.splat %127 : i64 -> tensor<2x1x16xi64>
+      %129 = arith.addi %125, %128 : tensor<2x1x16xi64>
+      %130 = tt.expand_dims %34 {axis = 2 : i32} : tensor<1x128xi32> -> tensor<1x128x1xi32>
+      %131 = arith.extsi %130 : tensor<1x128x1xi32> to tensor<1x128x1xi64>
+      %132 = tt.broadcast %129 : tensor<2x1x16xi64> -> tensor<2x128x16xi64>
+      %133 = tt.broadcast %131 : tensor<1x128x1xi64> -> tensor<2x128x16xi64>
+      %134 = arith.addi %132, %133 : tensor<2x128x16xi64>
+      %135 = tt.splat %arg14 : i64 -> tensor<2x1x1xi64>
+      %136 = arith.muli %116, %135 : tensor<2x1x1xi64>
+      %137 = tt.expand_dims %106 {axis = 2 : i32} : tensor<1x16xi32> -> tensor<1x16x1xi32>
+      %138 = arith.extsi %137 : tensor<1x16x1xi32> to tensor<1x16x1xi64>
+      %139 = tt.splat %arg15 : i64 -> tensor<1x16x1xi64>
+      %140 = arith.muli %138, %139 : tensor<1x16x1xi64>
+      %141 = tt.broadcast %136 : tensor<2x1x1xi64> -> tensor<2x16x1xi64>
+      %142 = tt.broadcast %140 : tensor<1x16x1xi64> -> tensor<2x16x1xi64>
+      %143 = arith.addi %141, %142 : tensor<2x16x1xi64>
+      %144 = arith.muli %1, %c128_i32 : i32
+      %145 = arith.extsi %144 : i32 to i64
+      %146 = tt.splat %145 : i64 -> tensor<2x16x1xi64>
+      %147 = arith.addi %143, %146 : tensor<2x16x1xi64>
+      %148 = tt.expand_dims %34 {axis = 1 : i32} : tensor<1x128xi32> -> tensor<1x1x128xi32>
+      %149 = arith.extsi %148 : tensor<1x1x128xi32> to tensor<1x1x128xi64>
+      %150 = tt.broadcast %147 : tensor<2x16x1xi64> -> tensor<2x16x128xi64>
+      %151 = tt.broadcast %149 : tensor<1x1x128xi64> -> tensor<2x16x128xi64>
+      %152 = arith.addi %150, %151 : tensor<2x16x128xi64>
+      %153 = tt.expand_dims %114 {axis = 1 : i32} : tensor<2x16xi1> -> tensor<2x1x16xi1>
+      %154 = tt.splat %arg4 : !tt.ptr<bf16> -> tensor<2x128x16x!tt.ptr<bf16>>
+      %155 = tt.addptr %154, %134 : tensor<2x128x16x!tt.ptr<bf16>>, tensor<2x128x16xi64>
+      %156 = tt.broadcast %153 : tensor<2x1x16xi1> -> tensor<2x128x16xi1>
+      %157 = tt.load %155, %156, %cst_0 {boundaryCheck = array<i32>, cache = 1 : i32, evict = 1 : i32, isVolatile = false} : tensor<2x128x16x!tt.ptr<bf16>>
+      %158 = tt.expand_dims %114 {axis = 2 : i32} : tensor<2x16xi1> -> tensor<2x16x1xi1>
+      %159 = tt.splat %arg5 : !tt.ptr<bf16> -> tensor<2x16x128x!tt.ptr<bf16>>
+      %160 = tt.addptr %159, %152 : tensor<2x16x128x!tt.ptr<bf16>>, tensor<2x16x128xi64>
+      %161 = tt.broadcast %158 : tensor<2x16x1xi1> -> tensor<2x16x128xi1>
+      %162 = tt.load %160, %161, %cst {boundaryCheck = array<i32>, cache = 1 : i32, evict = 1 : i32, isVolatile = false} : tensor<2x16x128x!tt.ptr<bf16>>
+      %163 = tt.dot %45, %157, %cst_8, inputPrecision = tf32 : tensor<2x8x128xbf16> * tensor<2x128x16xbf16> -> tensor<2x8x16xf32>
+      %164 = tt.splat %arg8 : f32 -> tensor<2x8x16xf32>
+      %165 = arith.mulf %163, %164 : tensor<2x8x16xf32>
+      %166 = tt.broadcast %153 : tensor<2x1x16xi1> -> tensor<2x8x16xi1>
+      %167 = arith.select %166, %165, %cst_6 : tensor<2x8x16xi1>, tensor<2x8x16xf32>
+      %168 = "tt.reduce"(%167) <{axis = 2 : i32}> ({
+      ^bb0(%arg17: f32, %arg18: f32):
+        %190 = arith.maxnumf %arg17, %arg18 : f32
+        tt.reduce.return %190 : f32
+      }) : (tensor<2x8x16xf32>) -> tensor<2x8xf32>
+      %169 = arith.maxnumf %50#0, %168 : tensor<2x8xf32>
+      %170 = tt.expand_dims %169 {axis = 2 : i32} : tensor<2x8xf32> -> tensor<2x8x1xf32>
+      %171 = tt.broadcast %170 : tensor<2x8x1xf32> -> tensor<2x8x16xf32>
+      %172 = arith.subf %167, %171 : tensor<2x8x16xf32>
+      %173 = math.exp2 %172 : tensor<2x8x16xf32>
+      %174 = arith.subf %50#0, %169 : tensor<2x8xf32>
+      %175 = math.exp2 %174 : tensor<2x8xf32>
+      %176 = arith.mulf %50#1, %175 : tensor<2x8xf32>
+      %177 = "tt.reduce"(%173) <{axis = 2 : i32}> ({
+      ^bb0(%arg17: f32, %arg18: f32):
+        %190 = arith.addf %arg17, %arg18 : f32
+        tt.reduce.return %190 : f32
+      }) : (tensor<2x8x16xf32>) -> tensor<2x8xf32>
+      %178 = arith.addf %176, %177 : tensor<2x8xf32>
+      %179 = tt.expand_dims %175 {axis = 2 : i32} : tensor<2x8xf32> -> tensor<2x8x1xf32>
+      %180 = tt.broadcast %179 : tensor<2x8x1xf32> -> tensor<2x8x128xf32>
+      %181 = arith.mulf %50#2, %180 : tensor<2x8x128xf32>
+      %182 = arith.truncf %173 : tensor<2x8x16xf32> to tensor<2x8x16xbf16>
+      %183 = tt.dot %182, %162, %181, inputPrecision = tf32 : tensor<2x8x16xbf16> * tensor<2x16x128xbf16> -> tensor<2x8x128xf32>
+      %184 = tt.broadcast %104 : tensor<2x1xi1> -> tensor<2x8xi1>
+      %185 = arith.select %184, %178, %50#1 : tensor<2x8xi1>, tensor<2x8xf32>
+      %186 = tt.expand_dims %104 {axis = 2 : i32} : tensor<2x1xi1> -> tensor<2x1x1xi1>
+      %187 = tt.broadcast %186 : tensor<2x1x1xi1> -> tensor<2x8x128xi1>
+      %188 = arith.select %187, %183, %50#2 : tensor<2x8x128xi1>, tensor<2x8x128xf32>
+      %189 = arith.select %184, %169, %50#0 : tensor<2x8xi1>, tensor<2x8xf32>
+      scf.yield %189, %185, %188 : tensor<2x8xf32>, tensor<2x8xf32>, tensor<2x8x128xf32>
+    } else {
+      scf.yield %50#0, %50#1, %50#2 : tensor<2x8xf32>, tensor<2x8xf32>, tensor<2x8x128xf32>
+    }
+    %54 = arith.maxsi %5, %c1_i32 : i32
+    %55 = arith.muli %54, %c16_i32 : i32
+    %56 = arith.subi %55, %c1_i32 : i32
+    %57 = arith.addi %3, %56 : i32
+    %58 = arith.divsi %57, %55 : i32
+    %59 = tt.splat %58 : i32 -> tensor<2xi32>
+    %60 = arith.cmpi slt, %6, %59 : tensor<2xi32>
+    %61 = tt.expand_dims %60 {axis = 1 : i32} : tensor<2xi1> -> tensor<2x1xi1>
+    %62 = arith.mulf %53#0, %cst_5 : tensor<2x8xf32>
+    %63 = tt.broadcast %61 : tensor<2x1xi1> -> tensor<2x8xi1>
+    %64 = arith.select %63, %62, %cst_10 : tensor<2x8xi1>, tensor<2x8xf32>
+    %65 = arith.select %63, %53#1, %cst_4 : tensor<2x8xi1>, tensor<2x8xf32>
+    %66 = tt.expand_dims %61 {axis = 2 : i32} : tensor<2x1xi1> -> tensor<2x1x1xi1>
+    %67 = tt.broadcast %66 : tensor<2x1x1xi1> -> tensor<2x8x128xi1>
+    %68 = arith.select %67, %53#2, %cst_7 : tensor<2x8x128xi1>, tensor<2x8x128xf32>
+    %69 = arith.cmpi sgt, %58, %c0_i32 : i32
+    %70 = "tt.reduce"(%64) <{axis = 0 : i32}> ({
+    ^bb0(%arg17: f32, %arg18: f32):
+      %98 = arith.maxnumf %arg17, %arg18 : f32
+      tt.reduce.return %98 : f32
+    }) : (tensor<2x8xf32>) -> tensor<8xf32>
+    %71 = tt.splat %69 : i1 -> tensor<8xi1>
+    %72 = arith.select %71, %70, %cst_3 : tensor<8xi1>, tensor<8xf32>
+    %73 = arith.select %63, %64, %cst_4 : tensor<2x8xi1>, tensor<2x8xf32>
+    %74 = tt.expand_dims %72 {axis = 0 : i32} : tensor<8xf32> -> tensor<1x8xf32>
+    %75 = tt.broadcast %74 : tensor<1x8xf32> -> tensor<2x8xf32>
+    %76 = arith.subf %73, %75 : tensor<2x8xf32>
+    %77 = math.exp %76 : tensor<2x8xf32>
+    %78 = arith.mulf %65, %77 : tensor<2x8xf32>
+    %79 = "tt.reduce"(%78) <{axis = 0 : i32}> ({
+    ^bb0(%arg17: f32, %arg18: f32):
+      %98 = arith.addf %arg17, %arg18 : f32
+      tt.reduce.return %98 : f32
+    }) : (tensor<2x8xf32>) -> tensor<8xf32>
+    %80 = tt.expand_dims %77 {axis = 2 : i32} : tensor<2x8xf32> -> tensor<2x8x1xf32>
+    %81 = tt.broadcast %80 : tensor<2x8x1xf32> -> tensor<2x8x128xf32>
+    %82 = arith.mulf %68, %81 : tensor<2x8x128xf32>
+    %83 = "tt.reduce"(%82) <{axis = 0 : i32}> ({
+    ^bb0(%arg17: f32, %arg18: f32):
+      %98 = arith.addf %arg17, %arg18 : f32
+      tt.reduce.return %98 : f32
+    }) : (tensor<2x8x128xf32>) -> tensor<8x128xf32>
+    %84 = tt.expand_dims %79 {axis = 1 : i32} : tensor<8xf32> -> tensor<8x1xf32>
+    %85 = arith.cmpf oeq, %84, %cst_2 : tensor<8x1xf32>
+    %86 = tt.broadcast %84 : tensor<8x1xf32> -> tensor<8x128xf32>
+    %87 = arith.divf %83, %86 : tensor<8x128xf32>
+    %88 = tt.broadcast %85 : tensor<8x1xi1> -> tensor<8x128xi1>
+    %89 = arith.select %88, %cst_11, %87 : tensor<8x128xi1>, tensor<8x128xf32>
+    %90 = arith.muli %23, %c2048_i64 : i64
+    %91 = tt.addptr %arg16, %90 : !tt.ptr<bf16>, i64
+    %92 = tt.splat %91 : !tt.ptr<bf16> -> tensor<8x1x!tt.ptr<bf16>>
+    %93 = tt.addptr %92, %30 : tensor<8x1x!tt.ptr<bf16>>, tensor<8x1xi32>
+    %94 = tt.broadcast %93 : tensor<8x1x!tt.ptr<bf16>> -> tensor<8x128x!tt.ptr<bf16>>
+    %95 = tt.broadcast %34 : tensor<1x128xi32> -> tensor<8x128xi32>
+    %96 = tt.addptr %94, %95 : tensor<8x128x!tt.ptr<bf16>>, tensor<8x128xi32>
+    %97 = arith.truncf %89 : tensor<8x128xf32> to tensor<8x128xbf16>
+    tt.store %96, %97, %42 : tensor<8x128x!tt.ptr<bf16>>
+    tt.return
+  }
+}
+
+{-#
+  external_resources: {
+    mlir_reproducer: {
+      pipeline: "builtin.module(convert-triton-to-tritongpu{enable-source-remat=false num-ctas=1 num-warps=2 target=cuda:71 threads-per-warp=64}, tritongpu-coalesce, tritongpu-F32DotTC{emu-tf32=false}, tritongpu-remove-layout-conversions, tritongpu-optimize-thread-locality, triton-iluvatar-tle-optimize-local-pointer-async-stores, triton-iluvatar-tle-early-assign-memory-space, triton-iluvatar-tle-optimize-exclusive-cumsum-layouts, triton-iluvatar-tle-lower-exclusive-cumsum, triton-iluvatar-tle-insert-local-pointer-barriers, triton-iluvatar-tle-optimize-local-pointer-loads, triton-iluvatar-tle-optimize-local-pointer-stores, triton-iluvatar-tle-lower-pipe-to-barriers, tritongpu-accelerate-matmul{use-sme=65550}, tritongpu-remove-layout-conversions, tritoniluvatargpu-mma-reduce-thread-locality, tritoniluvatargpu-optimize-epilogue, tritongpu-optimize-dot-operands{hoist-layout-conversion=true}, tritoniluvatargpu-sme-load{compute-capability=71}, triton-loop-aware-cse, tritongpu-fuse-nested-loops, canonicalize{  max-iterations=10 max-num-rewrites=-1 region-simplify=normal test-convergence=false top-down=true}, triton-licm, canonicalize{  max-iterations=10 max-num-rewrites=-1 region-simplify=normal test-convergence=false top-down=true}, tritongpu-combine-tensor-select-and-if, tritongpu-assign-latencies{num-stages=1}, tritongpu-schedule-loops, tritongpu-pipeline{dump-intermediate-steps=false num-stages=1}, canonicalize{  max-iterations=10 max-num-rewrites=-1 region-simplify=normal test-convergence=false top-down=true}, triton-loop-aware-cse, tritongpu-remove-layout-conversions, tritongpu-prefetch, tritongpu-optimize-dot-operands{hoist-layout-conversion=true}, triton-iluvatar-tle-lower-async-load, tritongpu-coalesce-async-copy, tritongpu-remove-layout-conversions, tritongpu-reduce-data-duplication, tritongpu-reorder-instructions, triton-loop-aware-cse, symbol-dce, sccp, cse, canonicalize{  max-iterations=10 max-num-rewrites=-1 region-simplify=normal test-convergence=false top-down=true})",
+      disable_threading: true,
+      verify_each: true
+    }
+  }
+#-}
+/workspace/experiments/minicpm-s2/framework/20261027T043321686931Z-gqa-s2-incta-hotspot-component/source/candidate.py:8:0: error: Failures have been detected while processing an MLIR pass pipeline
+/workspace/experiments/minicpm-s2/framework/20261027T043321686931Z-gqa-s2-incta-hotspot-component/source/candidate.py:8:0: note: Pipeline failed while executing [`TritonGPUAccelerateMatmul` on 'builtin.module' operation]: reproducer generated at `std::errs, please share the reproducer above with Triton project.`
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/framework/20261027T043321686931Z-gqa-s2-incta-hotspot-component/source/worker.py", line 213, in worker
+    first = {name: arm.call() for name, arm in arms.items()}
+                   ^^^^^^^^^^
+  File "/workspace/experiments/minicpm-s2/framework/20261027T043321686931Z-gqa-s2-incta-hotspot-component/source/worker.py", line 208, in call
+    compiled=kernel[(B,2) if fused else grid](**pk)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 412, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 765, in run
+    kernel = self._do_compile(key, signature, device, constexprs, options, attrs, warmup)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/runtime/jit.py", line 894, in _do_compile
+    kernel = self.compile(src, target=target, options=options.__dict__)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/spec/iluvatar/triton/compiler/compiler.py", line 362, in compile
+    next_module = compile_ir(module, metadata)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/backends/iluvatar/compiler.py", line 481, in <lambda>
+    stages["ttgir"] = lambda src, metadata: self.make_ttgir(src, metadata, options, capability)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/triton/backends/iluvatar/compiler.py", line 343, in make_ttgir
+    pm.run(mod, 'make_ttgir')
+RuntimeError: PassManager::run failed
+/usr/local/lib/python3.12/tempfile.py:940: ResourceWarning: Implicitly cleaning up <TemporaryDirectory '/tmp/biv150-q-fragment-sbdq0opf'>
+  _warnings.warn(warn_message, ResourceWarning)
+/usr/local/lib/python3.12/tempfile.py:940: ResourceWarning: Implicitly cleaning up <TemporaryDirectory '/tmp/biv150-q-fragment-a96zunm4'>
+  _warnings.warn(warn_message, ResourceWarning)
