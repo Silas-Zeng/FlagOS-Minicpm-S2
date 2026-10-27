@@ -1,5 +1,8 @@
 # FlagOS 第二季 MiniCPM5-2B 双平台实验
 
+本批原生 GQA 五轮的张量原件以无损 gzip 发布，原始 SHA 保持；[索引与恢复命令](experiments/tensor-storage-20261027.md)。
+
+
 团队主要看：**尝试了什么、改了什么、怎么测、结果怎样、是否保留。**
 
 - **[实验总表](team/experiments.md)**：唯一登记视图，包含成功、失败与待确认项。

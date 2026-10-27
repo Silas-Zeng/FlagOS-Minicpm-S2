@@ -1,0 +1,23 @@
+--- frozen-S2
++++ S4-only
+@@ -184,16 +184,16 @@
+ #endif
+ }
+ 
+-// First draft exposes only S2; S4 remains the same source template, not an
+-// enabled/qualified path. A future R32 component must instantiate/validate S4.
+-extern "C" void launch_corex_native_gqa_s2_draft(
++// Independent S4/N32 component: only the existing template instantiation changes.
++// No inherited S2 numeric/performance or model qualification.
++extern "C" void launch_corex_native_gqa_s4_draft(
+  const void* query,const void* key,const void* value,const int* seq_lens,
+  const int* block_table,int batch,float scale,
+  std::int64_t table_stride,std::int64_t q_token_stride,std::int64_t q_head_stride,
+  std::int64_t acc_token_stride,std::int64_t acc_head_stride,std::int64_t acc_segment_stride,
+  std::int64_t scalar_token_stride,std::int64_t scalar_head_stride,
+  float* acc,float* maximum,float* summation,cudaStream_t stream){
+- corex_native_gqa_producer_draft<2><<<dim3(batch,2,2),64,0,stream>>>(
++ corex_native_gqa_producer_draft<4><<<dim3(batch,2,4),64,0,stream>>>(
+   static_cast<const __nv_bfloat16*>(query),static_cast<const __nv_bfloat16*>(key),
+   static_cast<const __nv_bfloat16*>(value),seq_lens,block_table,scale,
+   table_stride,q_token_stride,q_head_stride,acc_token_stride,acc_head_stride,

@@ -1,0 +1,44 @@
+--- corex-native-gqa-s4-component-20261027/worker.py
++++ corex-native-gqa-s4-v2-component-20261027/worker.py
+@@ -254,6 +254,14 @@
+ 
+         def check(label, finite=True, changed=False):
+             # 整份 KV/输入逐位和 RNG 门在计时外；失败也先保存响应与 partial。
++            # Whole backing CPU snapshot distinguishes fixture corruption before any attention call.
++            query_backing_before_cpu = query_backing.cpu().clone()
++            query_backing_guard_before = bool((query_backing_before_cpu[:, 2048:] == -23).all())
++            if not query_backing_guard_before:
++                torch.save(query_backing_before_cpu.view(torch.int16), run / (label + "-bad-query-backing-before.pt"))
++                result["checks"].append(dict(case=label, checks=dict(query_backing_guard_before=False), attention_not_called=True))
++                write(run / "results.json", result)
++                raise RuntimeError("fixture guard已在Attention执行前改变：" + label)
+             before = tuple(x.clone() for x in (query, cache, common.seq_lens, common.block_table_tensor))
+             rng_cpu, rng_gpu = torch.get_rng_state().clone(), torch.cuda.get_rng_state().clone()
+             for arm in arms.values():
+@@ -271,6 +279,7 @@
+                      torch.equal(torch.isneginf(a.out[:B]), torch.isneginf(b.out[:B])))),
+                 finite=(all(bool(torch.isfinite(arm.out[:B]).all()) for arm in arms.values()) if finite else True),
+                 guard=bool((a.out[B:] == -17).all() and (b.out[B:] == -17).all()))
++            checks["query_backing_guard_before"] = query_backing_guard_before
+             if finite:
+                 checks["cross_arm_bitwise"] = same_bits(a.out[:B], b.out[:B])
+                 checks['all_partial_state_cross_arm_bitwise']=all(same_bits(x,y) for x,y in zip((a.partial,a.maxima,a.sums),(b.partial,b.maxima,b.sums)))
+@@ -302,6 +311,8 @@
+             result["checks"].append(record)
+             torch.save({"baseline": [x.cpu() for x in expected["baseline"]], "candidate": [x.cpu() for x in b.tensors],
+                         "failed_eager_candidate": failed_eager,
++                        "query_backing_before_cpu_bits": query_backing_before_cpu.view(torch.int16),
++                        "query_backing_after_cpu_bits": query_backing.cpu().view(torch.int16),
+                         "seq_lens": common.seq_lens.cpu(), "query": query.cpu(),
+                         "block_table": common.block_table_tensor.cpu()}, run / (label + ".pt"))
+             write(run / "results.json", result)
+@@ -333,7 +344,8 @@
+         boundary = [0, 1, 15, 16, 17, segments * 16, segments * 80 - 32, segments * 80 - 29]
+         common.seq_lens.copy_(torch.tensor([boundary[i % 8] for i in range(active)] + [0] * (B - active),
+                                            dtype=torch.int32, device="cuda"))
+-        query[:B].zero_()
++        # Same exact +0 BF16 Q, constructed on CPU: registered CUDA zero_ ignores this view stride.
++        query[:B].copy_(torch.zeros((B, 16, 128), dtype=torch.bfloat16, device="cpu").to(query.device))
+         cache.zero_()
+         cache[:, 1].fill_(-0.0)
+         check("finite-equal-max-negative-zero-v")
