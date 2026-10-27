@@ -7,7 +7,7 @@
 ## 登记 #318 · main6971 Graph真实热点诊断
 
 - **尝试**：保持生产源码，复用PR62诊断工具；Graph采样可用，fresh native FX证明缺项保留。图内插桩时间只用于排序，不作正常耗时或官方成绩。
-- **改动**：相关实现 [posthoc.json](../../../experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/actual/posthoc.json)；本轮准确变体以原件源码清单为准。
+- **改动**：相关实现 [posthoc.json](../../../experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/actual/posthoc.json)；[summary.md](../../../experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/posthoc-20261027/summary.md)；本轮准确变体以原件源码清单为准。
 - **怎么测**：冻结main6971/618文件身份检查；原Driver未进入workloads。
 - **结果**：诊断adapter把Git mode120000符号链接解引用，源码身份检查在CPU阶段拒绝；未启动collector/服务/GPU。修为校验linktarget字节后另run执行，原失败保留。
 - **是否保留**：保留入口失败；v2单独登记，不当模型错误或性能负。

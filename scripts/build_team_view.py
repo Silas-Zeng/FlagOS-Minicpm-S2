@@ -440,6 +440,8 @@ BATCH_RESULTS['sampler_stats_equality_failed']=('采样融合v2真实head首组s
 GROUPS['sampler-preprocess-stats']=('采样转换与首遍统计融合', 'v2统计逐位门失败，停止；无性能计时，原件已完整回收。', [])
 CODE['sampler-preprocess-stats'] += ['experiments/framework/20261027T031858174112Z-sampler-preprocess-stats-component/archive-receipt.json']
 
+CODE['main6971-graph-profile'] += ['experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/posthoc-20261027/summary.md']
+
 def group(row):
     if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats'):
         return row['profile_id']

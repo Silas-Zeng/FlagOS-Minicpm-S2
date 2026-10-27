@@ -18,10 +18,12 @@
 
 [实验总表](team/experiments.md) · [基线与原件](team/methods/baseline-environment.md) · [V布局](team/methods/kv-vtranspose.md) · [双流](team/methods/q32-mixed-overlap.md) · [采样融合](team/methods/sampler-preprocess-stats.md)。当前均未改变生产源码或主基线；组件结果不能作为官方吞吐。
 
-当前所有本方GPU任务已结束。采样v2的36份原件已逐SHA回收，统计逐位失败及原始摘要保留，不重跑。下一步优先读本站已有main6971诊断的ixsys时间线，确认连续decode步间是否存在可归因等待；队友PR67只公开窗口JSON，不能用Graph与步间隔相减虚构可省预算。
+当前所有本方GPU任务已结束。采样v2的36份原件已逐SHA回收，统计逐位失败及原始摘要保留，不重跑。既有main6971轨迹CPU分析已完成：正常64步未覆盖间隙0.4260%，全部1856个间隙后继已入队，无大额host提交空洞依据；Graph外head约3%、采样约4%。Graph span不代表图内饱和，旧轨迹不迁移为main56预算。
 
 03:55 UTC已将本批原始文件和团队视图推送至实验PR5，远端确认 `e0298c3baf91d7d9687a7812fa8ddfcfff35a750`，此前连接失败已解决。没有为上传重测。SSH使用用户确认指纹的项目专用known_hosts，保留严格校验；禁止网页UI操作，不记录凭据。
 
 团队main已合并[PR66](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/66)，当前为 `56f1838192abc940b3fb9accef490022ac125000`，新增双序列prefill。队友native5cbb单pair观察4K/16K +0.3739%/+0.8399%，105题101/105；本站上表main241/native14f成绩不迁移到新版本。新main的807文件已同步并按Git blob核验。
 
 SSH间歇性拒绝仍存在：03:43 UTC原公钥登录成功，已回收采样v2全部原件；随后相同身份再被publickey拒绝。服务器指纹已通过用户确认和严格校验，不能归因为密码错误；无需再发送密码。服务端授权或路由原因尚未知。本轮不启动网页UI。
+
+[旧轨迹CPU分析与复现入口](experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/posthoc-20261027/summary.md)。没有新增GPU测试或候选；下一阶段仍从新main实际GQA／线性路径选择独立实现，先与队友PR去重。

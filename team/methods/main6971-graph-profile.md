@@ -4,7 +4,7 @@
 
 保持生产源码，复用PR62诊断工具；Graph采样可用，fresh native FX证明缺项保留。图内插桩时间只用于排序，不作正常耗时或官方成绩。
 
-相关代码：[posthoc.json](../../experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/actual/posthoc.json)。
+相关代码：[posthoc.json](../../experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/actual/posthoc.json)；[summary.md](../../experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/posthoc-20261027/summary.md)。
 
 相关方法PR：未记录。
 
