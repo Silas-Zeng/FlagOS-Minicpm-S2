@@ -97,6 +97,7 @@
 - [GQA尾段append融合](methods/gqa-fused-append.md)
 - [LM-head温度epilogue融合](methods/lm-head-temperature.md)
 - [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md)
+- [CoreX Q32四页搬运编译探针](methods/native-q32-transfer.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

@@ -513,7 +513,17 @@ CODE['corex-native-gqa-page16'] += ['experiments/framework/20261027T143828583459
 CODE['corex-native-gqa-page16'] += ['experiments/official/20261027T145950Z-native-gqa-abi-v2-4k-four-rounds/summary.json', 'experiments/official/20261027T145950Z-native-gqa-abi-v2-4k-four-rounds/raw-evidence.json', 'experiments/bundles/20261027T145950Z-native-gqa-abi-v2-4k-four-rounds/manifest.json', 'experiments/bundles/20261027T145950Z-native-gqa-abi-v2-4k-four-rounds/raw.tar.gz.storage.json']
 GROUPS['corex-native-gqa-page16']=('CoreX原生BF16 GQA：单页与完整分页', '服务post-RoPE Q实际连续2048。S4连续布局九门通过，组件Event省22.1242%；ABI v2原官方4K弃首暖均6481.2267对A5971.44，观察+8.5371%，1024成功且S2/S4实际覆盖。KV548336对548288差48，不称严格因果或稳定幅度；待16K/105后定基线。旧a596只有安装未覆盖，不是内核负收益；QKV切片2560组件及夹具失败保留。', [])
 
+BATCH_RESULTS['native_gqa_abi_v2_16k_positive_observation']=('原官方16K暖4826.4467对A4529.7867，观察+6.5491%；512成功，S2/S4实际覆盖。', '保留整模正信号；KV少144，不称严格因果或稳定幅度。', '原四轮弃首；c75db/814与SOf720、native14f，原参数不变。', '388原件；KV548288对548432，DB/source/native及清理通过。')
+BATCH_RESULTS['native_gqa_abi_v2_accuracy_pass']=('原官方105题102/105（97.142857%），valid/pass，95%门通过；transport/cap/empty均0。', '保留完整受测源码成绩；启动capture不授105请求分支独立资格。', '原105题及temperature1.0/top_p0.95/max_tokens32768/batch8不变。', '379原件；request_coverage_proven=false，清理与身份通过。')
+BATCH_RESULTS['native_q32_transfer_compile_sidecar_only']=('CPU实编32SME/64MMA、64KiB；原checker=false，静态sidecar仅接受CoreX同步顺序。', '保留编译可行性；无GPU、数值或性能资格。', '复用原LLVM/ASM，不重编；原NVVM屏障匹配失败保留。', '20原件；M16坐标映射和完整Attention均未验证。')
+GROUPS['native-q32-transfer']=('CoreX Q32四页搬运编译探针', '原checker搜索NVVM屏障而实际CoreX使用bi.sl.barrier，passed=false原样保留；sidecar仅接受同步与共享生命周期静态顺序。无GPU执行、坐标映射、数值或性能资格。', [])
+CODE['native-q32-transfer']=['experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/summary.json', 'experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/raw-evidence.json', 'experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/compile-backend-barrier-review.json', 'experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/review-compile-160904.py']
+CODE['corex-native-gqa-page16'] += ['experiments/official/20261027T152326Z-native-gqa-abi-v2-16k-four-rounds/summary.json', 'experiments/official/20261027T152326Z-native-gqa-abi-v2-16k-four-rounds/raw-evidence.json', 'experiments/bundles/20261027T152326Z-native-gqa-abi-v2-16k-four-rounds/manifest.json', 'experiments/bundles/20261027T152326Z-native-gqa-abi-v2-16k-four-rounds/raw.tar.gz.storage.json']
+CODE['corex-native-gqa-page16'] += ['experiments/accuracy/20261027T161121Z-native-gqa-abi-v2-native14f-math500/summary.json', 'experiments/accuracy/20261027T161121Z-native-gqa-abi-v2-native14f-math500/raw-evidence.json', 'experiments/bundles/20261027T161121Z-native-gqa-abi-v2-native14f-math500/manifest.json', 'experiments/bundles/20261027T161121Z-native-gqa-abi-v2-native14f-math500/raw.tar.gz.storage.json']
+GROUPS['corex-native-gqa-page16']=('CoreX原生BF16 GQA：单页与完整分页', 'ABI v2原官方4K/16K各四轮暖均6481.2267/4826.4467，对各A观察+8.5371%/+6.5491%，1024/512请求成功且S2/S4实际覆盖；KV分别差+48/−144，不称严格因果或稳定幅度。原105题102/105、95%门通过，但启动capture不能证明105请求分支覆盖。旧未覆盖安装包和夹具失败均保留。', [])
+
 def group(row):
+    if row['profile_id']=='native-q32-transfer':return 'native-q32-transfer'
     if row['profile_id'] in ('corex-native-gqa-page16','corex-native-gqa-loop'):return 'corex-native-gqa-page16'
     if row['profile_id']=='gqa-fused-append':return 'gqa-fused-append'
     if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats', 'gqa-s2-incta', 'lm-head-temperature'):

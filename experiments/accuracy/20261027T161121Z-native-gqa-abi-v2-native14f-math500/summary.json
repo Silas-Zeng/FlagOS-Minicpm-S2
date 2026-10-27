@@ -1,0 +1,95 @@
+{
+  "run": "20261027T161121Z-native-gqa-abi-v2-native14f-math500",
+  "scope": "原官方105题准确率；原temperature1.0/top_p0.95/max_tokens32768/batch8不变",
+  "review": {
+    "format": "math500-level3-readonly-review-v1",
+    "evaluation_dir": "/workspace/experiments/minicpm-s2/accuracy/20261027T161121Z-native-gqa-abi-v2-native14f-math500/math500-level3/20261028_001238",
+    "validity": "valid",
+    "accuracy_gate": "pass",
+    "correct": 102,
+    "samples": 105,
+    "expected_samples": 105,
+    "exact_accuracy": 0.9714285714285714,
+    "threshold": 0.95,
+    "minimum_correct": 100,
+    "reported_score": 0.9714,
+    "errors": [],
+    "diagnostics": {
+      "stop_reasons": {
+        "stop": 105
+      },
+      "review_statuses": {
+        "success": 105
+      },
+      "transport_error_count": 0,
+      "transport_error_indices": [],
+      "output_cap_count": 0,
+      "output_cap_indices": [],
+      "empty_final_count": 0,
+      "empty_final_indices": [],
+      "empty_extracted_count": 0,
+      "empty_extracted_indices": [],
+      "missing_usage_indices": []
+    },
+    "evalscope_version": "1.11.1",
+    "dataset_fingerprint": "sha256:d2a0a846c4e8e0b074d9cf260e5bb5c3a1d6e41086e4ecefc7d17c624949151a",
+    "artifact_sha256": {
+      "reports/minicpm/math_500.json": "8240fda23c59d7ef865c1d7de78e8c1976088d26207a47ffa29658fcf2b63801",
+      "predictions/minicpm/math_500_Level 3.jsonl": "a83ac900d3b8036fec5f987f5e1c0a60a8ae4cf06c8e65aa29f94c5b21a9b8b3",
+      "reviews/minicpm/math_500_Level 3.jsonl": "19b06f523a6a6f1a27d8a2a4c8cfb1e6b7abbefb01af897a81012b125263b878",
+      "configs/task_config.yaml": "5d60c9d1ec53322ae4659c678ddcddb93edf9556d4ee4a42bffa9150693b434e"
+    },
+    "limitations": [
+      "Reads saved outputs only; does not prove server code installation or cleanup.",
+      "Truncation/empty-answer diagnostics do not change the official denominator.",
+      "Does not independently recompute the official answer judge."
+    ]
+  },
+  "source_tree": "3e2d08790fad834abff66dc1002a86f15eb65b38",
+  "source_count": 814,
+  "library_sha256": "f72064dc13c5909c83d21852d26bea48183d2467049baefb452443b7676e9364",
+  "model_path_valid": true,
+  "native_gqa": {
+    "valid": true,
+    "covered": true,
+    "selected_keys": [
+      [
+        32,
+        4,
+        2048
+      ],
+      [
+        64,
+        2,
+        2048
+      ]
+    ],
+    "captured_keys": [
+      [
+        32,
+        4,
+        2048
+      ],
+      [
+        64,
+        2,
+        2048
+      ]
+    ],
+    "abnormal": false,
+    "observed_scope": "service lifetime first-launch/capture markers, including startup",
+    "request_coverage_proven": false,
+    "request_branch_accuracy_qualified": false,
+    "request_coverage_reason": "helper只报每shape首次launch/capture；启动capture不证明105请求实际走该分支，本入口不增请求跟踪或修改题目/批量以制造覆盖"
+  },
+  "cleanup": {
+    "completed": true,
+    "database_restored": true,
+    "source_unchanged": true,
+    "native_unchanged": true,
+    "native_gqa_unchanged": true,
+    "finished_utc": "2026-10-27T16:28:06.032054+00:00"
+  },
+  "review_exit_code": 0,
+  "decision": "保留受测完整源码102/105、95%门通过；启动S2/S4 capture不证明105请求分支覆盖，不授该分支独立准确率资格。"
+}

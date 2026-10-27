@@ -1,0 +1,48 @@
+<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
+
+# 20261027T160904Z-native-q32-transfer-fragments
+
+平台：天数 BI-V150。本页只摘录既有登记；未记录字段不补猜。
+
+## 登记 #383 · CoreX Q32四页搬运编译探针
+
+- **尝试**：原checker搜索NVVM屏障而实际CoreX使用bi.sl.barrier，passed=false原样保留；sidecar仅接受同步与共享生命周期静态顺序。无GPU执行、坐标映射、数值或性能资格。
+- **改动**：相关实现 [summary.json](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/summary.json)；[raw-evidence.json](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/raw-evidence.json)；[compile-backend-barrier-review.json](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/compile-backend-barrier-review.json)；[review-compile-160904.py](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/review-compile-160904.py)；本轮准确变体以原件源码清单为准。
+- **怎么测**：20原件；M16坐标映射和完整Attention均未验证。
+- **结果**：CPU实编32SME/64MMA、64KiB；原checker=false，静态sidecar仅接受CoreX同步顺序。
+- **是否保留**：保留编译可行性；无GPU、数值或性能资格。
+
+<details><summary>完整原登记（含UTC、状态、过程与标识）</summary>
+
+```json
+{
+  "run_id": "20261027T160904Z-native-q32-transfer-fragments",
+  "local_date": "2026-10-27",
+  "utc_start": "20261027T160904Z",
+  "profile_id": "native-q32-transfer",
+  "phase": "diagnostic",
+  "device": "Iluvatar BI-V150",
+  "vllm_commit": "dac1b8fb48e7983e48283032efeee9b592c5fbe5",
+  "flaggems_commit": "4df52d9168ac55c1c1061cefb4638c570292d896",
+  "input_len": "",
+  "output_len": "",
+  "concurrency": "",
+  "num_prompts": "",
+  "profiler": "false",
+  "status": "native_q32_transfer_compile_sidecar_only",
+  "artifacts": "experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments",
+  "conclusion": "CoreX Q32四页搬运/原生M16片段仅CPU实编：32SME/64MMA、64KiB、SGPR51/VGPR50、无spill。原checker passed=false因仅匹配NVVM barrier；原失败保留，sidecar按真实bi.sl.barrier/ASM接受同步与共享生命周期顺序。不是M16坐标证明，无GPU执行、数值或性能资格。"
+}
+```
+
+</details>
+
+## 原件与说明
+
+- 原始目录：[20261027T160904Z-native-q32-transfer-fragments](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments)
+- 原命令：未单列，见原始目录
+- 环境 / 源码 / 后态：未单列，见原始目录
+- 原始结果：未单列，见原始目录
+- 日志 / 采样：未单列，见原始目录
+- 相关说明：未记录
+- 完整原登记：[registry.csv](../../../experiments/registry.csv)（登记序号见上；同一run可有多个阶段）

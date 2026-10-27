@@ -1,0 +1,134 @@
+{
+  "run": "20261027T160904Z-native-q32-transfer-fragments",
+  "scope": "仅CPU编译与实际CoreX backend屏障/共享生命周期静态审阅，无GPU执行",
+  "original_checker": {
+    "kernel": "corex_q32_transfer_fragment_probe",
+    "checks": {
+      "real_kernel": true,
+      "full_QK_PV_not_eliminated": true,
+      "four_pages_both_KV_SME": true,
+      "issuing_warp_wait_present": true,
+      "phase_barriers_present": false,
+      "single_64KiB_backing": true,
+      "no_exp_or_softmax": true
+    },
+    "counts": {
+      "mma_llvm": 64,
+      "sme_llvm": 32,
+      "wait8": 1,
+      "barrier": 0,
+      "mma_asm": 64,
+      "sme_asm": 32
+    },
+    "resources": {
+      "shared_bytes": 65536,
+      "private_bytes": 0,
+      "SGPR": 51,
+      "VGPR": 50,
+      "sgpr_spill_count": 0,
+      "vgpr_spill_count": 0
+    },
+    "passed": false,
+    "files": {
+      "probe.ll": "4dbcf9285faea6999be466e10f3fbfba0df8a873df3a8c63f282389dc6c175c2",
+      "probe.s": "64907647f15bd30c7bb1ad0680dda6330a8ff5b66a157d47d6c32bd8c5239456"
+    },
+    "scope": "compiler-only full native M16 fragments and four-page transfer; no row-major Q/P mapping, softmax, full attention or GPU qualification",
+    "GPU_executed": false,
+    "numerical_qualified": false,
+    "performance_qualified": false,
+    "limits": [
+      "resources belong to this diagnostic translation unit, not a future full attention kernel",
+      "manual CFG must verify all Q loads precede aliased SME and all issuing-warp waits precede consumer reads",
+      "nonempty compilation and stored full C do not establish C-to-matrix row/col semantics"
+    ]
+  },
+  "sidecar_review": {
+    "source": "160904 existing compiler outputs; no recompile",
+    "inputs": {
+      "probe.ll": "4dbcf9285faea6999be466e10f3fbfba0df8a873df3a8c63f282389dc6c175c2",
+      "probe.s": "64907647f15bd30c7bb1ad0680dda6330a8ff5b66a157d47d6c32bd8c5239456",
+      "compile-check.json": "b5a3061889698e6de6e71e1e52494066d47de2558e7539676d4c55d043148c8a",
+      "compile-check.log": "7d12d4ec54315195e8dadfbcab1c584e27010af9dbfac1e5aa085f56e4171d2e"
+    },
+    "original_passed": false,
+    "original_barrier_count": 0,
+    "original_error_preserved": true,
+    "correction": "checker searched llvm.nvvm.barrier.cta.sync.aligned.all; actual CoreX uses llvm.bi.sl.barrier",
+    "CoreX_barriers_LLVM_lines": [
+      132,
+      222,
+      336,
+      716,
+      762
+    ],
+    "barriers_ASM_lines": [
+      143,
+      178,
+      305,
+      525,
+      547
+    ],
+    "SME_LLVM_lines": [
+      239,
+      331
+    ],
+    "SME_ASM_lines": [
+      198,
+      301
+    ],
+    "wait_LLVM": [
+      332
+    ],
+    "wait_ASM": [
+      302
+    ],
+    "QK_MMA_ASM": [
+      395,
+      522
+    ],
+    "PV_MMA_ASM": [
+      573,
+      705
+    ],
+    "machine_phase_order_verified": true,
+    "issuing_warp": 0,
+    "all_warps_merge_before_consumers": true,
+    "shared_lifetimes": {
+      "Q": [
+        0,
+        65536
+      ],
+      "K": [
+        0,
+        16384
+      ],
+      "V": [
+        32768,
+        49152
+      ],
+      "P": [
+        0,
+        32768
+      ],
+      "order": "Q loads/barrier2 -> SME(wait warp0)/barrier3 -> all K QK reads/barrier4 -> P stores/barrier5 -> P+V PV"
+    },
+    "resources": {
+      "shared_bytes": 65536,
+      "private_bytes": 0,
+      "SGPR": 51,
+      "VGPR": 50,
+      "sgpr_spill_count": 0,
+      "vgpr_spill_count": 0
+    },
+    "compiler_only_acceptance": true,
+    "numerical_qualified": false,
+    "performance_qualified": false,
+    "GPU_executed": false,
+    "limits": [
+      "machine synchronization/alias order only; not a numerical M16 mapping proof",
+      "native A-word and C-component matrix coordinates remain a separate non-symmetric device gate"
+    ]
+  },
+  "decision": "原checker passed=false保留；其搜索NVVM barrier而CoreX实际bi.sl.barrier，sidecar仅接受编译阶段顺序。未获M16映射/数值/性能或完整Attention资格。"
+}
