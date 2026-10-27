@@ -436,6 +436,10 @@ BATCH_RESULTS['sampler_stats_equality_failed_raw_pending']=('采样融合v2仅�
 GROUPS['sampler-preprocess-stats']=('采样转换与首遍统计融合', 'v2首组统计逐位门失败，停止；无性能计时，完整原件待回收。', [])
 CODE['sampler-preprocess-stats'] += ['experiments/framework/20261027T031858174112Z-sampler-preprocess-stats-component/ssh-readback-summary.json']
 
+BATCH_RESULTS['sampler_stats_equality_failed']=('采样融合v2真实head首组scaled/filtered/IDs/RNG相同，但stats_bitwise=false，按预定门停止；无计时，后续换值/Graph/性能未运行。不能称原main预测错误，也不接受为等价候选。DB恢复、source/native不变；36份原始文件已完整回收并逐SHA核验，保留此前SSH读回摘要。停止当前实现。', '停止当前实现，无性能或官方资格。', '统计逐位门失败；不能用IDs相同替代。', '36份原件已完整回收，SHA通过；不重测。')
+GROUPS['sampler-preprocess-stats']=('采样转换与首遍统计融合', 'v2统计逐位门失败，停止；无性能计时，原件已完整回收。', [])
+CODE['sampler-preprocess-stats'] += ['experiments/framework/20261027T031858174112Z-sampler-preprocess-stats-component/archive-receipt.json']
+
 def group(row):
     if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats'):
         return row['profile_id']

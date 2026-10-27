@@ -1,6 +1,6 @@
 # 当前实验与接续
 
-更新：2026-10-27 03:24 UTC。main241官方两档四轮与105题完成；本轮候选均已停止。
+更新：2026-10-27 03:53 UTC。采样v2全部原件已回收；已同步团队main56，未启动新GPU任务。
 
 | 版本或方法 | 怎么测、结果 | 是否保留 |
 |---|---|---|
@@ -12,14 +12,14 @@
 | 纯BF16页内V转置 | 完整writer+GQA+reducer Event慢1.3305%、wall慢1.1845%，逐位等检查通过 | 停止，不扫参或接入模型 |
 | Q32与GQA双流 | D63/P1985/KV4K完整混合层：Event慢5.5214%、wall省0.5023%，正确性通过 | 无一致净收益，停止 |
 | 采样预处理融合首包 | 入口读旧安装副本，导入失败；候选尚未运行，无计时 | 仅修入口后另run，保留失败 |
-| 采样融合v2 | scaled/filtered/IDs/RNG相同，但统计逐位门失败；无计时 | 停止；完整原件待回收 |
+| 采样融合v2 | scaled/filtered/IDs/RNG相同，但统计逐位门失败；无计时 | 停止；36份原件已回收 |
 
 105题于02:31:13 UTC评测结束，34层native、真实provider及原Q-hoist/normalization检查通过。原owner因叠加性能测试的“Q32必须实际选中”检查而 `completed=false`；Q32已安装但未选中、无fallback/解析错误，C3未覆盖。原失败标记和原预测均保留，独立review判精度通过；不为覆盖检查强改框架或重跑105。同源码4K/16K原件另有实际Q32选中证据。
 
 [实验总表](team/experiments.md) · [基线与原件](team/methods/baseline-environment.md) · [V布局](team/methods/kv-vtranspose.md) · [双流](team/methods/q32-mixed-overlap.md) · [采样融合](team/methods/sampler-preprocess-stats.md)。当前均未改变生产源码或主基线；组件结果不能作为官方吞吐。
 
-当前所有本方GPU任务已结束：采样v2 owner37257/worker37260于03:19:32 UTC因stats_bitwise=false停止，无计时；DB恢复、source/native不变及清理通过。原包8b65578b与独审已保存。首包与双流亦均结束。下一步仅先回收v2原件，不重跑这些候选；之后另选有独立机制依据的新方向。
+当前所有本方GPU任务已结束。采样v2的36份原件已逐SHA回收，统计逐位失败及原始摘要保留，不重跑。下一步优先读本站已有main6971诊断的ixsys时间线，确认连续decode步间是否存在可归因等待；队友PR67只公开窗口JSON，不能用Graph与步间隔相减虚构可省预算。
 
 Git文件上传此前连接重置/TLS失败，远端最后确认f7f9515；PR正文先同步结果，文件发布状态另核，不为上传重测。原件仍在本地和实验机。SSH指纹经用户确认已恢复，使用项目专用known_hosts并保留严格校验；禁止网页UI操作，不记录凭据。
 
-03:22 UTC回收时SSH又拒绝公钥；严格服务器指纹校验已通过，日志显示网关仅提供publickey并拒绝已提交专用公钥，不提供password认证。原公钥指纹SHA256:YBsnxjMuO8HB3V9pbejfv7EabmMZ0Umjvy2ffGkH6bM。服务端授权/路由原因未定，完整v2原件仍在远端，当前只保存成功读回的摘要，不声称完整回收。
+SSH间歇性拒绝仍存在：03:43 UTC原公钥登录成功，已回收采样v2全部原件；随后相同身份再被publickey拒绝。服务器指纹已通过用户确认和严格校验，不能归因为密码错误；无需再发送密码。服务端授权或路由原因尚未知。本轮不启动网页UI。
