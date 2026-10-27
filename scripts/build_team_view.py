@@ -432,6 +432,10 @@ GROUPS['sampler-preprocess-stats']=('采样转换与首遍统计融合', '保留
 CODE['sampler-preprocess-stats']=['experiments/framework/20261027T030446321226Z-sampler-preprocess-stats-component/archive-receipt.json']
 BATCH_RESULTS['sampler_preprocess_entry_import_failure']=('首包f3e99d0a在候选执行前失败：入口PYTHONPATH只包含assets，导入安装旧vllm_fl，缺biv150_runtime，ImportError。cases/timings均空，尚无数值或性能结论，也不是生产框架报错。保留原包和26原件；下一包仅绑定main241765源码路径及复用既有身份检查，数学和候选不改。原owner已恢复DB并清理自有进程。', '保留原启动失败，只修入口源码路径后单独重试；无收益或数值结论。', '候选尚未运行，不能标记数值通过或数值错误。', '完整原件、精确命令、环境与收尾证据已回收。')
 
+BATCH_RESULTS['sampler_stats_equality_failed_raw_pending']=('采样融合v2仅修main241源码入口，真实head首组scaled/filtered/sampled IDs、global/per-request RNG、输入及独立CPU FP64转换均通过，但stats_bitwise=false，按预定门停止；timings为空，后续换值/Graph/性能未运行。不能称原main框架报错或已造成预测错误，也不接受为等价候选。03:19:32 UTC收尾，DB恢复、source/native不变。结果已通过SSH读到；随后网关仅提供publickey且拒绝原密钥，完整原件暂留实验机，未伪造归档回执。停止本实现，不改容差/数学或继续变体。', '停止当前实现，无性能或官方资格。', '首组统计逐位不符；输出IDs相同不能代替全等价门。', '仅已读回摘要在本地，完整原件仍在实验机；恢复SSH后回收，不重测。')
+GROUPS['sampler-preprocess-stats']=('采样转换与首遍统计融合', 'v2首组统计逐位门失败，停止；无性能计时，完整原件待回收。', [])
+CODE['sampler-preprocess-stats'] += ['experiments/framework/20261027T031858174112Z-sampler-preprocess-stats-component/ssh-readback-summary.json']
+
 def group(row):
     if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats'):
         return row['profile_id']

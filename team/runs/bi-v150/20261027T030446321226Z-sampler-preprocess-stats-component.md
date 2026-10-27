@@ -6,8 +6,8 @@
 
 ## 登记 #357 · 采样转换与首遍统计融合
 
-- **尝试**：保留原启动失败，只修入口源码路径后单独重试；无收益或数值结论。
-- **改动**：相关实现 [archive-receipt.json](../../../experiments/framework/20261027T030446321226Z-sampler-preprocess-stats-component/archive-receipt.json)；本轮准确变体以原件源码清单为准。
+- **尝试**：v2首组统计逐位门失败，停止；无性能计时，完整原件待回收。
+- **改动**：相关实现 [archive-receipt.json](../../../experiments/framework/20261027T030446321226Z-sampler-preprocess-stats-component/archive-receipt.json)；[ssh-readback-summary.json](../../../experiments/framework/20261027T031858174112Z-sampler-preprocess-stats-component/ssh-readback-summary.json)；本轮准确变体以原件源码清单为准。
 - **怎么测**：完整原件、精确命令、环境与收尾证据已回收。
 - **结果**：首包f3e99d0a在候选执行前失败：入口PYTHONPATH只包含assets，导入安装旧vllm_fl，缺biv150_runtime，ImportError。cases/timings均空，尚无数值或性能结论，也不是生产框架报错。保留原包和26原件；下一包仅绑定main241765源码路径及复用既有身份检查，数学和候选不改。原owner已恢复DB并清理自有进程。
 - **是否保留**：保留原启动失败，只修入口源码路径后单独重试；无收益或数值结论。

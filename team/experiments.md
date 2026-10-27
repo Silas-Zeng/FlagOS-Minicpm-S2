@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共357条登记、354个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共358条登记、355个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -335,6 +335,7 @@
 | 天数 BI-V150 | 355 | 20261027T024300270939Z | [纯BF16页内V布局](methods/kv-vtranspose.md) | 组件逐位/Graph/writer门通过；未运行模型或官方资格。 | 未记录/未记录/未记录/未记录 | 纯BF16页内V转置：K保持NHD，V改dim×slot；原GQA只改两处V维度寻址，并实作对应writer，未压缩或增持久容量。位型、8项数值/Graph及writer换值/换slot/负slot门通过，有限输入跨臂逐 | [20261027T024300270939Z-gqa-bf16-vtranspose-hotspot-component](runs/bi-v150/20261027T024300270939Z-gqa-bf16-vtranspose-hotspot-component.md) |
 | 天数 BI-V150 | 356 | 20261027T030312159264Z | [当前Q32与GQA混合双流](methods/q32-mixed-overlap.md) | 真实Q32/GQA绑定、换Q即时消费、整输出逐位及输入/KV/RNG门通过，pending最终0；不等于官方资格。 | 未记录/未记录/未记录/未记录 | main241真实D63/P1985/KV4096，Q32 grid63×2，GQA自然S4/grid63×2×4。A串行、B原93c双流，完整writer+两路Attention/reducer+fork/join/e | [20261027T030312159264Z-q32-mixed-overlap-mixed-component](runs/bi-v150/20261027T030312159264Z-q32-mixed-overlap-mixed-component.md) |
 | 天数 BI-V150 | 357 | 20261027T030446321226Z | [采样转换与首遍统计融合](methods/sampler-preprocess-stats.md) | 候选尚未运行，不能标记数值通过或数值错误。 | 未记录/未记录/未记录/未记录 | 首包f3e99d0a在候选执行前失败：入口PYTHONPATH只包含assets，导入安装旧vllm_fl，缺biv150_runtime，ImportError。cases/timings均空，尚无数值或性能结论，也不 | [20261027T030446321226Z-sampler-preprocess-stats-component](runs/bi-v150/20261027T030446321226Z-sampler-preprocess-stats-component.md) |
+| 天数 BI-V150 | 358 | 2026-10-27T03:18:58.174112+00:00 | [采样转换与首遍统计融合](methods/sampler-preprocess-stats.md) | 首组统计逐位不符；输出IDs相同不能代替全等价门。 | 未记录/未记录/未记录/未记录 | 采样融合v2仅修main241源码入口，真实head首组scaled/filtered/sampled IDs、global/per-request RNG、输入及独立CPU FP64转换均通过，但stats_bitwi | [20261027T031858174112Z-sampler-preprocess-stats-component](runs/bi-v150/20261027T031858174112Z-sampler-preprocess-stats-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
