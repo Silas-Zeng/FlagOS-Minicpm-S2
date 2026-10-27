@@ -566,6 +566,17 @@ BATCH_RESULTS['native_gqa_mixed_s4_official_partial_negative']=('原官方4K两�
 GROUPS['native-gqa-mixed-s4']=('原生BF16 GQA：mixed S4覆盖扩展', '原c75db仅覆盖B64/S2与B32/S4，真实mixed prefix61原回落Triton。B61/B60完整mixed组件Event省8.8533%/25.5143%、B63位型通过；仅helper/CPP扩32–63且排40，CU/chooser/S2不动。原官方4K两轮首暖6168.07对A6301.93观察−2.1241%后主动停，KV548432对548336不同，不能严格归因。候选不合并，停止16K/105，不定新基线；正确性门通过与性能筛选负分列。', [])
 CODE['native-gqa-mixed-s4'] += ['experiments/official/20261027T183747Z-native-gqa-mixed-s4-4k-four-rounds/summary.json', 'experiments/official/20261027T183747Z-native-gqa-mixed-s4-4k-four-rounds/raw-evidence.json', 'experiments/bundles/20261027T183747Z-native-gqa-mixed-s4-4k-four-rounds/manifest.json', 'experiments/bundles/20261027T183747Z-native-gqa-mixed-s4-4k-four-rounds/raw.tar.gz.storage.json']
 
+
+# 后续独立两轮：小收益保留，负组件停止；不更新官方基线。
+BATCH_RESULTS['qkv_bn32_w8_negative']=('M64真实layer0 QKV权重／合成激活，原64/64/128 w16s1对64/32/128 w8s1，仅BN与warp两项变化，原FPbody／runtime K不变、无额外权重。八项位型／独立FP64／换值Graph／side与RNG通过；完整MM Graph Event .03167163394→.03444711491ms慢8.7633%，停止形状／模型／官方，非数值错误。SME／shared静态减少不代表收益。', '停止该负组件，不进模型／官方。', '关闭profiler的同轮完整Graph ABBA；原数学／输入RNG门通过。', '原件逐SHA验证并完整无损分块；不叠加S2/S4或其它方法比例。')
+CODE['shape-gemm'] += ['experiments/framework/20261027T190017939358Z-qkv-bn32-component/summary.json', 'experiments/framework/20261027T190017939358Z-qkv-bn32-component/raw-evidence.json', 'experiments/bundles/20261027T190017939358Z-qkv-bn32-component/manifest.json', 'experiments/bundles/20261027T190017939358Z-qkv-bn32-component/raw.tar.gz.storage.json']
+BATCH_RESULTS['native_gqa_s4_macro01_strict_positive']=('N32/S4/KV16384／连续Qstride2048，同轮原f720 macro0对私有同源macro1，完整producer＋原reducer Graph ABBA。原九门／全partial位型／FP64／换值Graph／input／RNG通过；Event .8022495508→.7950562537ms省.8966408%，wall省1.0151%。保留小正候选，不冒称官方／模型资格，不与S2收益相加；mixed扩覆盖官方负路线不叠加。', '保留小正候选；原官方／准确率尚未授予。', '关闭profiler的同轮完整Graph ABBA；原数学／输入RNG门通过。', '原件逐SHA验证并完整无损分块；不叠加S2/S4或其它方法比例。')
+CODE['corex-native-gqa-page16'] += ['experiments/framework/20261027T190534106960Z-native-gqa-s4-macro01-hotspot-component/summary.json', 'experiments/framework/20261027T190534106960Z-native-gqa-s4-macro01-hotspot-component/raw-evidence.json', 'experiments/bundles/20261027T190534106960Z-native-gqa-s4-macro01-hotspot-component/manifest.json', 'experiments/bundles/20261027T190534106960Z-native-gqa-s4-macro01-hotspot-component/raw.tar.gz.storage.json']
+GROUPS['corex-native-gqa-page16']=('CoreX原生BF16 GQA：单页与完整分页', 'PR92有效4K/16K暖6481.2267/4826.4467、102/105，KV与请求覆盖限制保留。同轮macro0/1完整producer+原reducer：N64/S2省1.0521%，N32/S4省0.89664%，数值/位型/Graph门全过；仅小正组件，不相加、不继承官方。候选生产/官方由主线独立验证，不包含mixed扩范围负路线。', [])
+
+BATCH_RESULTS['native_gqa_overlap1_offline_build']=('原c75db的S2／S4默认启用V等待重叠，源码58a2fc96／treef1658b69；仅CU默认宏、离线builder与helper回执三项，不含mixed扩覆盖、runner／采样不变。191340 CPU离线构建SO c8a725da与源码／命令／receipt身份通过；无GPU数值或官方资格，不继承组件比例或准确率，主线后续原官方另记。', '保留离线构建身份；官方尚未授予。', 'S2/S4默认macro1，未叠加mixed负范围；数值源未变。', 'CPU-only；完整20原件及源码/SO/命令回执逐SHA保存。')
+CODE['corex-native-gqa-page16'] += ['experiments/cpu-probes/20261027T191340Z-native-gqa-overlap1-production-build/summary.json', 'experiments/cpu-probes/20261027T191340Z-native-gqa-overlap1-production-build/raw-evidence.json', 'experiments/bundles/20261027T191340Z-native-gqa-overlap1-production-build/manifest.json', 'experiments/bundles/20261027T191340Z-native-gqa-overlap1-production-build/raw.tar.gz.storage.json']
+
 def group(row):
     if row['profile_id']=='native-gqa-mixed-s4':return 'native-gqa-mixed-s4'
     if row['profile_id']=='native-gqa-production-hotspot':return 'native-gqa-production-hotspot'

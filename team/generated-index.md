@@ -2,6 +2,6 @@
 
 # 自动视图来源
 
-登记：`experiments/registry.csv`；SHA256 `bb2f6d1fd50604488568c0cfff42de87733d959d7c7e33e38edea0fe8fb689fe`。
+登记：`experiments/registry.csv`；SHA256 `ed9eb7bb471852eaccadf172b4912b3ef37662605e5f0b123a89c0598a2ed0e3`。
 
-共398条登记、395个run。程序只读取目录/既有说明建立链接，不重验实验。
+共401条登记、398个run。程序只读取目录/既有说明建立链接，不重验实验。

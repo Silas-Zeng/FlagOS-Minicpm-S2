@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共398条登记、395个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共401条登记、398个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -376,6 +376,9 @@
 | 天数 BI-V150 | 396 | 20261027T182749Z | [原生BF16 GQA：mixed S4覆盖扩展](methods/native-gqa-mixed-s4.md) | f6b4候选仅Python／CPP两文件扩原已选S4的32≤B≤63并排40，原CU a8b1／S2／chooser／macro0不变。182749离线构建新SO b9bff11d及完整receipt通过；此步确重编同源CU，服务／后继组件不做运行时编译。仅身份／构建资格，没有数值或性能；后继Runtime组件单列。 | 未记录/未记录/未记录/未记录 | f6b4候选仅Python／CPP两文件扩原已选S4的32≤B≤63并排40，原CU a8b1／S2／chooser／macro0不变。 | [20261027T182749Z-native-gqa-mixed-s4-production-build](runs/bi-v150/20261027T182749Z-native-gqa-mixed-s4-production-build.md) |
 | 天数 BI-V150 | 397 | 20261027T183250970628Z | [原生BF16 GQA：mixed S4覆盖扩展](methods/native-gqa-mixed-s4.md) | 只加载新b9bff11d SO：A旧Runtime guard自然回Triton，B实际新生产_Runtime；真实step123 B60＋1988／step129 B63＋1985。B63唯一上界位型、B60初始／换值完整输出、parent／输入RNG／guard全过；完整B60 eager Event1.66750455→1.24205244ms省25.5143%，wall省14.0096%。原CU九门复用，不冒称新mixed Graph／模型准确率或官方收益；4K另由主线验证。 | 未记录/未记录/未记录/未记录 | 只加载新b9bff11d SO：A旧Runtime guard自然回Triton，B实际新生产_Runtime；真实step123 B60＋1988／step129 B63＋1985。 | [20261027T183250970628Z-corex-native-gqa-mixed60-runtime-component](runs/bi-v150/20261027T183250970628Z-corex-native-gqa-mixed60-runtime-component.md) |
 | 天数 BI-V150 | 398 | 20261027T183747Z | [原生BF16 GQA：mixed S4覆盖扩展](methods/native-gqa-mixed-s4.md) | f6b4仅helper/CPP扩原S4范围，新SO b9bff11d，首冷新增eager覆盖门通过。 | 4096/1024/64/256 | 原官方4K两轮512成功；首暖6168.07对6301.93观察−2.1241%，按预设主动停止。 | [20261027T183747Z-native-gqa-mixed-s4-4k-four-rounds](runs/bi-v150/20261027T183747Z-native-gqa-mixed-s4-4k-four-rounds.md) |
+| 天数 BI-V150 | 399 | 20261027T190017939358Z | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 关闭profiler的同轮完整Graph ABBA；原数学／输入RNG门通过。 | 未记录/未记录/未记录/未记录 | M64真实layer0 QKV权重／合成激活，原64/64/128 w16s1对64/32/128 w8s1，仅BN与warp两项变化，原FPbody／runtime K不变、无额外权重。八项位型／独立FP64／换值Gr | [20261027T190017939358Z-qkv-bn32-component](runs/bi-v150/20261027T190017939358Z-qkv-bn32-component.md) |
+| 天数 BI-V150 | 400 | 20261027T190534106960Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 关闭profiler的同轮完整Graph ABBA；原数学／输入RNG门通过。 | 未记录/未记录/未记录/未记录 | N32/S4/KV16384／连续Qstride2048，同轮原f720 macro0对私有同源macro1，完整producer＋原reducer Graph ABBA。原九门／全partial位型／FP64／换值Gr | [20261027T190534106960Z-native-gqa-s4-macro01-hotspot-component](runs/bi-v150/20261027T190534106960Z-native-gqa-s4-macro01-hotspot-component.md) |
+| 天数 BI-V150 | 401 | 20261027T191340Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | S2/S4默认macro1，未叠加mixed负范围；数值源未变。 | 未记录/未记录/未记录/未记录 | 原c75db的S2／S4默认启用V等待重叠，源码58a2fc96／treef1658b69；仅CU默认宏、离线builder与helper回执三项，不含mixed扩覆盖、runner／采样不变。191340 CPU离线构 | [20261027T191340Z-native-gqa-overlap1-production-build](runs/bi-v150/20261027T191340Z-native-gqa-overlap1-production-build.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
