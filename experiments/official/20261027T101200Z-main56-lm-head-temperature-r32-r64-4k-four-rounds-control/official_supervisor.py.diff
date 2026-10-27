@@ -1,0 +1,20 @@
+--- fe3e/official_supervisor.py
++++ 4k/official_supervisor.py
+@@ -53,7 +53,7 @@
+         value=float(row['Total tok/s']);base=reference[size]
+         if not math.isfinite(value) or not value>0:return dict(kind='runtime_error',reason='首暖吞吐非有效正数',prefill=size,round=2)
+         if value<base:
+-            return dict(kind='performance',reason='本档第2轮首暖低于本次main56本次16K首暖，停止后续；不是完整官方成绩',
++            return dict(kind='performance',reason='本档第2轮首暖低于本次main56本次4K首暖，停止后续；不是完整官方成绩',
+                 prefill=size,round=2,candidate=value,baseline=base,delta_percent=(value/base-1)*100)
+     return None
+ 
+@@ -70,7 +70,7 @@
+     command=['/usr/local/bin/python',str(HERE/'official_owner.py'),'--performance-control',str(ROOT/'official/20261024T161030Z-main0bf9-main-official-four-rounds-control'),'--source-dir',str(source)]
+     with log.open('x') as out:owner=subprocess.Popen(command,stdout=out,stderr=subprocess.STDOUT,stdin=subprocess.DEVNULL,start_new_session=True)
+     receipt=dict(supervisor_pid=os.getpid(),owner_pid=owner.pid,label=label,log=str(log),command=command,
+-        started_utc=stamp,prefill=16384,baseline=baseline,stop_policy='每档仅第2轮首暖筛；正首暖后跑满该档四轮，不因后续波动早停；错误立即停止')
++        started_utc=stamp,prefill=4096,baseline=baseline,stop_policy='每档仅第2轮首暖筛；正首暖后跑满该档四轮，不因后续波动早停；错误立即停止')
+     save(HERE/'supervisor-launch.json',receipt);print(json.dumps(receipt),flush=True)
+     fd=os.pidfd_open(owner.pid);poll=select.poll();poll.register(fd,select.POLLIN)
+     state=None;seen=0;stopped=False;stack_checked=False;server_position=0;server_pending=''

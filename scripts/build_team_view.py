@@ -481,6 +481,14 @@ BATCH_RESULTS['lm_head_temperature_r32_r64_accuracy_pass_scope_limited']=('新8d
 CODE['lm-head-temperature'] += ['experiments/accuracy/20261027T094907Z-main56-head-temperature-r32-r64-native14f-math500/coverage-summary.json', 'experiments/accuracy/20261027T094907Z-main56-head-temperature-r32-r64-native14f-math500-control/accuracy-review.json', 'experiments/accuracy/20261027T094907Z-main56-head-temperature-r32-r64-native14f-math500/archive-receipt.json']
 GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '新8d1a R32+R64原官方16K暖均4529.79对A4526.57 tok/s，单组+0.0710%、KV不同，非严格因果。完整105取得103/105（98.0952%）且运行/清理通过，但head32/64与prefill Q32未覆盖，不授分支准确率资格；本新源4K仍在跑。旧31094098的4K+0.3109%单列，组件收益不相加。', [])
 
+BATCH_RESULTS['lm_head_temperature_r32_r64_4k_complete_kv_mismatch']=('新8d1a官方4K暖均5971.44对A5902.77，观察+1.1634%；1024成功，R32/R64实际消费。KV不同。', '保留单组正观察；非严格因果或稳定收益，不定新基线。', '同源105为103/105且通过，但head32/64与Q32未覆盖。', '原四轮弃首；809源8d1a，KV548288对A548432；365原件逐SHA。')
+CODE['lm-head-temperature'] += ['experiments/official/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds/comparison.json', 'experiments/official/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds/archive-receipt.json']
+GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '新8d1a同源原官方4K/16K各四轮，暖均5971.44/4529.79 tok/s，对各自A观察+1.1634%/+0.0710%；两档KV不同，非严格因果或稳定收益，不定新基线。原105为103/105 valid/pass，但head32/64和Q32未覆盖，分支准确率未证。旧31094098与局部组件结果另列，不相加。', [])
+
+BATCH_RESULTS['lm_head_temperature_r32_bn256_nonpositive']=('R32 BN256完整链Event慢2.6150%，wall快5.7801%；十门和资源门通过。', '停止BN256，不扫参、不进模型；不取第一B当收益。', '三方全scaled/filtered/IDs/RNG、独立FP64与Graph/side通过。', '真实W＋合成hidden，完整eager ABBA；shared12→36KiB、regs21→37/spill0，无节流，73原件。')
+CODE['lm-head-temperature'] += ['experiments/framework/20261027T103846792930Z-lm-head-temperature-r32-bn256-component/comparison.json', 'experiments/framework/20261027T103846792930Z-lm-head-temperature-r32-bn256-component/archive-receipt.json']
+GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '新8d1a同源原官方4K/16K各四轮，暖均5971.44/4529.79 tok/s，对各自A观察+1.1634%/+0.0710%；两档KV不同，非严格因果或稳定收益，不定新基线。原105为103/105 valid/pass，但head32/64和Q32未覆盖，分支准确率未证。旧31094098与局部组件结果另列，不相加。\n\n同融合基线上的R32 BN256扩展已完成：十门过，但完整ABBA Event慢2.6150%、wall快5.7801%，按nonpositive停止，不影响原BN64融合生产结果。', [])
+
 def group(row):
     if row['profile_id']=='gqa-fused-append':return 'gqa-fused-append'
     if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats', 'gqa-s2-incta', 'lm-head-temperature'):
