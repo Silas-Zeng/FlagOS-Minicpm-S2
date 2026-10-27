@@ -1,0 +1,53 @@
+{
+  "samples": [
+    {
+      "step": 162,
+      "length_min": 4128,
+      "length_max": 4256,
+      "logical_kv_bytes": 274708480,
+      "per_layer_producer_ms": 0.4213795796746299,
+      "logical_GBps": 651.9264180103777,
+      "ratio_to_old_contiguous_reference": 0.9797040388956012
+    },
+    {
+      "step": 258,
+      "length_min": 4224,
+      "length_max": 4352,
+      "logical_kv_bytes": 280999936,
+      "per_layer_producer_ms": 0.4310244520505269,
+      "logical_GBps": 651.935022858192,
+      "ratio_to_old_contiguous_reference": 0.9797169701159427
+    },
+    {
+      "step": 642,
+      "length_min": 4608,
+      "length_max": 4736,
+      "logical_kv_bytes": 306165760,
+      "per_layer_producer_ms": 0.46751767538842703,
+      "logical_GBps": 654.8752616585646,
+      "ratio_to_old_contiguous_reference": 0.9841355114550616
+    },
+    {
+      "step": 1161,
+      "length_min": 4097,
+      "length_max": 4225,
+      "logical_kv_bytes": 272754688,
+      "per_layer_producer_ms": 0.41955695762520745,
+      "logical_GBps": 650.1016918986558,
+      "ratio_to_old_contiguous_reference": 0.9769618712335081
+    }
+  ],
+  "formula": "sum(request.num_computed_tokens + scheduled_tokens) * 2(K/V) * 2(KV heads) * 128(head dim) * 2(BF16 bytes), divided by sum(42 instrumented producer intervals)/42",
+  "units": "decimal GB/s",
+  "actual_HBM_counter": false,
+  "physical_bandwidth_saturation_proved": false,
+  "reference": {
+    "run": "20261026T101034477784Z-biv150-stream-read-reference-hotspot-component",
+    "logical_GBps": 665.4320643201544,
+    "bytes": 536870912,
+    "checksum_output_bytes": 131072,
+    "timing": "standalone Event without per-node inserted diagnostic timing",
+    "environment_limit": "different date/runtime workload and memory/cache layout; not a simultaneous A/A reference or physical bandwidth roof"
+  },
+  "decision": "No high-upside native double-buffer prototype: no KV byte reduction and conditional reference headroom small; avoid claiming hardware limit."
+}

@@ -81,3 +81,5 @@
 最新闭合：ABI v2官方16K暖均4826.4467，对A观察+6.5491%（KV少144）；同源码原105题102/105、95%门通过。4K/16K正观察仍明示KV差异，启动capture不证明105请求分支覆盖。CPU Q32探针原checker失败与sidecar静态接受分列，无数值/性能资格；详见方法记录。
 
 原生BF16 GQA同步版本已通过[框架PR92](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/92)合并至main `b3b87d2a`，上述4K/16K与105结果作为接续基线并保留条件限制。宏1及M16映射后继仅保留组件/诊断资格，不转移为官方收益。
+
+后继Q32原生Attention完整组件正确性通过，但Event慢21.56%而停止，不进入模型；入口缺SO路径的首失败单列。当前同步原生GQA热点profile原posthoc不完整，已有节点解析通过；插桩区间只作诊断，完整3109原件以无损xz保留，沿每轮raw-evidence索引恢复。

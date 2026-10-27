@@ -1,0 +1,97 @@
+{
+  "run": "20261027T172936Z-native-q32-attention-notrace",
+  "scope": "纯CPU实编与机器级静态检查；未GPU执行",
+  "compile": {
+    "passed": true,
+    "checks": {
+      "real_kernel": true,
+      "QK_and_PV_exist": true,
+      "four_page_SME_exists": true,
+      "copy_wait_exists": true,
+      "phase_barriers_exist": true,
+      "one_64KiB_backing": true,
+      "natural_exp_lowered": true,
+      "score_and_sum_FMA_present": true
+    },
+    "counts": {
+      "mma_llvm": 64,
+      "sme_llvm": 32,
+      "wait8": 1,
+      "barrier": 7,
+      "mma_asm": 64,
+      "sme_asm": 32,
+      "exp_asm": 20,
+      "fma_asm": 84,
+      "barrier_asm": 7
+    },
+    "resources": {
+      "shared_bytes": 65536,
+      "private_bytes": 0,
+      "SGPR": 104,
+      "VGPR": 105,
+      "sgpr_spill_count": 49,
+      "vgpr_spill_count": 0
+    },
+    "files": {
+      "probe.ll": "c92744ec4a8e67c9f93b0bed9bfe560ce835efb93ed33bcf54a5705b17b727e2",
+      "probe.s": "4cb1efc2455c7f0fee624b5d902b1577d2f98fc6de25d79bb76a24fabc822d45"
+    },
+    "scope": "compiler-only ordinary causal Q32/T64 synchronous attention prototype; exact operation dependencies/FP mode still need source-specific review",
+    "GPU_executed": false,
+    "numerical_qualified": false,
+    "performance_qualified": false,
+    "limits": [
+      "static counts may grow from branch duplication; they are not a dynamic performance estimate",
+      "aggregate FMA count does not by itself prove each running-L update/scale operation matches original ASM",
+      "must inspect exp log2e multiply order, full-C rescale/MMA chain, tail mask and Q/P/V alias CFG before numerical launch"
+    ]
+  },
+  "decision": "删除七个诊断参数访问与FP32 trace stores的编译变体；VGPR122→105、SGPR spill89→49，仍有spill。无数值/性能资格，不凭资源变化宣称收益。",
+  "no_trace_check": {
+    "passed": true,
+    "checks": {
+      "original_mechanism_checks": true,
+      "seven_diagnostic_args_unused": true,
+      "no_FP32_trace_stores": true,
+      "one_64KiB_backing": true
+    },
+    "diagnostic_arg_body_uses": {
+      "%10": 0,
+      "%11": 0,
+      "%12": 0,
+      "%13": 0,
+      "%14": 0,
+      "%15": 0,
+      "%16": 0
+    },
+    "FP32_stores": 0,
+    "resources": {
+      "shared_bytes": 65536,
+      "private_bytes": 0,
+      "SGPR": 104,
+      "VGPR": 105,
+      "sgpr_spill_count": 49,
+      "vgpr_spill_count": 0
+    },
+    "counts": {
+      "mma_llvm": 64,
+      "sme_llvm": 32,
+      "wait8": 1,
+      "barrier": 7,
+      "mma_asm": 64,
+      "sme_asm": 32,
+      "exp_asm": 20,
+      "fma_asm": 84,
+      "barrier_asm": 7
+    },
+    "files": {
+      "probe.ll": "c92744ec4a8e67c9f93b0bed9bfe560ce835efb93ed33bcf54a5705b17b727e2",
+      "probe.s": "4cb1efc2455c7f0fee624b5d902b1577d2f98fc6de25d79bb76a24fabc822d45"
+    },
+    "scope": "no-trace compiler-only; inspect actual FP dependencies/CFG before any device numerical gate",
+    "SGPR_spill_removed_not_assumed": true,
+    "GPU_executed": false,
+    "numerical_qualified": false,
+    "performance_qualified": false
+  }
+}
