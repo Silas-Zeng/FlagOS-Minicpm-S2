@@ -3,6 +3,8 @@
 本批原生 GQA 五轮的张量原件以无损 gzip 发布，原始 SHA 保持；[索引与恢复命令](experiments/tensor-storage-20261027.md)。
 
 
+最新原生GQA阶段：ABI v2原官方4K暖均6481.2267，对A5971.44观察+8.5371%；1024成功、S2/S4实际覆盖。KV相差48 tokens，待16K与105，不定新基线。三轮原件以[方法记录](team/methods/corex-native-gqa-page16.md)中的原压缩包/manifest索引保存，不重复展开源码或大张量。
+
 团队主要看：**尝试了什么、改了什么、怎么测、结果怎样、是否保留。**
 
 - **[实验总表](team/experiments.md)**：唯一登记视图，包含成功、失败与待确认项。

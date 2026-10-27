@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共378条登记、375个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共381条登记、378个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -356,6 +356,9 @@
 | 天数 BI-V150 | 376 | 20261027T132510103688Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 无性能或模型资格。 | 未记录/未记录/未记录/未记录 | 同FlagGems dispatch隔离8项输入构造，不调用GQA。zero_在B32/B64误改extra512分别12800/26112元素，与连续numel写入源码预测吻合；fill(1)/copy全位型通过。ne | [20261027T132510103688Z-gqa-strided-fixture-diagnostic](runs/bi-v150/20261027T132510103688Z-gqa-strided-fixture-diagnostic.md) |
 | 天数 BI-V150 | 377 | 20261027T133209942679Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 完整producer＋原reducer，Qstride2560；不计writer，不授模型资格。 | 未记录/未记录/未记录/未记录 | QKV切片布局（非服务post-RoPE布局）、行距2560的N64/S2/KV4096完整producer＋原reducer Graph ABBA：Event0.528684→0.413887ms（省21.7137%） | [20261027T133209942679Z-corex-native-gqa-s2-qstride2560-component](runs/bi-v150/20261027T133209942679Z-corex-native-gqa-s2-qstride2560-component.md) |
 | 天数 BI-V150 | 378 | 20261027T133545186656Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 完整producer＋原reducer，Qstride2560；不计writer，不授模型资格。 | 未记录/未记录/未记录/未记录 | QKV切片布局（非服务post-RoPE布局）、行距2560的N32/S4/KV16384完整producer＋原reducer Graph ABBA：Event1.029622→0.801413ms（省22.1644% | [20261027T133545186656Z-corex-native-gqa-s4-synchronous-component](runs/bi-v150/20261027T133545186656Z-corex-native-gqa-s4-synchronous-component.md) |
+| 天数 BI-V150 | 379 | 20261027T140221Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 原参数/四轮；fresh FX证实服务post-RoPE Q行距2048。 | 4096/1024/64/256 | 原官方4K暖5970.98、1024成功；native只有安装，无实际覆盖。 | [20261027T140221Z-native-gqa-4k-four-rounds](runs/bi-v150/20261027T140221Z-native-gqa-4k-four-rounds.md) |
+| 天数 BI-V150 | 380 | 20261027T143828583459Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | N32/S4/KV16384，完整producer＋原reducer Graph ABBA；writer不计时。 | 未记录/未记录/未记录/未记录 | S4连续Q2048九门通过，完整组件Event省22.1242%、wall省22.0967%。 | [20261027T143828583459Z-corex-native-gqa-s4-contiguous-component](runs/bi-v150/20261027T143828583459Z-corex-native-gqa-s4-contiguous-component.md) |
+| 天数 BI-V150 | 381 | 20261027T145950Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 原四轮弃首；c75db/814、SOf720、native14f及原参数不变。 | 4096/1024/64/256 | 原官方4K暖6481.2267对A5971.44，观察+8.5371%；1024成功，S2/S4实际覆盖。 | [20261027T145950Z-native-gqa-abi-v2-4k-four-rounds](runs/bi-v150/20261027T145950Z-native-gqa-abi-v2-4k-four-rounds.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
