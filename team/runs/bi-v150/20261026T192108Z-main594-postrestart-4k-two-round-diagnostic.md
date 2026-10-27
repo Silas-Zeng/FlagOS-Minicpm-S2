@@ -6,7 +6,7 @@
 
 ## 登记 #347 · 基线接续与容器环境复查
 
-- **尝试**：同版本main594 4K首暖观察下降2.01%，只作两轮诊断；新main241独立16K四轮暖均4487.49。两种源码和实验目的分别保留，不混算。
+- **尝试**：当前main241/native14f原官方4K/16K各四轮暖均5850.05/4487.49 tok/s，同身份105题104/105通过。105未覆盖Q32/C3，原owner覆盖检查失败单独保留。main594重启后4K首暖下降2.01%仅为两轮诊断，不证明容器因果；不同源码、KV和实验目的不混算。
 - **改动**：相关实现 [archive-receipt.json](../../../experiments/official/20261026T192108Z-main594-postrestart-4k-two-round-diagnostic/archive-receipt.json)；[result.json](../../../experiments/official/20261026T192108Z-main594-postrestart-4k-two-round-diagnostic/result.json)；[archive-receipt.json](../../../experiments/official/20261026T184110Z-main241-control-16k-four-rounds/archive-receipt.json)；[result.json](../../../experiments/official/20261026T184110Z-main241-control-16k-four-rounds/result.json)；[comparison.json](../../../experiments/official/20261027T012646Z-main241-control-4k-four-rounds/comparison.json)；[archive-receipt.json](../../../experiments/official/20261027T012646Z-main241-control-4k-four-rounds/archive-receipt.json)；[coverage-summary.json](../../../experiments/accuracy/20261027T021016Z-main241-native14f-math500/coverage-summary.json)；[accuracy-review.json](../../../experiments/accuracy/20261027T021016Z-main241-native14f-math500-control/accuracy-review.json)；[archive-receipt.json](../../../experiments/accuracy/20261027T021016Z-main241-native14f-math500/archive-receipt.json)；本轮准确变体以原件源码清单为准。
 - **怎么测**：源码、精确命令、原始CSV/日志及清理见本轮原件。
 - **结果**：原main594/native14f/初始DB207f重启后4K两轮诊断：冷5612.30对4909.31（+14.32%），首暖5726.40对5843.85（−2.0098%），512请求全部成功。旧三暖5767.56–5931.59，本轮首暖比旧最小低0.714%；源码/DB/native与时钟相同，KV容量548432→548384少48tokens，不能称完全同环境。

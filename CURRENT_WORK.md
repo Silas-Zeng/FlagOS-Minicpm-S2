@@ -17,6 +17,6 @@
 
 [实验总表](team/experiments.md) · [基线与原件](team/methods/baseline-environment.md) · [V布局](team/methods/kv-vtranspose.md) · [双流](team/methods/q32-mixed-overlap.md) · [采样融合](team/methods/sampler-preprocess-stats.md)。当前均未改变生产源码或主基线；组件结果不能作为官方吞吐。
 
-当前采样首包owner37024/worker37027已于03:05:02 UTC结束，DB恢复与清理通过；没有仍在运行的本方GPU任务。仅入口修复v2由GEMM准备、Attention窄审；候选数学不变。准备好后root重新检查GPU/9031，串行启动一次完整采样组件。此前双流owner36751/worker36754于03:03:34 UTC结束。
+当前唯一GPU任务：采样入口修复v2于03:18:57 UTC启动，owner37257，日志 `/workspace/experiments/minicpm-s2/scripts/sampler-preprocess-stats-v2-8b65578b/launch.log`。包SHA8b65578b，仅绑定main241源码与native14f，数学和验证门未变，独审通过。先查日志对应run/manifest，勿重复启动。首包与双流均已结束并完成清理。
 
 Git文件上传此前连接重置/TLS失败，远端最后确认f7f9515；PR正文先同步结果，文件发布状态另核，不为上传重测。原件仍在本地和实验机。SSH指纹经用户确认已恢复，使用项目专用known_hosts并保留严格校验；禁止网页UI操作，不记录凭据。
