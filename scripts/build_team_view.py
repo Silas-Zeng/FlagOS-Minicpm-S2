@@ -458,7 +458,23 @@ BATCH_RESULTS['lm_head_temperature_4k_positive_observation']=('head温度epilogu
 CODE['lm-head-temperature'] += ['experiments/official/20261027T055059Z-main56-lm-head-temperature-4k-four-rounds/comparison.json', 'experiments/official/20261027T055059Z-main56-lm-head-temperature-4k-four-rounds/archive-receipt.json']
 GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '组件完整head+Sampler Event省17.31%；生产同main56/native14f/DB/KV原官方4K本组暖均5921.12对5902.77 tok/s，观察+0.3109%。保留小收益信号，尚待16K/105，不把局部组件收益迁移为模型结论。', [])
 
+BATCH_RESULTS['main56_control_16k_complete']=('main56/native14f原官方16K暖均4526.57 tok/s，512成功、KV548384、原栈/清理通过。', '保留本次16K控制；4K与105资格分开。', '原请求与路径/清理检查通过，不等于105。', '原官方四轮弃首；同版本候选须引用本run。')
+BATCH_RESULTS['lm_head_temperature_r32_component_positive']=('R32完整head+Sampler Event省10.05%、wall省11.00%；实际BM32/BN64/BK64/w8/s1，10门过。', '保留局部正信号，待最窄生产验证；不与R64相加。', '逐位/FP64/RNG/换值Graph过；不是模型准确率。', '完整eager链ABBA含分配/提交，reg21/shared12288/spill0，无节流。')
+CODE['baseline-environment'] += ['experiments/official/20261027T075834Z-main56-control-16k-four-rounds/comparison.json', 'experiments/official/20261027T075834Z-main56-control-16k-four-rounds/archive-receipt.json']
+CODE['lm-head-temperature'] += ['experiments/framework/20261027T083835962824Z-lm-head-temperature-r32-epilogue-component/comparison.json', 'experiments/framework/20261027T083835962824Z-lm-head-temperature-r32-epilogue-component/archive-receipt.json']
+GROUPS['baseline-environment']=('基线接续与容器环境复查', '本站main56/native14f两档原官方控制：4K暖均5902.77、KV548432；16K暖均4526.57、KV548384，分别1024/512成功，原栈与清理通过。两档独立服务，未继承105或候选收益；旧main241成绩按旧源单列。', [])
+GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '原BF16舍入后融合FP32转换/温度，保原Sampler。R64/R32组件完整链分别省17.31%/10.05% Event，不能相加或外推整模。R64生产4K单组暖均5921.12对5902.77 tok/s（+0.3109%），16K/105仍另行验证；R32仅局部正信号，尚未生产启用。', [])
+
+BATCH_RESULTS['lm_head_temperature_r64_16k_kv_mismatch_stopped']=('R64-only 16K首冷4029.77 tok/s、128成功；KV548288≠548384资格停止。head无覆盖/无异常，原栈及清理通过。', '停止旧R64-only无覆盖16K；非数值错误，不计算收益。', '首冷请求成功不等于105准确率，原SIGTERM状态保留。', '仅1个冷轮，非完整官方；R32+R64后继另行验证。')
+CODE['lm-head-temperature'] += ['experiments/official/20261027T084030Z-main56-lm-head-temperature-16k-four-rounds/comparison.json', 'experiments/official/20261027T084030Z-main56-lm-head-temperature-16k-four-rounds/archive-receipt.json']
+GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '原BF16舍入后融合FP32/温度，原Sampler不变。R64/R32组件完整链分别省17.31%/10.05% Event，不相加或外推整模。R64生产4K单组观察+0.3109%；16K仅冷轮，KV不匹配且R64无覆盖后停止，不计算收益。R32+R64及105另行验证。', [])
+
+GROUPS['gqa-fused-append']=('GQA尾段append融合', '只对私有尾slot省独立writer启动，不改BF16/页序/归约。实际编译VGPR增51超过预设预算后停止；数值和计时尚未运行，不称错误或实测慢，不扩展或放宽阈值。', [])
+CODE['gqa-fused-append']=['experiments/framework/20261027T090439643177Z-gqa-fused-append-hotspot-component/comparison.json', 'experiments/framework/20261027T090439643177Z-gqa-fused-append-hotspot-component/archive-receipt.json', 'experiments/framework/20261027T090439643177Z-gqa-fused-append-hotspot-component/source/candidate.py']
+BATCH_RESULTS['gqa_fused_append_resource_budget_stopped']=('尾段append融合编译成功；VGPR93→144超预设+16预算，SGPR spill0→50，shared8KiB不变。数值/计时均未运行，清理通过。', '停止冻结实现，不放宽预算或扫参；非数值错误/实测慢。', '仅编译身份与资源已取得，原8门和FP64未执行。', '唯一N64/S2；完整链ABBA尚未开始，69原件保留。')
+
 def group(row):
+    if row['profile_id']=='gqa-fused-append':return 'gqa-fused-append'
     if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats', 'gqa-s2-incta', 'lm-head-temperature'):
         return row['profile_id']
     if row['profile_id']=='native-silu-lut':return 'native-silu-lut'

@@ -1,0 +1,117 @@
+{
+  "gpu_executed": false,
+  "derivation": {
+    "worker.py": {
+      "inverse_byte_equal": true,
+      "replacements": [
+        [
+          "M64真实head",
+          "M32真实head",
+          1
+        ],
+        [
+          "rows=64,vocab=130560",
+          "rows=32,vocab=130560",
+          1
+        ],
+        [
+          "torch.randn((64,2048)",
+          "torch.randn((32,2048)",
+          1
+        ],
+        [
+          "torch.ones(64,dtype",
+          "torch.ones(32,dtype",
+          1
+        ],
+        [
+          "torch.full((64,),",
+          "torch.full((32,),",
+          1
+        ],
+        [
+          "range(64)",
+          "range(32)",
+          1
+        ],
+        [
+          "torch.empty((64,130560)",
+          "torch.empty((32,130560)",
+          1
+        ],
+        [
+          "rows=[0,1,31,63]",
+          "rows=[0,1,15,31]",
+          1
+        ],
+        [
+          "63:torch.Generator",
+          "31:torch.Generator",
+          1
+        ]
+      ]
+    },
+    "factory.py": {
+      "inverse_byte_equal": true,
+      "replacements": [
+        [
+          "==(64,130560,2048)",
+          "==(32,130560,2048)",
+          1
+        ],
+        [
+          "==(64,2048)",
+          "==(32,2048)",
+          1
+        ],
+        [
+          "==(64,130560)",
+          "==(32,130560)",
+          1
+        ],
+        [
+          "==(64,)",
+          "==(32,)",
+          1
+        ]
+      ]
+    },
+    "entry.py": {
+      "inverse_byte_equal": true,
+      "replacements": [
+        [
+          "-lm-head-temperature-epilogue-component",
+          "-lm-head-temperature-r32-epilogue-component",
+          1
+        ],
+        [
+          "固定R64完整head+Sampler",
+          "固定R32完整head+Sampler",
+          1
+        ]
+      ]
+    }
+  },
+  "candidate_bytes_equal_R64": true,
+  "rows32_generators_0_31": true,
+  "fp64_rows": [
+    0,
+    1,
+    15,
+    31
+  ],
+  "original_extreme_scale_64_retained": true,
+  "actual_config_not_hardcoded": true,
+  "fake_14arg_launch_and_different_config_preserved": true,
+  "reference_R64_tar_sha256": "c2c39c7398deb7d6f6e3f6ddbedf597d22a2007bef4c4509a9aec1b273cf9d17",
+  "shared_unchanged_assets": [
+    "reused_helpers.py",
+    "monitor_gpu.sh",
+    "installed-manifest.json",
+    "source_identity.py",
+    "base-source-manifest.json",
+    "installed-linear.py",
+    "candidate.py",
+    "kernel.diff"
+  ]
+}

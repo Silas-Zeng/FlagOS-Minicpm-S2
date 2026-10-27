@@ -1,31 +1,23 @@
 # 当前实验与接续
 
-更新：2026-10-27 08:05 UTC。BI-V150 当前唯一GPU任务是原main56/native14f的16K四轮控制；LM-head温度融合4K组已完成，本组暖均+0.3109%。C500由队友独立维护。
+更新：2026-10-27 09:10 UTC。BI-V150唯一GPU任务是R32＋R64 LM-head融合原官方16K对照。C500由队友独立维护。新版本105准确率尚未验证，优化代码尚未合并。
 
-| 版本／方法 | 已完成结果 | 资格与决定 |
+| 方法／版本 | 已测结果 | 决定与限制 |
 |---|---|---|
-| main56/native14f 原官方4K | 5036.45／5749.08／5908.26／6050.97 tok/s，弃首均 **5902.77**；1024请求成功，KV548432 | 当前4K对照；尚无同版本16K/105资格 |
-| main241/native14f 既有完整结果 | 4K弃首5850.053333、16K4487.49 tok/s；105题104/105（99.047619%） | 保留原版本成绩；不迁移到main56，Q32/C3精度覆盖另列 |
-| LM-head温度epilogue组件 | R64真实W＋合成hidden，10组门通过；完整head+Sampler Event省17.3138%、wall省12.2401% | 保留；不是整模型吞吐收益或105资格 |
-| LM-head温度epilogue实际服务 | 4K四轮5081.15／5778.04／5988.09／5997.24，暖均5921.12 tok/s，较同版本A **+0.3109%** | 1024请求成功、同KV548432、真实kernel/原栈及清理通过；单组小收益，16K/105待验证 |
+| main56/native14f 原官方4K A | 四轮5036.45／5749.08／5908.26／6050.97，弃首均5902.77 tok/s；1024成功、KV548432 | 同版本4K对照 |
+| main56/native14f 原官方16K A | 四轮4108.26／4528.51／4526.31／4524.90，弃首均4526.573333；512成功、KV548384 | 本次16K对照；不继承旧105 |
+| R64融合官方4K B | 四轮5081.15／5778.04／5988.09／5997.24，弃首5921.123333（本组+0.3109%） | 1024成功，同KV/native/DB，真实融合已命中；单组小收益，不外推稳定增益 |
+| R64／R32融合组件 | 完整head＋Sampler Event分别省17.31%／10.05%，各10组检查通过 | 保留局部正信号，两形状收益不能相加或当模型准确率 |
+| 旧R64-only融合16K B | 首冷4029.77、128成功；KV548288比A少96 tokens，管理脚本停止；R64未覆盖、无异常 | 不完整且容量不匹配，不计收益；不称框架错误，不重跑无覆盖版本 |
+| KV尾段append融合组件 | 编译通过；VGPR93→144、SGPR spill0→50，shared8192不变，触发预设资源预算 | 当前实现停止，数值/计时未进行；不是已测性能回退 |
+| 历史main241/native14f | 4K5850.053333、16K4487.49；105题104/105（99.047619%） | 保留历史资格，不迁移到main56或新候选 |
 
-main56为 `56f1838192abc940b3fb9accef490022ac125000`，来自团队PR66。本站native14f与队友native5cbb结果分别管理。相比旧main241，4K暖均观察+0.9011%，但KV548288→548432，不报严格因果收益。原官方请求成功也不能替代模型准确率。
+共同原版为main `56f1838192abc940b3fb9accef490022ac125000`（团队PR66）、native `14f4457a…`、初始DB `207f1bda…`。官方脚本和服务参数保持。上述两档分别比较，KV不同明确列出；请求成功不能替代105题准确率。本站native14f与队友native5cbb成绩分别记录。
 
-**当前16K控制 A**：07:58:34 UTC启动，owner54135、driver54139；run `official/20261027T075834Z-main56-control-16k-four-rounds`，control同名加`-control`，入口 `scripts/main56-control-16k-d2ca829f/launcher.log`。启动前GPU/9031空闲，原官方负载 `[[16384,1024,64,128]]` 四轮。远端根目录 `/workspace/experiments/minicpm-s2/`。
+**当前唯一GPU任务**：09:07:32 UTC启动，supervisor59035、owner59037；run `official/20261027T090733Z-main56-lm-head-temperature-r32-r64-16k-four-rounds`，control同名加`-control`。入口 `scripts/head-temperature-r32-r64-16k-fe3e2493/supervisor-launch.json`，终态`supervisor-final.json`。生产包8d1a3de4／809源，入口fe3e2493，两者独审通过；R32/R64分别记录真实选中和采样消费。首暖对A4528.51筛选，正后四轮；KV容量不一致保留观察但不能报告严格因果收益。远端根目录 `/workspace/experiments/minicpm-s2/`。
 
-已完成4K候选B：
+本批归档：16KA 311份、R32组件46份、旧16KB 346份、append69份原件，逐SHA核验；登记366条／363个唯一run。原件沿[实验总表](team/experiments.md)与[LM-head方法](team/methods/lm-head-temperature.md)查阅。每轮只记方法、改动、测法、结果、是否保留；负结果及停止原因不删改。
 
-- run：`official/20261027T055059Z-main56-lm-head-temperature-4k-four-rounds`；同名`-control/state.json`保存结果和清理状态。
-- 入口：`scripts/head-temperature-official-23b56983`；06:10:37 UTC owner46616/supervisor46614退出0，完整四轮、源码/native/DB恢复和清理通过。340份原件逐SHA归档。
-- 已完成A：`official/20261027T052425Z-main56-control-4k-four-rounds`，05:44:08结束，DB恢复、源码/native不变和清理通过。
-- 候选仅809文件中的5项改动，生产包SHA `31094098…4825`，官方入口 `23b56983…2f46`，均独审通过；受测kernel字节不变，保持官方服务/benchmark参数。
+下一步按当前官方对照结果决定是否继续新版本105准确率与代码PR。采样统计逐位失败、S2同CTA编译失败、KV SoA、V转置、Q32双流、SiLU LUT及本次append已停止；不为上传重复测试。旧main6971轨迹已分析，不能直接当main56预算。
 
-候选只接已验证R64，显式传递本步采样状态；原stats/top-p/softmax/RNG不变，不适用条件走原路。真实模型ParallelLMHead已命中受测kernel及原采样链。4K首暖+0.50%后跑满，暖均+0.3109%；对应轮耗时−0.3241%、TTFT−0.4531%、TPOT−0.3088%，不外推组件收益或夸大为稳定提升。
-
-**下一步**：完成同版本16K A/B与必要原105准确率验证；保留R32组件后备，不并发占卡。确认收益及正确性后按方法提中文代码PR，当前尚未合并本优化。负结果同样保留，不因上传重复已过检查。
-
-[实验总表](team/experiments.md) · [当前对照及证据](team/methods/baseline-environment.md) · [LM-head方法](team/methods/lm-head-temperature.md) · [团队导航](team/README.md)。当前登记362条／359个唯一run。A的311份、组件的44份及4KB的340份原件均逐SHA核验。
-
-采样统计融合（逐位门失败）、S2同CTA（首次编译失败）、KV SoA、V转置、Q32双流、SiLU LUT等已停止，原件沿总表保留。旧main6971轨迹已分析，不重复profiling；未覆盖间隙0.4260%，暂无大额跨步CPU提交空洞依据，旧轨迹不作main56性能预算。
-
-105题旧owner的Q32覆盖检查失败标记原样保留；独立复核的官方104/105成绩有效，但不声称验证了未命中的分支。SSH使用用户确认的网关指纹，严格校验，禁止网页UI操作，不记录凭据。
+SSH仅使用已确认服务器指纹，禁止网页UI操作，不记录凭据。团队代码改动按方法提中文PR；当前实验PR发布不代表生产代码已经合并。

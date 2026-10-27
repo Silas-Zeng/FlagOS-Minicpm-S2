@@ -1,0 +1,20 @@
+--- R64/entry.py
++++ R32/entry.py
+@@ -46,7 +46,7 @@
+     native = args.native_library.resolve(strict=True)
+     source_before = source_identity.check(source, native)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-lm-head-temperature-epilogue-component")
++    run = ROOT / "framework" / (stamp + "-lm-head-temperature-r32-epilogue-component")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+@@ -54,7 +54,7 @@
+         shutil.copyfile(HERE / name, assets / name)
+     shutil.copyfile(HERE / "asset-pins.json", assets / "asset-pins.json")
+     state = dict(started_utc=stamp, owner_pid=os.getpid(),
+-        scope="固定R64完整head+Sampler；只head温度epilogue，原stats/RNG不改", run=str(run),
++        scope="固定R32完整head+Sampler；只head温度epilogue，原stats/RNG不改", run=str(run),
+         command=[sys.executable, *sys.argv], owned_processes=[], exit_code=1)
+     state.update(source=str(source), source_count=807, source_identity=source_before,
+                  base_commit="56f1838192abc940b3fb9accef490022ac125000",

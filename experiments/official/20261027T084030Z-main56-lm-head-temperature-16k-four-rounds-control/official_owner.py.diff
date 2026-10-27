@@ -1,0 +1,53 @@
+--- 4K/official_owner.py
++++ 16K/official_owner.py
+@@ -1,4 +1,4 @@
+-"""main56 head温度epilogue候选4K的原官方四轮；不改原服务和评测参数。"""
++"""main56 head温度epilogue候选16K的原官方四轮；不改原服务和评测参数。"""
+ import argparse
+ import datetime
+ import fcntl
+@@ -21,7 +21,7 @@
+ COMMON = ROOT / 'scripts/run_accuracy_gate.py'
+ DRIVER = HERE / 'case_driver.py'
+ COMMON_SHA = '35d30dfa4fc4d583c7fc62db1f18c992a7fd6a7e54fab95749710759b5df6a54'
+-DRIVER_SHA = '5ab07ec7839f0b527b65a591dafe4f8c68e41d083304d49ac1f1c08a50f6478d'
++DRIVER_SHA = '7d7a439328113cce48dc6088e44e5db755b5dcd39ff156c07818f95c62a7bba3'
+ DB = Path('/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db')
+ 
+ def sha(p):
+@@ -64,9 +64,9 @@
+     performance_control = Path(reference['control'])
+     origin, blobs, hashes, tree = source_identity
+     stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+-    run = ROOT / 'official' / (stamp + '-main56-lm-head-temperature-4k-four-rounds')
++    run = ROOT / 'official' / (stamp + '-main56-lm-head-temperature-16k-four-rounds')
+     control = run.with_name(run.name + '-control')
+-    source = ROOT / 'code' / (stamp + '-main56-lm-head-temperature-4k')
++    source = ROOT / 'code' / (stamp + '-main56-lm-head-temperature-16k')
+     control.mkdir(exist_ok=False)
+     shutil.copytree(origin, source, symlinks=True, ignore=shutil.ignore_patterns('.git', '__pycache__', '*.pyc', '*.pyo'))
+     if u.source_maps(source) != (blobs, hashes):
+@@ -105,8 +105,8 @@
+     state = dict(owner_pid=os.getpid(), run=str(run), control=str(control), source=str(source),
+                  commit=None, base_commit=q.COMMIT, tree=tree, source_count=len(blobs), completed=False,
+                  performance_control=str(performance_control),
+-                 workload='[[4096,1024,64,256]]',
+-                 qualification='main56 head温度epilogue已审809源/5差分；对052425原4K控制；native14f/DB/原参数不变；head实际选择与采样另核，不继承组件或105资格')
++                 workload='[[16384,1024,64,128]]',
++                 qualification='main56 head温度epilogue已审809源/5差分；对075834原16K控制；native14f/DB/原参数不变；head实际选择与采样另核，不继承组件或105资格')
+     lock = (ROOT / 'framework-device.lock').open('a')
+     process = None
+     original = None
+@@ -137,7 +137,11 @@
+         state['model_path'] = model_path_evidence(run, control, reference, source, env)
+         q.require(state['model_path']['valid'], '完整官方负载后的实际优化栈未闭合；成绩与原件保留')
+         state['head_coverage'] = state['model_path']['head_temperature']
+-        q.require(state['head_coverage']['valid'], 'head覆盖资格未闭合；原官方driver成绩独立保留，不等于请求或数学失败')
++        import head_activation
++        state['head_scope'] = ('selected_and_sampled' if state['head_coverage']['covered']
++            else 'not_exercised_R64' if head_activation.optional_scope_valid(state['head_coverage'])
++            else 'invalid_head_evidence')
++        q.require(head_activation.optional_scope_valid(state['head_coverage']), 'head存在拒绝/回原/解析或不完整选择；原官方成绩独立保留')
+         q.check_reference(reference)
+         state['benchmark_completed'] = True
+         state['accuracy_gate'] = 'not_inherited_from_component_or_parent_main' 

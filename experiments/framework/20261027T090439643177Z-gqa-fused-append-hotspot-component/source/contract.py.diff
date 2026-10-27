@@ -1,0 +1,15 @@
+--- 0146-initial/contract.py
++++ v2/contract.py
+@@ -15,8 +15,9 @@
+     for row,slot in writes:
+         block,offset=divmod(slot,16)
+         for other,length in enumerate(lengths):
+-            if other==row:continue
+             for col in range((length+15)//16):
+-                if int(table[other][col])==block and col*16+offset<length:
+-                    raise ValueError('append跨请求别名/可见prefix，拒绝融合')
++                logical_position=col*16+offset
++                if (int(table[other][col])==block and logical_position<length
++                        and not (other==row and logical_position==length-1)):
++                    raise ValueError('append同/跨请求非尾可见alias，拒绝融合')
+     return dict(valid=True,positive_writes=len(writes),admission='显式CPU数据；非生产每步证明或免费元数据路径')

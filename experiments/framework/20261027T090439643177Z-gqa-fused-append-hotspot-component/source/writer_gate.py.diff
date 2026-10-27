@@ -1,0 +1,15 @@
+--- 0146-initial/writer_gate.py
++++ v2/writer_gate.py
+@@ -24,7 +24,11 @@
+             n=int(lengths[0].item());page=int(table[0,(n-1)//16].item())
+             slots[0]=page*16+(n-1)%16
+             key[0,:,0]=2.0**-126;value[0,:,0]=-(2.0**-126)
+-        if phase=='negative_slot':slots[1]=-1
++        if phase=='negative_slot':
++            slots[1]=-1
++            # Every BF16 payload differs bitwise; expected overlay must still skip row1.
++            key[1].view(torch.int16).bitwise_xor_(-32768)
++            value[1].view(torch.int16).bitwise_xor_(-32768)
+         lens=lengths.cpu().tolist();tab=table.cpu().tolist();mapping=slots.cpu().tolist()
+         admission=validate(lens,tab,mapping)
+         cache.copy_(saved[3]);cache_b.copy_(saved[3])

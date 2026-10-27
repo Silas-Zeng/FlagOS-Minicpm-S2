@@ -1,0 +1,70 @@
+{
+  "base_commit": "56f1838192abc940b3fb9accef490022ac125000",
+  "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+  "rows": 32,
+  "cases_passed": 10,
+  "actual_identity": {
+    "constants": {
+      "num_warps": "8",
+      "num_stages": "1",
+      "num_ctas": "1",
+      "BLOCK_M": "32",
+      "BLOCK_N": "64",
+      "BLOCK_K": "64",
+      "EVEN_K": "True"
+    },
+    "kwargs": {
+      "BIAS": false,
+      "GROUP_M": 8,
+      "SPLIT_K": 1
+    },
+    "grid": [
+      2040,
+      1
+    ],
+    "linear_source_sha256": "d431a4fa144ed67dc3deab46dd5beace3612858075f85c39e602447ba3bf768a",
+    "head_source": "actual UnquantizedLinearMethod.apply/F.linear default dispatch",
+    "weight_name": "lm_head.weight",
+    "weight_sha256": "9f5cf86ab727309a3130cad08fc6153925b3a2b29084afc24e641a4733e65189",
+    "output_dtype": "torch.bfloat16",
+    "output_stride": [
+      130560,
+      1
+    ]
+  },
+  "resources": [
+    {
+      "arm": "original-head",
+      "hash": "4b568c0f5ca364e5451009267247c30ad52ee2edf912af3ed21c1edd892d35ba",
+      "shared": 12288,
+      "n_regs": 21,
+      "n_spills": 0
+    },
+    {
+      "arm": "candidate-head",
+      "hash": "bacf34cbfb5b4a100448451f4a6f6eccf5309b10dad7e87b7e9259c023152c9e",
+      "shared": 12288,
+      "n_regs": 21,
+      "n_spills": 0
+    }
+  ],
+  "median": {
+    "A": {
+      "event_per_call_ms": 2.607533812522888,
+      "wall_per_call_ms": 3.16378125
+    },
+    "B": {
+      "event_per_call_ms": 2.3455960750579834,
+      "wall_per_call_ms": 2.8157235
+    }
+  },
+  "event_saving_percent": 10.045420550518958,
+  "wall_saving_percent": 11.001321598956949,
+  "no_cpu_throttling": true,
+  "accuracy_qualified": false,
+  "official_qualified": false,
+  "combined_gain_claimed": false,
+  "finished_utc": "2026-10-27T08:39:07.813283+00:00",
+  "result_sha256": "09144fc7d777e27f02132288670f3e6d1a944051e2129600e5d49ee84d1bd265",
+  "conclusion": "R32真实LM-head权重与实际F.linear配置，合成hidden；保留局部正信号。非官方或模型准确率，不与R64组件收益相加。"
+}

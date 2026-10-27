@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共362条登记、359个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共366条登记、363个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -340,6 +340,10 @@
 | 天数 BI-V150 | 360 | 20261027T050730877973Z | [LM-head温度epilogue融合](methods/lm-head-temperature.md) | 10组逐位、独立FP64、IDs/RNG及换值Graph门通过。 | 未记录/未记录/未记录/未记录 | R64真实LM-head权重130560×2048、合成hidden；保留原BF16舍入后融合FP32转换与温度除法，原stats/top-p/RNG不变。10组逐位/FP64/采样ID/RNG/换值Graph及输入不变 | [20261027T050730877973Z-lm-head-temperature-epilogue-component](runs/bi-v150/20261027T050730877973Z-lm-head-temperature-epilogue-component.md) |
 | 天数 BI-V150 | 361 | 2026-10-27T05:24:25+00:00 | [基线接续与容器环境复查](methods/baseline-environment.md) | 1024请求和原实际路径检查通过。 | 4096/1024/64/256 | main56/native14f原官方4K四轮暖均5902.77 tok/s，1024请求成功，KV548432；原栈及清理通过。仅4K控制，不继承16K或105。 | [20261027T052425Z-main56-control-4k-four-rounds](runs/bi-v150/20261027T052425Z-main56-control-4k-four-rounds.md) |
 | 天数 BI-V150 | 362 | 2026-10-27T05:50:59+00:00 | [LM-head温度epilogue融合](methods/lm-head-temperature.md) | 1024请求/实际head消费与原栈通过，不等于模型准确率。 | 4096/1024/64/256 | head温度epilogue原官方4K暖均5921.12对A5902.77 tok/s，本组+0.3109%；同KV/native/DB，1024请求及实际启用/清理通过。保留小信号，待16K/105。 | [20261027T055059Z-main56-lm-head-temperature-4k-four-rounds](runs/bi-v150/20261027T055059Z-main56-lm-head-temperature-4k-four-rounds.md) |
+| 天数 BI-V150 | 363 | 2026-10-27T07:58:34+00:00 | [基线接续与容器环境复查](methods/baseline-environment.md) | 原请求与路径/清理检查通过，不等于105。 | 16384/1024/64/128 | main56/native14f原官方16K暖均4526.57 tok/s，512成功、KV548384、原栈/清理通过。 | [20261027T075834Z-main56-control-16k-four-rounds](runs/bi-v150/20261027T075834Z-main56-control-16k-four-rounds.md) |
+| 天数 BI-V150 | 364 | 2026-10-27T08:38:35.962824+00:00 | [LM-head温度epilogue融合](methods/lm-head-temperature.md) | 逐位/FP64/RNG/换值Graph过；不是模型准确率。 | 未记录/未记录/未记录/未记录 | R32完整head+Sampler Event省10.05%、wall省11.00%；实际BM32/BN64/BK64/w8/s1，10门过。 | [20261027T083835962824Z-lm-head-temperature-r32-epilogue-component](runs/bi-v150/20261027T083835962824Z-lm-head-temperature-r32-epilogue-component.md) |
+| 天数 BI-V150 | 365 | 2026-10-27T08:40:30+00:00 | [LM-head温度epilogue融合](methods/lm-head-temperature.md) | 首冷请求成功不等于105准确率，原SIGTERM状态保留。 | 16384/1024/64/128 | R64-only 16K首冷4029.77 tok/s、128成功；KV548288≠548384资格停止。head无覆盖/无异常，原栈及清理通过。 | [20261027T084030Z-main56-lm-head-temperature-16k-four-rounds](runs/bi-v150/20261027T084030Z-main56-lm-head-temperature-16k-four-rounds.md) |
+| 天数 BI-V150 | 366 | 2026-10-27T09:04:39.643177+00:00 | [GQA尾段append融合](methods/gqa-fused-append.md) | 仅编译身份与资源已取得，原8门和FP64未执行。 | 未记录/未记录/未记录/未记录 | 尾段append融合编译成功；VGPR93→144超预设+16预算，SGPR spill0→50，shared8KiB不变。数值/计时均未运行，清理通过。 | [20261027T090439643177Z-gqa-fused-append-hotspot-component](runs/bi-v150/20261027T090439643177Z-gqa-fused-append-hotspot-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

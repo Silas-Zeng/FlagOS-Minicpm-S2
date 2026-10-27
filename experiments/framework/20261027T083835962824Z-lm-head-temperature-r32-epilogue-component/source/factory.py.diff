@@ -1,0 +1,22 @@
+--- R64/factory.py
++++ R32/factory.py
+@@ -12,7 +12,7 @@
+             value=self.original[grid](*args,**kwargs)
+             assert isinstance(value,tuple) and len(value)==2,'真实LibEntry ABI变化'
+             kernel,constants=value
+-            assert tuple(args[4:7])==(64,130560,2048)
++            assert tuple(args[4:7])==(32,130560,2048)
+             assert kwargs['BIAS'] is False and kwargs['GROUP_M']==8 and kwargs['SPLIT_K']==1
+             assert constants.get('EVEN_K') is True,'非原EVEN_K head，不改变循环数学'
+             resolved=dict(zip(self.original.arg_names,args));resolved.update(kwargs);resolved.update(constants)
+@@ -34,8 +34,8 @@
+ 
+ 
+ def launch(candidate,record,x,w,temp,out):
+-    assert tuple(x.shape)==(64,2048) and tuple(w.shape)==(130560,2048)
+-    assert tuple(out.shape)==(64,130560) and tuple(temp.shape)==(64,)
++    assert tuple(x.shape)==(32,2048) and tuple(w.shape)==(130560,2048)
++    assert tuple(out.shape)==(32,130560) and tuple(temp.shape)==(32,)
+     assert x.is_contiguous() and w.is_contiguous() and out.is_contiguous() and temp.is_contiguous()
+     args=list(record['args']);args[:4]=[x,w,w,out]
+     args.append(temp)

@@ -1,0 +1,72 @@
+--- main56-original
++++ fused-append
+@@ -1,5 +1,5 @@
+ @triton.jit
+-def _gqa_decode_attention(
++def _gqa_decode_attention_fused_append(
+     segm_output_ptr,
+     segm_max_ptr,
+     segm_expsum_ptr,
+@@ -9,6 +9,11 @@
+     seq_lens_ptr,
+     block_table_ptr,
+     softmax_scale_log2e,
++    fresh_key_ptr,
++    fresh_value_ptr,
++    append_slot_ptr,
++    fresh_key_stride: tl.int64,
++    fresh_value_stride: tl.int64,
+     queries_per_kv: tl.constexpr,
+     block_table_stride: tl.int64,
+     query_stride_token: tl.int64,
+@@ -57,6 +62,20 @@
+     Q = tl.load(query_ptr + query_offsets, mask=row_valid[:, None], other=0.0)
+ 
+     block_table_row = block_table_ptr + seq_idx * block_table_stride
++
++    # Caller admits exact private tail slots; no CTA may consume this new slot from cache.
++    append_slot = tl.load(append_slot_ptr + seq_idx).to(tl.int64)
++    append_enabled = (upper == seq_len) & (append_slot >= 0)
++    fresh_k = tl.load(fresh_key_ptr + token_idx * fresh_key_stride
++        + kv_head_idx * HEAD_SIZE + offs_dim, mask=append_enabled, other=0.0)
++    fresh_v = tl.load(fresh_value_ptr + token_idx * fresh_value_stride
++        + kv_head_idx * HEAD_SIZE + offs_dim, mask=append_enabled, other=0.0)
++    append_page = tl.maximum(append_slot, 0) // PAGE_SIZE
++    append_column = tl.maximum(append_slot, 0) % PAGE_SIZE
++    tl.store(key_cache_ptr + append_page * k_stride_block + append_column * k_stride_slot
++        + kv_head_idx * k_stride_head + offs_dim, fresh_k, mask=append_enabled)
++    tl.store(value_cache_ptr + append_page * v_stride_block + append_column * v_stride_slot
++        + kv_head_idx * v_stride_head + offs_dim, fresh_v, mask=append_enabled)
+     column_slot = offs_step % PAGE_SIZE
+ 
+     running_max = tl.full([ROWS], float("-inf"), dtype=tl.float32)
+@@ -81,8 +100,11 @@
+             + kv_head_idx * v_stride_head
+             + offs_dim[None, :]
+         )
+-        K = tl.load(key_cache_ptr + k_offsets)
+-        V = tl.load(value_cache_ptr + v_offsets)
++        append_row = append_enabled & (position + offs_step == seq_len - 1)
++        K_cached = tl.load(key_cache_ptr + k_offsets, mask=~append_row[None, :], other=0.0)
++        V_cached = tl.load(value_cache_ptr + v_offsets, mask=~append_row[:, None], other=0.0)
++        K = tl.where(append_row[None, :], fresh_k[:, None], K_cached)
++        V = tl.where(append_row[:, None], fresh_v[None, :], V_cached)
+ 
+         scores = tl.dot(Q, K) * softmax_scale_log2e
+         new_max = tl.maximum(running_max, tl.max(scores, 1))
+@@ -112,8 +134,13 @@
+             + kv_head_idx * v_stride_head
+             + offs_dim[None, :]
+         )
+-        K = tl.load(key_cache_ptr + k_offsets, mask=column_valid[None, :], other=0.0)
+-        V = tl.load(value_cache_ptr + v_offsets, mask=column_valid[:, None], other=0.0)
++        append_row = append_enabled & (full_upper + offs_step == seq_len - 1)
++        K_cached = tl.load(key_cache_ptr + k_offsets,
++            mask=column_valid[None, :] & ~append_row[None, :], other=0.0)
++        V_cached = tl.load(value_cache_ptr + v_offsets,
++            mask=column_valid[:, None] & ~append_row[:, None], other=0.0)
++        K = tl.where(append_row[None, :], fresh_k[:, None], K_cached)
++        V = tl.where(append_row[:, None], fresh_v[None, :], V_cached)
+ 
+         scores = tl.dot(Q, K) * softmax_scale_log2e
+         scores = tl.where(column_valid[None, :], scores, float("-inf"))
