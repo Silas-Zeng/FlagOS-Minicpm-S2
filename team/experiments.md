@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共384条登记、381个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共386条登记、383个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -360,8 +360,10 @@
 | 天数 BI-V150 | 380 | 20261027T143828583459Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | N32/S4/KV16384，完整producer＋原reducer Graph ABBA；writer不计时。 | 未记录/未记录/未记录/未记录 | S4连续Q2048九门通过，完整组件Event省22.1242%、wall省22.0967%。 | [20261027T143828583459Z-corex-native-gqa-s4-contiguous-component](runs/bi-v150/20261027T143828583459Z-corex-native-gqa-s4-contiguous-component.md) |
 | 天数 BI-V150 | 381 | 20261027T145950Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 原四轮弃首；c75db/814、SOf720、native14f及原参数不变。 | 4096/1024/64/256 | 原官方4K暖6481.2267对A5971.44，观察+8.5371%；1024成功，S2/S4实际覆盖。 | [20261027T145950Z-native-gqa-abi-v2-4k-four-rounds](runs/bi-v150/20261027T145950Z-native-gqa-abi-v2-4k-four-rounds.md) |
 | 天数 BI-V150 | 382 | 20261027T152326Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 原四轮弃首；c75db/814与SOf720、native14f，原参数不变。 | 16384/1024/64/128 | 原官方16K暖4826.4467对A4529.7867，观察+6.5491%；512成功，S2/S4实际覆盖。 | [20261027T152326Z-native-gqa-abi-v2-16k-four-rounds](runs/bi-v150/20261027T152326Z-native-gqa-abi-v2-16k-four-rounds.md) |
-| 天数 BI-V150 | 383 | 20261027T160904Z | [CoreX Q32四页搬运编译探针](methods/native-q32-transfer.md) | 复用原LLVM/ASM，不重编；原NVVM屏障匹配失败保留。 | 未记录/未记录/未记录/未记录 | CPU实编32SME/64MMA、64KiB；原checker=false，静态sidecar仅接受CoreX同步顺序。 | [20261027T160904Z-native-q32-transfer-fragments](runs/bi-v150/20261027T160904Z-native-q32-transfer-fragments.md) |
+| 天数 BI-V150 | 383 | 20261027T160904Z | [CoreX Q32四页搬运与M16映射诊断](methods/native-q32-transfer.md) | 复用原LLVM/ASM，不重编；原NVVM屏障匹配失败保留。 | 未记录/未记录/未记录/未记录 | CPU实编32SME/64MMA、64KiB；原checker=false，静态sidecar仅接受CoreX同步顺序。 | [20261027T160904Z-native-q32-transfer-fragments](runs/bi-v150/20261027T160904Z-native-q32-transfer-fragments.md) |
 | 天数 BI-V150 | 384 | 20261027T161121Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 原105题及temperature1.0/top_p0.95/max_tokens32768/batch8不变。 | 未记录/32768/8/105 | 原官方105题102/105（97.142857%），valid/pass，95%门通过；transport/cap/empty均0。 | [20261027T161121Z-native-gqa-abi-v2-native14f-math500](runs/bi-v150/20261027T161121Z-native-gqa-abi-v2-native14f-math500.md) |
+| 天数 BI-V150 | 385 | 20261027T163852438077Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | N64/S2/KV4096，V等待后移；完整producer＋原reducer，writer仅准备。 | 未记录/未记录/未记录/未记录 | 宏1九门通过；完整组件对原Triton Event省22.3849%、wall省22.3205%。 | [20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component](runs/bi-v150/20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component.md) |
+| 天数 BI-V150 | 386 | 20261027T164809092948Z | [CoreX Q32四页搬运与M16映射诊断](methods/native-q32-transfer.md) | 第二组沿首组坐标，不重新拟合；Q/KV回读和输入/RNG守卫通过。 | 未记录/未记录/未记录/未记录 | 两次launch固定映射，换值QK16384/PV32768值对CPU FP64 cast FP32逐位通过。 | [20261027T164809092948Z-native-q32-m16-mapping-diagnostic](runs/bi-v150/20261027T164809092948Z-native-q32-m16-mapping-diagnostic.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

@@ -522,6 +522,13 @@ CODE['corex-native-gqa-page16'] += ['experiments/official/20261027T152326Z-nativ
 CODE['corex-native-gqa-page16'] += ['experiments/accuracy/20261027T161121Z-native-gqa-abi-v2-native14f-math500/summary.json', 'experiments/accuracy/20261027T161121Z-native-gqa-abi-v2-native14f-math500/raw-evidence.json', 'experiments/bundles/20261027T161121Z-native-gqa-abi-v2-native14f-math500/manifest.json', 'experiments/bundles/20261027T161121Z-native-gqa-abi-v2-native14f-math500/raw.tar.gz.storage.json']
 GROUPS['corex-native-gqa-page16']=('CoreX原生BF16 GQA：单页与完整分页', 'ABI v2原官方4K/16K各四轮暖均6481.2267/4826.4467，对各A观察+8.5371%/+6.5491%，1024/512请求成功且S2/S4实际覆盖；KV分别差+48/−144，不称严格因果或稳定幅度。原105题102/105、95%门通过，但启动capture不能证明105请求分支覆盖。旧未覆盖安装包和夹具失败均保留。', [])
 
+BATCH_RESULTS['native_gqa_v_overlap_component_signal']=('宏1九门通过；完整组件对原Triton Event省22.3849%、wall省22.3205%。', '保留组件信号；无同轮宏0增量对照，不当官方收益。', 'N64/S2/KV4096，V等待后移；完整producer＋原reducer，writer仅准备。', '121原件；DB/source/native与清理通过。')
+BATCH_RESULTS['native_q32_m16_mapping_diagnostic_pass']=('两次launch固定映射，换值QK16384/PV32768值对CPU FP64 cast FP32逐位通过。', '保留M16映射依据；非完整Attention或性能资格。', '第二组沿首组坐标，不重新拟合；Q/KV回读和输入/RNG守卫通过。', '70原件；无softmax/Graph/模型准确率资格。')
+GROUPS['native-q32-transfer']=('CoreX Q32四页搬运与M16映射诊断', '160904原checker失败与CoreX sidecar静态接受分列；164809两次launch固定映射对独立FP64逐位通过。尚无softmax、Graph、完整Attention、性能或模型准确率资格。', [])
+GROUPS['corex-native-gqa-page16']=('CoreX原生BF16 GQA：单页与完整分页', '同步ABI v2已由[框架PR92](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/92)合并至main b3b87d2a；接续基线4K/16K暖6481.2267/4826.4467、102/105，保留KV差异与105请求分支覆盖限制。宏1组件对原Triton省22.3849%，尚无同轮宏0增量或官方资格。', [])
+CODE['corex-native-gqa-page16'] += ['experiments/framework/20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component/summary.json', 'experiments/framework/20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component/raw-evidence.json', 'experiments/bundles/20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component/manifest.json', 'experiments/bundles/20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component/raw.tar.gz.storage.json']
+CODE['native-q32-transfer'] += ['experiments/framework/20261027T164809092948Z-native-q32-m16-mapping-diagnostic/summary.json', 'experiments/framework/20261027T164809092948Z-native-q32-m16-mapping-diagnostic/raw-evidence.json', 'experiments/bundles/20261027T164809092948Z-native-q32-m16-mapping-diagnostic/manifest.json', 'experiments/bundles/20261027T164809092948Z-native-q32-m16-mapping-diagnostic/raw.tar.gz.storage.json']
+
 def group(row):
     if row['profile_id']=='native-q32-transfer':return 'native-q32-transfer'
     if row['profile_id'] in ('corex-native-gqa-page16','corex-native-gqa-loop'):return 'corex-native-gqa-page16'

@@ -4,10 +4,10 @@
 
 平台：天数 BI-V150。本页只摘录既有登记；未记录字段不补猜。
 
-## 登记 #383 · CoreX Q32四页搬运编译探针
+## 登记 #383 · CoreX Q32四页搬运与M16映射诊断
 
-- **尝试**：原checker搜索NVVM屏障而实际CoreX使用bi.sl.barrier，passed=false原样保留；sidecar仅接受同步与共享生命周期静态顺序。无GPU执行、坐标映射、数值或性能资格。
-- **改动**：相关实现 [summary.json](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/summary.json)；[raw-evidence.json](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/raw-evidence.json)；[compile-backend-barrier-review.json](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/compile-backend-barrier-review.json)；[review-compile-160904.py](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/review-compile-160904.py)；本轮准确变体以原件源码清单为准。
+- **尝试**：160904原checker失败与CoreX sidecar静态接受分列；164809两次launch固定映射对独立FP64逐位通过。尚无softmax、Graph、完整Attention、性能或模型准确率资格。
+- **改动**：相关实现 [summary.json](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/summary.json)；[raw-evidence.json](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/raw-evidence.json)；[compile-backend-barrier-review.json](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/compile-backend-barrier-review.json)；[review-compile-160904.py](../../../experiments/cpu-probes/20261027T160904Z-native-q32-transfer-fragments/review-compile-160904.py)；[summary.json](../../../experiments/framework/20261027T164809092948Z-native-q32-m16-mapping-diagnostic/summary.json)；[raw-evidence.json](../../../experiments/framework/20261027T164809092948Z-native-q32-m16-mapping-diagnostic/raw-evidence.json)；[manifest.json](../../../experiments/bundles/20261027T164809092948Z-native-q32-m16-mapping-diagnostic/manifest.json)；[raw.tar.gz.storage.json](../../../experiments/bundles/20261027T164809092948Z-native-q32-m16-mapping-diagnostic/raw.tar.gz.storage.json)；本轮准确变体以原件源码清单为准。
 - **怎么测**：20原件；M16坐标映射和完整Attention均未验证。
 - **结果**：CPU实编32SME/64MMA、64KiB；原checker=false，静态sidecar仅接受CoreX同步顺序。
 - **是否保留**：保留编译可行性；无GPU、数值或性能资格。

@@ -1,0 +1,48 @@
+<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
+
+# 20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component
+
+平台：天数 BI-V150。本页只摘录既有登记；未记录字段不补猜。
+
+## 登记 #385 · CoreX原生BF16 GQA：单页与完整分页
+
+- **尝试**：同步ABI v2已由[框架PR92](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/92)合并至main b3b87d2a；接续基线4K/16K暖6481.2267/4826.4467、102/105，保留KV差异与105请求分支覆盖限制。宏1组件对原Triton省22.3849%，尚无同轮宏0增量或官方资格。
+- **改动**：相关实现 [comparison.json](../../../experiments/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/comparison.json)；[result.json](../../../experiments/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/result.json)；[result.json](../../../experiments/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/posthoc-120655/result.json)；[recompute.py](../../../experiments/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/posthoc-120655/recompute.py)；[llvm-build.log](../../../experiments/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/related-cpu/113301/llvm-build.log)；[compile-check.json](../../../experiments/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/compile-proof/compile-check.json)；[backend-equivalence.json](../../../experiments/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/source/backend-equivalence.json)；[archive-receipt.json](../../../experiments/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/archive-receipt.json)；[comparison.json](../../../experiments/framework/20261027T122022380438Z-corex-native-gqa-page16-numeric/comparison.json)；[result.json](../../../experiments/framework/20261027T122022380438Z-corex-native-gqa-page16-numeric/result.json)；[independent-review.md](../../../experiments/framework/20261027T122022380438Z-corex-native-gqa-page16-numeric/independent-review.md)；[archive-receipt.json](../../../experiments/framework/20261027T122022380438Z-corex-native-gqa-page16-numeric/archive-receipt.json)；[comparison.json](../../../experiments/framework/20261027T125106851090Z-corex-native-gqa-s2-synchronous-component/comparison.json)；[results.json](../../../experiments/framework/20261027T125106851090Z-corex-native-gqa-s2-synchronous-component/results.json)；[independent-review.md](../../../experiments/framework/20261027T125106851090Z-corex-native-gqa-s2-synchronous-component/independent-review.md)；[archive-receipt.json](../../../experiments/framework/20261027T125106851090Z-corex-native-gqa-s2-synchronous-component/archive-receipt.json)；[comparison.json](../../../experiments/framework/20261027T131805595037Z-corex-native-gqa-s4-synchronous-component/comparison.json)；[results.json](../../../experiments/framework/20261027T131805595037Z-corex-native-gqa-s4-synchronous-component/results.json)；[archive-receipt.json](../../../experiments/framework/20261027T131805595037Z-corex-native-gqa-s4-synchronous-component/archive-receipt.json)；[comparison.json](../../../experiments/framework/20261027T132510103688Z-gqa-strided-fixture-diagnostic/comparison.json)；[results.json](../../../experiments/framework/20261027T132510103688Z-gqa-strided-fixture-diagnostic/results.json)；[archive-receipt.json](../../../experiments/framework/20261027T132510103688Z-gqa-strided-fixture-diagnostic/archive-receipt.json)；[comparison.json](../../../experiments/framework/20261027T133209942679Z-corex-native-gqa-s2-qstride2560-component/comparison.json)；[results.json](../../../experiments/framework/20261027T133209942679Z-corex-native-gqa-s2-qstride2560-component/results.json)；[independent-review.md](../../../experiments/framework/20261027T133209942679Z-corex-native-gqa-s2-qstride2560-component/independent-review.md)；[archive-receipt.json](../../../experiments/framework/20261027T133209942679Z-corex-native-gqa-s2-qstride2560-component/archive-receipt.json)；[comparison.json](../../../experiments/framework/20261027T133545186656Z-corex-native-gqa-s4-synchronous-component/comparison.json)；[results.json](../../../experiments/framework/20261027T133545186656Z-corex-native-gqa-s4-synchronous-component/results.json)；[independent-review.md](../../../experiments/framework/20261027T133545186656Z-corex-native-gqa-s4-synchronous-component/independent-review.md)；[archive-receipt.json](../../../experiments/framework/20261027T133545186656Z-corex-native-gqa-s4-synchronous-component/archive-receipt.json)；[summary.json](../../../experiments/official/20261027T140221Z-native-gqa-4k-four-rounds/summary.json)；[raw-evidence.json](../../../experiments/official/20261027T140221Z-native-gqa-4k-four-rounds/raw-evidence.json)；[manifest.json](../../../experiments/bundles/20261027T140221Z-native-gqa-4k-four-rounds/manifest.json)；[raw.tar.gz.storage.json](../../../experiments/bundles/20261027T140221Z-native-gqa-4k-four-rounds/raw.tar.gz.storage.json)；[summary.json](../../../experiments/framework/20261027T143828583459Z-corex-native-gqa-s4-contiguous-component/summary.json)；[raw-evidence.json](../../../experiments/framework/20261027T143828583459Z-corex-native-gqa-s4-contiguous-component/raw-evidence.json)；[manifest.json](../../../experiments/bundles/20261027T143828583459Z-corex-native-gqa-s4-contiguous-component/manifest.json)；[raw.tar.gz.storage.json](../../../experiments/bundles/20261027T143828583459Z-corex-native-gqa-s4-contiguous-component/raw.tar.gz.storage.json)；[summary.json](../../../experiments/official/20261027T145950Z-native-gqa-abi-v2-4k-four-rounds/summary.json)；[raw-evidence.json](../../../experiments/official/20261027T145950Z-native-gqa-abi-v2-4k-four-rounds/raw-evidence.json)；[manifest.json](../../../experiments/bundles/20261027T145950Z-native-gqa-abi-v2-4k-four-rounds/manifest.json)；[raw.tar.gz.storage.json](../../../experiments/bundles/20261027T145950Z-native-gqa-abi-v2-4k-four-rounds/raw.tar.gz.storage.json)；[summary.json](../../../experiments/official/20261027T152326Z-native-gqa-abi-v2-16k-four-rounds/summary.json)；[raw-evidence.json](../../../experiments/official/20261027T152326Z-native-gqa-abi-v2-16k-four-rounds/raw-evidence.json)；[manifest.json](../../../experiments/bundles/20261027T152326Z-native-gqa-abi-v2-16k-four-rounds/manifest.json)；[raw.tar.gz.storage.json](../../../experiments/bundles/20261027T152326Z-native-gqa-abi-v2-16k-four-rounds/raw.tar.gz.storage.json)；[summary.json](../../../experiments/accuracy/20261027T161121Z-native-gqa-abi-v2-native14f-math500/summary.json)；[raw-evidence.json](../../../experiments/accuracy/20261027T161121Z-native-gqa-abi-v2-native14f-math500/raw-evidence.json)；[manifest.json](../../../experiments/bundles/20261027T161121Z-native-gqa-abi-v2-native14f-math500/manifest.json)；[raw.tar.gz.storage.json](../../../experiments/bundles/20261027T161121Z-native-gqa-abi-v2-native14f-math500/raw.tar.gz.storage.json)；[summary.json](../../../experiments/framework/20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component/summary.json)；[raw-evidence.json](../../../experiments/framework/20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component/raw-evidence.json)；[manifest.json](../../../experiments/bundles/20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component/manifest.json)；[raw.tar.gz.storage.json](../../../experiments/bundles/20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component/raw.tar.gz.storage.json)；本轮准确变体以原件源码清单为准。
+- **怎么测**：121原件；DB/source/native与清理通过。
+- **结果**：宏1九门通过；完整组件对原Triton Event省22.3849%、wall省22.3205%。
+- **是否保留**：保留组件信号；无同轮宏0增量对照，不当官方收益。
+
+<details><summary>完整原登记（含UTC、状态、过程与标识）</summary>
+
+```json
+{
+  "run_id": "20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component",
+  "local_date": "2026-10-27",
+  "utc_start": "20261027T163852438077Z",
+  "profile_id": "corex-native-gqa-loop",
+  "phase": "component",
+  "device": "Iluvatar BI-V150",
+  "vllm_commit": "dac1b8fb48e7983e48283032efeee9b592c5fbe5",
+  "flaggems_commit": "4df52d9168ac55c1c1061cefb4638c570292d896",
+  "input_len": "",
+  "output_len": "",
+  "concurrency": "",
+  "num_prompts": "",
+  "profiler": "false",
+  "status": "native_gqa_v_overlap_component_signal",
+  "artifacts": "experiments/framework/20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component",
+  "conclusion": "宏1只将V等待后移至QK与softmax之后，N64/S2/KV4096完整producer＋原reducer。九门通过，Event0.52793175→0.40975457ms，对原Triton省22.3849%；wall省22.3205%。未有同轮宏0/宏1对照，不能将历史差值当宏1增量或官方收益；保留待后续筛选。DB/source/native与清理通过。"
+}
+```
+
+</details>
+
+## 原件与说明
+
+- 原始目录：[20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component](../../../experiments/framework/20261027T163852438077Z-corex-native-gqa-s2-v-overlap-component)
+- 原命令：未单列，见原始目录
+- 环境 / 源码 / 后态：未单列，见原始目录
+- 原始结果：未单列，见原始目录
+- 日志 / 采样：未单列，见原始目录
+- 相关说明：未记录
+- 完整原登记：[registry.csv](../../../experiments/registry.csv)（登记序号见上；同一run可有多个阶段）
