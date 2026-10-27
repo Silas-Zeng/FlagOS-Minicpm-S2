@@ -96,6 +96,7 @@
 - [S2同CTA归约](methods/gqa-s2-incta.md)
 - [GQA尾段append融合](methods/gqa-fused-append.md)
 - [LM-head温度epilogue融合](methods/lm-head-temperature.md)
+- [CoreX原生GQA单page16数值诊断](methods/corex-native-gqa-page16.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

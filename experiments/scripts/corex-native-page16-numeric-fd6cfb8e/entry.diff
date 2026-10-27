@@ -1,0 +1,61 @@
+--- reused-main56-entry.py
++++ native-page16-entry.py
+@@ -30,6 +30,7 @@
+     parser.add_argument("--model", type=Path, default=Path("/workspace/MiniCPM5-2B"))
+     parser.add_argument("--run-dir", type=Path)
+     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
++    parser.add_argument("--compile-dir", type=Path, required=True, help="已完成无设备编译的page16 LLVM/ASM检查目录")
+     args = parser.parse_args()
+     if args.worker:
+         from worker import worker
+@@ -37,6 +38,8 @@
+     import fcntl
+     import reused_helpers as owner
+     import source_identity
++    from compile_proof import check as check_compile
++    compile_proof = check_compile(args.compile_dir, HERE / "page16.cu")
+     for name, expected in read(HERE / "asset-pins.json").items():
+         if sha(HERE / name) != expected:
+             raise RuntimeError("入口资产变化：" + name)
+@@ -46,7 +49,7 @@
+     native = args.native_library.resolve(strict=True)
+     source_before = source_identity.check(source, native)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-lm-head-temperature-r32-bn256-component")
++    run = ROOT / "framework" / (stamp + "-corex-native-gqa-page16-numeric")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+@@ -54,11 +57,13 @@
+         shutil.copyfile(HERE / name, assets / name)
+     shutil.copyfile(HERE / "asset-pins.json", assets / "asset-pins.json")
+     state = dict(started_utc=stamp, owner_pid=os.getpid(),
+-        scope="固定R32完整head+Sampler；A已测温度epilogue，B仅BN64→256；原stats/RNG不改", run=str(run),
++        scope="原生page16布局及QK/softmax/BF16P/PV数值诊断；无历史loop/reducer/性能资格", run=str(run),
+         command=[sys.executable, *sys.argv], owned_processes=[], exit_code=1)
+     state.update(source=str(source), source_count=807, source_identity=source_before,
+                  base_commit="56f1838192abc940b3fb9accef490022ac125000",
+                  native=str(native), native_sha256=source_identity.NATIVE_SHA)
++    state["compile_proof"] = compile_proof
++    shutil.copytree(args.compile_dir, run / "compile-proof")
+     save(run / "manifest.json", state)
+     lock = child = monitor = None
+     locked = copied_db = False
+@@ -78,7 +83,7 @@
+         state["database_original_sha256"] = sha(DB)
+         shutil.copyfile(args.model / "config.json", assets / "model-config.json")
+         env = dict(os.environ)
+-        # 固定两臂同一个 worker/DB；本组件同一默认FlagGems注册；A/B均已完成温度epilogue，B只加宽N片段，不修改生产文件。
++        # 原GQA只作单页数学对照；不安装新生产路径，不计时。
+         for key in tuple(env):
+             if key.startswith(("VLLM_FL_BIV150_", "BIV150_", "MINICPM_NATIVE_", "MINICPM_DECODE_GAP_")):
+                 del env[key]
+@@ -89,7 +94,7 @@
+             ("VLLM_PLUGINS", "PYTHONPATH", "BIV150_NATIVE_W8A8_LIBRARY", "PYTHONDONTWRITEBYTECODE",
+              "OMP_NUM_THREADS", "MKL_NUM_THREADS", "USE_FLAGGEMS", "USE_FLAGTUNE", "TRITON_CACHE_DIR",
+              "CUDA_VISIBLE_DEVICES", "IX_VISIBLE_DEVICES", "COREX_VISIBLE_DEVICES")}
+-        command = [sys.executable, str(assets / "entry.py"), "--worker", "--run-dir", str(run), "--model", str(args.model), "--source-dir", str(source), "--native-library", str(native)]
++        command = [sys.executable, str(assets / "entry.py"), "--worker", "--run-dir", str(run), "--model", str(args.model), "--source-dir", str(source), "--native-library", str(native), "--compile-dir", str(run / "compile-proof")]
+         state["worker_command"] = command
+         with (run / "worker.log").open("x") as log:
+             child = subprocess.Popen(command, env=env, stdout=log, stderr=subprocess.STDOUT,
