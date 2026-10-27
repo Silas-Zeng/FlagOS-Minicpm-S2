@@ -454,6 +454,10 @@ BATCH_RESULTS['main56_control_4k_complete']=('main56/native14f原官方4K四轮�
 CODE['baseline-environment'] += ['experiments/official/20261027T052425Z-main56-control-4k-four-rounds/comparison.json', 'experiments/official/20261027T052425Z-main56-control-4k-four-rounds/archive-receipt.json']
 GROUPS['baseline-environment']=('基线接续与容器环境复查', '本站main56/native14f原官方4K四轮暖均5902.77 tok/s，KV548432，仅保留新4K控制；无新16K或105资格。旧main241/native14f两档暖均5850.05/4487.49及104/105仍按旧源码单列，不迁移或拆成严格因果收益。', [])
 
+BATCH_RESULTS['lm_head_temperature_4k_positive_observation']=('head温度epilogue原官方4K暖均5921.12对A5902.77 tok/s，本组+0.3109%；同KV/native/DB，1024请求及实际启用/清理通过。保留小信号，待16K/105。', '保留单组4K小收益，待16K和105；非稳定净收益结论。', '1024请求/实际head消费与原栈通过，不等于模型准确率。', '原官方4轮弃首；同main56/native14f/DB/KV，CSV对比见原件。')
+CODE['lm-head-temperature'] += ['experiments/official/20261027T055059Z-main56-lm-head-temperature-4k-four-rounds/comparison.json', 'experiments/official/20261027T055059Z-main56-lm-head-temperature-4k-four-rounds/archive-receipt.json']
+GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '组件完整head+Sampler Event省17.31%；生产同main56/native14f/DB/KV原官方4K本组暖均5921.12对5902.77 tok/s，观察+0.3109%。保留小收益信号，尚待16K/105，不把局部组件收益迁移为模型结论。', [])
+
 def group(row):
     if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats', 'gqa-s2-incta', 'lm-head-temperature'):
         return row['profile_id']

@@ -1,0 +1,65 @@
+{
+  "base_commit": "56f1838192abc940b3fb9accef490022ac125000",
+  "candidate_tree": "8125c3d9efc83afdd63f7174cea3374de2da24ac",
+  "source_count": 809,
+  "baseline_run": "20261027T052425Z-main56-control-4k-four-rounds",
+  "four_rounds_tok_s": [
+    5081.15,
+    5778.04,
+    5988.09,
+    5997.24
+  ],
+  "warm_mean_tok_s": 5921.123333333333,
+  "baseline_four_rounds_tok_s": [
+    5036.45,
+    5749.08,
+    5908.26,
+    6050.97
+  ],
+  "baseline_warm_mean_tok_s": 5902.77,
+  "observed_change_percent": 0.3109274685161756,
+  "first_warm_change_percent": 0.5037327711564288,
+  "successful_requests": 1024,
+  "same_kv_tokens": 548432,
+  "same_native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+  "same_initial_database_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+  "changed_files": [
+    "vllm_fl/compile_semantics.py",
+    "vllm_fl/patches/biv150_compute_order.py",
+    "vllm_fl/patches/biv150_lm_head_temperature.py",
+    "vllm_fl/patches/biv150_lm_head_temperature_kernel.py",
+    "vllm_fl/worker/model_runner.py"
+  ],
+  "head_selected_and_sampled": true,
+  "head_real_selection_share_measured": false,
+  "accuracy_qualified": false,
+  "sixteen_k_qualified": false,
+  "metrics": {
+    "Benchmark Duration (s)": {
+      "baseline_warm_mean": 222.15,
+      "candidate_warm_mean": 221.43,
+      "change_percent": -0.3241053342336264
+    },
+    "Mean TTFT (ms)": {
+      "baseline_warm_mean": 3258.7366666666667,
+      "candidate_warm_mean": 3243.9700000000003,
+      "change_percent": -0.4531408388322222
+    },
+    "Mean TPOT (ms)": {
+      "baseline_warm_mean": 50.736666666666665,
+      "candidate_warm_mean": 50.58,
+      "change_percent": -0.30878391695683405
+    },
+    "Mean ITL (ms)": {
+      "baseline_warm_mean": 50.736666666666665,
+      "candidate_warm_mean": 50.58,
+      "change_percent": -0.30878391695683405
+    }
+  },
+  "analysis": "同main56/native14f、初始DB与KV548432下，本组4K弃首吞吐5902.770000→5921.123333 tok/s（+0.3109%）；CSV暖轮benchmark耗时222.150→221.430s（-0.3241%），TTFT 3258.737→3243.970ms（-0.4531%），TPOT 50.737→50.580ms（-0.3088%）。这是单组官方观察，benchmark轮耗时不是head组件计时；不外推组件17.31%为模型收益，尚待16K/105及稳定性确认。",
+  "raw_csv_sha256": {
+    "baseline": "56729d564e4a5ff9625f4d166149d9141b9efdf7fcdadedfc36b8277c889c5a2",
+    "candidate": "c67aa18c85dc30e236fb504ee1c1498e09723011e0be338063e944697e0964d5"
+  },
+  "finished_utc": "2026-10-27T06:10:37.876991+00:00"
+}

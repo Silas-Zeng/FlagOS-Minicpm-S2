@@ -6,8 +6,8 @@
 
 ## 登记 #360 · LM-head温度epilogue融合
 
-- **尝试**：完整head+Sampler组件省17.31% Event/12.24% wall；保留，待生产接入验证。
-- **改动**：相关实现 [archive-receipt.json](../../../experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/archive-receipt.json)；[result.json](../../../experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/result.json)；[candidate.py](../../../experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/source/candidate.py)；本轮准确变体以原件源码清单为准。
+- **尝试**：组件完整head+Sampler Event省17.31%；生产同main56/native14f/DB/KV原官方4K本组暖均5921.12对5902.77 tok/s，观察+0.3109%。保留小收益信号，尚待16K/105，不把局部组件收益迁移为模型结论。
+- **改动**：相关实现 [archive-receipt.json](../../../experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/archive-receipt.json)；[result.json](../../../experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/result.json)；[candidate.py](../../../experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/source/candidate.py)；[comparison.json](../../../experiments/official/20261027T055059Z-main56-lm-head-temperature-4k-four-rounds/comparison.json)；[archive-receipt.json](../../../experiments/official/20261027T055059Z-main56-lm-head-temperature-4k-four-rounds/archive-receipt.json)；本轮准确变体以原件源码清单为准。
 - **怎么测**：R64真实head W/合成hidden，唯一完整eager ABBA，原采样链不变。
 - **结果**：R64真实LM-head权重130560×2048、合成hidden；保留原BF16舍入后融合FP32转换与温度除法，原stats/top-p/RNG不变。10组逐位/FP64/采样ID/RNG/换值Graph及输入不变检查通过。完整eager head+Sampler唯一ABBA含分配与提交，Event3.828030→3.165252ms（省17.3138%），wall4.
 - **是否保留**：保留局部正信号，待实际服务验证；不是官方收益。
