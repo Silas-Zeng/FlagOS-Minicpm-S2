@@ -88,6 +88,7 @@
 - [GQA标量KV页基址与动态for组合](methods/gqa-scalar-page-base.md)
 - [长prefill四面板完整Attention](methods/prefill-panel4.md)
 - [基线接续与容器环境复查](methods/baseline-environment.md)
+- [无损KV位编码与页内布局](methods/kv-lossless.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

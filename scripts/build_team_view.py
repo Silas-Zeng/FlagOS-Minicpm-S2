@@ -401,7 +401,12 @@ CODE['baseline-environment'] += ['experiments/official/20261026T192108Z-main594-
 BATCH_RESULTS['main241_control_16k_complete']=('新团队main241/native14f/初始DB207f原官方16K四轮3791.43/4489.43/4487.31/4485.73 tok/s，弃首暖均4487.49，512请求全部成功；对旧main594暖均4192.49观察+7.0364%；KV容量548288→548432多144tokens，非严格等KV单项因果。实际Q32与原优化栈通过，source/native/DB恢复及清理成功。本次仅16K正式四轮，未取得本站新main4K或105资格；不冒用队友native5cbb成绩。', '保留新main同口径16K控制；4K和105资格独立。', '请求及实际路径检查通过，不等于模型准确率资格。', '源码、精确命令、原始CSV/日志及清理见本轮原件。')
 CODE['baseline-environment'] += ['experiments/official/20261026T184110Z-main241-control-16k-four-rounds/archive-receipt.json', 'experiments/official/20261026T184110Z-main241-control-16k-four-rounds/result.json']
 
+GROUPS['kv-lossless']=('无损KV位编码与页内布局','真实42层位样本支持继续组件；逻辑少读约24.2%不等于HBM或吞吐收益。',[])
+CODE['kv-lossless']=['experiments/profiles/20261027T011819661362Z-main241-real-kv-bits/archive-receipt.json', 'experiments/profiles/20261027T011819661362Z-main241-real-kv-bits/kv-bit-stats.json', 'experiments/profiles/20261027T011819661362Z-main241-real-kv-bits/result.json']
+BATCH_RESULTS['real_kv_bits_sample_complete']=('main241/native14f独立诊断，原数学题256prompt tokens，42层各128token的真实post-RoPE K/V共5.25MiB；writer与cache全部逐位相等。CPU无损12bit+escape估算K/V逻辑少读24.20258%/24.21341%，全部行可压缩且复原逐位一致；按独立256B row的128B事务粒度反而多0.78125%，所以不能当HBM或吞吐收益。保留真实样本，下一项改为页内SoA/行级raw exponent fallback组件；尚无压缩生产实现、长16K代表性或模型准确率成绩。采满后按设计终止请求与自有服务，exit0、原源码不变、DB恢复及清理通过。', '保留样本；准备完整writer＋decode组件，不进入生产。', '真实writer/cache及CPU编码复原逐位相等；非模型准确率验收。', '原题及token IDs、源码/native、服务命令与清理见原件。')
+
 def group(row):
+    if row['profile_id']=='kv-lossless':return 'kv-lossless'
     if row['profile_id']=='baseline-environment':return 'baseline-environment'
     if row['profile_id']=='prefill-panel4':return 'prefill-panel4'
 
