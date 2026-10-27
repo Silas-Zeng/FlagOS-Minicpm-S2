@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共349条登记、346个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共353条登记、350个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -327,6 +327,10 @@
 | 天数 BI-V150 | 347 | 2026-10-26T19:21:08+00:00 | [基线接续与容器环境复查](methods/baseline-environment.md) | 请求及实际路径检查通过，不等于模型准确率资格。 | 4096/1024/64/256 | 原main594/native14f/初始DB207f重启后4K两轮诊断：冷5612.30对4909.31（+14.32%），首暖5726.40对5843.85（−2.0098%），512请求全部成功。旧三暖5767.5 | [20261026T192108Z-main594-postrestart-4k-two-round-diagnostic](runs/bi-v150/20261026T192108Z-main594-postrestart-4k-two-round-diagnostic.md) |
 | 天数 BI-V150 | 348 | 2026-10-26T18:41:10+00:00 | [基线接续与容器环境复查](methods/baseline-environment.md) | 请求及实际路径检查通过，不等于模型准确率资格。 | 16384/1024/64/128 | 新团队main241/native14f/初始DB207f原官方16K四轮3791.43/4489.43/4487.31/4485.73 tok/s，弃首暖均4487.49，512请求全部成功；对旧main594暖均41 | [20261026T184110Z-main241-control-16k-four-rounds](runs/bi-v150/20261026T184110Z-main241-control-16k-four-rounds.md) |
 | 天数 BI-V150 | 349 | 2026-10-27T01:18:19.661362+00:00 | [无损KV位编码与页内布局](methods/kv-lossless.md) | 真实writer/cache及CPU编码复原逐位相等；非模型准确率验收。 | 256/未记录/1/1 | main241/native14f独立诊断，原数学题256prompt tokens，42层各128token的真实post-RoPE K/V共5.25MiB；writer与cache全部逐位相等。CPU无损12bit+ | [20261027T011819661362Z-main241-real-kv-bits](runs/bi-v150/20261027T011819661362Z-main241-real-kv-bits.md) |
+| 天数 BI-V150 | 350 | 2026-10-27T01:26:46+00:00 | [基线接续与容器环境复查](methods/baseline-environment.md) | 1024请求和实际路径检查通过。 | 4096/1024/64/256 | main241/native14f/初始DB207f原官方4K四轮[5632.05, 5833.56, 6000.87, 5715.73] tok/s，弃首暖均5850.053333；1024请求全SUCCESS，实际Q | [20261027T012646Z-main241-control-4k-four-rounds](runs/bi-v150/20261027T012646Z-main241-control-4k-four-rounds.md) |
+| 天数 BI-V150 | 351 | 2026-10-27T01:47:25.735145+00:00 | [BF16 SiLU精确查表](methods/native-silu-lut.md) | 逐位/有限域/真实gate/INT64/Graph门通过。 | 未记录/未记录/未记录/未记录 | 真实layer20权重/M2048完整native gate：A实际14f SO、B同量化/GEMM及BF16舍入，仅以256KiB同设备精确表替SiLU expf和除法。65280有限BF16位型×12up逐位、12项 | [20261027T014725735145Z-native-silu-lut-component](runs/bi-v150/20261027T014725735145Z-native-silu-lut-component.md) |
+| 天数 BI-V150 | 352 | 20261027T015104107809Z | [无损KV位编码与页内布局](methods/kv-lossless.md) | 未运行数值门，不标记正确性通过或数值错误。 | 未记录/未记录/未记录/未记录 | 无损KV页内SoA首包：整数提升32位后直接bitcast BF16被编译器拒绝，未获得GPU数值或计时结论。保留冻结包及失败日志；下一包只显式收为uint16再bitcast，不改框架/数学/容差。DB恢复和清理通过。 | [20261027T015104107809Z-gqa-lossless12-soa-hotspot-component](runs/bi-v150/20261027T015104107809Z-gqa-lossless12-soa-hotspot-component.md) |
+| 天数 BI-V150 | 353 | 20261027T015640083939Z | [无损KV位编码与页内布局](methods/kv-lossless.md) | 组件位型、数值、Graph、writer门通过；不等同模型资格。 | 未记录/未记录/未记录/未记录 | 无损KV页内SoA v2：真实KV短样本拓展组件，65536 BF16位型编码、8项数值/Graph/FP64等与writer三转换门通过，有限输入跨臂逐位一致。完整writer+producer+reducer Gra | [20261027T015640083939Z-gqa-lossless12-soa-hotspot-component](runs/bi-v150/20261027T015640083939Z-gqa-lossless12-soa-hotspot-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

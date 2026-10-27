@@ -1,0 +1,63 @@
+{
+  "cpu_only": true,
+  "sample_sha256": "f4821117318bb89e9a4265a78bc8d9cebd323676af91fe1f60125c79eeb7caa0",
+  "real_model_samples": true,
+  "rows_exact": 21504,
+  "raw_special_patterns_exact": 65536,
+  "cpu_roundtrip_all_bits": true,
+  "real_slot_page_alignment_verified": true,
+  "compressed_high_plane_untouched": true,
+  "target_row_update": true,
+  "production_inverse_exact": true,
+  "original_fp_math_reducer_unchanged": true,
+  "V_read_position": "FP softmax后/PV前，减少新宽整数/位复原跨QK活跃；实际调度未证",
+  "stats": {
+    "K": {
+      "rows": 10752,
+      "raw_fallback_rows": 197,
+      "raw_row_fraction": 0.01832217261904762,
+      "tail_128B_pairs": 192,
+      "modeled_sector_traffic": {
+        "32": {
+          "modeled_bytes": 2098496,
+          "fraction_saved": 0.23760695684523814,
+          "assumption": "page/head内各plane连续且按粒度对齐；metadata按2B/row摊销，不是实测事务"
+        },
+        "64": {
+          "modeled_bytes": 2098496,
+          "fraction_saved": 0.23760695684523814,
+          "assumption": "page/head内各plane连续且按粒度对齐；metadata按2B/row摊销，不是实测事务"
+        },
+        "128": {
+          "modeled_bytes": 2110464,
+          "fraction_saved": 0.2332589285714286,
+          "assumption": "page/head内各plane连续且按粒度对齐；metadata按2B/row摊销，不是实测事务"
+        }
+      }
+    },
+    "V": {
+      "rows": 10752,
+      "raw_fallback_rows": 78,
+      "raw_row_fraction": 0.007254464285714286,
+      "tail_128B_pairs": 78,
+      "modeled_sector_traffic": {
+        "32": {
+          "modeled_bytes": 2090880,
+          "fraction_saved": 0.2403738839285714,
+          "assumption": "page/head内各plane连续且按粒度对齐；metadata按2B/row摊销，不是实测事务"
+        },
+        "64": {
+          "modeled_bytes": 2090880,
+          "fraction_saved": 0.2403738839285714,
+          "assumption": "page/head内各plane连续且按粒度对齐；metadata按2B/row摊销，不是实测事务"
+        },
+        "128": {
+          "modeled_bytes": 2095872,
+          "fraction_saved": 0.2385602678571429,
+          "assumption": "page/head内各plane连续且按粒度对齐；metadata按2B/row摊销，不是实测事务"
+        }
+      }
+    }
+  },
+  "limits": "32/64/128B为粒度敏感性、非已证BI-V150硬件sector；指令向量宽度/SME64B不能证明L2事务"
+}

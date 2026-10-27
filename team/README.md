@@ -89,6 +89,7 @@
 - [长prefill四面板完整Attention](methods/prefill-panel4.md)
 - [基线接续与容器环境复查](methods/baseline-environment.md)
 - [无损KV位编码与页内布局](methods/kv-lossless.md)
+- [BF16 SiLU精确查表](methods/native-silu-lut.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

@@ -1,0 +1,56 @@
+--- main241/gqa
++++ lossless12-soa/gqa
+@@ -1,5 +1,5 @@
+ @triton.jit
+-def _gqa_decode_attention(
++def _gqa_decode_attention_lossless12(
+     segm_output_ptr,
+     segm_max_ptr,
+     segm_expsum_ptr,
+@@ -28,6 +28,7 @@
+     PAGE_SIZE: tl.constexpr,
+     ROWS: tl.constexpr,
+     SEGMENTS: tl.constexpr,
++    packed_meta_ptr=None,
+ ):
+     seq_idx = tl.program_id(0)
+     kv_head_idx = tl.program_id(1)
+@@ -81,14 +82,16 @@
+             + kv_head_idx * v_stride_head
+             + offs_dim[None, :]
+         )
+-        K = tl.load(key_cache_ptr + k_offsets)
+-        V = tl.load(value_cache_ptr + v_offsets)
++        K = load_bf16(key_cache_ptr, packed_meta_ptr, page, kv_head_idx,
++                      column_slot[None, :], offs_dim[:, None], True)
+ 
+         scores = tl.dot(Q, K) * softmax_scale_log2e
+         new_max = tl.maximum(running_max, tl.max(scores, 1))
+         probability = tl.math.exp2(scores - new_max[:, None])
+         rescale = tl.math.exp2(running_max - new_max)
+         running_sum = running_sum * rescale + tl.sum(probability, 1)
++        V = load_bf16(value_cache_ptr, packed_meta_ptr, page, 2 + kv_head_idx,
++                      column_slot[:, None], offs_dim[None, :], True)
+         accumulator = accumulator * rescale[:, None] + tl.dot(
+             probability.to(V.dtype), V
+         )
+@@ -112,8 +115,8 @@
+             + kv_head_idx * v_stride_head
+             + offs_dim[None, :]
+         )
+-        K = tl.load(key_cache_ptr + k_offsets, mask=column_valid[None, :], other=0.0)
+-        V = tl.load(value_cache_ptr + v_offsets, mask=column_valid[:, None], other=0.0)
++        K = load_bf16(key_cache_ptr, packed_meta_ptr, page, kv_head_idx,
++                      column_slot[None, :], offs_dim[:, None], column_valid[None, :])
+ 
+         scores = tl.dot(Q, K) * softmax_scale_log2e
+         scores = tl.where(column_valid[None, :], scores, float("-inf"))
+@@ -121,6 +124,8 @@
+         probability = tl.math.exp2(scores - new_max[:, None])
+         rescale = tl.math.exp2(running_max - new_max)
+         running_sum = running_sum * rescale + tl.sum(probability, 1)
++        V = load_bf16(value_cache_ptr, packed_meta_ptr, page, 2 + kv_head_idx,
++                      column_slot[:, None], offs_dim[None, :], column_valid[:, None])
+         accumulator = accumulator * rescale[:, None] + tl.dot(
+             probability.to(V.dtype), V
+         )

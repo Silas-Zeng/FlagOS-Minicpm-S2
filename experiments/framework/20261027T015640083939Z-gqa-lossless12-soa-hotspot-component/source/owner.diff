@@ -1,0 +1,39 @@
+--- old-reviewed/entry
++++ main241-soa/entry
+@@ -38,7 +38,7 @@
+         import distributed_bootstrap
+         return distributed_bootstrap.execute(lambda: worker(args.run_dir, args.model, args.shape), args.run_dir)
+     if args.source_dir is None or args.native_library is None:
+-        parser.error("需要已冻结的 main6971 --source-dir 和已构建 --native-library")
++        parser.error("需要已冻结的 main241 --source-dir 和已构建 --native-library")
+     import fcntl
+     import validate_block_table_candidate as owner
+     import source_identity
+@@ -51,15 +51,15 @@
+     native = args.native_library.resolve(strict=True)
+     source_before = source_identity.check(source, native)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-gqa-page-lookahead-" + args.shape + "-component")
++    run = ROOT / "framework" / (stamp + "-gqa-lossless12-soa-" + args.shape + "-component")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+     for name in read(HERE / "asset-pins.json"):
+         shutil.copyfile(HERE / name, assets / name)
+     shutil.copyfile(HERE / "asset-pins.json", assets / "asset-pins.json")
+-    state = dict(started_utc=stamp, owner_pid=os.getpid(), source=str(source), source_count=618,
+-        base_commit="6971ef48615af97a1637405c71f96dd89969563e", native=str(native), native_sha256=NATIVE_SHA,
++    state = dict(started_utc=stamp, owner_pid=os.getpid(), source=str(source), source_count=765,
++        base_commit="241220723a09061c182764f8f738e5ec01190367", native=str(native), native_sha256=NATIVE_SHA,
+         run=str(run), command=[sys.executable, *sys.argv], owned_processes=[], exit_code=1)
+     state["source_identity"] = source_before
+     save(run / "manifest.json", state)
+@@ -104,7 +104,7 @@
+         state["owned_processes"].append(dict(role="monitor", pid=monitor.pid))
+         save(run / "manifest.json", state)
+         print(json.dumps(dict(run=str(run), worker_pid=child.pid, owner_pid=os.getpid())), flush=True)
+-        status = child.wait(timeout=420)
++        status = child.wait(timeout=600)
+     except BaseException:
+         state["error"] = traceback.format_exc()
+         traceback.print_exc()

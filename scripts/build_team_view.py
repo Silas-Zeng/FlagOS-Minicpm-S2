@@ -405,7 +405,21 @@ GROUPS['kv-lossless']=('无损KV位编码与页内布局','真实42层位样本�
 CODE['kv-lossless']=['experiments/profiles/20261027T011819661362Z-main241-real-kv-bits/archive-receipt.json', 'experiments/profiles/20261027T011819661362Z-main241-real-kv-bits/kv-bit-stats.json', 'experiments/profiles/20261027T011819661362Z-main241-real-kv-bits/result.json']
 BATCH_RESULTS['real_kv_bits_sample_complete']=('main241/native14f独立诊断，原数学题256prompt tokens，42层各128token的真实post-RoPE K/V共5.25MiB；writer与cache全部逐位相等。CPU无损12bit+escape估算K/V逻辑少读24.20258%/24.21341%，全部行可压缩且复原逐位一致；按独立256B row的128B事务粒度反而多0.78125%，所以不能当HBM或吞吐收益。保留真实样本，下一项改为页内SoA/行级raw exponent fallback组件；尚无压缩生产实现、长16K代表性或模型准确率成绩。采满后按设计终止请求与自有服务，exit0、原源码不变、DB恢复及清理通过。', '保留样本；准备完整writer＋decode组件，不进入生产。', '真实writer/cache及CPU编码复原逐位相等；非模型准确率验收。', '原题及token IDs、源码/native、服务命令与清理见原件。')
 
+BATCH_RESULTS['main241_control_4k_complete']=('main241/native14f/初始DB207f原官方4K四轮[5632.05, 5833.56, 6000.87, 5715.73] tok/s，弃首暖均5850.053333；1024请求全SUCCESS，实际Q32/原栈、源码/native不变、DB恢复及清理通过。旧main594暖均5847.666667，观察变化+0.0408%，基本持平，不宣称稳定提升；KV 548432→548288。本站main241两档吞吐控制现已补齐，完整105准确率仍未取得；不能将请求成功等同准确率通过。', '保留本站main241完整4K控制，未取得105模型准确率资格。', '1024请求和实际路径检查通过。', '原官方四轮弃首，精确命令、CSV、源码/环境及收尾见原件。')
+CODE['baseline-environment'] += ['experiments/official/20261027T012646Z-main241-control-4k-four-rounds/comparison.json', 'experiments/official/20261027T012646Z-main241-control-4k-four-rounds/archive-receipt.json']
+
+GROUPS['native-silu-lut']=('BF16 SiLU精确查表','完整gate慢10.37%，正确性通过，停止。',[])
+CODE['native-silu-lut']=['experiments/framework/20261027T014725735145Z-native-silu-lut-component/result.json', 'experiments/framework/20261027T014725735145Z-native-silu-lut-component/archive-receipt.json']
+BATCH_RESULTS['native_silu_lut_negative']=('真实layer20权重/M2048完整native gate：A实际14f SO、B同量化/GEMM及BF16舍入，仅以256KiB同设备精确表替SiLU expf和除法。65280有限BF16位型×12up逐位、12项真实gate/Graph/side及独立INT64、输入/表/RNG门全过。完整Graph ABBA 0.716412395239→0.790738135576ms，耗时+10.374714%；额外gather成本计入，非只测尾核。停止该实现，不扫M或生产，不声称错误或近似；DB恢复/清理通过。', '停止，不进入生产或官方测试。', '逐位/有限域/真实gate/INT64/Graph门通过。', '原始计时、实际SO与编译命令、环境和清理见原件。')
+
+BATCH_RESULTS['kv_soa_compile_failure']=('无损KV页内SoA首包：整数提升32位后直接bitcast BF16被编译器拒绝，未获得GPU数值或计时结论。保留冻结包及失败日志；下一包只显式收为uint16再bitcast，不改框架/数学/容差。DB恢复和清理通过。', '首包编译失败，保留；单行类型修正另run验证。', '未运行数值门，不标记正确性通过或数值错误。', '原始结果、精确命令、环境、编译产物及收尾见原件。')
+CODE['kv-lossless'] += ['experiments/framework/20261027T015104107809Z-gqa-lossless12-soa-hotspot-component/archive-receipt.json']
+BATCH_RESULTS['kv_soa_component_negative']=('无损KV页内SoA v2：真实KV短样本拓展组件，65536 BF16位型编码、8项数值/Graph/FP64等与writer三转换门通过，有限输入跨臂逐位一致。完整writer+producer+reducer Graph ABBA 0.543926090002→2.477649092674ms，耗时+355.512089%。停止当前实现，不扫参/进生产。CPU按128B预算省约23%并未转化为完整组件收益；实际HBM事务/占用率未测，不归因缓存。非模型准确率或官方成绩，DB恢复及清理通过。', '性能显著负，停止当前实现，不进入模型或官方测试。', '组件位型、数值、Graph、writer门通过；不等同模型资格。', '原始结果、精确命令、环境、编译产物及收尾见原件。')
+CODE['kv-lossless'] += ['experiments/framework/20261027T015640083939Z-gqa-lossless12-soa-hotspot-component/archive-receipt.json']
+GROUPS['kv-lossless']=('无损KV位编码与页内布局','SoA完整组件慢355.51%，正确性通过；停止实现，保留真实位样本。',[])
+
 def group(row):
+    if row['profile_id']=='native-silu-lut':return 'native-silu-lut'
     if row['profile_id']=='kv-lossless':return 'kv-lossless'
     if row['profile_id']=='baseline-environment':return 'baseline-environment'
     if row['profile_id']=='prefill-panel4':return 'prefill-panel4'

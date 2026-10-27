@@ -1,0 +1,206 @@
+--- old-reviewed/gqa-page-owner-worker
++++ lossless12-soa/worker
+@@ -52,13 +52,15 @@
+ 
+ 
+ from fp_reference import sampled_reference
++import soa_kernels
++import writer_gate
+ 
+ 
+ def worker(run, model, shape="hotspot"):
+-    result = dict(status="started", kind="生产 kernel+reducer 的随机输入组件", checks=[], timings=[],
+-                  limitations=["没有模型权重或实际激活采样；不是模型资格或官方收益",
+-                               "仅N64/B64/S2；观测长度多重集、合成激活；原while/page16/4D-KV/FP/split保持，仅下一i32页号预取",
+-                               "性能仅关闭 profiler 的同输入 CUDA Graph ABBA"])
++    result = dict(status="started", kind="真实模型KV位样本拓展的writer+GQA+reducer组件，随机Q；无模型/官方资格", checks=[], timings=[],
++                  limitations=["没有模型权重；真实KV仅一条256token原题的128token采样，重复页不代表16K真实激活",
++                               "仅N64/B64/S2；128token真实KV页样本重复到容量，随机Q；原while/page16/FP/split，新增无损SoA",
++                               "完整writer+producer+reducer同流Graph ABBA；整池编码只初始化/门内刷新，不在每decode计时"])
+     gqa = producer_capture = reducer_capture = None
+     original_producer = original_reducer = None
+     try:
+@@ -90,9 +92,9 @@
+             raise RuntimeError("共同 native 安装链不符")
+         gqa = importlib.import_module("vllm_fl.patches.biv150_gqa_decode")
+         if digest(Path(gqa.__file__)) != SOURCE_SHA or digest(HERE / "baseline.py") != SOURCE_SHA:
+-            raise RuntimeError("实际 GQA 不是冻结 main6971/618 原件")
++            raise RuntimeError("实际 GQA 不是冻结 main241/765 原件")
+         backend = importlib.import_module("vllm.v1.attention.backends.triton_attn")
+-        candidate = load("gqa_page_lookahead_candidate", HERE / "candidate.py")
++        candidate = load("gqa_lossless12_soa_candidate", HERE / "candidate.py")
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("非单卡")
+         torch.cuda.set_device(0)
+@@ -109,6 +111,18 @@
+         L = 16384
+         common, query, key, value, cache = make_data(torch, [1] * B, L)
+         query[B:] = -17
++        # 只复用真实位样本，不把随机组件当压缩率；逻辑页重复不是长上下文轨迹。
++        import numpy as np
++        if digest(HERE/'real-kv.npz') != 'f4821117318bb89e9a4265a78bc8d9cebd323676af91fe1f60125c79eeb7caa0':
++            raise RuntimeError('真实位样本SHA不符')
++        with np.load(HERE/'real-kv.npz',allow_pickle=False) as data:
++            seed_bits=np.stack((data['k_bits'].reshape(-1,16,2,128),data['v_bits'].reshape(-1,16,2,128)),axis=1)
++        seed=torch.from_numpy(seed_bits.view(np.int16)).to(device='cuda').view(torch.bfloat16)
++        cache.copy_(seed.index_select(0,torch.arange(len(cache),device='cuda')%len(seed)))
++        key[:B].copy_(seed[torch.arange(B,device='cuda')%len(seed),0,0])
++        value[:B].copy_(seed[torch.arange(B,device='cuda')%len(seed),1,0])
++        result['real_activation_source']=dict(sample_sha256=digest(HERE/'real-kv.npz'),
++            sampled_tokens=128,prompt_tokens=256,layers=42,extension='按真实16token物理页重复到容量；无长模型代表性')
+         table = torch.zeros((B, 8192), dtype=torch.int32)
+         table[:, :L // 16] = torch.arange(B * (L // 16), dtype=torch.int32).reshape(B, -1)
+         table[:, :L // 16] = table[:, :L // 16].reshape(B, -1, 4).flip(-1).reshape(B, -1)
+@@ -170,18 +184,40 @@
+             query_start_loc=common.query_start_loc_cpu.tolist(), seq_lens=common.seq_lens.cpu().tolist(),
+             padded_slot_values=common.slot_mapping[active:].cpu().tolist())
+         original_inputs = (query.clone(), cache.clone(), common.seq_lens.clone(), common.block_table_tensor.clone())
+-        result["page_lookahead"] = dict(carry="next page i32 only", old_span=False, old_dynamic_for=False)
++        packed=torch.full((len(cache),4,4096),165,device='cuda',dtype=torch.uint8)
++        packed_meta=torch.full((len(cache),4,32),204,device='cuda',dtype=torch.uint8)
++        decoded=torch.empty_like(cache)
++        def refresh():
++            packed.fill_(165);packed_meta.fill_(204)
++            soa_kernels.encode_cache[(len(cache),4,16)](cache,packed,packed_meta,num_warps=1,num_stages=1)
++            soa_kernels.decode_cache[(len(cache),4,16)](packed,packed_meta,decoded,num_warps=1,num_stages=1)
++            if not torch.equal(decoded.view(torch.int16),cache.view(torch.int16)):
++                raise RuntimeError('整池codec位型不精确；停止')
++        # 独立8页混排全BF16位型，只做bitpattern读回，不把NaN输入塞Attention比较。
++        allbits=((torch.arange(65536,device='cuda',dtype=torch.int32)*40503+97)&65535).to(torch.int16)
++        special=allbits.view(torch.bfloat16).reshape(8,2,16,2,128)
++        sp=torch.full((8,4,4096),165,device='cuda',dtype=torch.uint8)
++        sm=torch.full((8,4,32),204,device='cuda',dtype=torch.uint8);back=torch.empty_like(special)
++        soa_kernels.encode_cache[(8,4,16)](special,sp,sm,num_warps=1,num_stages=1)
++        soa_kernels.decode_cache[(8,4,16)](sp,sm,back,num_warps=1,num_stages=1)
++        if not torch.equal(special.view(torch.int16),back.view(torch.int16)):
++            raise RuntimeError('65536 BF16位型GPU codec失败')
++        result['codec_special_patterns_exact']=65536
++        refresh()
++        result['codec_layout']=dict(page_bytes=16384,metadata_bytes_per_page=128,
++            capacity_reclaimed=False,extra_metadata_bytes=packed_meta.numel(),
++            initialization_only_full_encoding=True,one_new_token_writer_per_timed_call=True)
+         arms = {}
+-        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_page_lookahead)):
++        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_lossless12)):
+             out = torch.full_like(query, -17)
+             partial = torch.full_like(metadata.softmax_segm_output, -17)
+             maxima = torch.full_like(metadata.softmax_segm_max, -17)
+             sums = torch.full_like(metadata.softmax_segm_expsum, -17)
+             pk = dict(kwargs, segm_output_ptr=partial.narrow(2, 0, segments), segm_max_ptr=maxima.narrow(2, 0, segments),
+                       segm_expsum_ptr=sums.narrow(2, 0, segments))
+-            keepalive = []
+-            if any(pk[pointer] is not kwargs[pointer] for pointer in ("key_cache_ptr","value_cache_ptr")):
+-                raise RuntimeError("两臂必须直用原4D KV pointer；禁止带旧span视图")
++            keepalive = [packed,packed_meta]
++            if name=='candidate':
++                pk.update(key_cache_ptr=packed,value_cache_ptr=packed,packed_meta_ptr=packed_meta)
+             rk = dict(rkwargs, output_ptr=out[:B], segm_output_ptr=pk["segm_output_ptr"],
+                       segm_max_ptr=pk["segm_max_ptr"], segm_expsum_ptr=pk["segm_expsum_ptr"])
+             def call(kernel=kernel, pk=pk, rk=rk, keepalive=keepalive):
+@@ -194,36 +230,21 @@
+         torch.cuda.synchronize()
+         result["resources"] = {name: dump(compiled, run / ("ir-" + name)) for name, compiled in first.items()}
+         result["resources"]["production"] = dump(production_compiled, run / "ir-production")
++        result['actual_baseline_identity']=dict(source_sha256=SOURCE_SHA,
++            production_hash=production_compiled.hash,direct_baseline_hash=first['baseline'].hash,
++            matched=production_compiled.hash==first['baseline'].hash,
++            note='绑定本次main241实际backend调用；旧641478只作历史来源，不强置编译身份')
++        if not result['actual_baseline_identity']['matched']:
++            raise RuntimeError('baseline直接对照不是本次实际生产编译产物')
+         result["resources"]["reducer"] = dump(reducer_compiled, run / "ir-reducer")
+-        # Selection is diagnostic: a frontend mask is not proof of an SME copy.
+-        patterns = {"sme_transport": r"sme|g2s|global_to_shared|global.*shared|cp\.async",
+-                    "wait": r"waitcnt|wait_group|async_wait|wait_all|waitcnt_",
+-                    "barrier": r"barrier|s_barrier|syncthreads",
+-                    "shared_fragment": r"local_load|local_alloc|s2r|shared"}
+-        selection = dict(diagnostic_only=True, no_asm_selection_claim=True,
+-            expected_mask_delta_hex="0x0", masks={}, evidence={},
+-            note="页号预取不新增SME；需核next-page load相对当前PV/下一KV地址的实际wait位置及SGPR资源。")
+-        for arm_name, compiled in first.items():
+-            selection["masks"][arm_name] = result["resources"][arm_name]["use_sme"]
+-            selection["evidence"][arm_name] = {}
+-            for stage, raw in compiled.asm.items():
+-                if not isinstance(raw, (str, bytes)):
+-                    continue
+-                if isinstance(raw, bytes):
+-                    try:
+-                        raw = raw.decode("utf-8")
+-                    except UnicodeDecodeError:
+-                        continue
+-                lines = raw.splitlines()
+-                selection["evidence"][arm_name][stage] = {
+-                    kind: [dict(line=i + 1, text=line[:1000]) for i, line in enumerate(lines)
+-                           if re.search(pattern, line, re.IGNORECASE)][:256]
+-                    for kind, pattern in patterns.items()}
+-        a_mask, b_mask = (selection["masks"][name] for name in ("baseline", "candidate"))
+-        selection["mask_delta_matches"] = (a_mask ^ b_mask == 0) if isinstance(a_mask, int) and isinstance(b_mask, int) else None
+-        result["selection_diagnostic"] = selection
+-        write(run / "page-lookahead-diagnostic.json", selection)
+-        write(run / "results.json", result)
++        result['codec_resources_note']='新uint8载入/位复原/布局/晚V为完整候选；不用useSme mask或寄存器数预判收益'
++        enc=soa_kernels.encode_cache[(len(cache),4,16)](cache,packed,packed_meta,num_warps=1,num_stages=1)
++        dec=soa_kernels.decode_cache[(len(cache),4,16)](packed,packed_meta,decoded,num_warps=1,num_stages=1)
++        wr=soa_kernels.write_rows[(B,2,2)](key,value,common.slot_mapping,packed,packed_meta,
++            INPUT_STRIDE=key.stride(0),num_warps=1,num_stages=1)
++        result['resources']['encoder']=dump(enc,run/'ir-encoder')
++        result['resources']['decoder']=dump(dec,run/'ir-decoder')
++        result['resources']['writer']=dump(wr,run/'ir-writer')
+         same_bits = lambda a, b: torch.equal(a.view(torch.int16 if a.element_size() == 2 else torch.int32),
+                                             b.view(torch.int16 if b.element_size() == 2 else torch.int32))
+         if not same_bits(production_output, arms["baseline"].out):
+@@ -244,6 +265,7 @@
+         torch.cuda.synchronize()
+ 
+         def check(label, finite=True, changed=False):
++            refresh()  # 门内一次刷新；不是每个attention call，更不进入最终成本Graph。
+             # 整份 KV/输入逐位和 RNG 门在计时外；失败也先保存响应与 partial。
+             before = tuple(x.clone() for x in (query, cache, common.seq_lens, common.block_table_tensor))
+             rng_cpu, rng_gpu = torch.get_rng_state().clone(), torch.cuda.get_rng_state().clone()
+@@ -282,8 +304,9 @@
+             checks["rng_unchanged"] = torch.equal(rng_cpu, torch.get_rng_state()) and torch.equal(rng_gpu, torch.cuda.get_rng_state())
+             if changed:
+                 checks["output_changed"] = not same_bits(initial_output[:B], expected["baseline"][0][:B])
+-            checks["original_4D_KV_direct"] = all(arms["candidate"].pk[pointer] is kwargs[pointer]
+-                for pointer in ("key_cache_ptr","value_cache_ptr"))
++            checks['actual_codec_pointers']=all(arms['candidate'].pk[p] is packed
++                for p in ('key_cache_ptr','value_cache_ptr')) and arms['candidate'].pk['packed_meta_ptr'] is packed_meta
++            checks['finite_cross_arm_bitwise']=same_bits(a.out[:B],b.out[:B]) if finite else True
+             record = dict(case=label, checks=checks, independent_reference=oracle, nonfinite_diagnostic=not finite,
+                           baseline_nan=int(torch.isnan(a.out[:B]).sum().item()),
+                           candidate_nan=int(torch.isnan(b.out[:B]).sum().item()))
+@@ -336,8 +359,15 @@
+         for target, saved in zip((query, cache, common.seq_lens, common.block_table_tensor), original_inputs):
+             target.copy_(saved)
+         check("restored-dense-before-ABBA")
+-        for arm in arms.values():
+-            arm.graph.replay()
++        full_graphs,writer_checks=writer_gate.qualify(torch,run,arms,impl,layer,key,value,cache,
++            common.slot_mapping,packed,packed_meta,soa_kernels,sampled_reference,query,
++            common.seq_lens,common.block_table_tensor,active)
++        result['new_writer_graph_checks']=writer_checks
++        refresh()
++        for name in arms:full_graphs[name].replay()
++        torch.cuda.synchronize()
++        if not same_bits(arms['baseline'].out[:B],arms['candidate'].out[:B]):
++            raise RuntimeError('恢复timing输入后完整链跨臂逐位失败')
+         pairs = [(torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)) for _ in range(4)]
+         for start, end in pairs:
+             start.record(); end.record()
+@@ -345,7 +375,7 @@
+         database = Path("/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db")
+         database_before = digest(database)
+         for name, events in zip(("baseline", "candidate", "candidate", "baseline"), pairs):
+-            timing = timed_batch(torch, arms[name].graph.replay, events, 16)
++            timing = timed_batch(torch, full_graphs[name].replay, events, 16)
+             timing["arm"] = name
+             result["timings"].append(timing)
+             write(run / "results.json", result)
+@@ -357,7 +387,7 @@
+             a = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "baseline")
+             b = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "candidate")
+             result["summary"][metric] = dict(baseline_ms=a, candidate_ms=b, fraction_saved=1 - b / a)
+-        result.update(status="component_signal_only", decision="仅N64/S2下一页号预取一组完整组件；实际overlap/wait由root审，净负停止，不自动扩形状或模型")
++        result.update(status="component_signal_only", decision="仅N64/S2真实样本分布writer+producer+reducer组件；负即停，正仍需全部消费者/实际模型/准确率资格")
+     except BaseException:
+         result.update(status="failed", error=traceback.format_exc())
+         traceback.print_exc()
