@@ -489,6 +489,10 @@ BATCH_RESULTS['lm_head_temperature_r32_bn256_nonpositive']=('R32 BN256完整链E
 CODE['lm-head-temperature'] += ['experiments/framework/20261027T103846792930Z-lm-head-temperature-r32-bn256-component/comparison.json', 'experiments/framework/20261027T103846792930Z-lm-head-temperature-r32-bn256-component/archive-receipt.json']
 GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '新8d1a同源原官方4K/16K各四轮，暖均5971.44/4529.79 tok/s，对各自A观察+1.1634%/+0.0710%；两档KV不同，非严格因果或稳定收益，不定新基线。原105为103/105 valid/pass，但head32/64和Q32未覆盖，分支准确率未证。旧31094098与局部组件结果另列，不相加。\n\n同融合基线上的R32 BN256扩展已完成：十门过，但完整ABBA Event慢2.6150%、wall快5.7801%，按nonpositive停止，不影响原BN64融合生产结果。', [])
 
+BATCH_RESULTS['lm_head_temperature_same_kv_4k_control_complete']=('新A暖均5923.116667；同KV候选B观察+0.8158%，1024成功。', '支持按小收益建立代码PR；不声称稳定幅度或新基线。', '组件逐位/IDs/RNG已过；同源105通过但head分支未覆盖。', '同main56/native14f/初始DB/参数，KV548288；两A暖均漂移+0.3447%，326原件逐SHA。')
+CODE['lm-head-temperature'] += ['experiments/official/20261027T105243Z-main56-control-4k-four-rounds/comparison.json', 'experiments/official/20261027T105243Z-main56-control-4k-four-rounds/archive-receipt.json']
+GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '新8d1a同源原官方4K/16K各四轮，暖均5971.44/4529.79 tok/s，对各自A观察+1.1634%/+0.0710%；两档KV不同，非严格因果或稳定收益，不定新基线。原105为103/105 valid/pass，但head32/64和Q32未覆盖，分支准确率未证。旧31094098与局部组件结果另列，不相加。\n\n同融合基线上的R32 BN256扩展已完成：十门过，但完整ABBA Event慢2.6150%、wall快5.7801%，按nonpositive停止，不影响原BN64融合生产结果。\n\n时间相近原A已补：4K暖均5923.116667、KV548288与8d1a B一致，B观察+0.8158%；两A漂移+0.3447%。支持小收益代码PR，保留波动/105分支覆盖/16K容量差异限制，不定稳定基线。', [])
+
 def group(row):
     if row['profile_id']=='gqa-fused-append':return 'gqa-fused-append'
     if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats', 'gqa-s2-incta', 'lm-head-temperature'):

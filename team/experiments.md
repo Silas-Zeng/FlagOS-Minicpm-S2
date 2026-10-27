@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共370条登记、367个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共371条登记、368个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -348,6 +348,7 @@
 | 天数 BI-V150 | 368 | 2026-10-27T09:49:07+00:00 | [LM-head温度epilogue融合](methods/lm-head-temperature.md) | 未从安装/覆盖推断分支准确率；原score与原分母不变。 | 未记录/未记录/8/105 | 新8d1a/809源原105：103/105=98.0952%，valid/pass，105 stop、0错误/截断/空答，owner与清理通过。 | [20261027T094907Z-main56-head-temperature-r32-r64-native14f-math500](runs/bi-v150/20261027T094907Z-main56-head-temperature-r32-r64-native14f-math500.md) |
 | 天数 BI-V150 | 369 | 2026-10-27T10:12:00+00:00 | [LM-head温度epilogue融合](methods/lm-head-temperature.md) | 同源105为103/105且通过，但head32/64与Q32未覆盖。 | 4096/1024/64/256 | 新8d1a官方4K暖均5971.44对A5902.77，观察+1.1634%；1024成功，R32/R64实际消费。KV不同。 | [20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds](runs/bi-v150/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds.md) |
 | 天数 BI-V150 | 370 | 20261027T103846792930Z | [LM-head温度epilogue融合](methods/lm-head-temperature.md) | 三方全scaled/filtered/IDs/RNG、独立FP64与Graph/side通过。 | 未记录/未记录/未记录/未记录 | R32 BN256完整链Event慢2.6150%，wall快5.7801%；十门和资源门通过。 | [20261027T103846792930Z-lm-head-temperature-r32-bn256-component](runs/bi-v150/20261027T103846792930Z-lm-head-temperature-r32-bn256-component.md) |
+| 天数 BI-V150 | 371 | 2026-10-27T10:52:43+00:00 | [LM-head温度epilogue融合](methods/lm-head-temperature.md) | 组件逐位/IDs/RNG已过；同源105通过但head分支未覆盖。 | 4096/1024/64/256 | 新A暖均5923.116667；同KV候选B观察+0.8158%，1024成功。 | [20261027T105243Z-main56-control-4k-four-rounds](runs/bi-v150/20261027T105243Z-main56-control-4k-four-rounds.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

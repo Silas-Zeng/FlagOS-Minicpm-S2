@@ -1,0 +1,79 @@
+{
+  "run_id": "20261027T105243Z-main56-control-4k-four-rounds",
+  "base_commit": "56f1838192abc940b3fb9accef490022ac125000",
+  "source_count": 807,
+  "tree": "1e9af62de05aad53ee61c814054624de8e252dd0",
+  "four_rounds_tok_s": [
+    5659.63,
+    5828.66,
+    5895.09,
+    6045.6
+  ],
+  "warm_mean_tok_s": 5923.116666666667,
+  "previous_A": {
+    "run": "20261027T052425Z-main56-control-4k-four-rounds",
+    "four_rounds_tok_s": [
+      5036.45,
+      5749.08,
+      5908.26,
+      6050.97
+    ],
+    "warm_mean_tok_s": 5902.77,
+    "kv_tokens": 548432
+  },
+  "candidate_B": {
+    "run": "20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds",
+    "four_rounds_tok_s": [
+      5721.52,
+      5751.06,
+      6060.06,
+      6103.2
+    ],
+    "warm_mean_tok_s": 5971.4400000000005,
+    "kv_tokens": 548288
+  },
+  "candidate_vs_new_A_percent": 0.8158430105771997,
+  "candidate_first_warm_vs_new_A_percent": -1.3313523176853637,
+  "new_A_vs_old_A_percent": 0.34469692477712144,
+  "candidate_vs_old_A_percent": 1.163352121122796,
+  "warm_round_range_percent": {
+    "old_A": 5.251101045732542,
+    "new_A": 3.721953244828158
+  },
+  "comparable_kv": true,
+  "same_native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+  "same_initial_database_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+  "same_benchmark_command": true,
+  "changed_files": [
+    "vllm_fl/compile_semantics.py",
+    "vllm_fl/patches/biv150_compute_order.py",
+    "vllm_fl/patches/biv150_lm_head_temperature.py",
+    "vllm_fl/patches/biv150_lm_head_temperature_kernel.py",
+    "vllm_fl/worker/model_runner.py"
+  ],
+  "small_gain_code_pr_supported": true,
+  "stable_gain_claimed": false,
+  "randomized_causal_gain_claimed": false,
+  "new_stable_baseline": false,
+  "same_source_accuracy": {
+    "correct": 103,
+    "samples": 105,
+    "valid": true,
+    "passed": true,
+    "head_branches_exercised": false
+  },
+  "official_completed": true,
+  "successful_requests": 1024,
+  "cleanup": {
+    "database_restored": true,
+    "source_unchanged": true,
+    "native_unchanged": true
+  },
+  "finished_utc": "2026-10-27T11:10:56.488122+00:00",
+  "raw_csv_sha256": {
+    "A_new": "540d50caf9c370bc2cb5a835ebd1779901d4ec59e81804b00a48bf23572f5e96",
+    "A_old": "56729d564e4a5ff9625f4d166149d9141b9efdf7fcdadedfc36b8277c889c5a2",
+    "B": "f355565739cdaaf42d807aca55c938110c9e18c84af76c81908bd6872fdd4c4d"
+  },
+  "conclusion": "时间相近main56原官方4K控制四轮[5659.63, 5828.66, 5895.09, 6045.6]tok/s，弃首暖均5923.116667，1024SUCCESS，807源/tree1e9af、native14f、初始DB207f与原参数/原栈通过，KV548288与新8d1a候选B相同。已登记B暖均5971.440000对本A观察+0.815843%，首暖-1.331352%；旧A暖均5902.770000，两A漂移+0.344697%，各轮波动保留，不宣称稳定幅度。支持按小收益建立中文代码PR并引用已测组件和同源原105，不重复测试；105为103/105但head分支未覆盖，组件严格逐位/IDs/RNG资格与模型准确率分开。16K现有A/B容量不同，仍仅观察；4K本A晚于B且两组暖轮内有升温趋势，不包装成随机交错因果或新稳定基线。326原件逐SHA，源码/native不变、DB恢复和清理通过。"
+}
