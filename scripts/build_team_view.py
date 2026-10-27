@@ -450,6 +450,10 @@ GROUPS['lm-head-temperature']=('LM-head温度epilogue融合', '完整head+Sample
 CODE['lm-head-temperature']=['experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/archive-receipt.json', 'experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/result.json', 'experiments/framework/20261027T050730877973Z-lm-head-temperature-epilogue-component/source/candidate.py']
 BATCH_RESULTS['lm_head_temperature_component_positive']=('R64真实LM-head权重130560×2048、合成hidden；保留原BF16舍入后融合FP32转换与温度除法，原stats/top-p/RNG不变。10组逐位/FP64/采样ID/RNG/换值Graph及输入不变检查通过。完整eager head+Sampler唯一ABBA含分配与提交，Event3.828030→3.165252ms（省17.3138%），wall4.165081→3.655269ms（省12.2401%），无CPU节流。寄存器31→37，shared40960B不变，两臂spill0，无候选新增持久权重副本。保留局部正信号，下一步最窄生产接入；尚非模型准确率或官方吞吐资格，不迁移为整模收益。main56/native14f，DB恢复、源码/native不变及清理通过。44份原件逐SHA核验。', '保留局部正信号，待实际服务验证；不是官方收益。', '10组逐位、独立FP64、IDs/RNG及换值Graph门通过。', 'R64真实head W/合成hidden，唯一完整eager ABBA，原采样链不变。')
 
+BATCH_RESULTS['main56_control_4k_complete']=('main56/native14f原官方4K四轮暖均5902.77 tok/s，1024请求成功，KV548432；原栈及清理通过。仅4K控制，不继承16K或105。', '保留本站main56完整4K控制；无16K/105资格。', '1024请求和原实际路径检查通过。', '原官方四轮弃首，原命令、CSV、807源及收尾见原件。')
+CODE['baseline-environment'] += ['experiments/official/20261027T052425Z-main56-control-4k-four-rounds/comparison.json', 'experiments/official/20261027T052425Z-main56-control-4k-four-rounds/archive-receipt.json']
+GROUPS['baseline-environment']=('基线接续与容器环境复查', '本站main56/native14f原官方4K四轮暖均5902.77 tok/s，KV548432，仅保留新4K控制；无新16K或105资格。旧main241/native14f两档暖均5850.05/4487.49及104/105仍按旧源码单列，不迁移或拆成严格因果收益。', [])
+
 def group(row):
     if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats', 'gqa-s2-incta', 'lm-head-temperature'):
         return row['profile_id']

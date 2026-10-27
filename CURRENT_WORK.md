@@ -1,33 +1,28 @@
 # 当前实验与接续
 
-更新：2026-10-27 03:53 UTC。采样v2全部原件已回收；已同步团队main56，未启动新GPU任务。
+更新：2026-10-27 05:56 UTC。BI-V150 当前唯一GPU任务是 LM-head温度融合候选的原官方4K对照；C500由队友独立维护。
 
-| 版本或方法 | 怎么测、结果 | 是否保留 |
+| 版本／方法 | 已完成结果 | 资格与决定 |
 |---|---|---|
-| main241/native14f 原官方4K | 四轮5632.05／5833.56／6000.87／5715.73，弃首均 **5850.05 tok/s**，1024请求成功 | 当前对照；相对旧main594观察+0.0408%，基本持平 |
-| 同版本原官方16K | 四轮3791.43／4489.43／4487.31／4485.73，弃首均 **4487.49 tok/s**，512请求成功 | 当前对照；相对旧main594观察+7.0364%，KV不同，不报严格单项因果 |
-| 同版本原官方105题 | **104/105（99.047619%），valid/pass**；105 stop，0请求错误/截断/空答案/空提取 | 保留原成绩。Q32/C3未被本负载覆盖，不能继承覆盖资格 |
-| 原main594重启后4K复查 | 同源码两轮：冷+14.32%、首暖−2.0098%；频率一致、KV少48tokens | 仅诊断，不足以证明持续下降或容器启停因果 |
-| SiLU精确查表／无损KV SoA | 完整组件分别慢10.3747%／355.5121%，各自正确性检查通过 | 两条实现停止，原件保留 |
-| 纯BF16页内V转置 | 完整writer+GQA+reducer Event慢1.3305%、wall慢1.1845%，逐位等检查通过 | 停止，不扫参或接入模型 |
-| Q32与GQA双流 | D63/P1985/KV4K完整混合层：Event慢5.5214%、wall省0.5023%，正确性通过 | 无一致净收益，停止 |
-| 采样预处理融合首包 | 入口读旧安装副本，导入失败；候选尚未运行，无计时 | 仅修入口后另run，保留失败 |
-| 采样融合v2 | scaled/filtered/IDs/RNG相同，但统计逐位门失败；无计时 | 停止；36份原件已回收 |
+| main56/native14f 原官方4K | 5036.45／5749.08／5908.26／6050.97 tok/s，弃首均 **5902.77**；1024请求成功，KV548432 | 当前4K对照；尚无同版本16K/105资格 |
+| main241/native14f 既有完整结果 | 4K弃首5850.053333、16K4487.49 tok/s；105题104/105（99.047619%） | 保留原版本成绩；不迁移到main56，Q32/C3精度覆盖另列 |
+| LM-head温度epilogue组件 | R64真实W＋合成hidden，10组门通过；完整head+Sampler Event省17.3138%、wall省12.2401% | 保留；不是整模型吞吐收益或105资格 |
 
-105题于02:31:13 UTC评测结束，34层native、真实provider及原Q-hoist/normalization检查通过。原owner因叠加性能测试的“Q32必须实际选中”检查而 `completed=false`；Q32已安装但未选中、无fallback/解析错误，C3未覆盖。原失败标记和原预测均保留，独立review判精度通过；不为覆盖检查强改框架或重跑105。同源码4K/16K原件另有实际Q32选中证据。
+main56为 `56f1838192abc940b3fb9accef490022ac125000`，来自团队PR66。本站native14f与队友native5cbb结果分别管理。相比旧main241，4K暖均观察+0.9011%，但KV548288→548432，不报严格因果收益。原官方请求成功也不能替代模型准确率。
 
-[实验总表](team/experiments.md) · [基线与原件](team/methods/baseline-environment.md) · [V布局](team/methods/kv-vtranspose.md) · [双流](team/methods/q32-mixed-overlap.md) · [采样融合](team/methods/sampler-preprocess-stats.md)。当前均未改变生产源码或主基线；组件结果不能作为官方吞吐。
+**当前候选 B**：05:50:58 UTC启动，supervisor46614、owner46616。远端根目录 `/workspace/experiments/minicpm-s2/`：
 
-当前所有本方GPU任务已结束。采样v2的36份原件已逐SHA回收，统计逐位失败及原始摘要保留，不重跑。既有main6971轨迹CPU分析已完成：正常64步未覆盖间隙0.4260%，全部1856个间隙后继已入队，无大额host提交空洞依据；Graph外head约3%、采样约4%。Graph span不代表图内饱和，旧轨迹不迁移为main56预算。
+- run：`official/20261027T055059Z-main56-lm-head-temperature-4k-four-rounds`；同名`-control/state.json`保存结果和清理状态。
+- 入口：`scripts/head-temperature-official-23b56983`，读取`supervisor-launch.json`、最终`supervisor-final.json`与`launcher.log`；未确认结束前不另占GPU。
+- 已完成A：`official/20261027T052425Z-main56-control-4k-four-rounds`，05:44:08结束，DB恢复、源码/native不变和清理通过。
+- 候选仅809文件中的5项改动，生产包SHA `31094098…4825`，官方入口 `23b56983…2f46`，均独审通过；受测kernel字节不变，保持官方服务/benchmark参数。
 
-03:55 UTC已将本批原始文件和团队视图推送至实验PR5，远端确认 `e0298c3baf91d7d9687a7812fa8ddfcfff35a750`，此前连接失败已解决。没有为上传重测。SSH使用用户确认指纹的项目专用known_hosts，保留严格校验；禁止网页UI操作，不记录凭据。
+候选只接已验证R64，显式传递本步采样状态；原stats/top-p/softmax/RNG不变，不适用条件走原路。组件A用UnquantizedLinearMethod，真实模型head为EmbeddingMethod；同底层F.linear已通过实际SDK源码核对，实际服务命中仍由日志确认。首暖低于本次A的5749.08可提前收尾；首暖正则跑满四轮，错误立即停止。当前尚无B性能结论，不发布为可合并收益。
 
-团队main已合并[PR66](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/66)，当前为 `56f1838192abc940b3fb9accef490022ac125000`，新增双序列prefill。队友native5cbb单pair观察4K/16K +0.3739%/+0.8399%，105题101/105；本站上表main241/native14f成绩不迁移到新版本。新main的807文件已同步并按Git blob核验。
+**下一步**：回收B原结果；有收益再完成必要模型准确率/另一负载验证，按方法提中文代码PR。负结果同样保留，不因上传或合并重复已过检查。
 
-SSH间歇性拒绝仍存在：03:43 UTC原公钥登录成功，已回收采样v2全部原件；随后相同身份再被publickey拒绝。服务器指纹已通过用户确认和严格校验，不能归因为密码错误；无需再发送密码。服务端授权或路由原因尚未知。本轮不启动网页UI。
+[实验总表](team/experiments.md) · [当前对照及证据](team/methods/baseline-environment.md) · [LM-head方法](team/methods/lm-head-temperature.md) · [团队导航](team/README.md)。当前登记361条／358个唯一run。A的311份原件和组件的44份原件均逐SHA核验。
 
-[旧轨迹CPU分析与复现入口](experiments/profiles/20261026T084521Z-main6971-production-hotspot-4k/posthoc-20261027/summary.md)。旧数据继续用于选择方案，不重复测试。
+采样统计融合（逐位门失败）、S2同CTA（首次编译失败）、KV SoA、V转置、Q32双流、SiLU LUT等已停止，原件沿总表保留。旧main6971轨迹已分析，不重复profiling；未覆盖间隙0.4260%，暂无大额跨步CPU提交空洞依据，旧轨迹不作main56性能预算。
 
-04:33 UTC唯一S2同CTA归约组件在首次candidate编译中失败，LLVM报告二维与三维布局不匹配，数值/计时均未开始；不是生产main错误，也不声称性能负。当前实现停止，未改编译器、验证门或生产。DB恢复、源码/native不变、设备/9031清理通过。[全部39份原件](experiments/framework/20261027T043321686931Z-gqa-s2-incta-hotspot-component/archive-receipt.json)已回收逐SHA核验，登记现359条/356唯一run。
-
-同轮CPU筛选：Attention scratch仅8.125MiB单builder共享，不能按42层或bucket重复计算增容；末层all-discard裁剪在4243旧步骤中仅1步适用，覆盖不足，两者不新增GPU测试。当前没有后台GPU任务。SSH已按用户确认指纹恢复；Git传输间歇断开时用GitHub API补传同一分支，保留原Git对象与历史，不修改main。
+105题旧owner的Q32覆盖检查失败标记原样保留；独立复核的官方104/105成绩有效，但不声称验证了未命中的分支。SSH使用用户确认的网关指纹，严格校验，禁止网页UI操作，不记录凭据。
