@@ -1,0 +1,327 @@
+	.text
+	.globl	encode_cache                    ; -- Begin function encode_cache
+	.p2align	3
+	.type	encode_cache,@function
+	.iluvatar_kernel encode_cache
+encode_cache:                           ; @encode_cache
+.Lfunc_begin0:
+	.file	1 "/workspace/experiments/minicpm-s2/framework/20261027T024300270939Z-gqa-bf16-vtranspose-hotspot-component/source" "layout_kernels.py"
+	.loc	1 7 0                           ; layout_kernels.py:7:0
+	.cfi_sections .debug_frame
+	.cfi_startproc
+	.cfi_return_column 32
+	.iluvatar_kernel_code_t
+		iluvatar_code_version_major = 1
+		iluvatar_code_version_minor = 3
+		iluvatar_machine_kind = 1
+		iluvatar_machine_version_major = 1
+		iluvatar_machine_version_minor = 1
+		iluvatar_machine_version_stepping = 0
+		kernel_code_entry_byte_offset = 256
+		kernel_code_prefetch_byte_size = 0
+		granulated_workitem_vgpr_count = 2
+		granulated_warp_sgpr_count = 3
+		float_mode = 12
+		debug_mode = 0
+		has_mbar = 0
+		user_sgpr_count = 6
+		enable_sgpr_workgroup_id_x = 1
+		enable_sgpr_workgroup_id_y = 1
+		enable_sgpr_workgroup_id_z = 0
+		enable_sgpr_workgroup_info = 1
+		enable_vgpr_workitem_id = 3
+		granulated_slb_size = 0
+		enable_exception = 128
+		enable_sgpr_private_segment_buffer = 1
+		enable_sgpr_globalvariable_ptr = 0
+		enable_sgpr_kernarg_segment_ptr = 1
+		enable_sgpr_constvariable_ptr = 0
+		enable_sgpr_private_segment_size = 0
+		enable_sgpr_grid_workgroup_count_x = 0
+		enable_sgpr_grid_workgroup_count_y = 0
+		enable_sgpr_grid_workgroup_count_z = 0
+		private_element_size = 1
+		is_ptr64 = 1
+		is_dynamic_callstack = 0
+		is_debug_enabled = 0
+		enable_private_swizzle = 1
+		has_called_assert = 0
+		has_called_printf = 0
+		has_called_malloc = 0
+		enable_srf_flat_shared = 0
+		enable_srf_flat_scratch = 0
+		has_wgmma = 0
+		has_dva = 0
+		enable_dynamic_smem_size = 0
+		workitem_private_segment_byte_size = 0
+		workgroup_group_segment_byte_size = 0
+		kernarg_segment_byte_size = 32
+		workgroup_fbarrier_count = 0
+		warp_sgpr_count = 28
+		workitem_vgpr_count = 11
+		reserved_vgpr_first = 0
+		reserved_vgpr_count = 0
+		reserved_sgpr_first = 0
+		reserved_sgpr_count = 0
+		debug_warp_private_segment_offset_sgpr = 0
+		debug_private_segment_buffer_sgpr = 0
+		kernarg_segment_alignment = 3
+		group_segment_alignment = 4
+		private_segment_alignment = 4
+		warp_size = 6
+		call_convention = -1
+		runtime_loader_kernel_symbol = 0
+	.end_iluvatar_kernel_code_t
+; %bb.0:
+	; Func LiveIn Regs:
+	;  blockIdx.x : s6  blockIdx.y : s7
+	ml_vrf_init_u32 v4, tcr
+	sl_mov_b32 s0, s7
+.Ltmp0:
+	.loc	1 10 21 prologue_end            ; layout_kernels.py:10:21
+	ml_mov_b32 v5, tid
+	.loc	1 8 25                          ; layout_kernels.py:8:25
+	sl_lsa_load_b32x8 s[12:19], s[4:5], noreg, #0, ca
+	.loc	1 10 21                         ; layout_kernels.py:10:21
+	ml_shl_b32 v6, tid, 0x1
+	ml_add_i32 v7, v6, 0x80
+	.loc	1 11 23                         ; layout_kernels.py:11:23
+	sl_mov_b32 s7, 0x0
+	.loc	1 11 35 is_stmt 0               ; layout_kernels.py:11:35
+	sl_shl_b64 {s[2:3], wcr}, s[6:7], 0xd
+	.loc	1 11 49                         ; layout_kernels.py:11:49
+	sl_mull_u32 s4, s0, 0x100
+	.loc	1 11 42                         ; layout_kernels.py:11:42
+	sl_mov_b32 s5, s7
+	sl_add_i64 s[2:3], s[2:3], s[4:5]
+	.loc	1 11 55                         ; layout_kernels.py:11:55
+	ml_add_i32 v1, s2, v6
+	.loc	1 13 25 is_stmt 1               ; layout_kernels.py:13:25
+	ml_mov_b32 v0, s3
+	ml_shl_b32 v8, v1, 0x1
+	ml_shl_b32 v2, v0, 0x1
+	sl_wait smcnt(0)
+	ml_addo_u32 {v0, tcr}, s12, v8
+	ml_srl_b32 v1, v1, 0x1f
+	ml_or_b32 v9, v2, v1
+	ml_mov_b32 v1, s13
+	ml_addc_i32 v1, v1, v9, tcr
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	.loc	1 14 36                         ; layout_kernels.py:14:36
+	sl_mov_b32 s4, 0x2000
+	ml_addo_u32 {v2, tcr}, s4, v0
+	.loc	1 13 25                         ; layout_kernels.py:13:25
+	sl_add_i64 s[16:17], s[12:13], s[2:3]
+	.loc	1 13 16 is_stmt 0               ; layout_kernels.py:13:16
+	sl_mov_b32 s19, 0xfff00004
+	.loc	1 15 32 is_stmt 1               ; layout_kernels.py:15:32
+	ml_lsa_load_a64_dword  v0, v[0:1], kop=0
+	.loc	1 14 36                         ; layout_kernels.py:14:36
+	ml_addc_i32 v3, 0, v1, tcr
+	.loc	1 15 22                         ; layout_kernels.py:15:22
+	ml_addo_u32 {v1, tcr}, s14, v8
+	ml_mov_b32 v8, s15
+	.loc	1 15 32 is_stmt 0               ; layout_kernels.py:15:32
+	ml_lsa_blkload_x1 v10, s[16:19], noreg, noreg, #256, ca
+	ml_mov_v2s_b32 s20, v1, 0x0
+	.loc	1 15 22                         ; layout_kernels.py:15:22
+	ml_addc_i32 v8, v8, v9, tcr
+	.loc	1 15 32                         ; layout_kernels.py:15:32
+	ml_mov_v2s_b32 s21, v8, 0x0
+	.loc	1 16 32 is_stmt 1               ; layout_kernels.py:16:32
+	ml_lsa_load_a64_dword  v2, v[2:3], kop=0
+	.loc	1 15 32                         ; layout_kernels.py:15:32
+	ml_mov_b32 v3, s20
+	ml_sub_i32 v1, v1, v3
+	sl_mov_b32 s23, 0xffffffff
+	.loc	1 16 32                         ; layout_kernels.py:16:32
+	ml_lsa_blkload_x1 v3, s[16:19], noreg, s4, #256, ca
+	sl_mov_b32 s22, s23
+	.loc	1 15 32                         ; layout_kernels.py:15:32
+	ml_sub_i32 v6, v7, v6
+	ml_shl_b32 v6, v6, 0x1
+	ml_mov_v2s_b32 s1, v6, 0x0
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[22:23], tmsk
+	sl_wait vmcnt(3)
+	ml_lsa_store_dword v0, s[20:23], signed v1, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	ml_add_i32 v0, s1, v1
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[22:23], tmsk
+	sl_wait vmcnt(3)
+	ml_lsa_store_dword v10, s[20:23], signed v0, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 16 32                         ; layout_kernels.py:16:32
+	ml_and_b32 v0, tid, 0x20
+	ml_cmp_eq_u32 tcr, v0, 0x0
+	ml_mov_b32 v0, 0x7632
+	ml_mov_b32 v1, 0x5410
+	ml_csel_b32 v6, v1, v0, tcr
+	ml_csel_b32 v7, v0, v1, tcr
+	sl_mov_b32 s1, 0x2010200
+	ml_byte_permute_b32 v6, v6, v6, s1
+	ml_pk_shl_b16 v6, v6, 0x40004
+	ml_pk_srl_b8 v6, v6, 0x40004
+	sl_wait vmcnt(2)
+	ml_byte_permute_b32 v6, v2, v3, v6
+	ml_byte_permute_b32 v7, v7, v7, s1
+	ml_pk_shl_b16 v7, v7, 0x40004
+	ml_srl_b32 v4, v4, 0x1
+	ml_and_b32 v8, tid, 0x1
+	ml_shl_b32 v9, v8, 0x5
+	ml_anyop3_b32 v4, 31, v4, v9, 0xfffffff8
+	ml_slb_shuffle_rtn_b32 v6, v6, v4
+	ml_pk_srl_b8 v7, v7, 0x40004
+	ml_byte_permute_b32 v2, v2, v3, v7
+	ml_xor_b32 v3, v4, 0x20
+	ml_slb_shuffle_rtn_b32 v2, v2, v3
+	.loc	1 16 22 is_stmt 0               ; layout_kernels.py:16:22
+	sl_shl_b64 {s[2:3], wcr}, s[6:7], 0xe
+	sl_add_i64 s[2:3], s[14:15], s[2:3]
+	sl_mull_u32 s6, s0, 0x2
+	.loc	1 16 32                         ; layout_kernels.py:16:32
+	ml_cmp_eq_u32 tcr, v8, 0x0
+	ml_mov_b32 v3, 0x1054
+	ml_csel_b32 v1, v1, v3, tcr
+	ml_mov_b32 v3, 0x3276
+	ml_csel_b32 v0, v0, v3, tcr
+	ml_byte_permute_b32 v1, v1, v1, s1
+	ml_pk_shl_b16 v1, v1, 0x40004
+	ml_pk_srl_b8 v1, v1, 0x40004
+	ml_byte_permute_b32 v0, v0, v0, s1
+	sl_add_i64 s[0:1], s[2:3], s[6:7]
+	sl_mov_b32 s3, 0xfff00020
+	ml_pk_shl_b16 v0, v0, 0x40004
+	ml_pk_srl_b8 v0, v0, 0x40004
+	sl_wait lmcnt(0)
+	ml_byte_permute_b32 v1, v6, v2, v1
+	ml_lsa_store_short v1, s[0:3], unsigned v5, s4, #0, wb|mie
+	ml_srl_b32 v1, v1, 0x10
+	sl_mov_b32 s2, 0x2800
+	ml_byte_permute_b32 v0, v6, v2, v0
+	ml_lsa_store_short v1, s[0:3], unsigned v5, s2, #0, wb|mie
+	sl_mov_b32 s2, 0x3000
+	ml_lsa_store_short v0, s[0:3], unsigned v5, s2, #0, wb|mie
+	ml_srl_b32 v0, v0, 0x10
+	sl_mov_b32 s2, 0x3800
+	ml_lsa_store_short v0, s[0:3], unsigned v5, s2, #0, wb|mie
+	.loc	1 16 4                          ; layout_kernels.py:16:4
+	sl_eop 
+.Ltmp1:
+	.section	.rodata,"a",@progbits
+	.p2align	6, 0x0
+	.globl	encode_cache.kd
+	.type	encode_cache.kd,@object
+	.size	encode_cache.kd, 64
+encode_cache.kd:
+	.asciz	"\000\000\000"
+	.long	0
+	.asciz	"\000\000\000\000\000\000\000"
+	.quad	encode_cache@rel64-encode_cache.kd
+	.asciz	"\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.long	536770
+	.asciz	"\003\000\264\006\211\000\000\000\000\000\000"
+	.text
+.Lfunc_end0:
+	.size	encode_cache, .Lfunc_end0-encode_cache
+	.cfi_endproc
+                                        ; -- End function
+	.section	.Iluvatar.csdata,"",@progbits
+; Kernel info:
+; codeLenInByte = 832
+; NumSgprs: 28
+; NumVgprs: 11
+; ScratchSize: 0
+; MemoryBound: 0
+; FloatMode: 12
+; IeeeMode: 1
+; SLBByteSize: 0 bytes/workgroup (compile time only)
+; SGPRBlocks: 3
+; VGPRBlocks: 2
+; NumSGPRsForWarpsPerNU: 24
+; NumVGPRsForWarpsPerNR: 11
+; ReqNTIDx: 0
+; MaxNTIDx: 0
+; MinCTASm: 0
+; ActiveWarp: 8
+; WarpLimiterHint : 0
+	.section	.debug_abbrev,"",@progbits
+	.byte	1                               ; Abbreviation Code
+	.byte	17                              ; DW_TAG_compile_unit
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	37                              ; DW_AT_producer
+	.byte	8                               ; DW_FORM_string
+	.byte	19                              ; DW_AT_language
+	.byte	5                               ; DW_FORM_data2
+	.byte	3                               ; DW_AT_name
+	.byte	8                               ; DW_FORM_string
+	.byte	16                              ; DW_AT_stmt_list
+	.byte	6                               ; DW_FORM_data4
+	.byte	27                              ; DW_AT_comp_dir
+	.byte	8                               ; DW_FORM_string
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	0                               ; EOM(3)
+	.section	.debug_info,"",@progbits
+	.long	167                             ; Length of Unit
+	.short	2                               ; DWARF version number
+	.long	.debug_abbrev                   ; Offset Into Abbrev. Section
+	.byte	8                               ; Address Size (in bytes)
+	.byte	1                               ; Abbrev [1] 0xb:0xa0 DW_TAG_compile_unit
+	.ascii	"triton"                        ; DW_AT_producer
+	.byte	0
+	.short	2                               ; DW_AT_language
+	.ascii	"layout_kernels.py"             ; DW_AT_name
+	.byte	0
+	.long	.debug_line                     ; DW_AT_stmt_list
+	.ascii	"/workspace/experiments/minicpm-s2/framework/20261027T024300270939Z-gqa-bf16-vtranspose-hotspot-component/source" ; DW_AT_comp_dir
+	.byte	0
+	.quad	.Lfunc_begin0                   ; DW_AT_low_pc
+	.quad	.Lfunc_end0                     ; DW_AT_high_pc
+	.section	".note.GNU-stack","",@progbits
+	.iluvatar_isa "bi-iluvatar-ilurt--ivcore-1-1-0"
+	.iluvatar_hsa_metadata
+---
+iluvatar.kernels:
+  - .args:
+      - .address_space:  global
+        .name:           KArg_0
+        .offset:         0
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_1
+        .offset:         8
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_2
+        .offset:         16
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_3
+        .offset:         24
+        .size:           8
+        .value_kind:     global_buffer
+    .group_segment_fixed_size: 0
+    .kernarg_segment_align: 8
+    .kernarg_segment_size: 32
+    .max_flat_workgroup_size: 0
+    .name:           encode_cache
+    .private_segment_fixed_size: 0
+    .sgpr_count:     28
+    .sgpr_spill_count: 0
+    .symbol:         encode_cache.kd
+    .vgpr_count:     11
+    .vgpr_spill_count: 0
+    .warp_size:      64
+iluvatar.version:
+  - 1
+  - 0
+...
+
+	.end_iluvatar_hsa_metadata

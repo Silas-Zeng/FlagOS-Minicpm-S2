@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共353条登记、350个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共357条登记、354个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -331,6 +331,10 @@
 | 天数 BI-V150 | 351 | 2026-10-27T01:47:25.735145+00:00 | [BF16 SiLU精确查表](methods/native-silu-lut.md) | 逐位/有限域/真实gate/INT64/Graph门通过。 | 未记录/未记录/未记录/未记录 | 真实layer20权重/M2048完整native gate：A实际14f SO、B同量化/GEMM及BF16舍入，仅以256KiB同设备精确表替SiLU expf和除法。65280有限BF16位型×12up逐位、12项 | [20261027T014725735145Z-native-silu-lut-component](runs/bi-v150/20261027T014725735145Z-native-silu-lut-component.md) |
 | 天数 BI-V150 | 352 | 20261027T015104107809Z | [无损KV位编码与页内布局](methods/kv-lossless.md) | 未运行数值门，不标记正确性通过或数值错误。 | 未记录/未记录/未记录/未记录 | 无损KV页内SoA首包：整数提升32位后直接bitcast BF16被编译器拒绝，未获得GPU数值或计时结论。保留冻结包及失败日志；下一包只显式收为uint16再bitcast，不改框架/数学/容差。DB恢复和清理通过。 | [20261027T015104107809Z-gqa-lossless12-soa-hotspot-component](runs/bi-v150/20261027T015104107809Z-gqa-lossless12-soa-hotspot-component.md) |
 | 天数 BI-V150 | 353 | 20261027T015640083939Z | [无损KV位编码与页内布局](methods/kv-lossless.md) | 组件位型、数值、Graph、writer门通过；不等同模型资格。 | 未记录/未记录/未记录/未记录 | 无损KV页内SoA v2：真实KV短样本拓展组件，65536 BF16位型编码、8项数值/Graph/FP64等与writer三转换门通过，有限输入跨臂逐位一致。完整writer+producer+reducer Gra | [20261027T015640083939Z-gqa-lossless12-soa-hotspot-component](runs/bi-v150/20261027T015640083939Z-gqa-lossless12-soa-hotspot-component.md) |
+| 天数 BI-V150 | 354 | 2026-10-27T02:10:16+00:00 | [基线接续与容器环境复查](methods/baseline-environment.md) | 104/105达到原95%门槛，Q32/C3未被该负载覆盖。 | 未记录/未记录/8/105 | main241完整765源/native14f/DB207f，原Math500 Level3全105题、temperature1/top_p.95/max32768/batch8不变：104/105=99.047619% | [20261027T021016Z-main241-native14f-math500](runs/bi-v150/20261027T021016Z-main241-native14f-math500.md) |
+| 天数 BI-V150 | 355 | 20261027T024300270939Z | [纯BF16页内V布局](methods/kv-vtranspose.md) | 组件逐位/Graph/writer门通过；未运行模型或官方资格。 | 未记录/未记录/未记录/未记录 | 纯BF16页内V转置：K保持NHD，V改dim×slot；原GQA只改两处V维度寻址，并实作对应writer，未压缩或增持久容量。位型、8项数值/Graph及writer换值/换slot/负slot门通过，有限输入跨臂逐 | [20261027T024300270939Z-gqa-bf16-vtranspose-hotspot-component](runs/bi-v150/20261027T024300270939Z-gqa-bf16-vtranspose-hotspot-component.md) |
+| 天数 BI-V150 | 356 | 20261027T030312159264Z | [当前Q32与GQA混合双流](methods/q32-mixed-overlap.md) | 真实Q32/GQA绑定、换Q即时消费、整输出逐位及输入/KV/RNG门通过，pending最终0；不等于官方资格。 | 未记录/未记录/未记录/未记录 | main241真实D63/P1985/KV4096，Q32 grid63×2，GQA自然S4/grid63×2×4。A串行、B原93c双流，完整writer+两路Attention/reducer+fork/join/e | [20261027T030312159264Z-q32-mixed-overlap-mixed-component](runs/bi-v150/20261027T030312159264Z-q32-mixed-overlap-mixed-component.md) |
+| 天数 BI-V150 | 357 | 20261027T030446321226Z | [采样转换与首遍统计融合](methods/sampler-preprocess-stats.md) | 候选尚未运行，不能标记数值通过或数值错误。 | 未记录/未记录/未记录/未记录 | 首包f3e99d0a在候选执行前失败：入口PYTHONPATH只包含assets，导入安装旧vllm_fl，缺biv150_runtime，ImportError。cases/timings均空，尚无数值或性能结论，也不 | [20261027T030446321226Z-sampler-preprocess-stats-component](runs/bi-v150/20261027T030446321226Z-sampler-preprocess-stats-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

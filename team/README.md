@@ -90,6 +90,9 @@
 - [基线接续与容器环境复查](methods/baseline-environment.md)
 - [无损KV位编码与页内布局](methods/kv-lossless.md)
 - [BF16 SiLU精确查表](methods/native-silu-lut.md)
+- [纯BF16页内V布局](methods/kv-vtranspose.md)
+- [当前Q32与GQA混合双流](methods/q32-mixed-overlap.md)
+- [采样转换与首遍统计融合](methods/sampler-preprocess-stats.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 

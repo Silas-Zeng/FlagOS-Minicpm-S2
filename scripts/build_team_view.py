@@ -418,7 +418,23 @@ BATCH_RESULTS['kv_soa_component_negative']=('无损KV页内SoA v2：真实KV短�
 CODE['kv-lossless'] += ['experiments/framework/20261027T015640083939Z-gqa-lossless12-soa-hotspot-component/archive-receipt.json']
 GROUPS['kv-lossless']=('无损KV位编码与页内布局','SoA完整组件慢355.51%，正确性通过；停止实现，保留真实位样本。',[])
 
+BATCH_RESULTS['main241_accuracy_pass_scope_limited']=('main241完整765源/native14f/DB207f，原Math500 Level3全105题、temperature1/top_p.95/max32768/batch8不变：104/105=99.047619%，valid/pass；105 stop，0请求错误/截断/空答案/空提取。34层native、实际provider、原Q-hoist/normalization通过，源码/native不变、DB恢复和清理通过。Q32已安装但本轮未selected、无fallback/解析错误，原owner复用性能组必选Q32门而completed=false，原失败保留；官方精度通过与Q32/C3覆盖不足分开，不报框架数值错误，也不声称本轮验证长prefill分支。两档吞吐控制已完成，后续以本站同身份结果作基线，不继承队友native5cbb。', '保留当前main241原官方精度结果；不为覆盖门强改框架或重测105。', '104/105达到原95%门槛，Q32/C3未被该负载覆盖。', '原预测、review/report、配置、实际native/provider及清理原件均保存。')
+CODE['baseline-environment'] += ['experiments/accuracy/20261027T021016Z-main241-native14f-math500/coverage-summary.json', 'experiments/accuracy/20261027T021016Z-main241-native14f-math500-control/accuracy-review.json', 'experiments/accuracy/20261027T021016Z-main241-native14f-math500/archive-receipt.json']
+
+GROUPS['kv-vtranspose']=('纯BF16页内V布局', '完整组件慢1.33%，停止当前实现。', [])
+CODE['kv-vtranspose']=['experiments/framework/20261027T024300270939Z-gqa-bf16-vtranspose-hotspot-component/archive-receipt.json']
+BATCH_RESULTS['kv_vtranspose_component_negative']=('纯BF16页内V转置：K保持NHD，V改dim×slot；原GQA只改两处V维度寻址，并实作对应writer，未压缩或增持久容量。位型、8项数值/Graph及writer换值/换slot/负slot门通过，有限输入跨臂逐位一致。完整writer+GQA+reducer Graph ABBA Event 0.544616460800→0.551862716675ms，慢1.330525%；wall慢1.184494%。静态bytepermute减少但寄存器增多，未测实际occupancy/HBM，不作因果归因。性能负，停止当前实现，不扫参、不接prefill/模型；组件正确不等于官方资格。源码/native不变、DB恢复和清理通过。', '停止当前实现，不进生产。', '组件逐位/Graph/writer门通过；未运行模型或官方资格。', '原始结果、编译产物、命令与环境已回收，实际occupancy/事务未测。')
+
+GROUPS['q32-mixed-overlap']=('当前Q32与GQA混合双流', '完整GPU耗时负，不进入生产，不扫形状或流优先级。', [])
+CODE['q32-mixed-overlap']=['experiments/framework/20261027T030312159264Z-q32-mixed-overlap-mixed-component/archive-receipt.json']
+BATCH_RESULTS['q32_mixed_overlap_negative']=('main241真实D63/P1985/KV4096，Q32 grid63×2，GQA自然S4/grid63×2×4。A串行、B原93c双流，完整writer+两路Attention/reducer+fork/join/event/record_stream/collect均计入。32calls ABBA Event 2.071281075478→2.185644984245ms，慢5.521409%；wall 2.222790375→2.211624625ms，省0.502330%，不一致且B两块波动大，无净收益。九项正确性检查全过，selected68/fallback1/pending最终0/峰值9；源码/native不变，DB恢复和清理通过。停止本实现，不证明实际共驻，不进生产。', '完整GPU耗时负，不进入生产，不扫形状或流优先级。', '真实Q32/GQA绑定、换Q即时消费、整输出逐位及输入/KV/RNG门通过，pending最终0；不等于官方资格。', '完整原件、精确命令、环境与收尾证据已回收。')
+GROUPS['sampler-preprocess-stats']=('采样转换与首遍统计融合', '保留原启动失败，只修入口源码路径后单独重试；无收益或数值结论。', [])
+CODE['sampler-preprocess-stats']=['experiments/framework/20261027T030446321226Z-sampler-preprocess-stats-component/archive-receipt.json']
+BATCH_RESULTS['sampler_preprocess_entry_import_failure']=('首包f3e99d0a在候选执行前失败：入口PYTHONPATH只包含assets，导入安装旧vllm_fl，缺biv150_runtime，ImportError。cases/timings均空，尚无数值或性能结论，也不是生产框架报错。保留原包和26原件；下一包仅绑定main241765源码路径及复用既有身份检查，数学和候选不改。原owner已恢复DB并清理自有进程。', '保留原启动失败，只修入口源码路径后单独重试；无收益或数值结论。', '候选尚未运行，不能标记数值通过或数值错误。', '完整原件、精确命令、环境与收尾证据已回收。')
+
 def group(row):
+    if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats'):
+        return row['profile_id']
     if row['profile_id']=='native-silu-lut':return 'native-silu-lut'
     if row['profile_id']=='kv-lossless':return 'kv-lossless'
     if row['profile_id']=='baseline-environment':return 'baseline-environment'

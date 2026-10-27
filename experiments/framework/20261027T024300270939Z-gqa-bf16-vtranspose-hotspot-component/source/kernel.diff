@@ -1,0 +1,27 @@
+--- main241/original
++++ vtranspose/candidate
+@@ -1,5 +1,5 @@
+ @triton.jit
+-def _gqa_decode_attention(
++def _gqa_decode_attention_vtranspose(
+     segm_output_ptr,
+     segm_max_ptr,
+     segm_expsum_ptr,
+@@ -79,7 +79,7 @@
+             page * v_stride_block
+             + column_slot[:, None] * v_stride_slot
+             + kv_head_idx * v_stride_head
+-            + offs_dim[None, :]
++            + offs_dim[None, :] * PAGE_SIZE
+         )
+         K = tl.load(key_cache_ptr + k_offsets)
+         V = tl.load(value_cache_ptr + v_offsets)
+@@ -110,7 +110,7 @@
+             page * v_stride_block
+             + column_slot[:, None] * v_stride_slot
+             + kv_head_idx * v_stride_head
+-            + offs_dim[None, :]
++            + offs_dim[None, :] * PAGE_SIZE
+         )
+         K = tl.load(key_cache_ptr + k_offsets, mask=column_valid[None, :], other=0.0)
+         V = tl.load(value_cache_ptr + v_offsets, mask=column_valid[:, None], other=0.0)
