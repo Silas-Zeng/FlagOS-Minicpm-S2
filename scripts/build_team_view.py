@@ -588,6 +588,11 @@ CODE['native-q32-transfer'] += ['experiments/framework/20261027T194147574489Z-na
 GROUPS['corex-native-gqa-page16']=('CoreX原生BF16 GQA：单页与完整分页', 'PR92仍为有效基线，4K/16K暖6481.2267/4826.4467、102/105。仅原S2/S4默认macro1，不叠mixed负范围：同KV548336原官方4K四轮暖6627.8167对6481.2267观察+2.26176%，1024成功／实际覆盖／源／两库／DB清理通过；16K/105另由主线验证，尚无新基线或稳定幅度。此前S2/S4同轮组件省1.0521%/.89664%，比例不相加。', [])
 GROUPS['native-q32-transfer']=('CoreX原生Q32 Attention：编译、映射与组件', '旧shared-P组件数值正确但慢21.56%；direct-P近持平停止。独立双KV槽保持64KiB与原FPbody，191803实编存在预取/当前计算窗口且双spill0（非实际重叠证明）；194147完整长组件全部位型/FP64/Graph/尾NaN等门过，Event省2.50544%、wall省3.34544%。保留局部正候选，未接模型/官方，不与其它组件幅度相加。', [])
 
+
+BATCH_RESULTS['native_gqa_macro1_official_16k_positive']=('仅原S2/S4默认macro1。原官方16K四轮4269.60／4834.45／4832.36／4831.17，弃首均4832.66对A4826.446667观察+0.128735%；同KV548288、同起始DB207f，512成功，实际原生覆盖／源／两库／DB恢复／清理通过。保留单组小正观察，105另验；不称稳定幅度或新基线。', '保留单组小正观察；105另验。', '原官方参数、同KV/DB、macro1实际覆盖与清理通过。', '366原件逐SHA保存；不为上传重测。')
+CODE['corex-native-gqa-page16'] += ['experiments/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds/summary.json', 'experiments/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds/raw-evidence.json', 'experiments/bundles/20261027T194324Z-native-gqa-overlap-16k-four-rounds/manifest.json', 'experiments/bundles/20261027T194324Z-native-gqa-overlap-16k-four-rounds/raw.tar.gz.storage.json']
+GROUPS['corex-native-gqa-page16']=('CoreX原生BF16 GQA：单页与完整分页', 'PR92仍为有效基线。仅原S2/S4默认macro1：原官方4K／16K均四轮，弃首均6627.8167／4832.66，对各自A观察+2.26176%／+0.128735%，同各自KV与DB，1024／512成功；105另验，尚不更新基线。mixed扩范围负候选已停，未混入。', [])
+
 def group(row):
     if row['profile_id']=='native-gqa-mixed-s4':return 'native-gqa-mixed-s4'
     if row['profile_id']=='native-gqa-production-hotspot':return 'native-gqa-production-hotspot'

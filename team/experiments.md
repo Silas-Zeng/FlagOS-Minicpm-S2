@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共404条登记、401个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共405条登记、402个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -382,6 +382,7 @@
 | 天数 BI-V150 | 402 | 20261027T191803Z | [CoreX原生Q32 Attention：编译、映射与组件](methods/native-q32-transfer.md) | 已有原命令／参数／原数学及对应正确性门保持；原始阶段结果分列。 | 未记录/未记录/未记录/未记录 | Q32 KV双槽64KiB原FPbody不变；191803仅CPU实编及独审通过，真实CFG存在下一页copy→当前QK／softmax／PV窗口，尾页／末页／空段同步已核。64SME／64MMA／5barrier、SG | [20261027T191803Z-native-q32-kv-double-slot](runs/bi-v150/20261027T191803Z-native-q32-kv-double-slot.md) |
 | 天数 BI-V150 | 403 | 20261027T192157Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 已有原命令／参数／原数学及对应正确性门保持；原始阶段结果分列。 | 4096/1024/64/256 | 仅原c75db S2／S4默认macro1，不含mixed扩范围。原官方4K四轮5481.01／6441.35／6721.46／6720.64，弃首均6627.816667对A6481.226667观察+2.261763 | [20261027T192157Z-native-gqa-overlap-4k-four-rounds](runs/bi-v150/20261027T192157Z-native-gqa-overlap-4k-four-rounds.md) |
 | 天数 BI-V150 | 404 | 20261027T194147574489Z | [CoreX原生Q32 Attention：编译、映射与组件](methods/native-q32-transfer.md) | 已有原命令／参数／原数学及对应正确性门保持；原始阶段结果分列。 | 未记录/未记录/未记录/未记录 | Q32双KV槽保持64KiB与原数学，只将下一页copy放当前QK／softmax／PV之间。初始／恢复／换值／side全输出位型、原独立FP64／尾NaN／输入／RNG及Graph门全部通过；完整Q32长组件Event | [20261027T194147574489Z-native-q32-kv-double-slot-long-component](runs/bi-v150/20261027T194147574489Z-native-q32-kv-double-slot-long-component.md) |
+| 天数 BI-V150 | 405 | 20261027T194324Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 原官方参数、同KV/DB、macro1实际覆盖与清理通过。 | 16384/1024/64/128 | 仅原S2/S4默认macro1。原官方16K四轮4269.60／4834.45／4832.36／4831.17，弃首均4832.66对A4826.446667观察+0.128735%；同KV548288、同起始DB207 | [20261027T194324Z-native-gqa-overlap-16k-four-rounds](runs/bi-v150/20261027T194324Z-native-gqa-overlap-16k-four-rounds.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
