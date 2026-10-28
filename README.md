@@ -1,12 +1,16 @@
 # FlagOS 第二季 MiniCPM5-2B 双平台实验
 
-最新：194324原官方16K四轮4269.60／4834.45／4832.36／4831.17，弃首均4832.66，对A4826.446667观察+0.128735%；同KV548288、同起始DB，512成功。新增366原件，总405条／402 run。原4K单组+2.26176%一并保留，105另验，不称稳定幅度或新基线。
+当前 BI-V150 有效基线为[框架PR105](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/105)，合并commit `1cbac531ca9afaa0e9a68624d5d10cb1d0412055`。仅原S2/S4启用V等待重叠，受测源tree f165／GQA SO c8a725da，原native14f保持。
 
-当前有效BI-V150基线仍为[框架PR92](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/92)／main b3b87d2：原官方4K／16K各四轮弃首均6481.2267／4826.4467 tok/s，原105题102/105；KV及105请求分支覆盖限制保留，C500结果独立。
+| 原官方验证 | 新基线结果 | 相对PR92原对照 |
+|---|---|---|
+| 4K四轮弃首均 | 6627.816667 tok/s，1024成功 | 同KV548336／DB，单组观察+2.261763% |
+| 16K四轮弃首均 | 4832.66 tok/s，512成功 | 同KV548288／DB，单组观察+0.128735% |
+| 原105题 | 103/105＝98.095238%，原95%门通过 | 零错误／截断／空；不把采样题数差当准确率提升证据 |
 
-最新三轮保存472份原件，总计404条登记／401个独立run。原S2/S4默认macro1的原官方4K四轮弃首均6627.8167，对A6481.2267观察+2.26176%，同KV548336、1024成功；16K／105另由主线验证，不称稳定幅度或新基线。Q32双KV槽仅编译及完整长组件通过，Event省2.50544%、wall省3.34544%，尚无模型／官方资格。
+启动捕获不证明105逐题经过原生分支；通用stack缺compute_order marker与旧105相同，原pending回执保留。不同负载百分比不相加，不把单组幅度称统计稳定。
 
-mixed-S4扩范围候选此前官方首暖低于基线后停止，未合并；它与本次只改原S2/S4等待重叠分开。原件完整无损分块保存，历史mixed61的193MB原gzip对应完整tar流xz14.7MB、全成员校验；恢复命令见每轮raw-evidence.json。入口：[原生GQA](team/methods/corex-native-gqa-page16.md)／[Q32](team/methods/native-q32-transfer.md)／[当前接续](CURRENT_WORK.md)。
+总408条／405个独立run，最新三轮476原件已归档。Q32长组件双槽Event省2.50544%仅是局部证据；新GPU metadata接线pure2048的完整Event慢9.30069%，按预设停止，mixed未测，无生产资格。正负结果及完整证据见[原生GQA](team/methods/corex-native-gqa-page16.md)／[Q32](team/methods/native-q32-transfer.md)。
 
 团队主要看：**尝试了什么、改了什么、怎么测、结果怎样、是否保留。**
 
