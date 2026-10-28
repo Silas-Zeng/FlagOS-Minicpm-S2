@@ -24,7 +24,7 @@
 | premax vote CPU编译 | 134934当次仅8KiB／64SGPR／76VGPR／0spill，无GPU资格；后续组件见下行 |
 | premax vote组件 | 141255共12case、有限output/partial硬逐位、FP64/Graph/边界通过；Event近持平慢0.001408%、wall省0.084431%，按Event门停止，不进生产/官方 |
 | Q32 direct-Q v2及组合 | 150532 pure2048与153450 mixed/long组件Event正向，但mixed wall慢1.110675%，均非官方收益；155444组合CPU编译审阅只批准一次pure组件A/B，无数值/生产资格。160148官方4K完整1024请求，弃首均6537.81，对PR105 6627.816667观察−1.358014%；KV548432≠548336，不作严格因果，按完整负结果停止direct-Q，不跑16K/105、不改基线 |
-| direct-Q＋grouped pure组合162319 | Event A/B .519592→.550852ms（慢6.0163%），wall省8.4983%但B两次波动较大；按Event负信号停止，raw顶层numerical_component_passed=false为earlyreturn未赋值，18硬门实际全过，不能称数值失败；原包SHA/独审待最后回收核验，暂未登记。PR107 K8格式不兼容，不组合 |
+| direct-Q＋grouped pure组合162319 | Event A/B .519592→.550852ms（慢6.0163%），wall省8.4983%但B两次波动较大；按Event负信号停止，raw顶层numerical_component_passed=false为earlyreturn未赋值，18硬门实际全过，不能称数值失败；98项原件及原包SHA已回收核验，终态审阅与登记完成。PR107 K8格式不兼容，不组合 |
 
 总443条／440个唯一run。本批覆盖12个run原件（含此前已登记的141255），98项原件与终态审阅已核验；累计964个原manifest成员。160148完整4K四轮为负，162319组件按Event门停止；不跑16K/105、不改PR105基线。
 

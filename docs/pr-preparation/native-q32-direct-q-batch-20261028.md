@@ -14,4 +14,4 @@
 
 162319组合pure2048完成ABBA，18项原硬门通过。Event A/B均值0.519592/0.550852 ms，慢6.016321%，按事前Event门停止；wall省8.498318%，但B两次0.605957/0.495748 ms波动大，不能称稳定退化或选择性报收益。raw顶层`numerical_component_passed=false`依原样保留；终态review确认18项数值/状态门都通过，false因性能early return早于总标志赋值，不代表数值失败。无模型或官方资格。PR107的K8格式不兼容，未与本候选组合。
 
-**登记概况：** 443条、440个run；本批12个run原件累计964项，按archive manifest及恢复包逐项SHA核验。直接查看[团队实验导航](team/README.md)、[唯一实验总表](team/experiments.md)和[Q32方法记录](team/methods/native-q32-transfer.md)。回收receipt及本次stage范围见 `tmp/native-postterminal-record-receipt-20261028.json` 与同目录stage清单。
+**登记概况：** 443条、440个run；本批12个run原件累计964项，按archive manifest及恢复包逐项SHA核验。直接查看[团队实验导航](../../team/README.md)、[唯一实验总表](../../team/experiments.md)和[Q32方法记录](../../team/methods/native-q32-transfer.md)。本地回收receipt为 `tmp/native-postterminal-record-receipt-20261028.json`，本次stage清单位于本文同目录。
