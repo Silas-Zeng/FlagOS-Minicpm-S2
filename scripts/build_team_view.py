@@ -1387,5 +1387,37 @@ for _k,_a,_c,_r,_d in [
     SHORT_ATTEMPTS[_k]=(_a,_c)
 
 
+# 2026-10-29 BM32/BN32 与宽转置tile的CPU/组件后续
+BATCH_RESULTS.update({
+    'shape_gemm_bm32bn32_warp32_cpu_metadata_failed': ('Triton导入成功但distribution metadata查询失败；未形成有效编译结果。', '保留CPU环境失败原件，不判layout、数值或性能。', 'CPU环境查询失败', '仅CPU编译准备；importlib.metadata.version失败，GPU未启动。'),
+    'shape_gemm_bm32bn32_warp32_layout_no_go': ('w16/w32编译成功，但warp32未增加有效坐标工作；layout筛选NO-GO。', '固定点停止；无GPU数值或性能结论。', 'CPU编译成功，layout NO-GO', '同源pair仅num_warps不同；layout/TTGIR审查发现新增warp不产生独立输出/MMA工作。'),
+    'shape_gemm_transpose_wide_cpu_compile_pass': ('固定宽转置tile CPU编译及ASM筛查通过；未测数值或性能。', '保留为编译筛查结果，不据此授予GPU或生产资格。', 'CPU编译通过', 'M64 down，BM128/BN64/BK128，w32/s2；CPU-only，无设备运行。'),
+    'shape_gemm_transpose_wide_metadata_gate_failed': ('组件计时前metadata断言失败；原A/B实际use_sme均为7，worker误要求15。', '保留入口门失败；无数值/性能结论，不标为kernel错误。', 'metadata契约失败，未计时', 'BI-V150组件准备阶段退出；实际两臂metadata均为7，未进入数值或ABBA计时。'),
+    'shape_gemm_transpose_wide_component_negative': ('42层真实权重、两种图案、ABBA完成；数值/Graph/side通过。B Event 3.184987ms对A 2.324920ms慢36.9934%。', '停止此实现；不进官方/105、不合并或更新基线。', '组件正确性通过，性能明显负', 'M64 down固定宽转置tile，42层真实权重；两pattern完整ABBA，实际use_sme 7/7，恢复清理通过。'),
+})
+SHORT_ATTEMPTS.update({
+    'shape_gemm_bm32bn32_warp32_cpu_metadata_failed': ('检查BM32/BN32配置的CPU编译器版本与可用性。', '仅metadata查询失败，无有效编译或GPU尝试。'),
+    'shape_gemm_bm32bn32_warp32_layout_no_go': ('比较w16与w32配置是否产生独立且有用的warp工作分配。', '两臂同源、仅num_warps不同；实际编译后layout未显示新增有效工作，停止。'),
+    'shape_gemm_transpose_wide_cpu_compile_pass': ('对固定宽转置tile做CPU-only编译与ASM检查。', '仅编译筛查，不把未初始化资源字段当作设备资源或性能证据。'),
+    'shape_gemm_transpose_wide_metadata_gate_failed': ('准备真实42层M64 down权重组件的宽转置tile计时。', 'A/B实际use_sme=7，worker错误期待15，未开始数值或计时。'),
+    'shape_gemm_transpose_wide_component_negative': ('验证宽转置tile能否改善M64 down的42层完整组件时间。', '固定BM128/BN64/BK128、w32/s2、CTA1；真实权重和生产数学不变，完整ABBA。'),
+})
+
+# 发布前更正：2026-10-29 warp32/宽转置新增5run事实表述
+BATCH_RESULTS.update({
+ 'shape_gemm_bm32bn32_warp32_cpu_metadata_failed': ('实际BM64/BN64/BK128；w16编译成功并有6项产物，之后Triton distribution version查询因metadata缺失失败，w32未执行。', '保留环境查询失败；父归档目录名称bm32bn32不代表本次tile配置。', 'w16编译后metadata查询失败', 'BM64/BN64/BK128，CPU-only；只有w16已运行编译，w32未执行。'),
+ 'shape_gemm_bm32bn32_warp32_layout_no_go': ('实际BM64/BN64/BK128，w16/w32均CPU编译成功；warp32布局未增加有效坐标工作，筛选NO-GO。', '停止此配置；父归档目录名bm32bn32不代表tile，无GPU结果。', 'CPU编译完成，layout NO-GO', '同源w16/w32 pair，BM64/BN64/BK128；编译后审查布局工作映射。'),
+ 'shape_gemm_transpose_wide_cpu_compile_pass': ('BM128/BN64/BK128宽转置tile CPU编译与ASM检查通过；没有GPU或性能结果。', '仅保留编译筛查；不授予数值、组件或生产资格。', 'CPU编译通过', 'CPU-only编译检查，BM128/BN64/BK128。'),
+ 'shape_gemm_transpose_wide_metadata_gate_failed': ('首轮组件在数值与计时前因worker错误要求metadata.use_sme=15退出；A/B实际均为7。内核配置未被改成15。', '保留worker metadata期望值门错误；无数值或计时结论。', 'metadata期望值错误，未计时', '组件准备失败；原A/B的metadata.use_sme均为7，worker误要求15。'),
+ 'shape_gemm_transpose_wide_component_negative': ('42层真实权重、两组输入、ABBA完成；数值/Graph/side通过。B Event均值3.184987ms，对A 2.324920ms慢36.9934%。', '停止该实现；不进官方/105，不合并或更新基线。', '组件正确性通过，性能明显负', 'M64 down固定宽转置tile、42层真实权重；两组输入、ABBA完整，实际metadata.use_sme为7/7，恢复清理通过。'),
+})
+SHORT_ATTEMPTS.update({
+ 'shape_gemm_bm32bn32_warp32_cpu_metadata_failed': ('检查BM64/BN64/BK128下w16/w32候选的CPU编译可行性。', 'w16成功编译并保存6项产物；随后distribution version查询失败，因此w32未执行。父归档目录名不代表tile配置。'),
+ 'shape_gemm_bm32bn32_warp32_layout_no_go': ('比较BM64/BN64/BK128下w16和w32布局是否增加有效warp工作。', '两臂均编译；w32未增加有效坐标工作，layout筛选NO-GO。'),
+ 'shape_gemm_transpose_wide_cpu_compile_pass': ('对固定宽转置tile做CPU-only编译和ASM检查。', 'BM128/BN64/BK128；仅编译筛查，无设备性能结论。'),
+ 'shape_gemm_transpose_wide_metadata_gate_failed': ('准备42层M64 down宽转置组件测量。', 'worker错误要求metadata.use_sme=15，而原A/B均为7；不是kernel配置变更，未开始数值/计时。'),
+ 'shape_gemm_transpose_wide_component_negative': ('检验宽转置tile对M64 down完整42层组件耗时的影响。', '固定BM128/BN64/BK128、w32/s2、CTA1；真实权重与生产数学不变，两组输入做完整ABBA。'),
+})
+
 if __name__ == '__main__':
     main()
