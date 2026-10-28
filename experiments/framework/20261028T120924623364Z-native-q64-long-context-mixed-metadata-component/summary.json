@@ -1,0 +1,676 @@
+{
+  "run": "20261028T120924623364Z-native-q64-long-context-mixed-metadata-component",
+  "status": "native_q64_mixed_event_positive_wall_negative",
+  "conclusion": "Q64在61 decode+1987 prefill、context7948=4×1987边界做完整mixed forward，20门/两组FP64/全输出位型通过。Event4.430978775→4.325495720ms省2.380581%，wall4.764854469→4.782359062ms慢0.367369%；保留GPU组件正信号并保留wall回退。两臂为旧c75/f720冻结组件，非PR105官方，不授生产/模型/全范围资格。",
+  "raw_original_files": 89,
+  "model_qualified": false,
+  "new_baseline": false,
+  "original_results": {
+    "status": "component_only_passed",
+    "kind": "actual Builder/Impl/Manager Q64 metadata ABI via original Q32 policy",
+    "cases": [
+      {
+        "label": "mixed61-q1987-context7948",
+        "shape": {
+          "total": 2048,
+          "prefix": 61,
+          "M": 1987,
+          "KV": 9935,
+          "capacity": 16384
+        },
+        "actual_manager": {
+          "hash": "accf035e7a8b7f9c72a7a374733a3335672f2f728ed0abdeead228b65c256d1b",
+          "grid": [
+            63,
+            2
+          ],
+          "mechanism": {
+            "ttgir_q_load_outside_loop": true,
+            "llvm_q_memory_reads_in_loop": 0,
+            "llvm_q_memory_reads_total": 32,
+            "q_read_blocks": [
+              ".lr.ph73",
+              "230",
+              "239",
+              "243",
+              "247",
+              "251",
+              "255",
+              "259",
+              "263",
+              "267",
+              "271",
+              "275",
+              "279",
+              "283",
+              "287",
+              "291",
+              "295"
+            ],
+            "q_debug_nodes": 3,
+            "barrier_calls": 3,
+            "mechanism_pass": true,
+            "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+          }
+        },
+        "actual_ABI": {
+          "query_ptr": {
+            "shape": [
+              1987,
+              16,
+              128
+            ],
+            "stride": [
+              2048,
+              128,
+              1
+            ],
+            "storage_offset": 124928,
+            "data_ptr": 137530257428480
+          },
+          "output_ptr": {
+            "shape": [
+              1987,
+              16,
+              128
+            ],
+            "stride": [
+              2048,
+              128,
+              1
+            ],
+            "storage_offset": 124928,
+            "data_ptr": 137530280497152
+          },
+          "key_cache_ptr": {
+            "shape": [
+              63488,
+              16,
+              2,
+              128
+            ],
+            "stride": [
+              8192,
+              256,
+              128,
+              1
+            ],
+            "storage_offset": 0,
+            "data_ptr": 137529216991232
+          },
+          "value_cache_ptr": {
+            "shape": [
+              63488,
+              16,
+              2,
+              128
+            ],
+            "stride": [
+              8192,
+              256,
+              128,
+              1
+            ],
+            "storage_offset": 4096,
+            "data_ptr": 137529216999424
+          },
+          "seq_lens_ptr": {
+            "shape": [
+              1
+            ],
+            "stride": [
+              1
+            ],
+            "storage_offset": 61,
+            "data_ptr": 137530278150900
+          },
+          "query_start_len_ptr": {
+            "shape": [
+              2
+            ],
+            "stride": [
+              1
+            ],
+            "storage_offset": 0,
+            "data_ptr": 137530278283776
+          },
+          "block_tables_ptr": {
+            "shape": [
+              1,
+              8192
+            ],
+            "stride": [
+              8192,
+              1
+            ],
+            "storage_offset": 499712,
+            "data_ptr": 137530269678592
+          }
+        },
+        "GPU_metadata_initial": {
+          "cu": [
+            0,
+            1987
+          ],
+          "seq_len": 9935
+        },
+        "checks": [
+          {
+            "label": "actual_B_single_native_launch",
+            "passed": true
+          },
+          {
+            "label": "native_current_view_offset",
+            "passed": true
+          },
+          {
+            "label": "initial_full_mixed_output_bitwise",
+            "passed": true
+          },
+          {
+            "label": "initial_finite_and_tail_guard",
+            "passed": true
+          },
+          {
+            "label": "initial_storage_and_metadata_unchanged",
+            "passed": true
+          },
+          {
+            "label": "original_writer_exact_before_reader",
+            "passed": true
+          },
+          {
+            "label": "initial_original_FP64_contract",
+            "passed": true
+          },
+          {
+            "label": "tail_CPU_overlay_exact",
+            "passed": true
+          },
+          {
+            "label": "tail_NaN_first32_all_heads_finite_bitwise",
+            "passed": true
+          },
+          {
+            "label": "tail_inputs_and_GPU_metadata_readonly",
+            "passed": true
+          },
+          {
+            "label": "tail_restore_full_bitwise_finite_guard",
+            "passed": true
+          },
+          {
+            "label": "changed_metadata_Graph_full_output_bitwise",
+            "passed": true
+          },
+          {
+            "label": "changed_Graph_replay_vs_fresh_eager",
+            "passed": true
+          },
+          {
+            "label": "changed_active_finite_prefix_padding_unchanged",
+            "passed": true
+          },
+          {
+            "label": "same_address_metadata_and_storage_unchanged",
+            "passed": true
+          },
+          {
+            "label": "side_stream_full_bits_and_readonly_metadata",
+            "passed": true
+          },
+          {
+            "label": "restored_real_full_output_bitwise",
+            "passed": true
+          },
+          {
+            "label": "restored_original_FP64_contract",
+            "passed": true
+          },
+          {
+            "label": "aftertiming_full_output_and_inputs",
+            "passed": true
+          },
+          {
+            "label": "original_parent_and_manager_binding_preserved",
+            "passed": true
+          }
+        ],
+        "timings": [
+          {
+            "calls": 16,
+            "wall_total_ms": 73.915523,
+            "wall_per_call_ms": 4.6197201875,
+            "event_total_ms": 70.880615234375,
+            "event_per_call_ms": 4.4300384521484375,
+            "submit_thread_cpu_ns": 12633147,
+            "submit_process_cpu_ns": 12779082,
+            "cpu_stat_before": {
+              "paths": {
+                "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+                "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+                "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+              },
+              "raw": {
+                "stat": "nr_periods 376375\nnr_throttled 2337\nthrottled_time 9605234301614",
+                "quota": "600000",
+                "period": "100000"
+              },
+              "counters": {
+                "nr_periods": 376375,
+                "nr_throttled": 2337,
+                "throttled_time": 9605234301614
+              }
+            },
+            "cpu_stat_after": {
+              "paths": {
+                "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+                "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+                "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+              },
+              "raw": {
+                "stat": "nr_periods 376376\nnr_throttled 2337\nthrottled_time 9605234301614",
+                "quota": "600000",
+                "period": "100000"
+              },
+              "counters": {
+                "nr_periods": 376376,
+                "nr_throttled": 2337,
+                "throttled_time": 9605234301614
+              }
+            },
+            "cpu_stat_delta": {
+              "nr_periods": 1,
+              "nr_throttled": 0,
+              "throttled_time": 0
+            },
+            "arm": "current"
+          },
+          {
+            "calls": 16,
+            "wall_total_ms": 76.579684,
+            "wall_per_call_ms": 4.78623025,
+            "event_total_ms": 69.18843841552734,
+            "event_per_call_ms": 4.324277400970459,
+            "submit_thread_cpu_ns": 11400885,
+            "submit_process_cpu_ns": 11541235,
+            "cpu_stat_before": {
+              "paths": {
+                "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+                "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+                "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+              },
+              "raw": {
+                "stat": "nr_periods 376376\nnr_throttled 2337\nthrottled_time 9605234301614",
+                "quota": "600000",
+                "period": "100000"
+              },
+              "counters": {
+                "nr_periods": 376376,
+                "nr_throttled": 2337,
+                "throttled_time": 9605234301614
+              }
+            },
+            "cpu_stat_after": {
+              "paths": {
+                "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+                "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+                "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+              },
+              "raw": {
+                "stat": "nr_periods 376377\nnr_throttled 2337\nthrottled_time 9605234301614",
+                "quota": "600000",
+                "period": "100000"
+              },
+              "counters": {
+                "nr_periods": 376377,
+                "nr_throttled": 2337,
+                "throttled_time": 9605234301614
+              }
+            },
+            "cpu_stat_delta": {
+              "nr_periods": 1,
+              "nr_throttled": 0,
+              "throttled_time": 0
+            },
+            "arm": "native"
+          },
+          {
+            "calls": 16,
+            "wall_total_ms": 76.455806,
+            "wall_per_call_ms": 4.778487875,
+            "event_total_ms": 69.22742462158203,
+            "event_per_call_ms": 4.326714038848877,
+            "submit_thread_cpu_ns": 11247140,
+            "submit_process_cpu_ns": 11462096,
+            "cpu_stat_before": {
+              "paths": {
+                "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+                "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+                "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+              },
+              "raw": {
+                "stat": "nr_periods 376377\nnr_throttled 2337\nthrottled_time 9605234301614",
+                "quota": "600000",
+                "period": "100000"
+              },
+              "counters": {
+                "nr_periods": 376377,
+                "nr_throttled": 2337,
+                "throttled_time": 9605234301614
+              }
+            },
+            "cpu_stat_after": {
+              "paths": {
+                "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+                "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+                "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+              },
+              "raw": {
+                "stat": "nr_periods 376378\nnr_throttled 2337\nthrottled_time 9605234301614",
+                "quota": "600000",
+                "period": "100000"
+              },
+              "counters": {
+                "nr_periods": 376378,
+                "nr_throttled": 2337,
+                "throttled_time": 9605234301614
+              }
+            },
+            "cpu_stat_delta": {
+              "nr_periods": 1,
+              "nr_throttled": 0,
+              "throttled_time": 0
+            },
+            "arm": "native"
+          },
+          {
+            "calls": 16,
+            "wall_total_ms": 78.55982,
+            "wall_per_call_ms": 4.90998875,
+            "event_total_ms": 70.91070556640625,
+            "event_per_call_ms": 4.431919097900391,
+            "submit_thread_cpu_ns": 12613786,
+            "submit_process_cpu_ns": 12702848,
+            "cpu_stat_before": {
+              "paths": {
+                "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+                "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+                "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+              },
+              "raw": {
+                "stat": "nr_periods 376378\nnr_throttled 2337\nthrottled_time 9605234301614",
+                "quota": "600000",
+                "period": "100000"
+              },
+              "counters": {
+                "nr_periods": 376378,
+                "nr_throttled": 2337,
+                "throttled_time": 9605234301614
+              }
+            },
+            "cpu_stat_after": {
+              "paths": {
+                "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+                "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+                "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+              },
+              "raw": {
+                "stat": "nr_periods 376378\nnr_throttled 2337\nthrottled_time 9605234301614",
+                "quota": "600000",
+                "period": "100000"
+              },
+              "counters": {
+                "nr_periods": 376378,
+                "nr_throttled": 2337,
+                "throttled_time": 9605234301614
+              }
+            },
+            "cpu_stat_delta": {
+              "nr_periods": 0,
+              "nr_throttled": 0,
+              "throttled_time": 0
+            },
+            "arm": "current"
+          }
+        ],
+        "CPU_snapshot": {
+          "query": 1987,
+          "kv": 9935,
+          "context": 7948,
+          "prefix": 61
+        },
+        "fixture_scope": "synthetic ratio boundary; original step125 decode61/offset retained, suffix context intentionally7948; not captured16K coverage",
+        "physical_cache_contract": {
+          "total_pages": 63488,
+          "pages_per_request": 1024,
+          "actual_seq_len": 9935,
+          "per_request_capacity": 16384,
+          "note": "shared pool total capacity is only an address bound, not this sequence length"
+        },
+        "original_IR": {
+          "resources": {
+            "compiled_type": "CompiledKernel",
+            "hash": "accf035e7a8b7f9c72a7a374733a3335672f2f728ed0abdeead228b65c256d1b",
+            "n_regs": 113,
+            "n_spills": 0,
+            "metadata": {
+              "num_warps": 16,
+              "num_stages": 1,
+              "shared": 65536,
+              "use_sme": 114691,
+              "warp_size": 64
+            },
+            "asm_sha256": {
+              "source": "542bbc196d6992a65e5fbf961a93db23cb2d09c90bc2d65f06069e4ca697963d",
+              "ttir": "19b75b3bb5c4b11223cd3c674579270804d10bfcb8ba9b6cd4b69786024efaf9",
+              "ttgir": "00ebddd5a1a4777695b38d78497710c377bc1fde0e2eabec5ac830f20c1edd2e",
+              "llir": "e70cf3f96934011db2e86a1044042913c493e89cad43f9b98d653f5a9677cd29",
+              "asm": "14108c439aea96ff4e3fa73714622d10c7e7bde067ce226ea6f0e3d814858220",
+              "cubin": "18798e166cc38010a21f11a5855bea8ad92654a8f61902931580058215f05fee"
+            }
+          },
+          "private_bytes": 0
+        },
+        "actual_native_dispatch": [
+          {
+            "grid": [
+              63,
+              2
+            ],
+            "native_grid": [
+              32,
+              2
+            ],
+            "query_rows": 1987,
+            "q_storage_offset": 124928,
+            "out_storage_offset": 124928,
+            "metadata_GPU": true,
+            "production_hook": false,
+            "cpu_snapshot": {
+              "query": 1987,
+              "kv": 9935,
+              "context": 7948,
+              "prefix": 61
+            }
+          }
+        ],
+        "FP64_initial": {
+          "criteria": "原合同：每臂finite且max_abs≤5e-4、relative_l2≤0.01；仅本合成输入",
+          "GPU_metadata": {
+            "cu": [
+              0,
+              1987
+            ],
+            "kv": 9935,
+            "query": 1987,
+            "context": 7948
+          },
+          "output_prefix": 61,
+          "rows": [
+            0,
+            15,
+            16,
+            127,
+            128,
+            1023,
+            1986
+          ],
+          "heads": [
+            0,
+            7,
+            8,
+            15
+          ],
+          "arms": {
+            "current": {
+              "max_abs": 0.0001853061919882687,
+              "rms_abs": 4.1524861128728455e-05,
+              "relative_l2": 0.0023585416957105513,
+              "finite": true,
+              "passed": true
+            },
+            "native": {
+              "max_abs": 0.0001853061919882687,
+              "rms_abs": 4.1524861128728455e-05,
+              "relative_l2": 0.0023585416957105513,
+              "finite": true,
+              "passed": true
+            }
+          }
+        },
+        "tail_NaN": {
+          "cu": [
+            0,
+            32
+          ],
+          "seq_len": 7980,
+          "context_len": 7948,
+          "poisoned_absolute_slots": [
+            7980,
+            8000
+          ],
+          "end_exclusive": true,
+          "scope": "full unchanged grid; suffix view offset61 retained; device metadata restricts first32/head16; not production short-query qualification"
+        },
+        "GPU_metadata_changed": {
+          "cu": [
+            7,
+            1981
+          ],
+          "seq_len": 9932,
+          "pointers_unchanged": true,
+          "table_change": "swap valid physical page IDs in columns0/1 in the same allocation",
+          "scope": "direct entry ABI only, not new production qstart range"
+        },
+        "FP64_restored_changed": {
+          "criteria": "原合同：每臂finite且max_abs≤5e-4、relative_l2≤0.01；仅本合成输入",
+          "GPU_metadata": {
+            "cu": [
+              0,
+              1987
+            ],
+            "kv": 9935,
+            "query": 1987,
+            "context": 7948
+          },
+          "output_prefix": 61,
+          "rows": [
+            0,
+            15,
+            16,
+            127,
+            128,
+            1023,
+            1986
+          ],
+          "heads": [
+            0,
+            7,
+            8,
+            15
+          ],
+          "arms": {
+            "current": {
+              "max_abs": 6.859615313237893e-05,
+              "rms_abs": 1.4423686688508345e-05,
+              "relative_l2": 0.0023684114838074593,
+              "finite": true,
+              "passed": true
+            },
+            "native": {
+              "max_abs": 6.859615313237893e-05,
+              "rms_abs": 1.4423686688508345e-05,
+              "relative_l2": 0.0023684114838074593,
+              "finite": true,
+              "passed": true
+            }
+          }
+        },
+        "summary": {
+          "event": {
+            "current_ms": 4.430978775024414,
+            "native_ms": 4.325495719909668,
+            "fraction_saved": 0.023805813674691922
+          },
+          "wall": {
+            "current_ms": 4.76485446875,
+            "native_ms": 4.782359062499999,
+            "fraction_saved": -0.003673689063286689
+          }
+        },
+        "timing_scope": "actual entire mixed Impl.forward (original61 decode + candidate1987 prefill) via original Builder/Policy/Manager; CPU ratio gate + GPU metadata ABI; writer/setup and extension compilation outside both arms; binding once per arm, not per call"
+      }
+    ],
+    "model_qualified": false,
+    "numerical_component_passed": true,
+    "limits": [
+      "One mixed61+1987 synthetic context=7948 ratio boundary; not live16K coverage or a benchmark filter.",
+      "A/B full storage bitwise and finite plus original FP64 threshold on actual suffix cu/seq are mandatory.",
+      "104855 Q64 directAND math is reused; this new GPU metadata ABI must pass all component gates again.",
+      "No service/official/production qualification; no unsupported range is enabled."
+    ],
+    "native_compile_proof": {
+      "source_sha256": "e5aa9bef311a8d59991a31e53a2173d595dcc794e5bd66fc29e44b87c8568692",
+      "files": {
+        "probe.ll": "c5ef1ff7e7ce8dc0c16178946ba94793667b9ffb9bf4fdad79233fe5ab80499c",
+        "probe.s": "ea252cf16838d9527b71ad74adf11b3d70feb500f08b11e8e999d034c03f90d8"
+      },
+      "source_specific_math_review_passed": true,
+      "resources": {
+        "shared_bytes": 65536,
+        "private_bytes": 0,
+        "SGPR": 84,
+        "VGPR": 107,
+        "sgpr_spill_count": 0,
+        "vgpr_spill_count": 0
+      },
+      "scope": "compiler+actualCFG proof only; Q64 GPU metadata ABI and unchanged directAND/cohort/double-slot64KiB; actual new Manager component gates pending"
+    },
+    "dispatch": {
+      "index_source_sha256": "47a7108bcf8424a96651021703f8731f1866a0e2eff88a1ac647e574ccf7e61d",
+      "registered": true,
+      "exclude_ops": []
+    },
+    "native_gate_install": {
+      "installed": true,
+      "already": true
+    },
+    "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+    "actual_native_build": {
+      "library_sha256": "8e9d26ffa56bbb178290a024979cc8234ea8ef58c0ff9adf17af6a443705b939",
+      "kernel_sha256": "e5aa9bef311a8d59991a31e53a2173d595dcc794e5bd66fc29e44b87c8568692",
+      "command": "/usr/local/corex/bin/clang++  -DTORCH_EXTENSION_NAME=corex_q64_metadata_component -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.12/site-packages/torch/include -isystem /usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/corex/include -isystem /usr/local/include/python3.12 -D_GLIBCXX_USE_CXX11_ABI=0 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__ILUVATAR__ -D__ILUVATAR_WORKAROUND__ -D__ILUVATAR_DIAG__ -cl-single-precision-constant -fPIC -mllvm --bonus-inst-threshold=0 -mllvm --skip-double -fclang-abi-compat=16 -D__MR__ -O3 -std=c++17 -D__ILUVATAR__ -D__MR__ -x ivcore --cuda-gpu-arch=ivcore11 --cuda-path=/usr/local/corex -c /workspace/experiments/minicpm-s2/framework/20261028T120924623364Z-native-q64-long-context-mixed-metadata-component/source/launcher.cu -o launcher.cuda.o ",
+      "resources_are_from_bare_CPU_probe": true,
+      "note": "Torch extension adds its normal flags; numerical/timing applies to this actual loaded SO, not assumed CPU register allocation"
+    }
+  },
+  "source_identity": {
+    "commit": "dac1b8fb48e7983e48283032efeee9b592c5fbe5",
+    "tree": "3e2d08790fad834abff66dc1002a86f15eb65b38",
+    "tracked_files": 814,
+    "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+    "extras": {}
+  },
+  "base_commit": "dac1b8fb48e7983e48283032efeee9b592c5fbe5"
+}

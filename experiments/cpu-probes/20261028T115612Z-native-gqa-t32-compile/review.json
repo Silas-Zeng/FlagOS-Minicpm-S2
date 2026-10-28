@@ -1,0 +1,88 @@
+{
+  "reviewer": "/root/experiment_sync_resume",
+  "independent_of_author": true,
+  "decision": "GO_ONE_FULL_COMPONENT_S2",
+  "allow_one_full_component": true,
+  "CPU_only": true,
+  "GPU_executed": false,
+  "numerical_qualified": false,
+  "performance_qualified": false,
+  "source_sha256": "f2975861706d922f5f50ead1781e67a46a8405b69f151c982e4e6187c35847be",
+  "LLVM_sha256": "783c45ce1407fd87002d99dbc1d7040808272f0c076f5ab2e732d0361cce3559",
+  "ASM_sha256": "1ac1e0823bbf01da8152c0e6ec247393d1515701dfb37394eaeb306a26bd6e27",
+  "resources": {
+    "shared_bytes": 16384,
+    "SGPR": 80,
+    "VGPR": 80,
+    "private_bytes": 0,
+    "sgpr_spill": 0,
+    "vgpr_spill": 0
+  },
+  "actual_hot_loop": {
+    "loop": "BB0_9 -> softmax/packing BB0_10..16 -> BB0_8 -> BB0_9",
+    "QK": {
+      "lines": [
+        553,
+        615
+      ],
+      "MMA": 16,
+      "chains": {
+        "v[74:77]": 8,
+        "v[70:73]": 8
+      },
+      "order": "每页原k0..7；两链交错且无交叉累加，首共同零输入不影响独立性"
+    },
+    "PV": {
+      "lines": [
+        418,
+        488
+      ],
+      "MMA": 16,
+      "order": "实际先page0八组，再page1八组；每个独立acc仍page0→page1"
+    },
+    "state": {
+      "rho_exp_lines": [
+        384,
+        387
+      ],
+      "running_L_FMA_lines": [
+        389,
+        390
+      ],
+      "accumulator_scalings": 32,
+      "each_accumulator_component_once": true
+    },
+    "wait": {
+      "K_SME_lines": [
+        512,
+        524
+      ],
+      "K_SME_count": 8,
+      "K_wait_barrier_lines": [
+        525,
+        526
+      ],
+      "V_SME_lines": [
+        538,
+        558
+      ],
+      "V_SME_count": 8,
+      "V_wait_barrier_lines": [
+        386,
+        392
+      ],
+      "first_V_read_line": 393,
+      "reuse_barrier_line": 489,
+      "V_issue_to_QK_softmax_overlap": true
+    },
+    "shared_addresses": "K0 0x0000..0x0fff、V0 0x1000..0x1fff、K1 0x2000..0x2fff、V1 0x3000..0x3fff，各4KiB独立区间"
+  },
+  "scope": "按root要求薄核真实热循环/等待/资源，复用root源码分段与尾页审查；25原件全SHA已回收，不重复全量哈希。只实例化S2。",
+  "conclusion": "实际省去了每两页的一组rho/分母更新与32次acc rescale；两页共同max/sum属于新数学顺序，当前证据足以允许一次N64/S2完整组件门，没有数值或性能结论。",
+  "required_component_contract": "Original independent FP64 atol/rtol .03, relative L2 .01; finite, nonfinite pattern, per-arm tail poison, per-arm eager/Graph bitwise, input/RNG and side-stream gates. Cross-arm output/partial bitwise is diagnostic for this new algorithm, not inherited qualification.",
+  "limits": [
+    "原FP64 atol=rtol .03且relativeL2<=.01；finite/nonfinite、tail poison、同臂eager/Graph位型、输入/RNG、side-stream仍须通过，不调阈值。",
+    "跨臂输出/partial bitwise仅诊断；共同max和BF16 P改变舍入，不能套PR105位型合同。",
+    "CPU裸编译资源不等于实际SO或设备占用；不外推S4、模型正确性或官方吞吐。"
+  ]
+}

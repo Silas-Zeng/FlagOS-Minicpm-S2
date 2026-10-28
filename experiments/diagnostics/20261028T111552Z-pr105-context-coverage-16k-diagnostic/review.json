@@ -1,0 +1,23 @@
+{
+  "run": "20261028T111552Z",
+  "conclusion": "benchmark成功；coverage诊断失败，CPU RAM证据不可恢复；不重复整轮",
+  "benchmark_exit_code": 0,
+  "successful_requests": 128.0,
+  "raw_benchmark_completed_label": false,
+  "raw_error": "FileNotFoundError(2, 'No such file or directory')",
+  "actual_observation_files": [
+    "bootstrap-125978.json"
+  ],
+  "worker_observations_recoverable": false,
+  "reason_evidence": "SIGUSR1等待20s后worker-125978.json不存在；server.log无collector异常或signal ack，11:26:42清理明确force killing remaining processes count=1。",
+  "cause_limit": "空闲EngineCore的Python signal回调延迟是可能解释；没有ack/current状态原件，不能确认handler未执行、pending_flush或handler覆盖的具体因果。atexit不能依赖强制进程终止。",
+  "source_unchanged": true,
+  "libraries_unchanged": true,
+  "database_restored": true,
+  "postflight": {
+    "checked_utc": "2026-10-28T11:26:46.197410+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "next": "不重跑。下一有效候选官方窗口可顺带在worker step收尾每若干prefill步主动flush；独立标诊断开销，不以此轮给吞吐基线。"
+}
