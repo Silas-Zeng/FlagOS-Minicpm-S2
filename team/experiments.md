@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共424条登记、421个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共428条登记、425个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -402,6 +402,10 @@
 | 天数 BI-V150 | 422 | 20261028T120924623364Z | [CoreX原生Prefill Attention：Q32／Q64](methods/native-q32-transfer.md) | 按已测负载与源码范围；模型/官方/生产资格不由组件或编译替代。 | 未记录/未记录/未记录/未记录 | Q64在61 decode+1987 prefill、context7948=4×1987边界做完整mixed forward，20门/两组FP64/全输出位型通过。Event4.430978775→4.32549572 | [20261028T120924623364Z-native-q64-long-context-mixed-metadata-component](runs/bi-v150/20261028T120924623364Z-native-q64-long-context-mixed-metadata-component.md) |
 | 天数 BI-V150 | 423 | 20261028T121814Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | S2固定形状，原数值合同与新共享生命周期分别验证；无S4/模型/官方资格。 | 未记录/未记录/未记录/未记录 | T32保持两页数学，QK读完后barrier再用同8KiB写V；实际16QK/16PV与页序保持，shared16→8KiB、64SGPR/80VGPR、0spill。每pair多一道barrier，V仅重叠softma | [20261028T121814Z-native-gqa-t32-reuse-compile](runs/bi-v150/20261028T121814Z-native-gqa-t32-reuse-compile.md) |
 | 天数 BI-V150 | 424 | 20261028T123106447870Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | S2固定形状，原数值合同与新共享生命周期分别验证；无S4/模型/官方资格。 | 未记录/未记录/未记录/未记录 | 固定N64/S2/KV4096完整producer+原reducer ABBA32：九数值门/FP64/非有限/尾/同臂Graph/side/输入RNG通过。Event .409684807→.408775479ms省0 | [20261028T123106447870Z-native-gqa-t32-reuse-hotspot-component](runs/bi-v150/20261028T123106447870Z-native-gqa-t32-reuse-hotspot-component.md) |
+| 天数 BI-V150 | 425 | 20261028T124728Z | [CoreX原生Prefill Attention：Q32／Q64](methods/native-q32-transfer.md) | CPU成品/资源不等于GPU数值或模型吞吐；不推断occupancy。 | 未记录/未记录/未记录/未记录 | Q64生产接线离线构建成功：821源tree232258a8，实际SO c157a26a；原e5aa CU/bridge/launcher复用。未启动服务/GPU，只获成品身份；官方筛选另列125913。 | [20261028T124728Z-native-q64-long-context-production-build](runs/bi-v150/20261028T124728Z-native-q64-long-context-production-build.md) |
+| 天数 BI-V150 | 426 | 20261028T125302Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | CPU成品/资源不等于GPU数值或模型吞吐；不推断occupancy。 | 未记录/未记录/未记录/未记录 | T32复用生产成品离线构建成功：814源treea2ad8270、单CU22e0b2c3、实际SO502e1570。无GPU/服务；123106约0.22%组件小正另列，尚无本生产模型成绩。 | [20261028T125302Z-native-gqa-t32-reuse-production-build](runs/bi-v150/20261028T125302Z-native-gqa-t32-reuse-production-build.md) |
+| 天数 BI-V150 | 427 | 20261028T132607Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | CPU成品/资源不等于GPU数值或模型吞吐；不推断occupancy。 | 未记录/未记录/未记录/未记录 | T64四页复用仅CPU实际编译：S2、16KiB、88SGPR/88VGPR、0spill；LLVM16817445/ASM b529dbe2。全kernel计数含尾路径，不代替完整quad热循环判断；尚无GPU数值/性 | [20261028T132607Z-native-gqa-t64-reuse-compile](runs/bi-v150/20261028T132607Z-native-gqa-t64-reuse-compile.md) |
+| 天数 BI-V150 | 428 | 20261028T125913Z | [CoreX原生Prefill Attention：Q32／Q64](methods/native-q32-transfer.md) | KV不同，不称严格因果或稳定退化；未跑满四轮、未跑准确率。 | 16384/1024/64/128 | Q64生产16K原官方首冷4041.81、首暖4819.11 tok/s，两轮256请求成功。对PR105首暖4834.45观察-0.317306%，按预设停止；KV548432对548288不匹配，不称严格因果或稳定退 | [20261028T125913Z-native-q64-long-context-16k-four-rounds](runs/bi-v150/20261028T125913Z-native-q64-long-context-16k-four-rounds.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

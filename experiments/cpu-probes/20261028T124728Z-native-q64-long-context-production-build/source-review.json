@@ -1,0 +1,35 @@
+{
+  "independent_CPU_review": true,
+  "decision": "GO_TO_FROZEN_SERVICE_VALIDATION",
+  "checks": {
+    "frozen_component_q64_attention.cu": true,
+    "frozen_component_bridge.cpp": true,
+    "frozen_component_launcher.cu": true,
+    "author28_CPU_report_passed": true
+  },
+  "source_sha256": {
+    "vllm_fl/patches/biv150_native_q64.py": "b8688bc956637b7002d6f9bf7adb0d158e5939f5514c451291a49eb93285c62e",
+    "vllm_fl/patches/biv150_q64_cpu_context.py": "e4927853e8410bcce0ee986edbc7263f24be570ab4c5891195d45731a192c73e",
+    "vllm_fl/patches/biv150_mixed_decode.py": "9470cacb71c538bf607da6642090231d01199e58b5d390c1e2db20342ca151a6",
+    "vllm_fl/patches/biv150_prefill_q32.py": "43c944b9d1f3e10baaee89898373d1a038878135cc223630f1b965572d81d09d",
+    "vllm_fl/compile_semantics.py": "18dce793c7e053754a44e77ecc0fb79bc10403ccc829eb9b19d5266be33976e4",
+    "vllm_fl/patches/biv150_compute_order.py": "683ada0b1c82df849e15a24b9d1ff2f9bf82d8eeeb1985a234ae8c87e326459a",
+    "tools/build_biv150_native_q64.py": "547957b7f995c073f77238964725d5a7932b439551b08d68e7d37cf9a8dd8c69",
+    "tools/check_biv150_native_q64_cpu.py": "4ab5d4f95ba30d3c7611c50ca69e18809a191c4011f0f66ede2a745b1057d508"
+  },
+  "cpu_report_sha256": "8cbf20968ea47e8a8549e770bb6a4331f874809245b04c91ac89ede9ce52e4b9",
+  "reviewed_new_risks": [
+    "CPU只读现成CPU cu/_seq_lens_cpu且转不可变tuple；不触发懒D2H。每次build先清旧字段，mixed replace显式给suffix、decode清None。",
+    "单suffix且CPU Q等于实际view行数、1024..2048、context>=4Q、KV<=16384；CPU仅分流，kernel仍读原GPU cu/seq与已有storage_offset data_ptr。",
+    "ContextVar遇嵌套decode/异常finally reset；原三cell闭包维持，compute_order四个受改源pin已更新，原runner pin不变。",
+    "原split plan producer wait_stream/record_stream未改；新接线不创建GPU metadata副本或异步流，Q64继承原consumer stream。",
+    "原qfragment descriptor检查和原Q32 policy先行，multi2/未知descriptor/hooks/async/capture在launch前回原；native实际launch后错误不回退重试。",
+    "默认启用限BI-V150/MiniCPM5-2B、预编译SO；缺SO不载入、不采CPU镜像。一次加载固定内容SHA，源码/SO/feature均进入编译缓存身份。",
+    "core CU/bridge/launcher与已过组件一致；没有benchmark/service参数变更或已有失败门放宽。"
+  ],
+  "remaining": [
+    "生产loader/Manager/CPU scope组合尚待真实服务验证；28项mock不能当新SO加载或请求覆盖证据。",
+    "context>=4Q是性能分流边界，不能把局部Event幅度写成官方稳定收益；按已安排官方/准确率流程决定保留。"
+  ],
+  "reused": "旧e5aa数学/ABI及111346/120924组件资格；28项CPU未因本复核重复执行。"
+}

@@ -1,0 +1,37 @@
+{
+  "status": "ACTUAL_COMPILER_FACTS_ONLY",
+  "checks": {
+    "only_one_S2": true,
+    "shared_16KiB": true,
+    "no_private_or_spill": true
+  },
+  "kernels": [
+    {
+      "name": "_Z32corex_native_gqa_t64_reuse_probeILj2EEvPK13__ix_bfloat16S2_S2_PKiS4_fllllllllPfS5_S5_",
+      "mma": 144,
+      "sme": 72,
+      "wait8": 8,
+      "counts_are_whole_kernel_including_tail_paths": true
+    }
+  ],
+  "resources": [
+    {
+      "name": "_Z32corex_native_gqa_t64_reuse_probeILj2EEvPK13__ix_bfloat16S2_S2_PKiS4_fllllllllPfS5_S5_",
+      "group_segment_fixed_size": 16384,
+      "private_segment_fixed_size": 0,
+      "sgpr_count": 88,
+      "vgpr_count": 88,
+      "sgpr_spill_count": 0,
+      "vgpr_spill_count": 0,
+      "warp_size": 64
+    }
+  ],
+  "files": {
+    "gqa.ll": "16817445520fa476204654d46c9278bd930b7a6be722390569857f59c4595e86",
+    "gqa.s": "b529dbe2f8fc04321f6a5104ff508ef1e0afebbb7c7b93dcca4e667d13a9b0b8"
+  },
+  "pending": "核完整quad实际CFG：四独立页K→全部QK→释放barrier→同址四页V→完成barrier→原页序PV→释放；相比两轮T32是否真少4barrier/16shuffle/32rescale/2rho/2L-FMA，16KiB/零spill只是必要条件。",
+  "device_executed": false,
+  "numerical_qualified": false,
+  "performance_qualified": false
+}
