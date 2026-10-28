@@ -1,0 +1,37 @@
+{
+  "CPU_only": true,
+  "decision": "NO_GO_PRE_PV_EARLY_G2_DRAIN",
+  "allow_GPU": false,
+  "source_sha256": "a7b93eaa4de5d078a4ad49c3d5c13a34932e35e634761b51075b5d2d8c84e3f5",
+  "LLVM_sha256": "9d9b39252b617f4a4087da0ac43b27fa6da74bc192481656f0ec1885b3438bcf",
+  "ASM_sha256": "0d28fda094e81f1dcd801a724dbff70a8d4fe64b804a9df67463b1b86a9ea9bd",
+  "artifact": "archive/hotspot-layout-20261026/batch-102147-native-gqa-double-slot-compile/cpu-probes/20261028T102147Z-native-gqa-double-slot-compile/gqa.s",
+  "S2": {
+    "next_8_SME_lines": [556, 565],
+    "QK_block": "BB0_20",
+    "reconvergence_to_pre_PV": "BB0_22/23 -> BB0_3",
+    "early_drain_line": 345,
+    "drain": "sl_wait lmcnt(0) g2scnt(0)",
+    "pre_PV_barrier_line": 346,
+    "first_PV_MMA_line": 373,
+    "last_PV_MMA_line": 414,
+    "page_end_barrier_line": 415
+  },
+  "S4": {
+    "next_8_SME_lines": [1413, 1422],
+    "QK_block": "BB1_20",
+    "reconvergence_to_pre_PV": "BB1_22/23 -> BB1_3",
+    "early_drain_line": 1202,
+    "drain": "sl_wait lmcnt(0) g2scnt(0)",
+    "pre_PV_barrier_line": 1203,
+    "first_PV_MMA_line": 1230,
+    "last_PV_MMA_line": 1271,
+    "page_end_barrier_line": 1272
+  },
+  "resources_each": {"shared_bytes": 16384, "SGPR": 59, "VGPR": 82, "private_bytes": 0, "spills": 0},
+  "conclusion": "两核都在当前PV之前排空下一页SME，未满足预先规定的完整QK/PV窗口。QK/softmax部分仍可能重叠，但不扩展该候选验证，不把编译结果写成实测性能负收益或数值错误。",
+  "next": "停止本方案，不排GPU，不追加原FP长审，不删除/移动barrier挽救。保留源码和实际编译负机制证据。",
+  "device_executed": false,
+  "numeric_qualified": false,
+  "performance_qualified": false
+}

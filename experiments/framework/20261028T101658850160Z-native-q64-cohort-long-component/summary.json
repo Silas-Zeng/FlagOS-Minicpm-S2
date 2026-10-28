@@ -1,0 +1,84 @@
+{
+  "run": "20261028T101658850160Z-native-q64-cohort-long-component",
+  "status": "native_q64_cohort_event_negative",
+  "conclusion": "原Q32／旧双槽Q32／Q64同轮ABCCBA长组件Event为6.561143398／6.401421785／6.880203247ms；Q64对原慢4.862870%、对双槽慢7.479299%，停止。长输入位型/原FP64/换值Graph/side/输入与Q33八门通过，非数值失败；旧双槽同轮省2.434356%仍仅局部观察。未进模型/官方，不外推吞吐或准确率。",
+  "raw_original_files": 82,
+  "model_qualified": false,
+  "new_baseline": false,
+  "original_status": "stopped_negative",
+  "summary": {
+    "event": {
+      "current_ms": 6.561143398284912,
+      "q32_double_ms": 6.401421785354614,
+      "q64_ms": 6.8802032470703125,
+      "fraction_saved": -0.07479298783452615,
+      "fraction_saved_vs_original": -0.04862869616122145,
+      "q32_double_fraction_saved_vs_original": 0.02434356380201186
+    },
+    "wall": {
+      "current_ms": 6.6523398125,
+      "q32_double_ms": 6.418763375,
+      "q64_ms": 6.89700759375,
+      "fraction_saved": -0.07450722059839121,
+      "fraction_saved_vs_original": -0.03677920673719326,
+      "q32_double_fraction_saved_vs_original": 0.035111922133187035
+    }
+  },
+  "numerical_component_passed": true,
+  "Q33_boundary": {
+    "scope": "direct original Q32 arithmetic vs Q64 boundary only; original production M33 policy is unchanged",
+    "checks": [
+      {
+        "label": "normal_complete33rows_bitwise",
+        "passed": true
+      },
+      {
+        "label": "normal_finite_tail_cohort_and_padding",
+        "passed": true
+      },
+      {
+        "label": "normal_input_metadata_RNG_unchanged",
+        "passed": true
+      },
+      {
+        "label": "future_position32_CPU_overlay_exact",
+        "passed": true
+      },
+      {
+        "label": "first_cohort_future_NaN_finite_exact",
+        "passed": true
+      },
+      {
+        "label": "first_CTA_unwritten_heads_and_padding",
+        "passed": true
+      },
+      {
+        "label": "restored_full_bitwise_and_storage",
+        "passed": true
+      },
+      {
+        "label": "restored_finite_and_guards",
+        "passed": true
+      }
+    ],
+    "poison_scope": {
+      "logical_position": 32,
+      "physical_page": 1,
+      "both_K_and_V": true,
+      "required_valid_target": "first32queries/head0..7",
+      "q64_second_cohort": "query32/head0..7 legitimately reads poison; not claimed finite/valid; no output beyond row33 allowed"
+    },
+    "passed": true,
+    "FP64": "not repeated on newcausal33; unchanged original long FP64 remains hard gate",
+    "timed": false,
+    "production_qualified": false
+  },
+  "actual_native_build": {
+    "library_sha256": "e43056c6905d92a7fa82ca091bd6bf8e74492c963baf016b1e3482586e6e7e50",
+    "kernel_sha256": "f9999d601abb51a1d2a2425d8101c0eaeabed284a7cc263c917b7282a4dcd106",
+    "command": "/usr/local/corex/bin/clang++  -DTORCH_EXTENSION_NAME=corex_q64_attention_component -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.12/site-packages/torch/include -isystem /usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/corex/include -isystem /usr/local/include/python3.12 -D_GLIBCXX_USE_CXX11_ABI=0 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__ILUVATAR__ -D__ILUVATAR_WORKAROUND__ -D__ILUVATAR_DIAG__ -cl-single-precision-constant -fPIC -mllvm --bonus-inst-threshold=0 -mllvm --skip-double -fclang-abi-compat=16 -D__MR__ -O3 -std=c++17 -D__ILUVATAR__ -D__MR__ -x ivcore --cuda-gpu-arch=ivcore11 --cuda-path=/usr/local/corex -c /workspace/experiments/minicpm-s2/framework/20261028T101658850160Z-native-q64-cohort-long-component/source/launcher.cu -o launcher.cuda.o ",
+    "resources_are_from_bare_CPU_probe": true,
+    "note": "Torch extension adds its normal flags; numerical/timing applies to this actual loaded SO, not assumed CPU register allocation"
+  },
+  "scope": "真实完整prefill组件，不含模型与官方成绩；tail poison只声明受保护目标范围"
+}

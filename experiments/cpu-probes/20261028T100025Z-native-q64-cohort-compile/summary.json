@@ -1,0 +1,21 @@
+{
+  "run": "20261028T100025Z-native-q64-cohort-compile",
+  "status": "native_q64_cohort_compile_only",
+  "conclusion": "Q64把两个原Q32 cohort放同一2048-thread CTA共享KV加载；CPU实际编译64KiB shared、83SGPR/107VGPR、private/spill0。实际逐cohort数学依赖、Q寄存器生命周期与统一barrier独审通过，只允许后续组件门，编译本身不授数值或性能资格。",
+  "raw_original_files": 28,
+  "model_qualified": false,
+  "new_baseline": false,
+  "CPU_only": true,
+  "resources": {
+    "shared_bytes": 65536,
+    "private_bytes": 0,
+    "SGPR": 83,
+    "VGPR": 107,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0
+  },
+  "source_sha256": "f9999d601abb51a1d2a2425d8101c0eaeabed284a7cc263c917b7282a4dcd106",
+  "LLVM_sha256": "69e97f4396beed4c8f3f4a79dea2041235ec2a2a29d46f14879ad9dc6f6e08d3",
+  "ASM_sha256": "2400b4aacd7197efaa07ce9d248f47958428068c1c61bc20a25723396ff6f1cd",
+  "scope": "两个Q32 cohort共享KV，只有CPU机制资格；GPU见后继独立run"
+}

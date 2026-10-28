@@ -97,7 +97,7 @@
 - [GQA尾段append融合](methods/gqa-fused-append.md)
 - [LM-head温度epilogue融合](methods/lm-head-temperature.md)
 - [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md)
-- [CoreX原生Q32 Attention：编译、映射与组件](methods/native-q32-transfer.md)
+- [CoreX原生Prefill Attention：Q32／Q64](methods/native-q32-transfer.md)
 - [同步原生GQA实际热点诊断](methods/native-gqa-production-hotspot.md)
 - [原生BF16 GQA：mixed S4覆盖扩展](methods/native-gqa-mixed-s4.md)
 

@@ -10,7 +10,7 @@
 
 启动捕获不证明105逐题经过原生分支；通用stack缺compute_order marker与旧105相同，原pending回执保留。不同负载百分比不相加，不把单组幅度称统计稳定。
 
-总408条／405个独立run，最新三轮476原件已归档。Q32长组件双槽Event省2.50544%仅是局部证据；新GPU metadata接线pure2048的完整Event慢9.30069%，按预设停止，mixed未测，无生产资格。正负结果及完整证据见[原生GQA](team/methods/corex-native-gqa-page16.md)／[Q32](team/methods/native-q32-transfer.md)。
+总411条／408个独立run，最新三轮134原件已归档。Q64完整长组件数值门通过，但Event对原Q32慢4.862870%、对旧双槽慢7.479299%，停止；原生GQA双槽在实际CPU ASM的PV前提前等待，按机制门停止、未进GPU。Q32旧双槽同轮小收益仍只作局部观察，不外推官方吞吐。当前PR105基线不变；正负结果见[原生GQA](team/methods/corex-native-gqa-page16.md)／[Q32和Q64](team/methods/native-q32-transfer.md)。
 
 团队主要看：**尝试了什么、改了什么、怎么测、结果怎样、是否保留。**
 
