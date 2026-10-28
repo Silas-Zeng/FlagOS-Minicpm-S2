@@ -1376,5 +1376,16 @@ for _k,_a,_c,_r,_d in [
 
 
 
+# 2026-10-29 Direct-G8 官方4K资格失败与完整负结果
+for _k,_a,_c,_r,_d in [
+ ('shape_gemm_direct_g8_official_prebenchmark_marker_failed','验证Direct-G8官方4K入口能否在服务启动后完成首请求前资格检查。','冷路径尚未触发真实GEMM，driver因预期direct marker缺失而停止；benchmark未开始。','服务启动后资格门退出，0轮benchmark；无数值或吞吐结论。','保留入口时序失败原件；不归类为kernel正确性或性能负结果。'),
+ ('shape_gemm_direct_g8_first_round_bind_failed','验证Direct-G8官方4K冷轮后的实际kernel绑定身份。','首轮256请求沿SDK fallback完成；首条SUCCESS后未取得Direct-G8 receipt，supervisor停止后续轮次。','冷轮6005.43 tok/s，但候选未启用，不作为候选吞吐结论。','保留接口绑定失败证据；不归类为数值错误。'),
+ ('shape_gemm_direct_g8_transport_base_qualification_failed','验证Direct-G8官方4K候选冻结source运输身份。','CPU暂存完成815文件后，qualification错误地把341运输基底与f165性能基线比较；GPU未启动。','pre-GPU资格失败，无服务、benchmark、数值或吞吐结论。','保留准备失败原件；运输基底与测量基线分开记录。'),
+ ('shape_gemm_direct_g8_official4k_full_negative','检验Direct-G8实际绑定后的官方4K端到端影响。','原官方参数及服务流程完成四轮，首轮actualDirect receipt有效；DB/source/两SO及stack清理通过。','四轮5418.24/6519.84/6726.82/6441.8 tok/s；弃首均6562.82，对PR105基线6627.816667为−0.980665%。KV548432对548336不匹配。','保留官方完整负均值；不称严格因果收益，不进入16K/105、不合并或更新基线。'),
+]:
+    BATCH_RESULTS[_k]=('结果与限制见原始bundle及登记结论。',_d,_r,'原始成员、清单与压缩分块按SHA256核验；入口资格失败与完整官方负结果分开。')
+    SHORT_ATTEMPTS[_k]=(_a,_c)
+
+
 if __name__ == '__main__':
     main()
