@@ -1,0 +1,48 @@
+{
+  "run": "20261028T134934Z-native-gqa-premax-vote-compile",
+  "status": "native_gqa_premax_vote_compile_only",
+  "conclusion": "premax vote仅CPU实际编译：8KiB／64SGPR／76VGPR／0spill，LLVMf2b09bfe/ASM6ec14738。试图在max树前统一vote跳过max/rho，仍需实际CFG和原数值/Graph门；无GPU/性能/模型资格，不把后续准备态计为已跑。",
+  "raw_original_files": 23,
+  "model_qualified": false,
+  "new_baseline": false,
+  "CPU_only": true,
+  "GPU_executed": false,
+  "compiler_facts": {
+    "status": "ACTUAL_COMPILER_FACTS_ONLY",
+    "checks": {
+      "only_one_S2": true,
+      "shared_8KiB": true,
+      "no_private_or_spill": true
+    },
+    "kernels": [
+      {
+        "name": "_Z34corex_native_gqa_premax_vote_probeILj2EEvPK13__ix_bfloat16S2_S2_PKiS4_fllllllllPfS5_S5_",
+        "mma": 32,
+        "sme": 16,
+        "wait8": 4,
+        "counts_are_whole_kernel_including_tail_paths": true
+      }
+    ],
+    "resources": [
+      {
+        "name": "_Z34corex_native_gqa_premax_vote_probeILj2EEvPK13__ix_bfloat16S2_S2_PKiS4_fllllllllPfS5_S5_",
+        "group_segment_fixed_size": 8192,
+        "private_segment_fixed_size": 0,
+        "sgpr_count": 64,
+        "vgpr_count": 76,
+        "sgpr_spill_count": 0,
+        "vgpr_spill_count": 0,
+        "warp_size": 64
+      }
+    ],
+    "files": {
+      "gqa.ll": "f2b09bfe461e8cf78881ed962012daa21a13d96f642656b9b17bb0c08564a577",
+      "gqa.s": "6ec14738bc1d26e56cea39c534b63adc10cb02bace23bd2b215f23a9733c4e97"
+    },
+    "pending": "核vote_all为64lane统一分支，fast路径跳过8个max shuffle和2个rho exp；保原概率/L FMA/acc缩放及PV/同步。对比额外比较/vote/branch和原V重叠窗口，不靠源级if声称收益",
+    "device_executed": false,
+    "numerical_qualified": false,
+    "performance_qualified": false
+  },
+  "source_sha256": "bb36451e9e8e26aa7e3e7a94395b6292d8559da9b8f22482878b172194985e2d"
+}

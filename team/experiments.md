@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共428条登记、425个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共431条登记、428个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -406,6 +406,9 @@
 | 天数 BI-V150 | 426 | 20261028T125302Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | CPU成品/资源不等于GPU数值或模型吞吐；不推断occupancy。 | 未记录/未记录/未记录/未记录 | T32复用生产成品离线构建成功：814源treea2ad8270、单CU22e0b2c3、实际SO502e1570。无GPU/服务；123106约0.22%组件小正另列，尚无本生产模型成绩。 | [20261028T125302Z-native-gqa-t32-reuse-production-build](runs/bi-v150/20261028T125302Z-native-gqa-t32-reuse-production-build.md) |
 | 天数 BI-V150 | 427 | 20261028T132607Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | CPU成品/资源不等于GPU数值或模型吞吐；不推断occupancy。 | 未记录/未记录/未记录/未记录 | T64四页复用仅CPU实际编译：S2、16KiB、88SGPR/88VGPR、0spill；LLVM16817445/ASM b529dbe2。全kernel计数含尾路径，不代替完整quad热循环判断；尚无GPU数值/性 | [20261028T132607Z-native-gqa-t64-reuse-compile](runs/bi-v150/20261028T132607Z-native-gqa-t64-reuse-compile.md) |
 | 天数 BI-V150 | 428 | 20261028T125913Z | [CoreX原生Prefill Attention：Q32／Q64](methods/native-q32-transfer.md) | KV不同，不称严格因果或稳定退化；未跑满四轮、未跑准确率。 | 16384/1024/64/128 | Q64生产16K原官方首冷4041.81、首暖4819.11 tok/s，两轮256请求成功。对PR105首暖4834.45观察-0.317306%，按预设停止；KV548432对548288不匹配，不称严格因果或稳定退 | [20261028T125913Z-native-q64-long-context-16k-four-rounds](runs/bi-v150/20261028T125913Z-native-q64-long-context-16k-four-rounds.md) |
+| 天数 BI-V150 | 429 | 20261028T132807Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | KV不同，不称严格因果或稳定退化；未满四轮/16K/准确率。 | 4096/1024/64/256 | T32复用4K原官方首冷5491.63／首暖6412.53 tok/s，两轮512请求成功；对PR105首暖6441.35观察−0.447422%，按门停止。KV548432对548336不同，非严格因果/稳定退化；源/ | [20261028T132807Z-native-gqa-t32-reuse-4k-four-rounds](runs/bi-v150/20261028T132807Z-native-gqa-t32-reuse-4k-four-rounds.md) |
+| 天数 BI-V150 | 430 | 20261028T134552095824Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 跨算法位型仅诊断，原数值门通过；组件负不冒充模型成绩。 | 未记录/未记录/未记录/未记录 | T64四页复用N64/S2/KV4096完整producer+原reducer ABBA32：九原case、六双臂FP64、三非有限、同臂Graph/尾/side/输入RNG通过。Event .409594774→.42 | [20261028T134552095824Z-native-gqa-t64-reuse-hotspot-component](runs/bi-v150/20261028T134552095824Z-native-gqa-t64-reuse-hotspot-component.md) |
+| 天数 BI-V150 | 431 | 20261028T134934Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | CPU编译不等于GPU数值或模型吞吐资格。 | 未记录/未记录/未记录/未记录 | premax vote仅CPU实际编译：8KiB／64SGPR／76VGPR／0spill，LLVMf2b09bfe/ASM6ec14738。试图在max树前统一vote跳过max/rho，仍需实际CFG和原数值/Gra | [20261028T134934Z-native-gqa-premax-vote-compile](runs/bi-v150/20261028T134934Z-native-gqa-premax-vote-compile.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |

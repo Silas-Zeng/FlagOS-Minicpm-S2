@@ -1,0 +1,1081 @@
+{
+  "run": "20261028T134552095824Z-native-gqa-t64-reuse-hotspot-component",
+  "status": "native_gqa_t64_reuse_component_negative",
+  "conclusion": "T64四页复用N64/S2/KV4096完整producer+原reducer ABBA32：九原case、六双臂FP64、三非有限、同臂Graph/尾/side/输入RNG通过。Event .409594774→.421100542ms慢2.809061%，wall慢2.675528%；数值通过但性能负，停止，不进模型或合并。",
+  "raw_original_files": 86,
+  "model_qualified": false,
+  "new_baseline": false,
+  "review": {
+    "reviewer": "experiment_sync_resume，终态薄审",
+    "decision": "NUMERIC_PASS_PERFORMANCE_NEGATIVE_STOP",
+    "checks": {
+      "nine_original_cases": true,
+      "six_FP64_both_arms": true,
+      "three_nonfinite_original_cases": true,
+      "original_FP64_thresholds": true,
+      "side_tail": true,
+      "ABBA32_order": true,
+      "summary_from_raw_timing": true,
+      "CPU_no_throttle_in_timing": true,
+      "same_original_producer_reducer_contract": true,
+      "source_and_two_original_SO_unchanged": true,
+      "database_restored": true,
+      "terminal_exit_cleanup": true,
+      "negative_status": true
+    },
+    "run": "20261028T134552095824Z-native-gqa-t64-reuse-hotspot-component",
+    "summary": {
+      "event": {
+        "macro1_ms": 0.4095947742462158,
+        "t64_reuse_ms": 0.42110054194927216,
+        "fraction_saved": -0.02809061156659176
+      },
+      "wall": {
+        "macro1_ms": 0.41266153125,
+        "t64_reuse_ms": 0.42370240625,
+        "fraction_saved": -0.02675528045116282
+      }
+    },
+    "shape": {
+      "N": 64,
+      "S": 2,
+      "KV": 4096,
+      "cache_capacity": 16384,
+      "Q_stride": [
+        2048,
+        128,
+        1
+      ]
+    },
+    "source_identity": {
+      "commit": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd",
+      "tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+      "tracked_files": 814,
+      "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+      "extras": {}
+    },
+    "base_commit": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd",
+    "source_count": 814,
+    "actual_candidate_SO": "a2f62d46cbb207edefea3568238548efad52dc7722b3341653c4fdb8d9c33a2b",
+    "actual_candidate_source": "714bc94aa79f270d884d5cfbfdc1c3d1ca44a0bfae94f9c8060341debd5eb038",
+    "numerical_contract": {
+      "source": "scripts/remote/validate_mapped_decode.py:70-92",
+      "atol": 0.03,
+      "rtol": 0.03,
+      "relative_l2_limit": 0.01,
+      "description": "新T64四页数学顺序；沿原独立FP64阈值，cross-arm/partial bitwise仅诊断，同arm Graph/eager与tail poison仍逐位；不是模型准确率"
+    },
+    "timing_contract": {
+      "order": [
+        "macro1",
+        "t64_reuse",
+        "t64_reuse",
+        "macro1"
+      ],
+      "loops_per_window": 32,
+      "per_replay": [
+        "one native producer",
+        "one unchanged original reducer"
+      ],
+      "writer_in_timing": false,
+      "input": "restored exact initial seed725013; N64/S2/KV4096/Qstride2048",
+      "SO0": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+      "SO1": "a2f62d46cbb207edefea3568238548efad52dc7722b3341653c4fdb8d9c33a2b"
+    },
+    "original_result_sha256": "affaf3efaf95bb842b7153299bb4632cc29deb66c517cc76994f86f862609571",
+    "case_names": [
+      "dense-random",
+      "graph-changed-q-kv-pages-ragged-zero-tail",
+      "tail-unused-KV-NaN-masked",
+      "finite-equal-max-negative-zero-v",
+      "finite-equal-max-subnormal-cancellation-v",
+      "finite-max-nonfinite-accumulator",
+      "negative-infinity-max-original-path",
+      "positive-infinity-max-original-path",
+      "restored-dense-before-ABBA"
+    ],
+    "nonfinite_case_names": [
+      "finite-max-nonfinite-accumulator",
+      "negative-infinity-max-original-path",
+      "positive-infinity-max-original-path"
+    ],
+    "finished_utc": "2026-10-28T13:46:47.695609+00:00",
+    "model_qualified": false,
+    "new_baseline": false,
+    "raw_member_SHA_reused": "root已核86原件，不重复全量",
+    "note": "九原case和六双臂FP64通过，跨算法output/partial位型只诊断。Event慢2.809061%、wall慢2.675528%，不扩shape、不进模型、不新合并；CPU compile资源不冒充actual SO逐kernel资源。"
+  },
+  "original_results": {
+    "status": "stopped_negative",
+    "checks": [
+      {
+        "case": "dense-random",
+        "checks": {
+          "eager_numerics": true,
+          "finite": true,
+          "guard": true,
+          "padded_output_zero": true,
+          "padded_partials_untouched": true,
+          "scratch_unwritten_storage": true,
+          "graph_fresh_bits": true,
+          "inputs_unchanged": true,
+          "rng_unchanged": true
+        },
+        "independent_reference": {
+          "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+          "atol": 0.03,
+          "rtol": 0.03,
+          "relative_l2_limit": 0.01,
+          "rows": [
+            0,
+            1,
+            4,
+            8,
+            10,
+            13,
+            14,
+            15,
+            62,
+            63
+          ],
+          "heads": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "lengths": [
+            4096,
+            4096,
+            4096,
+            4096,
+            4096,
+            4096,
+            4096,
+            4096,
+            4096,
+            4096
+          ],
+          "arms": {
+            "macro1": {
+              "finite": true,
+              "max_abs": 0.0003521891965664742,
+              "relative_l2": 0.0022570838328979884,
+              "passed": true
+            },
+            "t64_reuse": {
+              "finite": true,
+              "max_abs": 0.00030505255365879946,
+              "relative_l2": 0.0022623153485757308,
+              "passed": true
+            }
+          },
+          "scope": "合成组件抽样，不是模型准确率"
+        },
+        "nonfinite_diagnostic": false,
+        "baseline_nan": 0,
+        "candidate_nan": 0,
+        "cross_arm_bitwise_diagnostic": false,
+        "all_partial_state_cross_arm_bitwise_diagnostic": false
+      },
+      {
+        "case": "graph-changed-q-kv-pages-ragged-zero-tail",
+        "checks": {
+          "eager_numerics": true,
+          "finite": true,
+          "guard": true,
+          "padded_output_zero": true,
+          "padded_partials_untouched": true,
+          "scratch_unwritten_storage": true,
+          "graph_fresh_bits": true,
+          "inputs_unchanged": true,
+          "rng_unchanged": true,
+          "output_changed": true
+        },
+        "independent_reference": {
+          "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+          "atol": 0.03,
+          "rtol": 0.03,
+          "relative_l2_limit": 0.01,
+          "rows": [
+            0,
+            1,
+            4,
+            8,
+            10,
+            13,
+            14,
+            15,
+            62,
+            63
+          ],
+          "heads": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "lengths": [
+            0,
+            1,
+            17,
+            63,
+            65,
+            4097,
+            16383,
+            16384,
+            16383,
+            16384
+          ],
+          "arms": {
+            "macro1": {
+              "finite": true,
+              "max_abs": 0.004196068008279097,
+              "relative_l2": 0.0008515692520050289,
+              "passed": true
+            },
+            "t64_reuse": {
+              "finite": true,
+              "max_abs": 0.004196068008279097,
+              "relative_l2": 0.0008574854566539959,
+              "passed": true
+            }
+          },
+          "scope": "合成组件抽样，不是模型准确率"
+        },
+        "nonfinite_diagnostic": false,
+        "baseline_nan": 0,
+        "candidate_nan": 0,
+        "cross_arm_bitwise_diagnostic": false,
+        "all_partial_state_cross_arm_bitwise_diagnostic": false
+      },
+      {
+        "case": "tail-unused-KV-NaN-masked",
+        "checks": {
+          "eager_numerics": true,
+          "finite": true,
+          "guard": true,
+          "padded_output_zero": true,
+          "padded_partials_untouched": true,
+          "scratch_unwritten_storage": true,
+          "graph_fresh_bits": true,
+          "inputs_unchanged": true,
+          "rng_unchanged": true
+        },
+        "independent_reference": {
+          "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+          "atol": 0.03,
+          "rtol": 0.03,
+          "relative_l2_limit": 0.01,
+          "rows": [
+            0,
+            1,
+            4,
+            8,
+            10,
+            13,
+            14,
+            15,
+            62,
+            63
+          ],
+          "heads": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "lengths": [
+            0,
+            1,
+            17,
+            63,
+            65,
+            4097,
+            16383,
+            16384,
+            16383,
+            16384
+          ],
+          "arms": {
+            "macro1": {
+              "finite": true,
+              "max_abs": 0.004196068008279097,
+              "relative_l2": 0.0008515692520050289,
+              "passed": true
+            },
+            "t64_reuse": {
+              "finite": true,
+              "max_abs": 0.004196068008279097,
+              "relative_l2": 0.0008574854566539959,
+              "passed": true
+            }
+          },
+          "scope": "合成组件抽样，不是模型准确率"
+        },
+        "nonfinite_diagnostic": false,
+        "baseline_nan": 0,
+        "candidate_nan": 0,
+        "cross_arm_bitwise_diagnostic": false,
+        "all_partial_state_cross_arm_bitwise_diagnostic": false
+      },
+      {
+        "case": "finite-equal-max-negative-zero-v",
+        "checks": {
+          "eager_numerics": true,
+          "finite": true,
+          "guard": true,
+          "padded_output_zero": true,
+          "padded_partials_untouched": true,
+          "scratch_unwritten_storage": true,
+          "graph_fresh_bits": true,
+          "inputs_unchanged": true,
+          "rng_unchanged": true
+        },
+        "independent_reference": {
+          "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+          "atol": 0.03,
+          "rtol": 0.03,
+          "relative_l2_limit": 0.01,
+          "rows": [
+            0,
+            1,
+            4,
+            8,
+            10,
+            13,
+            14,
+            15,
+            62,
+            63
+          ],
+          "heads": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "lengths": [
+            0,
+            1,
+            17,
+            0,
+            15,
+            32,
+            128,
+            131,
+            128,
+            131
+          ],
+          "arms": {
+            "macro1": {
+              "finite": true,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "passed": true
+            },
+            "t64_reuse": {
+              "finite": true,
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "passed": true
+            }
+          },
+          "scope": "合成组件抽样，不是模型准确率"
+        },
+        "nonfinite_diagnostic": false,
+        "baseline_nan": 0,
+        "candidate_nan": 0,
+        "cross_arm_bitwise_diagnostic": true,
+        "all_partial_state_cross_arm_bitwise_diagnostic": true
+      },
+      {
+        "case": "finite-equal-max-subnormal-cancellation-v",
+        "checks": {
+          "eager_numerics": true,
+          "finite": true,
+          "guard": true,
+          "padded_output_zero": true,
+          "padded_partials_untouched": true,
+          "scratch_unwritten_storage": true,
+          "graph_fresh_bits": true,
+          "inputs_unchanged": true,
+          "rng_unchanged": true
+        },
+        "independent_reference": {
+          "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+          "atol": 0.03,
+          "rtol": 0.03,
+          "relative_l2_limit": 0.01,
+          "rows": [
+            0,
+            1,
+            4,
+            8,
+            10,
+            13,
+            14,
+            15,
+            62,
+            63
+          ],
+          "heads": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "lengths": [
+            0,
+            1,
+            17,
+            0,
+            15,
+            32,
+            128,
+            131,
+            128,
+            131
+          ],
+          "arms": {
+            "macro1": {
+              "finite": true,
+              "max_abs": 1.566073072319646e-53,
+              "relative_l2": 6.672892949406044e-16,
+              "passed": true
+            },
+            "t64_reuse": {
+              "finite": true,
+              "max_abs": 1.566073072319646e-53,
+              "relative_l2": 6.672892949406044e-16,
+              "passed": true
+            }
+          },
+          "scope": "合成组件抽样，不是模型准确率"
+        },
+        "nonfinite_diagnostic": false,
+        "baseline_nan": 0,
+        "candidate_nan": 0,
+        "cross_arm_bitwise_diagnostic": true,
+        "all_partial_state_cross_arm_bitwise_diagnostic": true
+      },
+      {
+        "case": "finite-max-nonfinite-accumulator",
+        "checks": {
+          "eager_numerics": true,
+          "finite": true,
+          "guard": true,
+          "padded_output_zero": true,
+          "padded_partials_untouched": true,
+          "scratch_unwritten_storage": true,
+          "graph_fresh_bits": true,
+          "inputs_unchanged": true,
+          "rng_unchanged": true
+        },
+        "independent_reference": null,
+        "nonfinite_diagnostic": true,
+        "baseline_nan": 112896,
+        "candidate_nan": 112896,
+        "cross_arm_bitwise_diagnostic": true,
+        "all_partial_state_cross_arm_bitwise_diagnostic": true
+      },
+      {
+        "case": "negative-infinity-max-original-path",
+        "checks": {
+          "eager_numerics": true,
+          "finite": true,
+          "guard": true,
+          "padded_output_zero": true,
+          "padded_partials_untouched": true,
+          "scratch_unwritten_storage": true,
+          "graph_fresh_bits": true,
+          "inputs_unchanged": true,
+          "rng_unchanged": true
+        },
+        "independent_reference": null,
+        "nonfinite_diagnostic": true,
+        "baseline_nan": 114688,
+        "candidate_nan": 114688,
+        "cross_arm_bitwise_diagnostic": true,
+        "all_partial_state_cross_arm_bitwise_diagnostic": true
+      },
+      {
+        "case": "positive-infinity-max-original-path",
+        "checks": {
+          "eager_numerics": true,
+          "finite": true,
+          "guard": true,
+          "padded_output_zero": true,
+          "padded_partials_untouched": true,
+          "scratch_unwritten_storage": true,
+          "graph_fresh_bits": true,
+          "inputs_unchanged": true,
+          "rng_unchanged": true
+        },
+        "independent_reference": null,
+        "nonfinite_diagnostic": true,
+        "baseline_nan": 114688,
+        "candidate_nan": 114688,
+        "cross_arm_bitwise_diagnostic": true,
+        "all_partial_state_cross_arm_bitwise_diagnostic": true
+      },
+      {
+        "case": "restored-dense-before-ABBA",
+        "checks": {
+          "eager_numerics": true,
+          "finite": true,
+          "guard": true,
+          "padded_output_zero": true,
+          "padded_partials_untouched": true,
+          "scratch_unwritten_storage": true,
+          "graph_fresh_bits": true,
+          "inputs_unchanged": true,
+          "rng_unchanged": true
+        },
+        "independent_reference": {
+          "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+          "atol": 0.03,
+          "rtol": 0.03,
+          "relative_l2_limit": 0.01,
+          "rows": [
+            0,
+            1,
+            4,
+            8,
+            10,
+            13,
+            14,
+            15,
+            62,
+            63
+          ],
+          "heads": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "lengths": [
+            4096,
+            4096,
+            4096,
+            4096,
+            4096,
+            4096,
+            4096,
+            4096,
+            4096,
+            4096
+          ],
+          "arms": {
+            "macro1": {
+              "finite": true,
+              "max_abs": 0.0003521891965664742,
+              "relative_l2": 0.0022570838328979884,
+              "passed": true
+            },
+            "t64_reuse": {
+              "finite": true,
+              "max_abs": 0.00030505255365879946,
+              "relative_l2": 0.0022623153485757308,
+              "passed": true
+            }
+          },
+          "scope": "合成组件抽样，不是模型准确率"
+        },
+        "nonfinite_diagnostic": false,
+        "baseline_nan": 0,
+        "candidate_nan": 0,
+        "cross_arm_bitwise_diagnostic": false,
+        "all_partial_state_cross_arm_bitwise_diagnostic": false
+      }
+    ],
+    "timings": [
+      {
+        "calls": 32,
+        "wall_total_ms": 13.234745,
+        "wall_per_call_ms": 0.41358578125,
+        "event_total_ms": 13.116000175476074,
+        "event_per_call_ms": 0.4098750054836273,
+        "submit_thread_cpu_ns": 9918913,
+        "submit_process_cpu_ns": 10527901,
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 397952\nnr_throttled 2553\nthrottled_time 10567818658129",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 397952,
+            "nr_throttled": 2553,
+            "throttled_time": 10567818658129
+          }
+        },
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 397952\nnr_throttled 2553\nthrottled_time 10567818658129",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 397952,
+            "nr_throttled": 2553,
+            "throttled_time": 10567818658129
+          }
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 0,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "arm": "macro1"
+      },
+      {
+        "calls": 32,
+        "wall_total_ms": 13.560216,
+        "wall_per_call_ms": 0.42375675,
+        "event_total_ms": 13.470749855041504,
+        "event_per_call_ms": 0.420960932970047,
+        "submit_thread_cpu_ns": 10160232,
+        "submit_process_cpu_ns": 10796751,
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 397952\nnr_throttled 2553\nthrottled_time 10567818658129",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 397952,
+            "nr_throttled": 2553,
+            "throttled_time": 10567818658129
+          }
+        },
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 397952\nnr_throttled 2553\nthrottled_time 10567818658129",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 397952,
+            "nr_throttled": 2553,
+            "throttled_time": 10567818658129
+          }
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 0,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "arm": "t64_reuse"
+      },
+      {
+        "calls": 32,
+        "wall_total_ms": 13.556738,
+        "wall_per_call_ms": 0.4236480625,
+        "event_total_ms": 13.479684829711914,
+        "event_per_call_ms": 0.4212401509284973,
+        "submit_thread_cpu_ns": 10160905,
+        "submit_process_cpu_ns": 10772869,
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 397952\nnr_throttled 2553\nthrottled_time 10567818658129",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 397952,
+            "nr_throttled": 2553,
+            "throttled_time": 10567818658129
+          }
+        },
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 397952\nnr_throttled 2553\nthrottled_time 10567818658129",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 397952,
+            "nr_throttled": 2553,
+            "throttled_time": 10567818658129
+          }
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 0,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "arm": "t64_reuse"
+      },
+      {
+        "calls": 32,
+        "wall_total_ms": 13.175593,
+        "wall_per_call_ms": 0.41173728125,
+        "event_total_ms": 13.098065376281738,
+        "event_per_call_ms": 0.4093145430088043,
+        "submit_thread_cpu_ns": 9873382,
+        "submit_process_cpu_ns": 10598538,
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 397952\nnr_throttled 2553\nthrottled_time 10567818658129",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 397952,
+            "nr_throttled": 2553,
+            "throttled_time": 10567818658129
+          }
+        },
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 397952\nnr_throttled 2553\nthrottled_time 10567818658129",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 397952,
+            "nr_throttled": 2553,
+            "throttled_time": 10567818658129
+          }
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 0,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "arm": "macro1"
+      }
+    ],
+    "kind": "strict native macro1/t64_reuse complete producer+same reducer Graph ABBA",
+    "shape": {
+      "N": 64,
+      "S": 2,
+      "KV": 4096,
+      "cache_capacity": 16384,
+      "Q_stride": [
+        2048,
+        128,
+        1
+      ]
+    },
+    "limits": [
+      "One shape and a strict same-run native comparison; no model/official throughput qualification.",
+      "New four-page numerical order: original FP64/nonfinite/Graph/input/RNG gates; cross-arm output/partial bits are diagnostic.",
+      "A is current PR105 macro1; T64 reuse16KiB changes common max/P rounding and sums; all nine original GPU gates retained, no new performance qualification."
+    ],
+    "macro1": {
+      "library": "/workspace/experiments/minicpm-s2/build/native-gqa-overlap1-58a2fc96-20261028/corex_native_gqa_s2_probe.so",
+      "sha256": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+      "overlap_v": true,
+      "namespace": "corex_native_gqa_s2_probe",
+      "build_commands_sha256": "37c163d52ec73b7a5e5d484345d6dff572b702a6d8707f268a954099eb1765bb",
+      "source_sha256": {
+        "native_gqa_s2.cpp": "f6bf9611184de7688a0460fe3b810bf0479e21a5dccdbbda77a7d69dadca7a9e",
+        "native_gqa_s2.cu": "dc9bc915c9f5b165cbf0915fe653caa4dd727b48d6f94a50064c5d3c572f60bf"
+      }
+    },
+    "dispatch": {
+      "index_source_sha256": "47a7108bcf8424a96651021703f8731f1866a0e2eff88a1ac647e574ccf7e61d",
+      "registered": true,
+      "exclude_ops": []
+    },
+    "native_gate_install": {
+      "installed": true,
+      "already": true
+    },
+    "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+    "compile_proof": {
+      "CPU_only": true,
+      "source_sha256": "714bc94aa79f270d884d5cfbfdc1c3d1ca44a0bfae94f9c8060341debd5eb038",
+      "LLVM_sha256": "16817445520fa476204654d46c9278bd930b7a6be722390569857f59c4595e86",
+      "ASM_sha256": "b529dbe2f8fc04321f6a5104ff508ef1e0afebbb7c7b93dcca4e667d13a9b0b8",
+      "artifact": "archive/hotspot-layout-20261026/batch-132607-native-gqa-t64-compile/cpu-probes/20261028T132607Z-native-gqa-t64-reuse-compile",
+      "resources": [
+        {
+          "name": "_Z32corex_native_gqa_t64_reuse_probeILj2EEvPK13__ix_bfloat16S2_S2_PKiS4_fllllllllPfS5_S5_",
+          "group_segment_fixed_size": 16384,
+          "private_segment_fixed_size": 0,
+          "sgpr_count": 88,
+          "vgpr_count": 88,
+          "sgpr_spill_count": 0,
+          "vgpr_spill_count": 0,
+          "warp_size": 64
+        }
+      ],
+      "actual_per64": {
+        "MMA": 64,
+        "K_SME": 16,
+        "V_SME": 16,
+        "barrier": 4,
+        "g2s_completion": 2,
+        "warp_shuffle": 24,
+        "exponential": 10,
+        "maximum": 16,
+        "sum_add": 14,
+        "L_FMA": 2,
+        "acc_rescale": 32,
+        "P_BF16": 8
+      },
+      "resource_scope": "独立CPU编译身份；actual extension命令/SO由worker另存，不冒充精确资源。",
+      "numerical_contract": "新T64顺序；全部原九门阈值、非有限模式与本arm Graph/tail/side位型保留，跨算法bitwise仅诊断。"
+    },
+    "t64_reuse": {
+      "library": "/workspace/experiments/minicpm-s2/framework/20261028T134552095824Z-native-gqa-t64-reuse-hotspot-component/t64_reuse-build/corex_native_gqa_t64_reuse_component.so",
+      "sha256": "a2f62d46cbb207edefea3568238548efad52dc7722b3341653c4fdb8d9c33a2b",
+      "namespace": "corex_native_gqa_t64_reuse_component",
+      "actual_cuda_command": "/usr/local/corex/bin/clang++  -DTORCH_EXTENSION_NAME=corex_native_gqa_t64_reuse_component -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.12/site-packages/torch/include -isystem /usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/corex/include -isystem /usr/local/include/python3.12 -D_GLIBCXX_USE_CXX11_ABI=0 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__ILUVATAR__ -D__ILUVATAR_WORKAROUND__ -D__ILUVATAR_DIAG__ -cl-single-precision-constant -fPIC -mllvm --bonus-inst-threshold=0 -mllvm --skip-double -fclang-abi-compat=16 -D__MR__ -O3 -std=c++17 -D__ILUVATAR__ -D__MR__ -x ivcore --cuda-gpu-arch=ivcore11 --cuda-path=/usr/local/corex -c /workspace/experiments/minicpm-s2/framework/20261028T134552095824Z-native-gqa-t64-reuse-hotspot-component/source/native_gqa_t64_reuse.cu -o native_gqa_t64_reuse.cuda.o ",
+      "source_sha256": "714bc94aa79f270d884d5cfbfdc1c3d1ca44a0bfae94f9c8060341debd5eb038",
+      "overlap_v": true,
+      "frozen_source": "714bc94a unchanged; 132607 T64 compiler proof is separate; prior T32/double-slot results retained"
+    },
+    "actual_production_binding": {
+      "runtime_class": "_Runtime",
+      "library_sha256": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+      "native_taken": true,
+      "grid": [
+        64,
+        2,
+        2
+      ],
+      "reducer_grid": [
+        64,
+        16
+      ],
+      "reducer_hash": "124a223496b55732c94ef574dee57a81449293ecb4a405f32d9b577be07dc80d",
+      "Q_stride": [
+        2048,
+        128,
+        1
+      ],
+      "lengths": [
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096,
+        4096
+      ],
+      "setup_capture_restored": true,
+      "scope": "one synthetic backend call, not request coverage ratio"
+    },
+    "numerical_contract": {
+      "source": "scripts/remote/validate_mapped_decode.py:70-92",
+      "atol": 0.03,
+      "rtol": 0.03,
+      "relative_l2_limit": 0.01,
+      "description": "新T64四页数学顺序；沿原独立FP64阈值，cross-arm/partial bitwise仅诊断，同arm Graph/eager与tail poison仍逐位；不是模型准确率"
+    },
+    "side_stream_bits": true,
+    "tail_poison_output_unchanged": true,
+    "timing_contract": {
+      "order": [
+        "macro1",
+        "t64_reuse",
+        "t64_reuse",
+        "macro1"
+      ],
+      "loops_per_window": 32,
+      "per_replay": [
+        "one native producer",
+        "one unchanged original reducer"
+      ],
+      "writer_in_timing": false,
+      "input": "restored exact initial seed725013; N64/S2/KV4096/Qstride2048",
+      "SO0": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+      "SO1": "a2f62d46cbb207edefea3568238548efad52dc7722b3341653c4fdb8d9c33a2b"
+    },
+    "summary": {
+      "event": {
+        "macro1_ms": 0.4095947742462158,
+        "t64_reuse_ms": 0.42110054194927216,
+        "fraction_saved": -0.02809061156659176
+      },
+      "wall": {
+        "macro1_ms": 0.41266153125,
+        "t64_reuse_ms": 0.42370240625,
+        "fraction_saved": -0.02675528045116282
+      }
+    },
+    "decision": "Strict same-run macro1/t64_reuse component only; no automatic shape or official chain"
+  },
+  "source_identity": {
+    "commit": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd",
+    "tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+    "tracked_files": 814,
+    "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+    "extras": {}
+  },
+  "base_commit": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd"
+}
