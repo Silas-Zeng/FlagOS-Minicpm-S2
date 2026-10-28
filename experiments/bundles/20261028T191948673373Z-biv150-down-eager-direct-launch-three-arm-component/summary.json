@@ -1,0 +1,19 @@
+{
+  "run_id": "20261028T191948673373Z-biv150-down-eager-direct-launch-three-arm-component",
+  "scope": "BI-V150 M2048/N2048/K6144 down；真实42层权重，两组固定输入 eager 组件；A frozen provided GROUP_M8，B GROUP_M4 normal-JIT，C 同一CompiledKernel位置ABI直调",
+  "status": "component_positive_host_submission_signal",
+  "wall_ms_median_42_layers": {
+    "A": 26.252933499999997,
+    "B": 25.1707245,
+    "C": 24.469711
+  },
+  "C_vs_B_wall_improvement_percent": 2.7850350513351274,
+  "event_ms_median_42_layers": {
+    "B": 23.25234603881836,
+    "C": 23.264795303344727
+  },
+  "C_vs_B_event_delta_percent": 0.053539821339248554,
+  "correctness": "84个eager输出/两组输入全有限且逐元素相等；FP64抽样通过；Graph三臂互比且42层全输出finite/equal，不与eager快照对照；side-stream仅layer0；输入/RNG不变",
+  "limits": "组件结果，不是官方吞吐/整模型收益；不证明原生产GROUP_M差异的host因果；A、B、C均为单次ABCCBA/输入模式",
+  "conclusion": "C对B的同步wall中位约快2.8%，GPU Event近似（约0.05%变慢），主要支持host submission机制的组件信号。原先Bhost>A假说不成立；保留组件观察，等待官方端到端验证，不直接授权生产/稳定收益。"
+}

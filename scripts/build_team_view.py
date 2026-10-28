@@ -1364,6 +1364,16 @@ for _k,_a,_c,_r,_d in [
     BATCH_RESULTS[_k]=('结果与限制见原始bundle及登记结论。',_d,_r,'本条所列source/result/manifest原件完整打包并按SHA256分块；组件/CPU筛查与官方成绩分开。')
     SHORT_ATTEMPTS[_k]=(_a,_c)
 
+for _k,_a,_c,_r,_d in [
+ ('shape_gemm_direct_launch_component_positive','比较原SDK GROUP_M8、GROUP_M4 normal-JIT与同一已编译核direct launch的42层down组件。','C仅省掉已选kernel的host wrapper路径；数学/kernel/真实权重不变，两种输入各一次ABCCBA。','C对B两种pattern wall均值分别快2.802766%/2.798879%，GPU Event近似持平；84个输出及FP64、输入/RNG通过，Graph仅三臂互比、side仅layer0；非整模收益。','保留为host提交组件信号；不外推整模或官方收益，原“Bhost>A”假说被否决。'),
+ ('shape_gemm_direct_launch_official4k_small_positive_kv_mismatch','检验direct C/GROUP_M4候选在原官方4K设置下的端到端表现。','沿用原官方benchmark与服务参数，仅声明的生产down wrapper候选；首暖有正信号后完成四轮。','四轮/1024请求完成：总吞吐5244.67/6450.53/6723.84/6723.28；首暖对照+0.1425%，弃首均值+0.0714%。KV548432对548336不匹配。','仅保留小幅观察；不作严格因果/稳定收益，不更新基线、不合并；16K和准确率另判。'),
+ ('shape_gemm_direct_launch_official16k_driver_pin_preparation_failed','准备同候选的原官方16K入口并验证driver身份门。','运行owner准备入口；case_driver SHA未与owner pin一致，值未改也未实际开始benchmark。','启动owner Python后立刻因driver/common SHA门退出；无服务/benchmark子进程、无GPU运行和吞吐数据。','保留入口准备失败原件；与后续冻结修正版本及16K实测分开记录。'),
+ ('shape_gemm_direct_launch_official16k_first_warm_negative_stop','检验G4直调C在原官方16K负载上的整体表现。','原服务与评测参数不变；对PR105同档首暖筛选，负结果提前停止。','冷轮4361.39、首暖4825.32 tok/s；256请求成功，首暖观察−0.188853%，KV548384对548288不同。','停止C，不合并、不更新基线；不是完整四轮成绩，105条件包未运行。'),
+ ('shape_gemm_direct_launch_samekernel_component_positive','比较原SDK GROUP_M8与其同一CompiledKernel的直接调用。','保留原GPU核及数学，只减少LibEntry处理；42层真实权重、两pattern各一次ABBA。','wall观察省7.755105%/6.109667%，Event近似；84数值门、D换值Graph对fresh eager A、side0/41及输入/RNG通过。','保留D进入生产对照；不称官方收益，A Graph快照已被eager覆盖，未保存全输出数组。'),
+]:
+    BATCH_RESULTS[_k]=('结果与限制见原始bundle及登记结论。',_d,_r,'原始文件按清单SHA核验并完整打包；性能组件、官方成绩与入口准备失败分开。')
+    SHORT_ATTEMPTS[_k]=(_a,_c)
+
 
 
 if __name__ == '__main__':
