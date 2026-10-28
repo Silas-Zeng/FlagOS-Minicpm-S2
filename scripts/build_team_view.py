@@ -220,6 +220,23 @@ SHORT_ATTEMPTS['prefill_stride_main34942_accuracy_pass'] = (
 
 GROUPS['shape-gemm'] = ('BI-V150特定形状GEMM', '按真实轨迹选形状。M2048 down占映射BF16 MM约47.10%；大M静态化/减warp/加深K及M64 SplitK均负。宽N 256/256/32/w16/s2的42层真实down组件省24.12%，但实际模型M2030/2048选中后，4K首暖5451.11对PR60对应5533.03观察−1.48%；512 SUCCESS后主动早停，16K/105未跑，KV548432对548336，不能称严格因果、完整官方或正确性失败。PR61关闭未合并，保留原件。后继独立QKV M2048/2030,N2560,K2048，42层真实Q/K/V拼接组件12.705318→12.174299ms（省4.1795%），84数值/FP64抽样/Graph换值/side stream门通过；模型筛选另列，不叠down、不把组件比例当吞吐。另保留独立M1-8 down SplitK8组件，M2/M8整环省31.69%/34.98%，尚未接模型。原正确PR51及PR60基线不变。', [])
 CODE['shape-gemm'] = ['analysis/2026-10-26-gemm-target-priority.json','analysis/2026-10-26-gemm-component-results.json','experiments/framework/20261026T035139678096Z-biv150-down-wide-working-set-component/source/candidate.py','experiments/framework/20261026T034152136640Z-biv150-down-small-working-set-component/source/candidate.py']
+CODE['shape-gemm'] += [
+    'experiments/bundles/20261028T174702433104Z-biv150-down-groupm4-provided-linear-component/manifest.json', 'experiments/bundles/20261028T174702433104Z-biv150-down-groupm4-provided-linear-component/raw.tar.gz.storage.json',
+    'experiments/bundles/20261028T175144741472Z-biv150-down-groupm4-provided-linear-component/manifest.json', 'experiments/bundles/20261028T175144741472Z-biv150-down-groupm4-provided-linear-component/raw.tar.gz.storage.json',
+    'experiments/bundles/20261028T182129Z-biv150-down-groupm4-official-staging-failed/manifest.json', 'experiments/bundles/20261028T182129Z-biv150-down-groupm4-official-staging-failed/raw.tar.gz.storage.json',
+    'experiments/bundles/20261028T182535Z-native-gqa-overlap-4k-four-rounds/manifest.json', 'experiments/bundles/20261028T182535Z-native-gqa-overlap-4k-four-rounds/raw.tar.gz.storage.json',
+    'experiments/bundles/20261028T182704343608Z-biv150-down-groupm4-official-selector-failed/manifest.json', 'experiments/bundles/20261028T182704343608Z-biv150-down-groupm4-official-selector-failed/raw.tar.gz.storage.json',
+    'experiments/bundles/20261028T173517Z-down-w8a16-weight-screen/manifest.json', 'experiments/bundles/20261028T173517Z-down-w8a16-weight-screen/raw.tar.gz.storage.json',
+    'experiments/bundles/20261028T180055825919Z-down-w8a16-weight-only-component/manifest.json', 'experiments/bundles/20261028T180055825919Z-down-w8a16-weight-only-component/raw.tar.gz.storage.json',
+    'experiments/bundles/20261028T180433423251Z-down-w8a16-weight-only-component/manifest.json', 'experiments/bundles/20261028T180433423251Z-down-w8a16-weight-only-component/raw.tar.gz.storage.json',
+    'experiments/bundles/20261028T180844751927Z-down-w8a16-weight-only-component/manifest.json', 'experiments/bundles/20261028T180844751927Z-down-w8a16-weight-only-component/raw.tar.gz.storage.json',    'experiments/bundles/20261028T184911473313Z-down-bm32bn32-tile-component/manifest.json', 'experiments/bundles/20261028T184911473313Z-down-bm32bn32-tile-component/raw.tar.gz.storage.json',
+    'experiments/bundles/20261028T185611249396Z-down-bm32bn32-tile-handles-component/manifest.json', 'experiments/bundles/20261028T185611249396Z-down-bm32bn32-tile-handles-component/raw.tar.gz.storage.json',
+    'experiments/official/20261028T183704Z-native-gqa-overlap-4k-four-rounds/manifest.json',
+    'experiments/official/20261028T183704Z-native-gqa-overlap-4k-four-rounds/result.json',
+    'experiments/official/20261028T183704Z-native-gqa-overlap-4k-four-rounds/raw_runs_20261029_023914.csv',
+    'experiments/bundles/20261028T183704Z-native-gqa-overlap-4k-four-rounds/manifest.json',
+    'experiments/bundles/20261028T183704Z-native-gqa-overlap-4k-four-rounds/raw.tar.gz.storage.json',
+]
 for status, verdict, decision in [
     ('shape_gemm_negative','性能负结果，停止该候选','数值通过但完整组件慢，不接模型；不能把资源减少或循环减少当净收益。'),
     ('shape_gemm_official_negative_screen','官方首暖负，提前收尾','首暖负按约定主动停止，保留已测轮次和运行条件；未测16K/105，不合并或定基线。'),
@@ -1328,6 +1345,25 @@ def main():
     assert registry.read_bytes() == raw
     write(TEAM / 'generated-index.md', '# 自动视图来源\n\n登记：`experiments/registry.csv`；SHA256 `' + hashlib.sha256(raw).hexdigest() + '`。\n\n共' + str(len(rows)) + '条登记、' + str(len(BY_ID)) + '个run。程序只读取目录/既有说明建立链接，不重验实验。\n')
     print(json.dumps({'registry_records': len(rows), 'unique_runs': len(BY_ID), 'generated_files': len(GENERATED), 'entry': 'team/README.md', 'registry_unchanged': True}, ensure_ascii=False))
+
+
+# 2026-10-29 down GROUP_M4 与 W8A16 归档短记录
+for _k,_a,_c,_r,_d in [
+ ('shape_gemm_groupm4_entry_interface_failed', '验证GROUP_M4候选组件入口能否进入原生产provided-linear测试。', '只运行已有组件owner；入口接口失败，未开始数值/性能计时。', '入口初始化异常，未计时', '保留失败原件；不当数值错误或性能负结果。'),
+ ('shape_gemm_groupm4_component_positive', '用真实42层权重与两种BF16图案验证down GROUP_M4组件。', '自研JIT内核将CTA分组映射GROUP_M8改为GROUP_M4；生产provided-linear callback、tile与数学主体保持受测版本。', '两pattern逐元素相等及FP64/Graph/side/RNG门通过；A/B分别约省0.960829%与0.892794%，仅组件信号。', '保留为待官方接线候选；不外推为模型或官方收益。'),
+ ('shape_gemm_groupm4_official_staging_failed', '验证GROUP_M4官方4K候选能否通过冻结源暂存门。', '沿用原官方owner，只记stage源映射异常；未启动benchmark。', 'source_maps暂存失败，计算前退出。', '保留接口失败证据；不能归为性能或数值结果。'),
+ ('shape_gemm_groupm4_official_selector_failed', '验证GROUP_M4官方selector首暖回执与编译身份门。', '沿用官方路径；selector接口异常，未进入benchmark计时。', '接口异常，未获得性能比较。', '保留失败证据；不当作候选性能失败。'),
+ ('shape_gemm_w8a16_cpu_weight_screen', 'CPU筛查down W8A16 K128量化权重与有限合成输出误差。', '仅CPU评估对称分组量化误差，不运行CUDA、模型或官方准确率。', '42层真实down权重最大relative L2为0.007979；仅有限合成输出筛查，不能代表比赛准确率或吞吐。', '仅保留研究结果；未启用量化，不进入比赛候选。'),
+ ('shape_gemm_w8a16_compile_interface_failed', '检查W8A16 down候选能否用当前生产compile/config接口编译。', '编译调用接口异常，未取得可比较内核。', '编译接口失败，无性能/数值结果。', '保留接口失败原件；不判量化候选快慢。'),
+ ('shape_gemm_w8a16_timing_record_failed', '验证W8A16 down候选短测结果回执是否完整。', '复用受测候选，但计时结果记录接口异常。', '数值/Graph/side等五项门通过，只有ABBA计时回执缺失；不作性能判断。', '保留诊断原件；不把接口异常写作性能结论。'),
+ ('shape_gemm_w8a16_component_negative', '比较真实M64 down生产MM-out与W8A16 K128组件的完整Graph。', '候选采用权重分组量化与BF16 dot；A/B完整输出和ABBA计时。', 'A 0.0588357ms、B 0.6471999ms；五项门通过，候选约11倍慢，达到停止条件。', '保留负结果；停止W8A16组件路线，不接模型。'),
+ ('shape_gemm_groupm4_official_first_warm_negative_stop', '验证GROUP_M4生产接线的官方4K吞吐净影响。', 'G4为已测自研JIT CTA分组映射；源、两库及DB均恢复，selector/config有效。', '原官方设置RUNS=4/SKIP_FIRST=1；本次两轮观察，512 SUCCESS；KV计数不匹配。', '首暖负后按预设停止；不完整四轮/16K/105，不合并或更新基线；保留非因果限制。'),
+ ('shape_gemm_bm32bn32_compile_handles_uninitialized', '核对小CTA配置能否取得完整编译资源句柄。', '只尝试固定BM32/BN32/BK128编译筛选，不进入计时。', 'warmup资源字段未初始化导致停止；无数值或性能结论。', '保留接口/回执失败证据；待资源句柄闭合后再评估是否计时。'),
+ ('shape_gemm_bm32bn32_component_negative', '检验M64 down采用BM32/BN32/BK128是否减少完整组件时间。', '只改tile分块，原数学与生产callback保留；完整Graph计入结果。', '五项数值门通过，compile/RNG/清理门通过；完整Graph慢53.669168%。', '停止该固定点，不接官方或扩扫矩阵。'),
+]:
+    BATCH_RESULTS[_k]=('结果与限制见原始bundle及登记结论。',_d,_r,'本条所列source/result/manifest原件完整打包并按SHA256分块；组件/CPU筛查与官方成绩分开。')
+    SHORT_ATTEMPTS[_k]=(_a,_c)
+
 
 
 if __name__ == '__main__':
