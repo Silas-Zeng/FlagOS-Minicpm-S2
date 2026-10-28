@@ -1,0 +1,47 @@
+{
+  "decision": "GO_ONE_ORIGINAL_HARD_GATE_COMPONENT",
+  "CPU_only": true,
+  "files": {
+    "archive\\hotspot-layout-20261026\\batch-091802-native-q32-metadata-abi\\cpu-probes\\20261028T091802Z-native-q32-metadata-abi\\probe.ll": "8c72e8e4e327bb49216fe6857f311826db778c77b35b8c3d004e5c6cc6a64790",
+    "archive\\hotspot-layout-20261026\\batch-091802-native-q32-metadata-abi\\cpu-probes\\20261028T091802Z-native-q32-metadata-abi\\probe.s": "79020be21af6beea0ab03540f31babf57adb72222f7cf1b3744c112cb4a62ae6",
+    "archive\\hotspot-layout-20261026\\batch-151702-native-grouped-shuffle-compile\\cpu-probes\\20261028T151702Z-native-q32-grouped-shuffle-compile\\probe.ll": "9cf0d016449d54ea7245961c866d4cccadf4f61591d5794302cfd3302bae3fae",
+    "archive\\hotspot-layout-20261026\\batch-151702-native-grouped-shuffle-compile\\cpu-probes\\20261028T151702Z-native-q32-grouped-shuffle-compile\\probe.s": "2d95edb84f26d395062c001a649f93e52b89dfce24a3d79b84dcf1b3b36e541e"
+  },
+  "FP": {
+    "ordered_MMA_DAG_roots": 64,
+    "ordered_max_rho_L_P_roots": 28,
+    "unchanged_initial_phi_states": 32,
+    "normalization": "仅重命名共享符号、SSA与逐一对应循环状态；未交换操作数、浮点标志或运算树。"
+  },
+  "actual_mechanism": "首个wait前四条独立row shuffle；实际lmcnt(3)轮转，13次而非原单row逐条wait0。总wait数不必减少，不等同实测等待时间收益。",
+  "first_max_waits_before_exp": [
+    "3",
+    "3",
+    "3",
+    "3",
+    "3",
+    "3",
+    "3",
+    "3",
+    "3",
+    "3",
+    "3",
+    "3",
+    "3",
+    "2"
+  ],
+  "resources": {
+    "warp_sgpr_count": 96,
+    "workitem_vgpr_count": 106,
+    "workgroup_group_segment_byte_size": 65536,
+    "workitem_private_segment_byte_size": 0,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0
+  },
+  "synchronization": "BB0_45发32SME后无g2wait回BB0_36；当前全部QK/PV后原g2wait/barrier才排空。原Q两barrier和热循环三barrier共5未变。",
+  "limits": [
+    "仅准一次原bitwise/finite/FP64口径、Graph、storage、ABI与性能组件门，未授生产或收益。",
+    "相对091802多1VGPR，64KiB不变，无spill/private。",
+    "若与directQ组合，需独立新源/真实编译增量核；本回执不替组合机器码授资格。"
+  ]
+}

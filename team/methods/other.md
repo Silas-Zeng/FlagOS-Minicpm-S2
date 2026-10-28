@@ -23,6 +23,13 @@
 - [20261022T130457Z-prefill-v-late-cache-v2-gate](../runs/bi-v150/20261022T130457Z-prefill-v-late-cache-v2-gate.md)（登记#144）：wall慢0.27180%、event仅快0.02373%，不能认定收益，当前不集成；负结果不外推其他A+B **是否保留：** 未集成；失败或无收益记录保留。
 - [20261022T134939Z-q-shared-hardware-diagnostic](../runs/bi-v150/20261022T134939Z-q-shared-hardware-diagnostic.md)（登记#145）：失败后返回0，v1外层controller误报0，均不能算诊断成功 **是否保留：** 未集成；失败或无收益记录保留。
 - [20261022T135558Z-q-shared-hardware-diagnostic-v2](../runs/bi-v150/20261022T135558Z-q-shared-hardware-diagnostic-v2.md)（登记#146）：RNG/输出有限及padding/重复Q输出检查通过，worker与controller均成功，绑定恢复及设备settle **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261028T143204Z-native-q32-direct-q-compile](../runs/bi-v150/20261028T143204Z-native-q32-direct-q-compile.md)（登记#433）：失败 **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261028T144213Z-native-q32-direct-q-v2-compile](../runs/bi-v150/20261028T144213Z-native-q32-direct-q-v2-compile.md)（登记#434）：Q32 direct-Q v2 CPU编译及CFG检查通过 **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261028T150532441119Z-native-q32-direct-q-v2-pure-metadata-metadata-component](../runs/bi-v150/20261028T150532441119Z-native-q32-direct-q-v2-pure-metadata-metadata-component.md)（登记#435）：Event省3.67184%、wall省0.849919% **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261028T151702Z-native-q32-grouped-shuffle-compile](../runs/bi-v150/20261028T151702Z-native-q32-grouped-shuffle-compile.md)（登记#436）：grouped四行max shuffle CPU编译检查通过、0 spill **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261028T152528642613Z-native-q32-direct-q-v2-two-scopes-metadata-metadata-component](../runs/bi-v150/20261028T152528642613Z-native-q32-direct-q-v2-two-scopes-metadata-metadata-component.md)（登记#437）：失败原始结果，不记作数值失败或性能结果 **是否保留：** 未集成；失败或无收益记录保留。
+- [20261028T153908Z-native-q32-direct-q-v2-production-build](../runs/bi-v150/20261028T153908Z-native-q32-direct-q-v2-production-build.md)（登记#439）：生产819源CPU构建退出0 **是否保留：** 待确认；通过某项检查不自动等于优化保留。
+- [20261028T155906Z-native-down-fragment-lookahead-compile](../runs/bi-v150/20261028T155906Z-native-down-fragment-lookahead-compile.md)（登记#441）：CPU对照判定STOP_EQUIVALENT_SCHEDULE_NO_GPU：两版本 ordered MMA 32条一致，234条指令，差异只涉及shared地址/加载次序，停止GPU探测 **是否保留：** 待确认；通过某项检查不自动等于优化保留。
 
 ## 未记录
 

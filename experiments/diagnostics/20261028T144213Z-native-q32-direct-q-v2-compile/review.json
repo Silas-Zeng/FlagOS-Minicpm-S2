@@ -1,0 +1,96 @@
+{
+  "decision": "GO_ONE_PURE_REAL_METADATA_COMPONENT",
+  "CPU_only": true,
+  "source_sha256": "c5f93cc799b11bbf12c2aa332d4c735758a0ce3cb1e37cd4fbf7cf60be85c2ee",
+  "package_sha256": "f7d0ae6ee0bc20a5bdbc0059f5f3351e4a5737391b70ca9c2fd0546c745ba143",
+  "files": {
+    "probe.ll": "a851e10261f8c7bca26a202a061145854e0590cc0169c659c4669f4af30a6943",
+    "probe.s": "706ea0454b68ad07ece05842cfd90c83705f39ee44db980b1a1e003f38068f50"
+  },
+  "resources": {
+    "shared_bytes": 65536,
+    "private_bytes": 0,
+    "SGPR": 99,
+    "VGPR": 106,
+    "sgpr_spill_count": 2,
+    "vgpr_spill_count": 0
+  },
+  "source": "仅word外循环及每token统一有效区，八d两half地址不变，无效八word=0；逆回f581、热源逐字一致。原SDK/tail/offset证明复用。",
+  "actual_Q_init": {
+    "ushort_loads": 32,
+    "vmcnt_waits": [
+      "5",
+      "5",
+      "5",
+      "5",
+      "5",
+      "4",
+      "2",
+      "0",
+      "5",
+      "5",
+      "5",
+      "5",
+      "5",
+      "4",
+      "2",
+      "0"
+    ],
+    "byte_permute_pairs": 16,
+    "valid_regions": "BB0_5/BB0_7",
+    "Q_shared_load_store": 0,
+    "Q_barriers": 0
+  },
+  "FP": {
+    "instructions": 240,
+    "exact_operands_order_after_register_map": true,
+    "register_map": {
+      "v32": "v34",
+      "v33": "v35",
+      "v34": "v36",
+      "v35": "v37",
+      "v36": "v38",
+      "v37": "v39",
+      "v38": "v40",
+      "v39": "v41",
+      "v40": "v42",
+      "v41": "v43",
+      "v42": "v44",
+      "v43": "v45",
+      "v44": "v46",
+      "v45": "v47",
+      "v46": "v32",
+      "v47": "v33",
+      "v52": "v50",
+      "v51": "v49",
+      "v65": "v64",
+      "v60": "v59"
+    }
+  },
+  "CFG": "BB0_43..51 next32SME -> BB0_34原QK/softmax/PV ->1738drain/1739barrier；1750/1755wait+1756barrier后尾清零；1050尾发布barrier。没有提前drain。",
+  "spills": [
+    {
+      "line": 207,
+      "instruction": "ml_mov_s2v_b32 v105, s4, 0x0"
+    },
+    {
+      "line": 208,
+      "instruction": "ml_mov_s2v_b32 v105, s5, 0x1"
+    },
+    {
+      "line": 630,
+      "instruction": "ml_mov_v2s_b32 s0, v105, 0x0"
+    },
+    {
+      "line": 631,
+      "instruction": "ml_mov_v2s_b32 s1, v105, 0x1"
+    }
+  ],
+  "spill_scope": "第二token有效性64bit predicate在BB0_6保存到v105 lane0/1；输出尾部BB0_22一次恢复，随后控制第二token输出。四条lane寄存器移动均在tile循环外；无private/HBM spill，无每tile reload。",
+  "decision_basis": "相对受测8fb删除完整CTA的64KiB Q shared写+64KiB读及两初始化barrier；global Q字节和64KiB shared容量不减。相对f581将32串行wait0降为16个分批wait、仅两个valid区。代价为99/106对父96/105及一次性predicate保存恢复，实际收益未知，值得唯一pure组件判别。",
+  "gate_scope": "f581原无新增spill门失败及STOP保留。v2在实际编译后按新增机制/成本单独授一次组件；这不是数值或性能通过，也不改原bitwise/FP64/finite/tail/Graph/storage/RNG硬门。",
+  "remaining": [
+    "由root统一排一次原pure完整真实metadata ABI组件。",
+    "无数值/Graph/生产或吞吐资格；不宣称资源占用率改善。"
+  ]
+}

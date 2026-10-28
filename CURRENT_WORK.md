@@ -21,8 +21,11 @@
 | 生产离线成品与T64 CPU | 124728 Q64 SOc157a26a；125302 T32 SO502e1570；132607 T64 16KiB／88SGPR／88VGPR／0spill，当次仅编译资格，后续T64组件见下行 |
 | T32复用4K官方两轮 | 132807首冷5491.63／首暖6412.53，512成功；对6441.35观察−0.447422%，按门停止。KV548432≠548336，不称严格因果/稳定退化；未满四轮/16K/准确率，不合并 |
 | T64四页复用组件 | 134552原九case、六双臂FP64、三非有限与Graph/尾/side通过；ABBA Event慢2.809061%、wall慢2.675528%，恢复正常，停止，不进模型 |
-| premax vote CPU编译 | 134934仅8KiB／64SGPR／76VGPR／0spill；实际CFG及GPU数值/Graph门仍待验证，无性能/模型资格 |
+| premax vote CPU编译 | 134934当次仅8KiB／64SGPR／76VGPR／0spill，无GPU资格；后续组件见下行 |
+| premax vote组件 | 141255共12case、有限output/partial硬逐位、FP64/Graph/边界通过；Event近持平慢0.001408%、wall省0.084431%，按Event门停止，不进生产/官方 |
+| Q32 direct-Q v2及组合 | 150532 pure2048与153450 mixed/long组件Event正向，但mixed wall慢1.110675%，均非官方收益；155444组合CPU编译审阅只批准一次pure组件A/B，无数值/生产资格。160148官方4K完整1024请求，弃首均6537.81，对PR105 6627.816667观察−1.358014%；KV548432≠548336，不作严格因果，按完整负结果停止direct-Q，不跑16K/105、不改基线 |
+| direct-Q＋grouped pure组合162319 | Event A/B .519592→.550852ms（慢6.0163%），wall省8.4983%但B两次波动较大；按Event负信号停止，raw顶层numerical_component_passed=false为earlyreturn未赋值，18硬门实际全过，不能称数值失败；原包SHA/独审待最后回收核验，暂未登记。PR107 K8格式不兼容，不组合 |
 
-总431条／428个唯一run。本批450原件完整保存。Q64原16K、T32原4K首暖均未通过各自筛选，KV差异明示，不合并、不更新PR105。T64数值通过、组件性能负；premax仅CPU编译，后续准备态不计为已跑。
+总443条／440个唯一run。本批覆盖12个run原件（含此前已登记的141255），98项原件与终态审阅已核验；累计964个原manifest成员。160148完整4K四轮为负，162319组件按Event门停止；不跑16K/105、不改PR105基线。
 
 沿[实验总表](team/experiments.md)、[原生GQA](team/methods/corex-native-gqa-page16.md)、[Q32](team/methods/native-q32-transfer.md)查阅短记与原始证据。设备排期由主线统一安排。

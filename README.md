@@ -10,7 +10,7 @@
 
 启动捕获不证明105逐题经过原生分支；通用stack缺compute_order marker与旧105相同，原pending回执保留。不同负载百分比不相加，不把单组幅度称统计稳定。
 
-总431条／428个独立run。最新三轮450原件：T32复用4K官方两轮5491.63/6412.53 tok/s、512成功，首暖观察低0.447422%，KV不同，按门停止、不合并；T64组件数值通过但Event慢2.809061%；premax vote仅CPU编译，无GPU成绩。正式基线仍PR105。详见[原生GQA](team/methods/corex-native-gqa-page16.md)与[Q32／Q64](team/methods/native-q32-transfer.md)。
+总443条／440个独立run。本批12个run原件（含此前登记的141255）已按manifest核对，累计964个原件。pure2048、mixed/long仅为组件信号；160148官方4K完整四轮弃首均6537.81 tok/s，对PR105观察−1.358014%，KV不同，不作严格因果，按负结果停止，不跑16K/105、不改基线。155444仅CPU审阅批准一次pure组合组件；162319的Event门负、wall信号不稳定，18项硬门通过且原始false数值标记来自性能early return，不是数值失败。PR107 K8格式不兼容，未组合。正式基线仍PR105。详见[原生GQA](team/methods/corex-native-gqa-page16.md)与[团队实验视图](team/README.md)。
 
 团队主要看：**尝试了什么、改了什么、怎么测、结果怎样、是否保留。**
 

@@ -147,7 +147,16 @@ BATCH_RESULTS.update({'gqa_cg_official_first_warm_negative': ('4K冷/首暖4722.
 SHORT_ATTEMPTS.update({'gqa_cg_official_first_warm_negative': ('检查16K组件局部省时能否转为原官方服务收益。', '团队main0915完整603仅4处KV load加.cg；KV547648对547536，DB后分析作为独立原件，原failed/残留running字段不改。'), 'gqa_stride_no_net_gain': ('用constexpr stride减少分页地址计算的整数乘法。', '仅5个K/V stride声明为constexpr，原缓存策略、数学与reducer保留；alternate stride校验不同值的新JIT和原Graph仍绑定正确。')})
 CODE['gqa-kv-cg'] += ['experiments/framework/20261025T132239Z-main0915-gqa-kv-cg-four-rounds-control/early-stop-request.json', 'experiments/framework/20261025T132239Z-main0915-gqa-kv-cg-four-rounds-control/analysis/posthoc-db-comparison.json', 'experiments/framework/20261024T161030Z-main0bf9-main-official-four-rounds/benchmark_results/raw_runs_20261025_001229.csv']
 
-BATCH_RESULTS.update({'gqa_cg_b64_4k_signal': ('4K/B64/S2：原8组数值/Graph通过，Event0.528390→0.521568ms省1.2912%，wall省1.4224%。', '保留第三个局部正信号，不做长短gating；旧官方因Q-hoist/compute-order失活存在混杂，修正集成后再对照。', '4K组件局部正，官方差异待解', '实际GQA+reducer、原8项边界及16-call Graph ABBA；KV4096、page16、实际grid[64,2,2]，同一4处.cg源码与64条cg指令。')})
+BATCH_RESULTS.update({
+    'native_q32_direct_q_grouped_compile_cpu_go': ('独立CPU编译审阅GO，仅授权一次pure2048组件A/B；无GPU数值、性能、模型或生产资格。', '保留CPU编译与审阅证据；只允许指定组件实验，不继承151702资格。', 'CPU编译及独立审阅GO；无GPU结果', 'CPU编译＋独立FP DAG/资源审阅；SGPR99/VGPR107、shared64KiB、scalar spill 2、无VGPR/private spill。'),
+    'native_q32_direct_q_v2_official4k_complete_negative': ('官方4K四轮完整、1024请求成功；弃首暖均6537.81，对基线6627.816667为−1.358014%；首暖+0.424135%，故跑满。', '保留完整负结果并停止direct-Q；KV548432对548336不匹配，不作严格因果，不跑16K/105、不改基线。', '官方4K完整，均值负', '原4K官方脚本、服务参数及四轮弃首轮口径；路径资格、恢复和清理均通过。'),
+    'native_q32_direct_q_grouped_component_stopped_event_negative': ('18项硬门通过；Event A/B .519592/.550852ms，慢6.016321%，按Event门停止。wall省8.498318%，B重复值波动大。', '保留raw原值并停止组件；wall不称稳定收益/退化，raw numerical_component_passed=false保留，系性能early return未赋值，18项数值/状态门全过。无模型/官方资格。', '组件Event负，wall波动', 'pure2048完整ABBA与18项硬门；依原Event筛选门停止，保留原始性能状态及flag。')
+})
+SHORT_ATTEMPTS.update({
+    'native_q32_direct_q_grouped_compile_cpu_go': ('复核direct-Q＋grouped四行max组合是否具备开展一次纯组件测试的编译资格。', '仅CPU编译和独立资源审阅；批准范围限一次pure2048组件A/B。'),
+    'native_q32_direct_q_v2_official4k_complete_negative': ('按原官方4K四轮口径筛选direct-Q v2。', 'direct-Q v2官方构建；原benchmark与服务参数、1024请求及四轮规则不变。'),
+    'native_q32_direct_q_grouped_component_stopped_event_negative': ('检查grouped pure2048与qualified direct-Q组件组合。', 'A/B完整ABBA，Event为原筛选门；不把wall单项改作通过依据。')
+})
 SHORT_ATTEMPTS.update({'gqa_cg_b64_4k_signal': ('核查官方4K退化是否也出现在对应短输入局部形状。', '同一4处.cg候选，补4K/B64/S2；仅改组件负载，不写模型生产gating，不改官方参数。')})
 
 BATCH_RESULTS.update({'team_main_current_control_partial': ('原main4K冷/首暖5404.31/5761.99 tok/s、512成功；因已有完整基线主动停止，仅两轮，16K未测。', '保留当期部分对照，不覆盖旧完整基线；本轮两项原有优化启用，与旧.cg关闭状态不同，修正后才能判断.cg本体整模收益。', '原main两轮对照，主动停止', '原团队main0915完整603/tree766b、native14f与官方参数不变，无.cg或stride；RUNS4/SKIP_FIRST1原设置保留，用户提醒已有完整基线后向所属owner SIGTERM。原server.log第68/186/326行确认Q-hoist/compute-order启用；14:18:14 source/native/DB及清理通过。')})
@@ -679,10 +688,15 @@ BATCH_RESULTS['native_gqa_premax_vote_compile_only']=('premax vote仅CPU实际�
 CODE['corex-native-gqa-page16'] += ['experiments/cpu-probes/20261028T134934Z-native-gqa-premax-vote-compile/raw-evidence.json', 'experiments/cpu-probes/20261028T134934Z-native-gqa-premax-vote-compile/review.json', 'experiments/cpu-probes/20261028T134934Z-native-gqa-premax-vote-compile/source-review.json', 'experiments/cpu-probes/20261028T134934Z-native-gqa-premax-vote-compile/summary.json', 'experiments/bundles/20261028T134934Z-native-gqa-premax-vote-compile/manifest.json', 'experiments/bundles/20261028T134934Z-native-gqa-premax-vote-compile/raw.tar.gz.storage.json']
 GROUPS['corex-native-gqa-page16']=(GROUPS['corex-native-gqa-page16'][0],GROUPS['corex-native-gqa-page16'][1]+' 132807 T32复用生产4K仅完成5491.63/6412.53两轮、512成功，首暖对6441.35观察−0.447422%；KV548432对548336不同，按门停止、不作严格因果、不合并。134552 T64原九case和六双臂FP64通过，但完整ABBA Event慢2.809061%、wall慢2.675528%，停止。134934 premax vote仅CPU8KiB/64SGPR/76VGPR/0spill，无GPU/模型资格。正式基线保持PR105。',GROUPS['corex-native-gqa-page16'][2])
 
+# 已回收后继组件；等待与后续原件批量发布。
+BATCH_RESULTS['native_gqa_premax_vote_component_neutral_event_stop']=('premax vote N64/S2/KV4096完整producer+原reducer ABBA32：原九case及三个新增边界共12门、有限output/partial硬逐位、原FP64、非有限/Graph/尾/side/输入RNG通过。Event .409584254→.409590021ms近持平慢0.001408%，wall省0.084431%；按原Event门停止，不进生产/官方、不改PR105，原134934仅CPU编译事实保留。', '数值通过，按原Event门停止，不进生产或官方。', 'Event近似持平，wall小正不改原筛选门；无模型资格。', '完整producer+原reducer Graph ABBA32；复用既有根终态薄审与回收SHA，无发布重测。')
+CODE['corex-native-gqa-page16'] += ['experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/raw-evidence.json', 'experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/review.json', 'experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/source-review.json', 'experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/summary.json', 'experiments/bundles/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/manifest.json', 'experiments/bundles/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/raw.tar.gz.storage.json']
+GROUPS['corex-native-gqa-page16']=(GROUPS['corex-native-gqa-page16'][0],GROUPS['corex-native-gqa-page16'][1]+' 141255随后完成premax组件：12项原/新增case及硬逐位/FP64/Graph/边界通过，Event近持平慢0.001408%、wall省0.084431%；按原Event门停止，无生产/官方资格。',GROUPS['corex-native-gqa-page16'][2])
+
 def group(row):
     if row['profile_id']=='native-gqa-mixed-s4':return 'native-gqa-mixed-s4'
     if row['profile_id']=='native-gqa-production-hotspot':return 'native-gqa-production-hotspot'
-    if row['profile_id']=='native-q32-transfer':return 'native-q32-transfer'
+    if row['profile_id'] in ('native-q32-transfer', 'directq-grouped-compile', 'directq-grouped-incremental-pure2048'):return 'native-q32-transfer'
     if row['profile_id'] in ('corex-native-gqa-page16','corex-native-gqa-loop'):return 'corex-native-gqa-page16'
     if row['profile_id']=='gqa-fused-append':return 'gqa-fused-append'
     if row['profile_id'] in ('kv-vtranspose', 'q32-mixed-overlap', 'sampler-preprocess-stats', 'gqa-s2-incta', 'lm-head-temperature'):

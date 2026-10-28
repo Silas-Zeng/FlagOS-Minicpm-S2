@@ -1,0 +1,28 @@
+{
+  "decision": "STOP_EQUIVALENT_SCHEDULE_NO_GPU",
+  "run": "20261028T155906Z-native-down-fragment-lookahead-compile",
+  "CPU_only": true,
+  "files": {
+    "arm0.s": "c8640407f9c11e483bf8809d4f43280f7338c3aa65c0e42fbfd28faf57737feb",
+    "arm1.s": "a3f0dfce92aa1c7020a73ca27bea880bf40c4c8a800f9a7aad8826a88a340c30",
+    "arm0.ll": "faabca61f89793969d621a92c309d1fde39eef7ea75884384976469440b54ae6",
+    "arm1.ll": "51dc670f5cbb81d7ba62f3d152e1726ddf5f1d47d2ceacf0c25c2e517dd8e261"
+  },
+  "resources": {
+    "warp_sgpr_count": 28,
+    "workitem_vgpr_count": 82,
+    "workitem_private_segment_byte_size": 0,
+    "workgroup_group_segment_byte_size": 65536,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0
+  },
+  "instruction_count": 234,
+  "ordered_MMA_instructions_identical": 32,
+  "ordered_opcodes_and_vector_operands_identical": true,
+  "difference": "实际diff只涉及shared地址计算中的s2/s3分配；shared load、wait和MMA顺序完全相同。第二K16没有形成额外加载窗口。",
+  "conclusion": "编译器已把两种源顺序排成相同执行调度；按预设门停止本探针，不构建GPU接口或重扫参数。未测GPU，不称性能负或正确性失败。",
+  "limitations": [
+    "原探针不是完整BF16 GEMM，不替实际FlagGems基线，也未证明原始缓存函数在模型中实际被选。",
+    "24条shared加载含blkload，不能把静态条数等同读取字节；本结论仅比较两探针实际调度。"
+  ]
+}
