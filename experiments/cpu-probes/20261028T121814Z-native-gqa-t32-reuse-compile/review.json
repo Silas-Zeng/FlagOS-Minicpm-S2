@@ -1,0 +1,20 @@
+{
+  "reviewer": "root, independent of source author q32_review_resume",
+  "decision": "GO_ONE_COMPLETE_S2_COMPONENT",
+  "source_sha256": "7db363d4b9d4d5c16fdc99bb710ccd0023a65752324a2d340d31d7e71ac57ed8",
+  "LLVM_sha256": "8d0308c049b30d0ef3bdd37889eff23dbb39acab266fd6405539a035f8924078",
+  "ASM_sha256": "67549bfb22a34514cf265e9c1e7b0d0a63986b13c4f9df93f07caa472573a154",
+  "actual_full_pair": {
+    "K_SME": "504..516: eight loads into two4KiB regions",
+    "K_ready": "517 g2scnt(0), 518 barrier before519 firstKread",
+    "QK": "528..586: two independent8-MMA chains v74:77 and v70:73; last shared read582, lmcnt(0)585",
+    "reuse_barrier": "587 precedes V overwrite591..608",
+    "V_ready": "378 g2scnt(0),384 barrier precedes385 firstVread",
+    "PV": "16MMA across eight independent acc groups, original page0 thenpage1 order per acc",
+    "final_reuse": "481 barrier before nextKbatch",
+    "cost": "four barriers perpair; V overlaps only softmax, QK overlap removed"
+  },
+  "resources": {"shared_bytes":8192,"SGPR":64,"VGPR":80,"private_bytes":0,"spill":0},
+  "scope": "Thin source/actual-ASM lifecycle review; original tail mapping retained with relocated V base. Full numerical, poison, scratch guard and Graph gates still required on new loaded SO.",
+  "no_performance_or_model_qualification": true
+}

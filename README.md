@@ -10,7 +10,7 @@
 
 启动捕获不证明105逐题经过原生分支；通用stack缺compute_order marker与旧105相同，原pending回执保留。不同负载百分比不相加，不把单组幅度称统计稳定。
 
-总422条／419个独立run，本批五轮581份原件已归档。GQA双槽与T32均数值通过，但Event分别慢4.116242%／3.752166%，停止；Q64 mixed Event省2.380581%、wall慢0.367369%，仅保留组件信号。原16K单轮128请求成功但覆盖数据导出失败，不称覆盖已证实。正式基线仍为PR105；详见[原生GQA](team/methods/corex-native-gqa-page16.md)／[Q32和Q64](team/methods/native-q32-transfer.md)。
+总424条／421个独立run。最新T32复用8KiB编译与组件两轮110原件已归档；原九数值门通过，Event省0.221958%、wall省0.287814%，保留单组小正信号，不称稳定或官方收益。旧16KiB负结果及启动前拒绝包保留，正式基线仍PR105。详见[原生GQA](team/methods/corex-native-gqa-page16.md)；Q64 mixed与覆盖失败沿[Q32／Q64记录](team/methods/native-q32-transfer.md)。
 
 团队主要看：**尝试了什么、改了什么、怎么测、结果怎样、是否保留。**
 

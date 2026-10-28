@@ -1,0 +1,14 @@
+{
+  "reviewer": "root, independent of source author",
+  "source_sha256": "7db363d4b9d4d5c16fdc99bb710ccd0023a65752324a2d340d31d7e71ac57ed8",
+  "decision": "approve compiler-only; actual reuse ordering must be checked before one GPU component",
+  "checks": [
+    "two K regions remain disjoint at0/4096 bytes; each4KiB, within8KiB stage",
+    "new barrier after all QK fragment reads and dot operations precedes V SME overwrite",
+    "V descriptors now target reused region directly, PV and tail-zero helper use matching base",
+    "tail clear retains original per-word writer and odd BF16-half semantics",
+    "new T32 math, physical-page selection, split boundaries and original single-page tail preserved"
+  ],
+  "tradeoff": "shared16to8KiB but one extra barrier and only softmax overlaps V; no claim of measured occupancy or speedup",
+  "history": "12045116KiB T32 numeric pass but performance negative remains unchanged"
+}

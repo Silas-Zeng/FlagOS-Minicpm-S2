@@ -1,0 +1,22 @@
+{
+  "run": "20261028T121814Z-native-gqa-t32-reuse-compile",
+  "status": "native_gqa_t32_reuse_compile_only",
+  "conclusion": "T32保持两页数学，QK读完后barrier再用同8KiB写V；实际16QK/16PV与页序保持，shared16→8KiB、64SGPR/80VGPR、0spill。每pair多一道barrier，V仅重叠softmax；编译允许一次完整S2组件，不推断occupancy或收益。",
+  "raw_original_files": 24,
+  "model_qualified": false,
+  "new_baseline": false,
+  "CPU_only": true,
+  "GPU_executed": false,
+  "numerical_qualified": false,
+  "performance_qualified": false,
+  "resources": {
+    "shared_bytes": 8192,
+    "SGPR": 64,
+    "VGPR": 80,
+    "private_bytes": 0,
+    "spill": 0
+  },
+  "source_sha256": "7db363d4b9d4d5c16fdc99bb710ccd0023a65752324a2d340d31d7e71ac57ed8",
+  "LLVM_sha256": "8d0308c049b30d0ef3bdd37889eff23dbb39acab266fd6405539a035f8924078",
+  "ASM_sha256": "67549bfb22a34514cf265e9c1e7b0d0a63986b13c4f9df93f07caa472573a154"
+}

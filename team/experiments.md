@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共422条登记、419个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共424条登记、421个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -400,6 +400,8 @@
 | 天数 BI-V150 | 420 | 20261028T115612Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 按已测负载与源码范围；模型/官方/生产资格不由组件或编译替代。 | 未记录/未记录/未记录/未记录 | GQA逻辑T32合并两独立物理页一次softmax；真实热循环16QK两独立链、16PV、每acc分量只缩放一次，8K+8V等待安全；16KiB/80SGPR/80VGPR/0spill。共同max和BF16 P属新数学 | [20261028T115612Z-native-gqa-t32-compile](runs/bi-v150/20261028T115612Z-native-gqa-t32-compile.md) |
 | 天数 BI-V150 | 421 | 20261028T120451425507Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | 按已测负载与源码范围；模型/官方/生产资格不由组件或编译替代。 | 未记录/未记录/未记录/未记录 | GQA T32两页合并在唯一N64/S2完整producer+原reducer ABBA32测完；原九数值门/FP64/非有限/同臂Graph/输入RNG与尾/side通过，跨臂位型仅诊断。Event .40962085 | [20261028T120451425507Z-native-gqa-t32-hotspot-component](runs/bi-v150/20261028T120451425507Z-native-gqa-t32-hotspot-component.md) |
 | 天数 BI-V150 | 422 | 20261028T120924623364Z | [CoreX原生Prefill Attention：Q32／Q64](methods/native-q32-transfer.md) | 按已测负载与源码范围；模型/官方/生产资格不由组件或编译替代。 | 未记录/未记录/未记录/未记录 | Q64在61 decode+1987 prefill、context7948=4×1987边界做完整mixed forward，20门/两组FP64/全输出位型通过。Event4.430978775→4.32549572 | [20261028T120924623364Z-native-q64-long-context-mixed-metadata-component](runs/bi-v150/20261028T120924623364Z-native-q64-long-context-mixed-metadata-component.md) |
+| 天数 BI-V150 | 423 | 20261028T121814Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | S2固定形状，原数值合同与新共享生命周期分别验证；无S4/模型/官方资格。 | 未记录/未记录/未记录/未记录 | T32保持两页数学，QK读完后barrier再用同8KiB写V；实际16QK/16PV与页序保持，shared16→8KiB、64SGPR/80VGPR、0spill。每pair多一道barrier，V仅重叠softma | [20261028T121814Z-native-gqa-t32-reuse-compile](runs/bi-v150/20261028T121814Z-native-gqa-t32-reuse-compile.md) |
+| 天数 BI-V150 | 424 | 20261028T123106447870Z | [CoreX原生BF16 GQA：单页与完整分页](methods/corex-native-gqa-page16.md) | S2固定形状，原数值合同与新共享生命周期分别验证；无S4/模型/官方资格。 | 未记录/未记录/未记录/未记录 | 固定N64/S2/KV4096完整producer+原reducer ABBA32：九数值门/FP64/非有限/尾/同臂Graph/side/输入RNG通过。Event .409684807→.408775479ms省0 | [20261028T123106447870Z-native-gqa-t32-reuse-hotspot-component](runs/bi-v150/20261028T123106447870Z-native-gqa-t32-reuse-hotspot-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
