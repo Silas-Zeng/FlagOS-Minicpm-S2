@@ -1,0 +1,778 @@
+{
+  "run": "20261028T104855700928Z-native-q64-vmask-direct-and-long-component",
+  "status": "native_q64_direct_and_positive",
+  "conclusion": "Q64 direct AND复用原三臂ABCCBA长组件：原Q32／双槽Q32／Q64 Event6.560417652／6.402368069／6.247346401ms；Q64省4.772124%／2.421318%。原长门及Q33八门通过，保留标量ABI局部正信号，不授真实metadata或模型资格；旧f999负结果保留。",
+  "raw_original_files": 82,
+  "model_qualified": false,
+  "new_baseline": false,
+  "original_results": {
+    "status": "component_only_passed",
+    "kind": "original Q32 vs tested double-slot Q32 vs independent Q64 cohort component",
+    "shape": {
+      "M": 2047,
+      "KV": 16384,
+      "D": 128,
+      "Q_heads": 16,
+      "KV_heads": 2,
+      "page": 16,
+      "TILE_SIZE": 64,
+      "per_arm": {
+        "current": {
+          "BLOCK_Q": 32,
+          "warps": 16
+        },
+        "q32_double": {
+          "BLOCK_Q": 32,
+          "warps": 16
+        },
+        "q64": {
+          "BLOCK_Q": 64,
+          "warps": 32
+        }
+      }
+    },
+    "timings": [
+      {
+        "calls": 16,
+        "wall_total_ms": 106.377955,
+        "wall_per_call_ms": 6.6486221875,
+        "event_total_ms": 104.89981079101562,
+        "event_per_call_ms": 6.556238174438477,
+        "submit_thread_cpu_ns": 1357711,
+        "submit_process_cpu_ns": 1367690,
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366267\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366267,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366268\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366268,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "arm": "current"
+      },
+      {
+        "calls": 16,
+        "wall_total_ms": 102.741477,
+        "wall_per_call_ms": 6.4213423125,
+        "event_total_ms": 102.43470764160156,
+        "event_per_call_ms": 6.402169227600098,
+        "submit_thread_cpu_ns": 195379,
+        "submit_process_cpu_ns": 195364,
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366268\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366268,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366269\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366269,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "arm": "q32_double"
+      },
+      {
+        "calls": 16,
+        "wall_total_ms": 100.264119,
+        "wall_per_call_ms": 6.2665074375,
+        "event_total_ms": 99.95723724365234,
+        "event_per_call_ms": 6.2473273277282715,
+        "submit_thread_cpu_ns": 192158,
+        "submit_process_cpu_ns": 191895,
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366269\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366269,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366270\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366270,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "arm": "q64"
+      },
+      {
+        "calls": 16,
+        "wall_total_ms": 100.250729,
+        "wall_per_call_ms": 6.2656705625,
+        "event_total_ms": 99.95784759521484,
+        "event_per_call_ms": 6.247365474700928,
+        "submit_thread_cpu_ns": 183714,
+        "submit_process_cpu_ns": 183410,
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366270\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366270,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366271\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366271,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "arm": "q64"
+      },
+      {
+        "calls": 16,
+        "wall_total_ms": 102.745352,
+        "wall_per_call_ms": 6.4215845,
+        "event_total_ms": 102.44107055664062,
+        "event_per_call_ms": 6.402566909790039,
+        "submit_thread_cpu_ns": 183999,
+        "submit_process_cpu_ns": 183949,
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366271\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366271,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366272\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366272,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "arm": "q32_double"
+      },
+      {
+        "calls": 16,
+        "wall_total_ms": 106.546559,
+        "wall_per_call_ms": 6.6591599375,
+        "event_total_ms": 105.03355407714844,
+        "event_per_call_ms": 6.564597129821777,
+        "submit_thread_cpu_ns": 1374894,
+        "submit_process_cpu_ns": 1374897,
+        "cpu_stat_before": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366272\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366272,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_after": {
+          "paths": {
+            "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+            "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+            "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+          },
+          "raw": {
+            "stat": "nr_periods 366273\nnr_throttled 2123\nthrottled_time 8676877409253",
+            "quota": "600000",
+            "period": "100000"
+          },
+          "counters": {
+            "nr_periods": 366273,
+            "nr_throttled": 2123,
+            "throttled_time": 8676877409253
+          }
+        },
+        "cpu_stat_delta": {
+          "nr_periods": 1,
+          "nr_throttled": 0,
+          "throttled_time": 0
+        },
+        "arm": "current"
+      }
+    ],
+    "limits": [
+      "No weights/official score/production hook.",
+      "Full output bitwise is mandatory; no tolerance relaxation if the new operation tree differs.",
+      "A is actual current Q32/Q-hoist, not a rewritten numerical reference.",
+      "Each native arm has one shared64KiB and no workspace/reducer; three complete attention kernels write preallocated outputs.",
+      "No trace state is read or returned; original hidden L16 baseline is not instrumented."
+    ],
+    "native_compile_proof": {
+      "source_sha256": "fb1b6f477ad376b03fb6479900d2d6eb6e3e836ccdbe1956e859facf986c6ff9",
+      "files": {
+        "probe.ll": "c42360a823c8c9c3affe62a376452d625f96d964387351c37d8c549e7db0a1e5",
+        "probe.s": "2fbe029812806d84b1de6cb94b3c12349ede471e7c7dcff4424027162c225e6e"
+      },
+      "source_specific_math_review_passed": true,
+      "resources": {
+        "shared_bytes": 65536,
+        "private_bytes": 0,
+        "SGPR": 83,
+        "VGPR": 107,
+        "sgpr_spill_count": 0,
+        "vgpr_spill_count": 0
+      },
+      "scope": "compiler+actualCFG proof only; two Q32 cohorts in Q64/w32/64KiB; full new GPU numerical gates pending"
+    },
+    "dispatch": {
+      "index_source_sha256": "47a7108bcf8424a96651021703f8731f1866a0e2eff88a1ac647e574ccf7e61d",
+      "registered": true,
+      "exclude_ops": []
+    },
+    "native_gate_install": {
+      "installed": true,
+      "already": true
+    },
+    "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+    "reused_Q32_library": {
+      "path": "/workspace/experiments/minicpm-s2/framework/20261027T194147574489Z-native-q32-kv-double-slot-long-component/native-build/corex_q32_attention_component.so",
+      "sha256": "b6b3cddba256ed4de7d9d706d8acab4499da53f8eeec9f8d30afe9f78a903416",
+      "source_sha256": "26310a5ec4542235e28ba35abea0a8cc6a0ee3afc845b4f5657592cdb33c5280"
+    },
+    "actual_native_build": {
+      "library_sha256": "eab4d3390b6361184650b7439926bd841b2445a6d4c679963e7394bb4d9da107",
+      "kernel_sha256": "fb1b6f477ad376b03fb6479900d2d6eb6e3e836ccdbe1956e859facf986c6ff9",
+      "command": "/usr/local/corex/bin/clang++  -DTORCH_EXTENSION_NAME=corex_q64_attention_component -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.12/site-packages/torch/include -isystem /usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/corex/include -isystem /usr/local/include/python3.12 -D_GLIBCXX_USE_CXX11_ABI=0 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__ILUVATAR__ -D__ILUVATAR_WORKAROUND__ -D__ILUVATAR_DIAG__ -cl-single-precision-constant -fPIC -mllvm --bonus-inst-threshold=0 -mllvm --skip-double -fclang-abi-compat=16 -D__MR__ -O3 -std=c++17 -D__ILUVATAR__ -D__MR__ -x ivcore --cuda-gpu-arch=ivcore11 --cuda-path=/usr/local/corex -c /workspace/experiments/minicpm-s2/framework/20261028T104855700928Z-native-q64-vmask-direct-and-long-component/source/launcher.cu -o launcher.cuda.o ",
+      "resources_are_from_bare_CPU_probe": true,
+      "note": "Torch extension adds its normal flags; numerical/timing applies to this actual loaded SO, not assumed CPU register allocation"
+    },
+    "table_CPU_contract": {
+      "valid_pages": 1024,
+      "min": 0,
+      "max": 1023,
+      "cache_pages": 1024,
+      "trailing_minus_one_not_used": true
+    },
+    "production_q32_binding": {
+      "grid": [
+        64,
+        2
+      ],
+      "control_hash": "67ce58a37221a828caf9bfa0af24250034b2b7c019db7a0a86408d7794cd5d74",
+      "TTGIR_SHA": "00ebddd5a1a4777695b38d78497710c377bc1fde0e2eabec5ac830f20c1edd2e",
+      "LLVM_SHA": "e70cf3f96934011db2e86a1044042913c493e89cad43f9b98d653f5a9677cd29",
+      "mechanism": {
+        "ttgir_q_load_outside_loop": true,
+        "llvm_q_memory_reads_in_loop": 0,
+        "llvm_q_memory_reads_total": 32,
+        "q_read_blocks": [
+          ".lr.ph73",
+          "230",
+          "239",
+          "243",
+          "247",
+          "251",
+          "255",
+          "259",
+          "263",
+          "267",
+          "271",
+          "275",
+          "279",
+          "283",
+          "287",
+          "291",
+          "295"
+        ],
+        "q_debug_nodes": 3,
+        "barrier_calls": 3,
+        "mechanism_pass": true,
+        "limits": "barrier presence/count is recorded, not a complete synchronization/occupancy proof"
+      },
+      "source_commit": "dac1b8fb48e7983e48283032efeee9b592c5fbe5",
+      "outer_policy": "vllm_fl.patches.biv150_prefill_multi2._Policy"
+    },
+    "ir_current": {
+      "resources": {
+        "compiled_type": "CompiledKernel",
+        "hash": "67ce58a37221a828caf9bfa0af24250034b2b7c019db7a0a86408d7794cd5d74",
+        "n_regs": 113,
+        "n_spills": 0,
+        "metadata": {
+          "num_warps": 16,
+          "num_stages": 1,
+          "shared": 65536,
+          "use_sme": 114691,
+          "warp_size": 64
+        },
+        "asm_sha256": {
+          "source": "542bbc196d6992a65e5fbf961a93db23cb2d09c90bc2d65f06069e4ca697963d",
+          "ttir": "19b75b3bb5c4b11223cd3c674579270804d10bfcb8ba9b6cd4b69786024efaf9",
+          "ttgir": "00ebddd5a1a4777695b38d78497710c377bc1fde0e2eabec5ac830f20c1edd2e",
+          "llir": "e70cf3f96934011db2e86a1044042913c493e89cad43f9b98d653f5a9677cd29",
+          "asm": "93470bb35275c8101af0a50093cad5c602d190b61b25c8ae3c08e6c5e088083d",
+          "cubin": "ee7ca22def039eca1dd0b5e48ca4589be7a55279cf44d624d55da5a3106ad41c"
+        }
+      },
+      "private_bytes": 0
+    },
+    "actual_abi": {
+      "q": {
+        "shape": [
+          2047,
+          16,
+          128
+        ],
+        "stride": [
+          2048,
+          128,
+          1
+        ],
+        "storage_offset": 0
+      },
+      "k": {
+        "shape": [
+          1024,
+          16,
+          2,
+          128
+        ],
+        "stride": [
+          8192,
+          256,
+          128,
+          1
+        ],
+        "storage_offset": 0
+      },
+      "v": {
+        "shape": [
+          1024,
+          16,
+          2,
+          128
+        ],
+        "stride": [
+          8192,
+          256,
+          128,
+          1
+        ],
+        "storage_offset": 4096
+      },
+      "table": {
+        "shape": [
+          1,
+          8192
+        ],
+        "stride": [
+          8192,
+          1
+        ],
+        "storage_offset": 0
+      }
+    },
+    "writer_exact": {
+      "key": true,
+      "value": true
+    },
+    "initial_full_output": {
+      "bitwise": true,
+      "bitwise_to_current": {
+        "q32_double": true,
+        "q64": true
+      },
+      "diagnostic_only": false
+    },
+    "initial_FP64": {
+      "criteria": "每臂 finite 且 max_abs≤5e-4、relative_l2≤0.01；仅本合成输入",
+      "arms": {
+        "current": {
+          "max_abs": 0.0001364723083135816,
+          "rms_abs": 3.0695905011833144e-05,
+          "relative_l2": 0.0022837951317542346,
+          "finite": true,
+          "passed": true
+        },
+        "q32_double": {
+          "max_abs": 0.0001364723083135816,
+          "rms_abs": 3.0695905011833144e-05,
+          "relative_l2": 0.0022837951317542346,
+          "finite": true,
+          "passed": true
+        },
+        "q64": {
+          "max_abs": 0.0001364723083135816,
+          "rms_abs": 3.0695905011833144e-05,
+          "relative_l2": 0.0022837951317542346,
+          "finite": true,
+          "passed": true
+        }
+      }
+    },
+    "tail_NaN": {
+      "prefix": 14369,
+      "poisoned_absolute_slots": [
+        14369,
+        14370,
+        14371,
+        14372,
+        14373,
+        14374,
+        14375,
+        14376,
+        14377,
+        14378,
+        14379,
+        14380,
+        14381,
+        14382,
+        14383,
+        14384,
+        14385,
+        14386,
+        14387,
+        14388,
+        14389,
+        14390,
+        14391,
+        14392,
+        14393,
+        14394,
+        14395,
+        14396,
+        14397,
+        14398,
+        14399
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "scope": "first32queries/head0..7 protected target; Q64 legitimately computes poisoned second cohort rows32..63, not claimed finite; later CTAs not launched",
+      "arms": {
+        "current": {
+          "finite": true,
+          "bitwise_to_original_initial": true,
+          "untargeted_guard": true
+        },
+        "q32_double": {
+          "finite": true,
+          "bitwise_to_original_initial": true,
+          "untargeted_guard": true
+        },
+        "q64": {
+          "finite": true,
+          "bitwise_to_original_initial": true,
+          "untargeted_guard": true
+        }
+      }
+    },
+    "restored_full_output": {
+      "bitwise": true,
+      "bitwise_to_current": {
+        "q32_double": true,
+        "q64": true
+      },
+      "diagnostic_only": false
+    },
+    "changed_writer_exact": {
+      "key": true,
+      "value": true
+    },
+    "changed_Graph": {
+      "current": {
+        "replay_eager_bitwise": true,
+        "changed": true,
+        "finite": true,
+        "guard": true
+      },
+      "q32_double": {
+        "replay_eager_bitwise": true,
+        "changed": true,
+        "finite": true,
+        "guard": true
+      },
+      "q64": {
+        "replay_eager_bitwise": true,
+        "changed": true,
+        "finite": true,
+        "guard": true
+      }
+    },
+    "changed_full_output": {
+      "bitwise": true,
+      "bitwise_to_current": {
+        "q32_double": true,
+        "q64": true
+      },
+      "diagnostic_only": false
+    },
+    "changed_FP64": {
+      "criteria": "每臂 finite 且 max_abs≤5e-4、relative_l2≤0.01；仅本合成输入",
+      "arms": {
+        "current": {
+          "max_abs": 4.9663431700840144e-05,
+          "rms_abs": 1.1231169332807277e-05,
+          "relative_l2": 0.002352117474808797,
+          "finite": true,
+          "passed": true
+        },
+        "q32_double": {
+          "max_abs": 4.9663431700840144e-05,
+          "rms_abs": 1.1231169332807277e-05,
+          "relative_l2": 0.002352117474808797,
+          "finite": true,
+          "passed": true
+        },
+        "q64": {
+          "max_abs": 4.9663431700840144e-05,
+          "rms_abs": 1.1231169332807277e-05,
+          "relative_l2": 0.002352117474808797,
+          "finite": true,
+          "passed": true
+        }
+      }
+    },
+    "side_stream": {
+      "current": true,
+      "q32_double": true,
+      "q64": true
+    },
+    "side_full_output": {
+      "bitwise": true,
+      "bitwise_to_current": {
+        "q32_double": true,
+        "q64": true
+      },
+      "diagnostic_only": false
+    },
+    "read_only_input_RNG": {
+      "inputs": true,
+      "RNG": true,
+      "guards": true
+    },
+    "Q33_boundary": {
+      "scope": "direct original Q32 arithmetic vs Q64 boundary only; original production M33 policy is unchanged",
+      "checks": [
+        {
+          "label": "normal_complete33rows_bitwise",
+          "passed": true
+        },
+        {
+          "label": "normal_finite_tail_cohort_and_padding",
+          "passed": true
+        },
+        {
+          "label": "normal_input_metadata_RNG_unchanged",
+          "passed": true
+        },
+        {
+          "label": "future_position32_CPU_overlay_exact",
+          "passed": true
+        },
+        {
+          "label": "first_cohort_future_NaN_finite_exact",
+          "passed": true
+        },
+        {
+          "label": "first_CTA_unwritten_heads_and_padding",
+          "passed": true
+        },
+        {
+          "label": "restored_full_bitwise_and_storage",
+          "passed": true
+        },
+        {
+          "label": "restored_finite_and_guards",
+          "passed": true
+        }
+      ],
+      "poison_scope": {
+        "logical_position": 32,
+        "physical_page": 1,
+        "both_K_and_V": true,
+        "required_valid_target": "first32queries/head0..7",
+        "q64_second_cohort": "query32/head0..7 legitimately reads poison; not claimed finite/valid; no output beyond row33 allowed"
+      },
+      "passed": true,
+      "FP64": "not repeated on newcausal33; unchanged original long FP64 remains hard gate",
+      "timed": false,
+      "production_qualified": false
+    },
+    "summary": {
+      "event": {
+        "current_ms": 6.560417652130127,
+        "q32_double_ms": 6.402368068695068,
+        "q64_ms": 6.2473464012146,
+        "fraction_saved": 0.02421317640865739,
+        "fraction_saved_vs_original": 0.04772123781080839,
+        "q32_double_fraction_saved_vs_original": 0.02409139049001563
+      },
+      "wall": {
+        "current_ms": 6.6538910625,
+        "q32_double_ms": 6.42146340625,
+        "q64_ms": 6.266089,
+        "fraction_saved": 0.024196105532389156,
+        "fraction_saved_vs_original": 0.05828199753458163,
+        "q32_double_fraction_saved_vs_original": 0.03493108830108682
+      }
+    },
+    "numerical_component_passed": true,
+    "model_qualified": false,
+    "decision": "Q64 must beat both contemporaneous original and double-slot Q32 complete Events; no automatic other shape/service"
+  },
+  "source_identity": {
+    "commit": "dac1b8fb48e7983e48283032efeee9b592c5fbe5",
+    "tree": "3e2d08790fad834abff66dc1002a86f15eb65b38",
+    "tracked_files": 814,
+    "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+    "extras": {}
+  },
+  "base_commit": "dac1b8fb48e7983e48283032efeee9b592c5fbe5",
+  "actual_compile_identity": {
+    "source_sha256": "fb1b6f477ad376b03fb6479900d2d6eb6e3e836ccdbe1956e859facf986c6ff9",
+    "files": {
+      "probe.ll": "c42360a823c8c9c3affe62a376452d625f96d964387351c37d8c549e7db0a1e5",
+      "probe.s": "2fbe029812806d84b1de6cb94b3c12349ede471e7c7dcff4424027162c225e6e"
+    },
+    "source_specific_math_review_passed": true,
+    "resources": {
+      "shared_bytes": 65536,
+      "private_bytes": 0,
+      "SGPR": 83,
+      "VGPR": 107,
+      "sgpr_spill_count": 0,
+      "vgpr_spill_count": 0
+    },
+    "scope": "compiler+actualCFG proof only; two Q32 cohorts in Q64/w32/64KiB; full new GPU numerical gates pending"
+  },
+  "scope": "完整组件，非官方吞吐或模型准确率；计时和全部限制保留"
+}

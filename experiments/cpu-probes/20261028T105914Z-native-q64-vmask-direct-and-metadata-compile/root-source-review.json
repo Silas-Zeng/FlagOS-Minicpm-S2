@@ -1,0 +1,13 @@
+{
+  "reviewer": "/root",
+  "source_incremental_review_passed": true,
+  "source_sha256": "e5aa9bef311a8d59991a31e53a2173d595dcc794e5bd66fc29e44b87c8568692",
+  "scope": "仅新增metadata ABI源差分；复用已通过的Q64 directAND计算和同步检查",
+  "checks": [
+    "已阅读完整source.diff：签名改GPU seq/cu与容量，入口guard/当前view偏移复用8fb；tid后的计算与同步未改。",
+    "query_start>=0、query_stop>start且<=query_capacity后计算差值；合法当前桥capacity<=2048，差值无有符号溢出。KV必须不少于实际query且不超过cache/table地址容量；真实KV取seq，不由容量推断。",
+    "query/output先按当前Tensor.data_ptr，再仅增加cu_start乘原row stride一次；V偏移仍由调用方Tensor view承担。新增早退条件为CTA一致，在shared/barrier前；无写入后重试。",
+    "复用原CPU编译命令和源码校验，实际105914完成，29原件SHA通过；资源64KiB/84SGPR/107VGPR/零spill。"
+  ],
+  "next": "实际编译的metadata读取/偏移与FP/同步增量复核后，运行一次原完整long metadata组件；不继承标量ABI性能或授模型资格。"
+}

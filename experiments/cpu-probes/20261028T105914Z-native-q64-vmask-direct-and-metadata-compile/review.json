@@ -1,0 +1,40 @@
+{
+  "CPU_only": true,
+  "author_incremental_check_passed": true,
+  "review_passed": true,
+  "checks": {
+    "metadata_true_device_load_guard_and_int64_offset": true,
+    "FP_424_operands_and_order_equal_mod_verified_registers": true,
+    "branch_barrier_and_g2wait_sequence_equal_after_Q_init": true,
+    "next32SME_no_early_drain": true,
+    "counts_equal": true,
+    "no_private_or_spill": true,
+    "directAND_selection_not_reintroduced": true
+  },
+  "source_sha256": "e5aa9bef311a8d59991a31e53a2173d595dcc794e5bd66fc29e44b87c8568692",
+  "parent_source_sha256": "fb1b6f477ad376b03fb6479900d2d6eb6e3e836ccdbe1956e859facf986c6ff9",
+  "files": {
+    "probe.ll": "c5ef1ff7e7ce8dc0c16178946ba94793667b9ffb9bf4fdad79233fe5ab80499c",
+    "probe.s": "ea252cf16838d9527b71ad74adf11b3d70feb500f08b11e8e999d034c03f90d8"
+  },
+  "resources": {
+    "shared_bytes": 65536,
+    "private_bytes": 0,
+    "SGPR": 84,
+    "VGPR": 107,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0
+  },
+  "FP_instructions": 424,
+  "FP_digest": "7c5a29d0de8992b640430926ffd1d14cc3f6bd4fe6a8e912c4f2b88c2490f419",
+  "ABI": "实际 cu[0]/cu[1]/seq[0] 读取，顺序/容量 CTA 一致守门；Q/out 以当前 view data_ptr 各加一次 int64 start×stride；空 CTA 在 Q/table load 前返回。",
+  "CFG": "与103515同一BB标号：四Q barrier、BB0_116..125 next32SME、BB0_126 cohort分流、数学/PV结束回BB0_98 drain/barrier、BB0_101发布和BB0_115尾清零barrier均不变。",
+  "limits": [
+    "作者增量核；root/独立审阅仍需批准冻结组件。",
+    "旧104855 host ABI数值/性能不自动授本metadata入口资格；新SO须过原20门与完整forward ABBA。",
+    "源未改的数学、SDK映射和slot证明复用；不重复全套证明，不接生产。"
+  ],
+  "GPU_executed": false,
+  "numerical_qualified": false,
+  "performance_qualified": false
+}
