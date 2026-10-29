@@ -2,7 +2,7 @@
 
 # native GQA S8生产接入
 
-PR105 producer新增N30/S8；仅BF16且Q stride=2048命中，其余fallback。16K四轮正向观察、4K四轮暖均6594.42（对6627.82低0.5039%），两档KV均有差异；原105为101/105通过，但batch8中S8 selected/captured为not_exercised，不证明S8分支准确率覆盖。保持PR105基线，不作严格因果或更新基线。勘误：登记#480把wall数值误写成Event数值；原始results.json及本轮短记记录wall 1.032342→0.768814ms（快25.5272%），本视图按原件显示，不改registry或原始证据。
+PR105 producer新增N30/S8；仅BF16且Q stride=2048命中，其余fallback。16K官方四轮正向、4K官方观察略负且KV不匹配；本批KV16K/4K两档局部组件正向。原105为101/105通过，但batch8的S8为not_exercised；保持PR105基线，不作严格因果、长度分流或新基线。
 
 相关代码：[framework](../../patches/framework)。
 
@@ -21,3 +21,4 @@ PR105 producer新增N30/S8；仅BF16且Q stride=2048命中，其余fallback。16
 - [20261029T043401Z-native-gqa-s8-16k-four-rounds](../runs/bi-v150/20261029T043401Z-native-gqa-s8-16k-four-rounds.md)（登记#487）：相对PR105暖均4832.66为+1.1275%，但KV为548384对548288，不作严格因果或新基线 **是否保留：** 待确认；通过某项检查不自动等于优化保留。
 - [20261029T054720Z-native-gqa-s8-4k-four-rounds](../runs/bi-v150/20261029T054720Z-native-gqa-s8-4k-four-rounds.md)（登记#488）：4K四轮6161.33/6506.76/6723.79/6552.71 tok/s；暖均6594.42，对PR105 6627.82低0.5039%，KV548384对548336不同。 **是否保留：** 保留4K完整实测观察；KV不匹配，不作严格因果或基线更新。
 - [20261029T061308Z-native-gqa-s8-native14f-math500](../runs/bi-v150/20261029T061308Z-native-gqa-s8-native14f-math500.md)（登记#489）：原105题101/105（96.1905%），达到至少100正确门；S8库安装有效但N30/S8 selected/captured均未出现。 **是否保留：** 准确率门通过；batch8未覆盖S8 kernel执行，不能据此称S8分支正确性已验证。
+- [20261029T071002153051Z-native-gqa-s8-short-kv-component](../runs/bi-v150/20261029T071002153051Z-native-gqa-s8-short-kv-component.md)（登记#495）：KV16K Event 1.02895→0.76604ms，KV4K 0.27377→0.21720ms；wall两档均同步下降。 **是否保留：** 保留N30/S8组件正向观察；不授官方、准确率或长度分流资格。

@@ -1,0 +1,277 @@
+{
+  "schema": "prefill-base2-final-audit-v1",
+  "run_id": "20261029T065347035247Z-prefill-base2-m2048-kv16k-component",
+  "status": "stopped_negative",
+  "qualification": "single synthetic component only; no production or official qualification; no adjacent-tile scan",
+  "recovery": {
+    "archive": "archive/prefill-base2-20261029/batch-065347-component-negative",
+    "tar": "tmp/prefill-base2-065347-recovery.tar.gz",
+    "sha256": "bcfc35cd793641b3feb90c0c43bcd8ee40349836da541473de1def5ac9785548",
+    "compressed_bytes": 71268958,
+    "manifest_files": 89,
+    "manifest_payload_bytes": 100916582,
+    "sha256_verified_files": 89,
+    "bad_files": [],
+    "verification_method": "all relative paths opened with Windows extended path prefix; every manifest bytes and SHA-256 matched"
+  },
+  "result_preview": {
+    "path": "tmp/prefill-base2-065347-results-preview.json",
+    "sha256": "0ff0a7db265f54acd1f980d34d49067daf4a95c89eff128a119338d3e3fa4e9f",
+    "matches_recovered_results_json": true,
+    "results_json_sha256": "0ff0a7db265f54acd1f980d34d49067daf4a95c89eff128a119338d3e3fa4e9f"
+  },
+  "scope": {
+    "M": 2048,
+    "KV": 16384,
+    "Q_heads": 16,
+    "KV_heads": 2,
+    "D": 128,
+    "page": 16,
+    "page_table_stride": 8192
+  },
+  "timing": {
+    "method": "ABBA; two 16-call records per arm; same warmed Q-hoisted JITs",
+    "raw_samples": [
+      {
+        "arm": "baseline",
+        "calls": 16,
+        "event_ms_per_call": 6.568471431732178,
+        "wall_ms_per_call": 6.661673375
+      },
+      {
+        "arm": "base2",
+        "calls": 16,
+        "event_ms_per_call": 6.590365886688232,
+        "wall_ms_per_call": 6.6809774375
+      },
+      {
+        "arm": "base2",
+        "calls": 16,
+        "event_ms_per_call": 6.62116003036499,
+        "wall_ms_per_call": 6.7125898125
+      },
+      {
+        "arm": "baseline",
+        "calls": 16,
+        "event_ms_per_call": 6.5375285148620605,
+        "wall_ms_per_call": 6.62991075
+      }
+    ],
+    "means": {
+      "event": {
+        "baseline_ms": 6.552999973297119,
+        "base2_ms": 6.605762958526611,
+        "fraction_saved": -0.008051729809933858,
+        "relative_slowdown": 0.008051729809933858
+      },
+      "wall": {
+        "baseline_ms": 6.6457920625,
+        "base2_ms": 6.696783625,
+        "fraction_saved": -0.007672759246821551,
+        "relative_slowdown": 0.007672759246821551
+      }
+    },
+    "decision": "B is slower: Event +0.80517%, wall +0.76728%; stop this version"
+  },
+  "resources": {
+    "baseline": {
+      "sgpr": 104,
+      "vgpr": 113,
+      "sgpr_spill": 4,
+      "vgpr_spill": 0,
+      "shared": 65536,
+      "use_sme": 114691,
+      "limits": "diagnostic only; CPU compile/resource receipt is not GPU numerical or performance qualification"
+    },
+    "base2": {
+      "sgpr": 104,
+      "vgpr": 115,
+      "sgpr_spill": 3,
+      "vgpr_spill": 0,
+      "shared": 65536,
+      "use_sme": 114691,
+      "limits": "diagnostic only; CPU compile/resource receipt is not GPU numerical or performance qualification"
+    }
+  },
+  "correctness": {
+    "initial_fp64": {
+      "baseline": {
+        "passed": true,
+        "finite": true,
+        "max_abs": 0.0001564827101776592,
+        "rms_abs": 3.069909501881164e-05,
+        "relative_l2": 0.0022641409792214105
+      },
+      "base2": {
+        "passed": true,
+        "finite": true,
+        "max_abs": 0.0001564827101776592,
+        "rms_abs": 3.0672736774857867e-05,
+        "relative_l2": 0.002262196987705065
+      }
+    },
+    "changed_fp64": {
+      "baseline": {
+        "passed": true,
+        "finite": true,
+        "max_abs": 5.883345779997273e-05,
+        "rms_abs": 1.1311259224104055e-05,
+        "relative_l2": 0.002351080663513263
+      },
+      "base2": {
+        "passed": true,
+        "finite": true,
+        "max_abs": 5.883345779997273e-05,
+        "rms_abs": 1.1318746043441562e-05,
+        "relative_l2": 0.002352636822365861
+      }
+    },
+    "A_vs_production_bitwise": {
+      "bitwise": true,
+      "max_abs": 0.0
+    },
+    "graph_eager_changed_input": {
+      "baseline": {
+        "replay_eager_bits": true,
+        "changed": true,
+        "finite": true,
+        "guard": true
+      },
+      "base2": {
+        "replay_eager_bits": true,
+        "changed": true,
+        "finite": true,
+        "guard": true
+      }
+    },
+    "side_stream": {
+      "waits_for_prior_default_work": true,
+      "waits_before_default_stream_read": true,
+      "candidate_matches_default_eager": true,
+      "finite": true,
+      "output_guard": true
+    },
+    "read_only_rng_guards": {
+      "kv": true,
+      "query": true,
+      "key": true,
+      "value": true,
+      "page_table": true,
+      "slots": true,
+      "pointers": true,
+      "rng": true,
+      "guards": true
+    },
+    "shared_input_ptrs": {
+      "same_pointer": {
+        "query_ptr": true,
+        "key_cache_ptr": true,
+        "value_cache_ptr": true,
+        "block_tables_ptr": true,
+        "seq_lens_ptr": true,
+        "k_scale_cache_ptr": true,
+        "v_scale_cache_ptr": true,
+        "k_scale": true,
+        "v_scale": true,
+        "query_start_len_ptr": true
+      },
+      "compared_input_names": [
+        "query_ptr",
+        "key_cache_ptr",
+        "value_cache_ptr",
+        "block_tables_ptr",
+        "seq_lens_ptr",
+        "k_scale_cache_ptr",
+        "v_scale_cache_ptr",
+        "k_scale",
+        "v_scale",
+        "query_start_len_ptr"
+      ],
+      "excluded_output_names": [
+        "output_ptr",
+        "segm_expsum_ptr",
+        "segm_max_ptr",
+        "segm_output_ptr"
+      ],
+      "same_bytes": true,
+      "single_frozen_input_snapshot": "inputs-initial.pt",
+      "abi_fixture": "actual-capture-abi.json"
+    },
+    "cross_arm_initial": {
+      "bitwise": null,
+      "max_abs": 0.000244140625,
+      "rms_abs": 2.6552488634479232e-06,
+      "relative_l2": 0.0001997039362322539,
+      "diagnostic_only": true,
+      "note": "base-2 changes floating-point rounding; cross-arm bitwise is not a gate"
+    },
+    "cross_arm_changed": {
+      "bitwise": null,
+      "max_abs": 0.0001220703125,
+      "rms_abs": 8.701772458152846e-07,
+      "relative_l2": 0.00017420727817807347,
+      "diagnostic_only": true,
+      "note": "cross-arm difference is diagnostic only"
+    }
+  },
+  "cleanup": {
+    "exit_code": 0,
+    "finished_utc": "2026-10-29T06:54:13.780705+00:00",
+    "source": "/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028",
+    "source_count": 814,
+    "base_commit": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd",
+    "source_tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+    "source_identity": {
+      "tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+      "tracked_files": 814,
+      "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+      "extras": {}
+    },
+    "native": "/workspace/experiments/minicpm-s2/official/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds-control/native/biv150_native_w8a8.so",
+    "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+    "gqa_library": "/workspace/experiments/minicpm-s2/build/native-gqa-overlap1-58a2fc96-20261028/corex_native_gqa_s2_probe.so",
+    "gqa_library_sha256": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+    "database_original_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+    "database_after_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+    "database_restored": true,
+    "source_unchanged": true,
+    "native_unchanged": true,
+    "gqa_library_unchanged": true,
+    "postflight": {
+      "checked_utc": "2026-10-29T06:54:13.539516+00:00",
+      "port_9031": "free",
+      "free_mib": 32700
+    }
+  },
+  "prior_v1": {
+    "archive": "archive/prefill-base2-20261029/batch-064712-component-entry-failed",
+    "classification": "entry ABI KeyError before B build, numerical checks, or timing; not candidate numerical failure",
+    "manifest_files": 71,
+    "sha256_verified_files": 71,
+    "recovery_sha256": "37bdd3bc7096bc2387e7496aae78f6fc2cb248d113d74a63038733434445146c",
+    "archive_manifest_sha256_verified": true
+  },
+  "independent_review": "Recovery hashes, preview identity, ABBA aggregates, FP64/production/Graph/input gates and source/library/DB terminal cleanup independently checked from recovered files.",
+  "v2_abi_fixture": {
+    "path": "analysis/prefill-base2-20261029/gpu-preparation-v2/actual-capture-abi.json",
+    "sha256": "57bc22c51485528ac48f89eee5129ac5bb4eacdcadf2d72f4fa2b52c038752a8",
+    "run_source_fixture_sha256": "57bc22c51485528ac48f89eee5129ac5bb4eacdcadf2d72f4fa2b52c038752a8",
+    "matches_run": true,
+    "shared_input_fields": [
+      "output_ptr",
+      "segm_output_ptr",
+      "segm_max_ptr",
+      "segm_expsum_ptr",
+      "query_ptr",
+      "key_cache_ptr",
+      "value_cache_ptr",
+      "block_tables_ptr",
+      "seq_lens_ptr",
+      "k_scale_cache_ptr",
+      "v_scale_cache_ptr",
+      "k_scale",
+      "v_scale",
+      "query_start_len_ptr"
+    ]
+  }
+}

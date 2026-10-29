@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共492条登记、489个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共495条登记、492个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -457,6 +457,9 @@
 | 天数 BI-V150 | 487 | 2026-10-29T04:34:01+00:00 | [native GQA S8生产接入](methods/native-gqa-s8.md) | 已完成 | 16384/1024/64/128 | 相对PR105暖均4832.66为+1.1275%，但KV为548384对548288，不作严格因果或新基线 | [20261029T043401Z-native-gqa-s8-16k-four-rounds](runs/bi-v150/20261029T043401Z-native-gqa-s8-16k-four-rounds.md) |
 | 天数 BI-V150 | 488 | 2026-10-29T05:47:20+00:00 | [native GQA S8生产接入](methods/native-gqa-s8.md) | 4K四轮完成，暖均小幅低于对照 | 4096/1024/64/256 | 4K四轮6161.33/6506.76/6723.79/6552.71 tok/s；暖均6594.42，对PR105 6627.82低0.5039%，KV548384对548336不同。 | [20261029T054720Z-native-gqa-s8-4k-four-rounds](runs/bi-v150/20261029T054720Z-native-gqa-s8-4k-four-rounds.md) |
 | 天数 BI-V150 | 489 | 2026-10-29T06:13:08+00:00 | [native GQA S8生产接入](methods/native-gqa-s8.md) | 原105准确率通过，S8 not_exercised | 未记录/未记录/未记录/105 | 原105题101/105（96.1905%），达到至少100正确门；S8库安装有效但N30/S8 selected/captured均未出现。 | [20261029T061308Z-native-gqa-s8-native14f-math500](runs/bi-v150/20261029T061308Z-native-gqa-s8-native14f-math500.md) |
+| 天数 BI-V150 | 493 | 2026-10-29T06:47:12+00:00 | [Prefill base2 CPU编译筛查](methods/prefill-base2.md) | 组件入口KeyError，未计时 | 16384/未记录/未记录/未记录 | M2048/KV16K组件worker引用不存在kw_a[key_ptr]，实际ABI为key_cache_ptr/value_cache_ptr；selected_calls=0，无timings。 | [20261029T064712064303Z-prefill-base2-m2048-kv16k-component](runs/bi-v150/20261029T064712064303Z-prefill-base2-m2048-kv16k-component.md) |
+| 天数 BI-V150 | 494 | 2026-10-29T06:53:47+00:00 | [Prefill base2 CPU编译筛查](methods/prefill-base2.md) | 局部组件负结果 | 16384/未记录/未记录/未记录 | ABBA Event 6.5530→6.6058ms（慢0.8052%），wall 6.6458→6.6968ms（慢0.7673%）。 | [20261029T065347035247Z-prefill-base2-m2048-kv16k-component](runs/bi-v150/20261029T065347035247Z-prefill-base2-m2048-kv16k-component.md) |
+| 天数 BI-V150 | 495 | 2026-10-29T07:10:02+00:00 | [native GQA S8生产接入](methods/native-gqa-s8.md) | 两档局部组件正向 | 未记录/未记录/未记录/未记录 | KV16K Event 1.02895→0.76604ms，KV4K 0.27377→0.21720ms；wall两档均同步下降。 | [20261029T071002153051Z-native-gqa-s8-short-kv-component](runs/bi-v150/20261029T071002153051Z-native-gqa-s8-short-kv-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | CPU | 448 | 2026-10-28T17:35:19.582412+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 42层真实down权重最大relative L2为0.007979；仅有限合成输出筛查，不能代表比赛准确率或吞吐。 | 未记录/未记录/未记录/未记录 | CPU筛查42层真实down权重；最大weight relative L2为0.007979，门只基于有限合成输出，不代表官方准确率或吞吐；未在服务启用量化。 | [20261028T173517Z-down-w8a16-weight-screen](runs/cpu/20261028T173517Z-down-w8a16-weight-screen.md) |
 | CPU | 457 | 2026-10-28T20:04:54+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 启动owner Python后立刻因driver/common SHA门退出；无服务/benchmark子进程、无GPU运行和吞吐数据。 | 16384/1024/64/128 | BI-V150入口的CPU准备阶段：保留driver pin失败原件，未启动GPU或benchmark；不生成16K性能结论。 | [20261028T200454Z-down-gemm-direct-launch-official16k-driver-pin-preparation-failed](runs/cpu/20261028T200454Z-down-gemm-direct-launch-official16k-driver-pin-preparation-failed.md) |

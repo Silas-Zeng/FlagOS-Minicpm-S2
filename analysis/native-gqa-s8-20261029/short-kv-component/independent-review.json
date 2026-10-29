@@ -1,0 +1,67 @@
+{
+  "review": "independent narrow review",
+  "run": "20261029T071002153051Z-native-gqa-s8-short-kv-component",
+  "archive": "archive/native-gqa-s8-20261029/batch-071002-short-kv-positive",
+  "archive_items": 61,
+  "archive_bytes": 10583689,
+  "archive_sha256": "c93fe4eda5d61d03b1408475117e5334f1abadbdc756e2e895cd6eef02353ab7",
+  "raw_package_sha256": "c93fe4eda5d61d03b1408475117e5334f1abadbdc756e2e895cd6eef02353ab7",
+  "status": "component_only_passed",
+  "abba_order": [
+    "triton_s8",
+    "native_s8",
+    "native_s8",
+    "triton_s8"
+  ],
+  "calls_per_window": 32,
+  "timing_ms": {
+    "16384": {
+      "triton_event_mean": 1.028950810432434,
+      "native_event_mean": 0.7660449147224426,
+      "event_saved_ms": 0.26290589570999146,
+      "event_saved_fraction": 0.2555087114412211,
+      "triton_wall_mean": 1.031727390625,
+      "native_wall_mean": 0.76854509375
+    },
+    "4096": {
+      "triton_event_mean": 0.2737744450569153,
+      "native_event_mean": 0.2171994000673294,
+      "event_saved_ms": 0.056575044989585876,
+      "event_saved_fraction": 0.20664837792959245,
+      "triton_wall_mean": 0.275959921875,
+      "native_wall_mean": 0.219592703125
+    }
+  },
+  "correctness": {
+    "full_output_cross_arm_bitwise": true,
+    "partial_max_sum_cross_arm_bitwise": true,
+    "fp64_sample_both_arms_pass": true,
+    "graph_fresh_bits_both_lengths": true,
+    "side_stream_bits": true,
+    "input_rng_guard_both_lengths": true,
+    "padded_output_partials_and_scratch_guards": true
+  },
+  "identities": {
+    "old_gqa_so": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+    "s8_so": "6c3cbdd34cc66be42d15e979780d2f5dfab833948b43aa9b45d5648301fd6333",
+    "source_sha_cpp": "087ea25d73df57de754a83615ef9e2b1adea3e869654964100b20877cc16aea3",
+    "source_sha_cu": "5d7b8c31c4850d96fb917faa927be1de7644446db2be21f22b0ac59ce2be2239"
+  },
+  "state": {
+    "exit_code": 0,
+    "source_unchanged": true,
+    "native_unchanged": true,
+    "gqa_library_unchanged": true,
+    "s8_library_unchanged": true,
+    "database_restored": true,
+    "database_original_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+    "database_after_sha256": "0a3ccbd77a46988f9f0bfb932270c26569e35075d33ac32859b8bbf45c7cd89c",
+    "port_9031_postflight": "free",
+    "distributed_cleanup_errors": [],
+    "torch_initialized_after": false,
+    "model_parallel_initialized_after": false
+  },
+  "conclusion": "局部组件短KV与16K均为正；不得归因官方4K端到端波动，不增加长度分流。组件诊断完成；非官方吞吐或准确率结论。",
+  "archive_manifest_files": 61,
+  "archive_manifest_sha_and_size_verified": true
+}

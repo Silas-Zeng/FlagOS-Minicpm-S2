@@ -2,13 +2,18 @@
 
 # Prefill base2 CPU编译筛查
 
-尝试将log2e并入score scale、将P/alpha改用exp2；本批两次入口/编译工具失败后，063736 CPU编译完成并显示乘法数减少，但exp条数未变、寄存器略增。仅机制/编译证据，没有GPU数值或性能结论；S8准确率与官方4K另列。
+CPU机制证据之外，M2048/KV16K单层入口因ABI参数名KeyError未计时，exp2换底局部ABBA为负（Event慢0.8052%、wall慢0.7673%）。保留入口失败与负结果，不作生产或官方资格。
 
 相关代码：[framework](../../patches/framework)。
 
 相关方法PR：未记录。
 
 下列是既有登记摘要，不叠加单项收益、不把诊断当端到端或完整准确率。完整条件沿每轮原件查阅。
+
+## 天数 BI-V150
+
+- [20261029T064712064303Z-prefill-base2-m2048-kv16k-component](../runs/bi-v150/20261029T064712064303Z-prefill-base2-m2048-kv16k-component.md)（登记#493）：M2048/KV16K组件worker引用不存在kw_a[key_ptr]，实际ABI为key_cache_ptr/value_cache_ptr；selected_calls=0，无timings。 **是否保留：** 保留入口接线失败；不归为候选数值或性能失败。
+- [20261029T065347035247Z-prefill-base2-m2048-kv16k-component](../runs/bi-v150/20261029T065347035247Z-prefill-base2-m2048-kv16k-component.md)（登记#494）：ABBA Event 6.5530→6.6058ms（慢0.8052%），wall 6.6458→6.6968ms（慢0.7673%）。 **是否保留：** 保留负结果并停止；无生产或官方资格。
 
 ## CPU
 

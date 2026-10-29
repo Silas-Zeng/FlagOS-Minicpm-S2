@@ -1494,5 +1494,19 @@ SHORT_ATTEMPTS.update({
  'prefill_base2_cpu_compile_mechanism_complete': ('编译base2换底A/B并检查生成ASM与寄存器/溢出。', 'spill 4→3、VGPR113→115、mul84→65、exp维持20；CPU-only机制观察，不代表GPU性能。'),
 })
 
+
+BATCH_RESULTS.update({
+ 'prefill_base2_component_entry_keyerror': ('M2048/KV16K组件worker引用不存在kw_a[key_ptr]，实际ABI为key_cache_ptr/value_cache_ptr；selected_calls=0，无timings。','保留入口接线失败；不归为候选数值或性能失败。','组件入口KeyError，未计时','BI-V150固定合成M2048/KV16K；worker入口失败，零benchmark。'),
+ 'prefill_base2_component_negative': ('ABBA Event 6.5530→6.6058ms（慢0.8052%），wall 6.6458→6.6968ms（慢0.7673%）。','保留负结果并停止；无生产或官方资格。','局部组件负结果','BI-V150合成M2048/KV16K，暖JIT ABBA，两臂各2×16次。'),
+ 'native_gqa_s8_short_kv_component_positive': ('KV16K Event 1.02895→0.76604ms，KV4K 0.27377→0.21720ms；wall两档均同步下降。','保留N30/S8组件正向观察；不授官方、准确率或长度分流资格。','两档局部组件正向','BI-V150 N30/S8，KV16K与4K分开ABBA；非官方吞吐。'),
+})
+SHORT_ATTEMPTS.update({
+ 'prefill_base2_component_entry_keyerror': ('检查base2候选的M2048/KV16K组件入口接线。','worker读取不存在的key_ptr，实际ABI名为key_cache_ptr/value_cache_ptr；没有进入计时。'),
+ 'prefill_base2_component_negative': ('测试exp2换底在固定合成attention组件上的代价。','只改变log2(e)并入score scale及P/alpha换exp2；其余Q fragment与ABI固定。'),
+ 'native_gqa_s8_short_kv_component_positive': ('比较N30/S8 native producer在KV16K与KV4K下的组件时延。','固定producer和Q stride，两档分别ABBA；未增加长度分流。'),
+})
+GROUPS['prefill-base2'] = ('Prefill base2 CPU编译筛查', 'CPU机制证据之外，M2048/KV16K单层入口因ABI参数名KeyError未计时，exp2换底局部ABBA为负（Event慢0.8052%、wall慢0.7673%）。保留入口失败与负结果，不作生产或官方资格。', [])
+GROUPS['native-gqa-s8'] = ('native GQA S8生产接入', 'PR105 producer新增N30/S8；仅BF16且Q stride=2048命中，其余fallback。16K官方四轮正向、4K官方观察略负且KV不匹配；本批KV16K/4K两档局部组件正向。原105为101/105通过，但batch8的S8为not_exercised；保持PR105基线，不作严格因果、长度分流或新基线。', [])
+
 if __name__ == '__main__':
     main()
