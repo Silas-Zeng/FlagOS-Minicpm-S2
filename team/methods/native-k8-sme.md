@@ -2,9 +2,9 @@
 
 # NativeK8 SME布局与lookahead组件探针
 
-完整页K-stage字节布局探针通过；lookahead两臂standalone compile/ASM顺序门通过。新增producer+原reducer组件4-case结果逐位数值/Graph/input门全通过，Event改善2.07–2.73%，但4K Q stride2560 wall反向慢2.10%。均为组件/编译证据，不代表attention完整正确性、官方吞吐、模型准确率或生产资格。 本批补入Mixed N30/S4/Q pitch2048的隔离编译及组件筛选：A为main899原Mixed producer，B为NativeK8 SME lookahead；局部组件结果不代表服务/官方成绩、Graph覆盖、准确率或新基线。
+完整页K-stage字节布局探针通过；lookahead两臂standalone compile/ASM顺序门通过。新增producer+原reducer组件4-case结果逐位数值/Graph/input门全通过，Event改善2.07–2.73%，但4K Q stride2560 wall反向慢2.10%。均为组件/编译证据，不代表attention完整正确性、官方吞吐、模型准确率或生产资格。 本批加入Mixed N30/S4/Q stride2048全步正确性与官方16K服务记录：A完成四轮，B按首暖负向规则保留两轮；KV页数及运行后3_6 DB有差异，服务结果不可严格比较，不代表准确率或新基线。
 
-相关代码：[experiment-note.md](../../analysis/publication-k8-sme-20261029/experiment-note.md)；[native_k8_sme_A.cu](../../experiments/bundles/20261029T155955570211Z-native-k8-sme-pair-build/source/native_k8_sme_A.cu)；[native_k8_sme_B.cu](../../experiments/bundles/20261029T155955570211Z-native-k8-sme-pair-build/source/native_k8_sme_B.cu)；[worker.py](../../experiments/bundles/20261029T161341635355Z-native-k8-sme-component/source/worker.py)；[manifest.json](../../experiments/bundles/20261029T195932238481Z-native-k8-sme-mixed-build/manifest.json)；[manifest.json](../../experiments/bundles/20261029T200440454229Z-native-k8-sme-mixed-component/manifest.json)。
+相关代码：[experiment-note.md](../../analysis/publication-k8-sme-20261029/experiment-note.md)；[native_k8_sme_A.cu](../../experiments/bundles/20261029T155955570211Z-native-k8-sme-pair-build/source/native_k8_sme_A.cu)；[native_k8_sme_B.cu](../../experiments/bundles/20261029T155955570211Z-native-k8-sme-pair-build/source/native_k8_sme_B.cu)；[worker.py](../../experiments/bundles/20261029T161341635355Z-native-k8-sme-component/source/worker.py)；[manifest.json](../../experiments/bundles/20261029T203337571995Z-native-k8-sme-mixed-service-step/manifest.json)；[manifest.json](../../experiments/bundles/20261029T205801248145Z-native-k8-sme-mixed-a-16384-four-rounds/manifest.json)；[manifest.json](../../experiments/bundles/20261029T205801248145Z-native-k8-sme-mixed-b-16384-four-rounds/manifest.json)。
 
 相关方法PR：未记录。
 

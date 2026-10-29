@@ -1,0 +1,107 @@
+{
+  "schema": "native-k8-sme-mixed-official16k-pair-terminal-review-v1",
+  "verdict": "pass",
+  "verdict_scope": "A/B终态与其已回收证据相互吻合；pass表示证据复核通过，不表示候选性能通过或完整模型资格通过。",
+  "platform": "Iluvatar BI-V150",
+  "source_commit": "899ce77470b0b539aebc108fd122f668c2d5894d",
+  "run_prefix": "20261029T205801248145Z-native-k8-sme-mixed",
+  "recovery_receipt": {
+    "path": "tmp/native-k8-sme-mixed-20261030/service/recovery-205801/verified-receipt.json",
+    "entries": [
+      {"arm": "A", "archive": "tmp/native-k8-sme-mixed-20261030/service/recovery-205801/20261029T205801248145Z-native-k8-sme-mixed-a-16384-four-rounds-recovery.tar.gz", "sha256": "e704c39f4877d40ded2fc7b7b1f369a7256c0ced3c781cbbf34ad090adafffc6", "bytes": 3831156, "verified_files": 311},
+      {"arm": "B", "archive": "tmp/native-k8-sme-mixed-20261030/service/recovery-205801/20261029T205801248145Z-native-k8-sme-mixed-b-16384-four-rounds-recovery.tar.gz", "sha256": "2147929080202c1df7b8720f40fa042f58a70f2c4a68a0367d4fdf910f589ef7", "bytes": 3837355, "verified_files": 314},
+      {"arm": "entry", "archive": "tmp/native-k8-sme-mixed-20261030/service/recovery-205801/20261029T205801248145Z-native-k8-sme-mixed-service-recovery.tar.gz", "sha256": "6444da87f730573f98adbd8585718782090fc59338cd51bfc846cd53f2b7b1da", "bytes": 36815, "verified_files": 26}
+    ]
+  },
+  "shared_identity": {
+    "main899_source_manifest_sha256": "ea61726c3d10c5c9c33f18e2679606e842a9c31f124848344f5617ca838d3ef7",
+    "pure_overlay_manifest_sha256": "b4caebc586ebd600035f5921efb7278037d03f43ac3f26a814303ade690d0ca8",
+    "common_assets_sha256": "f96d3f889baecf71305d717fe62a8615a52c51b2f01c80e980e87a2cac41d98d",
+    "initial_databases": {
+      "TunedConfig_iluvatar_triton_3_2.db": "87c41ba8b6c6ac650e959c0e30de3f69c78eba95be7d106a1617d04a532810da",
+      "TunedConfig_iluvatar_triton_3_6.db": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378"
+    },
+    "official_case": [16384, 1024, 64, 128],
+    "official_driver": "unchanged; RUNS=4 and SKIP_FIRST=1",
+    "common_libraries": {
+      "pure_decode": "824f7dda043dd8e101b0f2296cba4aeda14d0718ae673805da1564a141c1f734",
+      "w8a8": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+      "stock_gqa": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b"
+    },
+    "service_flags": {
+      "VLLM_FL_BIV150_KONLY_ENCODED_SERVICE": "1",
+      "VLLM_FL_BIV150_KONLY_NATIVE_DECODE": "1",
+      "VLLM_FL_BIV150_KONLY_MIXED_NATIVE": "1",
+      "VLLM_FL_BIV150_KONLY_COMPACT_SERVICE": "0"
+    },
+    "cudagraph_mode": "FULL_DECODE_ONLY",
+    "mixed_graph_policy": "NONE"
+  },
+  "arms": {
+    "A": {
+      "run_id": "20261029T205801248145Z-native-k8-sme-mixed-a-16384-four-rounds",
+      "status": "completed_four_rounds",
+      "rounds": [
+        {"round": 1, "success": 128, "requests": 128, "total_tok_s": 3906.33, "output_tok_s": 229.78},
+        {"round": 2, "success": 128, "requests": 128, "total_tok_s": 4551.95, "output_tok_s": 267.76},
+        {"round": 3, "success": 128, "requests": 128, "total_tok_s": 4548.63, "output_tok_s": 267.57},
+        {"round": 4, "success": 128, "requests": 128, "total_tok_s": 4545.77, "output_tok_s": 267.40}
+      ],
+      "warm_mean_total_tok_s": 4548.783333333333,
+      "warm_mean_output_tok_s": 267.576666666667,
+      "official_validation": {"complete": true, "raw_rows": 4, "summary_rows": 1, "skip_first": 1, "summary_means_verified": true, "warmup_failures": []},
+      "mixed_overlay_manifest_sha256": "9278e76e1188417872a9be65166e61a0dff3b547219c8124cde85e693678ba54",
+      "mixed_so_sha256": "2b16e692005ee01f3e8ffe659ccfeaa3b4550d32cfdd003588f31343cc407526",
+      "mixed_namespace": "cjj_native_k8_mixed_sme_a",
+      "mixed_operator": "cjj_native_k8_mixed_sme_a::produce",
+      "mixed_selected_marker_count": 1,
+      "mixed_selected_geometry": {"rows": 30, "segments": 4, "query_stride": [2048, 128, 1], "worker_pid": 60791},
+      "kv_pages": 34271,
+      "database_after": {
+        "TunedConfig_iluvatar_triton_3_2.db": "87c41ba8b6c6ac650e959c0e30de3f69c78eba95be7d106a1617d04a532810da",
+        "TunedConfig_iluvatar_triton_3_6.db": "6e442d2ea16a5f1b774007acbdef1bcb41d102fd4a3705f81473ba744b9fc84e"
+      },
+      "processes": {"owner_exit": 0, "benchmark_exit": 0, "server_exit": 0, "monitor_signal": -15, "cleanup_errors": [], "port_9031_after": "free"}
+    },
+    "B": {
+      "run_id": "20261029T205801248145Z-native-k8-sme-mixed-b-16384-four-rounds",
+      "status": "stopped_first_warm_negative",
+      "rounds": [
+        {"round": 1, "success": 128, "requests": 128, "total_tok_s": 3871.73, "output_tok_s": 227.75},
+        {"round": 2, "success": 128, "requests": 128, "total_tok_s": 4547.97, "output_tok_s": 267.53}
+      ],
+      "stop": {"kind": "first_warm_negative", "round": 2, "baseline_A_round_2_total_tok_s": 4551.95, "candidate_B_round_2_total_tok_s": 4547.97, "delta_percent": -0.0874350553},
+      "mixed_overlay_manifest_sha256": "326289ef105d8fbef1bfafdb3ec6d133452bd2e30ca86b7ce87c60760c929133",
+      "mixed_so_sha256": "4154f29039b34e4e7e306706a7c52680719d38555c1ee627ea23e8bfeebfc1de",
+      "mixed_namespace": "cjj_native_k8_mixed_sme_b",
+      "mixed_operator": "cjj_native_k8_mixed_sme_b::produce",
+      "mixed_selected_marker_count": 1,
+      "mixed_selected_geometry": {"rows": 30, "segments": 4, "query_stride": [2048, 128, 1], "worker_pid": 69274},
+      "kv_pages": 34277,
+      "database_after": {
+        "TunedConfig_iluvatar_triton_3_2.db": "87c41ba8b6c6ac650e959c0e30de3f69c78eba95be7d106a1617d04a532810da",
+        "TunedConfig_iluvatar_triton_3_6.db": "192d02d121dfb427a8161e1c395fcb8b7accb08971bea8710da3e21937ef5918"
+      },
+      "processes": {"owner_exit": 1, "supervisor_exit": 0, "benchmark_terminated_by_supervisor": -15, "server_exit": 0, "monitor_signal": -15, "cleanup_errors": [], "port_9031_after": "free"},
+      "classification": "第二轮为128/128成功；监督器因首暖相对A首暖基准负向而主动发SIGTERM。KeyboardInterrupt/SIGTERM记录及owner非零退出是预期早停控制流，不是模型数值错误，也不等同完整四轮完成。"
+    }
+  },
+  "comparability": {
+    "performance_comparable": false,
+    "reason": "两臂起始3_2/3_6数据库SHA相同，但KV容量不同（A 34271页，B 34277页），运行后3_6数据库也各自改变且SHA不同；B只完成冷轮和一个暖轮，未形成完整四轮均值。仅保留本轮筛选事实，不作严格A/B因果归因或基线更新。",
+    "accuracy_verified": false,
+    "service_qualified": false,
+    "pr118_qualification_inherited": false
+  },
+  "evidence_paths": {
+    "A_run": "archive/native-k8-sme-mixed-20261030/service-a-205801/official/20261029T205801248145Z-native-k8-sme-mixed-a-16384-four-rounds/",
+    "B_run": "archive/native-k8-sme-mixed-20261030/service-b-205801/official/20261029T205801248145Z-native-k8-sme-mixed-b-16384-four-rounds/",
+    "entry_and_supervisor": "archive/native-k8-sme-mixed-20261030/service-entry-205801/",
+    "review_note": "原始run目录及压缩包保持不变；本review只复核回收证据，不执行重测。"
+  },
+  "limitations": [
+    "Mixed marker只证明worker中出现N30/S4/Qstride2048的主机侧选择，不是请求覆盖率或Graph replay计数。",
+    "官方准确率未执行；结果不能作为模型资格或新基线。",
+    "B没有完整四轮，早停是按首暖负向规则执行；原始SIGTERM与非零owner退出按受控停止解释。"
+  ]
+}
