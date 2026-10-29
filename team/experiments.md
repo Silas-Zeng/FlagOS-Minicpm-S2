@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共479条登记、476个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共481条登记、478个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -447,6 +447,8 @@
 | 天数 BI-V150 | 477 | 2026-10-29T00:46:24.060488+00:00 | [Prefill i32 offset 组件筛查](methods/prefill-i32-offset.md) | scope断言失败，未测数值/性能 | 16384/未记录/未记录/未记录 | 组件在scope断言停止；worker预设配置与当时selected compile scope不符，未进入A/B、数值或计时。 | [20261029T004624060488Z-prefill-i32-offset-m2048-kv16k-component](runs/bi-v150/20261029T004624060488Z-prefill-i32-offset-m2048-kv16k-component.md) |
 | 天数 BI-V150 | 478 | 2026-10-29T01:02:43.657857+00:00 | [Prefill i32 offset 组件筛查](methods/prefill-i32-offset.md) | 结果记录器失败，未测数值/性能 | 16384/未记录/未记录/未记录 | 组件完成A/B编译与Q-fragment proof后，结果记录代码访问未定义属性并退出；未形成数值/计时。 | [20261029T010243657857Z-prefill-i32-offset-m2048-kv16k-component](runs/bi-v150/20261029T010243657857Z-prefill-i32-offset-m2048-kv16k-component.md) |
 | 天数 BI-V150 | 479 | 2026-10-29T01:09:50.054874+00:00 | [Prefill i32 offset 组件筛查](methods/prefill-i32-offset.md) | 单层数值通过、性能负向停止 | 16384/未记录/未记录/未记录 | M2048/KV16384单层组件正确性门通过（FP64采样）；ABBA Event 8.347575→9.235266ms（+10.63%），wall 8.441216→9.303357ms（+10.21%）。 | [20261029T010950054874Z-prefill-i32-offset-m2048-kv16k-component](runs/bi-v150/20261029T010950054874Z-prefill-i32-offset-m2048-kv16k-component.md) |
+| 天数 BI-V150 | 480 | 2026-10-29T01:42:50.520820+00:00 | [其它登记与控制记录](methods/other.md) | 已登记，见短记 | 16384/未记录/未记录/未记录 | Event 1.029299→0.766297ms（快25.5515%），wall 1.029299→0.766297ms（快25.5515%），单次组件正向信号，等待端到端确认 | [20261029T014250520820Z-native-gqa-s8-hotspot-component](runs/bi-v150/20261029T014250520820Z-native-gqa-s8-hotspot-component.md) |
+| 天数 BI-V150 | 481 | 2026-10-29T01:58:14.445229+00:00 | [Prefill i32 offset 组件筛查](methods/prefill-i32-offset.md) | 已登记，见短记 | 16384/未记录/未记录/未记录 | Event 6.570426→6.833357ms（慢4.0017%），wall 6.663530→6.925456ms（慢3.9307%），负向停止 | [20261029T015814445229Z-prefill-i32-q32-m2048-kv16k-component](runs/bi-v150/20261029T015814445229Z-prefill-i32-q32-m2048-kv16k-component.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | CPU | 448 | 2026-10-28T17:35:19.582412+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 42层真实down权重最大relative L2为0.007979；仅有限合成输出筛查，不能代表比赛准确率或吞吐。 | 未记录/未记录/未记录/未记录 | CPU筛查42层真实down权重；最大weight relative L2为0.007979，门只基于有限合成输出，不代表官方准确率或吞吐；未在服务启用量化。 | [20261028T173517Z-down-w8a16-weight-screen](runs/cpu/20261028T173517Z-down-w8a16-weight-screen.md) |
 | CPU | 457 | 2026-10-28T20:04:54+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 启动owner Python后立刻因driver/common SHA门退出；无服务/benchmark子进程、无GPU运行和吞吐数据。 | 16384/1024/64/128 | BI-V150入口的CPU准备阶段：保留driver pin失败原件，未启动GPU或benchmark；不生成16K性能结论。 | [20261028T200454Z-down-gemm-direct-launch-official16k-driver-pin-preparation-failed](runs/cpu/20261028T200454Z-down-gemm-direct-launch-official16k-driver-pin-preparation-failed.md) |

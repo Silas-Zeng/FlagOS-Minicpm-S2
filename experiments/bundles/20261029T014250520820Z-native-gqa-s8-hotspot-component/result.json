@@ -1,0 +1,990 @@
+{
+  "status": "component_only_passed",
+  "checks": [
+    {
+      "case": "dense-random",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "full_output_cross_arm_bitwise": true,
+        "partial_max_sum_cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "scratch_unwritten_storage": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true
+      },
+      "independent_reference": {
+        "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+        "atol": 0.03,
+        "rtol": 0.03,
+        "relative_l2_limit": 0.01,
+        "rows": [
+          0,
+          1,
+          4,
+          8,
+          10,
+          13,
+          14,
+          15,
+          28,
+          29
+        ],
+        "heads": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "lengths": [
+          16384,
+          16384,
+          16384,
+          16384,
+          16384,
+          16384,
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "arms": {
+          "triton_s8": {
+            "finite": true,
+            "max_abs": 0.0001649068873482637,
+            "relative_l2": 0.002270971888483284,
+            "passed": true
+          },
+          "native_s8": {
+            "finite": true,
+            "max_abs": 0.0001649068873482637,
+            "relative_l2": 0.002270971888483284,
+            "passed": true
+          }
+        },
+        "scope": "合成组件抽样，不是模型准确率"
+      },
+      "nonfinite_diagnostic": false,
+      "baseline_nan": 0,
+      "candidate_nan": 0,
+      "full_output_cross_arm_bitwise": true,
+      "partial_max_sum_cross_arm_bitwise": true
+    },
+    {
+      "case": "graph-changed-q-kv-pages-ragged-zero-tail",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "full_output_cross_arm_bitwise": true,
+        "partial_max_sum_cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "scratch_unwritten_storage": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true,
+        "output_changed": true
+      },
+      "independent_reference": {
+        "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+        "atol": 0.03,
+        "rtol": 0.03,
+        "relative_l2_limit": 0.01,
+        "rows": [
+          0,
+          1,
+          4,
+          8,
+          10,
+          13,
+          14,
+          15,
+          28,
+          29
+        ],
+        "heads": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "lengths": [
+          0,
+          1,
+          17,
+          63,
+          65,
+          4097,
+          16383,
+          16384,
+          4096,
+          4097
+        ],
+        "arms": {
+          "triton_s8": {
+            "finite": true,
+            "max_abs": 0.004263334935912466,
+            "relative_l2": 0.0008226669323857659,
+            "passed": true
+          },
+          "native_s8": {
+            "finite": true,
+            "max_abs": 0.004263334935912466,
+            "relative_l2": 0.0008226669323857659,
+            "passed": true
+          }
+        },
+        "scope": "合成组件抽样，不是模型准确率"
+      },
+      "nonfinite_diagnostic": false,
+      "baseline_nan": 0,
+      "candidate_nan": 0,
+      "full_output_cross_arm_bitwise": true,
+      "partial_max_sum_cross_arm_bitwise": true
+    },
+    {
+      "case": "tail-unused-KV-NaN-masked",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "full_output_cross_arm_bitwise": true,
+        "partial_max_sum_cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "scratch_unwritten_storage": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true
+      },
+      "independent_reference": {
+        "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+        "atol": 0.03,
+        "rtol": 0.03,
+        "relative_l2_limit": 0.01,
+        "rows": [
+          0,
+          1,
+          4,
+          8,
+          10,
+          13,
+          14,
+          15,
+          28,
+          29
+        ],
+        "heads": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "lengths": [
+          0,
+          1,
+          17,
+          63,
+          65,
+          4097,
+          16383,
+          16384,
+          4096,
+          4097
+        ],
+        "arms": {
+          "triton_s8": {
+            "finite": true,
+            "max_abs": 0.004263334935912466,
+            "relative_l2": 0.0008226669323857659,
+            "passed": true
+          },
+          "native_s8": {
+            "finite": true,
+            "max_abs": 0.004263334935912466,
+            "relative_l2": 0.0008226669323857659,
+            "passed": true
+          }
+        },
+        "scope": "合成组件抽样，不是模型准确率"
+      },
+      "nonfinite_diagnostic": false,
+      "baseline_nan": 0,
+      "candidate_nan": 0,
+      "full_output_cross_arm_bitwise": true,
+      "partial_max_sum_cross_arm_bitwise": true
+    },
+    {
+      "case": "finite-equal-max-negative-zero-v",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "full_output_cross_arm_bitwise": true,
+        "partial_max_sum_cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "scratch_unwritten_storage": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true
+      },
+      "independent_reference": {
+        "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+        "atol": 0.03,
+        "rtol": 0.03,
+        "relative_l2_limit": 0.01,
+        "rows": [
+          0,
+          1,
+          4,
+          8,
+          10,
+          13,
+          14,
+          15,
+          28,
+          29
+        ],
+        "heads": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "lengths": [
+          0,
+          1,
+          17,
+          0,
+          15,
+          128,
+          608,
+          611,
+          17,
+          128
+        ],
+        "arms": {
+          "triton_s8": {
+            "finite": true,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "passed": true
+          },
+          "native_s8": {
+            "finite": true,
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "passed": true
+          }
+        },
+        "scope": "合成组件抽样，不是模型准确率"
+      },
+      "nonfinite_diagnostic": false,
+      "baseline_nan": 0,
+      "candidate_nan": 0,
+      "full_output_cross_arm_bitwise": true,
+      "partial_max_sum_cross_arm_bitwise": true
+    },
+    {
+      "case": "finite-equal-max-subnormal-cancellation-v",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "full_output_cross_arm_bitwise": true,
+        "partial_max_sum_cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "scratch_unwritten_storage": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true
+      },
+      "independent_reference": {
+        "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+        "atol": 0.03,
+        "rtol": 0.03,
+        "relative_l2_limit": 0.01,
+        "rows": [
+          0,
+          1,
+          4,
+          8,
+          10,
+          13,
+          14,
+          15,
+          28,
+          29
+        ],
+        "heads": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "lengths": [
+          0,
+          1,
+          17,
+          0,
+          15,
+          128,
+          608,
+          611,
+          17,
+          128
+        ],
+        "arms": {
+          "triton_s8": {
+            "finite": true,
+            "max_abs": 1.4355669829596754e-52,
+            "relative_l2": 4.8813528116659265e-15,
+            "passed": true
+          },
+          "native_s8": {
+            "finite": true,
+            "max_abs": 1.4355669829596754e-52,
+            "relative_l2": 4.8813528116659265e-15,
+            "passed": true
+          }
+        },
+        "scope": "合成组件抽样，不是模型准确率"
+      },
+      "nonfinite_diagnostic": false,
+      "baseline_nan": 0,
+      "candidate_nan": 0,
+      "full_output_cross_arm_bitwise": true,
+      "partial_max_sum_cross_arm_bitwise": true
+    },
+    {
+      "case": "finite-max-nonfinite-accumulator",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "full_output_cross_arm_bitwise": true,
+        "partial_max_sum_cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "scratch_unwritten_storage": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true
+      },
+      "independent_reference": null,
+      "nonfinite_diagnostic": true,
+      "baseline_nan": 52416,
+      "candidate_nan": 52416,
+      "full_output_cross_arm_bitwise": true,
+      "partial_max_sum_cross_arm_bitwise": true
+    },
+    {
+      "case": "negative-infinity-max-original-path",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "full_output_cross_arm_bitwise": true,
+        "partial_max_sum_cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "scratch_unwritten_storage": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true
+      },
+      "independent_reference": null,
+      "nonfinite_diagnostic": true,
+      "baseline_nan": 53248,
+      "candidate_nan": 53248,
+      "full_output_cross_arm_bitwise": true,
+      "partial_max_sum_cross_arm_bitwise": true
+    },
+    {
+      "case": "positive-infinity-max-original-path",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "full_output_cross_arm_bitwise": true,
+        "partial_max_sum_cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "scratch_unwritten_storage": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true
+      },
+      "independent_reference": null,
+      "nonfinite_diagnostic": true,
+      "baseline_nan": 53248,
+      "candidate_nan": 53248,
+      "full_output_cross_arm_bitwise": true,
+      "partial_max_sum_cross_arm_bitwise": true
+    },
+    {
+      "case": "restored-dense-before-ABBA",
+      "checks": {
+        "eager_numerics": true,
+        "finite": true,
+        "guard": true,
+        "full_output_cross_arm_bitwise": true,
+        "partial_max_sum_cross_arm_bitwise": true,
+        "padded_output_zero": true,
+        "padded_partials_untouched": true,
+        "scratch_unwritten_storage": true,
+        "graph_fresh_bits": true,
+        "inputs_unchanged": true,
+        "rng_unchanged": true
+      },
+      "independent_reference": {
+        "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+        "atol": 0.03,
+        "rtol": 0.03,
+        "relative_l2_limit": 0.01,
+        "rows": [
+          0,
+          1,
+          4,
+          8,
+          10,
+          13,
+          14,
+          15,
+          28,
+          29
+        ],
+        "heads": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "lengths": [
+          16384,
+          16384,
+          16384,
+          16384,
+          16384,
+          16384,
+          16384,
+          16384,
+          16384,
+          16384
+        ],
+        "arms": {
+          "triton_s8": {
+            "finite": true,
+            "max_abs": 0.0001649068873482637,
+            "relative_l2": 0.002270971888483284,
+            "passed": true
+          },
+          "native_s8": {
+            "finite": true,
+            "max_abs": 0.0001649068873482637,
+            "relative_l2": 0.002270971888483284,
+            "passed": true
+          }
+        },
+        "scope": "合成组件抽样，不是模型准确率"
+      },
+      "nonfinite_diagnostic": false,
+      "baseline_nan": 0,
+      "candidate_nan": 0,
+      "full_output_cross_arm_bitwise": true,
+      "partial_max_sum_cross_arm_bitwise": true
+    }
+  ],
+  "timings": [
+    {
+      "calls": 32,
+      "wall_total_ms": 33.053789,
+      "wall_per_call_ms": 1.03293090625,
+      "event_total_ms": 32.93598937988281,
+      "event_per_call_ms": 1.029249668121338,
+      "submit_thread_cpu_ns": 24792216,
+      "submit_process_cpu_ns": 25553177,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 490051\nnr_throttled 3262\nthrottled_time 13520161331260",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 490051,
+          "nr_throttled": 3262,
+          "throttled_time": 13520161331260
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 490051\nnr_throttled 3262\nthrottled_time 13520161331260",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 490051,
+          "nr_throttled": 3262,
+          "throttled_time": 13520161331260
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 0,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "triton_s8"
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 24.624884,
+      "wall_per_call_ms": 0.769527625,
+      "event_total_ms": 24.541030883789062,
+      "event_per_call_ms": 0.7669072151184082,
+      "submit_thread_cpu_ns": 18456126,
+      "submit_process_cpu_ns": 19135848,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 490051\nnr_throttled 3262\nthrottled_time 13520161331260",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 490051,
+          "nr_throttled": 3262,
+          "throttled_time": 13520161331260
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 490051\nnr_throttled 3262\nthrottled_time 13520161331260",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 490051,
+          "nr_throttled": 3262,
+          "throttled_time": 13520161331260
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 0,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "native_s8"
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 24.579207,
+      "wall_per_call_ms": 0.76810021875,
+      "event_total_ms": 24.502004623413086,
+      "event_per_call_ms": 0.7656876444816589,
+      "submit_thread_cpu_ns": 18418677,
+      "submit_process_cpu_ns": 19112497,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 490051\nnr_throttled 3262\nthrottled_time 13520161331260",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 490051,
+          "nr_throttled": 3262,
+          "throttled_time": 13520161331260
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 490051\nnr_throttled 3262\nthrottled_time 13520161331260",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 490051,
+          "nr_throttled": 3262,
+          "throttled_time": 13520161331260
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 0,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "native_s8"
+    },
+    {
+      "calls": 32,
+      "wall_total_ms": 33.016097,
+      "wall_per_call_ms": 1.03175303125,
+      "event_total_ms": 32.939117431640625,
+      "event_per_call_ms": 1.0293474197387695,
+      "submit_thread_cpu_ns": 24746390,
+      "submit_process_cpu_ns": 25461440,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 490051\nnr_throttled 3262\nthrottled_time 13520161331260",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 490051,
+          "nr_throttled": 3262,
+          "throttled_time": 13520161331260
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 490052\nnr_throttled 3262\nthrottled_time 13520161331260",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 490052,
+          "nr_throttled": 3262,
+          "throttled_time": 13520161331260
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 1,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "triton_s8"
+    }
+  ],
+  "kind": "N30/S8 original SDK automatic Triton producer vs new native S8 producer + same original reducer; Graph ABBA",
+  "shape": {
+    "N": 30,
+    "S": 8,
+    "KV": 16384,
+    "cache_capacity": 16384,
+    "Q_stride": [
+      2048,
+      128,
+      1
+    ]
+  },
+  "limits": [
+    "One fixed N30/KV16384 component only; no N29/N31, model or official qualification.",
+    "A is original SDK fallback with auto-selected S8; B is new native <8> specialization; both use the same reducer.",
+    "Full output and partial/max/sum cross-arm bitwise are hard gates; COREX_NATIVE_GQA_V_OVERLAP=1."
+  ],
+  "triton_s8": {
+    "library": "/workspace/experiments/minicpm-s2/build/native-gqa-overlap1-58a2fc96-20261028/corex_native_gqa_s2_probe.so",
+    "sha256": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+    "overlap_v": true,
+    "namespace": "corex_native_gqa_s2_probe",
+    "build_commands_sha256": "37c163d52ec73b7a5e5d484345d6dff572b702a6d8707f268a954099eb1765bb",
+    "source_sha256": {
+      "native_gqa_s2.cpp": "f6bf9611184de7688a0460fe3b810bf0479e21a5dccdbbda77a7d69dadca7a9e",
+      "native_gqa_s2.cu": "dc9bc915c9f5b165cbf0915fe653caa4dd727b48d6f94a50064c5d3c572f60bf"
+    }
+  },
+  "dispatch": {
+    "index_source_sha256": "47a7108bcf8424a96651021703f8731f1866a0e2eff88a1ac647e574ccf7e61d",
+    "registered": true,
+    "exclude_ops": []
+  },
+  "native_gate_install": {
+    "installed": true,
+    "already": true
+  },
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "native_s8": {
+    "library": "/workspace/experiments/minicpm-s2/framework/20261029T014250520820Z-native-gqa-s8-hotspot-component/native_s8-build/corex_native_gqa_s8_component.so",
+    "sha256": "8000eba5cffec216a46dc8c82ba17a048b5cb967aa175b42947809981064160e",
+    "namespace": "corex_native_gqa_s8_component",
+    "actual_cuda_command": "/usr/local/corex/bin/clang++  -DTORCH_EXTENSION_NAME=corex_native_gqa_s8_component -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.12/site-packages/torch/include -isystem /usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/corex/include -isystem /usr/local/include/python3.12 -D_GLIBCXX_USE_CXX11_ABI=0 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__ILUVATAR__ -D__ILUVATAR_WORKAROUND__ -D__ILUVATAR_DIAG__ -cl-single-precision-constant -fPIC -mllvm --bonus-inst-threshold=0 -mllvm --skip-double -fclang-abi-compat=16 -D__MR__ -O3 -std=c++17 -D__ILUVATAR__ -D__MR__ -DCOREX_NATIVE_GQA_V_OVERLAP=1 -x ivcore --cuda-gpu-arch=ivcore11 --cuda-path=/usr/local/corex -c /workspace/experiments/minicpm-s2/framework/20261029T014250520820Z-native-gqa-s8-hotspot-component/source/native_gqa_s8_component.cu -o native_gqa_s8_component.cuda.o ",
+    "source_sha256": "5d7b8c31c4850d96fb917faa927be1de7644446db2be21f22b0ac59ce2be2239",
+    "overlap_v": true,
+    "grid": [
+      30,
+      2,
+      8
+    ]
+  },
+  "actual_production_binding": {
+    "runtime_class": "_Runtime",
+    "library_sha256": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+    "native_selector_returned": false,
+    "sdk_fallback": true,
+    "producer_grid": [
+      30,
+      2,
+      8
+    ],
+    "reducer_grid": [
+      30,
+      16
+    ],
+    "sdk_compiled_type": "CompiledKernel",
+    "sdk_compiled_hash": "f9f2d5da77a4cb31b2fc25765518739d7c7abe632e2064af49ec4725420da697",
+    "reducer_hash": "dac64b7e3f1489807cb0681b0049687339c49c8e7edd7a5a1b5d6c803f567bca",
+    "q_facts": {
+      "shape": [
+        30,
+        16,
+        128
+      ],
+      "stride": [
+        2048,
+        128,
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "device": "cuda:0",
+      "requires_grad": false
+    },
+    "kv_facts": {
+      "key_cache_ptr": {
+        "shape": [
+          30720,
+          16,
+          2,
+          128
+        ],
+        "stride": [
+          8192,
+          256,
+          128,
+          1
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cuda:0",
+        "requires_grad": false
+      },
+      "value_cache_ptr": {
+        "shape": [
+          30720,
+          16,
+          2,
+          128
+        ],
+        "stride": [
+          8192,
+          256,
+          128,
+          1
+        ],
+        "dtype": "torch.bfloat16",
+        "device": "cuda:0",
+        "requires_grad": false
+      }
+    },
+    "shape_args": {
+      "tensors": {},
+      "scalars": {
+        "softmax_scale_log2e": 0.12751743082459868,
+        "queries_per_kv": 8,
+        "PAGE_SIZE": 16,
+        "ROWS": 8,
+        "SEGMENTS": 8,
+        "num_warps": 1,
+        "num_stages": 1
+      }
+    },
+    "setup_capture_restored": true,
+    "scope": "one real synthetic forward call; no request coverage claim",
+    "selected_grid": [
+      30,
+      2,
+      8
+    ]
+  },
+  "input_reproduction": {
+    "seed": 725013,
+    "make_data_lengths": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "kv_len": 16384,
+    "cache_after_update_sha256": "20a591ec4463006e7cc7e2c2baaf7581fed2dc1435941e8419b9c77433b1eb93",
+    "cache_snapshot": "one CPU copy held only to restore deliberate boundary mutations; no repeated cache snapshots or cache dump"
+  },
+  "numerical_contract": {
+    "source": "same pinned CPU FP64 reference as grid-order owner",
+    "atol": 0.03,
+    "rtol": 0.03,
+    "relative_l2_limit": 0.01,
+    "description": "两种producer，同一原reducer；完整输出和partial/max/sum跨臂bitwise为硬门，另跑原FP64/Graph/side门；不是模型准确率"
+  },
+  "side_stream_bits": true,
+  "tail_poison_output_unchanged": true,
+  "timing_contract": {
+    "order": [
+      "triton_s8",
+      "native_s8",
+      "native_s8",
+      "triton_s8"
+    ],
+    "loops_per_window": 32,
+    "per_replay": [
+      "one native producer",
+      "one unchanged original reducer"
+    ],
+    "writer_in_timing": false,
+    "input": "restored exact seed725013 N30/S8/KV16384/Qstride2048",
+    "SO0": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+    "SO1": "8000eba5cffec216a46dc8c82ba17a048b5cb967aa175b42947809981064160e"
+  },
+  "summary": {
+    "event": {
+      "triton_s8_ms": 1.0292985439300537,
+      "native_s8_ms": 0.7662974298000336,
+      "fraction_saved": 0.25551489961875673
+    },
+    "wall": {
+      "triton_s8_ms": 1.03234196875,
+      "native_s8_ms": 0.7688139218750001,
+      "fraction_saved": 0.25527204632985123
+    }
+  },
+  "decision": "Strict same-run N30/S8 producer component only; no other batch shapes, production route, or official qualification"
+}
