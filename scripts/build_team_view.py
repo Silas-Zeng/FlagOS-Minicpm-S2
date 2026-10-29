@@ -1544,3 +1544,13 @@ SHORT_ATTEMPTS['native_gqa_s8_official_entry_failed_pre_gpu'] = ('尝试启动sh
 GROUPS['native-gqa-shared4k'] = ('GQA shared4k共享缓冲区复用', 'N32/S4/KV16K局部ABBA省时约0.05% Event、0.14% wall，只是微弱正向组件信号，未确认稳定收益。S8官方候选的三次入口失败均在GPU启动前，无benchmark请求和性能计时；不将其解读为候选数值错误或退化。', [])
 GROUPS['native-gqa-linear-n64'] = ('真实linear shape与窄N方向诊断', '104512短请求捕获135次linear调用；实际shape与warm-only调用分开，精确shape私有数据库记录不支持窄N候选，故NO-GO。诊断不是候选性能测试，也不据此推断官方请求热点。', [])
 GROUPS['native-gqa-s8'] = ('native GQA S8生产接入与shared4k筛选', 'PR105 producer新增N30/S8，仅BF16且Q stride=2048命中，其余fallback。16K官方暖均观察+1.1275%，4K暖均−0.5039%，KV条件不匹配；原105为101/105，但batch8未覆盖S8 kernel执行。另有三次shared4k官方入口失败，全部在GPU启动前，无benchmark请求和性能数据；不构成候选正确性或性能结论。保持PR105基线，不作严格因果或新基线。', [])
+
+
+# PR5 publication batch shared4k official 2026-10-29
+BATCH_RESULTS['native_gqa_s8_shared4k_official_16k_positive_observation'] = ('暖均4908.913333 tok/s，对PR105 4832.66为观察+1.577875%；KV容量差48 tokens。', '保留为完整官方16K正向观察；不作严格因果、新基线或准确率资格，4K另行筛选。', '暖均4908.913333 tok/s，对PR105 4832.66为观察+1.577875%；KV容量差48 tokens。', '沿用官方脚本/服务参数，16384输入、1024输出、并发64、每轮128请求；完成四轮，弃首轮比较PR105。')
+SHORT_ATTEMPTS['native_gqa_s8_shared4k_official_16k_positive_observation'] = ('筛选N30/S8 shared4k候选的官方16K吞吐表现。', 'PR105 N30/S8 producer接入shared4k实现；仅BF16、Q stride=2048命中，其余回退保持。')
+BATCH_RESULTS['native_gqa_s8_shared4k_official_4k_negative_stopped'] = ('第二轮6204.95 tok/s，对PR105 6441.35低3.670038%；512请求成功，KV差48 tokens。', '保留两轮负向筛选结果；不扩为四轮、不称框架错误，不建立基线或准确率资格。', '第二轮6204.95 tok/s，对PR105 6441.35低3.670038%；512请求成功，KV差48 tokens。', '官方4K输入4096、输出1024、并发64、512请求；记录两轮，在第二轮按负向筛选规则停止。')
+SHORT_ATTEMPTS['native_gqa_s8_shared4k_official_4k_negative_stopped'] = ('按官方首暖筛选规则评估shared4k S8候选4K负载。', '运行同一shared4k S8接入；保持官方服务及评测参数，未改变候选实现。')
+GROUPS['native-gqa-s8'] = ('native GQA S8与shared4k官方筛选', 'shared4k S8路径官方16K完成四轮，暖均相对PR105观察+1.577875%；KV条件差48 tokens，不能严格归因。官方4K第二轮低3.670038%，按首暖规则停止，仅两轮，不是四轮成绩。两档均实际触发S8 eager_only，但无准确率资格，不更新PR105基线。', [])
+
+

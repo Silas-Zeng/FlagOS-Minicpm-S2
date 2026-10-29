@@ -1,8 +1,8 @@
 <!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
 
-# native GQA S8生产接入与shared4k筛选
+# native GQA S8与shared4k官方筛选
 
-PR105 producer新增N30/S8，仅BF16且Q stride=2048命中，其余fallback。16K官方暖均观察+1.1275%，4K暖均−0.5039%，KV条件不匹配；原105为101/105，但batch8未覆盖S8 kernel执行。另有三次shared4k官方入口失败，全部在GPU启动前，无benchmark请求和性能数据；不构成候选正确性或性能结论。保持PR105基线，不作严格因果或新基线。
+shared4k S8路径官方16K完成四轮，暖均相对PR105观察+1.577875%；KV条件差48 tokens，不能严格归因。官方4K第二轮低3.670038%，按首暖规则停止，仅两轮，不是四轮成绩。两档均实际触发S8 eager_only，但无准确率资格，不更新PR105基线。
 
 相关代码：[framework](../../patches/framework)。
 
@@ -25,6 +25,8 @@ PR105 producer新增N30/S8，仅BF16且Q stride=2048命中，其余fallback。16
 - [20261029T081824131260Z-native-gqa-s8-short-kv-component](../runs/bi-v150/20261029T081824131260Z-native-gqa-s8-short-kv-component.md)（登记#497）：两档组件Event均有明显下降；本结果不等同端到端官方吞吐。 **是否保留：** 保留局部正信号；不授生产、官方或完整S8准确率资格。
 - [20261029T101441Z-linear-n64-short-capture](../runs/bi-v150/20261029T101441Z-linear-n64-short-capture.md)（登记#501）：本次采集未观察到可用目标调用；不是全局不存在该调用的证明。 **是否保留：** 保留无观察诊断；不转为性能或实现结论。
 - [20261029T102212246584Z-native-gqa-s8-shared4k-short-kv-component](../runs/bi-v150/20261029T102212246584Z-native-gqa-s8-shared4k-short-kv-component.md)（登记#502）：两档Event与wall均正向；这是局部组件信号。 **是否保留：** 保留组件候选观察；不声称官方收益/模型资格，不修改生产代码。
+- [20261029T115655Z-native-gqa-s8-shared4k-16384-four-rounds](../runs/bi-v150/20261029T115655Z-native-gqa-s8-shared4k-16384-four-rounds.md)（登记#508）：暖均4908.913333 tok/s，对PR105 4832.66为观察+1.577875%；KV容量差48 tokens。 **是否保留：** 保留为完整官方16K正向观察；不作严格因果、新基线或准确率资格，4K另行筛选。
+- [20261029T124129Z-native-gqa-s8-shared4k-4096-four-rounds](../runs/bi-v150/20261029T124129Z-native-gqa-s8-shared4k-4096-four-rounds.md)（登记#509）：第二轮6204.95 tok/s，对PR105 6441.35低3.670038%；512请求成功，KV差48 tokens。 **是否保留：** 保留两轮负向筛选结果；不扩为四轮、不称框架错误，不建立基线或准确率资格。
 
 ## CPU
 
