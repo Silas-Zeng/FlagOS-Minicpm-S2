@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共487条登记、484个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共492条登记、489个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -455,6 +455,8 @@
 | 天数 BI-V150 | 485 | 2026-10-29T04:01:13+00:00 | [native GQA S8生产接入](methods/native-gqa-s8.md) | 失败/未通过 | 16384/未记录/未记录/未记录 | 失败，benchmark未开始 | [20261029T040113Z-native-gqa-s8-official16k-entry](runs/bi-v150/20261029T040113Z-native-gqa-s8-official16k-entry.md) |
 | 天数 BI-V150 | 486 | 2026-10-29T04:10:10+00:00 | [native GQA S8生产接入](methods/native-gqa-s8.md) | 已登记，见短记 | 16384/未记录/未记录/未记录 | 官方入口因旧ready-marker reader误识别VLLM环境变量警告而失败；0个benchmark请求、无吞吐计时，不是模型数值错误。 | [20261029T041010Z-native-gqa-s8-official16k-ready](runs/bi-v150/20261029T041010Z-native-gqa-s8-official16k-ready.md) |
 | 天数 BI-V150 | 487 | 2026-10-29T04:34:01+00:00 | [native GQA S8生产接入](methods/native-gqa-s8.md) | 已完成 | 16384/1024/64/128 | 相对PR105暖均4832.66为+1.1275%，但KV为548384对548288，不作严格因果或新基线 | [20261029T043401Z-native-gqa-s8-16k-four-rounds](runs/bi-v150/20261029T043401Z-native-gqa-s8-16k-four-rounds.md) |
+| 天数 BI-V150 | 488 | 2026-10-29T05:47:20+00:00 | [native GQA S8生产接入](methods/native-gqa-s8.md) | 4K四轮完成，暖均小幅低于对照 | 4096/1024/64/256 | 4K四轮6161.33/6506.76/6723.79/6552.71 tok/s；暖均6594.42，对PR105 6627.82低0.5039%，KV548384对548336不同。 | [20261029T054720Z-native-gqa-s8-4k-four-rounds](runs/bi-v150/20261029T054720Z-native-gqa-s8-4k-four-rounds.md) |
+| 天数 BI-V150 | 489 | 2026-10-29T06:13:08+00:00 | [native GQA S8生产接入](methods/native-gqa-s8.md) | 原105准确率通过，S8 not_exercised | 未记录/未记录/未记录/105 | 原105题101/105（96.1905%），达到至少100正确门；S8库安装有效但N30/S8 selected/captured均未出现。 | [20261029T061308Z-native-gqa-s8-native14f-math500](runs/bi-v150/20261029T061308Z-native-gqa-s8-native14f-math500.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | CPU | 448 | 2026-10-28T17:35:19.582412+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 42层真实down权重最大relative L2为0.007979；仅有限合成输出筛查，不能代表比赛准确率或吞吐。 | 未记录/未记录/未记录/未记录 | CPU筛查42层真实down权重；最大weight relative L2为0.007979，门只基于有限合成输出，不代表官方准确率或吞吐；未在服务启用量化。 | [20261028T173517Z-down-w8a16-weight-screen](runs/cpu/20261028T173517Z-down-w8a16-weight-screen.md) |
 | CPU | 457 | 2026-10-28T20:04:54+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 启动owner Python后立刻因driver/common SHA门退出；无服务/benchmark子进程、无GPU运行和吞吐数据。 | 16384/1024/64/128 | BI-V150入口的CPU准备阶段：保留driver pin失败原件，未启动GPU或benchmark；不生成16K性能结论。 | [20261028T200454Z-down-gemm-direct-launch-official16k-driver-pin-preparation-failed](runs/cpu/20261028T200454Z-down-gemm-direct-launch-official16k-driver-pin-preparation-failed.md) |
@@ -466,6 +468,9 @@
 | CPU | 473 | 2026-10-28T23:55:32.240420+00:00 | [Prefill i32 offset 组件筛查](methods/prefill-i32-offset.md) | A normal身份不匹配，停止编译 | 未记录/未记录/未记录/未记录 | i32-offset v3 CPU-only在A normal kernel身份门停止：未复现171100 selected normal hash，B候选未编译。静态guard仍是BM128/BQ16/page32，不 | [20261028T235532240420Z-prefill-i32-offset-v3-cpu-identity-failed](runs/cpu/20261028T235532240420Z-prefill-i32-offset-v3-cpu-identity-failed.md) |
 | CPU | 474 | 2026-10-29T00:06:55.051332+00:00 | [Prefill i32 offset 组件筛查](methods/prefill-i32-offset.md) | CPU编译完成，A身份失败 | 未记录/未记录/未记录/未记录 | i32-offset v5 CPU-only完成A normal编译，但身份仍未匹配171100 selected kernel；保留严格身份门拒绝。 | [20261029T000655051332Z-prefill-i32-offset-v5-cpu-identity-failed](runs/cpu/20261029T000655051332Z-prefill-i32-offset-v5-cpu-identity-failed.md) |
 | CPU | 475 | 2026-10-29T00:12:04.223339+00:00 | [Prefill i32 offset 组件筛查](methods/prefill-i32-offset.md) | CPU机制诊断完成，未获生产资格 | 未记录/未记录/未记录/未记录 | i32-offset v6仅作CPU机制诊断：两臂normal/Q-fragment编译及proof通过，但A生产selected hash仍不匹配。资源观察A SGPR104/VGPR113/spill4，B SGPR | [20261029T001204223339Z-prefill-i32-offset-v6-cpu-mechanism-diagnostic](runs/cpu/20261029T001204223339Z-prefill-i32-offset-v6-cpu-mechanism-diagnostic.md) |
+| CPU | 490 | 2026-10-29T05:13:20+00:00 | [Prefill base2 CPU编译筛查](methods/prefill-base2.md) | CPU入口失败，未编译 | 未记录/未记录/未记录/未记录 | CPU入口引用的run_compile.py路径不存在；owner启动前失败，无编译产物或设备结果。 | [20261029T051320Z-prefill-base2-cpu-compile](runs/cpu/20261029T051320Z-prefill-base2-cpu-compile.md) |
+| CPU | 491 | 2026-10-29T05:15:06+00:00 | [Prefill base2 CPU编译筛查](methods/prefill-base2.md) | CPU编译中断，工具读源码路径错误 | 未记录/未记录/未记录/未记录 | CPU编译器把源码字符串误交给Path.read_text作路径，触发文件名过长；B Q-hoisted未编译。 | [20261029T051506Z-prefill-base2-cpu-compile](runs/cpu/20261029T051506Z-prefill-base2-cpu-compile.md) |
+| CPU | 492 | 2026-10-29T06:37:36+00:00 | [Prefill base2 CPU编译筛查](methods/prefill-base2.md) | CPU编译通过，未测性能 | 未记录/未记录/未记录/未记录 | A/B CPU编译完成；SGPR spill 4→3、VGPR113→115、ASM乘法84→65而exp仍20。 | [20261029T063736Z-prefill-base2-cpu-compile](runs/cpu/20261029T063736Z-prefill-base2-cpu-compile.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 3 | 2026-10-21T03:11:02.718451+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T031102Z-c1](runs/unrecorded/20261021T031102Z-c1.md) |

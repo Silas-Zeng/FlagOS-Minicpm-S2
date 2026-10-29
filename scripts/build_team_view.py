@@ -710,7 +710,7 @@ BATCH_RESULTS['native_gqa_premax_vote_component_neutral_event_stop']=('premax vo
 CODE['corex-native-gqa-page16'] += ['experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/raw-evidence.json', 'experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/review.json', 'experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/source-review.json', 'experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/summary.json', 'experiments/bundles/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/manifest.json', 'experiments/bundles/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/raw.tar.gz.storage.json']
 GROUPS['corex-native-gqa-page16']=(GROUPS['corex-native-gqa-page16'][0],GROUPS['corex-native-gqa-page16'][1]+' 141255随后完成premax组件：12项原/新增case及硬逐位/FP64/Graph/边界通过，Event近持平慢0.001408%、wall省0.084431%；按原Event门停止，无生产/官方资格。',GROUPS['corex-native-gqa-page16'][2])
 
-GROUPS['native-gqa-s8'] = ('native GQA S8生产接入', '在PR105既有producer上接入N30/S8容量路径；仅BF16且Q stride=2048命中，其余fallback。组件测试有正向信号，16K官方四轮观察正向但KV548384对548288不匹配；4K与accuracy-105待测，不作严格因果或更新基线。勘误：登记#480把wall数值误写成Event数值；原始results.json及本轮短记记录wall 1.032342→0.768814ms（快25.5272%），本视图按原件显示，不改registry或原始证据。', [])
+GROUPS['native-gqa-s8'] = ('native GQA S8生产接入', 'PR105 producer新增N30/S8；仅BF16且Q stride=2048命中，其余fallback。16K四轮正向观察、4K四轮暖均6594.42（对6627.82低0.5039%），两档KV均有差异；原105为101/105通过，但batch8中S8 selected/captured为not_exercised，不证明S8分支准确率覆盖。保持PR105基线，不作严格因果或更新基线。勘误：登记#480把wall数值误写成Event数值；原始results.json及本轮短记记录wall 1.032342→0.768814ms（快25.5272%），本视图按原件显示，不改registry或原始证据。', [])
 
 
 def group(row):
@@ -752,6 +752,8 @@ def group(row):
         return 'shape-gemm'
     if row['profile_id'] == 'prefill-i32-offset':
         return 'prefill-i32-offset'
+    if row['profile_id'] == 'prefill-base2':
+        return 'prefill-base2'
     if row['profile_id'] in ('rope-kv-fusion', 'final-ffn-row-prune', 'selected-query-row', 'attention-affine-pages', 'current-main-hotspot', 'attention-next-k', 'gqa-identity-rescale', 'main-correctness', 'gqa-kv-cg', 'gqa-kv-stride', 'lm-head-paired-gemv', 'attention-head-major', 'native-silu-vec2', 'gqa-four-page-t64', 'prefill-log2', 'prefill-stride', 'night-kernel-counters', 'gqa-grouped-simt'):
         return row['profile_id']
     s = (row['profile_id'] + ' ' + row['run_id']).lower()
@@ -1474,6 +1476,23 @@ SHORT_ATTEMPTS.update({
  'prefill_i32_component_negative': ('同ABI对比原kernel与i32相对offset kernel，单shape ABBA。', '正确性门通过（FP64采样），Event慢10.63%、wall慢10.21%；停止候选，不进生产。'),
 })
 GROUPS['shape-gemm'] = ('BI-V150特定形状GEMM', GROUPS['shape-gemm'][1] + ' 另有PR105 16K单次profile诊断完成128请求，posthoc缺fresh FX图证，非官方分数。', GROUPS['shape-gemm'][2])
+
+# 2026-10-29 native GQA S8 accuracy + base2 CPU compile batch.
+GROUPS['prefill-base2'] = ('Prefill base2 CPU编译筛查', '尝试将log2e并入score scale、将P/alpha改用exp2；本批两次入口/编译工具失败后，063736 CPU编译完成并显示乘法数减少，但exp条数未变、寄存器略增。仅机制/编译证据，没有GPU数值或性能结论；S8准确率与官方4K另列。', [])
+BATCH_RESULTS.update({
+ 'native_gqa_s8_official_4k_four_rounds_complete': ('4K四轮6161.33/6506.76/6723.79/6552.71 tok/s；暖均6594.42，对PR105 6627.82低0.5039%，KV548384对548336不同。', '保留4K完整实测观察；KV不匹配，不作严格因果或基线更新。', '4K四轮完成，暖均小幅低于对照', 'BI-V150官方4K、四轮各256成功；S8自然eager_only；候选/参考KV差48。'),
+ 'native_gqa_s8_accuracy105_pass_s8_not_exercised': ('原105题101/105（96.1905%），达到至少100正确门；S8库安装有效但N30/S8 selected/captured均未出现。', '准确率门通过；batch8未覆盖S8 kernel执行，不能据此称S8分支正确性已验证。', '原105准确率通过，S8 not_exercised', 'BI-V150原105题、batch8；105成功review/stop，0传输错误/截断/空答案；S8 natural activation not_exercised。'),
+ 'prefill_base2_cpu_entry_missing_script': ('CPU入口引用的run_compile.py路径不存在；owner启动前失败，无编译产物或设备结果。', '保留入口路径错误；不归为候选数值/性能失败。', 'CPU入口失败，未编译', 'CPU-only；入口找不到run_compile.py，未触碰GPU。'),
+ 'prefill_base2_q_debug_source_reader_path_error': ('CPU编译器把源码字符串误交给Path.read_text作路径，触发文件名过长；B Q-hoisted未编译。', '保留source-reader工具错误；非kernel失败，无GPU或性能结论。', 'CPU编译中断，工具读源码路径错误', 'CPU-only；normal B有ASM产物，Q-hoisted B缺失；无数值/性能结果。'),
+ 'prefill_base2_cpu_compile_mechanism_complete': ('A/B CPU编译完成；SGPR spill 4→3、VGPR113→115、ASM乘法84→65而exp仍20。', '保留为换底机制证据；未上GPU，无数值/性能或生产资格。', 'CPU编译通过，未测性能', 'Q-hoisted A/B编译；仅静态指令/资源观察，不推出吞吐收益。'),
+})
+SHORT_ATTEMPTS.update({
+ 'native_gqa_s8_official_4k_four_rounds_complete': ('检验N30/S8生产接入在官方4K参数下的端到端影响。', '保留PR105 producer/N30 S8 producer；仅BF16 Q stride=2048命中，其余fallback。'),
+ 'native_gqa_s8_accuracy105_pass_s8_not_exercised': ('按原batch8及服务参数运行完整105题准确率评估。', 'S8库身份安装有效，但自然负载没有触发N30/S8 selected或capture；准确率不能充当S8分支覆盖。'),
+ 'prefill_base2_cpu_entry_missing_script': ('尝试运行base2候选CPU编译入口。', '入口引用的run_compile.py不存在，启动前退出；无编译、GPU或性能结果。'),
+ 'prefill_base2_q_debug_source_reader_path_error': ('修复入口后检查base2 normal与Q-hoisted两臂CPU编译。', '源码读取helper把源码内容当文件路径，导致路径过长；Q-hoisted B未编译，无数值/性能结论。'),
+ 'prefill_base2_cpu_compile_mechanism_complete': ('编译base2换底A/B并检查生成ASM与寄存器/溢出。', 'spill 4→3、VGPR113→115、mul84→65、exp维持20；CPU-only机制观察，不代表GPU性能。'),
+})
 
 if __name__ == '__main__':
     main()
