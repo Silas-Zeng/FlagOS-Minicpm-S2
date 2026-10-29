@@ -710,7 +710,12 @@ BATCH_RESULTS['native_gqa_premax_vote_component_neutral_event_stop']=('premax vo
 CODE['corex-native-gqa-page16'] += ['experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/raw-evidence.json', 'experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/review.json', 'experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/source-review.json', 'experiments/framework/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/summary.json', 'experiments/bundles/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/manifest.json', 'experiments/bundles/20261028T141255044639Z-native-gqa-premax-vote-hotspot-component/raw.tar.gz.storage.json']
 GROUPS['corex-native-gqa-page16']=(GROUPS['corex-native-gqa-page16'][0],GROUPS['corex-native-gqa-page16'][1]+' 141255随后完成premax组件：12项原/新增case及硬逐位/FP64/Graph/边界通过，Event近持平慢0.001408%、wall省0.084431%；按原Event门停止，无生产/官方资格。',GROUPS['corex-native-gqa-page16'][2])
 
+GROUPS['native-gqa-s8'] = ('native GQA S8生产接入', '在PR105既有producer上接入N30/S8容量路径；仅BF16且Q stride=2048命中，其余fallback。组件测试有正向信号，16K官方四轮观察正向但KV548384对548288不匹配；4K与accuracy-105待测，不作严格因果或更新基线。勘误：登记#480把wall数值误写成Event数值；原始results.json及本轮短记记录wall 1.032342→0.768814ms（快25.5272%），本视图按原件显示，不改registry或原始证据。', [])
+
+
 def group(row):
+    if row['profile_id'] == 'native-gqa-s8':
+        return 'native-gqa-s8'
     if row['profile_id']=='native-gqa-mixed-s4':return 'native-gqa-mixed-s4'
     if row['profile_id']=='native-gqa-production-hotspot':return 'native-gqa-production-hotspot'
     if row['profile_id'] in ('native-q32-transfer', 'directq-grouped-compile', 'directq-grouped-incremental-pure2048'):return 'native-q32-transfer'
@@ -829,6 +834,10 @@ def brief(value, limit=220):
 
 
 def result(row, limit=190):
+    if row['run_id'] == '20261029T014250520820Z-native-gqa-s8-hotspot-component':
+        return 'Event 1.029299→0.766297ms（快25.5515%），wall 1.032342→0.768814ms（快25.5272%）；以原始results.json及本轮短记为准，registry中wall数值为误抄。'
+    if row['run_id'] == '20261029T041010Z-native-gqa-s8-official16k-ready':
+        return '官方入口因旧ready-marker reader误识别VLLM环境变量警告而失败；0个benchmark请求、无吞吐计时，不是模型数值错误。'
     current_component_summary = {
         'main241_q32_panel4_negative': '停止panel4生产接入；旧Q16三项边界未启动且暂缓，新main241成为后续研究基础。',
         'main594_m32_fixed_address_firstwarm_negative': '停止本次M32生产路线，保留全部两轮原件；不继续旧main验证或把局部收益算官方收益。',
