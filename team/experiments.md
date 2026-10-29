@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共514条登记、511个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共516条登记、513个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -470,6 +470,7 @@
 | 天数 BI-V150 | 509 | 2026-10-29T12:41:29+00:00 | [native GQA S8与shared4k官方筛选](methods/native-gqa-s8.md) | 第二轮6204.95 tok/s，对PR105 6441.35低3.670038%；512请求成功，KV差48 tokens。 | 4096/1024/64/512 | 第二轮6204.95 tok/s，对PR105 6441.35低3.670038%；512请求成功，KV差48 tokens。 | [20261029T124129Z-native-gqa-s8-shared4k-4096-four-rounds](runs/bi-v150/20261029T124129Z-native-gqa-s8-shared4k-4096-four-rounds.md) |
 | 天数 BI-V150 | 511 | 2026-10-29T15:33:49+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 通过 | 未记录/未记录/未记录/未记录 | 16个布局案例/96项检查全部通过：isolated 2048B K head stage图像A/B逐字节相同，CPU reference、输入不变、guard通过 | [20261029T153349258627Z-native-k8-sme-layout](runs/bi-v150/20261029T153349258627Z-native-k8-sme-layout.md) |
 | 天数 BI-V150 | 514 | 2026-10-29T16:13:41+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 组件ABBA候选信号 | 未记录/未记录/未记录/未记录 | 4组数值/Graph边界通过；Event四项减少2.07–2.73%，4K Q stride2560 wall反向慢2.10%。 | [20261029T161341635355Z-native-k8-sme-component](runs/bi-v150/20261029T161341635355Z-native-k8-sme-component.md) |
+| 天数 BI-V150 | 516 | 2026-10-29T16:58:59+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 通过 | 未记录/未记录/未记录/未记录 | bitwise、original reducer、side-stream、changed-Q Graph bitwise、Q/storage/lengths/table只读与guards | [20261029T165859246696Z-native-k8-sme-dispatcher-boundary](runs/bi-v150/20261029T165859246696Z-native-k8-sme-dispatcher-boundary.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | CPU | 448 | 2026-10-28T17:35:19.582412+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 42层真实down权重最大relative L2为0.007979；仅有限合成输出筛查，不能代表比赛准确率或吞吐。 | 未记录/未记录/未记录/未记录 | CPU筛查42层真实down权重；最大weight relative L2为0.007979，门只基于有限合成输出，不代表官方准确率或吞吐；未在服务启用量化。 | [20261028T173517Z-down-w8a16-weight-screen](runs/cpu/20261028T173517Z-down-w8a16-weight-screen.md) |
 | CPU | 457 | 2026-10-28T20:04:54+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 启动owner Python后立刻因driver/common SHA门退出；无服务/benchmark子进程、无GPU运行和吞吐数据。 | 16384/1024/64/128 | BI-V150入口的CPU准备阶段：保留driver pin失败原件，未启动GPU或benchmark；不生成16K性能结论。 | [20261028T200454Z-down-gemm-direct-launch-official16k-driver-pin-preparation-failed](runs/cpu/20261028T200454Z-down-gemm-direct-launch-official16k-driver-pin-preparation-failed.md) |
@@ -493,6 +494,7 @@
 | CPU | 510 | 2026-10-29T15:31:21+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 通过 | 未记录/未记录/未记录/未记录 | BI-V150 CoreX compile-only通过 | [20261029T153121891538Z-native-k8-sme-layout-compile](runs/cpu/20261029T153121891538Z-native-k8-sme-layout-compile.md) |
 | CPU | 512 | 2026-10-29T15:45:19+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 通过 | 未记录/未记录/未记录/未记录 | 两臂standalone compile-only通过 | [20261029T154519134404Z-native-k8-sme-lookahead-compile](runs/cpu/20261029T154519134404Z-native-k8-sme-lookahead-compile.md) |
 | CPU | 513 | 2026-10-29T15:59:55+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | A/B final SO构建与静态身份核验 | 未记录/未记录/未记录/未记录 | 隔离A/B SO构建成功；符号、动态依赖和20参数ABI核对通过。无GPU执行。 | [20261029T155955570211Z-native-k8-sme-pair-build](runs/cpu/20261029T155955570211Z-native-k8-sme-pair-build.md) |
+| CPU | 515 | 2026-10-29T16:45:36+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 通过 | 未记录/未记录/未记录/未记录 | A/B dispatcher SO均编译成功 | [20261029T164536162881Z-native-k8-sme-dispatcher-build](runs/cpu/20261029T164536162881Z-native-k8-sme-dispatcher-build.md) |
 | 未记录 | 1 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 2 | 2026-10-21T03:03:49.652994+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 16384/16/8/8 | 8 completed | [20261021T030349Z-b0](runs/unrecorded/20261021T030349Z-b0.md) |
 | 未记录 | 3 | 2026-10-21T03:11:02.718451+00:00 | [早期集成、块表与 profile](methods/early.md) | 不可直接比较 | 4096/32/16/16 | 16 completed | [20261021T031102Z-c1](runs/unrecorded/20261021T031102Z-c1.md) |

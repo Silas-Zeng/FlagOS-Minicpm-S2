@@ -1,0 +1,39 @@
+{
+  "review_scope": "增量审阅 Torch dispatcher 源码及最终 CPU 编译 A/B SO；不重审数值 kernel，不代表设备正确性或性能资格。",
+  "inputs": {
+    "main_commit": "899ce77470b0b539aebc108fd122f668c2d5894d",
+    "recovery_bundle_sha256": "40b05607aae494248da6471a23e054ec6976316f4a0f4ac7c26d77220baf939c",
+    "host_source_sha256": {
+      "A": "6fa6b8cf2acf30da15708c080ce468486a170325c4ed4cb4b97924503eca1da3",
+      "B": "7dd3f2b741f51cbe08009cbb28bf3e73b22583ee421a0092f0678be697face49"
+    },
+    "producer_source_sha256_matches_tested_pair": {
+      "A": {"sha256": "434b596af854108cca4cfdd2025121cf431d20d31e7e1d93718cfd450d337542", "matches": true},
+      "B": {"sha256": "8df62a7cdbd284d0593ba8f1bee825b3765b966b1d3a8b90fbb06db0c2ca075a", "matches": true}
+    },
+    "tested_common_codec_origin_sha256": "50258694d7844a654dcf006ae4ad052f66b7db4c0e650437962822911c56c3be",
+    "compiled_library_sha256": {
+      "A": "824f7dda043dd8e101b0f2296cba4aeda14d0718ae673805da1564a141c1f734",
+      "B": "bdc16c49fef721b5dad7d7627f9c046f726f29a2f9c589297b9f4f036b08b6ef"
+    }
+  },
+  "findings": {
+    "source_transform": "A/B host 与 codec 变更是隔离 namespace/launcher/codec C 符号的替换；source manifest 记录逆变换逐字节还原。producer 两份源与已测 A/B SHA 完全一致。",
+    "torch_dispatch": "A/B 分别以 TORCH_LIBRARY 和 CUDA TORCH_LIBRARY_IMPL 注册独立 cjj_native_k8_klookahead_probe_a/b 命名空间；各自提供 produce 与 codec，host launcher、codec launcher 符号带 A/B 前缀。最终 nm symbols 与源声明对应，没有看到跨臂命名碰撞。",
+    "host_contract": "producer 检查分段、Q/K/V/scale/table/partial 张量形状步长、设备与存储区间；CUDAGuard 后使用当前 stream，并执行 launch check。codec 同样走当前 stream/CUDAGuard。输入内容有效性及页表 ID 范围仍由调用方 fixture 保证。",
+    "build": "CPU compile-only 回执 completed=true、operator_called=false、GPU initialized before/after=false。实际 extra_cflags 为 -O3/-std=c++17；CUDA flags 含 -O3/-std=c++17、__ILUVATAR__/__MR__、V-overlap=1、ivcore/ivcore11 与 /usr/local/corex，与原构建脚本一致。",
+    "final_device_code": "B 最终 SO SASS 中，S2 两条 next-K SME load 位于 PV MMA 序列之前、g2scnt wait 位于 PV 后；S4 对应顺序相同。A SO 保持基线实现。最终产物的这一检查只确认编译产物包含预期序列，不替代运行时同步/数值门。"
+  },
+  "decision": "CPU源码与编译身份增量 GO，可进入最小 dispatcher 设备门；尚无真实 torch.ops 设备执行证据，不能据此宣称组件正确性或性能通过。",
+  "minimum_device_gate": [
+    "同一进程加载 A/B 两个最终 SO，确认两个 torch.ops namespace/schema 均可解析且调用分别落到对应库；记录库 SHA。",
+    "通过真实 torch.ops.produce 各跑 S2、S4，覆盖一个短/尾页和一个完整页情形；与已审 worker 的数值门保持一致（A/B 输出逐位、FP64 reference/边界、输入只读）。",
+    "通过真实 torch.ops.codec 验证码流与scale输出，检查 A/B 等价及原始输入未变。",
+    "在非默认 side stream 及一次 CUDA Graph capture/replay 中各覆盖两臂至少一个 S2/S4 调用，确认输出、同步和错误检查；无需重跑旧 16K 性能矩阵。"
+  ],
+  "limitations": [
+    "CPU 构建未调用 dispatcher op，无法验证动态注册在设备进程内的可用性或 ABI 运行行为。",
+    "归档未提供独立动态依赖清单；此次只核了构建成功、注册/launcher 符号及目标 SASS。",
+    "不得把 standalone SO 反汇编或此前直接 kernel worker 的结果当作 dispatcher 路由已通过。"
+  ]
+}
