@@ -2,7 +2,7 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共516条登记、513个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共519条登记、516个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
@@ -471,6 +471,9 @@
 | 天数 BI-V150 | 511 | 2026-10-29T15:33:49+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 通过 | 未记录/未记录/未记录/未记录 | 16个布局案例/96项检查全部通过：isolated 2048B K head stage图像A/B逐字节相同，CPU reference、输入不变、guard通过 | [20261029T153349258627Z-native-k8-sme-layout](runs/bi-v150/20261029T153349258627Z-native-k8-sme-layout.md) |
 | 天数 BI-V150 | 514 | 2026-10-29T16:13:41+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 组件ABBA候选信号 | 未记录/未记录/未记录/未记录 | 4组数值/Graph边界通过；Event四项减少2.07–2.73%，4K Q stride2560 wall反向慢2.10%。 | [20261029T161341635355Z-native-k8-sme-component](runs/bi-v150/20261029T161341635355Z-native-k8-sme-component.md) |
 | 天数 BI-V150 | 516 | 2026-10-29T16:58:59+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 通过 | 未记录/未记录/未记录/未记录 | bitwise、original reducer、side-stream、changed-Q Graph bitwise、Q/storage/lengths/table只读与guards | [20261029T165859246696Z-native-k8-sme-dispatcher-boundary](runs/bi-v150/20261029T165859246696Z-native-k8-sme-dispatcher-boundary.md) |
+| 天数 BI-V150 | 517 | 2026-10-29T17:47:27+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 官方4K服务入口在ready前退出；cleanup成功，未进入benchmark。 | 4096/1024/64/0（benchmark未启动） | A臂main899官方4K服务启动未ready，benchmark未发出（0行）；根因为Windows git archive产生CRLF、源码依赖SHA不符。无模型数值/准确率/吞吐结论。 | [20261029T174727581180Z-native-k8-sme-a-4096-four-rounds](runs/bi-v150/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds.md) |
+| 天数 BI-V150 | 518 | 2026-10-29T17:59:00+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 官方4K四轮，弃首轮暖均6779.84 tok/s；256请求/轮均成功，终态独审通过。 | 4096/1024/64/256×4轮 | A臂main899 NativeK8 SME官方4K四轮均完成，原始吞吐5579.18/6400.98/6970.94/6967.59 tok/s；按官方弃首轮口径暖均6779.84 tok/s。所选A库已加载，目标64 | [20261029T175900061663Z-native-k8-sme-a-4096-four-rounds](runs/bi-v150/20261029T175900061663Z-native-k8-sme-a-4096-four-rounds.md) |
+| 天数 BI-V150 | 519 | 2026-10-29T17:59:00+00:00 | [NativeK8 SME布局与lookahead组件探针](methods/native-k8-sme.md) | 官方4K四轮，弃首轮暖均6796.443333 tok/s；256请求/轮均成功，终态独审后纳入。 | 4096/1024/64/256×4轮 | B臂main899 NativeK8 SME官方4K四轮均完成，原始吞吐5653.86/6470.63/7003.28/6915.42 tok/s；按官方弃首轮口径暖均6796.443333 tok/s。相对A臂6779 | [20261029T175900061663Z-native-k8-sme-b-4096-four-rounds](runs/bi-v150/20261029T175900061663Z-native-k8-sme-b-4096-four-rounds.md) |
 | CPU | 38 | 未记录 | [SQLite 反射及 SQL+C2/C3 组合](methods/sql.md) | 通过 | 未记录/未记录/未记录/未记录 | CPU only Python 3.12.11 and SQLAlchemy 2.0.48 | [20261021T072702Z-sql-cpu-gate](runs/cpu/20261021T072702Z-sql-cpu-gate.md) |
 | CPU | 448 | 2026-10-28T17:35:19.582412+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 42层真实down权重最大relative L2为0.007979；仅有限合成输出筛查，不能代表比赛准确率或吞吐。 | 未记录/未记录/未记录/未记录 | CPU筛查42层真实down权重；最大weight relative L2为0.007979，门只基于有限合成输出，不代表官方准确率或吞吐；未在服务启用量化。 | [20261028T173517Z-down-w8a16-weight-screen](runs/cpu/20261028T173517Z-down-w8a16-weight-screen.md) |
 | CPU | 457 | 2026-10-28T20:04:54+00:00 | [BI-V150特定形状GEMM](methods/shape-gemm.md) | 启动owner Python后立刻因driver/common SHA门退出；无服务/benchmark子进程、无GPU运行和吞吐数据。 | 16384/1024/64/128 | BI-V150入口的CPU准备阶段：保留driver pin失败原件，未启动GPU或benchmark；不生成16K性能结论。 | [20261028T200454Z-down-gemm-direct-launch-official16k-driver-pin-preparation-failed](runs/cpu/20261028T200454Z-down-gemm-direct-launch-official16k-driver-pin-preparation-failed.md) |

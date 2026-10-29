@@ -1,0 +1,50 @@
+{
+  "scope": "A 臂 4K 官方服务终态证据；仅做 CPU 增量复核",
+  "archive": "archive/native-k8-sme-20261029/service-a-official4k-175900/",
+  "archive_sha256_prefix": "9dfc69… (full package digest recorded by root)",
+  "run_id": "20261029T175900061663Z-native-k8-sme-a-4096-four-rounds",
+  "terminal": {
+    "owner_completed": true,
+    "supervisor_owner_exit_code": 0,
+    "planned_stop": null,
+    "driver_exit_code": 0,
+    "benchmark_completed": true,
+    "official_validation": "4 raw rows, one summary row; runs 2-4 recompute to the official summary; no failed requests",
+    "cleanup_errors": [],
+    "server_exit_code": 0,
+    "port_9031_after": "free",
+    "gpu_free_mib_after": 32700
+  },
+  "official_case": [4096, 1024, 64, 256],
+  "raw_runs": [
+    {"round": 1, "successful_requests": 256, "status": "SUCCESS", "total_tok_s": 5579.18, "duration_s": 234.93, "mean_ttft_ms": 10107.86, "mean_tpot_ms": 46.95},
+    {"round": 2, "successful_requests": 256, "status": "SUCCESS", "total_tok_s": 6400.98, "duration_s": 204.77, "mean_ttft_ms": 3864.85, "mean_tpot_ms": 45.93},
+    {"round": 3, "successful_requests": 256, "status": "SUCCESS", "total_tok_s": 6970.94, "duration_s": 188.03, "mean_ttft_ms": 3798.37, "mean_tpot_ms": 41.91},
+    {"round": 4, "successful_requests": 256, "status": "SUCCESS", "total_tok_s": 6967.59, "duration_s": 188.12, "mean_ttft_ms": 3805.77, "mean_tpot_ms": 41.92}
+  ],
+  "official_retained_runs_2_to_4_summary_total_tok_s": 6779.84,
+  "runtime_identity": {
+    "source_base": "main899 899ce77470b0b539aebc108fd122f668c2d5894d with declared A overlay",
+    "installed_library_sha256": "824f7dda043dd8e101b0f2296cba4aeda14d0718ae673805da1564a141c1f734",
+    "operator": "cjj_native_k8_klookahead_probe_a::produce",
+    "installed": true,
+    "loaded_library_confirmed": true,
+    "runtime_compile": false,
+    "physical_page_bytes": 16384,
+    "selected_case_events": 84,
+    "target_geometry_observed": {"shape": 64, "segments": 2, "capture_and_eager_observed": true},
+    "cache_pages": 34277,
+    "event_limit": "Host selected/captured 标记不等于 Graph replay 次数，也不能归因到某一计分轮。"
+  },
+  "database": {
+    "selected": "TunedConfig_iluvatar_triton_3_6.db",
+    "selected_before_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+    "selected_after_sha256": "1bf06dd2bdc37dd78f88a5d3bc85b34e775e0928ea473e008e93ab2c8ea17119",
+    "other_db_before_and_after_sha256": "87c41ba8b6c6ac650e959c0e30de3f69c78eba95be7d106a1617d04a532810da",
+    "selected_snapshot_change": "573 to 585 tables; 21187 to 21832 rows. Twelve new tables include Amax and linearized-JIT entries; two existing linear-kernel tables grew 1856 to 2444 rows and 140 to 177 rows.",
+    "interpretation": "本次运行期间私有调优 DB 确实发生变化，但前后快照没有把写入时间对应到具体 benchmark 轮次。这证明调优/缓存记录有所累积，不能证明它导致后续轮次提速。"
+  },
+  "round_progression_assessment": "第 2 至第 4 轮均快于第 1 轮，第 3、4 轮结果接近。benchmark 前的日志记录了模型图编译/缓存信息，捕获期间也多次出现 backend 回退到 event timing 的警告；但日志没有逐轮缓存命中或自动调优解释。TTFT 下降和数据库增长均有记录，原因仍未闭合，不能从本次运行推断。",
+  "errors": "未发现 benchmark error、Traceback 或请求失败。服务日志有重复的 FlagGems amax 弃用/UserWarning 和既有 vllm._C 导入警告；服务与官方 benchmark 均正常退出。",
+  "conclusion": "A 臂 4K 官方吞吐运行已完成并通过内部校验，观察到所选 A 库身份及目标 64×2 host 路由。这只是 A 臂筛选结果，不是 A/B 收益，也不是完整准确率结果；不能据此认为 NativeK8 导致了本轮内的逐轮提速。模型准确率尚未测试。"
+}
