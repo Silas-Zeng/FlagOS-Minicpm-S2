@@ -1,0 +1,50 @@
+{
+  "receipt": {
+    "run_id_utc": "20261028T235007.253864Z",
+    "command": [
+      "/usr/local/bin/python",
+      "-X",
+      "utf8",
+      "/workspace/experiments/minicpm-s2/cpu-probes/prefill-i32-offset-v2-20261028T235007Z/compile_pair.py"
+    ],
+    "cwd": "/workspace/experiments/minicpm-s2/cpu-probes/prefill-i32-offset-v2-20261028T235007Z",
+    "python": "3.12.11 (main, Jul 31 2025, 06:45:11) [GCC 13.3.0]",
+    "executable": "/usr/local/bin/python",
+    "exit_code": 1,
+    "files": {
+      "baseline.kernel.py": "fa6ddc420a95102d116714fcbea41bc81aa9c09379d68518af65755c015b8744",
+      "candidate.kernel.py": "e82be54ec79e85522ba88d435a36d9b91f25211f41b4ee83696ecd75c0697414",
+      "generate_candidate.py": "415e317f8d4c4fe268705f8ef07b073582009c3947fe2c5c72a50907b85519c9",
+      "guard.py": "6203055148cdd1302ce585645ad05c8752b3c005145c1166beb962d399002ed0",
+      "compile_pair.py": "33ea43650719af8c5b0362b81a686b36ac985514ce6eb3f74e0413d1d4af6b1d",
+      "specialization.json": "791701b63ead3ec7d17fa4f1b74659cc81e6261227d4f58a3c187e06a2567c8c",
+      "triton_attention_helpers.py": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1",
+      "biv150_q_fragment_service.py": "c3c5bb34086681918cc328a6bbc2b349dd9019899b730fc99f9b2dc02f3ae1a9",
+      "launch-and-recover.sh": "98e3eb582ebfef269272debc37d0eacae7371860bcdd378f4165f3764ebe016a",
+      "asset-pins.json": "9d8272d6e47159cd5869a1f77b6e599d3fad4269c2fc9dd22d1ffd4a5f784213"
+    },
+    "stdout_sha256": "dcd18a76a1e2c01f519da91012d8d5bc2486e06a3674ec41204ce3817513b522",
+    "stderr_sha256": "80f320c27777634aa533e1068a2fb2392771ed1c3230a4a4217facd0e9642196",
+    "cuda_api_used_by_owner": false
+  },
+  "static_check": {
+    "status": "PASS",
+    "baseline_sha256": "fa6ddc420a95102d116714fcbea41bc81aa9c09379d68518af65755c015b8744",
+    "candidate_sha256": "e82be54ec79e85522ba88d435a36d9b91f25211f41b4ee83696ecd75c0697414",
+    "eligible_171100_shape": "shape/stride bounds fit i32; valid page-ID range relies on framework cache contract",
+    "candidate_file": "candidate.kernel.py",
+    "cpu_guard_cases": 7,
+    "helper_int64_path": "3D segment-store helper, compile specialization IS_3D=False",
+    "limitations": [
+      "page-id value range uses framework validity contract; no host reads",
+      "compile-only owner not executed locally"
+    ]
+  },
+  "diagnostic": "set_arg_attr() 收到错误的 attrs list 值，CPU Triton AST lowering 失败。",
+  "scope_mismatch": {
+    "candidate_guard": "BM128/BQ16/page32",
+    "actual_target": "BM256/BQ32/page16",
+    "applicable_to_actual_target": false
+  },
+  "limitation": "CPU-only preparation; no tensor launch, model accuracy, GPU timing, or performance result."
+}

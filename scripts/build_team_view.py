@@ -745,6 +745,8 @@ def group(row):
         return row['profile_id']
     if row['profile_id'] == 'shape-gemm':
         return 'shape-gemm'
+    if row['profile_id'] == 'prefill-i32-offset':
+        return 'prefill-i32-offset'
     if row['profile_id'] in ('rope-kv-fusion', 'final-ffn-row-prune', 'selected-query-row', 'attention-affine-pages', 'current-main-hotspot', 'attention-next-k', 'gqa-identity-rescale', 'main-correctness', 'gqa-kv-cg', 'gqa-kv-stride', 'lm-head-paired-gemv', 'attention-head-major', 'native-silu-vec2', 'gqa-four-page-t64', 'prefill-log2', 'prefill-stride', 'night-kernel-counters', 'gqa-grouped-simt'):
         return row['profile_id']
     s = (row['profile_id'] + ' ' + row['run_id']).lower()
@@ -1295,7 +1297,9 @@ def main():
         related = sorted(reports.get(rid, []), key=lambda p: (rid.split('T')[1][:6] not in p.name, 'framework-experiments' in p.name, len(p.name)))[:3]
         body += '- 相关说明：' + ('；'.join(link(p, page, p.stem) for p in related) or '未记录') + '\n'
         body += '- 完整原登记：' + link(registry, page, 'registry.csv') + '（登记序号见上；同一run可有多个阶段）\n'
-        write(page, body)
+        # Preserve hand-authored run notes; only generated pages carry the marker.
+        if not page.exists() or page.read_text(encoding='utf-8').startswith(MARK):
+            write(page, body)
     table = TEAM / 'experiments.md'
     text = '# 实验总表\n\n唯一登记源：' + link(registry, table, 'registry.csv') + '。共' + str(len(rows)) + '条登记、' + str(len(BY_ID)) + '个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。\n\n'
     text += '| 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |\n|---|---:|---|---|---|---|---|---|\n'
@@ -1417,7 +1421,35 @@ SHORT_ATTEMPTS.update({
  'shape_gemm_transpose_wide_cpu_compile_pass': ('对固定宽转置tile做CPU-only编译和ASM检查。', 'BM128/BN64/BK128；仅编译筛查，无设备性能结论。'),
  'shape_gemm_transpose_wide_metadata_gate_failed': ('准备42层M64 down宽转置组件测量。', 'worker错误要求metadata.use_sme=15，而原A/B均为7；不是kernel配置变更，未开始数值/计时。'),
  'shape_gemm_transpose_wide_component_negative': ('检验宽转置tile对M64 down完整42层组件耗时的影响。', '固定BM128/BN64/BK128、w32/s2、CTA1；真实权重与生产数学不变，两组输入做完整ABBA。'),
+ 'shape_gemm_native_gqa_grid_order_negative': ('比较native GQA原CTA顺序与单一grid-order置换的N64/S2组件耗时。', '真实production macro1与同run候选32-call ABBA；九类正确性/Graph/side/RNG门通过，event慢0.2253%，wall慢0.0941%，停止。'),
+ 'profile_diagnostic_reader_gate_failed_before_benchmark': ('分析PR105原官方16K单轮诊断的真实热点和native GQA覆盖。', 'benchmark前reader将真实overlap_v=true错判为false，0请求/0吞吐；保留资格失败，不归为模型错误。'),
 })
+
+BATCH_RESULTS.update({
+ 'shape_gemm_native_gqa_grid_order_negative': ('N64/S2 production GQA组件九类门通过；32-call ABBA event慢0.2253%、wall慢0.0941%。', '保留小幅负结果并停止该grid-order候选；不外推模型/官方成绩。', '组件通过，性能小幅负', 'BI-V150、同run production macro1对单一CTA/grid置换，32-call ABBA；非模型或官方性能测量。'),
+ 'profile_diagnostic_reader_gate_failed_before_benchmark': ('PR105 16K单轮诊断在预检阶段退出；生产GQA receipt因overlap_v期望值错误被拒。', '保留reader资格失败；0请求，不作为模型数值错误或性能结果。', '诊断预检失败，未启动benchmark', '原官方16K输入16384/输出1024/并发64/128请求入口；GQA shape/SO/stride/capture marker reader gate在benchmark前拒绝。'),
+})
+
+# 2026-10-29 PR105 16K diagnostic and prefill i32 CPU compile attempts.
+GROUPS['prefill-i32-offset'] = (
+    'Prefill i32 offset CPU 编译筛查',
+    'v2/v3在编译接口与A身份门停止，且其旧guard BM128/BQ16/page32不适用于实际BM256/BQ32/page16目标；v5正常编译后A身份仍不符。v6只做CPU机制诊断：两臂normal/Q-fragment编译与proof通过，但A生产selected identity仍不匹配。全部保留为CPU筛查，不授予生产、GPU、官方、数值或吞吐资格。', [])
+CODE['prefill-i32-offset'] = []
+BATCH_RESULTS.update({
+ 'profile_diagnostic_completed_posthoc_fresh_fx_missing': ('PR105 16K冷态诊断完成128/128；原件source/SO/DB/collector清理通过。posthoc返回diagnostic_incomplete，fresh FX图证缺项；仅覆盖诊断，不是官方分数。', '保留单次冷态profile和原始trace；不补伪造FX证据，不当作官方成绩或稳态收益。', '诊断完成，FX证据不完整', 'BI-V150 PR105树f1658、814源文件；16K输入/1024输出/128请求；driver/owner/collector为0，posthoc为1，native GQA生产回执覆盖。'),
+ 'prefill_i32_v2_compile_attrs_failed': ('i32-offset v2 CPU-only编译在set_arg_attr失败：ABI attrs把整数值解成list，Triton拒绝；未进入正常kernel编译。静态7项guard通过但锁定BM128/BQ16/page32，和目标BM256/BQ32/page16不符。', '保留编译接口失败，不称kernel数值/性能负；guard不适用于实际目标形状。', 'CPU编译因ABI attrs停止', '仅CPU、CUDA API未调用；真实编译trace显示set_arg_attr收到错误的list值。目标BM256/BQ32/page16，旧guard为BM128/BQ16/page32。'),
+ 'prefill_i32_v3_normal_identity_mismatch': ('i32-offset v3 CPU-only在A normal kernel身份门停止：未复现171100 selected normal hash，B候选未编译。静态guard仍是BM128/BQ16/page32，不适用于实际目标BM256/BQ32/page16。', '保留A身份门失败；不放宽normal identity，也不据此判断候选数学或性能。', 'A normal身份不匹配，停止编译', '仅CPU、CUDA API未调用；运行在B编译前退出。目标BM256/BQ32/page16，旧guard为BM128/BQ16/page32。'),
+ 'prefill_i32_v5_normal_identity_mismatch': ('i32-offset v5 CPU-only完成A normal编译，但身份仍未匹配171100 selected kernel；保留严格身份门拒绝。', '保留为CPU身份失败；无GPU、模型数值、吞吐或生产资格。', 'CPU编译完成，A身份失败', 'CPU-only；A normal identity不匹配，未授予生产或设备资格。'),
+ 'prefill_i32_v6_cpu_mechanism_diagnostic': ('i32-offset v6仅作CPU机制诊断：两臂normal/Q-fragment编译及proof通过，但A生产selected hash仍不匹配。资源观察A SGPR104/VGPR113/spill4，B SGPR85/VGPR112/spill0，shared 65536B。', '机制proof不是数值或性能结果；明确不授生产、GPU或官方资格，保留证据并停止。', 'CPU机制诊断完成，未获生产资格', 'normal identity未匹配；仅CPU编译/静态proof，无运行或吞吐数据。'),
+})
+SHORT_ATTEMPTS.update({
+ 'profile_diagnostic_completed_posthoc_fresh_fx_missing': ('对PR105 16K/128请求运行一次带采集器的冷态覆盖诊断。', '128/128完成；driver/owner/collector成功并完成清理；posthoc缺fresh FX图证，非官方性能测量。'),
+ 'prefill_i32_v2_compile_attrs_failed': ('用i32相对offset候选尝试重现171100的normal编译配置并检查编译门。', 'set_arg_attr因attrs值解码为list而停止；旧guard的BM128/BQ16/page32与目标BM256/BQ32/page16不符。'),
+ 'prefill_i32_v3_normal_identity_mismatch': ('修正attrs解码后重试同一CPU编译身份门。', 'A normal identity未重现171100 selected hash，B未编译；旧guard与目标BM256/BQ32/page16不符。'),
+ 'prefill_i32_v5_normal_identity_mismatch': ('验证v5按生产模块名修正后的A normal编译身份。', 'A仍未匹配171100 selected hash；严格拒绝，无GPU或性能结论。'),
+ 'prefill_i32_v6_cpu_mechanism_diagnostic': ('在不放宽生产身份门的前提下诊断i32 offset/Q-fragment编译机制。', '两臂编译与CPU proof通过，但A selected identity仍不匹配；不授GPU/生产资格。'),
+})
+GROUPS['shape-gemm'] = ('BI-V150特定形状GEMM', GROUPS['shape-gemm'][1] + ' 另有PR105 16K单次profile诊断完成128请求，posthoc缺fresh FX图证，非官方分数。', GROUPS['shape-gemm'][2])
 
 if __name__ == '__main__':
     main()
