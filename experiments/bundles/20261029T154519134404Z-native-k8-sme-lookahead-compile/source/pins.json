@@ -1,0 +1,19 @@
+{
+  "main": "899ce77470b0b539aebc108fd122f668c2d5894d",
+  "qk_path": "tools/kernels/biv150_native_k8_klookahead_qk.cu",
+  "qk_git_blob": "3ae5112b5dee65cfd7b8fc9f506f163a4167e0ba",
+  "codec_path": "tools/kernels/biv150_native_k8_codec.cuh",
+  "codec_git_blob": "e9049826d213e80baf6eb5c3dfddd1598d5f3d35",
+  "base_sha256": "a491757fff161436a323305f75c3223d12d2d91bd8420b2332e633012f72dd4c",
+  "variant_sha256": "108131ada8a8b5cae65264f3348b2947ba34eeeb561ea790505bc84f3511ef45",
+  "inverse_byte_exact": true,
+  "transform": [
+    "insert key i8 SME descriptor/issue helper",
+    "prologue full-page issue via two SME loads + wait8 + original barrier",
+    "issue next full K page after current V wait+ready barrier",
+    "remove PackedNextK/read/publish",
+    "wait8 after current PV then retain original page-end barrier"
+  ],
+  "partial_page": "original masked issue_k_i8 path unchanged; has_next is bounded by full_upper",
+  "codec_sha256": "37d5c7548c0301ee522f50fb0d4d2da53300676e71b03bb806c2d88779801d79"
+}

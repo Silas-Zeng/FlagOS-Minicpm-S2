@@ -1,0 +1,44 @@
+{
+  "review": "standalone_assembly_incremental",
+  "run_id": "20261029T154519134404Z-native-k8-sme-lookahead-compile",
+  "recovery_archive": "archive/native-k8-sme-20261029/lookahead-154519/",
+  "recovery_tar_sha256": "e0f593e187ce5283517aef85321570d3b46e54f365f1e95e259ae633bda21c84",
+  "device_execution": false,
+  "scope": "S2/S4 device-only standalone LLVM/ASM; not linked final SO",
+  "candidate_source_sha256": "108131ada8a8b5cae65264f3348b2947ba34eeeb561ea790505bc84f3511ef45",
+  "base_source_sha256": "a491757fff161436a323305f75c3223d12d2d91bd8420b2332e633012f72dd4c",
+  "candidate_assembly_sha256": "8ac4ccea53b3644bb50f366f3e16edcdd60b72c815fee15196fd132952ca68ca",
+  "base_assembly_sha256": "50bc52f94615a1a8e7c013d32beacc8d5975728c0f8e4a63f6a1f5d75a3bd526",
+  "findings": {
+    "S2": {
+      "current_V_completion": "candidate ASM line 752 g2scnt wait, line 757 CTA barrier; next-K issue follows",
+      "next_K_issue": "two sl_sme_load_16x1b64_col at lines 775-776, before current-page PV",
+      "current_PV": "eight BF16 m16n16k16 MMA instructions lines 804-847",
+      "post_PV_wait": "line 850 g2scnt wait is after the final PV instruction; loop backedge BB0_7 also has unconditional g2scnt wait at line 624 before next iteration work/read",
+      "control_flow": "next-K issue is in conditional BB0_13; source has has_next guard. Conditional path rejoins BB0_14 for current PV. Tail remains distinct source path."
+    },
+    "S4": {
+      "current_V_completion": "candidate ASM line 2246 g2scnt wait, line 2251 CTA barrier; next-K issue follows",
+      "next_K_issue": "two sl_sme_load_16x1b64_col at lines 2269-2270, before current-page PV",
+      "current_PV": "eight BF16 m16n16k16 MMA instructions lines 2298-2341",
+      "post_PV_wait": "line 2344 g2scnt wait follows final PV; loop backedge BB1_7 has unconditional g2scnt wait before next iteration work/read",
+      "control_flow": "same conditional lookahead/rejoin structure as S2; full-page guard and original tail path are covered by previously reviewed source/inverse check, not newly proven by ASM alone."
+    },
+    "resources": {
+      "candidate": {
+        "vgpr": 70,
+        "sgpr": 72,
+        "shared_bytes": 8192,
+        "scratch_size_bytes": 0
+      },
+      "base": {
+        "vgpr": 85,
+        "sgpr": 70,
+        "shared_bytes": 8192,
+        "scratch_size_bytes": 0
+      },
+      "interpretation": "register/shared metadata only; no occupancy or runtime-overlap inference"
+    }
+  },
+  "conclusion": "Standalone compiler output preserves the intended instruction order for both S2 and S4: next-K SME loads issue after current-V completion and before current PV; the K wait is after PV and is also enforced at the next loop header before next-iteration reads. This clears the CPU compile/assembly ordering gate only. Recheck final linked SO identity and its disassembly before any device component; no GPU, correctness, overlap-at-runtime, or performance claim is granted."
+}

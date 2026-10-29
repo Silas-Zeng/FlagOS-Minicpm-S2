@@ -72,6 +72,7 @@ GROUPS = {
     'official': ('完整官方吞吐对照', '原版与完整候选的原始官方结果；保留DB、KV和计分边界。', []),
     'attention': ('Attention 分流与 launch', 'prefill、3D decode、mixed分流、可见prefix及重叠等路径；相关PR不等于各实验已包含或独立验证全部方法。', ['prefill', 'decode3d', 'mixed-attention']),
     'early': ('早期集成、块表与 profile', '早期基点、块表提交、集成短筛和profile，不自动作为诊断开关或top-p单项性能。', ['diagnostics', 'top-p']),
+    'native-k8-sme': ('NativeK8 SME K页布局探针', '独立布局搬运探针：CoreX compile-only产物身份匹配；16个模式/页/head案例的2048B K-stage图像与A逐字节一致，CPU reference、输入不变和guard均通过。仅证明该full-page stage布局行为，不测Attention数学、partial page、模型/服务正确性、吞吐或生产资格。', []),
     'other': ('其它登记与控制记录', '没有足够字段继续归类的登记；不补猜实验结论。', []),
 }
 CODE = {
@@ -118,6 +119,7 @@ CODE = {
     'kv-pitched': ['patches/framework/candidates/biv150_kv_pitched_copy.py', 'patches/framework/candidates/biv150_kv_pitched_bridge.cpp'],
     'sql': ['patches/framework/biv150_sql_reflection.py'],
     'event': ['scripts/remote/validate_event_wait_gate.py', 'scripts/remote/validate_native_event_wait_gate.py'],
+    'native-k8-sme': ['analysis/publication-k8-sme-20261029/experiment-note.md', 'tmp/native-k8-sme-probe-20261029/native_k8_sme_probe.cu', 'tmp/native-k8-sme-probe-20261029/assembly-review.json', 'tmp/native-k8-sme-probe-20261029/terminal-review.json'],
 }
 
 
@@ -794,6 +796,7 @@ def group(row):
         ('mm-cta', r'cta|mm[_-]'), ('buffers', r'hidden|bucket'),
         ('event', r'event'), ('official', r'official|original13eb'),
         ('sql', r'sql'), ('attention', r'attention|mixed|decode_launch|direct_decode|\bc[23]\b'),
+        ('native-k8-sme', r'native[_-]k8[_-]sme'),
         ('early', r'\bb[0o]\b|\bc1\b|native[_-]decode|dirty_block_table|host[_-]gap'),
     ]:
         if re.search(pattern, s):
