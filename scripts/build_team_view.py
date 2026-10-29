@@ -1557,3 +1557,12 @@ SHORT_ATTEMPTS['native_gqa_s8_shared4k_official_4k_negative_stopped'] = ('按官
 GROUPS['native-gqa-s8'] = ('native GQA S8与shared4k官方筛选', 'shared4k S8路径官方16K完成四轮，暖均相对PR105观察+1.577875%；KV条件差48 tokens，不能严格归因。官方4K第二轮低3.670038%，按首暖规则停止，仅两轮，不是四轮成绩。两档均实际触发S8 eager_only，但无准确率资格，不更新PR105基线。', [])
 
 
+
+
+# PR5 publication batch native K8 component 2026-10-29
+BATCH_RESULTS['native_k8_sme_component_pair_build_pass'] = ('隔离A/B SO构建成功；符号、动态依赖和20参数ABI核对通过。无GPU执行。', '保留为组件入口构建身份；不把compile结果写成数值或性能结论。', 'A/B final SO构建与静态身份核验', '分别检查linked SO IR/SASS、symbols、动态依赖、build receipt。')
+SHORT_ATTEMPTS['native_k8_sme_component_pair_build_pass'] = ('为NativeK8 SME lookahead准备A/B隔离组件so。', '两臂使用独立launcher和producer符号；数学/原reducer不在此run测试。')
+BATCH_RESULTS['native_k8_sme_component_candidate'] = ('4组数值/Graph边界通过；Event四项减少2.07–2.73%，4K Q stride2560 wall反向慢2.10%。', '保留为局部producer+原reducer组件候选信号；不作稳定模型/官方吞吐、准确率或新基线资格。', '组件ABBA候选信号', '4个形状/stride case，数值全数组逐位、混合边界、变Q Graph、输入不变与redzone；原始A/B顺序见summary。')
+SHORT_ATTEMPTS['native_k8_sme_component_candidate'] = ('验证K-lookahead SME候选在producer+原reducer组件中的数值与局部耗时。', '仅比较已构建的隔离A/B producer，沿用同一原reducer及相同输入。')
+CODE['native-k8-sme'] = CODE.get('native-k8-sme', []) + ['experiments/bundles/20261029T155955570211Z-native-k8-sme-pair-build/source/native_k8_sme_A.cu', 'experiments/bundles/20261029T155955570211Z-native-k8-sme-pair-build/source/native_k8_sme_B.cu', 'experiments/bundles/20261029T161341635355Z-native-k8-sme-component/source/worker.py']
+GROUPS['native-k8-sme'] = ('NativeK8 SME布局与lookahead组件探针', '完整页K-stage字节布局探针通过；lookahead两臂standalone compile/ASM顺序门通过。新增producer+原reducer组件4-case结果逐位数值/Graph/input门全通过，Event改善2.07–2.73%，但4K Q stride2560 wall反向慢2.10%。均为组件/编译证据，不代表attention完整正确性、官方吞吐、模型准确率或生产资格。', [])

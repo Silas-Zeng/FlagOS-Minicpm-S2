@@ -1,0 +1,27 @@
+{
+  "review": "isolated_component_worker_incremental",
+  "reviewed_file": "tmp/native-k8-sme-component-20261029/worker.py",
+  "status": "GO_for_root_owned_isolated_component_run",
+  "gpu_or_ssh_used": false,
+  "scope": "Only the two previously blocking worker issues rechecked, plus requested ABI/cache/reducer/A-B/stream/graph/input/guard wiring; kernel source is not re-reviewed.",
+  "rechecked_fixes": {
+    "triton_source_lookup": {
+      "status": "pass",
+      "evidence": "load_reducer writes hash-named normalized source to a real .py file in the fresh output parent, verifies any preexisting same-name content, imports via spec_from_file_location, and retains the pinned normalized function SHA. The module is registered in sys.modules before execution, supporting inspect-based Triton source lookup."
+    },
+    "cross_stream_dependencies": {
+      "status": "pass",
+      "evidence": "The test side stream waits on the current/default stream after input and scratch allocation; timed scratch follows the same wait. Graph capture and replay both use the designated side stream, and side stream is synchronized after replay and before subsequent Q/length writes or host comparisons. Full-case output allocation is followed by a default-to-side wait."
+    }
+  },
+  "other_requested_wiring": {
+    "ctypes_launcher_abi": "pass: six pointers, batch and scale, eight int64 strides, three output pointers and explicit stream pointer match the isolated launcher interface.",
+    "reducer": "pass: original source file SHA plus normalized _reduce_partials function SHA are verified; one extracted pinned reducer is reused for A and B with the supplied strides/segment count.",
+    "A_B_comparison": "pass: each same case/input runs both arm-specific launchers; exact comparisons include partial/max/sum/output and backing stores, with both configured S2/S4 workload families, two Q strides, mixed boundary lengths, and full-length cases.",
+    "stream_and_graph": "pass after fix: producer and reducer are invoked under the explicit stream; graph capture/replay use that same stream; changed-Q replay is checked after synchronization.",
+    "readonly_and_guards": "pass: Q, full cache storage, lengths and block table snapshots are compared after ordinary producer/reducer calls; output and partial/max/sum sentinel redzones are checked.",
+    "default_behavior": "pass: without explicit --gpu, worker reports read-only CPU default and exits without device execution."
+  },
+  "cpu_checks": {"py_compile": "pass", "default_entry": "pass; gpu_executed=false"},
+  "decision": "GO for the root-owned isolated producer-plus-original-reducer component run with the pinned A/B SOs. This is authorization for that component gate only, not a numerical or performance pass."
+}

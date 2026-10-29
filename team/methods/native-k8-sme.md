@@ -1,11 +1,7 @@
 <!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
 
-# NativeK8 SME K页布局与lookahead编译探针
+# NativeK8 SME布局与组件实验
 
-本探针核实将完整16-slot K页经两条 `__ivcorex_sme_load_16x1b64_colxfb8` 搬运后，shared stage 的2048字节图像是否与原 `issue_k_i8` 路径一致。目标是确认SME搬运的布局行为，便于后续单独评估；它没有接入attention或生产代码。
+此前完整页K-stage字节布局探针16案/96项检查通过；lookahead独立compile/ASM顺序门通过。此次新增A/B最终SO pair-build与producer+原reducer组件试验。A/B SO符号隔离、20参数ABI一致。四组组件case逐位数值、全长度、Graph变Q、输入只读和redzone均通过，Event分别减少2.0675%、2.7325%、2.2473%、2.2759%；但4K Q stride2560 wall反向变慢2.1025%。组件信号不等于稳定收益、模型服务吞吐、准确率或生产资格。
 
-CPU编译使用实际BI-V150 CoreX工具链，保存source、build命令、实际SO、IR和ASM；GPU试验固定4种输入模式（zero、−127、+127、固定seed随机）、page 0/3、head 0/1，共16案。CPU reference、A/B逐字节相等、输入不变及两侧输出guard共96项检查均通过。原件和身份字段见[编译run](../runs/cpu/20261029T153121891538Z-native-k8-sme-layout-compile.md)与[布局run](../runs/bi-v150/20261029T153349258627Z-native-k8-sme-layout.md)。
-
-第三条CPU run记录lookahead候选与base两臂standalone compile-only成功。独审确认S2/S4中next-K SME发射在当前PV前，g2scnt wait在PV后且loop header再次等待；VGPR 85→70、SGPR 70→72、shared 8192B、scratch 0。只通过CPU编译/指令顺序门，不证明实际重叠、Attention数值或性能。详见[第三条CPU短记](../runs/cpu/20261029T154519134404Z-native-k8-sme-lookahead-compile.md)和[独立复核](../../../experiments/bundles/20261029T154519134404Z-native-k8-sme-lookahead-compile/source/assembly-review.json)。
-
-结论仅适用于探测的完整页与字节搬运stage；不覆盖partial page、完整attention数学、模型数值/准确率、吞吐或生产资格。源码依据main `899ce77470b0b539aebc108fd122f668c2d5894d`；probe源码、lookahead两臂与复核文件列于本地payload。
+详见[SO构建短记](../runs/cpu/20261029T155955570211Z-native-k8-sme-pair-build.md)和[组件短记](../runs/bi-v150/20261029T161341635355Z-native-k8-sme-component.md)，原始ABBA样本及复核在对应bundle。

@@ -1,0 +1,27 @@
+{
+  "review": "native_k8_sme_component_terminal_incremental",
+  "run_id": "20261029T161341635355Z-native-k8-sme-component",
+  "archive": "archive/native-k8-sme-20261029/component-161341/",
+  "recovery_bundle_sha256": "c29911ebeaaa7cbe821447f87eb1be9db2412550331783738e70694d229fd8d4",
+  "review_scope": "Four terminal A/B component cases, raw timing order, correctness/input/Graph flags, and owner cleanup; no code re-review or rerun.",
+  "terminal": {"owner_state": "pass", "exit_code": 0, "case_count": 4, "preflight_9031_free": true, "preflight_gpu_processes_none": true, "postflight_9031_free": true, "postflight_gpu_processes_none": true},
+  "cases": [
+    {"seqlen": 4096, "batch": 64, "segments": 2, "q_stride": 2048, "active_pages": 16384, "event_A_mean_ms": 0.3272735703, "event_B_mean_ms": 0.3205071538, "event_reduction_pct": 2.0675, "wall_A_mean_ms": 0.4109192523, "wall_B_mean_ms": 0.4042317448, "wall_reduction_pct": 1.6275},
+    {"seqlen": 4096, "batch": 64, "segments": 2, "q_stride": 2560, "active_pages": 16384, "event_A_mean_ms": 0.3298325761, "event_B_mean_ms": 0.3208198321, "event_reduction_pct": 2.7325, "wall_A_mean_ms": 0.3971807019, "wall_B_mean_ms": 0.4055312462, "wall_change_pct": 2.1025, "wall_interpretation": "candidate slower; one A wall sample is an outlier, retain raw values and do not claim wall improvement"},
+    {"seqlen": 16384, "batch": 32, "segments": 4, "q_stride": 2048, "active_pages": 32768, "event_A_mean_ms": 0.6310583201, "event_B_mean_ms": 0.6168766171, "event_reduction_pct": 2.2473, "wall_A_mean_ms": 0.7146347930, "wall_B_mean_ms": 0.6972986740, "wall_reduction_pct": 2.4259},
+    {"seqlen": 16384, "batch": 32, "segments": 4, "q_stride": 2560, "active_pages": 32768, "event_A_mean_ms": 0.6309864217, "event_B_mean_ms": 0.6166259046, "event_reduction_pct": 2.2759, "wall_A_mean_ms": 0.7145708220, "wall_B_mean_ms": 0.6984656360, "wall_reduction_pct": 2.2538}
+  ],
+  "correctness_and_coverage": {
+    "all_four_numeric_bitwise_all_arrays": true,
+    "all_four_full_length_bitwise_all_arrays": true,
+    "all_four_graph_changed_q_bitwise": true,
+    "all_four_input_immutability_q_storage_lengths_table": true,
+    "all_four_output_and_scratch_redzones_checked": true,
+    "mixed_lengths_include_empty_short_page_partial_and_segment_tail": true,
+    "original_pinned_reducer_sha": "48ca060feb335cffd2abd628c92992bbd05ec538a9358af653e5c64570898a20",
+    "A_so_sha256": "d3d199e0d1f4a157967de1d537fdb484004d08289ddf3333956b1b8d29a0f6d4",
+    "B_so_sha256": "dcff66122f2f2e50c9c34ae380a795aa8b377d90dfb8e9fc34be19dca1c79a50"
+  },
+  "timing_protocol": "Each case contains 16-call event/wall samples recorded in ABBA then BAAB order; all raw arm/order samples remain in summary.json. The reported event means are averages over the four arm samples per variant.",
+  "conclusion": "The isolated paired component passed its recorded bitwise, mixed-edge, full-length, Graph-live-input, and input-immutability checks. B has a consistent 2.07-2.73% event-time reduction in these four synthetic component cases, while 4K q_stride=2560 wall time moves in the opposite direction (+2.10%). This is local producer-plus-reducer evidence only; it cannot be packaged as stable model or official throughput gain, and no model-accuracy or service qualification was performed."
+}

@@ -1,0 +1,50 @@
+{
+  "review": "final_pair_shared_object_incremental_assembly",
+  "run_id": "20261029T155955570211Z-native-k8-sme-pair-build",
+  "archive": "archive/native-k8-sme-20261029/pair-build-155955/",
+  "bundle_sha256": "e483ad13b09c7b0cfaef510ef895b1bc0d6731d8169bfd34d1286753a4aaaaea",
+  "gpu_or_runtime_execution": false,
+  "scope": "actual linked A/B SO IR/SASS, symbols, dynamic dependencies and build receipt; no repeat of math/source audit",
+  "build_identity": {
+    "compiler": "/usr/local/corex/bin/clang++",
+    "compiler_sha256": "8428e871501b05213d5b7ec0ecf796f4d04de24e5bf75c2539dc812f52ab3101",
+    "A": {"source_sha256": "434b596af854108cca4cfdd2025121cf431d20d31e7e1d93718cfd450d337542", "so_sha256": "d3d199e0d1f4a157967de1d537fdb484004d08289ddf3333956b1b8d29a0f6d4"},
+    "B": {"source_sha256": "8df62a7cdbd284d0593ba8f1bee825b3765b966b1d3a8b90fbb06db0c2ca075a", "so_sha256": "dcff66122f2f2e50c9c34ae380a795aa8b377d90dfb8e9fc34be19dca1c79a50"}
+  },
+  "findings": {
+    "B_candidate_order_matches_standalone": {
+      "S2": {
+        "current_V_completion": "SASS line 667 g2scnt wait; line 672 barrier",
+        "next_K_issue": "two sl_sme_load_16x1b64_col at lines 689-690",
+        "current_PV": "eight BF16 m16n16k16 MMA instructions lines 717-760",
+        "post_PV_K_wait": "line 762 g2scnt wait; next loop header also waits before next-page consumption"
+      },
+      "S4": {
+        "current_V_completion": "SASS line 1976 g2scnt wait (preceding the next-page branch); branch rejoins after the existing V-ready synchronization",
+        "next_K_issue": "two sl_sme_load_16x1b64_col at lines 1998-1999",
+        "current_PV": "eight BF16 m16n16k16 MMA instructions lines 2026-2069",
+        "post_PV_K_wait": "line 2071 g2scnt wait; next loop header waits before next-page consumption"
+      },
+      "assessment": "The final linked B SO retains the standalone order: next-K loads issue before current PV, and their completion is ordered after PV and before subsequent-page use. The current V completion/barrier remains before lookahead issue."
+    },
+    "A_B_symbol_isolation": {
+      "A_exports": ["launch_cjj_native_k8_a_klookahead_s2", "launch_cjj_native_k8_a_klookahead_s4"],
+      "B_exports": ["launch_cjj_native_k8_b_klookahead_s2", "launch_cjj_native_k8_b_klookahead_s4"],
+      "producer_symbols_are_prefixed_per_arm": true,
+      "cross_arm_launcher_symbol_collision": false
+    },
+    "linkage_and_abi": {
+      "both_arms_same_20_argument_launcher_abi": true,
+      "stream_argument_is_cudaStream_t": true,
+      "needed_shared_libraries_both_arms": ["libstdc++.so.6", "libm.so.6", "libgcc_s.so.1", "libc.so.6"],
+      "unexpected_external_dependency_seen": false
+    },
+    "resource_metadata": {
+      "explicit_resource_summary_in_actual_so_ir_sass_logs": "not emitted by captured ixobjdump output",
+      "standalone_compile_only_reference": {"shared_bytes": 8192, "scratch_size_bytes": 0, "candidate_vgpr": 70, "candidate_sgpr": 72},
+      "limitation": "Do not treat standalone VGPR/SGPR figures as measured final-SO metadata; no occupancy inference."
+    },
+    "scope_delta": "Source manifest records inverse-byte-exact arms and symbol-name-only source deltas; unchanged codec, launch ABI/stream, math, and tail are reused from prior source review. This pass confirms separate A/B launch symbols and final linked B SASS ordering, not a fresh proof of numerical equivalence."
+  },
+  "decision": "GO for the isolated producer-plus-original-reducer numerical component gate using these pinned SOs. This is not numerical correctness or performance approval; component results must decide those gates. No GPU run was performed by this review."
+}
