@@ -1,0 +1,3 @@
+<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
+
+# 20261029T104512Z-linear-n64-short-capture\n\n- **尝试了什么：** 核实短请求中的真实linear调用shape及窄N方向证据。\n- **改了什么：** 安装LibEntry.run observer，不改kernel、模型或评测参数；记录135次linear调用和选中配置。\n- **怎么测：** 对照实际request/warm调用数与同shape私有数据库已测配置；该诊断不测候选性能。 证据：[原件manifest](../../../experiments/bundles/20261029T104512Z-linear-n64-short-capture/manifest.json)与[压缩包分块](../../../experiments/bundles/20261029T104512Z-linear-n64-short-capture/raw.tar.gz.storage.json)。\n- **结果怎样：** warm-only QKV的request_calls为0；精确shape BN128已有负记录，N64路线NO-GO。\n- **是否保留：** 保留诊断和NO-GO结论，不重复上卡，不推断官方热点收益。\n

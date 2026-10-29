@@ -1,8 +1,8 @@
 <!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
 
-# native GQA S8与shared4k组件
+# native GQA S8生产接入与shared4k筛选
 
-PR105原S8官方观察与本批局部组件结果分开：已有官方16K暖均相对PR105观察+1.1275%、4K−0.5039%，两档KV条件均不匹配；原105为101/105，S8分支未被batch8触发。本批N30/S8 short-KV与shared4k组件局部正向，live-acc不同候选负向，shared4k另有入口失败和CPU compile-only；这些组件不授官方、模型或新生产资格。
+PR105 producer新增N30/S8，仅BF16且Q stride=2048命中，其余fallback。16K官方暖均观察+1.1275%，4K暖均−0.5039%，KV条件不匹配；原105为101/105，但batch8未覆盖S8 kernel执行。另有三次shared4k官方入口失败，全部在GPU启动前，无benchmark请求和性能数据；不构成候选正确性或性能结论。保持PR105基线，不作严格因果或新基线。
 
 相关代码：[framework](../../patches/framework)。
 
@@ -31,3 +31,6 @@ PR105原S8官方观察与本批局部组件结果分开：已有官方16K暖均�
 - [20261029T075911Z-native-gqa-s8-source-build](../runs/cpu/20261029T075911Z-native-gqa-s8-source-build.md)（登记#496）：CPU build-only完成；产物身份可供后续组件参考，不含GPU验证。 **是否保留：** 保留为构建/身份记录，不视为性能或生产资格。
 - [20261029T095247685623Z-s8-shared4k-compile-entry-failed](../runs/cpu/20261029T095247685623Z-s8-shared4k-compile-entry-failed.md)（登记#499）：入口工具失败，不代表候选源码编译/数值/性能失败。 **是否保留：** 保留失败原件，后续LF修复后独立重试。
 - [20261029T095425907993Z-s8-shared4k-compile](../runs/cpu/20261029T095425907993Z-s8-shared4k-compile.md)（登记#500）：编译成功、spill为0；这只是compile-only机制证据。 **是否保留：** 保留编译产物，等待独立组件数值与性能结果。
+- [20261029T113354Z-native-gqa-s8-shared4k-official-entry](../runs/cpu/20261029T113354Z-native-gqa-s8-shared4k-official-entry.md)（登记#505）：三次官方入口均在GPU启动前失败；无benchmark请求或GPU性能结果。 **是否保留：** 保留入口失败证据；修复接线后另行启动，不作为模型数值错误。
+- [20261029T113526Z-native-gqa-s8-shared4k-official-entry](../runs/cpu/20261029T113526Z-native-gqa-s8-shared4k-official-entry.md)（登记#506）：三次官方入口均在GPU启动前失败；无benchmark请求或GPU性能结果。 **是否保留：** 保留入口失败证据；修复接线后另行启动，不作为模型数值错误。
+- [20261029T114342Z-native-gqa-s8-shared4k-official-entry](../runs/cpu/20261029T114342Z-native-gqa-s8-shared4k-official-entry.md)（登记#507）：三次官方入口均在GPU启动前失败；无benchmark请求或GPU性能结果。 **是否保留：** 保留入口失败证据；修复接线后另行启动，不作为模型数值错误。

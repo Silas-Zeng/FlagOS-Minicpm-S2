@@ -1,0 +1,3 @@
+<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
+
+# 20261029T104230927931Z-native-gqa-shared4k-s4-hotspot-component\n\n- **尝试了什么：** 验证N32/S4 shared4k复用K/V shared stage的局部组件代价。\n- **改了什么：** 只改shared stage生命周期；A为PR105 macro1 S4，B为shared4k S4，两臂使用原reducer。\n- **怎么测：** 同一恢复输入做producer+reducer ABBA，每窗32次；9个数值/状态用例通过。 证据：[原件manifest](../../../experiments/bundles/20261029T104230927931Z-native-gqa-shared4k-s4-hotspot-component/manifest.json)与[压缩包分块](../../../experiments/bundles/20261029T104230927931Z-native-gqa-shared4k-s4-hotspot-component/raw.tar.gz.storage.json)。\n- **结果怎样：** Event省0.0538%、wall省0.1435%，仅微弱组件正向。\n- **是否保留：** 保留为微正向观察；不确认稳定收益，不外推至官方或基线。\n

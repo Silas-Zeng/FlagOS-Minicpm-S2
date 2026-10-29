@@ -714,6 +714,8 @@ GROUPS['native-gqa-s8'] = ('native GQA S8生产接入', 'PR105 producer新增N30
 
 
 def group(row):
+    if row['profile_id']=='native-gqa-shared4k': return 'native-gqa-shared4k'
+    if row['profile_id']=='native-gqa-linear-n64': return 'native-gqa-linear-n64'
     if row['profile_id']=='native-gqa-live-acc': return 'native-gqa-live-acc'
     if row['profile_id'] == 'native-gqa-s8':
         return 'native-gqa-s8'
@@ -1530,3 +1532,15 @@ BATCH_RESULTS['native_gqa_s8_shared4k_component_positive'] = ('两档Event与wal
 SHORT_ATTEMPTS['native_gqa_s8_shared4k_component_positive'] = ('比较N30/S8原shared8KiB与shared4k K/V同址复用候选。', '只变共享缓冲区生命周期与V写入/读取地址；QK、softmax、PV数学与reducer保持。')
 GROUPS['native-gqa-s8'] = ('native GQA S8与shared4k组件', 'PR105原S8官方观察与本批局部组件结果分开：已有官方16K暖均相对PR105观察+1.1275%、4K−0.5039%，两档KV条件均不匹配；原105为101/105，S8分支未被batch8触发。本批N30/S8 short-KV与shared4k组件局部正向，live-acc不同候选负向，shared4k另有入口失败和CPU compile-only；这些组件不授官方、模型或新生产资格。', [])
 GROUPS['native-gqa-live-acc'] = ('native GQA live-acc组件', 'N32/S4 live-acc组件数值/FP64/Graph/副作用门通过，但Event慢0.0135%，wall微幅反向；保留负观察并停止，不扩展为模型或官方结论。', [])
+
+
+# PR5 local draft 2026-10-29: shared4k S4, linear capture, and pre-GPU entry failures.
+BATCH_RESULTS['native_gqa_shared4k_s4_component_micropositive'] = ('S4 Event省0.0538%、wall省0.1435%；属微弱组件正向，未确认稳定收益。', '保留组件观察；不作官方成绩、生产资格或基线更新。', '局部ABBA微正向', 'N32/S4/KV16K，每窗32次producer+原reducer；9个数值/状态用例通过。')
+SHORT_ATTEMPTS['native_gqa_shared4k_s4_component_micropositive'] = ('验证N32/S4 shared4k复用shared stage的组件代价。', '只改变shared stage生命周期；PR105 macro1 S4与shared4k两臂使用同一原reducer。')
+BATCH_RESULTS['native_gqa_linear_n64_actual_shape_no_go'] = ('135次linear调用已观察；窄N方向对实际shape为NO-GO，warm-only调用不代表请求热点。', '保留真实shape诊断；不重复上卡或推断模型性能。', '仅捕获，不测候选性能', '真实LibEntry.run observer及私有数据库精确shape记录；warm QKV request_calls=0。')
+SHORT_ATTEMPTS['native_gqa_linear_n64_actual_shape_no_go'] = ('核实真实linear调用shape以及窄N方向的已有同shape证据。', '只安装observer采集调用信息，不修改kernel、模型或评测参数。')
+BATCH_RESULTS['native_gqa_s8_official_entry_failed_pre_gpu'] = ('三次官方入口均在GPU启动前失败；无benchmark请求或GPU性能结果。', '保留入口失败证据；修复接线后另行启动，不作为模型数值错误。', 'CPU入口失败；未测GPU', '三次分别为旧overlay路径、旧DRIVER_SHA、qualification manifest字段结构不符。')
+SHORT_ATTEMPTS['native_gqa_s8_official_entry_failed_pre_gpu'] = ('尝试启动shared4k S8官方候选入口。', '三次失败均发生在启动GPU前，分别修正wrapper路径、DRIVER_SHA及manifest读取。')
+GROUPS['native-gqa-shared4k'] = ('GQA shared4k共享缓冲区复用', 'N32/S4/KV16K局部ABBA省时约0.05% Event、0.14% wall，只是微弱正向组件信号，未确认稳定收益。S8官方候选的三次入口失败均在GPU启动前，无benchmark请求和性能计时；不将其解读为候选数值错误或退化。', [])
+GROUPS['native-gqa-linear-n64'] = ('真实linear shape与窄N方向诊断', '104512短请求捕获135次linear调用；实际shape与warm-only调用分开，精确shape私有数据库记录不支持窄N候选，故NO-GO。诊断不是候选性能测试，也不据此推断官方请求热点。', [])
+GROUPS['native-gqa-s8'] = ('native GQA S8生产接入与shared4k筛选', 'PR105 producer新增N30/S8，仅BF16且Q stride=2048命中，其余fallback。16K官方暖均观察+1.1275%，4K暖均−0.5039%，KV条件不匹配；原105为101/105，但batch8未覆盖S8 kernel执行。另有三次shared4k官方入口失败，全部在GPU启动前，无benchmark请求和性能数据；不构成候选正确性或性能结论。保持PR105基线，不作严格因果或新基线。', [])

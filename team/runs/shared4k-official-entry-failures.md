@@ -1,0 +1,3 @@
+<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
+
+# shared4k S8官方入口失败（无GPU测量）\n\n113354：wrapper传入旧overlay路径；113526：owner的DRIVER_SHA未更新；114342：qualification误读base-source-manifest，缺少git_sha。三次均在GPU启动前终止，没有benchmark请求或GPU性能结果。证据：[113354/114342原件manifest](../../experiments/bundles/shared4k-entry-failures-113354-114342/manifest.json)与[分块索引](../../experiments/bundles/shared4k-entry-failures-113354-114342/raw.tar.gz.storage.json)，[113526原件manifest](../../experiments/bundles/20261029T113526Z-native-gqa-s8-shared4k-official-entry/manifest.json)与[分块索引](../../experiments/bundles/20261029T113526Z-native-gqa-s8-shared4k-official-entry/raw.tar.gz.storage.json)。\n
