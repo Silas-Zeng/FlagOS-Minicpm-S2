@@ -714,6 +714,7 @@ GROUPS['native-gqa-s8'] = ('native GQA S8生产接入', 'PR105 producer新增N30
 
 
 def group(row):
+    if row['profile_id']=='native-gqa-live-acc': return 'native-gqa-live-acc'
     if row['profile_id'] == 'native-gqa-s8':
         return 'native-gqa-s8'
     if row['profile_id']=='native-gqa-mixed-s4':return 'native-gqa-mixed-s4'
@@ -1510,3 +1511,22 @@ GROUPS['native-gqa-s8'] = ('native GQA S8生产接入', 'PR105 producer新增N30
 
 if __name__ == '__main__':
     main()
+
+
+# PR5 publication batch 2026-10-29: native S8/shared4k evidence.
+BATCH_RESULTS['native_gqa_s8_source_build_identity_pass'] = ('CPU build-only完成；产物身份可供后续组件参考，不含GPU验证。', '保留为构建/身份记录，不视为性能或生产资格。', 'CPU build-only完成；产物身份可供后续组件参考，不含GPU验证。', '核查source files、build summary与SO SHA；原件manifest逐项SHA复核。')
+SHORT_ATTEMPTS['native_gqa_s8_source_build_identity_pass'] = ('为N30/S8组件准备实际source build和SO身份。', '构建固定source树并生成build receipt；限定build_only，未发起GPU workload。')
+BATCH_RESULTS['native_gqa_s8_short_kv_component_positive'] = ('两档组件Event均有明显下降；本结果不等同端到端官方吞吐。', '保留局部正信号；不授生产、官方或完整S8准确率资格。', '两档组件Event均有明显下降；本结果不等同端到端官方吞吐。', 'ABBA组件计时及完整输出、partial、FP64抽样、Graph、side/input/RNG检查。')
+SHORT_ATTEMPTS['native_gqa_s8_short_kv_component_positive'] = ('测量N30/S8 native producer在KV16K与KV4K的组件路径。', '固定N30/S8实现，分别测试两档KV长度，没有新增长度分流。')
+BATCH_RESULTS['native_gqa_live_acc_component_negative'] = ('Event慢0.0135%，wall差极小且方向不一致；候选按Event负信号停止。', '保留负观察，不扩展到官方或模型测试。', 'Event慢0.0135%，wall差极小且方向不一致；候选按Event负信号停止。', '固定KV16K，检查数值/FP64抽样/Graph及side-effect，再做暖组件ABBA。')
+SHORT_ATTEMPTS['native_gqa_live_acc_component_negative'] = ('复核N32/S4 live-acc producer的热点组件代价。', '保持原macro1对照与live-acc候选数学和reducer。')
+BATCH_RESULTS['native_gqa_s8_shared4k_entry_crlf_failed'] = ('入口工具失败，不代表候选源码编译/数值/性能失败。', '保留失败原件，后续LF修复后独立重试。', '入口工具失败，不代表候选源码编译/数值/性能失败。', '检查owner结果与原始shell日志；没有kernel launch、数值门或计时。')
+SHORT_ATTEMPTS['native_gqa_s8_shared4k_entry_crlf_failed'] = ('尝试运行shared4k候选的CoreX compile-only入口。', '未形成编译结果；shell脚本换行符导致解析失败。')
+BATCH_RESULTS['native_gqa_s8_shared4k_compile_only_pass'] = ('编译成功、spill为0；这只是compile-only机制证据。', '保留编译产物，等待独立组件数值与性能结果。', '编译成功、spill为0；这只是compile-only机制证据。', '读取compile summary、LLVM/ASM和实际资源字段；不推断CTA occupancy。')
+SHORT_ATTEMPTS['native_gqa_s8_shared4k_compile_only_pass'] = ('验证S8 shared4k源码在实际CoreX工具链下可编译。', '候选把K/V共享stage压到4096B；无源码数值/运行改动。')
+BATCH_RESULTS['native_gqa_linear_n64_no_linear_observed'] = ('本次采集未观察到可用目标调用；不是全局不存在该调用的证明。', '保留无观察诊断；不转为性能或实现结论。', '本次采集未观察到可用目标调用；不是全局不存在该调用的证明。', '保留final/owner日志、profile与DB状态；本轮未得到目标launch证据。')
+SHORT_ATTEMPTS['native_gqa_linear_n64_no_linear_observed'] = ('用有界capture检查该profile窗口是否观察到目标N64 linear调用。', '没有改变kernel、模型或评测参数；采集driver异常退出。')
+BATCH_RESULTS['native_gqa_s8_shared4k_component_positive'] = ('两档Event与wall均正向；这是局部组件信号。', '保留组件候选观察；不声称官方收益/模型资格，不修改生产代码。', '两档Event与wall均正向；这是局部组件信号。', '同bundle包含102155 CPU build记录；组件分别对KV16K/4K执行数值、FP64、Graph、输入/RNG检查和ABBA。')
+SHORT_ATTEMPTS['native_gqa_s8_shared4k_component_positive'] = ('比较N30/S8原shared8KiB与shared4k K/V同址复用候选。', '只变共享缓冲区生命周期与V写入/读取地址；QK、softmax、PV数学与reducer保持。')
+GROUPS['native-gqa-s8'] = ('native GQA S8与shared4k组件', 'PR105原S8官方观察与本批局部组件结果分开：已有官方16K暖均相对PR105观察+1.1275%、4K−0.5039%，两档KV条件均不匹配；原105为101/105，S8分支未被batch8触发。本批N30/S8 short-KV与shared4k组件局部正向，live-acc不同候选负向，shared4k另有入口失败和CPU compile-only；这些组件不授官方、模型或新生产资格。', [])
+GROUPS['native-gqa-live-acc'] = ('native GQA live-acc组件', 'N32/S4 live-acc组件数值/FP64/Graph/副作用门通过，但Event慢0.0135%，wall微幅反向；保留负观察并停止，不扩展为模型或官方结论。', [])

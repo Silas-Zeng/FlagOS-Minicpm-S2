@@ -100,9 +100,10 @@
 - [CoreX原生Prefill Attention：Q32／Q64](methods/native-q32-transfer.md)
 - [同步原生GQA实际热点诊断](methods/native-gqa-production-hotspot.md)
 - [原生BF16 GQA：mixed S4覆盖扩展](methods/native-gqa-mixed-s4.md)
-- [native GQA S8生产接入](methods/native-gqa-s8.md)
+- [native GQA S8与shared4k组件](methods/native-gqa-s8.md)
 - [Prefill i32 offset 组件筛查](methods/prefill-i32-offset.md)
 - [Prefill base2 CPU编译筛查](methods/prefill-base2.md)
+- [native GQA live-acc组件](methods/native-gqa-live-acc.md)
 
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 
