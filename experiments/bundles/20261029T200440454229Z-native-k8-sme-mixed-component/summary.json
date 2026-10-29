@@ -1,0 +1,13 @@
+{
+  "run_id": "20261029T200440454229Z-native-k8-sme-mixed-component",
+  "status": "native_k8_sme_mixed_component_completed_screen",
+  "attempted": "验证 Mixed N30/S4 下 A/B producer 与原 reducer 的正确性及局部计时。",
+  "change": "仅切换唯一隔离的 A/B Mixed SME producer；两臂使用相同输入、真实宽16 scratch的前4段及 source/function-pinned 原 reducer。",
+  "measurement": "BI-V150；N30/S4、Q pitch 2048、KV 16384；边界与变值Q逐位核验，随后30行全16K进行8个ABBA/BAAB顺序窗口（每臂4个，每窗8次）计时（每臂4样本），计时含producer+原reducer。",
+  "conclusion": "BI-V150 N30/S4、Q pitch 2048 的 producer+原 reducer 隔离组件中，8个ABBA/BAAB顺序窗口（每臂4个，每窗8次） Event 均值 A 0.630725ms、B 0.581648ms（观察省7.7811%）；wall A 0.699091ms、B 0.646848ms（观察省7.4730%）。A/B partial、maximum、summation、reduced output逐位一致；混合边界、满16K、变Q、guard、只读及计时后复核通过。仅为组件局部观察：无独立FP64 oracle、actual writer/fullstep、Graph、官方服务或准确率；不更新基线。",
+  "retention": "保留为组件级正向计时观察，不外推服务或稳定收益；缺少FP64、actual writer/fullstep、Graph与模型准确率证据，不更新基线。",
+  "source_manifest_sha256": "b528b78c6b6154c9b28b6334897b994362f5d8a47f5935308f6d6b47e9d4d6de",
+  "source_manifest_path": "archive/native-k8-sme-mixed-20261030/component-200440/manifest.json",
+  "owner_manifest_sha256": "ba748fd2fb88797a4f04c0f4895415b70b9416c99b9046bd9c77259cd54f53bf",
+  "owner_manifest_path": "archive/native-k8-sme-mixed-20261030/component-owner-200440/manifest.json"
+}

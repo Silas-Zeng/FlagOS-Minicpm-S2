@@ -1,0 +1,44 @@
+{
+  "run": "20261029T200440454229Z-native-k8-sme-mixed-component",
+  "evidence": {
+    "owner_archive": "archive/native-k8-sme-mixed-20261030/component-owner-200440/",
+    "owner_manifest_sha256": "123797d84cdec3803fa9b628c0e48c84d7b1bf327c8b7a2b2604f0faae1f0c91",
+    "deployment_archive": "archive/native-k8-sme-mixed-20261030/component-200440/",
+    "deployment_manifest_sha256": "1b49eab44f4b605f3af700a38887fc2e4819ad2c08fe5b3a8143b5e9a2ff60d6",
+    "summary": "owner summary reports component_only=true, official_performance=false, service_qualification=false, accuracy=false; build-summary SHA and A/B library SHA match the separately reviewed actual build."
+  },
+  "scope": {
+    "device": "BI-V150",
+    "shape": "N30/S4/Q pitch 2048, KV 16384, scratch physical width 16, cache pages 34276 with 30720 active pages",
+    "reducer": "source/function-pinned original reducer; no reducer change",
+    "graph": "未测；当前Mixed service bridge声明Graph NONE",
+    "oracle": "未使用独立FP64 oracle；本轮按预期数学不变执行A/B逐位门"
+  },
+  "correctness": {
+    "mixed_boundary_and_full_length": "producer及reduced outputs的partial/maximum/summation/output均finite且A/B逐位相同，max_abs=0；full 16K有120 active segments/0 empty，两臂guard与有效前缀外区域均未被改写。",
+    "changed_q": "改变Q后重新执行A/B，四类outputs仍finite且逐位一致；输入Q、storage、lengths、table保持只读。",
+    "post_timing": "计时后full-16K outputs继续逐位相同；guards、前缀外区域与只读输入检查均通过。",
+    "artifact_note": "BF16输出以uint16原始位模式保存，元数据保留原始dtype；比较使用原张量。"
+  },
+  "timing": {
+    "paired_windows": 8,
+    "arm_samples": 4,
+    "event_ms_mean_A": 0.6307252049446106,
+    "event_ms_mean_B": 0.5816478580236435,
+    "event_saving_percent": 7.781098097273123,
+    "wall_ms_mean_A": 0.6990909168962389,
+    "wall_ms_mean_B": 0.6468479405157268,
+    "wall_saving_percent": 7.4729874352331445,
+    "timing_case": "30 rows all restored to KV length 16384; paired producer plus original reducer"
+  },
+  "lifecycle": {
+    "owner_pid": 60047,
+    "child_pid": 60049,
+    "exit_code": 0,
+    "preflight_gpu_processes": "none",
+    "postflight_gpu_processes": "none",
+    "port_9031_pre_and_post": "free",
+    "cleanup": "设备进程与端口均已清理"
+  },
+  "assessment": "本次受限组件测试数值门通过，观察到局部producer+reducer计时改善。不能外推为端到端服务、官方吞吐或模型准确率收益，也不能替代Graph、独立精度oracle或官方资格验证。"
+}

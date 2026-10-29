@@ -1,0 +1,11 @@
+{
+  "run_id": "20261029T195932238481Z-native-k8-sme-mixed-build",
+  "status": "native_k8_sme_mixed_compile_completed_cpu_only",
+  "attempted": "准备 Mixed N30/S4 的 NativeK8 SME lookahead A/B 隔离组件。",
+  "change": "A 使用 main899 原 Mixed v_overlap producer；B 使用 SME lookahead producer；分别编译唯一 namespace/SO，生产服务源码未改。",
+  "measurement": "CoreX clang22 compile-only；N30/S4、Q pitch 2048；CUDA、attention、codec、reducer 均未调用。",
+  "conclusion": "A/B 两库在 BI-V150 CoreX clang22 上 CPU compile-only 成功；未初始化 CUDA，未调用 attention、codec 或 reducer。A/B namespace 与 launcher 符号隔离，反汇编显示 B 的下一页 K SME 搬运在当前页 PV MMA 前发起并在后续消费前等待。此为编译/指令顺序证据，不是性能或模型服务成绩；保留为组件构建基线。",
+  "retention": "保留为组件编译与实际SO反汇编证据；不宣称吞吐收益、服务资格或准确率。",
+  "source_manifest_sha256": "7f801781d40ef95b8b095a27a4fbfa29ace033383fa2f43dc9f7cc1048b31ad1",
+  "source_manifest_path": "archive/native-k8-sme-mixed-20261030/build-195932/manifest.json"
+}
