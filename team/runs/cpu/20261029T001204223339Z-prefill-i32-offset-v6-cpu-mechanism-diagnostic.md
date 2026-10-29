@@ -4,7 +4,7 @@
 
 平台：CPU。本页只摘录既有登记；未记录字段不补猜。
 
-## 登记 #475 · Prefill i32 offset CPU 编译筛查
+## 登记 #475 · Prefill i32 offset 组件筛查
 
 - **尝试**：在不放宽生产身份门的前提下诊断i32 offset/Q-fragment编译机制。
 - **改动**：两臂编译与CPU proof通过，但A selected identity仍不匹配；不授GPU/生产资格。 版本、命令和源码见下方原件；[方法记录](../../methods/prefill-i32-offset.md)。

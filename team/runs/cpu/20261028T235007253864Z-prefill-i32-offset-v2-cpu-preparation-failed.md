@@ -4,7 +4,7 @@
 
 平台：CPU。本页只摘录既有登记；未记录字段不补猜。
 
-## 登记 #472 · Prefill i32 offset CPU 编译筛查
+## 登记 #472 · Prefill i32 offset 组件筛查
 
 - **尝试**：用i32相对offset候选尝试重现171100的normal编译配置并检查编译门。
 - **改动**：set_arg_attr因attrs值解码为list而停止；旧guard的BM128/BQ16/page32与目标BM256/BQ32/page16不符。 版本、命令和源码见下方原件；[方法记录](../../methods/prefill-i32-offset.md)。

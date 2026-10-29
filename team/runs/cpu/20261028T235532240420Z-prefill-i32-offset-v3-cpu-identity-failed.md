@@ -4,7 +4,7 @@
 
 平台：CPU。本页只摘录既有登记；未记录字段不补猜。
 
-## 登记 #473 · Prefill i32 offset CPU 编译筛查
+## 登记 #473 · Prefill i32 offset 组件筛查
 
 - **尝试**：修正attrs解码后重试同一CPU编译身份门。
 - **改动**：A normal identity未重现171100 selected hash，B未编译；旧guard与目标BM256/BQ32/page16不符。 版本、命令和源码见下方原件；[方法记录](../../methods/prefill-i32-offset.md)。

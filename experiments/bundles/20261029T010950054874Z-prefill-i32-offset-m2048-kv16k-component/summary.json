@@ -1,0 +1,30 @@
+{
+  "run_id": "20261029T010950054874Z-prefill-i32-offset-m2048-kv16k-component",
+  "status": "prefill_i32_component_negative",
+  "device": "Iluvatar BI-V150",
+  "scope": "私有单层attention组件，M=2048/KV=16384，BM128/BQ16/page16；非官方模型测试",
+  "source_tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+  "source_count": 814,
+  "source_command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/prefill-i32-component-v4-4bed3ad9/entry.py",
+    "--source-dir",
+    "/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028",
+    "--native-library",
+    "/workspace/experiments/minicpm-s2/official/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds-control/native/biv150_native_w8a8.so",
+    "--gqa-library",
+    "/workspace/experiments/minicpm-s2/build/native-gqa-overlap1-58a2fc96-20261028/corex_native_gqa_s2_probe.so"
+  ],
+  "source_exit_code": 0,
+  "conclusion": "i32相对offset候选在单层M2048/KV16384组件通过既定数值门，但ABBA慢于baseline：Event每调用8.347575→9.235266ms（+10.63%），wall 8.441216→9.303357ms（+10.21%）。负向停止，不接入生产。",
+  "correctness": "GO：原件终态独审确认初始/变化输入逐位、finite、采样FP64、Graph/side/input/KV/RNG/guard通过；仅单shape，FP64为采样。",
+  "timing": {
+    "event_baseline_ms": 8.347575187683105,
+    "event_candidate_ms": 9.235266208648682,
+    "wall_baseline_ms": 8.44121571875,
+    "wall_candidate_ms": 9.3033568125,
+    "event_change_percent": 10.634118303904216,
+    "wall_change_percent": 10.21347069516272
+  },
+  "limitation": "资源静态差异没有转成性能收益；单shape私有组件，不是完整attention层链、完整模型吞吐、准确率或官方资格。"
+}

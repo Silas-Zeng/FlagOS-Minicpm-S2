@@ -1433,7 +1433,7 @@ BATCH_RESULTS.update({
 # 2026-10-29 PR105 16K diagnostic and prefill i32 CPU compile attempts.
 GROUPS['prefill-i32-offset'] = (
     'Prefill i32 offset CPU 编译筛查',
-    'v2/v3在编译接口与A身份门停止，且其旧guard BM128/BQ16/page32不适用于实际BM256/BQ32/page16目标；v5正常编译后A身份仍不符。v6只做CPU机制诊断：两臂normal/Q-fragment编译与proof通过，但A生产selected identity仍不匹配。全部保留为CPU筛查，不授予生产、GPU、官方、数值或吞吐资格。', [])
+    '当前受测组件为单层M2048/KV16384、BM128/BQ16/page16的私有i32相对地址候选。四次运行中前三次分别因GQA依赖缺失、scope断言和结果记录异常而未形成A/B数值/计时结论；第四次组件数值门通过（FP64为采样），但Event慢10.63%、wall慢10.21%，按负向停止。此前CPU机制资源差异没有转成吞吐收益。只保留实验记录，不接入生产、不授予完整模型、准确率或官方资格。', [])
 CODE['prefill-i32-offset'] = []
 BATCH_RESULTS.update({
  'profile_diagnostic_completed_posthoc_fresh_fx_missing': ('PR105 16K冷态诊断完成128/128；原件source/SO/DB/collector清理通过。posthoc返回diagnostic_incomplete，fresh FX图证缺项；仅覆盖诊断，不是官方分数。', '保留单次冷态profile和原始trace；不补伪造FX证据，不当作官方成绩或稳态收益。', '诊断完成，FX证据不完整', 'BI-V150 PR105树f1658、814源文件；16K输入/1024输出/128请求；driver/owner/collector为0，posthoc为1，native GQA生产回执覆盖。'),
@@ -1448,6 +1448,21 @@ SHORT_ATTEMPTS.update({
  'prefill_i32_v3_normal_identity_mismatch': ('修正attrs解码后重试同一CPU编译身份门。', 'A normal identity未重现171100 selected hash，B未编译；旧guard与目标BM256/BQ32/page16不符。'),
  'prefill_i32_v5_normal_identity_mismatch': ('验证v5按生产模块名修正后的A normal编译身份。', 'A仍未匹配171100 selected hash；严格拒绝，无GPU或性能结论。'),
  'prefill_i32_v6_cpu_mechanism_diagnostic': ('在不放宽生产身份门的前提下诊断i32 offset/Q-fragment编译机制。', '两臂编译与CPU proof通过，但A selected identity仍不匹配；不授GPU/生产资格。'),
+})
+GROUPS['prefill-i32-offset'] = (
+    'Prefill i32 offset 组件筛查',
+    'M2048/KV16384、BM128/BQ16/page16私有单层组件。前三次入口/harness失败均未形成数值/计时结论；第四次通过单shape正确性门（FP64采样），但Event慢10.63%、wall慢10.21%，已停止。CPU资源变化不代表吞吐收益；不接入生产或官方。', [])
+BATCH_RESULTS.update({
+ 'prefill_i32_component_gqa_dependency_missing': ('入口没有传固定GQA依赖，EngineArgs初始化时报缺少native GQA库；未进入A/B、数值或计时。', '保留依赖接线失败，不称候选数值/性能失败。', '依赖入口失败，未测数值/性能', 'BI-V150私有组件入口；source tree f1658b69，原native与DB恢复。'),
+ 'prefill_i32_component_scope_assertion_failed': ('组件在scope断言停止；worker预设配置与当时selected compile scope不符，未进入A/B、数值或计时。', '保留scope/harness失败，不判候选正确性或性能。', 'scope断言失败，未测数值/性能', 'BI-V150私有单层组件；未形成A/B结果，source/native/GQA/DB恢复。'),
+ 'prefill_i32_component_result_recording_failed': ('组件完成A/B编译与Q-fragment proof后，结果记录代码访问未定义属性并退出；未形成数值/计时。', '保留记录器异常，不判候选数值或性能。', '结果记录器失败，未测数值/性能', 'BI-V150私有组件准备；A/B数值和计时未产生，环境恢复通过。'),
+ 'prefill_i32_component_negative': ('M2048/KV16384单层组件正确性门通过（FP64采样）；ABBA Event 8.347575→9.235266ms（+10.63%），wall 8.441216→9.303357ms（+10.21%）。', '保留正确性与负性能证据，停止i32候选，不接入生产或官方。', '单层数值通过、性能负向停止', 'BI-V150私有单shape attention组件；完整输出/Graph等门及ABBA通过，FP64仅采样；不代表完整模型或官方吞吐。'),
+})
+SHORT_ATTEMPTS.update({
+ 'prefill_i32_component_gqa_dependency_missing': ('尝试启动i32单层attention组件。', 'EngineArgs因未提供native GQA依赖而退出；没有A/B数值或性能结果。'),
+ 'prefill_i32_component_scope_assertion_failed': ('修复依赖接线后捕获组件scope并执行原固定scope断言。', '断言不符后停止；无A/B数值/性能结果，不据此判候选。'),
+ 'prefill_i32_component_result_recording_failed': ('以实际scope准备两臂并执行既定组件门。', '结果记录器异常；无数值/计时结果，保留原错误与恢复证据。'),
+ 'prefill_i32_component_negative': ('同ABI对比原kernel与i32相对offset kernel，单shape ABBA。', '正确性门通过（FP64采样），Event慢10.63%、wall慢10.21%；停止候选，不进生产。'),
 })
 GROUPS['shape-gemm'] = ('BI-V150特定形状GEMM', GROUPS['shape-gemm'][1] + ' 另有PR105 16K单次profile诊断完成128请求，posthoc缺fresh FX图证，非官方分数。', GROUPS['shape-gemm'][2])
 

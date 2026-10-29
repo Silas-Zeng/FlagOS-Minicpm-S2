@@ -4,7 +4,7 @@
 
 平台：CPU。本页只摘录既有登记；未记录字段不补猜。
 
-## 登记 #474 · Prefill i32 offset CPU 编译筛查
+## 登记 #474 · Prefill i32 offset 组件筛查
 
 - **尝试**：验证v5按生产模块名修正后的A normal编译身份。
 - **改动**：A仍未匹配171100 selected hash；严格拒绝，无GPU或性能结论。 版本、命令和源码见下方原件；[方法记录](../../methods/prefill-i32-offset.md)。

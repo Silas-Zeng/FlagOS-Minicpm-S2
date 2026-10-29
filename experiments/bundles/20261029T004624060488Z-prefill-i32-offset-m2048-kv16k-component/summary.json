@@ -1,0 +1,21 @@
+{
+  "run_id": "20261029T004624060488Z-prefill-i32-offset-m2048-kv16k-component",
+  "status": "prefill_i32_component_scope_assertion_failed",
+  "device": "Iluvatar BI-V150",
+  "scope": "私有单层attention组件，M=2048/KV=16384，BM128/BQ16/page16；非官方模型测试",
+  "source_tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+  "source_count": 814,
+  "source_command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/prefill-i32-component-v2-81b791ec/entry.py",
+    "--source-dir",
+    "/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028",
+    "--native-library",
+    "/workspace/experiments/minicpm-s2/official/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds-control/native/biv150_native_w8a8.so",
+    "--gqa-library",
+    "/workspace/experiments/minicpm-s2/build/native-gqa-overlap1-58a2fc96-20261028/corex_native_gqa_s2_probe.so"
+  ],
+  "source_exit_code": 1,
+  "conclusion": "i32组件在实际调用scope断言处停止；当时worker预设BM256/BQ32与selected配置不符，未进入A/B、数值或计时。保留为scope/harness失败，不判候选数值。",
+  "limitation": "没有有效A/B数值或计时；本次harness/依赖问题不得记作候选数值失败或性能负结果。"
+}

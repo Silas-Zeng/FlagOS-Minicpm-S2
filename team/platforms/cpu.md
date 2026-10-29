@@ -6,4 +6,4 @@
 
 - [SQLite 反射及 SQL+C2/C3 组合](../methods/sql.md)
 - [BI-V150特定形状GEMM](../methods/shape-gemm.md)
-- [Prefill i32 offset CPU 编译筛查](../methods/prefill-i32-offset.md)
+- [Prefill i32 offset 组件筛查](../methods/prefill-i32-offset.md)
