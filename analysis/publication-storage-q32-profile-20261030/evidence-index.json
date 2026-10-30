@@ -1,0 +1,1480 @@
+{
+  "registry_rows": 532,
+  "unique_runs": 529,
+  "base_registry_sha256": "5a2b78f2e8959f91124f46ece3545f7d3b3bb51b72705c05a9a57f8a41435000",
+  "registry_sha256": "69317f1a2b6c1dcd3b4d1b3f6b4f7e63e72b53537d238b520ce15cdfac393dad",
+  "runs": [
+    {
+      "run_id": "20261029T220427329020Z-native-k8-storage-snapshot",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-29T22:04:27.192847+00:00",
+      "profile_id": "native-k8-storage-snapshot",
+      "phase": "helper_cpu_metadata_abba",
+      "device": "",
+      "vllm_commit": "",
+      "flaggems_commit": "",
+      "input_len": "",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "helper_cpu_correctness_and_local_benchmark_pass",
+      "artifacts": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot",
+      "conclusion": "真实PyTorch CPU Tensor边界/别名/set_新调用快照检查通过；局部ABBA/BAAB中位数121377.996ns→80747.798ns/次（约33.47%）；不代表完整Adapter或服务收益。"
+    },
+    {
+      "run_id": "20261029T220702833593Z-mixed-a-16k-profile",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-29T22:07:02.833593+00:00",
+      "profile_id": "native-k8-sme-mixed-profile",
+      "phase": "warm_profile_entry_failed",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce77470b0b539aebc108fd122f668c2d5894d",
+      "flaggems_commit": "",
+      "input_len": "16384",
+      "output_len": "1024",
+      "concurrency": "64",
+      "num_prompts": "128",
+      "profiler": "true",
+      "status": "diagnostic_entry_failed_prebenchmark",
+      "artifacts": "experiments/bundles/20261029T220702833593Z-mixed-a-16k-profile",
+      "conclusion": "benchmark前旧S2/S4激活门误拒绝K-only encoded路线；profile未完成，无性能样本；不是模型/算子正确性失败。"
+    },
+    {
+      "run_id": "20261029T222344850512Z-mixed-a-16k-profile",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-29T22:23:44.850512+00:00",
+      "profile_id": "native-k8-sme-mixed-profile",
+      "phase": "warm_profile_diagnostic",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce77470b0b539aebc108fd122f668c2d5894d",
+      "flaggems_commit": "",
+      "input_len": "16384",
+      "output_len": "1024",
+      "concurrency": "64",
+      "num_prompts": "128",
+      "profiler": "true",
+      "status": "profile_diagnostic_posthoc_incomplete",
+      "artifacts": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile",
+      "conclusion": "同参非profile预热后完成128请求暖态诊断；Q32非Graph GPU事件201.460s。profile/collector/analyzer成功，旧posthoc不完整；非官方成绩、不更新基线。"
+    },
+    {
+      "run_id": "20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-29T22:46:53.126532+00:00",
+      "profile_id": "native-k8-storage-snapshot",
+      "phase": "official_16k_four_rounds",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce77470b0b539aebc108fd122f668c2d5894d",
+      "flaggems_commit": "",
+      "input_len": "16384",
+      "output_len": "1024",
+      "concurrency": "64",
+      "num_prompts": "128",
+      "profiler": "false",
+      "status": "completed_four_rounds_observed_small_delta",
+      "artifacts": "experiments/bundles/storage-B-224653",
+      "conclusion": "四轮3923.23/4555.17/4551.99/4550.26，弃首轮均值4552.473333 tok/s；相对同起始DB的A 4548.78观察+0.0812%。KV页相同，末态调优DB不同；仅小幅观察，不宣称稳定因果收益，不升级基线。"
+    },
+    {
+      "run_id": "20261029T233910926379Z-q32-causal-interior-component",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-29T23:39:10.926379+00:00",
+      "profile_id": "q32-causal-interior",
+      "phase": "compile_entry_identity_rejected",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce77470b0b539aebc108fd122f668c2d5894d",
+      "flaggems_commit": "",
+      "input_len": "",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "failed_closed_before_compile",
+      "artifacts": "experiments/bundles/q32-entry-233910",
+      "conclusion": "入口helper SHA与冻结身份不匹配，benchmark/编译前停止，无性能样本；保留失败记录。"
+    },
+    {
+      "run_id": "20261029T234221231370Z-q32-causal-interior-component",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-29T23:42:21.231370+00:00",
+      "profile_id": "q32-causal-interior",
+      "phase": "component_correctness_gate",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce77470b0b539aebc108fd122f668c2d5894d",
+      "flaggems_commit": "",
+      "input_len": "",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "stopped_bitwise_correctness_failure",
+      "artifacts": "experiments/bundles/q32-component-234221",
+      "conclusion": "step1048的A/B逐位不等，finite/readonly/guard通过；未计时，候选停止且不修救。保留源码和编译证据，约41MB失败张量留在原件库。"
+    }
+  ],
+  "uploaded_raw_objects": [
+    {
+      "path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/20261029T220427329020Z-receipt.json",
+      "bytes": 1050,
+      "sha256": "c924469cba2b26473114eff632a30b10e5195ed0efd1fe4e0d0fb83e05948294",
+      "git_sha": "1682e0510c50a08010389c9c83555a3de1f9704d"
+    },
+    {
+      "path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/20261029T220427329020Z-cpu-check.log",
+      "bytes": 4618,
+      "sha256": "945b791ce8e4e6642c566c62d9402994e8538b05ad2b7c6fcf16f2d50b0d2e27",
+      "git_sha": "78af8086596370577666d51a682c3e2d1e491700"
+    },
+    {
+      "path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/20261029T220427329020Z-transport.log",
+      "bytes": 7162,
+      "sha256": "5615626afeabd7b6d1be583bd78be909443976fd8e26045933446c634ca3e14e",
+      "git_sha": "8f90a1bb81128a6d053e9d1918314f96b59cd6ee"
+    },
+    {
+      "path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/independent-review.json",
+      "bytes": 2103,
+      "sha256": "547fe185d8acc058e9c315a48996770ccf868b4015513e1c726db500497975f5",
+      "git_sha": "da6b2fc4913247705f79f199a2b682e6e490c4d8"
+    },
+    {
+      "path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/root-independent-review.json",
+      "bytes": 3477,
+      "sha256": "5f2d84d2c66625674c76ed17b496d672736b4a3e552d08ae8b1c9fec6ceab396",
+      "git_sha": "c83fe2c62d3136bc0a579d35809d92ccf58b537a"
+    },
+    {
+      "path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/check_real_torch_cpu.py",
+      "bytes": 8467,
+      "sha256": "3187980397a04590cdeb554afd31786a7aa0f375eb2288ad0a99521e6b3a695e",
+      "git_sha": "28690d0ce2921ae1ba98b8e24060bacb346ba40d"
+    },
+    {
+      "path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/prepare_candidate.py",
+      "bytes": 6349,
+      "sha256": "e37ba49a50e16490843cd5e76a63beec377662ceca7f312f6ef4b2f05a2ded08",
+      "git_sha": "654614b5deda5fa92f758cc732e734cfebfe3a59"
+    },
+    {
+      "path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/candidate.patch",
+      "bytes": 5852,
+      "sha256": "b56f65130bb528350f98bd1cf97dbc7ff3eb30c0b6282d054d5154e941b866c0",
+      "git_sha": "612c55226bea29bd27882e5a4d7b31747ae8d277"
+    },
+    {
+      "path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/source-receipt.json",
+      "bytes": 887,
+      "sha256": "14b737932e84a4d584fd54b5f5820d3612e803c4ceec7899da2307f504f1e98e",
+      "git_sha": "b2ce59dc11d7cae86cbb7a968f398dc7bdd40028"
+    },
+    {
+      "path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/README.md",
+      "bytes": 4006,
+      "sha256": "f9200a70b500dc10dd90a333a3b4aff871eb79524d3473684e81f9433c49177b",
+      "git_sha": "55979ee116bdc907e0913bba74973f17b91b5eca"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0000.part",
+      "bytes": 262144,
+      "sha256": "9fc8bc278248255665491483343354a5a031e30b0ac04f3f503649f2b784fff1",
+      "git_sha": "390d84db8ec60773ec73c352bd60be2352cf105c"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0001.part",
+      "bytes": 262144,
+      "sha256": "d1bd2d4d8db7a3962655b4f9e758e5d440bc1b1b400b0c9ae68a03062338f191",
+      "git_sha": "d8d3299738b99ca82e47116b488cc706510b633d"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0002.part",
+      "bytes": 262144,
+      "sha256": "8434539724f388b3ad71b1771e9a9dbffed9f6f9b16748a72c24acc6c1d55c1e",
+      "git_sha": "67744dee17b705aa7338f56474976e098c913840"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0003.part",
+      "bytes": 262144,
+      "sha256": "679045a7cb683662651b626786b8558768d445cc2bf32a2eeca9692935ea8d49",
+      "git_sha": "7fa487b32d9b398e8840e0d764f719c6ae8bf8cd"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0004.part",
+      "bytes": 262144,
+      "sha256": "ddbb2a7977c333c6defb6826978b3bd98e7af893bea715b0e44bbab432d5a46e",
+      "git_sha": "3ce461475d54e891c3671d0184a4299d31d6a319"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0005.part",
+      "bytes": 262144,
+      "sha256": "4c533faddabcb4d8bbf5df622529a07ea43716876e6db80f408b992cd5a114df",
+      "git_sha": "062464e17e89727d83ac29c7a173e85eeab5769b"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0006.part",
+      "bytes": 262144,
+      "sha256": "9f858bc9c58a5d527d56952f9e0e6638dce8a91562269d4ba0b006d4d6199bc0",
+      "git_sha": "189efb2859a796c2e097c9d71def3622deccc2b2"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0007.part",
+      "bytes": 262144,
+      "sha256": "4d64b689bf8dee200b323d770710ccca108c3c53cd162b472cac6541976c009a",
+      "git_sha": "36dba9d064f2cd7af32659b8665afc8b65c96481"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0008.part",
+      "bytes": 262144,
+      "sha256": "b21df4deb1a1c61998ebdeedfdc58563398dc2e958e30dfc05a3e372ca30f8e4",
+      "git_sha": "7d97801e8d73993c919a4b5efe4cb3bca55f894a"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0009.part",
+      "bytes": 262144,
+      "sha256": "26ecde0b43692d2f685198f4001a9a940daf0aed780a92746087abeff0cc4be0",
+      "git_sha": "324f2f8437d53aa42b0279bfe838d18c84dc4741"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0010.part",
+      "bytes": 262144,
+      "sha256": "87246d3313313ec38ef31456487d14f8f681e923928a7654409529548558ed7e",
+      "git_sha": "579bd3e77b7796db2d7c7b2719e48905720c03f8"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0011.part",
+      "bytes": 262144,
+      "sha256": "f544f446b9af834d2a8e7919178ef9d9975af7e85d3beb3a0a8f04a9ddb197dc",
+      "git_sha": "cd8356798ceef64abacd4f94bfb330001d48e4dc"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0012.part",
+      "bytes": 262144,
+      "sha256": "a1e676ed1cf27ca9d2d958c7e6c131e4d5f1e764a3772c7fc260cbd36de28643",
+      "git_sha": "3a0b4b77e7b7967881231b4a7df796cab05e92a9"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0013.part",
+      "bytes": 262144,
+      "sha256": "33c1942a40465c17c51f2b6dac61415f306ada2d663a4dbe0c8c349768d386f6",
+      "git_sha": "73f459fc88b4720a37454fff1a9d00308179c866"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0014.part",
+      "bytes": 262144,
+      "sha256": "302265123a306cdcf30c8a7fec34e3405e2bebc4016ab119e5613853873e9297",
+      "git_sha": "c85a42fc4b186046b63689d467d42dff55425780"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0015.part",
+      "bytes": 262144,
+      "sha256": "05240bafa45b9ebf5eb818a5ddccc8be53198a1395aa36d184ceb1ece7c9de60",
+      "git_sha": "7f5f63cccada59bbac6ac9c4c4b7207fa375b784"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0016.part",
+      "bytes": 262144,
+      "sha256": "c210deb788aa5b68d5f495e1b9d3f493e2a127c8d4c36c1c99562d21950fb349",
+      "git_sha": "0456a775e08c570abceb4289c44a171574acf3b0"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0017.part",
+      "bytes": 262144,
+      "sha256": "1868ced22edc295e6f09c432354129f998f2958d334dc2fa14cb1367acb3e6a4",
+      "git_sha": "dbb20ba2b7c3e2bd559e3d52c5f32b2838e2854c"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0018.part",
+      "bytes": 262144,
+      "sha256": "458eb059428dc96f5bc78acc0e26378b6f1358820b38ce663bb07f6d043761ec",
+      "git_sha": "9fd2174f4553ec9cf53fef4142217117e862a473"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0019.part",
+      "bytes": 262144,
+      "sha256": "25f8cbd6b484e11d4d892adb4ec7670f0fa5c85b441d64b4395038e453e2f7ec",
+      "git_sha": "c85e498c16bf9362124bdb23dd9500ca767c0206"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0020.part",
+      "bytes": 262144,
+      "sha256": "60cdcd720ea93d9ded046f37e2479f4c6b0ec3b5c749f4511737b3f6d8ec1573",
+      "git_sha": "d862a4d87f551010378a3b43785176521b698c2b"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0021.part",
+      "bytes": 262144,
+      "sha256": "24c86263147cd1d65b056fd73b83f6c2cbaa9da4d08cbe0ce4096a83e6b2d141",
+      "git_sha": "bd518690868ca94af6b7061263c145b6f79596da"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0022.part",
+      "bytes": 262144,
+      "sha256": "af508a98fdfcc4ef860ce98f984c241f815706243950438769624287a6ffc9a3",
+      "git_sha": "d96d305965374efbb793e11053402adc4241e126"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0023.part",
+      "bytes": 262144,
+      "sha256": "38d472f7610c064cd65c82111cc5698ce50d97c34740f3d8087b6111f8567368",
+      "git_sha": "cd94530d6893cfea112f9693a35453b376c31324"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0024.part",
+      "bytes": 262144,
+      "sha256": "412b5ff5fa0037f97283d3bb9a29f8e9770f2966294068f4f4cd04884c3e67cb",
+      "git_sha": "58399728cf7030c38115ea1885f67b9009d8dcdd"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0025.part",
+      "bytes": 262144,
+      "sha256": "7693f97a107060fbe738bb571c6d74bba817831e282ef36acabc065d1310598c",
+      "git_sha": "50859a91dab4be40b5e601aab710d9d87f15003e"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0026.part",
+      "bytes": 262144,
+      "sha256": "9504579b91438680fbdfa5df1f01a8815858fc932a3116bbd55d0927791cd621",
+      "git_sha": "65413cbad4bd443be0945349230c67544a6e4260"
+    },
+    {
+      "path": "experiments/raw-blobs/b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377/0027.part",
+      "bytes": 259438,
+      "sha256": "82f89253fbbbc9c370e52d29f2496115397627bcb1f7d94e3c7f74351f90ba4e",
+      "git_sha": "b816af0d2b0ea2a9809879a3b6e29a1e67f6c82f"
+    },
+    {
+      "path": "experiments/bundles/20261029T220702833593Z-mixed-a-16k-profile/raw-recovery.tar.gz.storage.json",
+      "bytes": 6799,
+      "sha256": "4fd7af0492edefd75d5bf42aecdcdc93bc0efdbdc75a56876b34c09c3dfb82cb",
+      "git_sha": "563799afad484caf29cc1875b78c034d974caabd"
+    },
+    {
+      "path": "tmp/native-k8-sme-mixed-20261030/profile-deploy/220702-recovered.json",
+      "bytes": 396,
+      "sha256": "c65cba29b0f02dec585eea65bbe13c7899d32da0c379c1d7d2232011c8743edc",
+      "git_sha": "82f54ed797d332498df904b1b9a364894800db40"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/manifest.json",
+      "bytes": 411693,
+      "sha256": "42a22cd427531e508a60b471f357e8e36985490951fc03a49ce84a1321c68268",
+      "git_sha": "6a670dbb5a08053987ac00cf1640980492246444"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/server.log",
+      "bytes": 339479,
+      "sha256": "ee30c4fb500b081728bde720e4786dc1d591c42f911f544507a5d2daf881dd47",
+      "git_sha": "daf2738770868e9720fb8cd589b0b1ed0ee27450"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/benchmark-commands.jsonl",
+      "bytes": 2498,
+      "sha256": "2fbd51f3a014b3ff54ad1d13caa40eda071f9e6043f2367e84c109ecae5cd2f0",
+      "git_sha": "fb70778052b4683bccdbc941c0e8df29177db7e7"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/benchmark-env.json",
+      "bytes": 1112,
+      "sha256": "452c13b48cb8a9ea92f085ce548fec660fffe6fc6fa8fc93161c0fcb01278d91",
+      "git_sha": "44ef1caf958a66a6459db95f5d4aa5561f7cf3bf"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/service-env.json",
+      "bytes": 2533,
+      "sha256": "7cca7d1f4c0b88484b6812f27aa53f30cd0675cd9ee0fbb8c2d83ea8ab02f749",
+      "git_sha": "0a2713ed0a4e2e0ee49940e6697d617f4befcc75"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/service-owner.json",
+      "bytes": 499,
+      "sha256": "2c21ae3501e9e0b15c66b20e3efcb616713637a14bd715b3e71a13ac5ed4d2ae",
+      "git_sha": "3da43977fa3dbaf3ddb113b5052ab42b391b4dda"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/warmups.json",
+      "bytes": 1272,
+      "sha256": "f68bb4c82d3dd61442b2bac2d7a4787ad8bf101d4cb086b9a3345d7a8faa6180",
+      "git_sha": "10fa5ecf64c957b81dac24e42e71dc873ab9874d"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/diagnostic_results.json",
+      "bytes": 1476,
+      "sha256": "dcff8676b1ba39446f3e839b675f137426424dd3f37dde96f08d7c6a6e5ca611",
+      "git_sha": "963ee70f2b3f84c36a8e87f0e304f372935c579c"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/native-konly-prebenchmark.json",
+      "bytes": 371734,
+      "sha256": "6ab9024cb88f72d58fc6c1023befa5882a8af14f7c79d08769e6682637c9c726",
+      "git_sha": "7424bb096e46d14ee850b118e1715d2e301bb230"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/actual/posthoc.json",
+      "bytes": 23636,
+      "sha256": "5b137446bb462524a5563fe290adb6ab3b94c64ccdb38025849701fb3f612761",
+      "git_sha": "0d4904af83c9e3acc88ca98fa7737d30dd308afe"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/actual/prefill-activation.json",
+      "bytes": 17719,
+      "sha256": "61b8e77f5b45535d4b97d6f087ed0a63fe99a3a1e7d2bc5f7dd42c2193edb74e",
+      "git_sha": "8b3224b562378866849b33df56e1955c5e0523c9"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/analysis/window-1/summary.json",
+      "bytes": 3605,
+      "sha256": "5d3995c13909dc5ca9f6f1cab7d0a4629b6c89fe8ce2fb2c6b3b50a73951c485",
+      "git_sha": "39325b36dcd3c9b78b32db9081baae06210eb7e5"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/analysis/window-1/non_graph_kernel_hotspots.json",
+      "bytes": 11475,
+      "sha256": "ad0078e494e9e58386587633454e462c0196e464759ca3d48dbf9a65cef9ae40",
+      "git_sha": "b80dc306fe45940fd9e25e3f59756f50d616ee8c"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/analysis/window-1/stage-correlation.json",
+      "bytes": 471958,
+      "sha256": "ef31c15170bc23357d96441a4590f4b81b984b2412f647f94fc9835fdf5bd090",
+      "git_sha": "17d6cfe51c34d33f17ac24ba1d7dea25e595aae3"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/kernel_cjj_konly_q32.source",
+      "bytes": 125620,
+      "sha256": "bd1c8deac61e41053580f34f3146434d6a1a4a468054aa596e0fd341ed1353ad",
+      "git_sha": "8e82a8b274928753b4d7c16ab173b6add354f60d"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/kernel_cjj_konly_q32.json",
+      "bytes": 1091,
+      "sha256": "352b5dff8a203493859399b11b800a0333f2d320d70d98e26ab1e8dab93d0383",
+      "git_sha": "6db0e7613eee8966dacb4e2a38083351364d88f2"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/kernel_cjj_konly_q32.ttgir",
+      "bytes": 90058,
+      "sha256": "31ad63afce68b333d5798bd90f15c54aca01a56f692fd3efe90acf45ed4157eb",
+      "git_sha": "89a211610528f3f0c4ce33a9aed0f684b5d91066"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/kernel_cjj_konly_q32.llir",
+      "bytes": 217392,
+      "sha256": "3e6def876e5248114cf27fc3d7e81d2cdfe7cb60597071da99c211cf6fb6c923",
+      "git_sha": "67d1b62658ab8a5ff159221a7f6a9df3b0d391c1"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/kernel_cjj_konly_q32.asm",
+      "bytes": 304325,
+      "sha256": "359eccb0f476e53bab32a67a3f13df997e8a0d9e91587c50289562b62f2785f4",
+      "git_sha": "118197066e22e129e4ad044fdcacd99c8f37a0a2"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/__grp__kernel_cjj_konly_q32.json",
+      "bytes": 1493,
+      "sha256": "3cd5c2ebb2d8d826e690f54d8737fd6262288ff88906c9fa95070a25094c06b1",
+      "git_sha": "4218bc2fc6e027bc2e0121aec6049f6cf2d2e9ca"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/compile-summary.json",
+      "bytes": 6318,
+      "sha256": "de531bdbfdad2d98a8e16d3efc7c880aad1f415a24bee10cfffbb588a41e68db",
+      "git_sha": "4781ad2c6999cd9ccfdfe19da240b323ebbf968b"
+    },
+    {
+      "path": "tmp/native-k8-sme-mixed-20261030/profile/warm-profile-interpretation-222344.json",
+      "bytes": 5776,
+      "sha256": "0190c3558e0f2e0d795f2ea7a2ac25e7a2ee1ce4bb4d7a3c1a5554f4fd2aa47b",
+      "git_sha": "5cce778ebfc466fe0c364a8bd0c5306b78e32f9e"
+    },
+    {
+      "path": "tmp/native-k8-sme-mixed-20261030/profile/hotspot-followups-222344.md",
+      "bytes": 4955,
+      "sha256": "cd744d7bbae134140cce4c793ac11c9868775472179abb3e23960a74f89a75d7",
+      "git_sha": "85f167f616d3ba9f5c6149e7ca225d3ad4e0dd10"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/mixed-scheduler-shapes.json",
+      "bytes": 3612,
+      "sha256": "8b4a64a20737d7e3ba19f852799832bfffd19e02e18d1135e658cc73f3dc7064",
+      "git_sha": "bdf7fe97c42fe991a1e7e8300c05516e30d3c879"
+    },
+    {
+      "path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/run-note.md",
+      "bytes": 262,
+      "sha256": "0ae661990b593ed83d4646c8d361fc8a728d0258affe5dad60dd72ae18de1a27",
+      "git_sha": "f07fa7bd51edd98d8c93a6fb024d661745a3462e"
+    },
+    {
+      "path": "experiments/bundles/20261029T220702833593Z-mixed-a-16k-profile/run-note.md",
+      "bytes": 197,
+      "sha256": "6fb8693eb551d0f84ccac65cb5e28ca818f2d59b0afb083aaa89911011cdee82",
+      "git_sha": "89a93196fb82f5c22f2e2d9a2189967a21951935"
+    },
+    {
+      "path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/run-note.md",
+      "bytes": 349,
+      "sha256": "4b450bc2c62e0174bb1a677000f10eb23df99daa72690932f1022e82a2d16c50",
+      "git_sha": "812e08211fddd6b0ccac0f150f17e171d8125228"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0000.bin",
+      "bytes": 262144,
+      "sha256": "3378fe8102913fd2c29137a38dac4f546e7f58c6fa0cbf56eee739b8b426785b",
+      "git_sha": "674918df194aacf0b84952e2a55c2b73264be19b"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0001.bin",
+      "bytes": 262144,
+      "sha256": "c8a7c996a5bb60d5790a20f85a537582c3e287a3ab893189257cf02d7fba9263",
+      "git_sha": "110a509455d60dd00916c1100bbb675d6e275695"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0002.bin",
+      "bytes": 262144,
+      "sha256": "3d32c7593b057a8cd4a69fee767bc3f99b3d0a651bae6140238ed5d915e7b472",
+      "git_sha": "42bfdbca636a0e09743232a9b9e300768af69065"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0003.bin",
+      "bytes": 262144,
+      "sha256": "cfbd7d969a089d321b5bc78c8ea5343a0daf1db98f03070c58cab2cb5ecc2a5d",
+      "git_sha": "d1a06ada4ef6ecf7df52b977e7ce0ad33757151f"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0004.bin",
+      "bytes": 262144,
+      "sha256": "6f0c8b305cf696529216eefe5b3dad4303925f3123b5eabcb4ada584a42587c4",
+      "git_sha": "3bd036c02e1d2c71cffcba03b201065d78f92186"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0005.bin",
+      "bytes": 262144,
+      "sha256": "041759c6221d8e60a763af9dd1283b5791b781832fc77d05b7b911e06e31825c",
+      "git_sha": "19c6c79e0a19386d2f11bc9a51f727025191cb43"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0006.bin",
+      "bytes": 262144,
+      "sha256": "a40cd1c7cf9a6013370f71d7a8d52cc208775cab8276579b63ee451e81b7a28c",
+      "git_sha": "d54dc0612145b18497402b2e903012995667244d"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0007.bin",
+      "bytes": 262144,
+      "sha256": "718721ebade7802200b617b979193b3bdf3261d8b3f6a71ecab240f823ef15a5",
+      "git_sha": "69b92aadb4b0bbfbbdcc4d44dcb7ea13d318fe0b"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0008.bin",
+      "bytes": 262144,
+      "sha256": "d4f1fb2746b367457d0cc67f2668d59ed5b449dfae8ffd97edf03f8c9465db67",
+      "git_sha": "96a78d4b31d738efa80cdd9a85b04de36f6c3b19"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0009.bin",
+      "bytes": 262144,
+      "sha256": "667ccf84b9674bbd7dee9a6e094b1ace5e2f7de5be65993e8bf6e78617759609",
+      "git_sha": "17d2f92eae823be1b7fd161ad5eecae3a087cd7e"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0010.bin",
+      "bytes": 262144,
+      "sha256": "a30257ec9ef4197a285b89a722ef61f85a40655fffdbba4985cccbb8f856a772",
+      "git_sha": "6f983a1cb5477ba1fae3180f107ea1d3393cfffb"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0011.bin",
+      "bytes": 262144,
+      "sha256": "d3c0a194cc6c46c21fde7179e2193fc4782d738b3307513bf9e621705d8cd2f2",
+      "git_sha": "9012fc39f5084f6eed7647f90463c36d6b0dbdc2"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0012.bin",
+      "bytes": 262144,
+      "sha256": "da18f70b10a9c18f09f75fda65c111746921e52d951ebb107df704378645b447",
+      "git_sha": "f8d26e598803b2c48e8bada6536b31086ce86c6c"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0013.bin",
+      "bytes": 262144,
+      "sha256": "976504c715aa1aae9532924176f23f1a47a1703001c8f0af41ae80012b1e58c7",
+      "git_sha": "8a3bdd5ae3ad6c418defad7a064cc50bb4431604"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0014.bin",
+      "bytes": 158263,
+      "sha256": "26f127ecd49cc132bafc9cc500cc9f967787f1260e26994597f9313017cd8564",
+      "git_sha": "46849f7c8ecefd728f58198938f69a35f4c9b0b4"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/raw-recovery.json",
+      "bytes": 1425,
+      "sha256": "fe9c0b3ac5976a00137f2567b61f0fbf41f9466ded134539478cbb2ba8a37dc1",
+      "git_sha": "2bd70919795d6b6a4c7a847d8e1d19f9fdcec8c4"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/official/result.json",
+      "bytes": 1725,
+      "sha256": "b6f588b892344b0ee87aa1ab7a6da931ebbd230ce42b894b52e8419b1824c6db",
+      "git_sha": "fbb937fb5c8f96a51af0d65c216b90d67c31ae24"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/official/native-k8-sme-mixed-owner-result.json",
+      "bytes": 6439,
+      "sha256": "e6eebfea90ea7ae8b1866f7f1948ebea02a66eca8f69279e0d30c5e98691003c",
+      "git_sha": "2e70cbb8f79c4a028444e185dc94703b57268f3b"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/official/mixed-service-install-evidence.json",
+      "bytes": 2119,
+      "sha256": "e444bc8b8f399088310d8c64eec7318eba053c457f51cbd14a3fdbd911a5071e",
+      "git_sha": "3f73a70fe60b138ff160243fcb62e635c72b6ed4"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/official/server.log",
+      "bytes": 384368,
+      "sha256": "cf52d39b350b2302350ad934455955c4f9144b5e192f349c0ab4c4d3da963fda",
+      "git_sha": "e8f5493a4000549492a7b10e8aa78aa919166785"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/official/benchmark.log",
+      "bytes": 60556,
+      "sha256": "c857bd35c0dc5a9f88a98cbfd38ed0ad8e626933151da600d671e9fb695f5a20",
+      "git_sha": "db16b4eb85ca67f9dbfb18f2a8c53a169ad3b3d8"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/official/raw-runs.csv",
+      "bytes": 932,
+      "sha256": "fdda62f1cedfc00fcc8e64722b1896d111f6dd7727bdf469512dd33806bcd923",
+      "git_sha": "cdec759a4193b840a22f40449b27343318e75612"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/official/summary.csv",
+      "bytes": 419,
+      "sha256": "28cd451ff0278499814f65d9b153baae654e461ad5e6c12fae234f6d770a0895",
+      "git_sha": "4f1d220c142540702a02818c0176343b0fd6e716"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/official/manifest.json",
+      "bytes": 35497,
+      "sha256": "eccb07aa1b74e20506b6f75f9fe1d13d20d9d7e8b6ded3e04cb41d311b9326f3",
+      "git_sha": "c51e8ece2b8e3e6efa68371ef7c96f50cdee91b1"
+    },
+    {
+      "path": "experiments/bundles/storage-B-224653/storage-B-terminal-review.json",
+      "bytes": 1153,
+      "sha256": "22eaf557e30b461fce21dd9b85961ebf0f427c9275c69ed422276d73c290c40c",
+      "git_sha": "d484393b29ac7e744437282b4ebf7b7d4d57998c"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/run/summary.json",
+      "bytes": 882,
+      "sha256": "e65b3097433ae2d4135060467a5820ba6d9735e024421681a9b5b612e8e68ead",
+      "git_sha": "65173e64c3d4bd00c7b05201a6e491ff9e377fd8"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/run/state.json",
+      "bytes": 1472,
+      "sha256": "f9f26ef49c0e7632f39c34c09084ab38c72c3184cf9665009896c1a0e6e5f914",
+      "git_sha": "d93b04fdd7dbca93064332b5d3c74eb6d13991c6"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/run/worker.log",
+      "bytes": 907,
+      "sha256": "62ce8a4a83ee453e8e5bd4fdf7e654fbc7d965227a51f890641fa0b9acc5efcc",
+      "git_sha": "5a91fd95bfa0ab005802ee911d6cf1d721c74f29"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/run/environment.json",
+      "bytes": 409,
+      "sha256": "5e8c74be5210d2ddd8b13c4c06f24fd3edcc0a6ba92a4e65980ff9585fbd45d2",
+      "git_sha": "61f646d9d6f7c18e2100f47525be59783c86e5e3"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/run/preflight-ixsmi.txt",
+      "bytes": 1284,
+      "sha256": "5926f674b5069c18f4d6997490e08b13a3225817a562d55c83abc0da96752262",
+      "git_sha": "b9bc85e0161d85dee2aabb80d6ac34c9295af907"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/run/postflight-ixsmi.txt",
+      "bytes": 1284,
+      "sha256": "f159ddf42446617d4e46869c933ac35e65d689cda0a1813ec2409c140f41eb0c",
+      "git_sha": "20ddd1458fa9e7c92145a91fa546388d8460ef9b"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/source/candidate.py",
+      "bytes": 27752,
+      "sha256": "f4534a6fcc77b68b8d17e5dfb8ddad412a17293c8f6f4e627297141983f6d1a5",
+      "git_sha": "bbcc1595ab37144c28634c905d34c5e18fe1603f"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/source/baseline.py",
+      "bytes": 21372,
+      "sha256": "ac0ee4caaeed8dfd211a57cd4d3d130d8437a2a0129c1c915e1b19ed4fc66b4b",
+      "git_sha": "9a80bd9555c171ad3cb0167db57bbd548428e425"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/source/mixed-scheduler-shapes.json",
+      "bytes": 3612,
+      "sha256": "8b4a64a20737d7e3ba19f852799832bfffd19e02e18d1135e658cc73f3dc7064",
+      "git_sha": "bdf7fe97c42fe991a1e7e8300c05516e30d3c879"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/source/writer.py",
+      "bytes": 2531,
+      "sha256": "16afc46585f950f4b9c06c831b0e0dbf5515ee941a476a9ed300c492ebf947f9",
+      "git_sha": "3aa5ac71f4b3097bb9b22f78e7aec5a0003c428e"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/source/independent-review.json",
+      "bytes": 2361,
+      "sha256": "44178df7a43d7b53b8cb0c6a34843a234d9f5eeb372a331a171960a33290f9ba",
+      "git_sha": "98fec6fdf3b4a66b9bccce87e924d023bc865948"
+    },
+    {
+      "path": "experiments/bundles/q32-entry-233910/small-recovery.tar.gz",
+      "bytes": 21538,
+      "sha256": "e5c11adcbea5b9728793af7ea7216852fe5143f283ba0885a22528383951f73e",
+      "git_sha": "e707d26fc941033365c09500ff72e94dfd112727"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/run/summary.json",
+      "bytes": 11977,
+      "sha256": "5bc52b9452f9043b8b012c1f1e659b6d43e0a02022c8d265998617e5019c0864",
+      "git_sha": "eff3ca57de89d41ac48b0fe8f24153cf1eb19f2e"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/run/state.json",
+      "bytes": 1472,
+      "sha256": "1e40604e1acea70a85a773c57763246c51e05c1eebab16978c56d1a7baec9fd5",
+      "git_sha": "0d49b4bb0e893a5086e48ab54868b5e37b37a893"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/run/worker.log",
+      "bytes": 899,
+      "sha256": "cd605e214706a48867eff12ac061b98dde4fe2920670401174a7641998789079",
+      "git_sha": "8c304736cae824644f95d2238384f336b0fc3c32"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/run/environment.json",
+      "bytes": 409,
+      "sha256": "0a0dcfa955e34f7790c756d2fdd0707da82570be0f9ad3bb7cc35de5f7bf5aab",
+      "git_sha": "2fca7388330097053b2a1e4f40123a8eca75f98c"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/run/preflight-ixsmi.txt",
+      "bytes": 1284,
+      "sha256": "60d0a1933a40bb5afa1894a0902ef9aa21c4a7a89b3305b8fea9e5610b0676c0",
+      "git_sha": "01a803da5252659c160e2cc34cbf14d9dc03643d"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/run/postflight-ixsmi.txt",
+      "bytes": 1284,
+      "sha256": "86b0043fbe20ee8acdaafb32a78932e98005d0d8f613038f19118b42c09496df",
+      "git_sha": "954375025fab314c49202fbf9b1624c005e1b7c7"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/compile/A/resources.json",
+      "bytes": 1184,
+      "sha256": "d989c8e31c93c1b7d0c5ff30993eba505034bd97a0be75f3bf7ea757d8cabec1",
+      "git_sha": "5ab7d8223b7b6c61ade1e1b20120b138fb875f78"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/compile/A/kernel.source",
+      "bytes": 117169,
+      "sha256": "0eb883d6ad31029d99294633b4fb049fd2bd480de61b6b8e24032486cd213d72",
+      "git_sha": "b333d959a470ea54f65c7ae99a88aa09f2d35e71"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/compile/B/resources.json",
+      "bytes": 1184,
+      "sha256": "7b65ae69a8fcb36e84ccaaccc4878a6d03d635cdadf9d4750c474d5bf236b156",
+      "git_sha": "a60011958c01b1c828c9cbde9c17cfa03b9676fb"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/compile/B/kernel.source",
+      "bytes": 150049,
+      "sha256": "d77cde8b5d7655b33aa52c902e08c37db2653e2e742f569d70fd06e798529553",
+      "git_sha": "037ad9d38e9bffd91ca9fa60c13f77f8351ddb7a"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/source/candidate.py",
+      "bytes": 27752,
+      "sha256": "f4534a6fcc77b68b8d17e5dfb8ddad412a17293c8f6f4e627297141983f6d1a5",
+      "git_sha": "bbcc1595ab37144c28634c905d34c5e18fe1603f"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/source/baseline.py",
+      "bytes": 21372,
+      "sha256": "ac0ee4caaeed8dfd211a57cd4d3d130d8437a2a0129c1c915e1b19ed4fc66b4b",
+      "git_sha": "9a80bd9555c171ad3cb0167db57bbd548428e425"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/source/mixed-scheduler-shapes.json",
+      "bytes": 3612,
+      "sha256": "8b4a64a20737d7e3ba19f852799832bfffd19e02e18d1135e658cc73f3dc7064",
+      "git_sha": "bdf7fe97c42fe991a1e7e8300c05516e30d3c879"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/source/writer.py",
+      "bytes": 2531,
+      "sha256": "16afc46585f950f4b9c06c831b0e0dbf5515ee941a476a9ed300c492ebf947f9",
+      "git_sha": "3aa5ac71f4b3097bb9b22f78e7aec5a0003c428e"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/source/independent-review.json",
+      "bytes": 2361,
+      "sha256": "44178df7a43d7b53b8cb0c6a34843a234d9f5eeb372a331a171960a33290f9ba",
+      "git_sha": "98fec6fdf3b4a66b9bccce87e924d023bc865948"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/validation/worker-review.json",
+      "bytes": 1524,
+      "sha256": "af7ae55b34cc1f313e8f2444256a90cfba1cc2ae655f2bc6191cc768439db1b3",
+      "git_sha": "bb730dc662a0e79360360c096aa3febee14eebed"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/validation/owner-review.json",
+      "bytes": 1538,
+      "sha256": "dbc4799376fbfab265aac1441899cc056269ba13b7d33deb8e8863a0b5295cd4",
+      "git_sha": "8af46f438596a82c3abb890d512692f8d3309a0f"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/validation/compile_plan.json",
+      "bytes": 2850,
+      "sha256": "5bddce22b90589d4704aa00acb584d56cc1180253e645f430edec6c740de2df2",
+      "git_sha": "c1da18e5f1ab8dbbdbba2d11f49fc58acdbe2827"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/validation/package-receipt.json",
+      "bytes": 1451,
+      "sha256": "fe838d55dc8ec8eff9116ed7ca9bdc00856c89e00dc3082d9a6110e652177c45",
+      "git_sha": "e2049c6af16c1bf78f2762289a715dbcd00d079f"
+    },
+    {
+      "path": "experiments/bundles/q32-component-234221/q32-terminal-review.json",
+      "bytes": 1132,
+      "sha256": "7b82fbeb92261fe17120fe93ff30e79c9744ea4df32b68944036ede34e7f1f07",
+      "git_sha": "225428a8f1ec392954a1e626b001472b9d8b843e"
+    }
+  ],
+  "source_files": [
+    {
+      "payload_path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/20261029T220427329020Z-receipt.json",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/20261029T220427329020Z-receipt.json",
+      "bytes": 1050,
+      "sha256": "c924469cba2b26473114eff632a30b10e5195ed0efd1fe4e0d0fb83e05948294"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/20261029T220427329020Z-cpu-check.log",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/20261029T220427329020Z-cpu-check.log",
+      "bytes": 4618,
+      "sha256": "945b791ce8e4e6642c566c62d9402994e8538b05ad2b7c6fcf16f2d50b0d2e27"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/20261029T220427329020Z-transport.log",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/20261029T220427329020Z-transport.log",
+      "bytes": 7162,
+      "sha256": "5615626afeabd7b6d1be583bd78be909443976fd8e26045933446c634ca3e14e"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/independent-review.json",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/independent-review.json",
+      "bytes": 2103,
+      "sha256": "547fe185d8acc058e9c315a48996770ccf868b4015513e1c726db500497975f5"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/root-independent-review.json",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/root-independent-review.json",
+      "bytes": 3477,
+      "sha256": "5f2d84d2c66625674c76ed17b496d672736b4a3e552d08ae8b1c9fec6ceab396"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/check_real_torch_cpu.py",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/check_real_torch_cpu.py",
+      "bytes": 8467,
+      "sha256": "3187980397a04590cdeb554afd31786a7aa0f375eb2288ad0a99521e6b3a695e"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/prepare_candidate.py",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/prepare_candidate.py",
+      "bytes": 6349,
+      "sha256": "e37ba49a50e16490843cd5e76a63beec377662ceca7f312f6ef4b2f05a2ded08"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/candidate.patch",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/candidate.patch",
+      "bytes": 5852,
+      "sha256": "b56f65130bb528350f98bd1cf97dbc7ff3eb30c0b6282d054d5154e941b866c0"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/source-receipt.json",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/source-receipt.json",
+      "bytes": 887,
+      "sha256": "14b737932e84a4d584fd54b5f5820d3612e803c4ceec7899da2307f504f1e98e"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/README.md",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/README.md",
+      "bytes": 4006,
+      "sha256": "f9200a70b500dc10dd90a333a3b4aff871eb79524d3473684e81f9433c49177b"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220702833593Z-mixed-a-16k-profile/raw-recovery.tar.gz",
+      "source_path": "tmp/native-k8-sme-mixed-20261030/profile-deploy/220702-failed-recovery.tar.gz",
+      "bytes": 7337326,
+      "sha256": "b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377"
+    },
+    {
+      "payload_path": "tmp/native-k8-sme-mixed-20261030/profile-deploy/220702-recovered.json",
+      "source_path": "tmp/native-k8-sme-mixed-20261030/profile-deploy/220702-recovered.json",
+      "bytes": 396,
+      "sha256": "c65cba29b0f02dec585eea65bbe13c7899d32da0c379c1d7d2232011c8743edc"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/manifest.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/manifest.json",
+      "bytes": 411693,
+      "sha256": "42a22cd427531e508a60b471f357e8e36985490951fc03a49ce84a1321c68268"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/server.log",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/server.log",
+      "bytes": 339479,
+      "sha256": "ee30c4fb500b081728bde720e4786dc1d591c42f911f544507a5d2daf881dd47"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/benchmark-commands.jsonl",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/benchmark-commands.jsonl",
+      "bytes": 2498,
+      "sha256": "2fbd51f3a014b3ff54ad1d13caa40eda071f9e6043f2367e84c109ecae5cd2f0"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/benchmark-env.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/benchmark-env.json",
+      "bytes": 1112,
+      "sha256": "452c13b48cb8a9ea92f085ce548fec660fffe6fc6fa8fc93161c0fcb01278d91"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/service-env.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/service-env.json",
+      "bytes": 2533,
+      "sha256": "7cca7d1f4c0b88484b6812f27aa53f30cd0675cd9ee0fbb8c2d83ea8ab02f749"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/service-owner.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/service-owner.json",
+      "bytes": 499,
+      "sha256": "2c21ae3501e9e0b15c66b20e3efcb616713637a14bd715b3e71a13ac5ed4d2ae"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/warmups.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/warmups.json",
+      "bytes": 1272,
+      "sha256": "f68bb4c82d3dd61442b2bac2d7a4787ad8bf101d4cb086b9a3345d7a8faa6180"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/diagnostic_results.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/diagnostic_results.json",
+      "bytes": 1476,
+      "sha256": "dcff8676b1ba39446f3e839b675f137426424dd3f37dde96f08d7c6a6e5ca611"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/native-konly-prebenchmark.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/native-konly-prebenchmark.json",
+      "bytes": 371734,
+      "sha256": "6ab9024cb88f72d58fc6c1023befa5882a8af14f7c79d08769e6682637c9c726"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/actual/posthoc.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/actual/posthoc.json",
+      "bytes": 23636,
+      "sha256": "5b137446bb462524a5563fe290adb6ab3b94c64ccdb38025849701fb3f612761"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/actual/prefill-activation.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/actual/prefill-activation.json",
+      "bytes": 17719,
+      "sha256": "61b8e77f5b45535d4b97d6f087ed0a63fe99a3a1e7d2bc5f7dd42c2193edb74e"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/analysis/window-1/summary.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/analysis/window-1/summary.json",
+      "bytes": 3605,
+      "sha256": "5d3995c13909dc5ca9f6f1cab7d0a4629b6c89fe8ce2fb2c6b3b50a73951c485"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/analysis/window-1/non_graph_kernel_hotspots.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/analysis/window-1/non_graph_kernel_hotspots.json",
+      "bytes": 11475,
+      "sha256": "ad0078e494e9e58386587633454e462c0196e464759ca3d48dbf9a65cef9ae40"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/analysis/window-1/stage-correlation.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/analysis/window-1/stage-correlation.json",
+      "bytes": 471958,
+      "sha256": "ef31c15170bc23357d96441a4590f4b81b984b2412f647f94fc9835fdf5bd090"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/kernel_cjj_konly_q32.source",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/triton-cache/YCSSHWOQ2TK53ZL3EQO7TURMTQ4PU4PEQCDY2GHGSC2OWABOET3Q/kernel_cjj_konly_q32.source",
+      "bytes": 125620,
+      "sha256": "bd1c8deac61e41053580f34f3146434d6a1a4a468054aa596e0fd341ed1353ad"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/kernel_cjj_konly_q32.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/triton-cache/YCSSHWOQ2TK53ZL3EQO7TURMTQ4PU4PEQCDY2GHGSC2OWABOET3Q/kernel_cjj_konly_q32.json",
+      "bytes": 1091,
+      "sha256": "352b5dff8a203493859399b11b800a0333f2d320d70d98e26ab1e8dab93d0383"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/kernel_cjj_konly_q32.ttgir",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/triton-cache/YCSSHWOQ2TK53ZL3EQO7TURMTQ4PU4PEQCDY2GHGSC2OWABOET3Q/kernel_cjj_konly_q32.ttgir",
+      "bytes": 90058,
+      "sha256": "31ad63afce68b333d5798bd90f15c54aca01a56f692fd3efe90acf45ed4157eb"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/kernel_cjj_konly_q32.llir",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/triton-cache/YCSSHWOQ2TK53ZL3EQO7TURMTQ4PU4PEQCDY2GHGSC2OWABOET3Q/kernel_cjj_konly_q32.llir",
+      "bytes": 217392,
+      "sha256": "3e6def876e5248114cf27fc3d7e81d2cdfe7cb60597071da99c211cf6fb6c923"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/kernel_cjj_konly_q32.asm",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/triton-cache/YCSSHWOQ2TK53ZL3EQO7TURMTQ4PU4PEQCDY2GHGSC2OWABOET3Q/kernel_cjj_konly_q32.asm",
+      "bytes": 304325,
+      "sha256": "359eccb0f476e53bab32a67a3f13df997e8a0d9e91587c50289562b62f2785f4"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/q32-cache/__grp__kernel_cjj_konly_q32.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/triton-cache/YCSSHWOQ2TK53ZL3EQO7TURMTQ4PU4PEQCDY2GHGSC2OWABOET3Q/__grp__kernel_cjj_konly_q32.json",
+      "bytes": 1493,
+      "sha256": "3cd5c2ebb2d8d826e690f54d8737fd6262288ff88906c9fa95070a25094c06b1"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/compile-summary.json",
+      "source_path": "archive/native-k8-sme-mixed-20261030/build-195932/cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/compiled/compile-summary.json",
+      "bytes": 6318,
+      "sha256": "de531bdbfdad2d98a8e16d3efc7c880aad1f415a24bee10cfffbb588a41e68db"
+    },
+    {
+      "payload_path": "tmp/native-k8-sme-mixed-20261030/profile/warm-profile-interpretation-222344.json",
+      "source_path": "tmp/native-k8-sme-mixed-20261030/profile/warm-profile-interpretation-222344.json",
+      "bytes": 5776,
+      "sha256": "0190c3558e0f2e0d795f2ea7a2ac25e7a2ee1ce4bb4d7a3c1a5554f4fd2aa47b"
+    },
+    {
+      "payload_path": "tmp/native-k8-sme-mixed-20261030/profile/hotspot-followups-222344.md",
+      "source_path": "tmp/native-k8-sme-mixed-20261030/profile/hotspot-followups-222344.md",
+      "bytes": 4955,
+      "sha256": "cd744d7bbae134140cce4c793ac11c9868775472179abb3e23960a74f89a75d7"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/mixed-scheduler-shapes.json",
+      "source_path": "tmp/q32-causal-interior-20261030/mixed-scheduler-shapes.json",
+      "bytes": 3612,
+      "sha256": "8b4a64a20737d7e3ba19f852799832bfffd19e02e18d1135e658cc73f3dc7064"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220427329020Z-native-k8-storage-snapshot/run-note.md",
+      "source_path": "generated by prepare_publication.py",
+      "bytes": 262,
+      "sha256": "0ae661990b593ed83d4646c8d361fc8a728d0258affe5dad60dd72ae18de1a27"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T220702833593Z-mixed-a-16k-profile/run-note.md",
+      "source_path": "generated by prepare_publication.py",
+      "bytes": 197,
+      "sha256": "6fb8693eb551d0f84ccac65cb5e28ca818f2d59b0afb083aaa89911011cdee82"
+    },
+    {
+      "payload_path": "experiments/bundles/20261029T222344850512Z-mixed-a-16k-profile/run-note.md",
+      "source_path": "generated by prepare_publication.py",
+      "bytes": 349,
+      "sha256": "4b450bc2c62e0174bb1a677000f10eb23df99daa72690932f1022e82a2d16c50"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0000.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "3378fe8102913fd2c29137a38dac4f546e7f58c6fa0cbf56eee739b8b426785b"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0001.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "c8a7c996a5bb60d5790a20f85a537582c3e287a3ab893189257cf02d7fba9263"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0002.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "3d32c7593b057a8cd4a69fee767bc3f99b3d0a651bae6140238ed5d915e7b472"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0003.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "cfbd7d969a089d321b5bc78c8ea5343a0daf1db98f03070c58cab2cb5ecc2a5d"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0004.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "6f0c8b305cf696529216eefe5b3dad4303925f3123b5eabcb4ada584a42587c4"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0005.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "041759c6221d8e60a763af9dd1283b5791b781832fc77d05b7b911e06e31825c"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0006.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "a40cd1c7cf9a6013370f71d7a8d52cc208775cab8276579b63ee451e81b7a28c"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0007.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "718721ebade7802200b617b979193b3bdf3261d8b3f6a71ecab240f823ef15a5"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0008.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "d4f1fb2746b367457d0cc67f2668d59ed5b449dfae8ffd97edf03f8c9465db67"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0009.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "667ccf84b9674bbd7dee9a6e094b1ace5e2f7de5be65993e8bf6e78617759609"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0010.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "a30257ec9ef4197a285b89a722ef61f85a40655fffdbba4985cccbb8f856a772"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0011.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "d3c0a194cc6c46c21fde7179e2193fc4782d738b3307513bf9e621705d8cd2f2"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0012.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "da18f70b10a9c18f09f75fda65c111746921e52d951ebb107df704378645b447"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0013.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 262144,
+      "sha256": "976504c715aa1aae9532924176f23f1a47a1703001c8f0af41ae80012b1e58c7"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery/chunk-0014.bin",
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 158263,
+      "sha256": "26f127ecd49cc132bafc9cc500cc9f967787f1260e26994597f9313017cd8564"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/raw-recovery.json",
+      "source_path": "finalize_stage.py generated recovery chunk index",
+      "bytes": 1425,
+      "sha256": "fe9c0b3ac5976a00137f2567b61f0fbf41f9466ded134539478cbb2ba8a37dc1"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/official/result.json",
+      "source_path": "archive/native-k8-storage-snapshot-20261030/service-b-224653/official/20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds/result.json",
+      "bytes": 1725,
+      "sha256": "b6f588b892344b0ee87aa1ab7a6da931ebbd230ce42b894b52e8419b1824c6db"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/official/native-k8-sme-mixed-owner-result.json",
+      "source_path": "archive/native-k8-storage-snapshot-20261030/service-b-224653/official/20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds/native-k8-sme-mixed-owner-result.json",
+      "bytes": 6439,
+      "sha256": "e6eebfea90ea7ae8b1866f7f1948ebea02a66eca8f69279e0d30c5e98691003c"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/official/mixed-service-install-evidence.json",
+      "source_path": "archive/native-k8-storage-snapshot-20261030/service-b-224653/official/20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds/mixed-service-install-evidence.json",
+      "bytes": 2119,
+      "sha256": "e444bc8b8f399088310d8c64eec7318eba053c457f51cbd14a3fdbd911a5071e"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/official/server.log",
+      "source_path": "archive/native-k8-storage-snapshot-20261030/service-b-224653/official/20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds/server.log",
+      "bytes": 384368,
+      "sha256": "cf52d39b350b2302350ad934455955c4f9144b5e192f349c0ab4c4d3da963fda"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/official/benchmark.log",
+      "source_path": "archive/native-k8-storage-snapshot-20261030/service-b-224653/official/20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds/benchmark.log",
+      "bytes": 60556,
+      "sha256": "c857bd35c0dc5a9f88a98cbfd38ed0ad8e626933151da600d671e9fb695f5a20"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/official/raw-runs.csv",
+      "source_path": "archive/native-k8-storage-snapshot-20261030/service-b-224653/official/20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds/benchmark_results/raw_runs_20261030_070052.csv",
+      "bytes": 932,
+      "sha256": "fdda62f1cedfc00fcc8e64722b1896d111f6dd7727bdf469512dd33806bcd923"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/official/summary.csv",
+      "source_path": "archive/native-k8-storage-snapshot-20261030/service-b-224653/official/20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds/benchmark_results/summary_20261030_070052.csv",
+      "bytes": 419,
+      "sha256": "28cd451ff0278499814f65d9b153baae654e461ad5e6c12fae234f6d770a0895"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/official/manifest.json",
+      "source_path": "archive/native-k8-storage-snapshot-20261030/service-b-224653/official/20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds/manifest.json",
+      "bytes": 35497,
+      "sha256": "eccb07aa1b74e20506b6f75f9fe1d13d20d9d7e8b6ded3e04cb41d311b9326f3"
+    },
+    {
+      "payload_path": "experiments/bundles/storage-B-224653/storage-B-terminal-review.json",
+      "source_path": "analysis/publication-storage-q32-profile-20261030/storage-B-terminal-review.json",
+      "bytes": 1153,
+      "sha256": "22eaf557e30b461fce21dd9b85961ebf0f427c9275c69ed422276d73c290c40c"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/run/summary.json",
+      "source_path": "archive/q32-causal-interior-20261030/entry-233910/cpu-probes/20261029T233910926379Z-q32-causal-interior-component/summary.json",
+      "bytes": 882,
+      "sha256": "e65b3097433ae2d4135060467a5820ba6d9735e024421681a9b5b612e8e68ead"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/run/state.json",
+      "source_path": "archive/q32-causal-interior-20261030/entry-233910/cpu-probes/20261029T233910926379Z-q32-causal-interior-component/state.json",
+      "bytes": 1472,
+      "sha256": "f9f26ef49c0e7632f39c34c09084ab38c72c3184cf9665009896c1a0e6e5f914"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/run/worker.log",
+      "source_path": "archive/q32-causal-interior-20261030/entry-233910/cpu-probes/20261029T233910926379Z-q32-causal-interior-component/worker.log",
+      "bytes": 907,
+      "sha256": "62ce8a4a83ee453e8e5bd4fdf7e654fbc7d965227a51f890641fa0b9acc5efcc"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/run/environment.json",
+      "source_path": "archive/q32-causal-interior-20261030/entry-233910/cpu-probes/20261029T233910926379Z-q32-causal-interior-component/environment.json",
+      "bytes": 409,
+      "sha256": "5e8c74be5210d2ddd8b13c4c06f24fd3edcc0a6ba92a4e65980ff9585fbd45d2"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/run/preflight-ixsmi.txt",
+      "source_path": "archive/q32-causal-interior-20261030/entry-233910/cpu-probes/20261029T233910926379Z-q32-causal-interior-component/preflight-ixsmi.txt",
+      "bytes": 1284,
+      "sha256": "5926f674b5069c18f4d6997490e08b13a3225817a562d55c83abc0da96752262"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/run/postflight-ixsmi.txt",
+      "source_path": "archive/q32-causal-interior-20261030/entry-233910/cpu-probes/20261029T233910926379Z-q32-causal-interior-component/postflight-ixsmi.txt",
+      "bytes": 1284,
+      "sha256": "f159ddf42446617d4e46869c933ac35e65d689cda0a1813ec2409c140f41eb0c"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/source/candidate.py",
+      "source_path": "archive/q32-causal-interior-20261030/entry-233910/scripts/q32-causal-interior-b9155e46e300/candidate.py",
+      "bytes": 27752,
+      "sha256": "f4534a6fcc77b68b8d17e5dfb8ddad412a17293c8f6f4e627297141983f6d1a5"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/source/baseline.py",
+      "source_path": "archive/q32-causal-interior-20261030/entry-233910/scripts/q32-causal-interior-b9155e46e300/baseline.py",
+      "bytes": 21372,
+      "sha256": "ac0ee4caaeed8dfd211a57cd4d3d130d8437a2a0129c1c915e1b19ed4fc66b4b"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/source/mixed-scheduler-shapes.json",
+      "source_path": "archive/q32-causal-interior-20261030/entry-233910/scripts/q32-causal-interior-b9155e46e300/mixed-scheduler-shapes.json",
+      "bytes": 3612,
+      "sha256": "8b4a64a20737d7e3ba19f852799832bfffd19e02e18d1135e658cc73f3dc7064"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/source/writer.py",
+      "source_path": "archive/q32-causal-interior-20261030/entry-233910/scripts/q32-causal-interior-b9155e46e300/writer.py",
+      "bytes": 2531,
+      "sha256": "16afc46585f950f4b9c06c831b0e0dbf5515ee941a476a9ed300c492ebf947f9"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/source/independent-review.json",
+      "source_path": "archive/q32-causal-interior-20261030/entry-233910/scripts/q32-causal-interior-b9155e46e300/independent-review.json",
+      "bytes": 2361,
+      "sha256": "44178df7a43d7b53b8cb0c6a34843a234d9f5eeb372a331a171960a33290f9ba"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-entry-233910/small-recovery.tar.gz",
+      "source_path": "tmp/q32-causal-interior-20261030/validation/233910-recovery.tar.gz",
+      "bytes": 21538,
+      "sha256": "e5c11adcbea5b9728793af7ea7216852fe5143f283ba0885a22528383951f73e"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/run/summary.json",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/cpu-probes/20261029T234221231370Z-q32-causal-interior-component/summary.json",
+      "bytes": 11977,
+      "sha256": "5bc52b9452f9043b8b012c1f1e659b6d43e0a02022c8d265998617e5019c0864"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/run/state.json",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/cpu-probes/20261029T234221231370Z-q32-causal-interior-component/state.json",
+      "bytes": 1472,
+      "sha256": "1e40604e1acea70a85a773c57763246c51e05c1eebab16978c56d1a7baec9fd5"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/run/worker.log",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/cpu-probes/20261029T234221231370Z-q32-causal-interior-component/worker.log",
+      "bytes": 899,
+      "sha256": "cd605e214706a48867eff12ac061b98dde4fe2920670401174a7641998789079"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/run/environment.json",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/cpu-probes/20261029T234221231370Z-q32-causal-interior-component/environment.json",
+      "bytes": 409,
+      "sha256": "0a0dcfa955e34f7790c756d2fdd0707da82570be0f9ad3bb7cc35de5f7bf5aab"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/run/preflight-ixsmi.txt",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/cpu-probes/20261029T234221231370Z-q32-causal-interior-component/preflight-ixsmi.txt",
+      "bytes": 1284,
+      "sha256": "60d0a1933a40bb5afa1894a0902ef9aa21c4a7a89b3305b8fea9e5610b0676c0"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/run/postflight-ixsmi.txt",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/cpu-probes/20261029T234221231370Z-q32-causal-interior-component/postflight-ixsmi.txt",
+      "bytes": 1284,
+      "sha256": "86b0043fbe20ee8acdaafb32a78932e98005d0d8f613038f19118b42c09496df"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/compile/A/resources.json",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/cpu-probes/20261029T234221231370Z-q32-causal-interior-component/compile/A/resources.json",
+      "bytes": 1184,
+      "sha256": "d989c8e31c93c1b7d0c5ff30993eba505034bd97a0be75f3bf7ea757d8cabec1"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/compile/A/kernel.source",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/cpu-probes/20261029T234221231370Z-q32-causal-interior-component/compile/A/kernel.source",
+      "bytes": 117169,
+      "sha256": "0eb883d6ad31029d99294633b4fb049fd2bd480de61b6b8e24032486cd213d72"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/compile/B/resources.json",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/cpu-probes/20261029T234221231370Z-q32-causal-interior-component/compile/B/resources.json",
+      "bytes": 1184,
+      "sha256": "7b65ae69a8fcb36e84ccaaccc4878a6d03d635cdadf9d4750c474d5bf236b156"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/compile/B/kernel.source",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/cpu-probes/20261029T234221231370Z-q32-causal-interior-component/compile/B/kernel.source",
+      "bytes": 150049,
+      "sha256": "d77cde8b5d7655b33aa52c902e08c37db2653e2e742f569d70fd06e798529553"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/source/candidate.py",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/scripts/q32-causal-interior-5562c18bf750/candidate.py",
+      "bytes": 27752,
+      "sha256": "f4534a6fcc77b68b8d17e5dfb8ddad412a17293c8f6f4e627297141983f6d1a5"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/source/baseline.py",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/scripts/q32-causal-interior-5562c18bf750/baseline.py",
+      "bytes": 21372,
+      "sha256": "ac0ee4caaeed8dfd211a57cd4d3d130d8437a2a0129c1c915e1b19ed4fc66b4b"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/source/mixed-scheduler-shapes.json",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/scripts/q32-causal-interior-5562c18bf750/mixed-scheduler-shapes.json",
+      "bytes": 3612,
+      "sha256": "8b4a64a20737d7e3ba19f852799832bfffd19e02e18d1135e658cc73f3dc7064"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/source/writer.py",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/scripts/q32-causal-interior-5562c18bf750/writer.py",
+      "bytes": 2531,
+      "sha256": "16afc46585f950f4b9c06c831b0e0dbf5515ee941a476a9ed300c492ebf947f9"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/source/independent-review.json",
+      "source_path": "archive/q32-causal-interior-20261030/component-234221/scripts/q32-causal-interior-5562c18bf750/independent-review.json",
+      "bytes": 2361,
+      "sha256": "44178df7a43d7b53b8cb0c6a34843a234d9f5eeb372a331a171960a33290f9ba"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/validation/worker-review.json",
+      "source_path": "tmp/q32-causal-interior-20261030/validation/worker-review.json",
+      "bytes": 1524,
+      "sha256": "af7ae55b34cc1f313e8f2444256a90cfba1cc2ae655f2bc6191cc768439db1b3"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/validation/owner-review.json",
+      "source_path": "tmp/q32-causal-interior-20261030/validation/owner-review.json",
+      "bytes": 1538,
+      "sha256": "dbc4799376fbfab265aac1441899cc056269ba13b7d33deb8e8863a0b5295cd4"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/validation/compile_plan.json",
+      "source_path": "tmp/q32-causal-interior-20261030/validation/compile_plan.json",
+      "bytes": 2850,
+      "sha256": "5bddce22b90589d4704aa00acb584d56cc1180253e645f430edec6c740de2df2"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/validation/package-receipt.json",
+      "source_path": "tmp/q32-causal-interior-20261030/validation/package-receipt.json",
+      "bytes": 1451,
+      "sha256": "fe838d55dc8ec8eff9116ed7ca9bdc00856c89e00dc3082d9a6110e652177c45"
+    },
+    {
+      "payload_path": "experiments/bundles/q32-component-234221/q32-terminal-review.json",
+      "source_path": "analysis/publication-storage-q32-profile-20261030/q32-terminal-review.json",
+      "bytes": 1132,
+      "sha256": "7b82fbeb92261fe17120fe93ff30e79c9744ea4df32b68944036ede34e7f1f07"
+    }
+  ],
+  "large_originals": {
+    "完整ixsys trace": {
+      "source_path": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile/baseline.ixsys",
+      "bytes": 707436544,
+      "sha256": "d93534fe25a1e7999126b3f76709b7673ace8c83c4fd326d4634a021fe7e62cb",
+      "included": false
+    },
+    "暖态恢复包": {
+      "source_path": "tmp/native-k8-sme-mixed-20261030/profile-deploy/222344-warm-recovery.tar.gz",
+      "bytes": 256711190,
+      "sha256": "1a1ba335fa5b0c7ce15406d6ddd32384433817dabf9a5273bd2b6369e9aee870",
+      "included": false,
+      "local_archive": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/"
+    },
+    "早停失败恢复包": {
+      "source_path": "tmp/native-k8-sme-mixed-20261030/profile-deploy/220702-failed-recovery.tar.gz",
+      "bytes": 7337326,
+      "sha256": "b319115a9e9109e84bc54d22ae1e8eaa1e7a1bbce2cbadb2e5160a689385e377",
+      "included": true
+    },
+    "storage_B_recovery": {
+      "source_path": "tmp/native-k8-storage-snapshot-20261030/integration/service-b-recovery.tar.gz",
+      "bytes": 3828279,
+      "sha256": "a0e4ba96b8b127454884c8e27efc473998136c3d5003fb636331aff08b74f0e9",
+      "included_as_256KiB_chunks": true,
+      "chunk_count": 15
+    },
+    "Q32_234221_full_recovery": {
+      "source_path": "tmp/q32-causal-interior-20261030/validation/234221-recovery.tar.gz",
+      "bytes": 41364295,
+      "sha256": "726fc56f1189483b283aea0a17bbb5b30c970dc0694bb5e4fd0acb422427310e",
+      "included": false,
+      "reason": "含约41MB失败张量；原件继续保存在本地/远端恢复库"
+    },
+    "Q32_233910_recovery": {
+      "source_path": "tmp/q32-causal-interior-20261030/validation/233910-recovery.tar.gz",
+      "included": true
+    }
+  },
+  "note": "uploaded_raw_objects为实际发布对象。source_files记录源证据；大型恢复包按索引拆块，未上传的大trace/失败张量只保留原路径与SHA。前67个上传对象保持不变。"
+}

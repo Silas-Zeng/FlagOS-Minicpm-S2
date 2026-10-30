@@ -1,0 +1,25 @@
+{
+  "worker_sha256": "4eaf7d4a87cfa03a56bfbf50b4ba7998678f7ed02a2a31533971dd4f051baf72",
+  "candidate_sha256": "f4534a6fcc77b68b8d17e5dfb8ddad412a17293c8f6f4e627297141983f6d1a5",
+  "verdict": "GO：隔离组件，非服务资格",
+  "reviewer": "root，独立于worker作者",
+  "scope": [
+    "源/Writer/helper固定，实际encoded cache视图与页表逆序布局",
+    "同一输入A/B逐位、finite、缓存/输入只读；两个真实尾例与无history",
+    "changed Q实际改变输出，另核changed Q自身只读",
+    "uint8逐字节比较避开shell uint16 dtype支持差异",
+    "有限值guard保持13.0，输出payload仍NaN初始化",
+    "4组ABBA各50次，仅真实2018/14126主形状；Event与wall分别记录"
+  ],
+  "limitations": [
+    "合成显式ABI，不声称完整服务调用或FP64独立资格",
+    "实际编译资源/ASM删减和GPU结果待本次运行；正确性不一致立即结束"
+  ],
+  "entry_fix": {
+    "before": "59d9d34bbda988436593cfdb9cb05015d17db8ee85c50f6697e45f987acbf0b1",
+    "after": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1",
+    "evidence_manifest": "archive\\native-k8-storage-snapshot-20261030\\service-b-224653\\official\\20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds\\manifest.json",
+    "failed_run": "20261029T233910926379Z-q32-causal-interior-component",
+    "scope": "仅纠正抄写的helper哈希；实际helper和候选不改，首次在Attention编译/运行前停止"
+  }
+}

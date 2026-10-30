@@ -1,0 +1,79 @@
+--- main899/biv150_konly_encoded_native.py
++++ candidate/biv150_konly_encoded_native.py
+@@ -38,16 +38,33 @@
+     s=t.untyped_storage();return (int(s._cdata),int(s.data_ptr()),int(s.data_ptr())+int(s.nbytes()))
+ 
+ 
+-def overlaps(a,b):
+-    _,x,y=storage(a);_,u,v=storage(b);return x<v and u<y
++def storage_snapshot(t, cache):
++    """Cache only the backing-storage range for this exact Tensor object."""
++    key=id(t)
++    cached=cache.get(key)
++    if cached is not None and cached[0] is t:
++        return cached[1]
++    s=t.untyped_storage()
++    start=int(s.data_ptr());value=(int(s._cdata),start,start+int(s.nbytes()))
++    # Keep the Tensor alive and key by object identity, never by shared storage.
++    cache[key]=(t,value)
++    return value
+ 
+ 
+-def bounds(t):
++def overlaps(a,b,cache=None):
++    if cache is None:
++        _,x,y=storage(a);_,u,v=storage(b)
++    else:
++        _,x,y=storage_snapshot(a,cache);_,u,v=storage_snapshot(b,cache)
++    return x<v and u<y
++
++
++def bounds(t,cache=None):
+     widths={'torch.bfloat16':2,'torch.int8':1,'torch.float32':4,'torch.int32':4,'torch.int64':8}
+     need(str(t.dtype) in widths,'known operand dtype')
+     width=widths[str(t.dtype)];shape=tuple(t.shape);strides=tuple(t.stride())
+     need(len(shape)==len(strides) and all(type(n) is int and n>=0 for n in shape) and all(type(v) is int and v>0 for v in strides),'operand geometry')
+-    _,start,end=storage(t);pointer=int(t.data_ptr());offset=int(t.storage_offset())
++    _,start,end=(storage(t) if cache is None else storage_snapshot(t,cache));pointer=int(t.data_ptr());offset=int(t.storage_offset())
+     extent=0 if 0 in shape else 1+sum((n-1)*s for n,s in zip(shape,strides))
+     need(pointer==start+offset*width and start<=pointer and pointer+extent*width<=end,'operand backing bounds')
+ 
+@@ -74,7 +91,7 @@
+         need(config['path'] in {str(Path(p).resolve()) for p in torch.ops.loaded_libraries},'actual loaded-library set')
+         self.binding=(runtime,self.op,config['path'],config['sha256'])
+         self.code_binding=(type(self).try_produce.__code__,type(self).validate.__code__,type(self).verify.__code__)
+-        self.helper_binding=tuple((globals()[n],globals()[n].__code__) for n in ('need','storage','overlaps','bounds','geometry'))
++        self.helper_binding=tuple((globals()[n],globals()[n].__code__) for n in ('need','storage_snapshot','storage','overlaps','bounds','geometry'))
+         self.constant_binding=(ENV,PATH_ENV,SHA_ENV,LIBRARY_SHA,FORMAT,OPERATOR,SCHEMA,SCALE)
+         self.calls=0;self.fallbacks={};self.records={};self.overflow=0
+         self.imports=dict(installed=True,enabled=True,format=FORMAT,physical_page_bytes=16384,torch_file=str(torch.__file__),module_file=str(Path(__file__).resolve()),
+@@ -84,7 +101,7 @@
+ 
+     def verify(self,runtime):
+         if any(n in vars(self) for n in ('verify','validate','try_produce')):raise RuntimeError('NativeK8 instance method override')
+-        if self.helper_binding!=tuple((globals()[n],globals()[n].__code__) for n in ('need','storage','overlaps','bounds','geometry')) or self.constant_binding!=(ENV,PATH_ENV,SHA_ENV,LIBRARY_SHA,FORMAT,OPERATOR,SCHEMA,SCALE):
++        if self.helper_binding!=tuple((globals()[n],globals()[n].__code__) for n in ('need','storage_snapshot','storage','overlaps','bounds','geometry')) or self.constant_binding!=(ENV,PATH_ENV,SHA_ENV,LIBRARY_SHA,FORMAT,OPERATOR,SCHEMA,SCALE):
+             raise RuntimeError('NativeK8 helper/constants changed')
+         need(self.runtime is runtime and self.binding==(runtime,self.op,self.library['path'],self.library['sha256']), 'adapter/library/op binding changed')
+         need(self.code_binding==(type(self).try_produce.__code__,type(self).validate.__code__,type(self).verify.__code__),'installed native code changed')
+@@ -107,15 +124,16 @@
+         need(kw['query_code_ptr'] is role['key_cache_ptr'] and kw['query_scale_ptr'] is role['key_scale_ptr'],'foreign unused private-Q operands')
+         tensors=[kw[k] for k in ('query_ptr','key_cache_ptr','key_scale_ptr','value_cache_ptr','seq_lens_ptr','block_table_ptr','segm_output_ptr','segm_max_ptr','segm_expsum_ptr')]
+         q,k,scale,v,lens,table,partial,maximum,summation=tensors
+-        for t in tensors:bounds(t)
++        storage_snapshots={}
++        for t in tensors:bounds(t,storage_snapshots)
+         need(all(str(t.device)=='cuda:0' for t in tensors),'single actual CUDA0 roles')
+         need(str(q.dtype)=='torch.bfloat16' and tuple(q.shape[1:])==(16,128),'BF16 query heads/dim')
+         need(str(lens.dtype)==str(table.dtype)=='torch.int32','I32 metadata')
+         need(all(str(t.dtype)=='torch.float32' for t in (partial,maximum,summation)),'F32 scratch')
+-        for src in (q,lens,table):need(not overlaps(src,k),'source/live-cache backing alias')
++        for src in (q,lens,table):need(not overlaps(src,k,storage_snapshots),'source/live-cache backing alias')
+         for i,out in enumerate((partial,maximum,summation)):
+-            need(all(not overlaps(out,src) for src in (q,k,scale,v,lens,table)),'scratch/source backing alias')
+-            need(all(not overlaps(out,other) for other in (partial,maximum,summation)[:i]),'scratch backing alias')
++            need(all(not overlaps(out,src,storage_snapshots) for src in (q,k,scale,v,lens,table)),'scratch/source backing alias')
++            need(all(not overlaps(out,other,storage_snapshots) for other in (partial,maximum,summation)[:i]),'scratch backing alias')
+         need(tuple(maximum.stride())==tuple(summation.stride()),'scalar common strides')
+         observed={'query_stride_token':q.stride(0),'query_stride_head':q.stride(1),'block_table_stride':table.stride(0),
+             'k_stride_block':k.stride(0),'k_stride_slot':k.stride(1),'k_stride_head':k.stride(2),

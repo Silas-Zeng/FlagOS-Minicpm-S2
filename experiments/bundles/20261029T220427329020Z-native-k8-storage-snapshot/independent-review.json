@@ -1,0 +1,26 @@
+{
+  "schema": "native-k8-storage-snapshot-author-check-v1",
+  "author_check": true,
+  "independent_review": false,
+  "source_commit": "899ce77470b0b539aebc108fd122f668c2d5894d",
+  "source_sha256": "957bc4bca3262e76c419ccd6fb77592da4967338223fc602797332077fe85579",
+  "candidate_sha256": "aac0a5d128008595562b9a0b78236f755df142894ce02695be2aa755e89fd35e",
+  "patch_sha256": "b56f65130bb528350f98bd1cf97dbc7ff3eb30c0b6282d054d5154e941b866c0",
+  "preparer_sha256": "e37ba49a50e16490843cd5e76a63beec377662ceca7f312f6ef4b2f05a2ded08",
+  "checker_sha256": "3187980397a04590cdeb554afd31786a7aa0f375eb2288ad0a99521e6b3a695e",
+  "assessment": "函数级候选准备完成。通用storage(t)保留原实现逐字不变；只有Adapter.validate传入局部缓存时，bounds/overlaps复用按Tensor对象身份保存的backing range。所有原dtype/shape/stride/offset/bounds/alias检查保留。",
+  "static_call_count": "validate原有9次bounds与24个overlap pair约57次storage查询；候选路径最多每个唯一Tensor对象一次storage快照，最多9次。Tensor.data_ptr与storage_offset仍由每次bounds各读取一次。非缓存通用路径不使用snapshot helper。",
+  "metadata_stability": "要求同步validate期间Tensor storage、data_ptr、offset、shape及stride不被并发resize_/set_/storage替换；无跨调用缓存。候选未证明并发修改安全，此类并发修改仍不支持。",
+  "checks": {
+    "materializer": "pass",
+    "py_compile": "pass",
+    "real_torch_cpu": "not_run_no_torch",
+    "device_or_remote": "not_run",
+    "benchmark_option": "prepared_ABBA_BAAB_400_calls_per_window; not_run_no_torch",
+    "new_call_set_test": "implemented_with_real_Tensor_set_; not_run_no_torch"
+  },
+  "torch_checker_exit_code": 2,
+  "integration_status": "未集成；main899原adapter身份5898，当前受测pure-A载体身份824f。不得放宽既有source/library pins或声称已集成。",
+  "performance_status": "未测；源码访问计数下降不构成性能收益证据。",
+  "readme_sha256": "f9200a70b500dc10dd90a333a3b4aff871eb79524d3473684e81f9433c49177b"
+}

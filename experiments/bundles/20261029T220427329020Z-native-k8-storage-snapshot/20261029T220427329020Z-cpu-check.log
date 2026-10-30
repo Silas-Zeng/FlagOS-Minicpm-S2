@@ -1,0 +1,255 @@
+{
+  "status": "pass",
+  "runtime": "real PyTorch CPU tensors",
+  "bounds_cases": [
+    {
+      "case": 0,
+      "dtype": "torch.bfloat16",
+      "shape": [
+        512
+      ],
+      "stride": [
+        1
+      ],
+      "status": "ok",
+      "message": null
+    },
+    {
+      "case": 1,
+      "dtype": "torch.bfloat16",
+      "shape": [
+        8,
+        4
+      ],
+      "stride": [
+        16,
+        2
+      ],
+      "status": "ok",
+      "message": null
+    },
+    {
+      "case": 2,
+      "dtype": "torch.bfloat16",
+      "shape": [
+        8,
+        4
+      ],
+      "stride": [
+        16,
+        2
+      ],
+      "status": "ok",
+      "message": null
+    },
+    {
+      "case": 3,
+      "dtype": "torch.bfloat16",
+      "shape": [
+        8,
+        4
+      ],
+      "stride": [
+        4,
+        1
+      ],
+      "status": "ok",
+      "message": null
+    },
+    {
+      "case": 4,
+      "dtype": "torch.int32",
+      "shape": [
+        64
+      ],
+      "stride": [
+        1
+      ],
+      "status": "ok",
+      "message": null
+    },
+    {
+      "case": 5,
+      "dtype": "torch.int8",
+      "shape": [
+        64
+      ],
+      "stride": [
+        1
+      ],
+      "status": "ok",
+      "message": null
+    },
+    {
+      "case": 6,
+      "dtype": "torch.float32",
+      "shape": [
+        64
+      ],
+      "stride": [
+        1
+      ],
+      "status": "ok",
+      "message": null
+    },
+    {
+      "case": 7,
+      "dtype": "torch.bfloat16",
+      "shape": [
+        0,
+        4
+      ],
+      "stride": [
+        8,
+        1
+      ],
+      "status": "ok",
+      "message": null
+    },
+    {
+      "case": 8,
+      "dtype": "torch.bfloat16",
+      "shape": [
+        8,
+        4
+      ],
+      "stride": [
+        0,
+        1
+      ],
+      "status": "RuntimeError",
+      "message": "NativeK8 service: operand geometry"
+    },
+    {
+      "case": 9,
+      "dtype": "torch.float64",
+      "shape": [
+        8,
+        4
+      ],
+      "stride": [
+        4,
+        1
+      ],
+      "status": "RuntimeError",
+      "message": "NativeK8 service: known operand dtype"
+    }
+  ],
+  "alias_cases": [
+    {
+      "pair": 0,
+      "baseline": true,
+      "candidate": true
+    },
+    {
+      "pair": 1,
+      "baseline": true,
+      "candidate": true
+    },
+    {
+      "pair": 2,
+      "baseline": false,
+      "candidate": false
+    },
+    {
+      "pair": 3,
+      "baseline": false,
+      "candidate": false
+    },
+    {
+      "pair": 4,
+      "baseline": false,
+      "candidate": false
+    },
+    {
+      "pair": 5,
+      "baseline": false,
+      "candidate": false
+    },
+    {
+      "pair": 6,
+      "baseline": true,
+      "candidate": true
+    }
+  ],
+  "unique_tensor_snapshots": 8,
+  "view_objects_kept_distinct": true,
+  "new_call_snapshot": {
+    "status": "pass",
+    "operation": "real CPU Tensor.set_ to retained distinct storage",
+    "new_call_cache_created": true,
+    "storage_identity_changed": true,
+    "old_storage_retained": true
+  },
+  "benchmark": {
+    "order": "ABBA BAAB",
+    "windows": [
+      {
+        "window": 0,
+        "arm": "A",
+        "iterations": 400,
+        "elapsed_ns": 63442432,
+        "per_call_ns": 158606.08
+      },
+      {
+        "window": 1,
+        "arm": "B",
+        "iterations": 400,
+        "elapsed_ns": 32316243,
+        "per_call_ns": 80790.6075
+      },
+      {
+        "window": 2,
+        "arm": "B",
+        "iterations": 400,
+        "elapsed_ns": 32287857,
+        "per_call_ns": 80719.6425
+      },
+      {
+        "window": 3,
+        "arm": "A",
+        "iterations": 400,
+        "elapsed_ns": 48479654,
+        "per_call_ns": 121199.135
+      },
+      {
+        "window": 4,
+        "arm": "B",
+        "iterations": 400,
+        "elapsed_ns": 32310381,
+        "per_call_ns": 80775.9525
+      },
+      {
+        "window": 5,
+        "arm": "A",
+        "iterations": 400,
+        "elapsed_ns": 48520278,
+        "per_call_ns": 121300.695
+      },
+      {
+        "window": 6,
+        "arm": "A",
+        "iterations": 400,
+        "elapsed_ns": 48582119,
+        "per_call_ns": 121455.2975
+      },
+      {
+        "window": 7,
+        "arm": "B",
+        "iterations": 400,
+        "elapsed_ns": 32267379,
+        "per_call_ns": 80668.4475
+      }
+    ],
+    "median_per_call_ns": {
+      "A": 121377.99625,
+      "B": 80747.7975
+    },
+    "scope": "9个真实CPU Tensor上的bounds+24个overlap关系；不是Adapter完整调用或端到端吞吐。",
+    "storage_aliases": {
+      "key_scale_value_share_storage": true,
+      "three_scratch_storages_independent": true
+    }
+  },
+  "cuda_or_device_action": false
+}

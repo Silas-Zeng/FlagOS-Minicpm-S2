@@ -1514,6 +1514,18 @@ SHORT_ATTEMPTS.update({
 GROUPS['prefill-base2'] = ('Prefill base2 CPU编译筛查', 'CPU机制证据之外，M2048/KV16K单层入口因ABI参数名KeyError未计时，exp2换底局部ABBA为负（Event慢0.8052%、wall慢0.7673%）。保留入口失败与负结果，不作生产或官方资格。', [])
 GROUPS['native-gqa-s8'] = ('native GQA S8生产接入', 'PR105 producer新增N30/S8；仅BF16且Q stride=2048命中，其余fallback。16K官方四轮正向、4K官方观察略负且KV不匹配；本批KV16K/4K两档局部组件正向。原105为101/105通过，但batch8的S8为not_exercised；保持PR105基线，不作严格因果、长度分流或新基线。', [])
 
+
+# 2026-10-30 storage/profile/Q32：本批登记的精确分类与保留决定。
+_STORAGE_Q32_RUNS = {'20261029T220427329020Z-native-k8-storage-snapshot': ('storage-snapshot', '只保留局部证据，服务结论见同方法16K记录。'), '20261029T220702833593Z-mixed-a-16k-profile': ('mixed-warm-profile', '保留工具入口失败；不是模型错误。'), '20261029T222344850512Z-mixed-a-16k-profile': ('mixed-warm-profile', '保留热点证据；不作为官方吞吐或准确率。'), '20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds': ('storage-snapshot', '保留小幅观察，不升级基线；完整准确率未测。'), '20261029T233910926379Z-q32-causal-interior-component': ('q32-causal-interior', '保留入口失败证据；此轮未执行候选内核。'), '20261029T234221231370Z-q32-causal-interior-component': ('q32-causal-interior', '停止候选，不进入计时或服务。候选未改动团队main。')}
+GROUPS.update({'storage-snapshot': ('Storage 元数据单次调用复用', '在一次调用内复用 backing storage 元数据，仍执行 bounds/alias 检查。CPU helper中位耗时约省33.47%；官方16K四轮暖均4552.473333 tok/s，对既有A 4548.78观察+0.0812%。KV页相同，起始DB相同而末态调优DB不同；尚无稳定因果收益或新准确率资格。团队PR120旧4K ABA同样未证明稳定收益，本批补充16K，不重复声明新方法。', []), 'mixed-warm-profile': ('Mixed 暖态性能分析', '保留窗494.888s，GPU union489.748s（98.96%）；非Graph Q32 attention累计201.460s，约占窗口40.7%。实际Mixed调度样例Q2018/context12108/KV14126已回收，但不等同逐调用pointer ABI。profile/collector/analyzer成功；旧posthoc解析不完整，不是模型报错。这些时间是诊断结果，不是官方成绩或可直接省去的成本。', []), 'q32-causal-interior': ('Q32 历史块掩码精简', '尝试将完整历史tile与因果边界tile分为两个保持升序的循环，减少历史tile的load/causal mask。第一次入口仅有helper SHA抄写错误；修正入口后，首个组件样例A/B逐位不一致。finite、guard和输入只读通过，但未进入计时；停止候选。此结果不等于团队main已确认错误。', [])})
+_storage_q32_old_group, _storage_q32_old_result, _storage_q32_old_keep = group, result, keep
+def group(row):
+    return _STORAGE_Q32_RUNS[row['run_id']][0] if row['run_id'] in _STORAGE_Q32_RUNS else _storage_q32_old_group(row)
+def result(row, limit=190):
+    return row['conclusion'][:limit] if row['run_id'] in _STORAGE_Q32_RUNS else _storage_q32_old_result(row, limit)
+def keep(row):
+    return _STORAGE_Q32_RUNS[row['run_id']][1] if row['run_id'] in _STORAGE_Q32_RUNS else _storage_q32_old_keep(row)
+
 if __name__ == '__main__':
     main()
 

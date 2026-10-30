@@ -1,0 +1,149 @@
+{
+  "run": "20261029T222344850512Z-mixed-a-16k-profile",
+  "bundle_sha256": "1a1ba335fa5b0c7ce15406d6ddd32384433817dabf9a5273bd2b6369e9aee870",
+  "scope": "只读暖态profile解释；诊断run，非官方吞吐/准确率资格",
+  "completion": {
+    "profile_returncode": 0,
+    "collector_returncode": 0,
+    "posthoc_returncode": 1,
+    "analyzer_returncode": 0,
+    "runner_returncode": 1,
+    "state_complete": true,
+    "samples": 4,
+    "scope_errors": 0,
+    "benchmark_completed": 128,
+    "benchmark_failed": 0
+  },
+  "rc1_limitation": {
+    "meaning": "profile/collector本身成功；wrapper整体returncode=1来自posthoc_returncode=1，analyzer_returncode=0。posthoc结果标记diagnostic_incomplete，不代表trace或benchmark失败。",
+    "posthoc_status": "diagnostic_incomplete",
+    "posthoc_native_gqa_valid": false,
+    "native_gqa_parse_errors": [
+      "(EngineCore pid=81313) BIV150_NATIVE_GQA_INSTALL {\"compile_at_runtime\": false, \"extra_KV_bytes\": 0, \"installed\": true, \"library_sha256\": \"c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b\", \"overlap_v\": true, \"q_strides\": [[2048, 128, 1], [2560, 128, 1]], \"supported_shapes\": [[64, 2], [32, 4]]}"
+    ],
+    "prefill_compute_order_valid": false,
+    "missing_legacy_receipts": {
+      "selected_compiled_abi": 0,
+      "stack_status": "pending_or_missing"
+    }
+  },
+  "q32": {
+    "non_graph_kernel_name": "kernel_cjj_konly_q32",
+    "retained_events": 38682,
+    "summed_gpu_seconds": 201.459797596,
+    "mean_ms": 5.208101897419988,
+    "fraction_of_kernel_sum": 0.5510111697251996,
+    "top_grid_block_clusters": [
+      {
+        "phase": "outside_worker_execute",
+        "name": "kernel_cjj_konly_q32",
+        "grid": "(64, 2, 1)",
+        "block": "(1024, 1, 1)",
+        "regs": 135,
+        "srfs": 104,
+        "static_shared_bytes": 0,
+        "dynamic_shared_bytes": 57344,
+        "events": 1637,
+        "gpu_sum_s": 5.387863085000005
+      },
+      {
+        "phase": "mixed",
+        "name": "kernel_cjj_konly_q32",
+        "grid": "(64, 2, 1)",
+        "block": "(1024, 1, 1)",
+        "regs": 135,
+        "srfs": 104,
+        "static_shared_bytes": 0,
+        "dynamic_shared_bytes": 57344,
+        "events": 37566,
+        "gpu_sum_s": 192.32466918100005
+      }
+    ],
+    "binding_from_server_log": {
+      "profile": "q32",
+      "query_rows": 2048,
+      "sequences": 1,
+      "implementation_sha256": "57cd787014a0163780a8403396368133aa76a186310e9cbd0cc603e20f14dcba",
+      "block_m": 256,
+      "block_q": 32,
+      "num_warps": 16,
+      "num_stages": 1,
+      "tile_size": 64,
+      "minimum_query_rows": 1024,
+      "q32_hoist_enabled": false,
+      "scope": "首次 INSTALL/选择marker；可确认profile/prefill配置，但未与Mixed主簇逐次launch关联",
+      "matched_to_mixed_cluster": false
+    },
+    "shape_warning": "64x2 grid只说明该编译launch形状；首次INSTALL marker中的2048/1不能绑定到Mixed phase主簇，实际Mixed Q length尚未闭合。",
+    "mixed_cluster_actual_q_shape": "unknown; no per-launch argument binding available"
+  },
+  "profile_window": {
+    "gpu_union_seconds": 489.747836712,
+    "graph_seconds": 123.879877284,
+    "non_graph_kernel_seconds": 365.618355244,
+    "uncovered_seconds": 5.140239246,
+    "uncovered_p99_ms": 0.01717,
+    "worker_steps": 4661,
+    "phase_counts": {
+      "prefill": {
+        "count": 8,
+        "scheduled_tokens": 16384,
+        "prefill_tokens": 16384,
+        "decode_tokens": 0,
+        "worker_host_retained_ns": 2245500219
+      },
+      "mixed": {
+        "count": 1054,
+        "scheduled_tokens": 2147966,
+        "prefill_tokens": 2117360,
+        "decode_tokens": 30606,
+        "worker_host_retained_ns": 350105024673
+      },
+      "decode": {
+        "count": 3597,
+        "scheduled_tokens": 102921,
+        "prefill_tokens": 0,
+        "decode_tokens": 102921,
+        "worker_host_retained_ns": 12620978858
+      },
+      "empty": {
+        "count": 2,
+        "scheduled_tokens": 0,
+        "prefill_tokens": 0,
+        "decode_tokens": 0,
+        "worker_host_retained_ns": 345170
+      }
+    },
+    "gpu_phase_q32_rows": [
+      {
+        "phase": "outside_worker_execute",
+        "grid": "(64, 2, 1)",
+        "block": "(1024, 1, 1)",
+        "regs": 135,
+        "srfs": 104,
+        "dynamic_shared_bytes": 57344,
+        "events": 1637,
+        "gpu_sum_s": 5.387863085000005
+      },
+      {
+        "phase": "mixed",
+        "grid": "(64, 2, 1)",
+        "block": "(1024, 1, 1)",
+        "regs": 135,
+        "srfs": 104,
+        "dynamic_shared_bytes": 57344,
+        "events": 37566,
+        "gpu_sum_s": 192.32466918100005
+      }
+    ],
+    "active_window_retained_seconds": 494.888075958,
+    "profile_envelope_retained_seconds": 495.498638412,
+    "gpu_union_fraction_active_window": 0.9896133297694644
+  },
+  "storage_candidate_limit": {
+    "mixed_producer_event_count": 23142,
+    "current_estimated_storage_calls_per_eligible_forward": 88,
+    "interpretation": "Storage snapshot只针对Mixed Python校验；Q32 GPU事件201.46s不是该CPU候选可移除时长。窗口GPU覆盖约98.96%，5.14s uncovered不能归因给Python检查；host scope与CUDA API duration含GPU等待。仅暴露GPU空隙部分有直接关键路径上界，任何隐藏CPU节省需另测。"
+  },
+  "claim": "kernel_cjj_konly_q32是本窗口最大非Graph热点并主要出现在Mixed worker phase；compile resources由cache metadata确认。当前没有逐次launch参数证据把首次INSTALL marker的2048/1关联到该Mixed主簇，不能推断该簇实际Q length。"
+}

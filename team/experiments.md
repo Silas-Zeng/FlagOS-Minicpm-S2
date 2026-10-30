@@ -2,10 +2,16 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共526条登记、523个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共532条登记、529个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
+| 未记录（CPU微测） | 527 | 2026-10-29T22:04:27.192847+00:00 | [Storage 元数据单次调用复用](methods/storage-snapshot.md) | 只保留局部证据，服务结论见同方法16K记录。 | 未记录/未记录/未记录/未记录 | 真实PyTorch CPU Tensor边界/别名/set_新调用快照检查通过；局部ABBA/BAAB中位数121377.996ns→80747.798ns/次（约33.47%）；不代表完整Adapter或服务收益。 | [20261029T220427329020Z-native-k8-storage-snapshot](runs/unrecorded/20261029T220427329020Z-native-k8-storage-snapshot.md) |
+| 天数 BI-V150 | 528 | 2026-10-29T22:07:02.833593+00:00 | [Mixed 暖态性能分析](methods/mixed-warm-profile.md) | 保留工具入口失败；不是模型错误。 | 16384/1024/64/128 | benchmark前旧S2/S4激活门误拒绝K-only encoded路线；profile未完成，无性能样本；不是模型/算子正确性失败。 | [20261029T220702833593Z-mixed-a-16k-profile](runs/bi-v150/20261029T220702833593Z-mixed-a-16k-profile.md) |
+| 天数 BI-V150 | 529 | 2026-10-29T22:23:44.850512+00:00 | [Mixed 暖态性能分析](methods/mixed-warm-profile.md) | 保留热点证据；不作为官方吞吐或准确率。 | 16384/1024/64/128 | 同参非profile预热后完成128请求暖态诊断；Q32非Graph GPU事件201.460s。profile/collector/analyzer成功，旧posthoc不完整；非官方成绩、不更新基线。 | [20261029T222344850512Z-mixed-a-16k-profile](runs/bi-v150/20261029T222344850512Z-mixed-a-16k-profile.md) |
+| 天数 BI-V150 | 530 | 2026-10-29T22:46:53.126532+00:00 | [Storage 元数据单次调用复用](methods/storage-snapshot.md) | 保留小幅观察，不升级基线；完整准确率未测。 | 16384/1024/64/128 | 四轮3923.23/4555.17/4551.99/4550.26，弃首轮均值4552.473333 tok/s；相对同起始DB的A 4548.78观察+0.0812%。KV页相同，末态调优DB不同；仅小幅观察，不宣称稳定因果收益，不升级基线。 | [20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds](runs/bi-v150/20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds.md) |
+| 天数 BI-V150 | 531 | 2026-10-29T23:39:10.926379+00:00 | [Q32 历史块掩码精简](methods/q32-causal-interior.md) | 保留入口失败证据；此轮未执行候选内核。 | 未记录/未记录/未记录/未记录 | 入口helper SHA与冻结身份不匹配，benchmark/编译前停止，无性能样本；保留失败记录。 | [20261029T233910926379Z-q32-causal-interior-component](runs/bi-v150/20261029T233910926379Z-q32-causal-interior-component.md) |
+| 天数 BI-V150 | 532 | 2026-10-29T23:42:21.231370+00:00 | [Q32 历史块掩码精简](methods/q32-causal-interior.md) | 停止候选，不进入计时或服务。候选未改动团队main。 | 未记录/未记录/未记录/未记录 | step1048的A/B逐位不等，finite/readonly/guard通过；未计时，候选停止且不修救。保留源码和编译证据，约41MB失败张量留在原件库。 | [20261029T234221231370Z-q32-causal-interior-component](runs/bi-v150/20261029T234221231370Z-q32-causal-interior-component.md) |
 | 天数 BI-V150 | 5 | 2026-10-21T03:28:30.987069+00:00 | [早期集成、块表与 profile](methods/early.md) | 通过 | 未记录/未记录/未记录/未记录 | 32 state steps and 3 graph replays pass | [20261021T032830Z-metadata-gate](runs/bi-v150/20261021T032830Z-metadata-gate.md) |
 | 天数 BI-V150 | 11 | 2026-10-21T03:53:22.210462+00:00 | [Attention 分流与 launch](methods/attention.md) | 候选，见短记 | 未记录/未记录/未记录/未记录 | bitwise equal | [20261021T035322Z-attention-dispatch](runs/bi-v150/20261021T035322Z-attention-dispatch.md) |
 | 天数 BI-V150 | 12 | 2026-10-21T03:56:11.631701+00:00 | [Attention 分流与 launch](methods/attention.md) | 候选，见短记 | 未记录/未记录/未记录/未记录 | Original decode path: full-chunk latency reduction below 1 percent | [20261021T035611Z-mixed-dispatch](runs/bi-v150/20261021T035611Z-mixed-dispatch.md) |
