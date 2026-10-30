@@ -1,0 +1,22 @@
+{
+  "status": "编译增量支持进入合成组件筛选；不构成数值或性能资格",
+  "run": "20261030T024139836824Z-q32-affine-pages-compile-probe",
+  "summary_sha256": "3561e4e4b2af8247e88e0bb2cc7dc09409e70e8cc4337c97225861e009f6993c",
+  "candidate_sha256": "78c6d52c729e226f96f4a8831d671604f2985ee4f7df2ff82f5af87f9a0d853b",
+  "compiled_hashes": {
+    "A": "761ee8398ab5fccc658e25b62e58da8baa306722d6b4dd08320b6909836a6050",
+    "B": "fd67c030632a918d4575fb9bf4870de79d491305b3b882102b16f7dacba221f3"
+  },
+  "ASM证据": {
+    "命中分支": "B kernel.asm 的 candidate.py:301 条件跳转进入 BB0_40；该分支以 base + logical_page - lo 生成页号并进入 BB0_42，分支内没有页表 global load 指令。",
+    "fallback分支": "未命中进入 BB0_41，仍有实际页表 gather/load 指令，再汇合至原K/V与scale消费路径。",
+    "判定": "理想连续页命中路径确实消除了原向量页表读取；fallback仍保留。源码/TTGIR显示每CTA另读3个descriptor字段及范围比较分支。"
+  },
+  "资源": {
+    "A": {"registers": 135, "shared_bytes": 57344, "runtime_n_spills": 0, "asm_sgpr_spill_count": 98, "asm_vgpr_spill_count": 0},
+    "B": {"registers": 135, "shared_bytes": 57344, "runtime_n_spills": 0, "asm_sgpr_spill_count": 110, "asm_vgpr_spill_count": 0},
+    "解读": "寄存器数、shared与metadata runtime spill相同；ASM标量spill计数增加12，须在后续组件结果中保留为资源风险，不能将n_spills=0概括成没有spill。"
+  },
+  "终态": "compile-only完成，worker exit 0；前后GPU进程为空、端口9031空闲。请求use_sme=229379，编译metadata两臂effective use_sme均为3；不与服务warm cache身份混同。",
+  "限制": "只对合成identity descriptor证明编译与机器码分支；没有运行attention reader、数值输出或计时，也没有真实服务页表覆盖率。"
+}

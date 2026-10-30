@@ -120,3 +120,5 @@
 - [Q32 TILE128](methods/q32-tile128.md)
 
 - [Q32 K-only lookahead](methods/q32-k-lookahead.md)
+
+- [Q32 连续页仿射寻址](methods/q32-affine-pages.md)

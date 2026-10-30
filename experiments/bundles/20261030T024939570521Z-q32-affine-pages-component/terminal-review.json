@@ -1,0 +1,91 @@
+{
+  "审阅范围": "仅复核已回收 affine-pages 组件的原始摘要、A/B数值与计时、编译身份及清理；不重测设备。",
+  "运行": {
+    "run": "20261030T024939570521Z-q32-affine-pages-component",
+    "summary_sha256": "7c9b6e2abc0da4a077fb57f24acf67c1de0088ea754114bf6e3c3a00324e19c3",
+    "recovery_bundle_sha256": "8264a03fe240fa4a4a276359a223faf1c70cf23a96cd5862c8e1b6ff83d8c373",
+    "verified_files": 71,
+    "owner_pid": 98879,
+    "child_pid": 98881,
+    "worker_exit_code": 0,
+    "GPU和9031前后": "均空闲"
+  },
+  "身份": {
+    "baseline_sha256": "ac0ee4caaeed8dfd211a57cd4d3d130d8437a2a0129c1c915e1b19ed4fc66b4b",
+    "candidate_sha256": "78c6d52c729e226f96f4a8831d671604f2985ee4f7df2ff82f5af87f9a0d853b",
+    "writer_sha256": "16afc46585f950f4b9c06c831b0e0dbf5515ee941a476a9ed300c492ebf947f9",
+    "compiled_hash_matches_compile_probe": true,
+    "A_compiled_hash": "761ee8398ab5fccc658e25b62e58da8baa306722d6b4dd08320b6909836a6050",
+    "B_compiled_hash": "fd67c030632a918d4575fb9bf4870de79d491305b3b882102b16f7dacba221f3",
+    "effective_use_sme_A_B": 3
+  },
+  "数值门": {
+    "结论": "5个case通过：main、changed-Q、no-history、tail、short；A/B全输出逐位相同，FP64/有限值、guard和只读门通过。",
+    "same_arm_stable": true,
+    "changed_query_proves_output_changes": true,
+    "输入缓存页表描述符只读": true
+  },
+  "ABBA": {
+    "groups": 4,
+    "repetitions_per_block": 50,
+    "event_A_mean_ms": 7.989742584228516,
+    "event_B_mean_ms": 7.876383056640625,
+    "B_savings_percent": 1.4188132645431983,
+    "每组": [
+      {
+        "group": 0,
+        "A_ms": [
+          7.984483032226563,
+          7.981058959960937
+        ],
+        "B_ms": [
+          7.882348022460938,
+          7.878616943359375
+        ],
+        "A_group_mean_ms": 7.98277099609375,
+        "B_group_mean_ms": 7.880482482910156
+      },
+      {
+        "group": 1,
+        "A_ms": [
+          7.9848486328125,
+          7.981677856445312
+        ],
+        "B_ms": [
+          7.871151123046875,
+          7.876182250976562
+        ],
+        "A_group_mean_ms": 7.9832632446289065,
+        "B_group_mean_ms": 7.873666687011719
+      },
+      {
+        "group": 2,
+        "A_ms": [
+          7.992208862304688,
+          8.025333251953125
+        ],
+        "B_ms": [
+          7.870718383789063,
+          7.87659912109375
+        ],
+        "A_group_mean_ms": 8.008771057128907,
+        "B_group_mean_ms": 7.873658752441406
+      },
+      {
+        "group": 3,
+        "A_ms": [
+          7.989136962890625,
+          7.979193115234375
+        ],
+        "B_ms": [
+          7.879074096679688,
+          7.87637451171875
+        ],
+        "A_group_mean_ms": 7.9841650390625,
+        "B_group_mean_ms": 7.877724304199219
+      }
+    ],
+    "interpretation": "四组方向一致的局部正向；计时只覆盖合成ascending连续页布局的kernel调用。"
+  },
+  "范围限制": "组件数值与计时使用理想/合成页排列；descriptor创建、block table扫描、H2D与生命周期均不计入，真实服务连续页覆盖率未知。保留为条件候选，不接服务、不更新基线，也不称官方资格。下一步须先取得实际页表覆盖率，并核算descriptor构建/传输成本；只有净收益仍可信才补服务接线。"
+}

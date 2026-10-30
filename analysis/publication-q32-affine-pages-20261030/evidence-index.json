@@ -1,0 +1,142 @@
+{
+  "base_registry_sha256": "f6217fceaf847f8dd13da5c36ac80434e9c9a2c79f4fa63deb3eae5e9c11546b",
+  "base_rows": 540,
+  "base_unique_runs": 537,
+  "candidate_registry_sha256": "01056d28a15064e1d4331bc129a1f145177ae2d978719016ff57e55c550d112e",
+  "candidate_rows": 542,
+  "candidate_unique_runs": 539,
+  "runs": [
+    {
+      "run_id": "20261030T024139836824Z-q32-affine-pages-compile-probe",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-30T02:41:39.909755+00:00",
+      "profile_id": "q32-affine-pages",
+      "phase": "component_compile_only",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce774",
+      "flaggems_commit": "",
+      "input_len": "2018",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "compiled_only_component_candidate",
+      "artifacts": "experiments/bundles/20261030T024139836824Z-q32-affine-pages-compile-probe",
+      "conclusion": "编译审阅确认完整连续页命中分支以仿射页号替代页表读取，fallback仍保留；A/B runtime寄存器135、shared57344、runtime spill均相同，但ASM SGPR spill计数98→110。仅合成descriptor编译探针，无reader、数值或性能测量，真实覆盖率与descriptor构建/H2D成本未知。"
+    },
+    {
+      "run_id": "20261030T024939570521Z-q32-affine-pages-component",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-30T02:49:39.570521+00:00",
+      "profile_id": "q32-affine-pages",
+      "phase": "component_numerical_abba",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce774",
+      "flaggems_commit": "",
+      "input_len": "2018",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "component_positive_conditional_not_service",
+      "artifacts": "experiments/bundles/20261030T024939570521Z-q32-affine-pages-component",
+      "conclusion": "5个case全输出逐位一致，选定CPU FP64、guard、只读与changed-Q检查通过。四组ABBA Event均值A7.989743/B7.876383 ms，省1.418813%，四组方向一致。仅理想连续页合成布局，未计descriptor构建/H2D且无真实覆盖率与生命周期验证；保留条件候选，不接服务、不更新基线。"
+    }
+  ],
+  "evidence": {
+    "20261030T024139836824Z-q32-affine-pages-compile-probe": {
+      "result": "tmp/q32-affine-pages-20261030/validation/result.json",
+      "review": "tmp/q32-affine-pages-20261030/validation/terminal-review.json",
+      "execution": "tmp/q32-affine-pages-20261030/validation/execution-state.json",
+      "bundle": "tmp/q32-affine-pages-20261030/validation/compile-recovery.tar.gz",
+      "extra_evidence": [
+        "tmp/q32-affine-pages-20261030/validation/assembly-review.json",
+        "tmp/q32-affine-pages-20261030/validation/compile-024139-recovered.json"
+      ]
+    },
+    "20261030T024939570521Z-q32-affine-pages-component": {
+      "result": "tmp/q32-affine-pages-20261030/component/result.json",
+      "review": "tmp/q32-affine-pages-20261030/component/terminal-review.json",
+      "execution": "tmp/q32-affine-pages-20261030/component/execution-state.json",
+      "bundle": "tmp/q32-affine-pages-20261030/component/recovery.tar.gz",
+      "extra_evidence": [
+        "tmp/q32-affine-pages-20261030/validation/component-024939-recovered.json"
+      ]
+    }
+  },
+  "bundle_indexes": {
+    "20261030T024139836824Z-q32-affine-pages-compile-probe": {
+      "run_id": "20261030T024139836824Z-q32-affine-pages-compile-probe",
+      "original_name": "compile-recovery.tar.gz",
+      "original_bytes": 517497,
+      "original_sha256": "71b9d07df1892f9fff206e50ac597d41fcd0536e7d59ccc123cd09630605e6ae",
+      "chunk_bytes": 262144,
+      "chunks": [
+        {
+          "path": "experiments/raw-blobs/20261030T024139836824Z-q32-affine-pages-compile-probe/0000.part",
+          "offset": 0,
+          "bytes": 262144,
+          "sha256": "3145ae07f25f6699816adb743ad75f8864f8dfb06cd0c0be4c605eb4d0b63dee"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T024139836824Z-q32-affine-pages-compile-probe/0001.part",
+          "offset": 262144,
+          "bytes": 255353,
+          "sha256": "8a512d28395803abb8e23fe543e8044e3b050862be65cfca95278871fe021ddd"
+        }
+      ]
+    },
+    "20261030T024939570521Z-q32-affine-pages-component": {
+      "run_id": "20261030T024939570521Z-q32-affine-pages-component",
+      "original_name": "recovery.tar.gz",
+      "original_bytes": 1649375,
+      "original_sha256": "8264a03fe240fa4a4a276359a223faf1c70cf23a96cd5862c8e1b6ff83d8c373",
+      "chunk_bytes": 262144,
+      "chunks": [
+        {
+          "path": "experiments/raw-blobs/20261030T024939570521Z-q32-affine-pages-component/0000.part",
+          "offset": 0,
+          "bytes": 262144,
+          "sha256": "b66b8e6e1dddc5d94f0f065fc7756468905132c2d8f6b60b71c559661500d2c2"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T024939570521Z-q32-affine-pages-component/0001.part",
+          "offset": 262144,
+          "bytes": 262144,
+          "sha256": "427fe0c9dad7371e082df565415344882439adaee6347fc3d2f49622e01fb58a"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T024939570521Z-q32-affine-pages-component/0002.part",
+          "offset": 524288,
+          "bytes": 262144,
+          "sha256": "90b7810a8b21826bf3fec2f71b11276a33e4d6d211641fcc2ac0a3fd965594ed"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T024939570521Z-q32-affine-pages-component/0003.part",
+          "offset": 786432,
+          "bytes": 262144,
+          "sha256": "0f5d6be86dd67bfd33a4a2c71a88acfb5621387a11b339be5ba24a0928e003e8"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T024939570521Z-q32-affine-pages-component/0004.part",
+          "offset": 1048576,
+          "bytes": 262144,
+          "sha256": "26f92aa0a67b58b117289b9faa86690b1110cc9eb5aa470df5ef002f6783b9f9"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T024939570521Z-q32-affine-pages-component/0005.part",
+          "offset": 1310720,
+          "bytes": 262144,
+          "sha256": "e4f66b09fa9220f6b42bb7e65bf05b35d45290417c00e26530d5ea498af9d964"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T024939570521Z-q32-affine-pages-component/0006.part",
+          "offset": 1572864,
+          "bytes": 76511,
+          "sha256": "2450464d0346d9e7eab89f9f324d26d1b87d5aae06d7a2cb331e158a91370a4e"
+        }
+      ]
+    }
+  },
+  "limits": "恢复包以256KiB原字节分块；组件/编译结论严格按独立审阅，不外推为官方成绩、准确率或新基线。"
+}

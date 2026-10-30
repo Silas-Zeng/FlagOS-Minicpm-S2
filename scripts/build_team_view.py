@@ -1564,6 +1564,18 @@ def keep(row):
 def result(row, limit=190):
     return row['conclusion'][:limit] if row['run_id'] in _Q32_BATCH else _q32_result(row, limit)
 
+
+# 2026-10-30：Q32连续页仿射寻址本批精确run映射。
+_Q32_BATCH = {'20261030T024139836824Z-q32-affine-pages-compile-probe': {'method': 'q32-affine-pages', 'keep': '保留原件并按审阅边界表述'}, '20261030T024939570521Z-q32-affine-pages-component': {'method': 'q32-affine-pages', 'keep': '保留为条件候选；下一步先核真实连续页覆盖率和descriptor构建/传输成本，再决定是否服务接入。'}}
+GROUPS.update({'q32-affine-pages': ('Q32 连续页仿射寻址', '在完整且连续的KV页区间内，以仿射页号替代页表读取；跨界与尾部保留原页表路径。编译审阅确认命中分支去除页表读取，但ASM SGPR spill计数98→110。理想连续页布局的5-case数值门通过、四组ABBA局部省1.4188%；descriptor构建/H2D与真实覆盖率未测，仅保留条件候选。', [])})
+_q32_group, _q32_keep, _q32_result = group, keep, result
+def group(row):
+    return _Q32_BATCH[row['run_id']]['method'] if row['run_id'] in _Q32_BATCH else _q32_group(row)
+def keep(row):
+    return _Q32_BATCH[row['run_id']]['keep'] if row['run_id'] in _Q32_BATCH else _q32_keep(row)
+def result(row, limit=190):
+    return row['conclusion'][:limit] if row['run_id'] in _Q32_BATCH else _q32_result(row, limit)
+
 if __name__ == '__main__':
     main()
 
