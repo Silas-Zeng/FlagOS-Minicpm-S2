@@ -1540,6 +1540,18 @@ _q32_old_result = result
 def result(row, limit=190):
     return row['conclusion'][:limit] if row['run_id'] in _Q32_HEAD4_SCALE else _q32_old_result(row, limit)
 
+
+# 2026-10-30：Q32 K-scale/TILE128本批精确run映射。
+_Q32_BATCH = {'20261030T005910507361Z-q32-key-scale-compile-probe': {'method': 'q32-key-scale', 'keep': '保留原件并按审阅边界表述'}, '20261030T011120000584Z-q32-key-scale-component': {'method': 'q32-key-scale', 'keep': '保留负向观察与数值门未闭合的证据边界；停止候选，不进官方或生产资格，不重测。'}, '20261030T010749147245Z-q32-tile128-compile-probe': {'method': 'q32-tile128', 'keep': '保留编译与资源记录，进入同几何数值/组件门；当前不宣称性能收益、官方成绩或生产资格。'}, '20261030T012148540966Z-q32-tile128-component': {'method': 'q32-tile128', 'keep': '数值门通过但组件性能为负，停止候选；保留编译资源成本与本轮原件，不进服务/官方，不更新基线。'}}
+GROUPS.update({'q32-key-scale': ('Q32 K-scale每tile尺度融合', '每个KV tile读取K尺度后与score scale合并，再乘到整数QK分数；尝试减少循环内一组256×64 score乘法，代价是新增64元素逐token尺度运算并改变FP32结合顺序。TTGIR显示循环内score乘法3→2，ASM SGPR spill计数98→99。四组组件ABBA中B慢0.872%；全量AB数值门因GPU摘要与CPU回读矛盾未闭合，停止且不重测，不称数值通过或已确认错误。', []), 'q32-tile128': ('Q32 TILE128', '将Q32 encoded attention的KV tile从64扩为128，BM256/BQ32/w16/stage1保持；期望减少循环次数，实际VGPR 135→164、shared 57344→81920 B、ASM SGPR spill计数98→128。五case数值/guard/readonly/changed-Q通过，但组件B慢5.358%；停止，不进入服务/官方或更新基线。', [])})
+_q32_group, _q32_keep, _q32_result = group, keep, result
+def group(row):
+    return _Q32_BATCH[row['run_id']]['method'] if row['run_id'] in _Q32_BATCH else _q32_group(row)
+def keep(row):
+    return _Q32_BATCH[row['run_id']]['keep'] if row['run_id'] in _Q32_BATCH else _q32_keep(row)
+def result(row, limit=190):
+    return row['conclusion'][:limit] if row['run_id'] in _Q32_BATCH else _q32_result(row, limit)
+
 if __name__ == '__main__':
     main()
 

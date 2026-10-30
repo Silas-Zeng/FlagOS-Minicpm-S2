@@ -1,0 +1,132 @@
+{
+  "run": "20261030T012148540966Z-q32-tile128-component",
+  "status": "component_numeric_pass_performance_negative_stopped",
+  "decision": "数值门（参考、逐点容差、guard、只读、changed-Q及同臂稳定）通过；四组ABBA性能为负向，停止TILE128候选。",
+  "source_hashes": {
+    "baseline": "ac0ee4caaeed8dfd211a57cd4d3d130d8437a2a0129c1c915e1b19ed4fc66b4b",
+    "candidate": "4b6e3018feb8abce0b61c44a940053286f641aa9af35cf543535a5d4f9219b1d",
+    "writer": "16afc46585f950f4b9c06c831b0e0dbf5515ee941a476a9ed300c492ebf947f9",
+    "reference": "880793c6f0d6c9d13b10e7e273ff6f504c39bc9aaccaee4952eeb93393dc87fd",
+    "codecs": {
+      "biv150_konly_i8_qk_reference.py": "63d8f901b3648dad52f9dceab251e1d451def2aaa96f2bc30bd0aaff102e64e3",
+      "biv150_konly_decode_quant_reference.py": "38807ab17bf28e64afee6fb581af92d4e715856d954dc42db4fdd1dd6d91bc18"
+    },
+    "paths": {
+      "baseline": "/workspace/experiments/minicpm-s2/scripts/q32-tile128-component-966f537e5104/baseline.py",
+      "candidate": "/workspace/experiments/minicpm-s2/scripts/q32-tile128-component-966f537e5104/candidate.py",
+      "writer": "/workspace/experiments/minicpm-s2/scripts/q32-tile128-component-966f537e5104/writer.py",
+      "reference": "/workspace/experiments/minicpm-s2/scripts/q32-tile128-component-966f537e5104/component/reference.py"
+    }
+  },
+  "synthetic_abi": true,
+  "service_capture_claim": false,
+  "shape": {
+    "q_rows": 2018,
+    "context": 12108,
+    "total_kv": 14126,
+    "pages": 883
+  },
+  "config": {
+    "both_arms_common_geometry": {
+      "BLOCK_M": 256,
+      "BLOCK_Q": 32,
+      "grid_y": 2,
+      "num_warps": 16,
+      "num_stages": 1
+    },
+    "TILE_SIZE_A": 64,
+    "TILE_SIZE_B": 128,
+    "requested_use_sme": 229379,
+    "effective_use_sme_A": 3,
+    "effective_use_sme_B": 3,
+    "effective_values_are_from_compiled_metadata_not_requested_option": true,
+    "service_warm_hash_match_claim": false
+  },
+  "numerical_cases": [
+    {
+      "case": "main_q2018_kv14126",
+      "A_reference_pass": true,
+      "B_reference_pass": true,
+      "AB_pointwise_pass": true,
+      "finite_full_outputs": true,
+      "guards_unchanged": true,
+      "inputs_unchanged": true,
+      "A_B_max_abs_difference": 0.000244140625
+    },
+    {
+      "case": "main_changed_q",
+      "A_reference_pass": true,
+      "B_reference_pass": true,
+      "AB_pointwise_pass": true,
+      "finite_full_outputs": true,
+      "guards_unchanged": true,
+      "inputs_unchanged": null,
+      "A_B_max_abs_difference": 0.00048828125
+    },
+    {
+      "case": "no_history_q2018_kv2018",
+      "A_reference_pass": true,
+      "B_reference_pass": true,
+      "AB_pointwise_pass": true,
+      "finite_full_outputs": true,
+      "guards_unchanged": true,
+      "inputs_unchanged": true,
+      "A_B_max_abs_difference": 0.00390625
+    },
+    {
+      "case": "tail_q2019_kv16145",
+      "A_reference_pass": true,
+      "B_reference_pass": true,
+      "AB_pointwise_pass": true,
+      "finite_full_outputs": true,
+      "guards_unchanged": true,
+      "inputs_unchanged": true,
+      "A_B_max_abs_difference": 0.000244140625
+    },
+    {
+      "case": "short_q33_kv65",
+      "A_reference_pass": true,
+      "B_reference_pass": true,
+      "AB_pointwise_pass": true,
+      "finite_full_outputs": true,
+      "guards_unchanged": true,
+      "inputs_unchanged": true,
+      "A_B_max_abs_difference": 0.0
+    }
+  ],
+  "numeric_gates": {
+    "A_B_pointwise": "abs(B-A)<=0.005+0.005*abs(A), all outputs",
+    "FP64": "relative_RMSE<=0.005 and elementwise abs(actual-ref)<=0.005+0.005*abs(ref), selected 10 rows",
+    "bitwise": "record only across A/B; same-arm repeated outputs must be bitwise stable"
+  },
+  "primary_abba": {
+    "groups": 4,
+    "repetitions_per_block": 50,
+    "event_A_mean_ms": 7.97936897277832,
+    "event_B_mean_ms": 8.406893310546875,
+    "B_vs_A_percent": 5.357871521257618,
+    "same_arm_outputs_bitwise_stable": true,
+    "AB_uses_pointwise_tolerance": true
+  },
+  "terminal": {
+    "status": "completed",
+    "worker_returncode": 0,
+    "preflight": {
+      "utc": "2026-10-30T01:21:48.685200+00:00",
+      "port_9031": "free",
+      "gpu_processes": "none"
+    },
+    "postflight": {
+      "utc": "2026-10-30T01:22:35.001042+00:00",
+      "port_9031": "free",
+      "gpu_processes": "none"
+    },
+    "attention_reader_executed": true
+  },
+  "official_performance": false,
+  "accuracy_qualification": false,
+  "baseline_updated": false,
+  "bundle_sha256": "284311144f33238f102fbb9599c4ca0d25b2753dbd15d2a1bbfda942dd4fc1e9",
+  "verified_files": 70,
+  "evidence": "archive/q32-tile128-20261030/component-012148"
+}

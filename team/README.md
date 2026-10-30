@@ -114,3 +114,7 @@
 
 - [Q32 GQA head4 CTA拆分](methods/q32-gqa-head4.md)
 - [Q32 score-scale循环外提](methods/q32-score-scale.md)
+
+- [Q32 K-scale每tile尺度融合](methods/q32-key-scale.md)
+
+- [Q32 TILE128](methods/q32-tile128.md)
