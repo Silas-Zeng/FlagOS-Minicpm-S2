@@ -118,3 +118,5 @@
 - [Q32 K-scale每tile尺度融合](methods/q32-key-scale.md)
 
 - [Q32 TILE128](methods/q32-tile128.md)
+
+- [Q32 K-only lookahead](methods/q32-k-lookahead.md)

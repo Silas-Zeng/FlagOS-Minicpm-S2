@@ -2,10 +2,12 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共538条登记、535个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共540条登记、537个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
+| 天数 BI-V150 | 539 | 2026-10-30T01:59:10.809947+00:00 | [Q32 K-only lookahead](methods/q32-k-lookahead.md) | compiled_only_component_candidate | 2018/未记录/未记录/未记录 | 编译审阅在QK后、PV前定位到下一tile的页/K/scale加载，当前tile PV之后有完整vmcnt等待、下一轮才消费carry K，形成可能的重叠窗口；这只是机制窗口证据，未证明隐藏延迟或速度收益。VGPR135/shared57344均未上升，ASM SGPR spill计数98→88；仅writer与编译，无reader、数值或性能。 | [20261030T015910809947Z-q32-k-lookahead-compile-probe](runs/bi-v150/20261030T015910809947Z-q32-k-lookahead-compile-probe.md) |
+| 天数 BI-V150 | 540 | 2026-10-30T02:13:26.156242+00:00 | [Q32 K-only lookahead](methods/q32-k-lookahead.md) | component_numeric_pass_performance_negative_stopped | 2018/未记录/未记录/未记录 | 五个case（含changed-Q）全输出A/B逐位一致，CPU FP64抽样、guard、只读输入/缓存/表及重复稳定性通过。四组ABBA Event A8.031193/B8.537401 ms，B慢6.303%；四组分别慢7.0392%、7.0048%、6.8048%、4.4104%。停止此版，不进服务或官方测试，不升级基线。 | [20261030T021326156242Z-q32-k-lookahead-component](runs/bi-v150/20261030T021326156242Z-q32-k-lookahead-component.md) |
 | 天数 BI-V150 | 535 | 2026-10-30T00:59:10.507361+00:00 | [Q32 K-scale每tile尺度融合](methods/q32-key-scale.md) | compiled_only_numeric_next | 2018/未记录/未记录/未记录 | TTGIR循环内score乘法由3次降至2次，ASM SGPR spill计数98→99；runtime regs135/shared57344，runtime spills0、VGPR spills0、ScratchSize0。仅编译探针，无attention reader数值或性能，不是收益或生产资格。 | [20261030T005910507361Z-q32-key-scale-compile-probe](runs/bi-v150/20261030T005910507361Z-q32-key-scale-compile-probe.md) |
 | 天数 BI-V150 | 536 | 2026-10-30T01:11:20.073272+00:00 | [Q32 K-scale每tile尺度融合](methods/q32-key-scale.md) | component_negative_stopped_numeric_gate_unresolved | 2018/未记录/未记录/未记录 | 四组ABBA Event A7.9743986/B8.0439349 ms，B慢0.872%，性能负向并停止、不重测。五例各臂选定FP64抽样通过；full-output helper报告AB非逐位却max-abs=0，CPU回读五份均见非零差且均在点式门内，全量AB数值门未闭合。不能称全数值通过，也不是已确认候选错误；原summary保持不变，附posthoc CPU脚本与JSON。 | [20261030T011120000584Z-q32-key-scale-component](runs/bi-v150/20261030T011120000584Z-q32-key-scale-component.md) |
 | 天数 BI-V150 | 537 | 2026-10-30T01:07:49.220219+00:00 | [Q32 TILE128](methods/q32-tile128.md) | compiled_only_resource_cost_recorded | 2018/未记录/未记录/未记录 | 固定合成ABI编译成功；B TILE128相对A TILE64的VGPR 135→164、shared 57,344→81,920 B、ASM SGPR spill计数98→128。runtime spill、ASM VGPR spill与ScratchSize均为0；有效SME均3。仅writer和编译，无Attention reader/数值/性能测试；保留待数值与组件门，不由资源数据单独宣判。 | [20261030T010749147245Z-q32-tile128-compile-probe](runs/bi-v150/20261030T010749147245Z-q32-tile128-compile-probe.md) |

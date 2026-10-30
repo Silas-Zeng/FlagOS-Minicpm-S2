@@ -1552,6 +1552,18 @@ def keep(row):
 def result(row, limit=190):
     return row['conclusion'][:limit] if row['run_id'] in _Q32_BATCH else _q32_result(row, limit)
 
+
+# 2026-10-30：Q32 K-only lookahead本批精确run映射。
+_Q32_BATCH = {'20261030T015910809947Z-q32-k-lookahead-compile-probe': {'method': 'q32-k-lookahead', 'keep': '保留原件并按审阅边界表述'}, '20261030T021326156242Z-q32-k-lookahead-component': {'method': 'q32-k-lookahead', 'keep': '保留原件并按审阅边界表述'}}
+GROUPS.update({'q32-k-lookahead': ('Q32 K-only lookahead', '在当前QK MMA之后、PV之前发起下一KV tile的K/K-scale加载，尝试覆盖全局访存延迟；增加预取状态和活跃值。ASM确认跨PV候选窗口且编译资源未增加。组件五case数值门通过，但四组ABBA中B慢6.303%，停止，不进入服务/官方测试或更新基线。', [])})
+_q32_group, _q32_keep, _q32_result = group, keep, result
+def group(row):
+    return _Q32_BATCH[row['run_id']]['method'] if row['run_id'] in _Q32_BATCH else _q32_group(row)
+def keep(row):
+    return _Q32_BATCH[row['run_id']]['keep'] if row['run_id'] in _Q32_BATCH else _q32_keep(row)
+def result(row, limit=190):
+    return row['conclusion'][:limit] if row['run_id'] in _Q32_BATCH else _q32_result(row, limit)
+
 if __name__ == '__main__':
     main()
 

@@ -1,0 +1,39 @@
+{
+  "status": "PASS_COMPILE_ARTIFACT_WORTH_COMPONENT_NUMERICAL_GATE",
+  "compile_run": "20261030T015910809947Z-q32-k-lookahead-compile-probe",
+  "summary_sha256": "035337e4ce504ba26b1649cf19f84b642773de7f5cd5c6e26bd86e9b98e30c57",
+  "compiled_identity": {
+    "B_kernel_hash": "2dc7f0da3919ba4b68d7b33e633ce9e34713b8690990632dea7dbe58cb567f7b",
+    "A_kernel_hash": "761ee8398ab5fccc658e25b62e58da8baa306722d6b4dd08320b6909836a6050",
+    "candidate_source_sha256": "895df7895a4d753171e3b536930455ad8ef4b44dfd74b70e906cb14c8916232a"
+  },
+  "assembly_order": {
+    "qk": "B ASM loop body contains int8 QK MMA instructions (e.g. lines 5146-5253, source-mapped candidate.py:403).",
+    "lookahead": "After those QK operations, candidate.py next-tile page/K/scale calculations and global loads appear before continuation into current softmax/PV; multiple vmcnt partial waits occur during these loads.",
+    "pv_and_next_iteration": "Control flow rotates the loop: current PV MMA is in BB0_70 (e.g. lines 4874/4882, source candidate.py:472); the full vmcnt(0) wait at line 4909 follows PV and precedes the next loop header at line 4935, where carried K is consumed. This gives an instruction-level window for in-flight lookahead across PV.",
+    "interpretation": "Compile output supports a plausible memory-overlap opportunity and is sufficient to justify a small component correctness/performance test. It does not prove the hardware hides the loads or yields speedup."
+  },
+  "resources": {
+    "A": {
+      "vgpr": 135,
+      "warp_sgpr": 104,
+      "shared_bytes": 57344,
+      "runtime_spills_reported": 0,
+      "asm_sgpr_spill_count": 98,
+      "asm_vgpr_spill_count": 0
+    },
+    "B": {
+      "vgpr": 135,
+      "warp_sgpr": 104,
+      "shared_bytes": 57344,
+      "runtime_spills_reported": 0,
+      "asm_sgpr_spill_count": 88,
+      "asm_vgpr_spill_count": 0
+    },
+    "resource_delta_observed": "A/B的VGPR、warp-SGPR、shared和运行时spill报告不变；ASM尾部有独立spill计数，SGPR spill由98降至88，VGPR spill均为0。"
+  },
+  "scope_limits": [
+    "只审编译产物；没有执行attention reader、数值门或计时。",
+    "loop-rotated assembly顺序展示潜在异步窗口，不代表GPU执行层面的实际重叠、吞吐收益或生产资格。"
+  ]
+}
