@@ -1,0 +1,72 @@
+{
+  "schema": "q32-head4-terminal-review-v1",
+  "verdict": "数值门通过，组件计时负向；停止候选，不进入服务。",
+  "run_id": "20261030T002901364769Z-q32-head4-component",
+  "recovery": {
+    "path": "archive/q32-head4-20261030/component-002901/",
+    "manifest_files": 59,
+    "bundle_sha256": "e9ff1c52b94b92ed2fedc8b1b23104653a15202526c8cd01e0c86b1e241a7e13"
+  },
+  "source_hashes": {
+    "baseline.py": "ac0ee4caaeed8dfd211a57cd4d3d130d8437a2a0129c1c915e1b19ed4fc66b4b",
+    "candidate.py": "679a79754681d68c3ff7c274dfe6e480db0417a273bbe69b44a14d9c9c734d24",
+    "writer.py": "16afc46585f950f4b9c06c831b0e0dbf5515ee941a476a9ed300c492ebf947f9",
+    "worker.py": "7dd8b0ed773c5d23e374081c8a9aaca7be0620cf9c8b08ddb64692b734c91049"
+  },
+  "numeric_gate": {
+    "cases": 4,
+    "A_B_bitwise_all_cases": true,
+    "finite_guard_readonly_all_cases": true,
+    "changed_q_eager_bitwise_and_changes_output": true,
+    "scope": "合成encoded ABI；不是服务逐调用ABI、FP64、Graph或准确率验证"
+  },
+  "primary_abba": {
+    "shape": "Q2018/context12108/KV14126",
+    "groups": 4,
+    "repetitions_per_arm_per_group": 50,
+    "all_timed_outputs_same_hash_and_guards_valid": true,
+    "A_event_mean_ms": 7.983062515258789,
+    "B_event_mean_ms": 10.274863891601562,
+    "B_vs_A_event_delta_percent": 28.708297999198116,
+    "A_host_block_mean_ms_per_50": 401.46512968931347,
+    "B_host_block_mean_ms_per_50": 515.6077614519745,
+    "B_vs_A_host_block_delta_percent": 28.4315182867797,
+    "assessment": "B明显慢于A；按局部组件结果停止。"
+  },
+  "compiled_resources": {
+    "A": {
+      "hash": "761ee8398ab5fccc658e25b62e58da8baa306722d6b4dd08320b6909836a6050",
+      "warps": 16,
+      "registers": 135,
+      "spill_count": 0,
+      "shared_bytes": 57344,
+      "actual_use_sme": 3
+    },
+    "B": {
+      "hash": "7f2ed08217521f520d1cff7a414007e38cba52711e1f38d369de9e2be042a4de",
+      "warps": 8,
+      "registers": 135,
+      "spill_count": 0,
+      "shared_bytes": 40960,
+      "actual_use_sme": 3
+    },
+    "requested_use_sme": 229379,
+    "interpretation": "JIT根据实参specialization将use_sme重算为3；A/B均为该实际模式。不是warm-cache二进制身份匹配，也不能外推生产环境配置。"
+  },
+  "owner_terminal": {
+    "owner_pid": 97238,
+    "child_pid": 97240,
+    "worker_returncode": 0,
+    "status": "completed",
+    "postflight_port_9031": "free",
+    "postflight_gpu_processes": "none",
+    "finished_utc": "2026-10-30T00:29:21.877068+00:00"
+  },
+  "limitations": [
+    "工作负载为synthetic ABI，未进入服务、准确率门或官方吞吐测量。",
+    "A/B编译时实际use_sme=3，requested 229379被JIT覆盖；报告的Event/wall差值仅适用于本次合成组件。",
+    "shared下降16KiB且寄存器/spill未变，但测得B的Event与host block均慢；不追修本候选。"
+  ],
+  "independent_review": true,
+  "remote_or_gpu_actions_by_reviewer": false
+}

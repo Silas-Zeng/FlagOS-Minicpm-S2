@@ -1526,6 +1526,20 @@ def result(row, limit=190):
 def keep(row):
     return _STORAGE_Q32_RUNS[row['run_id']][1] if row['run_id'] in _STORAGE_Q32_RUNS else _storage_q32_old_keep(row)
 
+
+# 2026-10-30：Q32 head4 与 score-scale 的精确run覆盖。
+_Q32_HEAD4_SCALE = {'20261030T002901364769Z-q32-head4-component': {'method': 'q32-gqa-head4', 'keep': '保留负结果并停止'}, '20261030T003609248517Z-q32-score-scale-compile-probe': {'method': 'q32-score-scale', 'keep': '暂缓，资源门未闭合'}}
+GROUPS.update({'q32-gqa-head4': ('Q32 GQA head4 CTA拆分', '四例逐位通过，但完整producer+reducer组件中B慢28.7083%，停止，不进入服务。', []), 'q32-score-scale': ('Q32 score-scale循环外提', 'TTGIR循环乘法3→2；SGPR spill计数98→110，资源门未闭合。仅编译探针，无数值或性能结论。', [])})
+_q32_old_group, _q32_old_keep = group, keep
+def group(row):
+    return _Q32_HEAD4_SCALE[row['run_id']]['method'] if row['run_id'] in _Q32_HEAD4_SCALE else _q32_old_group(row)
+def keep(row):
+    return _Q32_HEAD4_SCALE[row['run_id']]['keep'] if row['run_id'] in _Q32_HEAD4_SCALE else _q32_old_keep(row)
+
+_q32_old_result = result
+def result(row, limit=190):
+    return row['conclusion'][:limit] if row['run_id'] in _Q32_HEAD4_SCALE else _q32_old_result(row, limit)
+
 if __name__ == '__main__':
     main()
 

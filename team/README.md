@@ -111,3 +111,6 @@
 [AI交接、详细SHA及过程稿归档入口](archive-index.md)
 
 更新：`python scripts/build_team_view.py`。仅重建本目录自动视图，不修改登记和证据。
+
+- [Q32 GQA head4 CTA拆分](methods/q32-gqa-head4.md)
+- [Q32 score-scale循环外提](methods/q32-score-scale.md)

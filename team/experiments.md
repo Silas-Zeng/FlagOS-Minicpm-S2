@@ -2,10 +2,12 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共532条登记、529个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共534条登记、531个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
+| 天数 BI-V150 | 533 | 2026-10-30T00:29:01.364769+00:00 | [Q32 GQA head4 CTA拆分](methods/q32-gqa-head4.md) | completed_negative | 2018/未记录/未记录/未记录 | 四例逐位与guard/readonly门通过；Q2018/KV14126组件A/B Event为7.983063/10.274864 ms，B慢28.7083%，停止，不进入服务/官方测量。 | [20261030T002901364769Z-q32-head4-component](runs/bi-v150/20261030T002901364769Z-q32-head4-component.md) |
+| 天数 BI-V150 | 534 | 2026-10-30T00:36:09.248517+00:00 | [Q32 score-scale循环外提](methods/q32-score-scale.md) | compiled_only_resource_caveat | 2018/未记录/未记录/未记录 | TTGIR循环内score乘法3→2；ASM SGPR spill计数98→110，资源差异未闭合。无reader数值/性能测量，暂缓，不作收益或生产资格结论。 | [20261030T003609248517Z-q32-score-scale-compile-probe](runs/bi-v150/20261030T003609248517Z-q32-score-scale-compile-probe.md) |
 | 未记录（CPU微测） | 527 | 2026-10-29T22:04:27.192847+00:00 | [Storage 元数据单次调用复用](methods/storage-snapshot.md) | 只保留局部证据，服务结论见同方法16K记录。 | 未记录/未记录/未记录/未记录 | 真实PyTorch CPU Tensor边界/别名/set_新调用快照检查通过；局部ABBA/BAAB中位数121377.996ns→80747.798ns/次（约33.47%）；不代表完整Adapter或服务收益。 | [20261029T220427329020Z-native-k8-storage-snapshot](runs/unrecorded/20261029T220427329020Z-native-k8-storage-snapshot.md) |
 | 天数 BI-V150 | 528 | 2026-10-29T22:07:02.833593+00:00 | [Mixed 暖态性能分析](methods/mixed-warm-profile.md) | 保留工具入口失败；不是模型错误。 | 16384/1024/64/128 | benchmark前旧S2/S4激活门误拒绝K-only encoded路线；profile未完成，无性能样本；不是模型/算子正确性失败。 | [20261029T220702833593Z-mixed-a-16k-profile](runs/bi-v150/20261029T220702833593Z-mixed-a-16k-profile.md) |
 | 天数 BI-V150 | 529 | 2026-10-29T22:23:44.850512+00:00 | [Mixed 暖态性能分析](methods/mixed-warm-profile.md) | 保留热点证据；不作为官方吞吐或准确率。 | 16384/1024/64/128 | 同参非profile预热后完成128请求暖态诊断；Q32非Graph GPU事件201.460s。profile/collector/analyzer成功，旧posthoc不完整；非官方成绩、不更新基线。 | [20261029T222344850512Z-mixed-a-16k-profile](runs/bi-v150/20261029T222344850512Z-mixed-a-16k-profile.md) |

@@ -1,0 +1,64 @@
+{
+  "status": "COMPILE_DELTA_CONFIRMED_RESOURCE_CAVEAT",
+  "run": "20261030T003609248517Z-q32-score-scale-compile-probe",
+  "recovery_archive": "archive/q32-score-scale-20261030/compile-003609/",
+  "recovery_tar_sha256": "b6889a58e10ca512b3ac7492724fec67ec593738c6c2d7d48f762e039aabe3c8",
+  "scope": "只复核本次编译产物的乘法位置、资源元数据与终态；没有 reader launch、数值检查或性能计时。",
+  "kernel_hashes": {
+    "A": "761ee8398ab5fccc658e25b62e58da8baa306722d6b4dd08320b6909836a6050",
+    "B": "0f839ecb7c7dbfd161041f032150f8406bed02cfa675390c5b0aa2a5491f077a"
+  },
+  "ttgir": {
+    "A": {
+      "loop_starts_line": 350,
+      "score_query_mul_line": 423,
+      "key_scale_mul_line": 426,
+      "score_scale_mul_line": 427,
+      "score_tensor_muls_inside_loop": 3
+    },
+    "B": {
+      "preloop_query_score_scale_mul_line": 314,
+      "loop_starts_line": 352,
+      "score_query_mul_line": 425,
+      "key_scale_mul_line": 428,
+      "score_tensor_muls_inside_loop": 2
+    },
+    "interpretation": "TTGIR 确认 B 将 query-scale 与 score-scale 的合并乘移到循环前，循环体少一项 score tensor 乘法。ASM 文本总 MUL 指令行数两边均为185，不能单凭静态总数宣称最终机器码总工作量下降。"
+  },
+  "resources": {
+    "A": {
+      "n_regs": 135,
+      "n_spills_reported_by_triton": 0,
+      "shared_bytes": 57344,
+      "asm_num_vgprs": 135,
+      "asm_num_sgprs": 104,
+      "asm_scratch_size": 0,
+      "asm_sgpr_spill_count": 98,
+      "asm_vgpr_spill_count": 0
+    },
+    "B": {
+      "n_regs": 135,
+      "n_spills_reported_by_triton": 0,
+      "shared_bytes": 57344,
+      "asm_num_vgprs": 135,
+      "asm_num_sgprs": 104,
+      "asm_scratch_size": 0,
+      "asm_sgpr_spill_count": 110,
+      "asm_vgpr_spill_count": 0
+    },
+    "interpretation": "Triton metadata 报告 spill=0 且 ASM ScratchSize=0，但 ASM ELF 元数据中的 SGPR spill 计数由98增至110。不能概括为无新增 spill；该资源差异尚未解释。"
+  },
+  "terminal": {
+    "owner_pid": 97413,
+    "worker_pid": 97415,
+    "worker_returncode": 0,
+    "status": "completed",
+    "preflight_gpu_and_port_9031": "空闲",
+    "postflight_gpu_and_port_9031": "空闲",
+    "attention_reader_launches": 0,
+    "writer_launches": 1,
+    "effective_use_sme_A_B": 3,
+    "requested_use_sme": 229379
+  },
+  "conclusion": "编译结构目标达到；新增 SGPR spill 计数使资源门存在未闭合差异。此项不等于数值错误；仅在资源差异机制明确后另行筛选。当前没有 reader 数值或性能证据，不支持生产资格。"
+}
