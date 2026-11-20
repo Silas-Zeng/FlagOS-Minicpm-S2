@@ -1,5 +1,7 @@
 # 当前实验与接续
 
+**2026-11-20 天数 BI-V150 最终主干准确率。** 官方 MATH-500 Level 3 答对 101/105 题，准确率 96.19%，通过比赛 95% 门槛。105 题均完成评分，0 个请求错误。 框架 `6220924c` 和 FlagGems `bda4a2e0` 均从完整 Git 检出构建。[官方报告](experiments/accuracy/20261120T082740Z-final-main-accuracy/math_500.json) · [逐题核对](experiments/accuracy/20261120T082740Z-final-main-accuracy/verdict.json) · [首次归档安装的记录](team/runs/bi-v150/20261120T082459Z-final-main-accuracy.md)。
+
 当前有效BI-V150基线为[框架PR105](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/105)，merge `1cbac531ca9afaa0e9a68624d5d10cb1d0412055`。已完成原官方4K／16K各四轮与原105；源码实际启用原S2/S4 V等待重叠，不含mixed扩范围负候选。
 
 | 结果 | 已有证据及限制 |
