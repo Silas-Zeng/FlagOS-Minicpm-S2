@@ -1,0 +1,734 @@
+{
+  "status": "component_only_passed",
+  "kind": "\u771f\u5b9e\u4e09\u81c2 kernel \u7ec4\u4ef6\uff1b\u65e0\u6a21\u578b\u6743\u91cd/\u5b98\u65b9\u6027\u80fd\u7ed3\u8bba",
+  "shape": {
+    "M": 2047,
+    "KV": 16384,
+    "Q_heads": 16,
+    "KV_heads": 2,
+    "D": 128,
+    "page": 16,
+    "page_table_stride": 8192
+  },
+  "candidate": "FlagGems head-major\uff1a\u65b0 page16 \u884c\u5f0f load\uff0bN64\uff1b\u4e24\u4e2a\u53d8\u5316\u5408\u5e76\u8ba1\u4e3a\u4e00\u4e2a\u65b9\u6cd5",
+  "limitations": [
+    "\u53ea\u6709\u4e00\u4e2a\u5408\u6210\u5f62\u72b6\uff1b\u4e0d\u662f\u5b9e\u9645\u6a21\u578b\u8f93\u51fa\u6216\u5b8c\u6574\u5b98\u65b9\u57fa\u7ebf\u3002",
+    "\u539f\u5e93/\u5019\u9009\u9006\u5e8f\u5206\u5757\u4e0e\u5f53\u524d\u5f52\u7ea6\u987a\u5e8f\u4e0d\u540c\uff0cBF16 \u4e0d\u8981\u6c42\u8de8\u81c2\u9010\u4f4d\u76f8\u540c\u3002",
+    "\u8ba1\u65f6\u5305\u62ec\u5404\u81c2\u5b9e\u9645 launch wrapper \u4e0e LSE \u5199\u51fa\uff1b\u56fa\u5b9a\u5171\u540c\u5199KV/metadata\u6210\u672c\u672a\u8ba1\u5165\u5dee\u989d\u3002",
+    "\u5168\u81c2\u540c\u4e00\u8f93\u5165\u7f13\u5b58/\u8fdb\u7a0b\uff1b\u4e0d\u58f0\u79f0\u7701\u4e868\u500dKV\uff0cM2047\u5747\u7ea6256 CTA\u3002"
+  ],
+  "timings": [
+    {
+      "calls": 16,
+      "wall_total_ms": 136.455593,
+      "wall_per_call_ms": 8.5284745625,
+      "event_total_ms": 133.87432861328125,
+      "event_per_call_ms": 8.367145538330078,
+      "submit_thread_cpu_ns": 2426504,
+      "submit_process_cpu_ns": 2423964,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742702\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742702,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742703\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742703,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 1,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "current",
+      "pair": "original"
+    },
+    {
+      "calls": 16,
+      "wall_total_ms": 477.307154,
+      "wall_per_call_ms": 29.831697125,
+      "event_total_ms": 475.5610046386719,
+      "event_per_call_ms": 29.722562789916992,
+      "submit_thread_cpu_ns": 1593902,
+      "submit_process_cpu_ns": 1594109,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742703\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742703,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742708\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742708,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 5,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "flaggems_original",
+      "pair": "original"
+    },
+    {
+      "calls": 16,
+      "wall_total_ms": 477.588741,
+      "wall_per_call_ms": 29.8492963125,
+      "event_total_ms": 475.8838806152344,
+      "event_per_call_ms": 29.74274253845215,
+      "submit_thread_cpu_ns": 1560015,
+      "submit_process_cpu_ns": 1559872,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742708\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742708,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742712\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742712,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 4,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "flaggems_original",
+      "pair": "original"
+    },
+    {
+      "calls": 16,
+      "wall_total_ms": 136.491177,
+      "wall_per_call_ms": 8.5306985625,
+      "event_total_ms": 133.90310668945312,
+      "event_per_call_ms": 8.36894416809082,
+      "submit_thread_cpu_ns": 2441584,
+      "submit_process_cpu_ns": 2500163,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742712\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742712,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742714\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742714,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 2,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "current",
+      "pair": "original"
+    },
+    {
+      "calls": 16,
+      "wall_total_ms": 136.256657,
+      "wall_per_call_ms": 8.5160410625,
+      "event_total_ms": 133.7650604248047,
+      "event_per_call_ms": 8.360316276550293,
+      "submit_thread_cpu_ns": 2361464,
+      "submit_process_cpu_ns": 2361847,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742714\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742714,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742715\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742715,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 1,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "current",
+      "pair": "candidate"
+    },
+    {
+      "calls": 16,
+      "wall_total_ms": 1328.825955,
+      "wall_per_call_ms": 83.0516221875,
+      "event_total_ms": 1327.098876953125,
+      "event_per_call_ms": 82.94367980957031,
+      "submit_thread_cpu_ns": 1569434,
+      "submit_process_cpu_ns": 1569343,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742715\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742715,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742729\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742729,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 14,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "page16_rows_n64",
+      "pair": "candidate"
+    },
+    {
+      "calls": 16,
+      "wall_total_ms": 1328.828681,
+      "wall_per_call_ms": 83.0517925625,
+      "event_total_ms": 1327.0941162109375,
+      "event_per_call_ms": 82.9433822631836,
+      "submit_thread_cpu_ns": 1563626,
+      "submit_process_cpu_ns": 1563713,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742729\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742729,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742742\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742742,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 13,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "page16_rows_n64",
+      "pair": "candidate"
+    },
+    {
+      "calls": 16,
+      "wall_total_ms": 135.59649,
+      "wall_per_call_ms": 8.474780625,
+      "event_total_ms": 133.9583740234375,
+      "event_per_call_ms": 8.372398376464844,
+      "submit_thread_cpu_ns": 2398721,
+      "submit_process_cpu_ns": 2467427,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742742\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742742,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 742743\nnr_throttled 3827\nthrottled_time 15012751795348",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 742743,
+          "nr_throttled": 3827,
+          "throttled_time": 15012751795348
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 1,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "current",
+      "pair": "candidate"
+    }
+  ],
+  "ir": {
+    "current": {
+      "resources": {
+        "compiled_type": "CompiledKernel",
+        "hash": "c45925d1e8cad442cab3a13748ef1c93b7506393f15dbc14d057aa16da317456",
+        "n_regs": 114,
+        "n_spills": 0,
+        "metadata": {
+          "num_warps": 8,
+          "num_stages": 1,
+          "shared": 32768,
+          "use_sme": 234881027,
+          "warp_size": 64
+        },
+        "asm_sha256": {
+          "source": "7ce556b4140398858e614632230c09d19c354eebd118213bc920db98bda7ec10",
+          "ttir": "8f048f8590d4b8e6c0987797621d768aed75d4b35b66a7cb0cec3c938dd5e915",
+          "ttgir": "ff570052d4c28486f67eaefebc19bdd4f941a23758ec47aaf62b6590d134ba32",
+          "llir": "c4cccdb9bb04e4a7743844edf52924efc057eea26e829f366616274ad3252771",
+          "asm": "1afbe972bf7bff543c5a19b249d346549d3274004f151d9247f46010b8b72213",
+          "cubin": "572d6fac40a0ce5417eabcb63f9361d846102df28ba4836220452d4eef620268"
+        }
+      },
+      "private_bytes": 0
+    },
+    "flaggems_original": {
+      "resources": {
+        "compiled_type": "CompiledKernel",
+        "hash": "503b24e5c7881a61bd570c2da579dee6e2cd82229828270c8252ba49d885d3ae",
+        "n_regs": 183,
+        "n_spills": 0,
+        "metadata": {
+          "num_warps": 4,
+          "num_stages": 3,
+          "shared": 49408,
+          "use_sme": 9,
+          "warp_size": 64
+        },
+        "asm_sha256": {
+          "source": "a693fcfed3b3be148e9ccd163c9d4a5347861418802fb250bad49db221b33b0b",
+          "ttir": "13e208545cce527a0dfd40f08b21cdaf41c45e6f8fabf0222d138be63a6caff4",
+          "ttgir": "ecac23a2d619d0812dec749c4649e54fea018f125959c376dcb068a8b0b49d33",
+          "llir": "d3cba93fe4286c550501d7be6ac0a81d35d2016ec531bfdf763102c917ac9b75",
+          "asm": "e038b43450a303db3aa6dabb2e870793ea6146536a8e7a9d45be871bbc735e08",
+          "cubin": "8a4a4050b802f74317b2bc552072144d3e91490e5163d9a19f596a4012d0bc7a"
+        }
+      },
+      "private_bytes": 0
+    },
+    "page16_rows_n64": {
+      "resources": {
+        "compiled_type": "CompiledKernel",
+        "hash": "ca59b79da0a04e06cd2b3e822a8d9d4d0a0b74c74ef6ba2d7ddd30369cab7571",
+        "n_regs": 215,
+        "n_spills": 0,
+        "metadata": {
+          "num_warps": 4,
+          "num_stages": 3,
+          "shared": 65552,
+          "use_sme": 9,
+          "warp_size": 64
+        },
+        "asm_sha256": {
+          "source": "ae5be615975aed98af9b9d1b4084bd682ce58fd9f97ea73176bbd229fcbb6b2d",
+          "ttir": "ef0259382b04626264484b36ff1886c6f7966522bb883fbbc5d16e5faa65476f",
+          "ttgir": "d3ae8e33f8c5f2039589ed759f96584ea8f2b2ea6bd697b8a41c4ee38615d2f6",
+          "llir": "3243044b87f8655c8d3c79cfb364addf024757f5620173b7745c6353b1b19cb8",
+          "asm": "ffdf86669a2dbc020f55834aac71067221e4517d96dd548d0a615e7f45a33173",
+          "cubin": "be2f8b39ca3b5b44111760c9c16401accb4ede553696e1bd9bfaa79bd6e08e63"
+        }
+      },
+      "private_bytes": 0
+    }
+  },
+  "dispatch": {
+    "index_source_sha256": "47a7108bcf8424a96651021703f8731f1866a0e2eff88a1ac647e574ccf7e61d",
+    "registered": true,
+    "exclude_ops": []
+  },
+  "native_install": {
+    "installed": true,
+    "already": true
+  },
+  "flaggems_original": {
+    "path": "/usr/local/lib/python3.12/site-packages/flag_gems/ops/flash_kernel.py",
+    "sha256": "eef0202e6c0ed08bef8098adede1a603c63354c54b54a19414e210b675157265",
+    "upstream": "https://github.com/flagos-ai/FlagGems/blob/v5.3.5/src/flag_gems/ops/flash_kernel.py",
+    "git_blob": "134075b148126a010734e49effedc554da801b68"
+  },
+  "device": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+  "initial_writer_exact": {
+    "key": true,
+    "value": true
+  },
+  "actual_abi": {
+    "q": {
+      "shape": [
+        2047,
+        16,
+        128
+      ],
+      "stride": [
+        2048,
+        128,
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "data_ptr": 138054285131776,
+      "storage_offset": 0
+    },
+    "k": {
+      "shape": [
+        1024,
+        16,
+        2,
+        128
+      ],
+      "stride": [
+        8192,
+        256,
+        128,
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "data_ptr": 138054299811840,
+      "storage_offset": 0
+    },
+    "v": {
+      "shape": [
+        1024,
+        16,
+        2,
+        128
+      ],
+      "stride": [
+        8192,
+        256,
+        128,
+        1
+      ],
+      "dtype": "torch.bfloat16",
+      "data_ptr": 138054299820032,
+      "storage_offset": 4096
+    },
+    "table": {
+      "shape": [
+        1,
+        8192
+      ],
+      "stride": [
+        8192,
+        1
+      ],
+      "dtype": "torch.int32",
+      "data_ptr": 138054297885184,
+      "storage_offset": 0
+    }
+  },
+  "configs": {
+    "current": {
+      "BLOCK_M": 128,
+      "BLOCK_Q": 16,
+      "TILE_SIZE": 64,
+      "num_warps": 8,
+      "num_stages": 1
+    },
+    "flaggems_original": {
+      "BLOCK_M": 128,
+      "BLOCK_N": 32,
+      "num_warps": 4,
+      "num_stages": 3,
+      "BLOCK_K": 128
+    },
+    "page16_rows_n64": {
+      "BLOCK_M": 128,
+      "BLOCK_N": 64,
+      "num_warps": 4,
+      "num_stages": 3,
+      "BLOCK_K": 128
+    }
+  },
+  "active_arms": [
+    "current",
+    "flaggems_original",
+    "page16_rows_n64"
+  ],
+  "initial_oracle": {
+    "criteria": "\u6bcf\u81c2 finite \u4e14 max_abs\u22645e-4\u3001relative_l2\u22640.01\uff1b\u4ec5\u672c\u5408\u6210\u8f93\u5165",
+    "arms": {
+      "current": {
+        "max_abs": 0.0001364723083135816,
+        "rms_abs": 3.0695905011833144e-05,
+        "relative_l2": 0.0022837951317542346,
+        "finite": true,
+        "passed": true
+      },
+      "flaggems_original": {
+        "max_abs": 0.00018109651240036384,
+        "rms_abs": 3.0863843998109444e-05,
+        "relative_l2": 0.0022962899006539203,
+        "finite": true,
+        "passed": true
+      },
+      "page16_rows_n64": {
+        "max_abs": 0.00018109651240036384,
+        "rms_abs": 3.086568064468169e-05,
+        "relative_l2": 0.002296426548343534,
+        "finite": true,
+        "passed": true
+      }
+    }
+  },
+  "initial_sanity": {
+    "current": {
+      "finite": true,
+      "guard": true
+    },
+    "flaggems_original": {
+      "finite": true,
+      "guard": true
+    },
+    "page16_rows_n64": {
+      "finite": true,
+      "guard": true
+    }
+  },
+  "changed_writer_exact": {
+    "key": true,
+    "value": true
+  },
+  "changed_input_graph": {
+    "current": {
+      "replay_eager_bits": true,
+      "changed": true,
+      "finite": true,
+      "guard": true
+    },
+    "flaggems_original": {
+      "replay_eager_bits": true,
+      "changed": true,
+      "finite": true,
+      "guard": true
+    },
+    "page16_rows_n64": {
+      "replay_eager_bits": true,
+      "changed": true,
+      "finite": true,
+      "guard": true
+    }
+  },
+  "changed_oracle": {
+    "criteria": "\u6bcf\u81c2 finite \u4e14 max_abs\u22645e-4\u3001relative_l2\u22640.01\uff1b\u4ec5\u672c\u5408\u6210\u8f93\u5165",
+    "arms": {
+      "current": {
+        "max_abs": 4.9663431700840144e-05,
+        "rms_abs": 1.1231169332807277e-05,
+        "relative_l2": 0.002352117474808797,
+        "finite": true,
+        "passed": true
+      },
+      "flaggems_original": {
+        "max_abs": 4.651117241925504e-05,
+        "rms_abs": 1.129874389846202e-05,
+        "relative_l2": 0.0023662694577430087,
+        "finite": true,
+        "passed": true
+      },
+      "page16_rows_n64": {
+        "max_abs": 4.651117241925504e-05,
+        "rms_abs": 1.1334259407007815e-05,
+        "relative_l2": 0.002373707387472487,
+        "finite": true,
+        "passed": true
+      }
+    }
+  },
+  "read_only_checks": {
+    "kv": true,
+    "query": true,
+    "key": true,
+    "value": true,
+    "rng": true,
+    "guards": true
+  },
+  "database_unchanged_during_ABBA": true,
+  "summary": {
+    "original": {
+      "event": {
+        "current_ms": 8.36804485321045,
+        "other_ms": 29.73265266418457,
+        "fraction_saved": -2.553118223640671
+      },
+      "wall": {
+        "current_ms": 8.5295865625,
+        "other_ms": 29.840496718750003,
+        "fraction_saved": -2.4984692986108614
+      }
+    },
+    "candidate": {
+      "event": {
+        "current_ms": 8.366357326507568,
+        "other_ms": 82.94353103637695,
+        "fraction_saved": -8.91393599381449
+      },
+      "wall": {
+        "current_ms": 8.49541084375,
+        "other_ms": 83.051707375,
+        "fraction_saved": -8.776067208815503
+      }
+    }
+  },
+  "decision": "\u7ec4\u4ef6\u4fe1\u53f7\uff1b\u662f\u5426\u8fdb\u5165\u6a21\u578b\u96c6\u6210\u7531root\u6309\u6570\u503c\u3001\u8d44\u6e90\u3001\u539f\u5e93\u4e0e\u5f53\u524d\u53cc\u91cd\u5dee\u989d\u51b3\u5b9a"
+}

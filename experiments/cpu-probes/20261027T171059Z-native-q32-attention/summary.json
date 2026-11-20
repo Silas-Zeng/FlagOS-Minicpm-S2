@@ -1,0 +1,50 @@
+{
+  "run": "20261027T171059Z-native-q32-attention",
+  "scope": "纯CPU实编与机器级静态检查；未GPU执行",
+  "compile": {
+    "passed": true,
+    "checks": {
+      "real_kernel": true,
+      "QK_and_PV_exist": true,
+      "four_page_SME_exists": true,
+      "copy_wait_exists": true,
+      "phase_barriers_exist": true,
+      "one_64KiB_backing": true,
+      "natural_exp_lowered": true,
+      "score_and_sum_FMA_present": true
+    },
+    "counts": {
+      "mma_llvm": 64,
+      "sme_llvm": 32,
+      "wait8": 1,
+      "barrier": 7,
+      "mma_asm": 64,
+      "sme_asm": 32,
+      "exp_asm": 20,
+      "fma_asm": 84,
+      "barrier_asm": 7
+    },
+    "resources": {
+      "shared_bytes": 65536,
+      "private_bytes": 0,
+      "SGPR": 104,
+      "VGPR": 122,
+      "sgpr_spill_count": 89,
+      "vgpr_spill_count": 0
+    },
+    "files": {
+      "probe.ll": "5415290e708791e75681886d3ade324c6154a75892328960ce758313beb706e8",
+      "probe.s": "3e08fa7fed0408c6ac4a0b853e27df1023a9d76d1ffc2696549c928361fc1241"
+    },
+    "scope": "compiler-only ordinary causal Q32/T64 synchronous attention prototype; exact operation dependencies/FP mode still need source-specific review",
+    "GPU_executed": false,
+    "numerical_qualified": false,
+    "performance_qualified": false,
+    "limits": [
+      "static counts may grow from branch duplication; they are not a dynamic performance estimate",
+      "aggregate FMA count does not by itself prove each running-L update/scale operation matches original ASM",
+      "must inspect exp log2e multiply order, full-C rescale/MMA chain, tail mask and Q/P/V alias CFG before numerical launch"
+    ]
+  },
+  "decision": "保留编译可行性，静态机制检查不授数值/性能或模型资格。"
+}

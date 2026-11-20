@@ -1,0 +1,32 @@
+{
+  "basis_run": "20261024T161030Z-main0bf9-main-official-four-rounds",
+  "base_commit": "0bf9d2efeaa10144dd7f0ff4597298df029f9328",
+  "base_tree": "8671e2ec040601981d1533d6a09beb20b9e507db",
+  "selected_combo_range": [
+    1,
+    2048
+  ],
+  "selected_math_matches_pr32_4d9a": true,
+  "original_math_ast_unchanged": true,
+  "added_stores": [
+    "K BF16 same result to slot cache",
+    "V unchanged from QKV offset2304 to slot cache"
+  ],
+  "fp_fusion": "原combo未显式设置；继承默认，不认定False",
+  "device_executed": false,
+  "files": {
+    "baseline_kernel.py": "06cbabfa1da5533380f64a692e09b7f4cf615f5d0a0f9cd9d531a09ed6ade124",
+    "candidate_kernel.py": "90ae77748171e9020fc088d5f7169c72c4b8cd54941fb556442a66741a733cd8",
+    "run_component.py": "5f8832fdb9dbe8ad0fa7e97008087f4a38d233ec9811d47acb7151a892ac5158"
+  },
+  "cpu_checks": "cpu-check.json:6",
+  "independent_review": "teammate独立增量窄审通过：仅3处None-safe配置记录，内核/采样/门未变；不重跑原套件",
+  "limitations": [
+    "actual_rows固定于每张capture图，未证明同图改变实际行数",
+    "CPU完整slots与校验仅为组件输入，不证明模型可廉价取得，不得新增GPU回读",
+    "原heuristic重新编译热身并保存本次配置，未直接复用旧机器码或固定旧服务XBLOCK",
+    "不外推旧服务核占比或整模型收益"
+  ],
+  "parent_failure": "203032 component stopped after first-case math/Graph/samples at optional configs=None metadata; no case result persisted; raw retained",
+  "changes": "only None-safe optional configs/launchers serialization, no kernel/measurement/guard changes"
+}

@@ -1,0 +1,39 @@
+--- sampler-v2-entry
++++ head-temperature-entry
+@@ -25,7 +25,7 @@
+ 
+ def main():
+     parser = argparse.ArgumentParser(description=__doc__)
+-    parser.add_argument("--source-dir", type=Path, default=Path('/workspace/experiments/minicpm-s2/code/main2412207-pr47-20261027'))
++    parser.add_argument("--source-dir", type=Path, default=Path('/workspace/experiments/minicpm-s2/code/main56f1838-pr66-20261027'))
+     parser.add_argument("--native-library", type=Path, default=Path('/workspace/experiments/minicpm-s2/official/20261026T184110Z-main241-control-16k-four-rounds-control/native/biv150_native_w8a8.so'))
+     parser.add_argument("--model", type=Path, default=Path("/workspace/MiniCPM5-2B"))
+     parser.add_argument("--run-dir", type=Path)
+@@ -42,11 +42,11 @@
+             raise RuntimeError("入口资产变化：" + name)
+     source = args.source_dir.resolve(strict=True)
+     if not source.is_relative_to(ROOT / "code") or args.source_dir.is_symlink():
+-        raise RuntimeError("必须使用实验code内冻结main241源码")
++        raise RuntimeError("必须使用实验code内冻结main56源码")
+     native = args.native_library.resolve(strict=True)
+     source_before = source_identity.check(source, native)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-sampler-preprocess-stats-component")
++    run = ROOT / "framework" / (stamp + "-lm-head-temperature-epilogue-component")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+@@ -54,10 +54,10 @@
+         shutil.copyfile(HERE / name, assets / name)
+     shutil.copyfile(HERE / "asset-pins.json", assets / "asset-pins.json")
+     state = dict(started_utc=stamp, owner_pid=os.getpid(),
+-        scope="固定R64完整Sampler；新转换/温度/首遍stats融合，原随机链不改，生产文件不变", run=str(run),
++        scope="固定R64完整head+Sampler；只head温度epilogue，原stats/RNG不改", run=str(run),
+         command=[sys.executable, *sys.argv], owned_processes=[], exit_code=1)
+-    state.update(source=str(source), source_count=765, source_identity=source_before,
+-                 base_commit="241220723a09061c182764f8f738e5ec01190367",
++    state.update(source=str(source), source_count=807, source_identity=source_before,
++                 base_commit="56f1838192abc940b3fb9accef490022ac125000",
+                  native=str(native), native_sha256=source_identity.NATIVE_SHA)
+     save(run / "manifest.json", state)
+     lock = child = monitor = None

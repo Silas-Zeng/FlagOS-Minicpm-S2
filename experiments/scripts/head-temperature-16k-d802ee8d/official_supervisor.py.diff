@@ -1,0 +1,40 @@
+--- 4K/official_supervisor.py
++++ 16K/official_supervisor.py
+@@ -27,8 +27,8 @@
+         kv=dict(valid=actual_kv==baseline['kv_tokens'],baseline=baseline['kv_tokens'],candidate=actual_kv)
+     except (OSError,ValueError) as error:
+         kv=dict(valid=False,error=repr(error),baseline=baseline['kv_tokens'])
+-    return dict(valid=bool(stack['valid'] and head['valid'] and kv['valid']),stack=stack,head_temperature=head,kv=kv,
+-        scope='首冷后一次只读实际启用/同KV资格；覆盖缺失不冒称官方请求失败，完整provider仍由原posthoc负责')
++    return dict(valid=bool(stack['valid'] and head_activation.optional_scope_valid(head) and kv['valid']),stack=stack,head_temperature=head,kv=kv,
++        scope='首冷后原stack/同KV资格；16K可合法不命中R64，实际选中须原三marker闭合；拒绝/回原/解析错误不放宽')
+ 
+ 
+ def complete_csv_snapshot(path):
+@@ -54,7 +54,7 @@
+         value=float(row['Total tok/s']);base=reference[size]
+         if not math.isfinite(value) or not value>0:return dict(kind='runtime_error',reason='首暖吞吐非有效正数',prefill=size,round=2)
+         if value<base:
+-            return dict(kind='performance',reason='本档第2轮首暖低于本次main56本次4K首暖，停止后续；不是完整官方成绩',
++            return dict(kind='performance',reason='本档第2轮首暖低于本次main56本次16K首暖，停止后续；不是完整官方成绩',
+                 prefill=size,round=2,candidate=value,baseline=base,delta_percent=(value/base-1)*100)
+     return None
+ 
+@@ -71,7 +71,7 @@
+     command=['/usr/local/bin/python',str(HERE/'official_owner.py'),'--performance-control',str(ROOT/'official/20261024T161030Z-main0bf9-main-official-four-rounds-control'),'--source-dir',str(source)]
+     with log.open('x') as out:owner=subprocess.Popen(command,stdout=out,stderr=subprocess.STDOUT,stdin=subprocess.DEVNULL,start_new_session=True)
+     receipt=dict(supervisor_pid=os.getpid(),owner_pid=owner.pid,label=label,log=str(log),command=command,
+-        started_utc=stamp,prefill=4096,baseline=baseline,stop_policy='每档仅第2轮首暖筛；正首暖后跑满该档四轮，不因后续波动早停；错误立即停止')
++        started_utc=stamp,prefill=16384,baseline=baseline,stop_policy='每档仅第2轮首暖筛；正首暖后跑满该档四轮，不因后续波动早停；错误立即停止')
+     save(HERE/'supervisor-launch.json',receipt);print(json.dumps(receipt),flush=True)
+     fd=os.pidfd_open(owner.pid);poll=select.poll();poll.register(fd,select.POLLIN)
+     state=None;seen=0;stopped=False;stack_checked=False;server_position=0;server_pending=''
+@@ -98,7 +98,7 @@
+                     rows=complete_csv_snapshot(files[-1])
+                 if rows and rows[0].get('Run Status')=='SUCCESS' and not stack_checked and 'qualification_stop' not in receipt:
+                     evidence=first_round_stack(server_log,baseline);save(Path(state['control'])/'first-round-stack.json',evidence);stack_checked=True
+-                    if not evidence['valid']:receipt['qualification_stop']=dict(reason='首冷后head覆盖/原stack/同KV资格未闭合，不作净收益对照；不冒称官方请求失败')
++                    if not evidence['valid']:receipt['qualification_stop']=dict(reason='首冷后head异常或原stack/同KV未闭合，不作净收益对照；不因单纯无R64覆盖停止')
+                 decision=new_row_decision(rows,seen,baseline['first_warm']) if rows is not None else None
+                 if decision:
+                     decision.update(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),completed_csv_rows=len(rows),owner_pid=owner.pid)

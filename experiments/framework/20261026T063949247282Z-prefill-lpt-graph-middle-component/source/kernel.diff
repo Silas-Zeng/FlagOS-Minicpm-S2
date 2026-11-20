@@ -1,0 +1,182 @@
+--- 原normalized/current.kernel.py
++++ stride-constexpr/candidate.kernel.py
+@@ -1,5 +1,5 @@
+ @triton.jit
+-def kernel_biv150_prefill_normalized(
++def kernel_biv150_prefill_stride(
+     # Output destination for the 2D path.  In 3D mode per-segment partials
+     # go to the ``segm_*`` tensors (see bottom of signature) and
+     # ``output_ptr`` is unused (callers may pass any non-null pointer).
+@@ -22,11 +22,11 @@
+     softcap,
+     num_query_heads: tl.constexpr,  # int
+     num_queries_per_kv: tl.constexpr,  # int
+-    block_table_stride: tl.int64,  # int
+-    query_stride_0: tl.int64,  # int
+-    query_stride_1: tl.int64,  # int, should be equal to head_size
+-    output_stride_0: tl.int64,  # int
+-    output_stride_1: tl.int64,  # int, should be equal to head_size
++    block_table_stride: tl.constexpr,  # int
++    query_stride_0: tl.constexpr,  # int
++    query_stride_1: tl.constexpr,  # int, should be equal to head_size
++    output_stride_0: tl.constexpr,  # int
++    output_stride_1: tl.constexpr,  # int, should be equal to head_size
+     qq_bias_stride_0: tl.int64,  # int
+     BLOCK_SIZE: tl.constexpr,  # int
+     TILE_SIZE: tl.constexpr,  # int must be power of 2
+@@ -44,13 +44,13 @@
+     USE_MM_PREFIX: tl.constexpr,  # bool
+     MAX_MM_RANGES: tl.constexpr,  # int
+     mm_prefix_range_ptr,
+-    stride_k_cache_0: tl.int64,  # int
+-    stride_k_cache_1: tl.int64,  # int
+-    stride_k_cache_2: tl.int64,  # int
++    stride_k_cache_0: tl.constexpr,  # int
++    stride_k_cache_1: tl.constexpr,  # int
++    stride_k_cache_2: tl.constexpr,  # int
+     stride_k_cache_3: tl.constexpr,  # int
+-    stride_v_cache_0: tl.int64,  # int
+-    stride_v_cache_1: tl.int64,  # int
+-    stride_v_cache_2: tl.int64,  # int
++    stride_v_cache_0: tl.constexpr,  # int
++    stride_v_cache_1: tl.constexpr,  # int
++    stride_v_cache_2: tl.constexpr,  # int
+     stride_v_cache_3: tl.constexpr,  # int
+     query_start_len_ptr,
+     BLOCK_Q: tl.constexpr,
+@@ -98,6 +98,17 @@
+     USE_TD_QO: tl.constexpr = False,
+     Q_IS_FP8: tl.constexpr = False,
+ ):
++    block_table_stride_i64 = tl.full((), block_table_stride, tl.int64)
++    query_stride_0_i64 = tl.full((), query_stride_0, tl.int64)
++    query_stride_1_i64 = tl.full((), query_stride_1, tl.int64)
++    output_stride_0_i64 = tl.full((), output_stride_0, tl.int64)
++    output_stride_1_i64 = tl.full((), output_stride_1, tl.int64)
++    stride_k_cache_0_i64 = tl.full((), stride_k_cache_0, tl.int64)
++    stride_k_cache_1_i64 = tl.full((), stride_k_cache_1, tl.int64)
++    stride_k_cache_2_i64 = tl.full((), stride_k_cache_2, tl.int64)
++    stride_v_cache_0_i64 = tl.full((), stride_v_cache_0, tl.int64)
++    stride_v_cache_1_i64 = tl.full((), stride_v_cache_1, tl.int64)
++    stride_v_cache_2_i64 = tl.full((), stride_v_cache_2, tl.int64)
+     USE_PER_TOKEN_HEAD_SCALES: tl.constexpr = KV_QUANT_MODE >= 2
+     USE_FP8_Q_DESCALE: tl.constexpr = KV_QUANT_MODE == 1 and Q_IS_FP8
+ 
+@@ -145,8 +156,8 @@
+     query_offset_0 = cur_batch_in_all_start_index + query_pos
+     query_offset_1 = kv_head_idx * num_queries_per_kv + offs_m % num_queries_per_kv
+     query_offset = (
+-        query_offset_0[:, None] * query_stride_0
+-        + query_offset_1[:, None] * query_stride_1
++        query_offset_0[:, None] * query_stride_0_i64
++        + query_offset_1[:, None] * query_stride_1_i64
+         + offs_d[None, :]
+     )
+ 
+@@ -159,8 +170,8 @@
+         Q = _load_q_td(
+             query_ptr,
+             q_block_local_len,
+-            query_stride_0,
+-            query_stride_1,
++            query_stride_0_i64,
++            query_stride_1_i64,
+             cur_batch_in_all_start_index,
+             q_block_local_idx,
+             kv_head_idx,
+@@ -177,7 +188,7 @@
+             other=0.0,
+         )
+ 
+-    block_table_offset = seq_idx * block_table_stride
++    block_table_offset = seq_idx * block_table_stride_i64
+ 
+     M = init_softmax_M(
+         sink_ptr, query_offset_1, query_mask_1, segm_idx, BLOCK_M, USE_SINKS, IS_3D
+@@ -245,9 +256,9 @@
+                 physical_block_scalar,
+                 kv_head_idx,
+                 offset_in_block,
+-                stride_k_cache_0,
+-                stride_k_cache_1,
+-                stride_k_cache_2,
++                stride_k_cache_0_i64,
++                stride_k_cache_1_i64,
++                stride_k_cache_2_i64,
+                 stride_k_cache_3,
+                 BLOCK_SIZE,
+                 TILE_SIZE,
+@@ -260,9 +271,9 @@
+                 physical_block_scalar,
+                 kv_head_idx,
+                 offset_in_block,
+-                stride_v_cache_0,
+-                stride_v_cache_1,
+-                stride_v_cache_2,
++                stride_v_cache_0_i64,
++                stride_v_cache_1_i64,
++                stride_v_cache_2_i64,
+                 stride_v_cache_3,
+                 BLOCK_SIZE,
+                 TILE_SIZE,
+@@ -271,16 +282,16 @@
+             )
+         else:
+             v_offset = (
+-                physical_block_idx[:, None] * stride_v_cache_0
+-                + kv_head_idx * stride_v_cache_2
++                physical_block_idx[:, None] * stride_v_cache_0_i64
++                + kv_head_idx * stride_v_cache_2_i64
+                 + offs_d[None, :] * stride_v_cache_3
+-                + (seq_offset % BLOCK_SIZE)[:, None] * stride_v_cache_1
++                + (seq_offset % BLOCK_SIZE)[:, None] * stride_v_cache_1_i64
+             )
+             k_offset = (
+-                physical_block_idx[None, :] * stride_k_cache_0
+-                + kv_head_idx * stride_k_cache_2
++                physical_block_idx[None, :] * stride_k_cache_0_i64
++                + kv_head_idx * stride_k_cache_2_i64
+                 + offs_d[:, None] * stride_k_cache_3
+-                + (seq_offset % BLOCK_SIZE)[None, :] * stride_k_cache_1
++                + (seq_offset % BLOCK_SIZE)[None, :] * stride_k_cache_1_i64
+             )
+             # K : (HEAD_SIZE, TILE_SIZE)
+             K_load = tl.load(
+@@ -450,20 +461,20 @@
+             acc = tl.clamp(acc, FP8_MIN, FP8_MAX)
+         if USE_TD_QO:
+             # 2D target: flat output[token, head, :].  Strides come
+-            # straight from the caller (``output_stride_0`` per token,
+-            # ``output_stride_1`` per head).
++            # straight from the caller (``output_stride_0_i64`` per token,
++            # ``output_stride_1_i64`` per head).
+             output_base = (
+                 output_ptr
+                 + (cur_batch_in_all_start_index + q_block_local_idx * BLOCK_Q)
+-                * output_stride_0
+-                + (kv_head_idx * num_queries_per_kv) * output_stride_1
++                * output_stride_0_i64
++                + (kv_head_idx * num_queries_per_kv) * output_stride_1_i64
+             )
+             _store_output_td(
+                 output_base,
+                 acc,
+                 q_block_local_len,
+-                output_stride_0,
+-                output_stride_1,
++                output_stride_0_i64,
++                output_stride_1_i64,
+                 num_queries_per_kv,
+                 BLOCK_Q,
+                 HEAD_SIZE,
+@@ -471,8 +482,8 @@
+             )
+         else:
+             output_offset = (
+-                query_offset_0[:, None] * output_stride_0
+-                + query_offset_1[:, None] * output_stride_1
++                query_offset_0[:, None] * output_stride_0_i64
++                + query_offset_1[:, None] * output_stride_1_i64
+                 + offs_d[None, :]
+             )
+             tl.store(

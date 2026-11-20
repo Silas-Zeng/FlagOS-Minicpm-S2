@@ -1,0 +1,29 @@
+{
+  "review": "actual-so-increment",
+  "scope": "仅复核CPU编译得到的A/B实际SO、符号隔离及反汇编中的K/V搬运与同步顺序；不复核组件数值，也不宣称性能结果。",
+  "build_bundle_sha256": "867793beefc7fc70ef59bf96d6398fbf1ee70939eae29f51b9d3a1c93b12e0b2",
+  "compile_summary_sha256": "de531bdbfdad2d98a8e16d3efc7c880aad1f415a24bee10cfffbb588a41e68db",
+  "source_pins_sha256": "f07e9ec222f2660ef456746d853d97974be547cdde52befd53086f1814c797ea",
+  "build": {
+    "compiled": true,
+    "compile_only": true,
+    "cuda_initialized": false,
+    "scope": "N30/S4/Q-stride-2048",
+    "scratch_width": 16,
+    "shared_static_bytes": 8192,
+    "resource_metadata": "归档没有直接寄存器占用/occupancy证据；不作相关推断。"
+  },
+  "libraries": {
+    "A_sha256": "2b16e692005ee01f3e8ffe659ccfeaa3b4550d32cfdd003588f31343cc407526",
+    "B_sha256": "4154f29039b34e4e7e306706a7c52680719d38555c1ee627ea23e8bfeebfc1de",
+    "symbol_namespace_collision": false,
+    "symbols": "A/B导出符号分别带_a_/_b_后缀，S2/S4 launcher名称分臂；cjj/launch符号交集为空。"
+  },
+  "assembly": {
+    "A": "S4包含V rowxfb16路径，不含K colxfb8搬运，符合基线臂。",
+    "B": "S4包含K colxfb8与V rowxfb16路径；下一页K搬运在当前页PV MMA前发起，之后出现多条当前PV MMA，再等待g2scnt并进入后续消费；V搬运在PV前等待并过barrier。实际顺序与源码预期一致。",
+    "evidence": "S4反汇编中next-K发起约0x15F70/0x15F78，期间有PV MMA（约0x16050至0x161A8），随后g2scnt等待约0x161B8；这些是该编译产物的顺序证据，不是吞吐测量。"
+  },
+  "assessment": "未发现本次实际SO新增的ABI、符号隔离或同步顺序阻断，可进入限定正确性组件验证。组件数值门、运行稳定性及性能仍待实测。",
+  "verification": "只读本地归档与反汇编；未SSH、未启动GPU。"
+}

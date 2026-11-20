@@ -1,0 +1,32 @@
+--- main241/_row_stats_partial
++++ candidate/_fused_cast_temperature_stats
+@@ -1,4 +1,10 @@
+-def _row_stats_partial(
++from vllm.triton_utils import tl, triton
++
++@triton.jit
++def _fused_cast_temperature_stats(
++    INPUT,
++    TEMPERATURE,
++    stride_input,
+     LOGITS,
+     MAX_PART,
+     SUM_PART,
+@@ -15,13 +21,16 @@
+     start = split * TILES_PER_SPLIT * BLOCK
+     row_max = float("-inf")
+     row_sum = 0.0
++    temperature = tl.load(TEMPERATURE + row)
+     for tile in range(TILES_PER_SPLIT):
+         idx = start + tile * BLOCK + offs
+         values = tl.load(
+-            LOGITS + row * stride_row + idx,
++            INPUT + row * stride_input + idx,
+             mask=idx < VOCAB_SIZE,
+             other=float("-inf"),
+         )
++        values = values.to(tl.float32) / temperature
++        tl.store(LOGITS + row * stride_row + idx, values, mask=idx < VOCAB_SIZE)
+         tile_max = tl.max(values, axis=0)
+         new_max = tl.maximum(row_max, tile_max)
+         safe_new_max = tl.where(new_max == float("-inf"), 0.0, new_max)

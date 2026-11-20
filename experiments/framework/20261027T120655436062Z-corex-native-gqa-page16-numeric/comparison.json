@@ -1,0 +1,74 @@
+{
+  "run_id": "20261027T120655436062Z-corex-native-gqa-page16-numeric",
+  "status": "failed_stop",
+  "case_count": 4,
+  "all_executed_numeric_comparisons_bitwise": true,
+  "independent_fp64_cases_passed": 3,
+  "original_coverage_false_preserved": true,
+  "original_coverage": {
+    "normal": true,
+    "subnormal": false,
+    "below_smallest_subnormal": false
+  },
+  "posthoc_CPU_coverage": {
+    "normal": true,
+    "subnormal": true,
+    "below_smallest_subnormal": true
+  },
+  "all_gates_passed": false,
+  "graph_executed": false,
+  "side_stream_executed": false,
+  "timings": [],
+  "performance_qualified": false,
+  "official_qualified": false,
+  "model_accuracy_qualified": false,
+  "compile_original_passed": false,
+  "compile_backend_equivalence_passed": true,
+  "library_sha256": "47d1b81172e56bfae5ae06c56bb4ffde457e65a1baae7ae566f5682bcc566d05",
+  "cleanup": {
+    "database_restored": true,
+    "source_unchanged": true,
+    "native_unchanged": true,
+    "exit_code": 1,
+    "finished_utc": "2026-10-27T12:07:14.247100+00:00"
+  },
+  "original_result_sha256": "83ba74df468ed904712d4bb2c3ba21ba12b13a5267692e582dfb768c693cd3c8",
+  "supplement": [
+    {
+      "path": "posthoc-120655/recompute.py",
+      "sha256": "0cc2c953a28bcd68a1dc052c76abbc594ed7e36e1c183b222d29cdab6f3368aa",
+      "bytes": 2408
+    },
+    {
+      "path": "posthoc-120655/result.json",
+      "sha256": "52a801ef1f4a13c26e9ede6b55aecf4098000c5f9a2fd989f0b0193bf82d6a91",
+      "bytes": 1816
+    },
+    {
+      "path": "related-cpu/113301/driver.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "related-cpu/113301/llvm-build.log",
+      "sha256": "569cc5f2023718d55cef0f895ebecddea37a26ef83a1d59c755b7efc22a3439c",
+      "bytes": 2730
+    },
+    {
+      "path": "related-cpu/113301/command.json",
+      "sha256": "4e6fbbcdee9ea843298de32e3d910653440aadc3cb571ded079c6dc0703b23d6",
+      "bytes": 270
+    },
+    {
+      "path": "related-cpu/113301/compiler-version.txt",
+      "sha256": "cb15fa53266ef1e7632e09e62c2611057b57314182535cefaad11531d3142e41",
+      "bytes": 176
+    },
+    {
+      "path": "related-cpu/113301/input.sha256",
+      "sha256": "9475182ae6fc228da59e72dcea4381a9473d8eebcde2b01b0d500deb92c5e559",
+      "bytes": 155
+    }
+  ],
+  "conclusion": "原生CoreX单page16/D128、每KV头8Q数值诊断，非完整历史loop/reducer。4组实际GPU的shared BF16、FP32/BF16 P、partial/max/sum均跨臂逐位，finite/输入只读/RNG通过；前三组独立FP64通过。第四underflow覆盖检查原false触发failed_stop，Graph/side未到、timings空，不称全门passed或性能/准确率资格。事后只读已存score的CPU float64证明normal/subnormal/低于最小subnormal输入均覆盖，原false/result保留；非数值不等证据，亦不能补授未执行门。113301先因device __exp2f声明失败；114038实际编译成功但原compile-check唯一exp2前端名字门false，backend补证同float_mode12/无修饰机器exp，其限制保留。owner72850于12:07:14 exit1，DB/source/native恢复及9031清理通过。80原件逐SHA复制，不接生产、不报吞吐。"
+}

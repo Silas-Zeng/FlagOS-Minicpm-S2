@@ -1,0 +1,141 @@
+{
+  "run": "20261028T111552Z-pr105-context-coverage-16k-diagnostic",
+  "status": "context_coverage_export_failed",
+  "conclusion": "PR105原单轮16K诊断128请求全部成功，但SIGUSR1后缺worker输出，owner判覆盖导出失败；RAM观察不可恢复，未确定signal回调的具体原因。源/两SO/DB恢复、清理通过，不重跑整轮，不称覆盖已证实或官方四轮成绩。",
+  "raw_original_files": 290,
+  "model_qualified": false,
+  "new_baseline": false,
+  "state": {
+    "owner_pid": 125811,
+    "run": "/workspace/experiments/minicpm-s2/official/20261028T111552Z-pr105-context-coverage-16k-diagnostic",
+    "control": "/workspace/experiments/minicpm-s2/official/20261028T111552Z-pr105-context-coverage-16k-diagnostic-control",
+    "source": "/workspace/experiments/minicpm-s2/code/20261028T111552Z-pr105-context-coverage",
+    "diagnostic_only": true,
+    "scored": false,
+    "tested_tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+    "model_baseline": "PR105 tested 814-source/c8 SO; merged main 1cbac531",
+    "steps": "one original run_once; no candidate enabled",
+    "completed": false,
+    "preflight": {
+      "checked_utc": "2026-10-28T11:15:52.639470+00:00",
+      "port_9031": "free",
+      "free_mib": 32700
+    },
+    "driver_exit_code": 1,
+    "driver_result": {
+      "status": "failed",
+      "benchmark_completed": false,
+      "accuracy_gate": "separate",
+      "cleanup_errors": [],
+      "score": "not an official performance result",
+      "benchmark_started_utc": "2026-10-28T11:17:02.618441+00:00",
+      "benchmark_exit_code": 0,
+      "benchmark_finished_utc": "2026-10-28T11:26:22.021818+00:00",
+      "error": "FileNotFoundError(2, 'No such file or directory')",
+      "traceback": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/scripts/run_official_gate.py\", line 226, in main\n    result['validation'] = validate_outputs(run)\n                           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/experiments/minicpm-s2/scripts/q32-context-coverage-16k-v2-4bc17cda/owner.py\", line 138, in validate\n    output = json.loads(target.read_text())\n                        ^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/pathlib.py\", line 1027, in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/pathlib.py\", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/experiments/minicpm-s2/official/20261028T111552Z-pr105-context-coverage-16k-diagnostic-control/observations/worker-125978.json'\n",
+      "benchmark_final_returncode": 0,
+      "server_final_returncode": 0,
+      "monitor_final_returncode": -15,
+      "postflight": {
+        "checked_utc": "2026-10-28T11:26:46.177903+00:00",
+        "port_9031": "free",
+        "free_mib": 32700
+      },
+      "benchmark_source_after": {
+        "RUNS": 4,
+        "SKIP_FIRST": 1
+      },
+      "exit_code": 1,
+      "finished_utc": "2026-10-28T11:26:46.189514+00:00",
+      "cpu_after": {
+        "cpu.cfs_quota_us": "600000\n",
+        "cpu.cfs_period_us": "100000\n",
+        "cpu.stat": "nr_periods 374201\nnr_throttled 2167\nthrottled_time 8838870125688\n"
+      },
+      "diagnostic_only": true,
+      "scored": false,
+      "workload_scope": "one original run_once([16384,1024,64,128]); CPU coverage only"
+    },
+    "postflight": {
+      "checked_utc": "2026-10-28T11:26:46.197410+00:00",
+      "port_9031": "free",
+      "free_mib": 32700
+    },
+    "database_restored": true,
+    "source_unchanged": true,
+    "libraries_unchanged": true,
+    "finished_utc": "2026-10-28T11:26:46.418023+00:00",
+    "exit_code": 1
+  },
+  "original_result": {
+    "status": "failed",
+    "benchmark_completed": false,
+    "accuracy_gate": "separate",
+    "cleanup_errors": [],
+    "score": "not an official performance result",
+    "benchmark_started_utc": "2026-10-28T11:17:02.618441+00:00",
+    "benchmark_exit_code": 0,
+    "benchmark_finished_utc": "2026-10-28T11:26:22.021818+00:00",
+    "error": "FileNotFoundError(2, 'No such file or directory')",
+    "traceback": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/scripts/run_official_gate.py\", line 226, in main\n    result['validation'] = validate_outputs(run)\n                           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/experiments/minicpm-s2/scripts/q32-context-coverage-16k-v2-4bc17cda/owner.py\", line 138, in validate\n    output = json.loads(target.read_text())\n                        ^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/pathlib.py\", line 1027, in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/pathlib.py\", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/experiments/minicpm-s2/official/20261028T111552Z-pr105-context-coverage-16k-diagnostic-control/observations/worker-125978.json'\n",
+    "benchmark_final_returncode": 0,
+    "server_final_returncode": 0,
+    "monitor_final_returncode": -15,
+    "postflight": {
+      "checked_utc": "2026-10-28T11:26:46.177903+00:00",
+      "port_9031": "free",
+      "free_mib": 32700
+    },
+    "benchmark_source_after": {
+      "RUNS": 4,
+      "SKIP_FIRST": 1
+    },
+    "exit_code": 1,
+    "finished_utc": "2026-10-28T11:26:46.189514+00:00",
+    "cpu_after": {
+      "cpu.cfs_quota_us": "600000\n",
+      "cpu.cfs_period_us": "100000\n",
+      "cpu.stat": "nr_periods 374201\nnr_throttled 2167\nthrottled_time 8838870125688\n"
+    },
+    "diagnostic_only": true,
+    "scored": false,
+    "workload_scope": "one original run_once([16384,1024,64,128]); CPU coverage only"
+  },
+  "single_round": {
+    "diagnostic_only": true,
+    "scored": false,
+    "official_script_sha256": "0813eba574e9d1eb50c297c515baa426da1bcb61ce8c78a398b482f246005565",
+    "official_repetitions_unchanged": [
+      4,
+      1
+    ],
+    "single_call_workload": [
+      16384,
+      1024,
+      64,
+      128
+    ],
+    "metrics": {
+      "successful_requests": 128.0,
+      "benchmark_duration": 519.01,
+      "total_input_tokens": 2097152.0,
+      "total_output_tokens": 131072.0,
+      "request_throughput": 0.25,
+      "output_throughput": 252.54,
+      "peak_output_throughput": 737.0,
+      "total_token_throughput": 4293.19,
+      "mean_ttft_ms": 118399.27,
+      "median_ttft_ms": 133867.78,
+      "p99_ttft_ms": 198402.11,
+      "mean_tpot_ms": 110.42,
+      "median_tpot_ms": 117.79,
+      "p99_tpot_ms": 131.54,
+      "mean_itl_ms": 110.42,
+      "median_itl_ms": 44.05,
+      "p99_itl_ms": 409.87,
+      "elapsed_sec": 559.27
+    }
+  },
+  "worker_observations_recoverable": false,
+  "official_score": false
+}

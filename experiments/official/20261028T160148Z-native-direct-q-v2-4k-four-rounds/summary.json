@@ -1,0 +1,53 @@
+{
+  "run": "20261028T160148Z-native-direct-q-v2-4k-four-rounds",
+  "status": "native_q32_direct_q_v2_official4k_complete_negative",
+  "conclusion": "官方4K完成原四轮、1024请求成功；首暖6468.67对6441.35 +0.424135%，按规则跑完；弃首三轮均6537.81对6627.816667 -1.358014%。路径资格、恢复清理通过。KV548432对548336不匹配，不作严格因果；direct-Q本组停止，不跑16K/105、不改基线。",
+  "raw_original_files": 364,
+  "model_qualified": false,
+  "new_baseline": false,
+  "source_snapshot": {
+    "source_tree": "c64a962dce6e0bbd09cbb701dfae610f0354686f",
+    "source_count": 819,
+    "direct_q_library_sha256": "872e5a88385599c9149125f804f109f16cc2367b5ded06b6911074aee9660a9f",
+    "baseline_commit": "1cbac531ca9afaa0e9a68624d5d10cb1d0412055"
+  },
+  "official_review": {
+    "run": "20261028T160148Z-native-direct-q-v2-4k-four-rounds",
+    "prefill": 4096,
+    "rates": [
+      5447.62,
+      6468.67,
+      6402.99,
+      6741.77
+    ],
+    "successful_requests": 1024,
+    "decision": "COMPLETE_NONPOSITIVE",
+    "official_four_rounds_complete": true,
+    "first_warm_baseline": 6441.35,
+    "first_warm_delta_percent": 0.42413469226170175,
+    "warm_mean": 6537.81,
+    "warm_mean_baseline": 6627.816666666667,
+    "warm_mean_delta_percent": -1.3580138255684937,
+    "compare_kv_match": false,
+    "kv_comparison": {
+      "valid": true,
+      "compare_kv_match": false,
+      "baseline": 548336,
+      "candidate": 548432,
+      "limitation": "KV容量不一致时仍记录官方观测和首暖筛选，但不能声称相同显存条件下的严格因果收益。"
+    },
+    "qualification_error": null,
+    "restoration_and_cleanup_passed": true,
+    "raw_csv_sha256": "9d1484ca081151b30798bef174bf77ba7259f5bf370079ae02e602111111e31a",
+    "limitations": [
+      "单次组对照不称统计稳定；KV不匹配时不能归因于唯一补丁。",
+      "吞吐请求成功不等于原105准确率通过；组件、官方与准确率资格分开。",
+      "主动首暖停止的driver异常和原始退出状态保留，不冒称四轮完整。"
+    ]
+  },
+  "qualification": {
+    "model_qualified": false,
+    "new_baseline": false,
+    "performance_stop": "完整四轮弃首均值为负，依规则停止direct-Q；不启动16K或105题"
+  }
+}

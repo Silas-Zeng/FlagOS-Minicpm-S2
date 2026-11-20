@@ -1,0 +1,87 @@
+{
+  "source": "160904 existing compiler outputs; no recompile",
+  "inputs": {
+    "probe.ll": "4dbcf9285faea6999be466e10f3fbfba0df8a873df3a8c63f282389dc6c175c2",
+    "probe.s": "64907647f15bd30c7bb1ad0680dda6330a8ff5b66a157d47d6c32bd8c5239456",
+    "compile-check.json": "b5a3061889698e6de6e71e1e52494066d47de2558e7539676d4c55d043148c8a",
+    "compile-check.log": "7d12d4ec54315195e8dadfbcab1c584e27010af9dbfac1e5aa085f56e4171d2e"
+  },
+  "original_passed": false,
+  "original_barrier_count": 0,
+  "original_error_preserved": true,
+  "correction": "checker searched llvm.nvvm.barrier.cta.sync.aligned.all; actual CoreX uses llvm.bi.sl.barrier",
+  "CoreX_barriers_LLVM_lines": [
+    132,
+    222,
+    336,
+    716,
+    762
+  ],
+  "barriers_ASM_lines": [
+    143,
+    178,
+    305,
+    525,
+    547
+  ],
+  "SME_LLVM_lines": [
+    239,
+    331
+  ],
+  "SME_ASM_lines": [
+    198,
+    301
+  ],
+  "wait_LLVM": [
+    332
+  ],
+  "wait_ASM": [
+    302
+  ],
+  "QK_MMA_ASM": [
+    395,
+    522
+  ],
+  "PV_MMA_ASM": [
+    573,
+    705
+  ],
+  "machine_phase_order_verified": true,
+  "issuing_warp": 0,
+  "all_warps_merge_before_consumers": true,
+  "shared_lifetimes": {
+    "Q": [
+      0,
+      65536
+    ],
+    "K": [
+      0,
+      16384
+    ],
+    "V": [
+      32768,
+      49152
+    ],
+    "P": [
+      0,
+      32768
+    ],
+    "order": "Q loads/barrier2 -> SME(wait warp0)/barrier3 -> all K QK reads/barrier4 -> P stores/barrier5 -> P+V PV"
+  },
+  "resources": {
+    "shared_bytes": 65536,
+    "private_bytes": 0,
+    "SGPR": 51,
+    "VGPR": 50,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0
+  },
+  "compiler_only_acceptance": true,
+  "numerical_qualified": false,
+  "performance_qualified": false,
+  "GPU_executed": false,
+  "limits": [
+    "machine synchronization/alias order only; not a numerical M16 mapping proof",
+    "native A-word and C-component matrix coordinates remain a separate non-symmetric device gate"
+  ]
+}

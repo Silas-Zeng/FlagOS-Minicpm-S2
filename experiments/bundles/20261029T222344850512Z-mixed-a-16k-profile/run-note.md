@@ -1,0 +1,1 @@
+同参非profile预热后完成128请求暖态诊断。Q32最大非Graph热点GPU事件201.460s；首次INSTALL marker未绑定Mixed主簇，Mixed调度样例Q=2018/context=12108/KV=14126，见调度形状索引；该索引不冒充各kernel的pointer ABI。profile/collector/analyzer成功，旧posthoc为diagnostic_incomplete；非官方成绩。

@@ -1,0 +1,55 @@
+{
+  "decision": "STOP_V1_NEW_SGPR_SPILL_NO_GPU",
+  "CPU_only": true,
+  "source_sha256": "f58176dc98c4e0ce5d615613cd6703a5eb82a9b64238747a10ea77c46c2bb800",
+  "files": {
+    "probe.ll": "d312fe93b16727158cb386e490d5b60e9b386bc1dee9b9fd36f1aebb4384e509",
+    "probe.s": "7d03383c8adc80e251dfaec040f04b23e99826ae5c57119a3e80d38610eceb3e"
+  },
+  "resources": {
+    "shared_bytes": 65536,
+    "private_bytes": 0,
+    "SGPR": 99,
+    "VGPR": 106,
+    "sgpr_spill_count": 2,
+    "vgpr_spill_count": 0
+  },
+  "checks": {
+    "Q_init_shared_removed": true,
+    "hot_240_FP_operands_order_equal_after_four_register_renames": true,
+    "next_32_SME_then_QK_softmax_PV_then_drain_barrier": true,
+    "three_hot_barriers_preserved": true,
+    "original_no_new_spill_gate": false
+  },
+  "FP_register_mapping": {
+    "v52": "v50",
+    "v51": "v49",
+    "v65": "v64",
+    "v60": "v59"
+  },
+  "spill_instructions": [
+    {
+      "line": 130,
+      "instruction": "ml_mov_s2v_b32 v105, s0, 0x0"
+    },
+    {
+      "line": 1016,
+      "instruction": "ml_mov_v2s_b32 s3, v105, 0x0"
+    },
+    {
+      "line": 1234,
+      "instruction": "ml_mov_s2v_b32 v105, s8, 0x1"
+    },
+    {
+      "line": 2242,
+      "instruction": "ml_mov_v2s_b32 s17, v105, 0x1"
+    }
+  ],
+  "spill_scope": "v105 lane0：head offset 130保存、输出路径1016重载；lane1：尾页半word边界1234保存、loop BB0_123/2242重载。后者属于尾页清零分支，不能称仅初始化；也不能称每个完整tile都发生。是SGPR寄存在VGPR lane，无private/HBM spill。",
+  "compiler_cause": "Q初始化被降低成32个独立ushort load及32次vmcnt(0)，重复有效性分支/地址构造。新增scalar压力与v105不能自动断言完全由哪一SSA值触发，但实际可删除的重复控制/等待明确。",
+  "next": "独立v2仅将每个word的有效token分支包住八d两half，保持f581失败及原资源门；重新实际编译决定，不修改本包、不授GPU。",
+  "limits": [
+    "这是静态编译机制复核，无数值/Graph/吞吐资格。",
+    "旧CPU地址、位型与offset证明复用，不重复运行。"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "status": "CPU_CONTRACT_ONLY_NO_GPU_QUALIFICATION",
+  "cases": [
+    {
+      "M": 2030,
+      "illustrative_tile": [
+        256,
+        256,
+        32
+      ],
+      "grid_each": [
+        192
+      ],
+      "total_ctas": 384,
+      "original_intermediate_bytes": 124723200,
+      "candidate_intermediate_bytes": 74833920,
+      "saved_logical_bytes": 49889280,
+      "scratch_bytes": 24944640,
+      "output_bytes": 24944640
+    },
+    {
+      "M": 2048,
+      "illustrative_tile": [
+        256,
+        256,
+        32
+      ],
+      "grid_each": [
+        192
+      ],
+      "total_ctas": 384,
+      "original_intermediate_bytes": 125829120,
+      "candidate_intermediate_bytes": 75497472,
+      "saved_logical_bytes": 50331648,
+      "scratch_bytes": 25165824,
+      "output_bytes": 25165824
+    }
+  ],
+  "original_silu_math_AST_equal": true,
+  "source_pins": {
+    "archive\\five-execution-20261026\\lpt-live-edge-silu\\artifact_compile_range_1_2048_subgraph_1-0.py": "9d40000ca8292e4d7ce9fabd06143e62bc02198c1047fdbc9491259f274bf4ab",
+    "archive\\five-execution-20261026\\lpt-live-edge-silu\\manifest.json": "8c826e39cf04c4d81920e255e225cb6a7c6af2b3e5816c12d3866480b3acea44",
+    "analysis\\gate-partial-fusion-20261026\\candidate.py": "f26385db68c7efc4cb22691921a3c83c1f3bb111fbd8d34ed4e7e10298fcee06",
+    "analysis\\gate-partial-fusion-20261026\\original_silu_kernel.py": "52c1984c9afd4b2bf748fece3b876cab05b74c493eab14605aab2b6777fc1bf3"
+  },
+  "original_installed_linear_sha256": "d431a4fa144ed67dc3deab46dd5beace3612858075f85c39e602447ba3bf768a",
+  "current_live_silu_sha256": "52c1984c9afd4b2bf748fece3b876cab05b74c493eab14605aab2b6777fc1bf3",
+  "actual_linear_contract": "GROUP_M8、acc += tl.dot(a,b,allow_tf32=False)；配置由原F.linear实际选择，不使用mm表",
+  "unverified": [
+    "实际opaque→F.linear身份/FlagGems绑定/被选tile须在组件worker核定",
+    "Triton/FlagTree编译与实际VGPR/shared/spill",
+    "GPU逐bit/FP64/Graph/side stream/RNG/完整两launch性能",
+    "B01双实现原件不可得；PR38评论为空，结构去重未完全核实"
+  ]
+}

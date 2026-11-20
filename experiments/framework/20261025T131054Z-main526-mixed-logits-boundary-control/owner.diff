@@ -1,0 +1,76 @@
+--- main526-mixed/verify_service.py
++++ mixed-logits/verify_service.py
+@@ -1,4 +1,4 @@
+-"""main526 freshserver原mixed双请求token诊断；不改变模型或采样。"""
++"""main526原mixed双请求+图外logits边界快照；不改数学、调度或采样。"""
+ import argparse
+ from datetime import datetime, timezone
+ import os
+@@ -11,6 +11,7 @@
+ import cache_gate as gate
+ import graph_gate
+ import diagnostic_requests
++import analyze
+ import lifecycle as life
+ import qualification as q
+ 
+@@ -30,11 +31,16 @@
+     common = q.load(gate.COMMON, 'final_ffn_verify_common')
+     source = args.source_dir.resolve(strict=True)
+     q.require(not args.source_dir.is_symlink() and source.is_relative_to(ROOT / 'code'), 'main526来源必须为已测code目录')
+-    manifest = q.read(HERE/'base-source-manifest.json')
++    manifest = q.read(HERE/'source-manifest.json')
+     (origin, blobs, hashes, _), (build, library, build_log), reference = q.qualify(args.performance_control, life)
+-    q.require(source == origin, '必须直接使用已验证main526源码')
++    base_hashes=hashes
++    blobs={p:dict(mode=v['mode'],sha=v['git_sha']) for p,v in manifest['files'].items()}
++    hashes={p:v['sha256'] for p,v in manifest['files'].items()}
++    q.require(source!=origin and len(hashes)==527 and life.source_maps(source)==(blobs,hashes),'诊断527来源不符')
++    q.require({p for p in set(hashes)|set(base_hashes) if hashes.get(p)!=base_hashes.get(p)} ==
++        {'vllm_fl/__init__.py','vllm_fl/patches/biv150_mixed_logits_observer.py'},'只允许图外观察接线/helper差异')
+     stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+-    run = ROOT / 'framework' / (stamp + '-main526-mixed-token-diagnostic')
++    run = ROOT / 'framework' / (stamp + '-main526-mixed-logits-boundary')
+     control = run.with_name(run.name + '-control')
+     run.mkdir(exist_ok=False)
+     control.mkdir(exist_ok=False)
+@@ -66,15 +72,18 @@
+     (control / 'q-hoist-artifacts').mkdir()
+     env['BIV150_Q_FRAGMENT_SERVICE_ARTIFACT_DIR'] = str(control / 'q-hoist-artifacts')
+     q.check_environment(origin, env, build, reference['graph'])
++    env.update(BIV150_MIXED_LOGITS='1',BIV150_MIXED_LOGITS_DIR=str(run/'logits-boundary'))
+     gate.save(control / 'environment-overrides.json', {k:v for k,v in sorted(env.items())
+         if k in gate.SAFE_ENV or k in ('BIV150_RESUME_NATIVE_RECEIPT', 'BIV150_RESUME_NATIVE_RECEIPT_SHA256',
+-                                      'BIV150_Q_FRAGMENT_SERVICE_ARTIFACT_DIR', 'PYTHONDONTWRITEBYTECODE')})
++                                      'BIV150_Q_FRAGMENT_SERVICE_ARTIFACT_DIR', 'PYTHONDONTWRITEBYTECODE',
++                                      'BIV150_MIXED_LOGITS','BIV150_MIXED_LOGITS_DIR')})
+     shutil.copyfile(gate.COMMON, control / 'run_accuracy_gate.py')
+     shutil.copyfile(gate.MONITOR, control / 'monitor_gpu.sh')
+     state = dict(owner_pid=os.getpid(), run=str(run), control=str(control), source=str(source),
+-        source_count=526, tree=manifest['tree'], base_commit=q.COMMIT, completed=False, cleanup_errors=[],
++        source_count=527, tree=manifest['tree'], base_commit=q.COMMIT, completed=False, cleanup_errors=[],
+         owned_processes=[], server_command=common.SERVER, started_utc=common.utc(),
+-        kind='main526 freshserver原mixed2；仅return_token_ids诊断返回字段，无性能测量')
++        kind='main526 + 图外前8步logits快照；保留原mixed请求/native14f；不是原526未改运行或官方资格',
++        source_delta=['vllm_fl/__init__.py','vllm_fl/patches/biv150_mixed_logits_observer.py'])
+     gate.save(control / 'state.json', state)
+     processes = []; lock = None; locked = False; original = None; handlers = {}
+     try:
+@@ -106,7 +115,7 @@
+         (run / 'monitor.pid').write_text(str(monitor.pid)+'\n')
+         gate.save(control / 'state.json', state)
+         print(__import__('json').dumps(state), flush=True)
+-        common.wait_ready(server, 'BIV150_COMPILE_SEMANTICS ', run)
++        common.wait_ready(server, 'BIV150_MIXED_LOGITS_CORE_HOOKED', run)
+         state['model_path'] = graph_gate.capture(run, source, env)
+         gate.save(control / 'state.json', state)
+         state['diagnostic'] = diagnostic_requests.run(run)
+@@ -136,6 +145,8 @@
+                 q.require(state['source_unchanged'] and state['native_unchanged'], '源码或native后态变化')
+                 q.check_reference(reference)
+                 state['cpu_after'] = common.cpu_state()
++                state['boundary_observation'] = analyze.analyze(run/'logits-boundary')
++                q.require(state['boundary_observation']['valid'],'快照未完整回收，不能作定位结论')
+             except BaseException as error:
+                 state['cleanup_errors'].append(repr(error))
+         state['completed'] = bool(state.get('validation_completed') and state.get('database_restored')

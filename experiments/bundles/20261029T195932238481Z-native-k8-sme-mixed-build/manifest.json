@@ -1,0 +1,168 @@
+{
+  "schema": "experiment-bundle-v1",
+  "run_id": "20261029T195932238481Z-native-k8-sme-mixed-build",
+  "source_commit": "899ce77470b0b539aebc108fd122f668c2d5894d",
+  "scope": "BI-V150 NativeK8 Mixed SME isolated component; not official service/accuracy qualification",
+  "result": "A/B 两库在 BI-V150 CoreX clang22 上 CPU compile-only 成功；未初始化 CUDA，未调用 attention、codec 或 reducer。A/B namespace 与 launcher 符号隔离，反汇编显示 B 的下一页 K SME 搬运在当前页 PV MMA 前发起并在后续消费前等待。此为编译/指令顺序证据，不是性能或模型服务成绩；保留为组件构建基线。",
+  "deployment_recovery_manifest": {
+    "run": "20261029T195932238481Z-native-k8-sme-mixed-build",
+    "files": [
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/README.md",
+        "bytes": 1529,
+        "sha256": "2a8a9bc6c285afcce5cc489ffed0a2dcfe6c25da271874dd8a8bac1ff3427e4d"
+      },
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/compile_pair.py",
+        "bytes": 6798,
+        "sha256": "efbcfe70350838d3c250e6baf8c966fafdd4efcc3fa17dd383dc61c2eec92605"
+      },
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/package-manifest.json",
+        "bytes": 767,
+        "sha256": "10abb23ee37547c8b95bfd627fd0d7c0e3d75bf5ef87cb6a42020418a19bd95f"
+      },
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/source/A/biv150_native_k8_codec.cuh",
+        "bytes": 652,
+        "sha256": "a594ea8fc0b76d795170a987cfaac5102dbb681de2bc5d24efa9f9f200827444"
+      },
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/source/A/codec.cu",
+        "bytes": 1365,
+        "sha256": "eefd1509ffc63d533ee853afe61b5dd5661bc11bb4951e0e5f6e4f591810bba1"
+      },
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/source/A/mixed_qk.cpp",
+        "bytes": 7408,
+        "sha256": "55dc1cf4a43eaa2dec60f17004023f15ead7f092a8a2056b80d21ec7f84bd9ec"
+      },
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/source/A/producer.cu",
+        "bytes": 14557,
+        "sha256": "5cdf9940ece52756c35df8395ea81164d2691e2730464b89bf849c1268a0b711"
+      },
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/source/B/biv150_native_k8_codec.cuh",
+        "bytes": 652,
+        "sha256": "709fada50ca384d6c3578be27a73a226eb940398c800150b1d38fe18915583fd"
+      },
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/source/B/codec.cu",
+        "bytes": 1365,
+        "sha256": "56374906e102af54ccd150b83110cf9c1b96e4f3d0e469e04cee346e214b513a"
+      },
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/source/B/mixed_qk.cpp",
+        "bytes": 7408,
+        "sha256": "1b6922f1a04b71a5383e1bef52f1a614099962dd0f9026a90d6428790db54a38"
+      },
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/source/B/producer.cu",
+        "bytes": 15601,
+        "sha256": "6836e37acb5741e4fd2d33e1c45b8c6b048bd52b0eff79a84db9ef8c08ed9640"
+      },
+      {
+        "path": "scripts/20261029T195932238481Z-native-k8-sme-mixed-build-entry/source-pins.json",
+        "bytes": 3833,
+        "sha256": "f07e9ec222f2660ef456746d853d97974be547cdde52befd53086f1814c797ea"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/A-actual-SO-IR.txt",
+        "bytes": 195497,
+        "sha256": "bcec22dd06a519067840883a5baa99fd5b75ed5a4ef32fa7e6c898369715966c"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/A-actual-SO-sass.txt",
+        "bytes": 300101,
+        "sha256": "1c55b87d8b89651db47861d44fb246e977985215531e6ba3884f504f155c0f54"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/A-nm.txt",
+        "bytes": 20219,
+        "sha256": "4c11b95f67141403cf808ad20a2b2c158295c9be7c8b75b28f36770e04ae6728"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/B-actual-SO-IR.txt",
+        "bytes": 184528,
+        "sha256": "f17a81beb04adb3bc366ec4f6a8f0fb677f96dea6ba08bd49f7911d311ad4730"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/B-actual-SO-sass.txt",
+        "bytes": 292705,
+        "sha256": "65f8b7b35c058a9edd5f7ca8ecc5326efa2320abda092b8beb2a8592b9f919e6"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/B-nm.txt",
+        "bytes": 20219,
+        "sha256": "030ffefad7656a80f0e2a12cf5887d1aa88771110284d6bf497fb15fb13b0653"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/build.log",
+        "bytes": 20786,
+        "sha256": "3262fb8a7479439885f4e23a22fc2453f7bbe82d707f800102e3f06939b9dea1"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/compiled/build/A/build.ninja",
+        "bytes": 2365,
+        "sha256": "df1e02c04d8234c551d1e7fa4fc49e985a3725522c0c4aaef831ca7448bb4764"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/compiled/build/B/build.ninja",
+        "bytes": 2365,
+        "sha256": "78b0332a674cdea732c50b8f8fd5223e112c3d3802f264d2c9928eb4c322ab3f"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/compiled/build/corex_native_k8_mixed_sme_a.so",
+        "bytes": 189128,
+        "sha256": "2b16e692005ee01f3e8ffe659ccfeaa3b4550d32cfdd003588f31343cc407526"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/compiled/build/corex_native_k8_mixed_sme_b.so",
+        "bytes": 185032,
+        "sha256": "4154f29039b34e4e7e306706a7c52680719d38555c1ee627ea23e8bfeebfc1de"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/compiled/compile-summary.json",
+        "bytes": 6318,
+        "sha256": "de531bdbfdad2d98a8e16d3efc7c880aad1f415a24bee10cfffbb588a41e68db"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/compiled/compiler-version.txt",
+        "bytes": 176,
+        "sha256": "cb15fa53266ef1e7632e09e62c2611057b57314182535cefaad11531d3142e41"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/launcher.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/postflight-ixsmi.txt",
+        "bytes": 1284,
+        "sha256": "b41faab860d574a7e8624cc3e506e97511bbdcc0cc59f9479e3054f821c99a98"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/preflight-ixsmi.txt",
+        "bytes": 1284,
+        "sha256": "5d6079e63927d57d040313bc2dfbbb94d8545e20cc2d695ab5650fe1d534ef4d"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/receipt.json",
+        "bytes": 6974,
+        "sha256": "052ee8e6933b71a16f5eb51501e9bb685172072afe6a07413fd7a34db8bb0ed9"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/root-launch.json",
+        "bytes": 309,
+        "sha256": "6a4b4266e53983b59f161c76a72368b5ccf13f6ce87057c2db4153e883f1fbe6"
+      },
+      {
+        "path": "cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build/state.json",
+        "bytes": 6974,
+        "sha256": "052ee8e6933b71a16f5eb51501e9bb685172072afe6a07413fd7a34db8bb0ed9"
+      }
+    ]
+  },
+  "original_recovery_tar_sha256": "867793beefc7fc70ef59bf96d6398fbf1ee70939eae29f51b9d3a1c93b12e0b2"
+}

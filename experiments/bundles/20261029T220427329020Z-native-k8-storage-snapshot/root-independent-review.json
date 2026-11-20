@@ -1,0 +1,44 @@
+{
+  "schema": "native-k8-storage-snapshot-independent-review-v1",
+  "reviewer": "root-independent-review",
+  "reviewed_files": {
+    "candidate.patch": "b56f65130bb528350f98bd1cf97dbc7ff3eb30c0b6282d054d5154e941b866c0",
+    "candidate.py": "aac0a5d128008595562b9a0b78236f755df142894ce02695be2aa755e89fd35e",
+    "check_real_torch_cpu.py": "3187980397a04590cdeb554afd31786a7aa0f375eb2288ad0a99521e6b3a695e"
+  },
+  "assessment": "函数级增量在同步且Tensor元数据稳定的validate调用内，缓存范围与原逐次storage查询的bounds/alias计算一致；未发现新增漏检或通用路径变化。该结论是静态代码审阅，不是Torch运行结果，也不构成载体集成或性能通过。",
+  "findings": [
+    {
+      "area": "快照生命周期",
+      "status": "条件成立",
+      "detail": "缓存按id(t)索引并额外持有Tensor对象，避免缓存期间对象释放及id复用；validate每次新建局部字典，不跨调用复用。缓存没有持有Storage对象，只保存_cdata和地址范围。因此同一个Tensor若在一次validate尚未结束时被并发set_/resize_或换storage，命中缓存会返回旧范围。README已明确将此类并发元数据变更列为不支持；仍需保证调用契约确实禁止该行为。"
+    },
+    {
+      "area": "alias与bounds",
+      "status": "静态一致",
+      "detail": "每个Tensor仍执行原dtype、shape、stride、storage_offset、data_ptr和extent边界校验；alias仍比较完整backing-storage区间，未按逻辑view切片放宽。不同Tensor view分别缓存，不按共享storage合并。validate中的原alias关系集合未改变；空区间与不同dtype view沿用原区间规则。"
+    },
+    {
+      "area": "通用路径与绑定",
+      "status": "未见变化",
+      "detail": "无cache时storage/bounds/overlaps走原逐次查询路径；只有validate显式传入局部缓存。helper_binding新增storage_snapshot并由verify复核函数对象和代码对象；现有operator、library和Adapter方法绑定未见放宽。"
+    },
+    {
+      "area": "CPU检查覆盖范围",
+      "status": "设计范围有限",
+      "detail": "脚本若在目标Torch CPU环境执行，可比较真实CPU Tensor上的helper返回值/异常、不同view别名关系、新validate调用在Tensor.set_后刷新快照，并可选计量9次bounds加24个overlap关系的局部CPU成本。它不覆盖CUDA/并发storage变更、完整Adapter路由/安装、生产载体或端到端收益。本机没有Torch，未执行该脚本；不报告CPU PASS。"
+    }
+  ],
+  "integration_and_qualification": {
+    "candidate_integrated": false,
+    "current_carrier_tested": false,
+    "note": "候选尚未集成到pure824f overlay。不得据此宣称当前完整服务载体已测；既有source/library pins应保持原样，后续集成需按新源码身份单独验证。"
+  },
+  "verdict": "静态增量审阅未发现必须阻断的代码差异；仅可进入真实Torch CPU helper检查准备。并发storage变更依赖不支持契约。当前不批准称为集成通过、设备通过或性能收益。",
+  "checks_performed": [
+    "逐行对照candidate.patch及候选源码中的storage/bounds/overlaps/validate/helper_binding变更",
+    "检查check_real_torch_cpu.py所构造Tensor及测试断言范围",
+    "读取README、作者检查记录并核对候选尚未集成的声明",
+    "未访问远端，未启动GPU，未伪造或执行Torch检查"
+  ]
+}

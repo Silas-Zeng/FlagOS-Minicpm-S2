@@ -1,0 +1,30 @@
+--- R64-16K/official_supervisor.py
++++ R32-R64-16K/official_supervisor.py
+@@ -23,12 +23,11 @@
+     import head_activation
+     stack=activation_evidence.stack_evidence(log_path);head=head_activation.capture(log_path)
+     try:
+-        actual_kv=head_activation.kv_tokens(log_path)
+-        kv=dict(valid=actual_kv==baseline['kv_tokens'],baseline=baseline['kv_tokens'],candidate=actual_kv)
++        kv=head_activation.compare_kv(log_path,baseline['kv_tokens'])
+     except (OSError,ValueError) as error:
+-        kv=dict(valid=False,error=repr(error),baseline=baseline['kv_tokens'])
+-    return dict(valid=bool(stack['valid'] and head_activation.optional_scope_valid(head) and kv['valid']),stack=stack,head_temperature=head,kv=kv,
+-        scope='首冷后原stack/同KV资格；16K可合法不命中R64，实际选中须原三marker闭合；拒绝/回原/解析错误不放宽')
++        kv=dict(valid=False,compare_kv_match=None,error=repr(error),baseline=baseline['kv_tokens'])
++    return dict(valid=bool(stack['valid'] and head_activation.optional_scope_valid(head) and kv['valid']),stack=stack,head_temperature=head,kv=kv,compare_kv_match=kv['compare_kv_match'],
++        scope='首冷后原stack和容量解析资格；每shape选择/采样闭合，缺覆盖允许；KV不同独立记不可严格因果，不自动停')
+ 
+ 
+ def complete_csv_snapshot(path):
+@@ -98,7 +97,9 @@
+                     rows=complete_csv_snapshot(files[-1])
+                 if rows and rows[0].get('Run Status')=='SUCCESS' and not stack_checked and 'qualification_stop' not in receipt:
+                     evidence=first_round_stack(server_log,baseline);save(Path(state['control'])/'first-round-stack.json',evidence);stack_checked=True
+-                    if not evidence['valid']:receipt['qualification_stop']=dict(reason='首冷后head异常或原stack/同KV未闭合，不作净收益对照；不因单纯无R64覆盖停止')
++                    receipt['compare_kv_match']=evidence['compare_kv_match'];receipt['kv_comparison']=evidence['kv']
++                    save(HERE/'supervisor-launch.json',receipt)
++                    if not evidence['valid']:receipt['qualification_stop']=dict(reason='首冷后head异常、原stack或KV解析未闭合；KV不等单独记录、不因正常缺覆盖停止')
+                 decision=new_row_decision(rows,seen,baseline['first_warm']) if rows is not None else None
+                 if decision:
+                     decision.update(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),completed_csv_rows=len(rows),owner_pid=owner.pid)

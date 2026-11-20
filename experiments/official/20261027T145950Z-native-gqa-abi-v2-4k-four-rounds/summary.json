@@ -1,0 +1,257 @@
+{
+  "run": "20261027T145950Z-native-gqa-abi-v2-4k-four-rounds",
+  "scope": "原官方4K四轮，弃首轮均值；单组历史基线对照",
+  "rounds": [
+    5349.02,
+    6301.93,
+    6445.8,
+    6695.95
+  ],
+  "warm_mean": 6481.2266666666665,
+  "baseline_warm_mean": 5971.44,
+  "delta_percent": 8.537080949765329,
+  "all_success": true,
+  "successful_requests": 1024.0,
+  "native_gqa": {
+    "valid": true,
+    "covered": true,
+    "target_covered": true,
+    "selected_keys": [
+      [
+        32,
+        4,
+        2048
+      ],
+      [
+        64,
+        2,
+        2048
+      ]
+    ],
+    "captured_keys": [
+      [
+        32,
+        4,
+        2048
+      ],
+      [
+        64,
+        2,
+        2048
+      ]
+    ],
+    "covered_shapes": [
+      [
+        32,
+        4
+      ],
+      [
+        64,
+        2
+      ]
+    ],
+    "covered_keys": [
+      [
+        32,
+        4,
+        2048
+      ],
+      [
+        64,
+        2,
+        2048
+      ]
+    ],
+    "installed": true,
+    "selected": true,
+    "captured": true,
+    "mode_stride_difference": [],
+    "abnormal": false,
+    "records": {
+      "INSTALL": [
+        {
+          "compile_at_runtime": false,
+          "extra_KV_bytes": 0,
+          "installed": true,
+          "library_sha256": "f72064dc13c5909c83d21852d26bea48183d2467049baefb452443b7676e9364",
+          "overlap_v": false,
+          "q_strides": [
+            [
+              2048,
+              128,
+              1
+            ],
+            [
+              2560,
+              128,
+              1
+            ]
+          ],
+          "supported_shapes": [
+            [
+              64,
+              2
+            ],
+            [
+              32,
+              4
+            ]
+          ]
+        }
+      ],
+      "SELECTED": [
+        {
+          "extra_KV_bytes": 0,
+          "grid": [
+            64,
+            2,
+            2
+          ],
+          "k_stride": [
+            8192,
+            256,
+            128,
+            1
+          ],
+          "library_sha256": "f72064dc13c5909c83d21852d26bea48183d2467049baefb452443b7676e9364",
+          "overlap_v": false,
+          "proof": "successful native launch; not a request coverage ratio",
+          "q_stride": [
+            2048,
+            128,
+            1
+          ],
+          "rows": 64,
+          "segments": 2,
+          "threads": 64,
+          "v_stride": [
+            8192,
+            256,
+            128,
+            1
+          ]
+        },
+        {
+          "extra_KV_bytes": 0,
+          "grid": [
+            32,
+            2,
+            4
+          ],
+          "k_stride": [
+            8192,
+            256,
+            128,
+            1
+          ],
+          "library_sha256": "f72064dc13c5909c83d21852d26bea48183d2467049baefb452443b7676e9364",
+          "overlap_v": false,
+          "proof": "successful native launch; not a request coverage ratio",
+          "q_stride": [
+            2048,
+            128,
+            1
+          ],
+          "rows": 32,
+          "segments": 4,
+          "threads": 64,
+          "v_stride": [
+            8192,
+            256,
+            128,
+            1
+          ]
+        }
+      ],
+      "CAPTURED": [
+        {
+          "extra_KV_bytes": 0,
+          "grid": [
+            64,
+            2,
+            2
+          ],
+          "k_stride": [
+            8192,
+            256,
+            128,
+            1
+          ],
+          "library_sha256": "f72064dc13c5909c83d21852d26bea48183d2467049baefb452443b7676e9364",
+          "overlap_v": false,
+          "proof": "successful native launch; not a request coverage ratio",
+          "q_stride": [
+            2048,
+            128,
+            1
+          ],
+          "rows": 64,
+          "segments": 2,
+          "threads": 64,
+          "v_stride": [
+            8192,
+            256,
+            128,
+            1
+          ]
+        },
+        {
+          "extra_KV_bytes": 0,
+          "grid": [
+            32,
+            2,
+            4
+          ],
+          "k_stride": [
+            8192,
+            256,
+            128,
+            1
+          ],
+          "library_sha256": "f72064dc13c5909c83d21852d26bea48183d2467049baefb452443b7676e9364",
+          "overlap_v": false,
+          "proof": "successful native launch; not a request coverage ratio",
+          "q_stride": [
+            2048,
+            128,
+            1
+          ],
+          "rows": 32,
+          "segments": 4,
+          "threads": 64,
+          "v_stride": [
+            8192,
+            256,
+            128,
+            1
+          ]
+        }
+      ]
+    },
+    "parse_errors": [],
+    "abnormal_records": [],
+    "library_sha256": "f72064dc13c5909c83d21852d26bea48183d2467049baefb452443b7676e9364",
+    "scope": "按生产去重键每shape真实launch/capture配对，SELECTED只准已验stride，CAPTURED必须实际postRoPE2048两目标；不同模式stride显式记录；不是请求覆盖率或数值资格"
+  },
+  "model_path_valid": true,
+  "kv_comparison": {
+    "valid": true,
+    "compare_kv_match": false,
+    "baseline": 548288,
+    "candidate": 548336,
+    "limitation": "KV容量不一致时仍记录官方观测和首暖筛选，但不能声称相同显存条件下的严格因果收益。"
+  },
+  "cleanup": {
+    "completed": true,
+    "error": null,
+    "cleanup_error": null,
+    "database_restored": true,
+    "source_unchanged": true,
+    "native_unchanged": true,
+    "native_gqa_unchanged": true,
+    "finished_utc": "2026-10-27T15:18:16.323632+00:00"
+  },
+  "raw_csv": "official/20261027T145950Z-native-gqa-abi-v2-4k-four-rounds/benchmark_results/raw_runs_20261027_230201.csv",
+  "raw_csv_sha256": "9167e20ab315eb2c996d0bbaa12dca6aea09658ef8ae2e65bf5f92df3189d2c6",
+  "decision": "保留，有效整模正信号；KV相差48 tokens，不宣称严格相同显存条件的单因子因果收益。待16K及原105准确率闭合后判断基线资格，不从启动捕获推断105请求覆盖。"
+}

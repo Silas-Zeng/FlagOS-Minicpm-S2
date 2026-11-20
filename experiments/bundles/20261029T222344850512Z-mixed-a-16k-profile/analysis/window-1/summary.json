@@ -1,0 +1,110 @@
+{
+  "epoch": 1,
+  "pid": 81313,
+  "prompt_tokens": 16384,
+  "diagnostic_only": true,
+  "official_score": false,
+  "active_window": {
+    "start_ns": 4479130295463859,
+    "end_ns": 4479627481576390,
+    "raw_duration_s": 497.186112531,
+    "retained_duration_s": 494.888075958,
+    "definition": "first EngineCore step through final scoped host return, clipped by the same diagnostic exclusion mask in every domain"
+  },
+  "profile_envelope": {
+    "start_ns": 4479129950353805,
+    "end_ns": 4479627747028790,
+    "raw_duration_s": 497.796674985,
+    "retained_duration_s": 495.498638412,
+    "gpu_union_s": 489.747836712,
+    "gpu_coverage_fraction": 0.988393910186251
+  },
+  "diagnostic_samples": 4,
+  "diagnostic_gpu_extension_count": 0,
+  "numeric_samples_exact": true,
+  "scope_errors": 0,
+  "worker_steps": 4661,
+  "worker_phase_counts": {
+    "prefill": {
+      "count": 8,
+      "scheduled_tokens": 16384,
+      "prefill_tokens": 16384,
+      "decode_tokens": 0,
+      "worker_host_retained_ns": 2245500219
+    },
+    "mixed": {
+      "count": 1054,
+      "scheduled_tokens": 2147966,
+      "prefill_tokens": 2117360,
+      "decode_tokens": 30606,
+      "worker_host_retained_ns": 350105024673
+    },
+    "decode": {
+      "count": 3597,
+      "scheduled_tokens": 102921,
+      "prefill_tokens": 0,
+      "decode_tokens": 102921,
+      "worker_host_retained_ns": 12620978858
+    },
+    "empty": {
+      "count": 2,
+      "scheduled_tokens": 0,
+      "prefill_tokens": 0,
+      "decode_tokens": 0,
+      "worker_host_retained_ns": 345170
+    }
+  },
+  "gpu": {
+    "cuda_graph": {
+      "raw_events_overlapping_profile": 3609,
+      "retained_event_count": 3593,
+      "partially_retained_events": 4,
+      "sum_s": 123.879877284,
+      "union_s": 123.879877284,
+      "diagnostic_enqueued_events": 16
+    },
+    "cuda_kernel": {
+      "raw_events_overlapping_profile": 681326,
+      "retained_event_count": 681234,
+      "partially_retained_events": 0,
+      "sum_s": 365.618355244,
+      "union_s": 365.618355244,
+      "diagnostic_enqueued_events": 12
+    },
+    "cuda_memcpy": {
+      "raw_events_overlapping_profile": 30414,
+      "retained_event_count": 30374,
+      "partially_retained_events": 0,
+      "sum_s": 0.249604184,
+      "union_s": 0.249604184,
+      "diagnostic_enqueued_events": 16
+    },
+    "cuda_memset": {
+      "raw_events_overlapping_profile": 0,
+      "retained_event_count": 0,
+      "partially_retained_events": 0,
+      "sum_s": 0.0,
+      "union_s": 0.0,
+      "diagnostic_enqueued_events": 0
+    }
+  },
+  "gpu_union_s": 489.747836712,
+  "gpu_union_fraction": 0.9896133297694644,
+  "gpu_uncovered_s": 5.140239246,
+  "gpu_uncovered_intervals": {
+    "count": 715202,
+    "max_ms": 98.342402,
+    "p99_ms": 0.01717
+  },
+  "graph_replays_metadata": 3597,
+  "retained_kernel_graph_overlap_s": 0.0,
+  "caveats": [
+    "Host scope/API durations are elapsed host time, including GPU waiting, not CPU utilization or CPU overhead.",
+    "Uncovered means no recorded GPU activity; it does not establish a CPU cause.",
+    "The common mask also clips normal asynchronous work overlapping diagnostic sampling; it is not an uninstrumented counterfactual.",
+    "Counts and token totals describe all original scheduled steps; retained host times exclude diagnostic intervals.",
+    "Graph intervals retain complete opaque spans; missing internal kernel rows are never treated as GPU idle.",
+    "Graph node event samples are analyzed separately and are not multiplied into whole-round kernel totals.",
+    "All results are diagnostic; profiler and metadata overhead remain."
+  ]
+}

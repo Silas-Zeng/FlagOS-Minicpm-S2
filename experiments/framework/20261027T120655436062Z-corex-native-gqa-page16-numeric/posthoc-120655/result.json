@@ -1,0 +1,48 @@
+{
+  "bundle_sha256": "6cfacbf03cea667cd121f93b2c914514d465e18ab6c21aadb90bf46483c5b4a8",
+  "npz_member": "framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/underflow_P-partial-mismatch.npz",
+  "npz_sha256": "60b7feb2ccda15ebfb1aaa03a9f6ab393c9c01d3975ebcbf54b954af0c778889",
+  "original_result_sha256": "83ba74df468ed904712d4bb2c3ba21ba12b13a5267692e582dfb768c693cd3c8",
+  "original_result_preserved": true,
+  "original_status": "failed_stop",
+  "original_coverage": {
+    "normal": true,
+    "subnormal": false,
+    "below_smallest_subnormal": false
+  },
+  "CPU_float64_coverage": {
+    "normal": true,
+    "subnormal": true,
+    "below_smallest_subnormal": true
+  },
+  "score_dtype": "float32 source -> CPU NumPy astype(float64)",
+  "thresholds": {
+    "min_normal": 1.1754943508222875e-38,
+    "min_subnormal": 1.401298464324817e-45
+  },
+  "score_row0": [
+    0.0,
+    -63.2486457824707,
+    -122.41673278808594,
+    -125.4771499633789,
+    -125.98722076416016,
+    -126.4972915649414,
+    -127.00736236572266,
+    -127.5174331665039,
+    -129.55770874023438,
+    -140.7792510986328,
+    -146.90008544921875,
+    -147.92022705078125,
+    -148.9403533935547,
+    -149.9604949951172,
+    -153.0209197998047,
+    -261.15570068359375
+  ],
+  "exact_probability_min": 2.42270511147877e-79,
+  "exact_probability_max": 1.0,
+  "all_FP32_P_bitwise": true,
+  "native_and_reference_subnormal_range_both_zero": true,
+  "interpretation": "原coverage路径先在GPU转double且依赖CPU float32 nextafter；这里只从已存float32在CPU转换并使用精确Python阈值。输入确覆盖三范围，设备数值已记录全逐位；不改原false，不补称尚未执行的Graph/side通过。",
+  "graph_or_side_completed": false,
+  "gpu_executed_here": false
+}

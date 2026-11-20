@@ -1,0 +1,1078 @@
+	.text
+	.globl	down_gemm                       ; -- Begin function down_gemm
+	.p2align	3
+	.type	down_gemm,@function
+	.iluvatar_kernel down_gemm
+down_gemm:                              ; @down_gemm
+.Lfunc_begin0:
+	.file	1 "/workspace/experiments/minicpm-s2/framework/20261026T032246818091Z-biv150-down-gemm-component/source" "candidate.py"
+	.loc	1 7 0                           ; candidate.py:7:0
+	.cfi_sections .debug_frame
+	.cfi_startproc
+	.cfi_return_column 32
+	.iluvatar_kernel_code_t
+		iluvatar_code_version_major = 1
+		iluvatar_code_version_minor = 3
+		iluvatar_machine_kind = 1
+		iluvatar_machine_version_major = 1
+		iluvatar_machine_version_minor = 1
+		iluvatar_machine_version_stepping = 0
+		kernel_code_entry_byte_offset = 256
+		kernel_code_prefetch_byte_size = 0
+		granulated_workitem_vgpr_count = 12
+		granulated_warp_sgpr_count = 7
+		float_mode = 12
+		debug_mode = 0
+		has_mbar = 0
+		user_sgpr_count = 6
+		enable_sgpr_workgroup_id_x = 1
+		enable_sgpr_workgroup_id_y = 1
+		enable_sgpr_workgroup_id_z = 0
+		enable_sgpr_workgroup_info = 1
+		enable_vgpr_workitem_id = 3
+		granulated_slb_size = 0
+		enable_exception = 128
+		enable_sgpr_private_segment_buffer = 1
+		enable_sgpr_globalvariable_ptr = 0
+		enable_sgpr_kernarg_segment_ptr = 1
+		enable_sgpr_constvariable_ptr = 0
+		enable_sgpr_private_segment_size = 0
+		enable_sgpr_grid_workgroup_count_x = 0
+		enable_sgpr_grid_workgroup_count_y = 0
+		enable_sgpr_grid_workgroup_count_z = 0
+		private_element_size = 1
+		is_ptr64 = 1
+		is_dynamic_callstack = 0
+		is_debug_enabled = 0
+		enable_private_swizzle = 1
+		has_called_assert = 0
+		has_called_printf = 0
+		has_called_malloc = 0
+		enable_srf_flat_shared = 0
+		enable_srf_flat_scratch = 0
+		has_wgmma = 0
+		has_dva = 0
+		enable_dynamic_smem_size = 0
+		workitem_private_segment_byte_size = 0
+		workgroup_group_segment_byte_size = 0
+		kernarg_segment_byte_size = 40
+		workgroup_fbarrier_count = 0
+		warp_sgpr_count = 62
+		workitem_vgpr_count = 52
+		reserved_vgpr_first = 0
+		reserved_vgpr_count = 0
+		reserved_sgpr_first = 0
+		reserved_sgpr_count = 0
+		debug_warp_private_segment_offset_sgpr = 0
+		debug_private_segment_buffer_sgpr = 0
+		kernarg_segment_alignment = 3
+		group_segment_alignment = 4
+		private_segment_alignment = 4
+		warp_size = 6
+		call_convention = -1
+		runtime_loader_kernel_symbol = 0
+	.end_iluvatar_kernel_code_t
+; %bb.0:
+	; Func LiveIn Regs:
+	;  blockIdx.x : s6  blockIdx.y : s7
+	ml_vrf_init_u32 v32, tcr
+.Ltmp0:
+	.loc	1 11 23 prologue_end            ; candidate.py:11:23
+	sl_lsa_load_b32x16 s[12:27], s[4:5], noreg, #0, ca
+	.loc	1 13 16                         ; candidate.py:13:16
+	sl_mull_u32 s1, s6, 0x80
+	.loc	1 14 34                         ; candidate.py:14:34
+	ml_and_b32 v0, tid, 0x7
+	sl_and_b32 {s32, wcr}, tcr_lo, 0x40
+	.loc	1 19 40                         ; candidate.py:19:40
+	sl_wait smcnt(0)
+	sl_mull_u32 s22, s6, 0xc0000
+	.loc	1 19 24 is_stmt 0               ; candidate.py:19:24
+	sl_sra_b32 {s23, wcr}, s22, 0x1f
+	.loc	1 13 34 is_stmt 1               ; candidate.py:13:34
+	sl_bfe2_b32 s2, tcr_lo, 0x46
+	.loc	1 13 21 is_stmt 0               ; candidate.py:13:21
+	sl_add_i32 s5, s2, s1
+	.loc	1 21 40 is_stmt 1               ; candidate.py:21:40
+	sl_mull_u32 s20, s7, 0x60000
+	.loc	1 21 24 is_stmt 0               ; candidate.py:21:24
+	sl_sra_b32 {s21, wcr}, s20, 0x1f
+	sl_bfe2_b32 s9, tcr_lo, 0x26
+	sl_bfe2_b32 s19, tcr_lo, 0x27
+	sl_mull_u32 s2, s9, 0x1000
+	sl_mull_u32 s3, s19, 0x400
+	sl_add_i32 s3, s2, s3
+	sl_mull_u32 s2, s19, 0x40
+	sl_mull_u32 s4, s9, 0x30000
+	sl_add_i32 s2, s2, s4
+	sl_add_i32 s4, s2, 0x60000
+	sl_add_i32 s8, s2, 0xc0000
+	sl_add_i32 s18, s2, 0x120000
+	ml_shl_b32 v1, v32, 0x6
+	sl_and_b32 {s0, wcr}, tcr_lo, 0x80
+	ml_and_b32 v2, tid, 0x8
+	ml_cmp_eq_u32 tcr, v2, 0x0
+	ml_mov_b32 v2, 0x280
+	ml_csel_b32 v2, 0, v2, tcr
+	sl_srl_b32 {s6, wcr}, s32, 0x5
+	sl_srl_b32 {s24, wcr}, s0, 0x1
+	sl_add_i32 s24, s24, s6
+	ml_shl_b32 v0, v0, 0x3
+	sl_mov_b32 s6, 0xc00
+	ml_anyop3_b32 v0, s6, v1, v0, 0xfffffff8
+	ml_anyop3_b32 v33, s24, v2, v0, 0xfffffffe
+	ml_xor_b32 v34, v33, 0x80
+	sl_mull_u32 s24, s9, 0x400
+	sl_mull_u32 s25, s19, 0x1000
+	sl_add_i32 s24, s24, s25
+	sl_add_i32 s25, s24, 0x8000
+	sl_mull_u32 s9, s9, 0x40
+	sl_mull_u32 s19, s19, 0x30000
+	sl_add_i32 s24, s9, s19
+	sl_add_i32 s26, s24, 0x60000
+	ml_shl_b32 v0, v32, 0x2
+	ml_and_b32 v0, v0, 0xfc
+	sl_mull_u32 s0, s0, 0x20
+	ml_add_i32 v35, s0, v0
+	ml_xor_b32 v36, v35, 0x80
+	sl_mov_b32 s0, 0x1300
+	ml_anyop3_b32 v37, s0, v1, v0, 0xf8
+	ml_xor_b32 v38, v37, 0x10
+	ml_xor_b32 v39, v37, 0x20
+	ml_xor_b32 v40, v37, 0x30
+	.loc	1 17 23 is_stmt 1               ; candidate.py:17:23
+	sl_shl_b64 {s[20:21], wcr}, s[20:21], 0x1
+	sl_add_i64 s[20:21], s[14:15], s[20:21]
+	sl_shl_b64 {s[14:15], wcr}, s[22:23], 0x1
+	sl_add_i64 s[12:13], s[12:13], s[14:15]
+	sl_mov_b32 s29, 0x0
+	sl_mov_b32 s28, 0x30
+	ml_mov_b32 v41, 0x0
+	sl_mov_b32 s15, 0x3000
+	sl_mov_b32 s14, 0xffffffff
+	sl_cmp_gt_i32 wcr, s5, 0x7ff
+	sl_sub_bi_u32 s0, s10, s10, wcr
+	sl_mov_b32 s30, 0xffffffff
+	sl_mov_b32 s31, 0xffffffff
+	sl_mov_b32 s5, s3
+	sl_mov_b32 s9, s3
+	sl_mov_b32 s19, s3
+	sl_mov_b32 s33, 0x1000
+	sl_mov_b32 s34, 0x2000
+	sl_mov_b32 s35, 0x4000
+	sl_mov_b32 s36, 0x5000
+	sl_mov_b32 s37, 0x6000
+	sl_mov_b32 s38, 0x7000
+	sl_mov_b32 s39, 0x400
+	sl_mov_b32 s40, 0x800
+	sl_mov_b32 s41, 0x2400
+	sl_mov_b32 s42, 0x2800
+	sl_mov_b32 s43, 0x2c00
+	sl_mov_b32 s44, 0x4400
+	sl_mov_b32 s45, 0x4800
+	sl_mov_b32 s46, 0x4c00
+	sl_mov_b32 s47, 0x6400
+	sl_mov_b32 s48, 0x6800
+	sl_mov_b32 s49, 0x6c00
+	sl_mov_b32 s50, 0x8000
+	sl_mov_b32 s51, 0x8400
+	sl_mov_b32 s52, 0x8800
+	sl_mov_b32 s53, 0x8c00
+	sl_mov_b32 s54, 0xa000
+	sl_mov_b32 s55, 0xa400
+	sl_mov_b32 s56, 0xa800
+	sl_mov_b32 s57, 0xac00
+	ml_mov_b32 v16, 0x0
+	ml_mov_b32 v17, 0x0
+	ml_mov_b32 v18, 0x0
+	ml_mov_b32 v19, 0x0
+	ml_mov_b32 v20, 0x0
+	ml_mov_b32 v21, 0x0
+	ml_mov_b32 v22, 0x0
+	ml_mov_b32 v23, 0x0
+	ml_mov_b32 v24, 0x0
+	ml_mov_b32 v25, 0x0
+	ml_mov_b32 v26, 0x0
+	ml_mov_b32 v27, 0x0
+	ml_mov_b32 v28, 0x0
+	ml_mov_b32 v29, 0x0
+	ml_mov_b32 v30, 0x0
+	ml_mov_b32 v31, 0x0
+	ml_mov_b32 v12, 0x0
+	ml_mov_b32 v13, 0x0
+	ml_mov_b32 v14, 0x0
+	ml_mov_b32 v15, 0x0
+	ml_mov_b32 v8, 0x0
+	ml_mov_b32 v9, 0x0
+	ml_mov_b32 v10, 0x0
+	ml_mov_b32 v11, 0x0
+	ml_mov_b32 v4, 0x0
+	ml_mov_b32 v5, 0x0
+	ml_mov_b32 v6, 0x0
+	ml_mov_b32 v7, 0x0
+	ml_mov_b32 v0, 0x0
+	ml_mov_b32 v1, 0x0
+	ml_mov_b32 v2, 0x0
+	ml_mov_b32 v3, 0x0
+	sl_jump BB0_2
+BB0_1:                                  ; %.critedge122
+                                        ;   in Loop: Header=BB0_2 Depth=1
+	.loc	1 21 20                         ; candidate.py:21:20
+	sl_mov_b64 s[22:23], s[14:15]
+	sl_sme_load_16x1b64_col s[20:23], s[24:25], 0x0, 0x0, 0x0, 0x1
+	sl_mov_b32 s27, s25
+	sl_sme_load_16x1b64_col s[20:23], s[26:27], 0x0, 0x0, 0x800, 0x1
+	sl_sme_load_16x1b64_col s[20:23], s[24:25], 0x0, 0x2, 0x200, 0x1
+	sl_sme_load_16x1b64_col s[20:23], s[26:27], 0x0, 0x2, 0xa00, 0x1
+	sl_wait lmcnt(0) g2scnt(0)
+	.loc	1 19 20                         ; candidate.py:19:20
+	sl_barrier 
+	ml_slb_load_b32x1  v42, v35, noreg, #0, null
+	.loc	1 17 23                         ; candidate.py:17:23
+	sl_add_i64 s[28:29], s[28:29], s[30:31]
+	sl_add_i64 s[20:21], s[20:21], 0x100
+	sl_xor_b64 {s[22:23], wcr}, s[28:29], 0x0
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v43, v35, noreg, #256, null
+	.loc	1 17 23                         ; candidate.py:17:23
+	sl_add_i64 s[12:13], s[12:13], 0x100
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v44, v37, s50, #0, null
+	ml_slb_load_b32x1  v45, v38, s50, #0, null
+	ml_slb_load_b32x1  v46, v37, s54, #0, null
+	ml_slb_load_b32x1  v47, v38, s54, #0, null
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v48, v35, s34, #0, null
+	ml_slb_load_b32x1  v49, v35, s34, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[42:43], v[44:45], v[16:19]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v50, v35, s39, #0, null
+	ml_slb_load_b32x1  v51, v35, s39, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[42:43], v[46:47], v[12:15]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v42, v35, s35, #0, null
+	ml_slb_load_b32x1  v43, v35, s35, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[48:49], v[44:45], v[20:23]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[48:49], v[46:47], v[8:11]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v48, v35, s37, #0, null
+	ml_slb_load_b32x1  v49, v35, s37, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[42:43], v[44:45], v[24:27]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[42:43], v[46:47], v[4:7]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v42, v36, noreg, #512, null
+	ml_slb_load_b32x1  v43, v36, noreg, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[48:49], v[44:45], v[28:31]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v44, v39, s50, #0, null
+	ml_slb_load_b32x1  v45, v40, s50, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[48:49], v[46:47], v[0:3]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v46, v39, s54, #0, null
+	ml_slb_load_b32x1  v47, v40, s54, #0, null
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v48, v36, s34, #512, null
+	ml_slb_load_b32x1  v49, v36, s34, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[42:43], v[44:45], v[16:19]
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[42:43], v[46:47], v[12:15]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v42, v36, s35, #512, null
+	ml_slb_load_b32x1  v43, v36, s35, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[48:49], v[44:45], v[20:23]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[48:49], v[46:47], v[8:11]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v48, v36, s37, #512, null
+	ml_slb_load_b32x1  v49, v36, s37, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[42:43], v[44:45], v[24:27]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[42:43], v[46:47], v[4:7]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v42, v37, s51, #0, null
+	ml_slb_load_b32x1  v43, v38, s51, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[48:49], v[44:45], v[28:31]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v44, v37, s55, #0, null
+	ml_slb_load_b32x1  v45, v38, s55, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[48:49], v[46:47], v[0:3]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v46, v35, s41, #0, null
+	ml_slb_load_b32x1  v47, v35, s41, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[50:51], v[42:43], v[16:19]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v48, v35, s44, #0, null
+	ml_slb_load_b32x1  v49, v35, s44, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[50:51], v[44:45], v[12:15]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v50, v36, s39, #512, null
+	ml_slb_load_b32x1  v51, v36, s39, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[46:47], v[42:43], v[20:23]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[46:47], v[44:45], v[8:11]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v46, v35, s47, #0, null
+	ml_slb_load_b32x1  v47, v35, s47, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[48:49], v[42:43], v[24:27]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[48:49], v[44:45], v[4:7]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v48, v39, s51, #0, null
+	ml_slb_load_b32x1  v49, v40, s51, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[46:47], v[42:43], v[28:31]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v42, v39, s55, #0, null
+	ml_slb_load_b32x1  v43, v40, s55, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[46:47], v[44:45], v[0:3]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v44, v36, s41, #512, null
+	ml_slb_load_b32x1  v45, v36, s41, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[50:51], v[48:49], v[16:19]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v46, v36, s44, #512, null
+	ml_slb_load_b32x1  v47, v36, s44, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[50:51], v[42:43], v[12:15]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v50, v35, s40, #0, null
+	ml_slb_load_b32x1  v51, v35, s40, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[44:45], v[48:49], v[20:23]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[44:45], v[42:43], v[8:11]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v44, v36, s47, #512, null
+	ml_slb_load_b32x1  v45, v36, s47, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[46:47], v[48:49], v[24:27]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[46:47], v[42:43], v[4:7]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v46, v37, s52, #0, null
+	ml_slb_load_b32x1  v47, v38, s52, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[44:45], v[48:49], v[28:31]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v48, v37, s56, #0, null
+	ml_slb_load_b32x1  v49, v38, s56, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[44:45], v[42:43], v[0:3]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v42, v35, s42, #0, null
+	ml_slb_load_b32x1  v43, v35, s42, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[50:51], v[46:47], v[16:19]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v44, v35, s45, #0, null
+	ml_slb_load_b32x1  v45, v35, s45, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[50:51], v[48:49], v[12:15]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v50, v36, s40, #512, null
+	ml_slb_load_b32x1  v51, v36, s40, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[42:43], v[46:47], v[20:23]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[42:43], v[48:49], v[8:11]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v42, v35, s48, #0, null
+	ml_slb_load_b32x1  v43, v35, s48, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[44:45], v[46:47], v[24:27]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[44:45], v[48:49], v[4:7]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v44, v39, s52, #0, null
+	ml_slb_load_b32x1  v45, v40, s52, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[42:43], v[46:47], v[28:31]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v46, v39, s56, #0, null
+	ml_slb_load_b32x1  v47, v40, s56, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[42:43], v[48:49], v[0:3]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v42, v36, s42, #512, null
+	ml_slb_load_b32x1  v43, v36, s42, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[50:51], v[44:45], v[16:19]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v48, v36, s45, #512, null
+	ml_slb_load_b32x1  v49, v36, s45, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[50:51], v[46:47], v[12:15]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v50, v35, s6, #0, null
+	ml_slb_load_b32x1  v51, v35, s6, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[42:43], v[44:45], v[20:23]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[42:43], v[46:47], v[8:11]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v42, v36, s48, #512, null
+	ml_slb_load_b32x1  v43, v36, s48, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[48:49], v[44:45], v[24:27]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[48:49], v[46:47], v[4:7]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v48, v37, s53, #0, null
+	ml_slb_load_b32x1  v49, v38, s53, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[42:43], v[44:45], v[28:31]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v44, v37, s57, #0, null
+	ml_slb_load_b32x1  v45, v38, s57, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[42:43], v[46:47], v[0:3]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v42, v35, s43, #0, null
+	ml_slb_load_b32x1  v43, v35, s43, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[50:51], v[48:49], v[16:19]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v46, v35, s46, #0, null
+	ml_slb_load_b32x1  v47, v35, s46, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[50:51], v[44:45], v[12:15]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v50, v36, s6, #512, null
+	ml_slb_load_b32x1  v51, v36, s6, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[42:43], v[48:49], v[20:23]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[42:43], v[44:45], v[8:11]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v42, v35, s49, #0, null
+	ml_slb_load_b32x1  v43, v35, s49, #256, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[46:47], v[48:49], v[24:27]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[46:47], v[44:45], v[4:7]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v46, v39, s53, #0, null
+	ml_slb_load_b32x1  v47, v40, s53, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[42:43], v[48:49], v[28:31]
+	.loc	1 21 20                         ; candidate.py:21:20
+	ml_slb_load_b32x1  v48, v39, s57, #0, null
+	ml_slb_load_b32x1  v49, v40, s57, #0, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[42:43], v[44:45], v[0:3]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v42, v36, s43, #512, null
+	ml_slb_load_b32x1  v43, v36, s43, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[16:19], v[50:51], v[46:47], v[16:19]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v44, v36, s46, #512, null
+	ml_slb_load_b32x1  v45, v36, s46, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[12:15], v[50:51], v[48:49], v[12:15]
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[20:23], v[42:43], v[46:47], v[20:23]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[8:11], v[42:43], v[48:49], v[8:11]
+	.loc	1 19 20                         ; candidate.py:19:20
+	ml_slb_load_b32x1  v42, v36, s49, #512, null
+	ml_slb_load_b32x1  v43, v36, s49, #768, null
+	.loc	1 22 35                         ; candidate.py:22:35
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[24:27], v[44:45], v[46:47], v[24:27]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[44:45], v[48:49], v[4:7]
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[28:31], v[42:43], v[46:47], v[28:31]
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[42:43], v[48:49], v[0:3]
+	.loc	1 17 23                         ; candidate.py:17:23
+	sl_cbr_wcrz BB0_4, wcr
+BB0_2:                                  ; =>This Inner Loop Header: Depth=1
+	.loc	1 19 20                         ; candidate.py:19:20
+	sl_wait lmcnt(0) g2scnt(0)
+	sl_barrier_req 0x0
+	sl_barrier_wait 0x0
+	sl_sme_load_16x1b64_rowxfb16 s[12:15], s[2:3], 0x0, 0x0, 0x0, 0x1
+	sl_or_b32 {s0, wcr}, s0, 0x0
+	sl_sme_load_16x1b64_rowxfb16 s[12:15], s[2:3], 0x0, 0x2, 0x200, 0x1
+	sl_sme_load_16x1b64_rowxfb16 s[12:15], s[4:5], 0x0, 0x0, 0x800, 0x1
+	sl_sme_load_16x1b64_rowxfb16 s[12:15], s[4:5], 0x0, 0x2, 0xa00, 0x1
+	sl_sme_load_16x1b64_rowxfb16 s[12:15], s[8:9], 0x0, 0x0, 0x1000, 0x1
+	sl_sme_load_16x1b64_rowxfb16 s[12:15], s[8:9], 0x0, 0x2, 0x1200, 0x1
+	sl_sme_load_16x1b64_rowxfb16 s[12:15], s[18:19], 0x0, 0x0, 0x1800, 0x1
+	sl_sme_load_16x1b64_rowxfb16 s[12:15], s[18:19], 0x0, 0x2, 0x1a00, 0x1
+	sl_wait g2scnt(0)
+	sl_cbr_wcrz BB0_1, wcr
+; %bb.3:                                ; %.critedge
+                                        ;   in Loop: Header=BB0_2 Depth=1
+	ml_slb_store_b16  v41, v33, noreg, #0, null
+	ml_slb_store_b16  v41, v33, noreg, #4, null
+	ml_slb_store_b16  v41, v33, noreg, #256, null
+	ml_slb_store_b16  v41, v33, noreg, #260, null
+	ml_slb_store_b16  v41, v33, s33, #0, null
+	ml_slb_store_b16  v41, v33, s33, #4, null
+	ml_slb_store_b16  v41, v33, s33, #256, null
+	ml_slb_store_b16  v41, v33, s33, #260, null
+	ml_slb_store_b16  v41, v33, s34, #0, null
+	ml_slb_store_b16  v41, v33, s34, #4, null
+	ml_slb_store_b16  v41, v33, s34, #256, null
+	ml_slb_store_b16  v41, v33, s34, #260, null
+	ml_slb_store_b16  v41, v33, s15, #0, null
+	ml_slb_store_b16  v41, v33, s15, #4, null
+	ml_slb_store_b16  v41, v33, s15, #256, null
+	ml_slb_store_b16  v41, v33, s15, #260, null
+	ml_slb_store_b16  v41, v33, s35, #0, null
+	ml_slb_store_b16  v41, v33, s35, #4, null
+	ml_slb_store_b16  v41, v33, s35, #256, null
+	ml_slb_store_b16  v41, v33, s35, #260, null
+	ml_slb_store_b16  v41, v33, s36, #0, null
+	ml_slb_store_b16  v41, v33, s36, #4, null
+	ml_slb_store_b16  v41, v33, s36, #256, null
+	ml_slb_store_b16  v41, v33, s36, #260, null
+	ml_slb_store_b16  v41, v33, s37, #0, null
+	ml_slb_store_b16  v41, v33, s37, #4, null
+	ml_slb_store_b16  v41, v33, s37, #256, null
+	ml_slb_store_b16  v41, v33, s37, #260, null
+	ml_slb_store_b16  v41, v33, s38, #0, null
+	ml_slb_store_b16  v41, v33, s38, #4, null
+	ml_slb_store_b16  v41, v33, s38, #256, null
+	ml_slb_store_b16  v41, v33, s38, #260, null
+	ml_slb_store_b16  v41, v34, noreg, #0, null
+	ml_slb_store_b16  v41, v34, noreg, #4, null
+	ml_slb_store_b16  v41, v34, noreg, #256, null
+	ml_slb_store_b16  v41, v34, noreg, #260, null
+	ml_slb_store_b16  v41, v34, s33, #0, null
+	ml_slb_store_b16  v41, v34, s33, #4, null
+	ml_slb_store_b16  v41, v34, s33, #256, null
+	ml_slb_store_b16  v41, v34, s33, #260, null
+	ml_slb_store_b16  v41, v34, s34, #0, null
+	ml_slb_store_b16  v41, v34, s34, #4, null
+	ml_slb_store_b16  v41, v34, s34, #256, null
+	ml_slb_store_b16  v41, v34, s34, #260, null
+	ml_slb_store_b16  v41, v34, s15, #0, null
+	ml_slb_store_b16  v41, v34, s15, #4, null
+	ml_slb_store_b16  v41, v34, s15, #256, null
+	ml_slb_store_b16  v41, v34, s15, #260, null
+	ml_slb_store_b16  v41, v34, s35, #0, null
+	ml_slb_store_b16  v41, v34, s35, #4, null
+	ml_slb_store_b16  v41, v34, s35, #256, null
+	ml_slb_store_b16  v41, v34, s35, #260, null
+	ml_slb_store_b16  v41, v34, s36, #0, null
+	ml_slb_store_b16  v41, v34, s36, #4, null
+	ml_slb_store_b16  v41, v34, s36, #256, null
+	ml_slb_store_b16  v41, v34, s36, #260, null
+	ml_slb_store_b16  v41, v34, s37, #0, null
+	ml_slb_store_b16  v41, v34, s37, #4, null
+	ml_slb_store_b16  v41, v34, s37, #256, null
+	ml_slb_store_b16  v41, v34, s37, #260, null
+	ml_slb_store_b16  v41, v34, s38, #0, null
+	ml_slb_store_b16  v41, v34, s38, #4, null
+	ml_slb_store_b16  v41, v34, s38, #256, null
+	ml_slb_store_b16  v41, v34, s38, #260, null
+	sl_jump BB0_1
+BB0_4:
+	.loc	1 14 16                         ; candidate.py:14:16
+	sl_mull_u32 s2, s7, 0x40
+	.loc	1 14 34 is_stmt 0               ; candidate.py:14:34
+	sl_srl_b32 {s3, wcr}, s32, 0x2
+	.loc	1 13 34 is_stmt 1               ; candidate.py:13:34
+	ml_srl_b32 v33, v32, 0x3
+	ml_and_b32 v33, v33, 0x17
+	.loc	1 13 21 is_stmt 0               ; candidate.py:13:21
+	ml_add_i32 v33, s1, v33
+	.loc	1 24 63 is_stmt 1               ; candidate.py:24:63
+	ml_cmp_lt_i32 tcr, v33, 0x800
+	.loc	1 23 33                         ; candidate.py:23:33
+	ml_shl_b32 v34, v33, 0xb
+	ml_shl_b32 v33, v33, 0xc
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_cvt_bf16_f32  v16, v16
+	.loc	1 24 63 is_stmt 0               ; candidate.py:24:63
+	sl_mov_b64 s[0:1], tcr
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_cvt_bf16_f32  v17, v17
+	ml_cvt_bf16_f32  v18, v18
+	ml_cvt_bf16_f32  v19, v19
+	ml_cvt_bf16_f32  v20, v20
+	ml_cvt_bf16_f32  v21, v21
+	ml_cvt_bf16_f32  v22, v22
+	ml_cvt_bf16_f32  v23, v23
+	ml_cvt_bf16_f32  v24, v24
+	ml_cvt_bf16_f32  v25, v25
+	ml_cvt_bf16_f32  v26, v26
+	ml_cvt_bf16_f32  v27, v27
+	ml_cvt_bf16_f32  v28, v28
+	ml_cvt_bf16_f32  v29, v29
+	ml_cvt_bf16_f32  v30, v30
+	ml_cvt_bf16_f32  v31, v31
+	.loc	1 23 17 is_stmt 1               ; candidate.py:23:17
+	ml_sra_b32 v35, v34, 0x1f
+	ml_shl_b32 v35, v35, 0x1
+	ml_addo_u32 {v36, tcr}, s16, v33
+	ml_srl_b32 v37, v34, 0x1f
+	ml_or_b32 v35, v35, v37
+	ml_mov_b32 v37, s17
+	ml_addc_i32 v35, v37, v35, tcr
+	.loc	1 14 34                         ; candidate.py:14:34
+	ml_and_b32 v37, tid, 0x7
+	ml_shl_b32 v37, v37, 0x1
+	.loc	1 14 21 is_stmt 0               ; candidate.py:14:21
+	sl_add_i32 s2, s2, s3
+	ml_add_i32 v37, s2, v37
+	.loc	1 23 37 is_stmt 1               ; candidate.py:23:37
+	ml_add_i32 v34, v37, v34
+	ml_shl_b32 v37, v37, 0x1
+	ml_addo_u32 {v36, tcr}, v37, v36
+	.loc	1 24 28                         ; candidate.py:24:28
+	sl_mov_b32 s2, 0x1000504
+	ml_byte_permute_b32 v16, v17, v16, s2
+	.loc	1 23 17                         ; candidate.py:23:17
+	ml_add_i32 v17, v33, 0x8000
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_byte_permute_b32 v18, v19, v18, s2
+	.loc	1 23 17                         ; candidate.py:23:17
+	ml_add_i32 v19, v33, 0x20000
+	.loc	1 23 37 is_stmt 0               ; candidate.py:23:37
+	ml_addc_i32 v35, 0, v35, tcr
+	.loc	1 24 28 is_stmt 1               ; candidate.py:24:28
+	ml_byte_permute_b32 v20, v21, v20, s2
+	ml_byte_permute_b32 v21, v23, v22, s2
+	ml_byte_permute_b32 v22, v25, v24, s2
+	ml_byte_permute_b32 v23, v27, v26, s2
+	ml_byte_permute_b32 v24, v29, v28, s2
+	ml_and_b32 v25, tid, 0x1
+	ml_cmp_eq_u32 tcr, v25, 0x0
+	ml_mov_b32 v25, 0x7632
+	ml_mov_b32 v26, 0x5410
+	ml_csel_b32 v27, v26, v25, tcr
+	ml_csel_b32 v28, v25, v26, tcr
+	sl_mov_b32 s3, 0x2010200
+	ml_byte_permute_b32 v27, v27, v27, s3
+	ml_pk_shl_b16 v27, v27, 0x40004
+	ml_pk_srl_b8 v27, v27, 0x40004
+	ml_shl_b32 v29, v32, 0x1
+	ml_bfe2_b32 v32, tid, 0x25
+	ml_anyop3_b32 v29, 62, v29, v32, 0xfffffff8
+	ml_byte_permute_b32 v32, v16, v18, v27
+	ml_byte_permute_b32 v28, v28, v28, s3
+	ml_pk_shl_b16 v28, v28, 0x40004
+	ml_slb_shuffle_rtn_b32 v32, v32, v29
+	ml_pk_srl_b8 v28, v28, 0x40004
+	ml_byte_permute_b32 v16, v16, v18, v28
+	ml_xor_b32 v18, v29, 0x1
+	ml_slb_shuffle_rtn_b32 v16, v16, v18
+	.loc	1 23 37                         ; candidate.py:23:37
+	ml_shl_b32 v34, v34, 0x1
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_byte_permute_b32 v30, v31, v30, s2
+	ml_byte_permute_b32 v31, v20, v21, v27
+	ml_slb_shuffle_rtn_b32 v31, v31, v29
+	ml_byte_permute_b32 v20, v20, v21, v28
+	ml_byte_permute_b32 v21, v22, v23, v27
+	ml_byte_permute_b32 v22, v22, v23, v28
+	ml_slb_shuffle_rtn_b32 v20, v20, v18
+	ml_and_b32 v23, tid, 0x20
+	ml_cmp_eq_u32 tcr, v23, 0x0
+	ml_mov_b32 v23, 0x1054
+	ml_slb_shuffle_rtn_b32 v21, v21, v29
+	ml_csel_b32 v23, v26, v23, tcr
+	ml_mov_b32 v26, 0x3276
+	ml_csel_b32 v25, v25, v26, tcr
+	ml_slb_shuffle_rtn_b32 v22, v22, v18
+	ml_byte_permute_b32 v23, v23, v23, s3
+	ml_pk_shl_b16 v23, v23, 0x40004
+	.loc	1 24 13 is_stmt 0               ; candidate.py:24:13
+	ml_mov_v2s_b32 s4, v36, 0x0
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_pk_srl_b8 v23, v23, 0x40004
+	sl_wait lmcnt(4)
+	ml_byte_permute_b32 v26, v32, v16, v23
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_mov_v2s_b32 s5, v35, 0x0
+	ml_mov_b32 v35, s4
+	ml_sub_i32 v35, v36, v35
+	sl_mov_b32 s7, 0xffffffff
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v26, s[4:7], signed v35, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	ml_sub_i32 v26, v37, v34
+	ml_add_i32 v36, v17, v26
+	ml_mov_v2s_b32 s6, v36, 0x0
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_byte_permute_b32 v36, v24, v30, v27
+	ml_slb_shuffle_rtn_b32 v36, v36, v29
+	ml_byte_permute_b32 v25, v25, v25, s3
+	ml_pk_shl_b16 v25, v25, 0x40004
+	ml_pk_srl_b8 v25, v25, 0x40004
+	ml_byte_permute_b32 v16, v32, v16, v25
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v32, s6, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v16, s[4:7], signed v32, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 23 17 is_stmt 1               ; candidate.py:23:17
+	ml_add_i32 v16, v33, 0x28000
+	ml_add_i32 v32, v33, 0x40000
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_byte_permute_b32 v24, v24, v30, v28
+	ml_slb_shuffle_rtn_b32 v24, v24, v18
+	.loc	1 24 13 is_stmt 0               ; candidate.py:24:13
+	ml_add_i32 v30, v19, v26
+	ml_mov_v2s_b32 s3, v30, 0x0
+	ml_add_i32 v30, v16, v26
+	ml_mov_v2s_b32 s6, v30, 0x0
+	.loc	1 24 28                         ; candidate.py:24:28
+	sl_wait lmcnt(4)
+	ml_byte_permute_b32 v30, v31, v20, v23
+	ml_byte_permute_b32 v20, v31, v20, v25
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v31, s3, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v30, s[4:7], signed v31, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	ml_add_i32 v30, s6, v35
+	ml_add_i32 v31, v32, v26
+	ml_mov_v2s_b32 s3, v31, 0x0
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v20, s[4:7], signed v30, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 23 17 is_stmt 1               ; candidate.py:23:17
+	ml_add_i32 v20, v33, 0x48000
+	.loc	1 24 28                         ; candidate.py:24:28
+	sl_wait lmcnt(2)
+	ml_byte_permute_b32 v30, v21, v22, v23
+	.loc	1 24 13 is_stmt 0               ; candidate.py:24:13
+	ml_add_i32 v31, s3, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v30, s[4:7], signed v31, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	ml_add_i32 v30, v20, v26
+	ml_mov_v2s_b32 s3, v30, 0x0
+	.loc	1 23 17 is_stmt 1               ; candidate.py:23:17
+	ml_add_i32 v30, v33, 0x60000
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_cvt_bf16_f32  v12, v12
+	ml_byte_permute_b32 v21, v21, v22, v25
+	.loc	1 24 13 is_stmt 0               ; candidate.py:24:13
+	ml_add_i32 v22, s3, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v21, s[4:7], signed v22, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_cvt_bf16_f32  v13, v13
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v21, v30, v26
+	ml_mov_v2s_b32 s3, v21, 0x0
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_cvt_bf16_f32  v14, v14
+	ml_cvt_bf16_f32  v15, v15
+	sl_wait lmcnt(0)
+	ml_byte_permute_b32 v21, v36, v24, v23
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v22, s3, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v21, s[4:7], signed v22, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 23 17 is_stmt 1               ; candidate.py:23:17
+	ml_add_i32 v21, v33, 0x68000
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_byte_permute_b32 v12, v13, v12, s2
+	ml_cvt_bf16_f32  v8, v8
+	ml_byte_permute_b32 v13, v15, v14, s2
+	ml_byte_permute_b32 v14, v12, v13, v27
+	ml_byte_permute_b32 v12, v12, v13, v28
+	ml_cvt_bf16_f32  v9, v9
+	ml_slb_shuffle_rtn_b32 v13, v14, v29
+	.loc	1 24 13 is_stmt 0               ; candidate.py:24:13
+	ml_add_i32 v14, v21, v26
+	ml_mov_v2s_b32 s3, v14, 0x0
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_cvt_bf16_f32  v10, v10
+	ml_slb_shuffle_rtn_b32 v12, v12, v18
+	ml_cvt_bf16_f32  v11, v11
+	ml_byte_permute_b32 v14, v36, v24, v25
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v15, s3, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v14, s[4:7], signed v15, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_byte_permute_b32 v8, v9, v8, s2
+	ml_byte_permute_b32 v9, v11, v10, s2
+	ml_byte_permute_b32 v10, v8, v9, v27
+	ml_byte_permute_b32 v8, v8, v9, v28
+	ml_slb_shuffle_rtn_b32 v9, v10, v29
+	.loc	1 23 37 is_stmt 1               ; candidate.py:23:37
+	ml_add_i32 v10, v37, 0x40
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_sub_i32 v11, v10, v37
+	ml_mov_v2s_b32 s3, v11, 0x0
+	.loc	1 24 28 is_stmt 0               ; candidate.py:24:28
+	ml_slb_shuffle_rtn_b32 v8, v8, v18
+	.loc	1 23 37 is_stmt 1               ; candidate.py:23:37
+	ml_sub_i32 v10, v10, v34
+	.loc	1 24 28                         ; candidate.py:24:28
+	sl_wait lmcnt(2)
+	ml_byte_permute_b32 v11, v13, v12, v23
+	.loc	1 24 13 is_stmt 0               ; candidate.py:24:13
+	ml_add_i32 v14, v17, v10
+	ml_mov_v2s_b32 s6, v14, 0x0
+	ml_add_i32 v14, s3, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v11, s[4:7], signed v14, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_byte_permute_b32 v11, v13, v12, v25
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v12, s6, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v11, s[4:7], signed v12, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_cvt_bf16_f32  v4, v4
+	ml_cvt_bf16_f32  v5, v5
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v11, v19, v10
+	ml_mov_v2s_b32 s3, v11, 0x0
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_cvt_bf16_f32  v6, v6
+	ml_cvt_bf16_f32  v7, v7
+	sl_wait lmcnt(0)
+	ml_byte_permute_b32 v11, v9, v8, v23
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v12, s3, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v11, s[4:7], signed v12, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_byte_permute_b32 v4, v5, v4, s2
+	ml_cvt_bf16_f32  v0, v0
+	ml_byte_permute_b32 v5, v7, v6, s2
+	ml_byte_permute_b32 v6, v4, v5, v27
+	ml_byte_permute_b32 v4, v4, v5, v28
+	ml_cvt_bf16_f32  v1, v1
+	ml_slb_shuffle_rtn_b32 v5, v6, v29
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v6, v16, v10
+	ml_mov_v2s_b32 s3, v6, 0x0
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_cvt_bf16_f32  v2, v2
+	ml_slb_shuffle_rtn_b32 v4, v4, v18
+	ml_cvt_bf16_f32  v3, v3
+	ml_byte_permute_b32 v6, v9, v8, v25
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v7, s3, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v6, s[4:7], signed v7, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_byte_permute_b32 v0, v1, v0, s2
+	ml_byte_permute_b32 v1, v3, v2, s2
+	ml_byte_permute_b32 v2, v0, v1, v27
+	ml_slb_shuffle_rtn_b32 v2, v2, v29
+	ml_byte_permute_b32 v0, v0, v1, v28
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v1, v32, v10
+	ml_mov_v2s_b32 s2, v1, 0x0
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_slb_shuffle_rtn_b32 v0, v0, v18
+	sl_wait lmcnt(2)
+	ml_byte_permute_b32 v1, v5, v4, v23
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v3, v20, v10
+	ml_mov_v2s_b32 s3, v3, 0x0
+	ml_add_i32 v3, s2, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v1, s[4:7], signed v3, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_byte_permute_b32 v1, v5, v4, v25
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v3, s3, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v1, s[4:7], signed v3, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	ml_add_i32 v1, v30, v10
+	ml_mov_v2s_b32 s2, v1, 0x0
+	ml_add_i32 v1, v21, v10
+	.loc	1 24 28                         ; candidate.py:24:28
+	sl_wait lmcnt(0)
+	ml_byte_permute_b32 v3, v2, v0, v23
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_mov_v2s_b32 s3, v1, 0x0
+	ml_add_i32 v1, s2, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v3, s[4:7], signed v1, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 24 28                         ; candidate.py:24:28
+	ml_byte_permute_b32 v0, v2, v0, v25
+	.loc	1 24 13                         ; candidate.py:24:13
+	ml_add_i32 v1, s3, v35
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v0, s[4:7], signed v1, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 23 4 is_stmt 1                ; candidate.py:23:4
+	sl_eop 
+.Ltmp1:
+	.section	.rodata,"a",@progbits
+	.p2align	6, 0x0
+	.globl	down_gemm.kd
+	.type	down_gemm.kd,@object
+	.size	down_gemm.kd, 64
+down_gemm.kd:
+	.asciz	"\000\000\000"
+	.long	0
+	.asciz	"\000\000\000\000\000\000\000"
+	.quad	down_gemm@rel64-down_gemm.kd
+	.asciz	"\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.long	537036
+	.asciz	"\003\000\264\006\211\000\000\000\000\000\000"
+	.text
+.Lfunc_end0:
+	.size	down_gemm, .Lfunc_end0-down_gemm
+	.cfi_endproc
+                                        ; -- End function
+	.section	.Iluvatar.csdata,"",@progbits
+; Kernel info:
+; codeLenInByte = 5512
+; NumSgprs: 62
+; NumVgprs: 52
+; ScratchSize: 0
+; MemoryBound: 0
+; FloatMode: 12
+; IeeeMode: 1
+; SLBByteSize: 0 bytes/workgroup (compile time only)
+; SGPRBlocks: 7
+; VGPRBlocks: 12
+; NumSGPRsForWarpsPerNU: 58
+; NumVGPRsForWarpsPerNR: 52
+; ReqNTIDx: 0
+; MaxNTIDx: 0
+; MinCTASm: 0
+; ActiveWarp: 4
+; WarpLimiterHint : 0
+	.section	.debug_abbrev,"",@progbits
+	.byte	1                               ; Abbreviation Code
+	.byte	17                              ; DW_TAG_compile_unit
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	37                              ; DW_AT_producer
+	.byte	8                               ; DW_FORM_string
+	.byte	19                              ; DW_AT_language
+	.byte	5                               ; DW_FORM_data2
+	.byte	3                               ; DW_AT_name
+	.byte	8                               ; DW_FORM_string
+	.byte	16                              ; DW_AT_stmt_list
+	.byte	6                               ; DW_FORM_data4
+	.byte	27                              ; DW_AT_comp_dir
+	.byte	8                               ; DW_FORM_string
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	0                               ; EOM(3)
+	.section	.debug_info,"",@progbits
+	.long	151                             ; Length of Unit
+	.short	2                               ; DWARF version number
+	.long	.debug_abbrev                   ; Offset Into Abbrev. Section
+	.byte	8                               ; Address Size (in bytes)
+	.byte	1                               ; Abbrev [1] 0xb:0x90 DW_TAG_compile_unit
+	.ascii	"triton"                        ; DW_AT_producer
+	.byte	0
+	.short	2                               ; DW_AT_language
+	.ascii	"candidate.py"                  ; DW_AT_name
+	.byte	0
+	.long	.debug_line                     ; DW_AT_stmt_list
+	.ascii	"/workspace/experiments/minicpm-s2/framework/20261026T032246818091Z-biv150-down-gemm-component/source" ; DW_AT_comp_dir
+	.byte	0
+	.quad	.Lfunc_begin0                   ; DW_AT_low_pc
+	.quad	.Lfunc_end0                     ; DW_AT_high_pc
+	.section	".note.GNU-stack","",@progbits
+	.iluvatar_isa "bi-iluvatar-ilurt--ivcore-1-1-0"
+	.iluvatar_hsa_metadata
+---
+iluvatar.kernels:
+  - .args:
+      - .address_space:  global
+        .name:           KArg_0
+        .offset:         0
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_1
+        .offset:         8
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_2
+        .offset:         16
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_3
+        .offset:         24
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_4
+        .offset:         32
+        .size:           8
+        .value_kind:     global_buffer
+    .group_segment_fixed_size: 0
+    .kernarg_segment_align: 8
+    .kernarg_segment_size: 40
+    .max_flat_workgroup_size: 0
+    .name:           down_gemm
+    .private_segment_fixed_size: 0
+    .sgpr_count:     62
+    .sgpr_spill_count: 0
+    .symbol:         down_gemm.kd
+    .vgpr_count:     52
+    .vgpr_spill_count: 0
+    .warp_size:      64
+iluvatar.version:
+  - 1
+  - 0
+...
+
+	.end_iluvatar_hsa_metadata

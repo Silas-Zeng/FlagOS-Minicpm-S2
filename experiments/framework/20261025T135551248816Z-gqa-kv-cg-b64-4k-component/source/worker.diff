@@ -1,0 +1,70 @@
+--- frozen-cg/worker
++++ b64-4k/worker
+@@ -51,10 +51,10 @@
+ from cache_policy import cache_evidence
+ 
+ 
+-def worker(run, model, shape="hotspot"):
++def worker(run, model, shape="b64-4k"):
+     result = dict(status="started", kind="生产 kernel+reducer 的随机输入组件", checks=[], timings=[],
+                   limitations=["没有模型权重或实际激活采样；不是模型资格或官方收益",
+-                               "默认 N33/bucket40/S16，可显式选择原 B32/S4；split 由实际生产路由选择",
++                               "默认 B64/S2、KV4096；原长场景入口保留但不自动运行，split 由实际生产路由选择",
+                                "性能仅关闭 profiler 的同输入 CUDA Graph ABBA"])
+     gqa = producer_capture = reducer_capture = None
+     original_producer = original_reducer = None
+@@ -103,14 +103,21 @@
+             B, active, segments = 40, 33, 16
+         elif shape == "b32":
+             B, active, segments = 32, 32, 4
++        elif shape == "b64-4k":
++            B, active, segments = 64, 64, 2
+         else:
+             raise ValueError("未知 shape")
+-        L = 16384
++        L = 4096 if shape == "b64-4k" else 16384
+         common, query, key, value, cache = make_data(torch, [1] * B, L)
+         query[B:] = -17
+         table = torch.zeros((B, 8192), dtype=torch.int32)
+         table[:, :L // 16] = torch.arange(B * (L // 16), dtype=torch.int32).reshape(B, -1)
+         common.block_table_tensor = table.cuda()
++        if shape == "b64-4k":
++            # Full active bucket still reserves the runner's null physical page.
++            cache = torch.cat((torch.zeros_like(cache[:1]), cache), dim=0)
++            common.block_table_tensor[:, :L // 16].add_(1)
++            common.slot_mapping.add_(16)
+         if active < B:
+             # Actual runner: query_start_loc tail=last real token, lengths=0,
+             # null block=0 (reserved), slot=-1, padded request/token counts=B.
+@@ -131,7 +138,7 @@
+                    _v_scale=torch.ones((), device="cuda"))
+         metadata = builder.build(0, common)
+         impl.do_kv_cache_update(layer, key, value, cache, common.slot_mapping)
+-        if active < B and not bool((cache[0] == 0).all()):
++        if (active < B or shape == "b64-4k") and not bool((cache[0] == 0).all()):
+             raise RuntimeError("padded slot=-1 或 null block 保留语义失配")
+         original_producer, original_reducer = gqa._gqa_decode_attention, gqa._reduce_partials
+         producer_capture, reducer_capture = Capture(original_producer), Capture(original_reducer)
+@@ -149,7 +156,7 @@
+                 kwargs["PAGE_SIZE"], kwargs["block_table_stride"], kwargs["num_warps"], kwargs["num_stages"]) != (
+                     (B, 2, segments), (B, 16), 8, segments, 128, 16, 8192, 1, 1):
+             raise RuntimeError("实际生产 ABI 未自然选中该 bucket 的 split/page16/w1s1")
+-        result["abi"] = dict(shape=shape, active_requests=active, padded_bucket=B,
++        result["abi"] = dict(shape=shape, kv_length=L, null_page_reserved=(active < B or shape == "b64-4k"), active_requests=active, padded_bucket=B,
+             grid=grid, reducer_grid=rgrid, builder_segments=metadata.num_par_softmax_segments,
+             source_q_shape=list(kwargs["query_ptr"].shape), source_k_shape=list(kwargs["key_cache_ptr"].shape),
+             source_k_stride=list(kwargs["key_cache_ptr"].stride()), block_table_stride=8192,
+@@ -250,11 +257,11 @@
+         query[:B].neg_()
+         # row15 remains long in the ragged pattern; mutate pages it actually reads.
+         changed_row = 15
+-        changed_page = changed_row * (L // 16) + (1 if active < B else 0)
++        changed_page = changed_row * (L // 16) + (1 if active < B or shape == "b64-4k" else 0)
+         cache[changed_page, 1].add_(0.5)
+         common.block_table_tensor[changed_row, :2].copy_(common.block_table_tensor[changed_row, :2].flip(0))
+         ragged_pattern = [0, 1, 15, 16, 17, 31, 32, 33, 63, 64, 65, 4095, 4096, 4097, 16383, 16384]
+-        ragged = [ragged_pattern[i % len(ragged_pattern)] for i in range(active)] + [0] * (B - active)
++        ragged = [min(L, ragged_pattern[i % len(ragged_pattern)]) for i in range(active)] + [0] * (B - active)
+         common.seq_lens.copy_(torch.tensor(ragged, dtype=torch.int32, device="cuda"))
+         check("graph-changed-q-kv-pages-ragged-zero-tail", changed=True)
+         # 按既定 split 造首页/三页/尾页边界，S16 也覆盖多个完整页与尾页。

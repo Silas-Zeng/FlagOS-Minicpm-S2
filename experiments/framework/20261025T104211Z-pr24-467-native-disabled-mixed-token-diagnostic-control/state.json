@@ -1,0 +1,146 @@
+{
+  "owner_pid": 239804,
+  "run": "/workspace/experiments/minicpm-s2/framework/20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic",
+  "control": "/workspace/experiments/minicpm-s2/framework/20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic-control",
+  "source": "/workspace/experiments/minicpm-s2/code/20261024T131603Z-pr24-isolated-cache",
+  "source_count": 467,
+  "tree": "d1a96e3f56723956a7902cba7e676fd285c83d0c",
+  "base_commit": "1ad9a708ee77323372f0fa5975a04a52d294852c",
+  "completed": true,
+  "cleanup_errors": [],
+  "owned_processes": [
+    {
+      "role": "server",
+      "pid": 239808
+    },
+    {
+      "role": "monitor",
+      "pid": 239809
+    }
+  ],
+  "server_command": [
+    "vllm",
+    "serve",
+    "/workspace/MiniCPM5-2B",
+    "--port",
+    "9031",
+    "--compilation-config",
+    "{\"cudagraph_mode\": \"FULL_DECODE_ONLY\"}",
+    "--served-model-name",
+    "minicpm",
+    "--gpu-memory-utilization",
+    "0.85",
+    "--max-model-len",
+    "131072"
+  ],
+  "started_utc": "2026-10-25T10:42:11.660782+00:00",
+  "kind": "旧467 native-disabled原mixed2；仅隔离正确性，非合规优化/性能/新基线",
+  "preflight": {
+    "ports_closed": {
+      "127.0.0.1": true,
+      "::1": true
+    },
+    "gpu": "68, 0\n",
+    "ixsmi": "Timestamp    Sun Oct 25 18:42:11 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  34C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+  },
+  "common_preflight": {
+    "checked_utc": "2026-10-25T10:42:11.767079+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "cpu_before": {
+    "cpu.cfs_quota_us": "600000\n",
+    "cpu.cfs_period_us": "100000\n",
+    "cpu.stat": "nr_periods 672395\nnr_throttled 3530\nthrottled_time 13740429668331\n"
+  },
+  "database_before_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+  "model_path": {
+    "source": "/workspace/experiments/minicpm-s2/code/20261024T131603Z-pr24-isolated-cache",
+    "source_count": 467,
+    "commit": "1ad9a708ee77323372f0fa5975a04a52d294852c",
+    "tree": "d1a96e3f56723956a7902cba7e676fd285c83d0c",
+    "native_library_sha256": "a42f71e27197c9d6efc0ad72ef1656b0c71abbd5f5d8530cdbdd390eb2470203",
+    "cache_root": "/workspace/experiments/minicpm-s2/framework/20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic-control/vllm-cache",
+    "graphs": [
+      {
+        "path": "/workspace/experiments/minicpm-s2/framework/20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic-control/vllm-cache/torch_compile_cache/7b45b6294d/rank_0_0/backbone/computation_graph.py",
+        "sha256": "ab75722cd9edd5cbd33a2bb72d3f17f090eb2796ec86386d777a852f8e9cd69c",
+        "evidence": "/workspace/experiments/minicpm-s2/framework/20261025T104211Z-pr24-467-native-disabled-mixed-token-diagnostic/model-path/0",
+        "native": {
+          "native_call_count": 0,
+          "calls": []
+        }
+      }
+    ],
+    "valid": true,
+    "installations": [
+      {
+        "installed": false
+      }
+    ]
+  },
+  "diagnostic": {
+    "completed": true,
+    "all_correct": true,
+    "limitation": "freshserver原main526 mixed基线故障诊断；仅返回token IDs，不是准确率或性能",
+    "mixed": {
+      "completed": true,
+      "correct": true,
+      "requests": [
+        {
+          "name": "prefill",
+          "completed": true,
+          "correct": true,
+          "usage": {
+            "prompt_tokens": 4652,
+            "total_tokens": 4709,
+            "completion_tokens": 57,
+            "prompt_tokens_details": null
+          },
+          "finish_reason": "stop",
+          "started": 4090771.673767026,
+          "visible": "85",
+          "finished": 4090774.778524044
+        },
+        {
+          "name": "decode",
+          "completed": true,
+          "correct": true,
+          "started": 4090766.125987218,
+          "usage": {
+            "prompt_tokens": 48,
+            "total_tokens": 347,
+            "completion_tokens": 299
+          },
+          "first_content_time": 4090771.673641807,
+          "visible_raw": "<think>\n首先，用户要求从1开始依次列出到128的每个整数。\n其次，需要确保每个整数单独一行。\n第三，要确保全部列完，不省略。\n第四，要确保不添加其他文字。\n</think>\n\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n100\n101\n102\n103\n104\n105\n106\n107\n108\n109\n110\n111\n112\n113\n114\n115\n116\n117\n118\n119\n120\n121\n122\n123\n124\n125\n126\n127\n128",
+          "visible": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n100\n101\n102\n103\n104\n105\n106\n107\n108\n109\n110\n111\n112\n113\n114\n115\n116\n117\n118\n119\n120\n121\n122\n123\n124\n125\n126\n127\n128",
+          "finished": 4090777.273554559
+        }
+      ],
+      "thread_alive": false,
+      "transport_errors": [],
+      "limitation": "首内容同步保留；HTTP重叠不等于已证明模型每步mixed覆盖"
+    }
+  },
+  "validation_completed": true,
+  "postflight": {
+    "ports_closed": {
+      "127.0.0.1": true,
+      "::1": true
+    },
+    "gpu": "68, 0\n",
+    "ixsmi": "Timestamp    Sun Oct 25 18:44:35 2026\n+--------------------------------------------------------------------------------+\n|  IX-ML: 4.4.0            Driver Version: 4.5.0          CUDA Version: 10.2     |\n|----------------------------------+----------------------+----------------------|\n| GPU  Name                        | Bus-Id               | Clock-SM  Clock-Mem  |\n| Fan  Temp  Perf    Pwr:Usage/Cap |      Memory-Usage    | GPU-Util  Compute M. |\n|==================================+======================+======================|\n| 0    Iluvatar BI-V150            | 00000000:16:00.0     | 1500MHz   1600MHz    |\n| N/A  34C   P0       91W / 350W   | 68MiB / 32768MiB     | 0%        Default    |\n+----------------------------------+----------------------+----------------------+\n\n+--------------------------------------------------------------------------------+\n| Processes:                                                          GPU Memory |\n|  GPU        PID      Process name                                   Usage(MiB) |\n|================================================================================|\n|  No running processes found                                                    |\n+--------------------------------------------------------------------------------+\n"
+  },
+  "database_after_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+  "database_restored": true,
+  "source_unchanged": true,
+  "native_unchanged": true,
+  "cpu_after": {
+    "cpu.cfs_quota_us": "600000\n",
+    "cpu.cfs_period_us": "100000\n",
+    "cpu.stat": "nr_periods 673835\nnr_throttled 3554\nthrottled_time 13827053794102\n"
+  },
+  "finished_utc": "2026-10-25T10:44:35.890359+00:00",
+  "exit_code": 0
+}

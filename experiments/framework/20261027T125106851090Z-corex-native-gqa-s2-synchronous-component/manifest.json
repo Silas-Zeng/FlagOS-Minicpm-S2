@@ -1,0 +1,117 @@
+{
+  "started_utc": "20261027T125106851090Z",
+  "owner_pid": 73247,
+  "scope": "原生同步S2 producer＋原reducer；仅N64/KV4096固定合成输入，非模型/官方资格",
+  "run": "/workspace/experiments/minicpm-s2/framework/20261027T125106851090Z-corex-native-gqa-s2-synchronous-component",
+  "command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/scripts/corex-native-gqa-s2-component-6f975b7c/entry.py",
+    "--compile-dir",
+    "/workspace/experiments/minicpm-s2/cpu-probes/20261027T123155Z-corex-native-gqa-loop"
+  ],
+  "owned_processes": [
+    {
+      "role": "worker",
+      "pid": 73250
+    },
+    {
+      "role": "monitor",
+      "pid": 73251
+    }
+  ],
+  "exit_code": 0,
+  "source": "/workspace/experiments/minicpm-s2/code/main56f1838-pr66-20261027",
+  "source_count": 807,
+  "source_identity": {
+    "commit": "56f1838192abc940b3fb9accef490022ac125000",
+    "tracked_files": 807,
+    "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+    "extras": {}
+  },
+  "base_commit": "56f1838192abc940b3fb9accef490022ac125000",
+  "native": "/workspace/experiments/minicpm-s2/official/20261026T184110Z-main241-control-16k-four-rounds-control/native/biv150_native_w8a8.so",
+  "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+  "compile_proof": {
+    "source_sha256": "8aa05659f5111c30d90c65c4c796dbd6fa946e40f470953ae47b1bf54992bf7f",
+    "receipt_sha256": "528f4c19cd3bc66f7992f92a86838c5f49b279d19c4ca54eff28df6444b5a184",
+    "record": {
+      "kernel": "_Z31corex_native_gqa_producer_draftILj2EEvPK13__ix_bfloat16S2_S2_PKiS4_fllllllllPfS5_S5_",
+      "checks": {
+        "real_kernel": true,
+        "SME_present": true,
+        "MMA_present": true,
+        "waits_present": true,
+        "exp2_machine_present": true,
+        "original_L_sum_FMA": true,
+        "single_8KiB_shared": true,
+        "same_float_mode": true
+      },
+      "counts": {
+        "mma_llvm": 32,
+        "sme_llvm": 16,
+        "wait8": 4,
+        "exp2": 8,
+        "mma_asm": 32,
+        "sme_asm": 16,
+        "sum_fma_asm": 4
+      },
+      "resources": {
+        "shared_bytes": 8192,
+        "private_bytes": 0,
+        "SGPR": 62,
+        "VGPR": 76,
+        "sgpr_spill_count": 0,
+        "vgpr_spill_count": 0
+      },
+      "passed": true,
+      "files": {
+        "gqa.ll": "cbf2448603dbe59fc420b4b14ab3e0168dea2d76a6185b7f3c61837411b84173",
+        "gqa.s": "457d5e25e1abf565aff4deacfc13874c10d660affa5d29135ffabb27a35db023"
+      },
+      "variant": "synchronous_0",
+      "scope": "full-loop compiler only; tail may duplicate static instruction bodies, no fixed sixteen-MMA assertion",
+      "gpu_executed": false,
+      "numeric_qualified": false,
+      "performance_qualified": false
+    },
+    "scope": "编译证据；不自动授历史/tail/Graph/reducer/性能资格"
+  },
+  "preflight": {
+    "checked_utc": "2026-10-27T12:51:06.863003+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "database_original_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+  "environment": {
+    "COREX_VISIBLE_DEVICES": "all",
+    "VLLM_PLUGINS": "fl",
+    "PYTHONPATH": "/workspace/experiments/minicpm-s2/code/main56f1838-pr66-20261027:/workspace/experiments/minicpm-s2/framework/20261027T125106851090Z-corex-native-gqa-s2-synchronous-component/source",
+    "BIV150_NATIVE_W8A8_LIBRARY": "/workspace/experiments/minicpm-s2/official/20261026T184110Z-main241-control-16k-four-rounds-control/native/biv150_native_w8a8.so",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "worker_command": [
+    "/usr/local/bin/python3",
+    "/workspace/experiments/minicpm-s2/framework/20261027T125106851090Z-corex-native-gqa-s2-synchronous-component/source/entry.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261027T125106851090Z-corex-native-gqa-s2-synchronous-component",
+    "--model",
+    "/workspace/MiniCPM5-2B",
+    "--source-dir",
+    "/workspace/experiments/minicpm-s2/code/main56f1838-pr66-20261027",
+    "--native-library",
+    "/workspace/experiments/minicpm-s2/official/20261026T184110Z-main241-control-16k-four-rounds-control/native/biv150_native_w8a8.so",
+    "--compile-dir",
+    "/workspace/experiments/minicpm-s2/framework/20261027T125106851090Z-corex-native-gqa-s2-synchronous-component/compile-proof"
+  ],
+  "database_after_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+  "database_restored": true,
+  "postflight": {
+    "checked_utc": "2026-10-27T12:51:54.593011+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "source_unchanged": true,
+  "native_unchanged": true,
+  "finished_utc": "2026-10-27T12:51:54.826519+00:00"
+}

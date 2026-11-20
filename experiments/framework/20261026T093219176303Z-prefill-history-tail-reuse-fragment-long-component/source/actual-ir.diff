@@ -1,0 +1,11 @@
+--- 受测actual-normal.ttgir
++++ Q-fragment-reused.ttgir
+@@ -335,7 +335,7 @@
+       %V_load_202 = tt.addptr %V_load, %v_offset_188 : tensor<64x128x!tt.ptr<bf16>, #blocked>, tensor<64x128xi64, #blocked> loc(#loc333)
+       %V_load_203 = tt.load %V_load_202 {boundaryCheck = array<i32>, cache = 1 : i32, evict = 1 : i32, isVolatile = false} : tensor<64x128x!tt.ptr<bf16>, #blocked> loc(#loc353)
+       %V_load_204 = ttg.local_alloc %V_load_203 : (tensor<64x128xbf16, #blocked>) -> !ttg.memdesc<64x128xbf16, #shared, #smem> loc(#loc353)
+-      %Q_205 = ttg.local_load %Q_142 : !ttg.memdesc<128x128xbf16, #shared, #smem> -> tensor<128x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc313)
++      %Q_205 = ttg.convert_layout %Q_157 : tensor<128x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<128x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc313)
+       %K_load_206 = ttg.local_load %K_load_201 : !ttg.memdesc<128x64xbf16, #shared1, #smem> -> tensor<128x64xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc352)
+       %S_207 = tt.dot %Q_205, %K_load_206, %cst_34, inputPrecision = tf32 : tensor<128x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x64xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<128x64xf32, #mma> loc(#loc354)
+       %S_208 = arith.mulf %S, %S_207 : tensor<128x64xf32, #mma> loc(#loc334)

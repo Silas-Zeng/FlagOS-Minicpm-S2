@@ -1,0 +1,30 @@
+{
+  "结论": "性能负向，停止候选；不进入官方或生产资格。未确认数值错误，但全量A/B数值门有矛盾，资格不闭合。",
+  "run": "20261030T011120000584Z-q32-key-scale-component",
+  "bundle": {
+    "sha256": "f69ddf679ed5f1a760e68dbdbd52a83683ec940d88ab7189051d8f99678bbc41",
+    "verified_files": 70,
+    "archive": "archive/q32-key-scale-20261030/component-011120"
+  },
+  "performance": {
+    "ABBA_groups": 4,
+    "repetitions_per_block": 50,
+    "event_A_mean_ms": 7.9743985748291015,
+    "event_B_mean_ms": 8.043934936523437,
+    "B_vs_A_percent": 0.8719950607162241,
+    "all_groups": "B慢于A；same-arm输出跨区块bitwise稳定"
+  },
+  "numeric_review": {
+    "raw_full_AB_claim": "每组均报告max_abs_difference=0且violations=0，但同时bitwise_equal=false；该统计与posthoc选定输出不一致，不能采信为已闭合的全量门。",
+    "posthoc": "selected-cpu-check.json对5个已保存输出逐一CPU FP64复核：均非bitwise相等，非零差元素分别96/122/8/39/81，最大绝对差分别0.0001220703125/0.0001220703125/0.00006103515625/0.001953125/0.0001220703125，pointwise violations均0，selected FP64门通过。",
+    "限制": "仅选定保存样本通过不等于全量输出数值资格；无证据确认候选本身数值错误。性能已负向，按要求不重测。"
+  },
+  "execution_cleanup": {
+    "owner_pid": 97899,
+    "child_pid": 97901,
+    "exit_code": 0,
+    "postflight_GPU_processes": 0,
+    "port_9031_free": true
+  },
+  "scope": "合成ABI组件测试；不构成服务/准确率/官方性能结论，不更新基线。原始70文件证据未改。"
+}

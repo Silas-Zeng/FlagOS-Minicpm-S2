@@ -1,0 +1,42 @@
+{
+  "CPU_only": true,
+  "author_incremental_check_passed": true,
+  "independent_review_pending": true,
+  "source_sha256": "fb1b6f477ad376b03fb6479900d2d6eb6e3e836ccdbe1956e859facf986c6ff9",
+  "parent_source_sha256": "f9999d601abb51a1d2a2425d8101c0eaeabed284a7cc263c917b7282a4dcd106",
+  "files": {
+    "probe.ll": "c42360a823c8c9c3affe62a376452d625f96d964387351c37d8c549e7db0a1e5",
+    "probe.s": "2fbe029812806d84b1de6cb94b3c12349ede471e7c7dcff4424027162c225e6e"
+  },
+  "resources": {
+    "shared_bytes": 65536,
+    "private_bytes": 0,
+    "SGPR": 83,
+    "VGPR": 107,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0
+  },
+  "exact_QK_to_BF16P_LLVM_definitions": 769,
+  "PV_MMA_chain": 32,
+  "additional_PV_nodes": 420,
+  "old_PV_counts": {
+    "AND": 128,
+    "anyop3": 64,
+    "MMA": 32
+  },
+  "new_PV_counts": {
+    "AND": 64,
+    "anyop3": 0,
+    "MMA": 32
+  },
+  "mechanism": "32 masked/raw vector selects deleted; 64 redundant AND plus64 anyop3 removed per activewarp/tile. New AND remains identity on fullmask and exact original tailmask.",
+  "CFG": "Same BB0_116..125 next32SME -> cohort math or BB0_98 bypass -> finalPV then BB0_98 drain/barrier; four Q barriers and all stage barriers retained.",
+  "limitations": [
+    "Author incremental check, root/independent reviewer must qualify the frozen package before GPU.",
+    "Parent101658 numerical pass and performance negative remain unchanged historical facts.",
+    "Actual new SO must run unchanged three-arm long/Q33/Graph/side/RNG/FP64 gates and ABCCBA; no observed throughput gain yet."
+  ],
+  "GPU_executed": false,
+  "numerical_qualified": false,
+  "performance_qualified": false
+}

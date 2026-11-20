@@ -1,0 +1,1548 @@
+{
+  "schema": "experiment-bundle-v1",
+  "run_id": "20261029T174727581180Z-native-k8-sme-a-4096-four-rounds",
+  "source_commit": "899ce77470b0b539aebc108fd122f668c2d5894d",
+  "scope": "NativeK8 SME service experiment; see the result and terminal review for the evidence boundary",
+  "result": "尝试在main899上用A臂NativeK8 SME服务执行官方4K入口；本次改动仅是隔离服务overlay/库身份接线，未改算法。启动时Windows git archive把395个源文件写成CRLF，依赖SHA与冻结Git blob不符，服务未ready、benchmark未启动（0行），随后清理成功。不是模型数值或性能结果；保留失败证据。修复为从git cat-file读取原始blob并逐blob核SHA1，正确源包SHA 236cb601…；用新run重试。",
+  "source_recovery_manifest": {
+    "run": "20261029T174727581180Z-native-k8-sme-a-4096-four-rounds",
+    "files": [
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/README.md",
+        "bytes": 5080,
+        "sha256": "8e33e857bf1f9efe01278f7db74d746b3b4faa5dfd314b9b0cf818a5c8f6a98d"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/common-assets-note.md",
+        "bytes": 4254,
+        "sha256": "4113464372f44ab0ca7d67c772c55e32837e81f9235d80c97b84b3b6ec2ad141"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/entry.tar.gz",
+        "bytes": 11928,
+        "sha256": "dca3f0627f628a1dcd99bb0c25fe2514c4aa20776d1dd556127a4decdb53bdb2"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/launch-A.json",
+        "bytes": 587,
+        "sha256": "d640319614f66ec9ce53c964992a15ed55e00c69dc0754dda8b6de58bb98a503"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/materialize-A.log",
+        "bytes": 1400,
+        "sha256": "0f5a0965d002af0d15ef8200181b917d7724d0feb90fbe974a5ddba77bb7d16d"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/materialize-B.log",
+        "bytes": 1400,
+        "sha256": "3293f8fde554e74562a35f0aff06f3eccf1e5f0c121dafbe45e3d46b2791e7c5"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/materialize_adapter_overlay.py",
+        "bytes": 5042,
+        "sha256": "2d5a42daf33eb13a36ffbe470223be914a50f486f852eca168f067fa80944aa2"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/overlay-A/native-k8-sme-overlay.json",
+        "bytes": 1400,
+        "sha256": "0f5a0965d002af0d15ef8200181b917d7724d0feb90fbe974a5ddba77bb7d16d"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/overlay-A/vllm_fl/compile_semantics.py",
+        "bytes": 12513,
+        "sha256": "5ddb1f36df56febef0ad876fa411e81f8efad84cdfc0f8725709a811fe205df6"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/overlay-A/vllm_fl/patches/biv150_konly_encoded_native.py",
+        "bytes": 12923,
+        "sha256": "70e15154fbcda528e4ec4c2a5f0c0720fc3752bd3848fdedf2abae9a36d437e6"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/overlay-A/vllm_fl/patches/biv150_konly_encoded_sources.json",
+        "bytes": 13605,
+        "sha256": "8a20f4e8937b54f87157cd90876123019ec5fdf9e30ddbaabbaefa92fe542ede"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/overlay-B/native-k8-sme-overlay.json",
+        "bytes": 1400,
+        "sha256": "3293f8fde554e74562a35f0aff06f3eccf1e5f0c121dafbe45e3d46b2791e7c5"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/overlay-B/vllm_fl/compile_semantics.py",
+        "bytes": 12513,
+        "sha256": "171eb1ce5925df386147d577a1d1ab19929ce42f1bb0f909e328348f1f901fd3"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/overlay-B/vllm_fl/patches/biv150_konly_encoded_native.py",
+        "bytes": 12923,
+        "sha256": "a7c76656f0766a017fed47b19a19eba98a5bb4ab48b743634f9ea1a35fe1c252"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/overlay-B/vllm_fl/patches/biv150_konly_encoded_sources.json",
+        "bytes": 13605,
+        "sha256": "6efd9e345f2b047b3f93c29b74cb5a3d52e5d606432c21d79d544310f05e85a4"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/owner-A.log",
+        "bytes": 1168,
+        "sha256": "87a92ad524e4a6f8ec93bb5d73e8dfb59d316fe575c562544fbe4a0694cbc414"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/owner.py",
+        "bytes": 14803,
+        "sha256": "584efc50464f5d455e0fc3315565fb2d582bf92b79c2b2f38e247d68a01e97c5"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/prepare-A.log",
+        "bytes": 833,
+        "sha256": "15748fdfa383ddd2e7246f193b84aacaf0e72fd8a1f10fee70ff5e56ac489556"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/prepare-B.log",
+        "bytes": 833,
+        "sha256": "d3f51e804096722f0443235be41d21a711c5500e652842065383110adf689148"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/run-plan.json",
+        "bytes": 7783,
+        "sha256": "efb8e6fc67e0cb1ad4c532601088996b48188239eb34f7c54b329b7bed88bd52"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/runtime-review.json",
+        "bytes": 3456,
+        "sha256": "527c79eee5c2f0d5163a6b4b15f97fa1435feca351ce86549abe406a023acbe2"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/supervise_arm.py",
+        "bytes": 6860,
+        "sha256": "6fccefc1fb8d20bd2e71bb4880d80ae9f06584481a118648a5ff3e137c3c7213"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/supervisor-A-idle.txt",
+        "bytes": 1284,
+        "sha256": "3cb4b1227be84e0df4c6c1b42961b66575c8a6d355610206dd63897698905cf3"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/supervisor-A.json",
+        "bytes": 5273,
+        "sha256": "9fe743e1249a192bb92164829d5c7437508d734a8ae9909afab41376b645b0f9"
+      },
+      {
+        "path": "scripts/native-k8-sme-service-dca3f0627f62/supervisor-A.log",
+        "bytes": 2082,
+        "sha256": "5e616a93ef0e0dc685b667552b6f11b4ecf832c7599b8846275bd56ee2557d3a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/database-after/manifest.json",
+        "bytes": 1927182,
+        "sha256": "25262565b167954eaa538eb4c759b232eca790bc43f7906df0f0c82c12287a29"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/database-after/snapshot.sqlite",
+        "bytes": 10133504,
+        "sha256": "509de6f49aeeaaef7fc928f292f3c85e647f89b3a192e0041b23a3db53380f14"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/database-after-command.json",
+        "bytes": 470,
+        "sha256": "e5e78f0674a51b81e3cb08e1655bb2ed2cd510468ea2d5a2823dafd19d609049"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/database-after.log",
+        "bytes": 474,
+        "sha256": "75e7b9d05b50ee4ead69819b0a92323904571b11632d86ab60d53bbbb3f83291"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/database-before/manifest.json",
+        "bytes": 1927184,
+        "sha256": "c9d182f88dbd2997239a31ed7c9b9c1926170e301e49f2da07fbeaeeb1522687"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/database-before/snapshot.sqlite",
+        "bytes": 10133504,
+        "sha256": "509de6f49aeeaaef7fc928f292f3c85e647f89b3a192e0041b23a3db53380f14"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/database-before-command.json",
+        "bytes": 471,
+        "sha256": "54830169de60d40ea1b1fd45d6f59a5f6bdac57bb0507752ae4be455ce5f17ff"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/database-before.log",
+        "bytes": 475,
+        "sha256": "0d636a743eada28daf3ba052ea4bf9be06232c3ce84e595debeabed66b1f5839"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/exit-code",
+        "bytes": 2,
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/finished-at.txt",
+        "bytes": 33,
+        "sha256": "4c010e68b4e4bdd6820888d41a33291189844cc110a9e62e983b84fd4c5c54d5"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/gpu.csv",
+        "bytes": 1482,
+        "sha256": "929eea3fbf258fb9d92487df31e38091d81524c8b0e0e2925ea94ac3906b4d58"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/manifest.json",
+        "bytes": 35451,
+        "sha256": "96d7f33b4d46f79d5159f51d1409dbea4d6780fac3894e0dc7f7abb33496dc11"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/monitor.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/native-k8-sme-owner-result.json",
+        "bytes": 1468,
+        "sha256": "4df739f23a40198945cf6b3d555dc33fe351e4902f864cc51499683c0be00fd0"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/result.json",
+        "bytes": 1307,
+        "sha256": "2708c9e987e9452843f1f5e58fe2a18af1b88e95696fb01d3faa236aae3474b3"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/server.log",
+        "bytes": 28946,
+        "sha256": "48891a15539cbfe9677b942ac59cb009a23684e2dd50cd7f9f79225bb38b5d51"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/server.pid",
+        "bytes": 6,
+        "sha256": "288bbcc714fa3f139e264f0df33e765dfa0ab95e277f5724afd7dde3dd3dff4a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/benchmark_throughput_serve.py",
+        "bytes": 13284,
+        "sha256": "0813eba574e9d1eb50c297c515baa426da1bcb61ce8c78a398b482f246005565"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/config.json",
+        "bytes": 704,
+        "sha256": "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/dataset/eval.yaml",
+        "bytes": 949,
+        "sha256": "3b27aa1c196f11345dd75a1333fa47044605eced79bfa2cd770ccae65fe12621"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/dataset/test.jsonl",
+        "bytes": 446564,
+        "sha256": "35dc41080a3680858b27fa7e0533d2d547825316fc5dafe5d316f4ccc5a06132"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/generation_config.json",
+        "bytes": 213,
+        "sha256": "9ac4f32e5f32358697a9f438a3ea89ef80e6ba786c72c49e932f9f21c122fdb1"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/installed/flag_gems/runtime/backend/_iluvatar/ops/mm.py",
+        "bytes": 8474,
+        "sha256": "4c2e23da2a6b65b89cbb8170967f14c5327d143e21137387f3907ccb4fcde090"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/installed/flag_gems/utils/models/sql.py",
+        "bytes": 13915,
+        "sha256": "6dc19cb581d70154f14b95ed9112d682c6b5919b6cf3f8dea01a78a75ec0efd7"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/installed/triton/__init__.py",
+        "bytes": 2958,
+        "sha256": "df3092178f70be89b50d22905cedae5bac414cc38677053616fc56802c91af30"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/installed/vllm/v1/attention/backends/triton_attn.py",
+        "bytes": 30400,
+        "sha256": "1219c4d1820b56e99ef6686de8a49c8c5aa57707794bcabf3322023799a03605"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/installed/vllm/v1/attention/ops/triton_attention_helpers.py",
+        "bytes": 14621,
+        "sha256": "59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/installed/vllm/v1/attention/ops/triton_unified_attention.py",
+        "bytes": 41796,
+        "sha256": "54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/installed/vllm/v1/worker/block_table.py",
+        "bytes": 14201,
+        "sha256": "b3a6649b968fba0b48c333d7ac96e65cc713a86133cc7eef0a8399f5339ec600"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/monitor_gpu.sh",
+        "bytes": 527,
+        "sha256": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/pyproject.toml",
+        "bytes": 5443,
+        "sha256": "bf0754e0e2580138eb5b18e9de363050b59b2c77432d99f0ed33366a0a066db4"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/setup.py",
+        "bytes": 6344,
+        "sha256": "441f8ce300163265b769cc7938e33b6d0c4b70f861f82f6cd01b3638936f0065"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/__init__.py",
+        "bytes": 7334,
+        "sha256": "b7886741342be9d40a63860efd8362b7a05e2dd85b6b55fb5c2fb60d9f3c7982"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/attention/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/attention/utils.py",
+        "bytes": 1978,
+        "sha256": "f233f44fba541c492872c9b3c8d95870bf159efe674a3946972440f9bc5d9fa8"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/compilation/__init__.py",
+        "bytes": 395,
+        "sha256": "6b12b5bffe3f02ace800aa29cf2d74f8a3589e8c2748cbda706b4607cd4115b6"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/compilation/break_graph.py",
+        "bytes": 1586,
+        "sha256": "fc24923bc0332ff2588d775dc5108bf78e70f53aef0ba931bc580e8f0a2e1bb8"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/compilation/graph.py",
+        "bytes": 9685,
+        "sha256": "91ba5a848e55630639ee241d8f8e8de1348d616a0b9dd1f0dc9e89ec7ebfec01"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/compile_semantics.py",
+        "bytes": 12513,
+        "sha256": "5ddb1f36df56febef0ad876fa411e81f8efad84cdfc0f8725709a811fe205df6"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/configs/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/configs/glm_moe_dsa.py",
+        "bytes": 1594,
+        "sha256": "3e606389e67d871d31e8c514c0eccab8939dd39d5431fc2454221cb42e1142db"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/configs/moe/E=256,N=512,device_name=nvidia,model=Qwen3.6-35B-A3B-H100.json",
+        "bytes": 3388,
+        "sha256": "a4609c34b5fa0580c3e5a2c7040c7ac8a8ff70f0cffa5beddd0cbdec4f67cc8b"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/configs/moe/E=256,N=512,device_name=nvidia.json",
+        "bytes": 3388,
+        "sha256": "a4609c34b5fa0580c3e5a2c7040c7ac8a8ff70f0cffa5beddd0cbdec4f67cc8b"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/README.md",
+        "bytes": 33014,
+        "sha256": "d9375dc91d48c1f777d825a0613ec5f2f63b5de76bd0dad48c815cedf318744a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/__init__.py",
+        "bytes": 9037,
+        "sha256": "27641edd0ff581f18732299801423d0350f3557bb80d18830f7270e512225ee8"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/__init__.py",
+        "bytes": 503,
+        "sha256": "470650c4f9ce263ed7f8711ba3d30974f63c1cc04c8a957dd786910d6948fdf9"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/base.py",
+        "bytes": 1207,
+        "sha256": "604430761eeef3c074d06449ff123347e46b2e118ad318c5ac0b2e3043913f9d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/__init__.py",
+        "bytes": 182,
+        "sha256": "cd77a5a48b5b33c5c5d43a9c79c9fcb907f3ce036961692347c8478bea0c91b3"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/flaggems.py",
+        "bytes": 8398,
+        "sha256": "8b174fcf52ac6555a539268e22b1567643bdcbcfdd90537c008e378b7124ceed"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/impl/__init__.py",
+        "bytes": 823,
+        "sha256": "f0a5d7b4fb84de02c46359bcd83eacb5058bd9f0b98d342a718f63a5d6124569"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/impl/activation.py",
+        "bytes": 1248,
+        "sha256": "ef89f5be917a4937ce24ed4fb364345d7d0667a5323c493ddc50a1692f8ea312"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/impl/attention.py",
+        "bytes": 38434,
+        "sha256": "2e80800362dfd248162113c308f0ec7e0c061102a35e17fc8e0221370ccee3f5"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/impl/custom_attention.py",
+        "bytes": 347,
+        "sha256": "a4f475b6b215f8c0e7cc638913d15019e92b6818d24fb22ce6ccd48288a46ce9"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/impl/fused_moe.py",
+        "bytes": 3870,
+        "sha256": "ee8120646a608184e74f7ae432a89e26a7b8dbbdc85a22d43d67eb624b45bb5d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/impl/mla.py",
+        "bytes": 6300,
+        "sha256": "677ced4f5704919c4668d5b991f4be282bc52eb521c1bde998397a5a45316d93"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/impl/normalization.py",
+        "bytes": 894,
+        "sha256": "d26b0b3e0b171390d0c2efaddcba88c4e8c84f3c5a0017a88f45be81c50c8bf3"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/impl/quantization.py",
+        "bytes": 3135,
+        "sha256": "2e1987f332551aac78f9b5efc95c9d84fddd40316bbb330b9bfd180aabc3bf68"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/impl/rotary.py",
+        "bytes": 1199,
+        "sha256": "991efdb3d83f38268974ab25722c4f0a3dc6453311af873dc8b02a8667280861"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/flaggems/register_ops.py",
+        "bytes": 5139,
+        "sha256": "26b51c155a7578438ed3f0c3d98004350c2655bc166535a22210d0803a31b2dd"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/reference/__init__.py",
+        "bytes": 186,
+        "sha256": "1b70d8d6ff6b243940e6260ce455d9c6b916827d6cabfc3c076c5e25e569e589"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/reference/impl/__init__.py",
+        "bytes": 391,
+        "sha256": "2b74298535b856173c6bbf81cca1d87368344fad2d2123543618873765634256"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/reference/impl/activation.py",
+        "bytes": 1171,
+        "sha256": "fee258fd59e52ed56e45791a602f7e1592e169fe7dd6759971c4dd16d3921113"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/reference/impl/normalization.py",
+        "bytes": 1060,
+        "sha256": "c66b81938bad64f488ab57368747ca554fc5afe5efc0673af74a601ca5b22069"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/reference/impl/quantization.py",
+        "bytes": 424,
+        "sha256": "fca9480c905c8df50eb1273b9be4f0f19193c3e4f44cbeeaafd1f25435692639"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/reference/impl/rotary.py",
+        "bytes": 3646,
+        "sha256": "a92d19555263c98e59424e8f7323dad2bbde81a73f9155738532afb7492900ce"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/reference/reference.py",
+        "bytes": 6421,
+        "sha256": "7e41bf0f8023e68d3aa09f4a0bbff8ba0386d1897523c356a44c35a4427c5078"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/reference/register_ops.py",
+        "bytes": 1980,
+        "sha256": "03faaecfb4cf58d342d4b27dba48c46a613b9f82cd31d2f0d2d79d5a3cd799cd"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/__init__.py",
+        "bytes": 797,
+        "sha256": "5a350fb8b611f869718e977d39fe9a406c4ca4fa9ce4fbc45a1b501eac8fefde"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/__init__.py",
+        "bytes": 246,
+        "sha256": "6536ab254002e0d3b1697c3404290d654f52b9d3738f7a210d22299f8bd753d2"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/ascend.py",
+        "bytes": 4623,
+        "sha256": "966ed65356ea42233abc96521c26e16ceb2bfe851f6e62aa9b654e4983ac6979"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/__init__.py",
+        "bytes": 1030,
+        "sha256": "fdc630bf038b674880084e17cc60af322e3368bd28079c503fc944f3cf3c8163"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/activation.py",
+        "bytes": 558,
+        "sha256": "d68adde224927de0e629d61d0885ced3585c285ecc7585acfe63f58dd1165a7e"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/attention.py",
+        "bytes": 30539,
+        "sha256": "64204a0e2b62aa084de7f4fcda3d2b86ff36a0a055d0f06fe9fb5a4d30fc7cd9"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/attention_mask.py",
+        "bytes": 5927,
+        "sha256": "3a50813ae0bae705291f447b0ac0586912a90b9dcbf33b8fa67c855cd1197ceb"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/causal_conv1d.py",
+        "bytes": 28977,
+        "sha256": "12c30d5513ad20d6ad45ca211d8bd2ade5db4afea5ef3c58776d13be8ccfb1fe"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/fla/__init__.py",
+        "bytes": 225,
+        "sha256": "93407536d7317772a7f8026634748795dd516d1e576f2c8648c933948bd6c456"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/fla/chunk.py",
+        "bytes": 7649,
+        "sha256": "0ddb27cd5af0c9514546aedb2a9869262e4926856180fc6f339bd1faa7064498"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/fla/l2norm.py",
+        "bytes": 2306,
+        "sha256": "75500a00f0d25e09a522e0f7efec76ac25a20fc53db01e64b75f519957e4f019"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/fla/utils.py",
+        "bytes": 2489,
+        "sha256": "0f73d19040f29e8884290d7fdd7da829c7579dd5afacabe40a7e0fd0b698ddb9"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/fused_gdn_gating.py",
+        "bytes": 3840,
+        "sha256": "7b44435392c6bb347aac3b98172207e159006bfd521c90e820431fc54a06f2e1"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/fused_moe.py",
+        "bytes": 5805,
+        "sha256": "414649694ccf8d1e3be10e47223e0b47e6e2678bf865b870bc73325ba5def6ec"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/mm_encoder_attention.py",
+        "bytes": 5455,
+        "sha256": "8060cb6a256da191039d096d487dbb7c0479152ac2b3e9656b1f07b1c8b7bcb1"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/normalization.py",
+        "bytes": 1029,
+        "sha256": "228fafc351740e0ac4dfdc9187019ef8bd282d36595a19452c2364e8664cf333"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/rotary.py",
+        "bytes": 2356,
+        "sha256": "757a9e5ef72041671193e7efdf54495651dc11d02ac11c69697886afd7063724"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/triton_utils.py",
+        "bytes": 1305,
+        "sha256": "f021de6aa08ba6152373767c8da21bacf4c14529e7967dcf54b715977146b7cb"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/impl/vocab_parallel_embedding.py",
+        "bytes": 10539,
+        "sha256": "311547efa24f22d23bc7c6fd6c812737112e4562de0c6287929c718ba0e8ec1c"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/patch.py",
+        "bytes": 5676,
+        "sha256": "3949398baead0457575a1a7ebc90b1d1402fb3815af0de360999023349eb1d1d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/patches/patch_mamba_config.py",
+        "bytes": 3707,
+        "sha256": "683bec8c18e4ed0ad25265f1bb9c7b0eafc169d6e60b70a994dc7de0e6955657"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/patches/patch_multimodal_merge.py",
+        "bytes": 2120,
+        "sha256": "ea6ecc4ac06bfb01e3e27d5829c1fa6ac5ab7ce78056a9440b3b697e11bf1517"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/ascend/register_ops.py",
+        "bytes": 2297,
+        "sha256": "ca75a6128fd5b517b1826878f2e93a5e792c413289ac2b7b881fc0595fcf8fe3"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/cuda/__init__.py",
+        "bytes": 166,
+        "sha256": "2d4b9bf7323d1bda8441d43e04135c19280c91a9fd6ba236213a59a43f46d34f"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/cuda/cuda.py",
+        "bytes": 8340,
+        "sha256": "28c2d84e7cd482180760537452b28e36bd399370f66e8faead1966169d79f8c7"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/cuda/impl/__init__.py",
+        "bytes": 364,
+        "sha256": "d47a0f0b3b5aa8bb12d4597c3b345f067049fb68405a7cdd90b4b7ef7744d925"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/cuda/impl/activation.py",
+        "bytes": 1405,
+        "sha256": "e5d36ca5a3d29bdc1335785a5a714a5c6731240ee38947018df07f8767d4e7a3"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/cuda/impl/fused_moe.py",
+        "bytes": 3844,
+        "sha256": "379861e1a3b91aa0f9a1c55121ae1b9bbb87b5e21511aea297d4be1a0f167098"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/cuda/impl/normalization.py",
+        "bytes": 1217,
+        "sha256": "972a39924130625a66312694e326c126edb6521ce5c5fc4ae99e4561a5b4e55e"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/cuda/impl/rotary.py",
+        "bytes": 1212,
+        "sha256": "687e09f18f086b598809ab50ccee8f56ce9fca0057d78b0ae63579c9c863eb00"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/cuda/register_ops.py",
+        "bytes": 4095,
+        "sha256": "41785bdafb2e0125b6a4a9916d2dcdb359c659be7550c526e44b9fe74765509c"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/iluvatar/__init__.py",
+        "bytes": 182,
+        "sha256": "8b337bef6cf66836bc5b6b331f9eb17f64633ffa3cb2d2a82f45deb4bb7efe91"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/iluvatar/iluvatar.py",
+        "bytes": 18894,
+        "sha256": "722d0c237752146d26197b19b9185799e24e33eab71dc0f783da8570d406e590"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/iluvatar/impl/__init__.py",
+        "bytes": 97,
+        "sha256": "bbea10fb77347d799b9e530ef2228634361c869bcc7d6262841a4fbc9efd75f5"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/iluvatar/impl/activation.py",
+        "bytes": 638,
+        "sha256": "21c230626ccf97b351919e2baa90343f24846b287de4835cdadeaf6729b6b8e9"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/iluvatar/impl/normalization.py",
+        "bytes": 1063,
+        "sha256": "b689c5f4c61cc2d2f217adc27edb21f0826ef93878c6b9b29eedfaefa3089c97"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/iluvatar/impl/rotary.py",
+        "bytes": 3929,
+        "sha256": "e5681e38f82e47d3fa5ea39c3dbaf5ec4f921bdea07b6f0c2bedd25eac4b7300"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/iluvatar/register_ops.py",
+        "bytes": 2263,
+        "sha256": "223c1a62676612bfdcf6874c38ae692de9a3faeb0ced5e7d84062165ffec71fa"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/__init__.py",
+        "bytes": 267,
+        "sha256": "6f6437a2872dcc3e91c80a4382a6ae40a22de1be5c46cb2e5492ee8633aa9f9d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/__init__.py",
+        "bytes": 325,
+        "sha256": "5a42902e2cdcf6d274474ffe9a812d0edcfbf6bac01de5f59959b43e9c2c3324"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/activation.py",
+        "bytes": 1131,
+        "sha256": "2d10b1f05e19cab901e0a7e8bb42b97a968999d04505b8647f564b8c6d0beca8"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/flash_attn.py",
+        "bytes": 51015,
+        "sha256": "dc4d6d2dd552be9985a9b87da5c25021c16932200f5829a586245b4d903a355a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/mla/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/mla/common.py",
+        "bytes": 77914,
+        "sha256": "f5efa122bb5a762848b1bde839113c0e2ca2f6dd89c408cc605448d857cd4199"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/mla/flashmla.py",
+        "bytes": 11751,
+        "sha256": "de62d771dc236806e928c0e9e20b4f99b3a8a182f96ac5a5e5e2a0fee4761feb"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/ops/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/ops/flashmla.py",
+        "bytes": 9272,
+        "sha256": "0824c1256b72f3740f349ce4ada7a77884cbd51f715f997ac7f809437181275d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/ops/merge_attn_states.py",
+        "bytes": 2118,
+        "sha256": "249a36b8c950d1a42c1948db31c5ec59a46b39b0c6629088a7cdc822ab5f8afd"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/ops/triton_decode_attention.py",
+        "bytes": 20924,
+        "sha256": "e8868d6dca6d18eb6d930407459510836c3b1c26be1724cbb0fc73d51c9e70c5"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/ops/triton_unified_attention.py",
+        "bytes": 38051,
+        "sha256": "a52f69ceeafc46921e5876a92a449a36ee09e514d78c70b973d5d8b0116605e6"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/ops/vit_attn_wrappers.py",
+        "bytes": 2588,
+        "sha256": "f13891e5ab14dcb34ab77deb4194744ff5b2b507c5675e78308d5a12c71e138b"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/utils/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/attention/utils/fa_utils.py",
+        "bytes": 1967,
+        "sha256": "e5d180e9031d5e363b097e7680c8b027d34048a622b91a21ba3e6079131a6461"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/fused_moe.py",
+        "bytes": 4199,
+        "sha256": "821f165cefc6efb377d7b02d278cc57f572219ad7633bf76e66eb056e1b7f4f5"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/layernorm.py",
+        "bytes": 732,
+        "sha256": "6ff42cf9983cd0e02d9998a2a51753b7c532e741f0429d2d11a25f1322176b3f"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/rotary_embedding.py",
+        "bytes": 730,
+        "sha256": "a65bf702223238d25d8629a442dbd02ce781aa53d8e4da95eca8ca2f66829ff7"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/impl/top_p_sample.py",
+        "bytes": 6625,
+        "sha256": "9d0fb3c54861f9f6fe413567cff579393f8c861e7769b10fa13930e5d4640134"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/metax.py",
+        "bytes": 6487,
+        "sha256": "fa66db1f628cd176b866b63c89d2b8e29c57cb86e8be52e224a72d8822189155"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/patches/__init__.py",
+        "bytes": 772,
+        "sha256": "f9de70f7493fd4f776189268ced99142e4087cc315e47de21fd8c2f2e586ca9b"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/patches/accelerator_compat.py",
+        "bytes": 3135,
+        "sha256": "29237d376530509adb317b638187d0d4a7279d890e9f0235c33988bb46351126"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/patches/chunk_delta_h.py",
+        "bytes": 11391,
+        "sha256": "51d29d43c0883d1b717c97fa9c202fa5fb3da78b98f33c499d98db21a294152a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/patches/cuda_wrapper.py",
+        "bytes": 8822,
+        "sha256": "bbed0468b2d9a8d829f8f878bff5edf2b6de062bcb365cd7fe3283655de1228d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/patches/fix_standalone_compile.py",
+        "bytes": 8425,
+        "sha256": "1e0b71fda8fa6118ab800a712fec2eabcbb6eef9c2bfbfefb60d7d41f85946af"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/patches/functorch_config_patch.py",
+        "bytes": 2659,
+        "sha256": "ad5a3cbf13eea4b7e934e3e22f0a33bafd664cc01d13d2893f3096ae89ff3aab"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/patches/gdn_linear_attn.py",
+        "bytes": 5122,
+        "sha256": "e0c2dd8f4fd59e6cf0d22b6ee362d022fae4137d242a398d6175fe75ac50d74a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/patches/pynccl_wrapper.py",
+        "bytes": 16898,
+        "sha256": "d0f1aff96b07f9573d244d53611d315d98f3bb1612939b6f63d5038b0f3081d5"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/patches/topk_topp_sampler.py",
+        "bytes": 3281,
+        "sha256": "1092ba67487f7232a1d374bdaf8551f319e217ca6b217c8d128f840257cd7b43"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/patches/utils_patch.py",
+        "bytes": 780,
+        "sha256": "0f263a7daaae627cf59d3568a870fe35610de0ddca8e5c8cf7e0bed8e36dec74"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/metax/register_ops.py",
+        "bytes": 2895,
+        "sha256": "b4dc09cf5cd73f155005489afe22109098480ce2728e0110750fb533cb69a54d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/musa/__init__.py",
+        "bytes": 166,
+        "sha256": "f1d002ff70a269e7aecb1e0cff9035fda22e8970a669d3d1367beec28714d1dd"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/musa/impl/__init__.py",
+        "bytes": 93,
+        "sha256": "a8f26ff8ee240434dad11f35e02dddf4ca3cae39c54835941884a8e4f919e34e"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/musa/impl/activation.py",
+        "bytes": 634,
+        "sha256": "ff17b6043b2176bb0ac780cec394d9b7d83bdf00035390ba8eaef0b2dd122e15"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/musa/impl/normalization.py",
+        "bytes": 1057,
+        "sha256": "d9fd0392257fde43e0f3814623c83e951fad01ee6b7234cce0ba67931172a21a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/musa/impl/rotary.py",
+        "bytes": 3907,
+        "sha256": "c09641459c77d9fd23f5a9a46fa1c87fc6a5240cff585418fe812aa9019d2c31"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/musa/musa.py",
+        "bytes": 4060,
+        "sha256": "42d740f33e74e40e1038ca8854807df553c195240cbc868a99a7c773be855b3a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/musa/patch.py",
+        "bytes": 21109,
+        "sha256": "d425ffd20e648c18a27f19646cf3e41f96c8ae488315896cfce891dc70d2cb57"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/musa/register_ops.py",
+        "bytes": 2278,
+        "sha256": "958be22021068f8073f2aa34be604ede5b4f5217c6cb68c358ba1edd28b1ad92"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/sunrise/__init__.py",
+        "bytes": 187,
+        "sha256": "be6305312c7c86f9a74f0dab11f24e34e5eeb218cae0349bb8e51e9a6c46782a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/sunrise/impl/__init__.py",
+        "bytes": 306,
+        "sha256": "83c625e0e20e3c7bd4b070b6293c85deec4a518324dfd428629e05b740b57cfd"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/sunrise/impl/attention.py",
+        "bytes": 38590,
+        "sha256": "95f832cc577509b15619bef9f774bad0feac2f37cf6264d1a6b634df4728b5f0"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/sunrise/impl/vocab_parallel_embedding.py",
+        "bytes": 2323,
+        "sha256": "546ced417cf163c29c5618d3d62cbdf0b75d2a4fa4fbcff99f49b68bac301bd0"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/sunrise/patch.py",
+        "bytes": 7949,
+        "sha256": "6d59d7c8079afc0a395128f9f2a753d02a5ff801f379a6a8bee60ab0847d127b"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/sunrise/register_ops.py",
+        "bytes": 1271,
+        "sha256": "f150e1c9ce92626b766839f04b8c529aed003388613cf70c105fb66839a6e11f"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/sunrise/sunrise.py",
+        "bytes": 2032,
+        "sha256": "01062fcdbff659faf12f2d8a69b93e004915bc4cea1f400fe353ff642bfa7f3c"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/template/__init__.py",
+        "bytes": 332,
+        "sha256": "0c77eba3497bebe4aad21c8b50b95fffa3f07cf904855c0ff54eff06b307021e"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/template/impl/__init__.py",
+        "bytes": 306,
+        "sha256": "83c625e0e20e3c7bd4b070b6293c85deec4a518324dfd428629e05b740b57cfd"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/template/register_ops.py",
+        "bytes": 1437,
+        "sha256": "b1eaad9e4deceba86908a4f83b2b5aa11893f499b66d0f51a10eaf1661829f6f"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/template/template.py",
+        "bytes": 2496,
+        "sha256": "7566ae06d47d6bfe8e1928c8be227431291c84e19bc88ea10087f0203a8b899e"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/thead/__init__.py",
+        "bytes": 249,
+        "sha256": "fb012176141c9fa324fbbb67e7a02f0e568207a9d1ffb0da8368f82ff2d36e25"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/thead/impl/__init__.py",
+        "bytes": 202,
+        "sha256": "98cbdb690181cc56d8067b9e6300f0ee10a92f1339af189fbbfe5501119ab5b9"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/thead/impl/attention.py",
+        "bytes": 11177,
+        "sha256": "0e96859ec7004b905039e14c84a1ab47d4dec688b3af0b64bfc243b17fd1b584"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/thead/register_ops.py",
+        "bytes": 1384,
+        "sha256": "e8422afd037535a0fad92461f996155f2b2ab93dcb4f50828ac7cd23b5008d87"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/thead/thead.py",
+        "bytes": 4123,
+        "sha256": "e4334b2dc5ad048f6ee726f9b4031e16a9a7cba2cda5ddf4f97fa0e5dc5a0e71"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/txda/__init__.py",
+        "bytes": 265,
+        "sha256": "64542fadcdb5f87ec0508c3a9fdd8da7a745918e9649871e381e41b643e0f39d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/txda/impl/__init__.py",
+        "bytes": 131,
+        "sha256": "0db33e57a8316acacd82645d0bc858b5bd1d0acb516b74aa825020362b7c1157"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/txda/impl/patchs/__init__.py",
+        "bytes": 789,
+        "sha256": "e16a11d0b2689bd2686bfab945173b15703d8f523d7647e4e58f75a551e143cf"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/txda/impl/patchs/apply_repetition_penalties.py",
+        "bytes": 2584,
+        "sha256": "7e7b7080a2d774b6e56d5992111e84b0c8072732348050c58e8abfa35d32aad3"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/txda/register_ops.py",
+        "bytes": 2155,
+        "sha256": "c5b76c1300f8d9a3ca426f3ec115ec2947c0310e0063eb1ea0ef1d72ea9a6636"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/backends/vendor/txda/txda.py",
+        "bytes": 3792,
+        "sha256": "2b7d1303b24146d7cdf4906547800adf78f51d08f997956b87edd63d7eecabbb"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/builtin_ops.py",
+        "bytes": 5912,
+        "sha256": "e4722bf3dcc2f9e124bff7270d370e0221ae029315e2af766f1a2374c1b44ed2"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/__init__.py",
+        "bytes": 751,
+        "sha256": "ee6d6359ee3f3762418f5d61fd4e30cefb86180de094c925639f92ed1bf20d7a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/ascend.yaml",
+        "bytes": 2423,
+        "sha256": "3eca39603fae70ef5f971ac2bd7ea3b5308af95b4847259cab477d4557614e49"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/hygon.yaml",
+        "bytes": 1544,
+        "sha256": "26df47b335c180bdf62abae9894a32390eac820ccf28464cfa2d35a52ac6d66e"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/iluvatar.yaml",
+        "bytes": 1649,
+        "sha256": "1fb19d85505c8a6860e3057b2f89b50624716164bacb4c485744b157e9c90dc5"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/metax.yaml",
+        "bytes": 1484,
+        "sha256": "d6d89f35e100b740fe5c7972e3fd759729a0ea0accdf10a52ee4fea30e8a7f90"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/musa.yaml",
+        "bytes": 1893,
+        "sha256": "cab3b30ea0485c24ce354bed6baef0917dffd3d1012eb7f25cffb2dc9bf11119"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/nvidia.yaml",
+        "bytes": 1388,
+        "sha256": "f7e39afb1e57c0ae49aff472175b36b31f339b950dc6a46356c7a4ef1fae988a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/nvidia_hopper.yaml",
+        "bytes": 1020,
+        "sha256": "85641f7221b8ce6529d614d3c7ddbe830130c1960e29e94cd56aa1c47d35384b"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/ptg.yaml",
+        "bytes": 1827,
+        "sha256": "3c628944cca1d5313589200e72fd7a5a106ce33853c68645907b87ac3ad1e9b4"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/sunrise.yaml",
+        "bytes": 1621,
+        "sha256": "d73b46368ba894baa8e1691bdda3f04e157944b55cb8d7f4b81248b6b4534e8d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/thead.yaml",
+        "bytes": 1293,
+        "sha256": "f996169805c5c9b329d859383555220c7ad6752019181b7838887e19eb03d984"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/config/utils.py",
+        "bytes": 7936,
+        "sha256": "2cc8470bb3f21fd7033f7da2fd0b6bb5ca74dc73b538b60a351b94cfa8839628"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/discovery.py",
+        "bytes": 7053,
+        "sha256": "56e2af89af4ebde393475829606249a6453ea4bcf81468228cfd9e25b81c376c"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/io_common.py",
+        "bytes": 49641,
+        "sha256": "d14b78f3bfb63609254c690cf6c32319ddd55b92f24afeca32be212410a5691a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/io_dumper.py",
+        "bytes": 66383,
+        "sha256": "9ac2069a1383a1d37bf961e57d3c9f1dc58ff10dc62c22f0d33ce7e0274c0204"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/logger_manager.py",
+        "bytes": 2034,
+        "sha256": "a855f6b0d1588add5462d1d9403a746ce3b672735cbfd581815a1ab3c764f771"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/manager.py",
+        "bytes": 23774,
+        "sha256": "a9daabf6f992a851c5ed89923eb62c35ef574b9d14dfdaccfd01d7b5b515b3da"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/ops.py",
+        "bytes": 5215,
+        "sha256": "b724de6aa4b6963566084cc6d861b5b23102766b0ab0ad0db82bdf31fe898ab9"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/policy.py",
+        "bytes": 24018,
+        "sha256": "058fa966ed53a5b184a3373bae77fdf5cdc64f35d830de6173a5b3371e03e938"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/registry.py",
+        "bytes": 3585,
+        "sha256": "ffb23624cadb3099c2fa11129bea798bb90d6907c19efd004ad43743b6a41127"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/dispatch/types.py",
+        "bytes": 3780,
+        "sha256": "9ee07f1fae8baabc4a7c088a9e41a668f5f315351c6ecab98de36aaaa8ad1962"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/distributed/__init__.py",
+        "bytes": 349,
+        "sha256": "9fcefd129a9b432ff221912a7fa23366dcce73b0c44d4b71ec680d72a37c5271"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/distributed/communicator.py",
+        "bytes": 8794,
+        "sha256": "2aaf42d8e675dea25d8626e68f0e2c88109a8bc2cf75c5de76ca00bcfc0ae5ec"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/distributed/device_communicators/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/distributed/device_communicators/flagcx.py",
+        "bytes": 15021,
+        "sha256": "6a35fb0fb952fb34ede1376b758897995e1fa7dad64abac781efdd3866fd6b5e"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/distributed/kv_transfer/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/distributed/kv_transfer/flagcx_connector.py",
+        "bytes": 65611,
+        "sha256": "8d060f78da61493cb8583472415a51578669b25378a833e09fe00bae9ab7796d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/distributed/kv_transfer/flagcx_stats.py",
+        "bytes": 13889,
+        "sha256": "27f08169962dc695b89ff3dcd04706e17882956f4a6b6982f7e2f8ae38d1910b"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/envs.py",
+        "bytes": 1099,
+        "sha256": "035c0852680b6122b732535649cadc262377184c0849ed7bb9a21e0ea0ed54c9"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/models/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/models/qwen3_5.py",
+        "bytes": 4304,
+        "sha256": "7e323bf2ea182dfed2f36a5df0ab058e9daa66d12f17c4cff6eda0806af1f758"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/_C_ops_registry.py",
+        "bytes": 3321,
+        "sha256": "f1f23f6402c8cffa7e76edf4a647a52f6c1a0406ac816735dc5272cc0f1c95a3"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/_C_ops_schemas.py",
+        "bytes": 15839,
+        "sha256": "bb69ff7cb1562f08847ed96a3c4209fa1f63989db7e9033ad4b79de70b37f90b"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/activation.py",
+        "bytes": 746,
+        "sha256": "f0d017f6abc0df258acdb56cd08bb33561a01fc1053640ddcbd15bd46d9f1b18"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/custom_ops.py",
+        "bytes": 7342,
+        "sha256": "708732fb6c6893d9e3677eee2943faed8ad74601a243ec60210c64d18e629b93"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/fla/__init__.py",
+        "bytes": 239,
+        "sha256": "e2ed7eec74b3280f0fefc2a98264f3f62023951f1dfb907b4ec6c7d5a737ccae"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/fla/chunk.py",
+        "bytes": 5761,
+        "sha256": "f037381e8ec7a222c7fc8130359999f8670976fee1014a44561d5263e00de85d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/fla/fused_recurrent.py",
+        "bytes": 5251,
+        "sha256": "670aaad878e69a9633fdfb4869dff856d8ed4f8fc967767ab4bc39b319937204"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/fla/utils.py",
+        "bytes": 1426,
+        "sha256": "26d35bbe664b0cbb6fe434f90d2f1ac57c8bdfcffdd69526df187aafde551c0c"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/fused_moe/__init__.py",
+        "bytes": 191,
+        "sha256": "b197f80da2733e69051837704e531afaebdfd9cf74eabe826abad86b978483d4"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/fused_moe/activation.py",
+        "bytes": 1933,
+        "sha256": "278795d5771f109370b57858abb2d2b76863477f016f52430e83ff2c5b270687"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/fused_moe/fused_moe.py",
+        "bytes": 11308,
+        "sha256": "eacf6bddfd74996da8587adf0e9f61295d6ca988d9c4eae731dbd51e06ad56cf"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/fused_moe/fused_moe_utils.py",
+        "bytes": 20203,
+        "sha256": "b81a05af334ebda422be692d30bb750d1cbab1eacd429e108c354c18fb33be3f"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/fused_moe/layer.py",
+        "bytes": 3560,
+        "sha256": "5a9cd5fbed5b756f5dea35d70acd0eb707c2d2e0b7f7fa68b5a6d83f0fd7cc59"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/fused_moe/router.py",
+        "bytes": 9583,
+        "sha256": "68cb7392e76fe085a2ded77867cd79cc834347a4949c6f3d834a71fbdbbe0115"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/layernorm.py",
+        "bytes": 833,
+        "sha256": "3c3af012de412947c1bdb735df2c217f96c7f63109ae7dd8d19d21b244fc4c01"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/ops/rotary_embedding.py",
+        "bytes": 2187,
+        "sha256": "83848171e57e52f4974a76895c66281f78bb98fc3948423b9eed08935b3ad976"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_async_token_update.py",
+        "bytes": 5472,
+        "sha256": "f9846d599c384b96566527734b9744acde073aaf55ce2ffe19cfb8905be5df2b"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_compute_order.py",
+        "bytes": 21205,
+        "sha256": "a1756eb2bcc2ff8bab6c37585628061574ee2a6ba4b8858c7356451a789ea05a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_cpu_metadata.py",
+        "bytes": 6547,
+        "sha256": "4aeaaf193e37fe08c561b85fcce797724e30d8453dc79604e2539bfe5ab4958c"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_decode_launch_runtime.py",
+        "bytes": 3907,
+        "sha256": "c6db4233d90fbce96bdd0c30f840bac5a36dce317304b8fb6c2d4d1dbb227eca"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_gqa_decode.py",
+        "bytes": 24701,
+        "sha256": "48ca060feb335cffd2abd628c92992bbd05ec538a9358af653e5c64570898a20"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_decode.py",
+        "bytes": 7577,
+        "sha256": "8837ce6941552e62f3f7f41e8ee760aeb3b60e9df8a48e5c53892129981daae0"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_hoist_native.py",
+        "bytes": 20214,
+        "sha256": "80611621aed5a5f7590efea6cfde07d5ded1d1585dbeed1143294d8eda434eaf"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_hoist_proposal.py",
+        "bytes": 14333,
+        "sha256": "b550d1566d6c0f0bf1182e99ed7ef5aa8009ef316185f60bb17f9b9aa950aebb"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_mixed_native.py",
+        "bytes": 12883,
+        "sha256": "35d1fa2ac079a7317be4d2edce08ddd3e76fae74a9167d4e25967c5709ee91b0"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_multi2.py",
+        "bytes": 21919,
+        "sha256": "b07c90c51f41b5a9134b781b5c88573964929c2fbfdf25a74080254b552e1afa"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_native.py",
+        "bytes": 12923,
+        "sha256": "70e15154fbcda528e4ec4c2a5f0c0720fc3752bd3848fdedf2abae9a36d437e6"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_normalized2d128.py",
+        "bytes": 21928,
+        "sha256": "4a908dd381bd0b815fb77c58c25980a69a87c8382d9206a1ca5018a14bc218ad"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_q32.py",
+        "bytes": 21916,
+        "sha256": "4d2551e18d8c6f0105f31a1360bfa75b83bd09de03e67d451c9bea4b010b2eb2"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_q32_adapter.py",
+        "bytes": 19054,
+        "sha256": "8c16127f92705d59a02cecd2f08f7adac2a667d9e1c7214a00aed395812f8704"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_raw3d.py",
+        "bytes": 21174,
+        "sha256": "5dfbc144c65e717a242eeeb76e882f3fc45caec17d770db68af981a175c1adee"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_runtime.py",
+        "bytes": 24556,
+        "sha256": "03488c1534d2fcc9bc2b2c04185446a9fb765ee342bd335dde8835a093d478eb"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_service.py",
+        "bytes": 17869,
+        "sha256": "07f62f0f5052108daa1bc02f02dcf42eca820541ea0b9eabef3b430b8636fefa"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_sources.json",
+        "bytes": 13605,
+        "sha256": "8a20f4e8937b54f87157cd90876123019ec5fdf9e30ddbaabbaefa92fe542ede"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_views.py",
+        "bytes": 7230,
+        "sha256": "d5adaaf906e0a6d5454bd49fbea967726541c6712c1d73303e05dcca9d8e9e20"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_writer.py",
+        "bytes": 2582,
+        "sha256": "f16b8ddcd065770b591e8cc21b3aa3a10a9eabbd908256ea5823db132949b574"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_kv_page_copy.py",
+        "bytes": 3657,
+        "sha256": "93d500cb509e27c4a0f633cfcd3d560afafacf72983918107e9e883758f95454"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_kv_pitched_bridge.cpp",
+        "bytes": 4618,
+        "sha256": "11cfbde9f8d932b5829b20242ca18b9ead50205acb5802ad45b2ee13c9f6ab5d"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_kv_pitched_copy.py",
+        "bytes": 12725,
+        "sha256": "17c52d6596d25d3a2faa7d243a0384632e43f4f5e99556be43faaee2c4738202"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_lm_head_temperature.py",
+        "bytes": 13770,
+        "sha256": "0764a2c352f3eb10c02f7b7ef0339f5c76ac5536a901522dd6c81b96c1840d51"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_lm_head_temperature_kernel.py",
+        "bytes": 2970,
+        "sha256": "4c800693a2ae134fc580382d4166091b4c48e96dc2b7838ab417da7094cb2537"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_mixed_decode.py",
+        "bytes": 13049,
+        "sha256": "2240e2c15339779bbe99a58d8d166b34901f1b95d8107886dc54a42e58409e7f"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_native_gqa.py",
+        "bytes": 8007,
+        "sha256": "2f5e730a428548a235b7c1cee7f5222176cce6d840fb406079c042052a49b0e1"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_native_w8a8.py",
+        "bytes": 6939,
+        "sha256": "8163f9fa0e5a17bd1474d2a6a921ffea8c9639d1127f994aaaa17c628ae8ef50"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_prefill_multi2.py",
+        "bytes": 6534,
+        "sha256": "359c662e1cda51abb8a4e1d417f036f5c925148c2c10a415623af7de1b5bd87e"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_prefill_normalized.py",
+        "bytes": 7810,
+        "sha256": "acfb6255042c07f85ccfcfac19166ad9324484f4bb596a36ddcf461d6572960b"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_prefill_q32.py",
+        "bytes": 4574,
+        "sha256": "58a1305f52d6f410531d32d23373e43b9654d10121b6088aef50e9e6e48ad48a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_provided_linear.py",
+        "bytes": 3522,
+        "sha256": "9cbc12c66ec0da96e89f5d419bc5f67889b0a75cf38fa9c4064b5d1817572e8b"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_q_fragment_service.py",
+        "bytes": 30396,
+        "sha256": "4445dd2f0ec5dc1710c1ede62ec5c317f06e39ce1f19694e7437d1f528bf43ec"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_runtime.py",
+        "bytes": 5175,
+        "sha256": "eed8110577a344fe05f84a5266919c6c4c545f63d5b28810f4e098fb0ffc0e53"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_small_out_lowering.py",
+        "bytes": 6060,
+        "sha256": "3b9ffafbcaa4a042305c4de48066d796aaa4952d7165871ff8bb3b0c04e615d0"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_sql_reflection.py",
+        "bytes": 3046,
+        "sha256": "83ea70be7cf9b73c85710e74e0890628172748b293e47e8e0f8661dd09e98777"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_stable_small_o.py",
+        "bytes": 6067,
+        "sha256": "ea5c928ce6d97aab64c3da105f22e7bfbe1fafee7fd195a1c49ecbe4422afd1c"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/biv150_top_p_triton.py",
+        "bytes": 10036,
+        "sha256": "5ec8b15ccf40df8a51ea4fc14052573ccea99271964adf0e7d9d00582f594a81"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/gdn_packed_decode.py",
+        "bytes": 5400,
+        "sha256": "2faaa4a9cb4354df9c001fad7c29f47e483cd56b62c19457e7ce492212ecdbb7"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/glm_moe_dsa.py",
+        "bytes": 6604,
+        "sha256": "24f86cbdbdbf4e8ed0b0784c53d4054e161f02f10e6519238a1b7453a936df35"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/moe_sum.py",
+        "bytes": 2239,
+        "sha256": "6eaee6f4622566059e0ce44dfdb69ad970fd2e8e1cdcbf4fd86d7e921c6643a2"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/patches/qwen3_5_text.py",
+        "bytes": 2465,
+        "sha256": "35a7c2234ed8bc0d26d4d194ff91debfc5f60e35f0066352866e98fd6901e667"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/platform.py",
+        "bytes": 23170,
+        "sha256": "5e9944b4675ab5cbedfef6fa9cd4bab9291da94386d501d36dd01489619e0804"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/quantization/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/quantization/quant_linear.py",
+        "bytes": 3091,
+        "sha256": "78d1aa66ddf1795f53e47529a7ce79bc22874ada69ef9306cb7a395c7d7b1da4"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/quantization/w8a8/__init__.py",
+        "bytes": 891,
+        "sha256": "32fe7f820edaa7b15e41d93cdb5df28211bab61b83172e4ea968a22f17e89e72"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/quantization/w8a8/int8_mode.py",
+        "bytes": 2664,
+        "sha256": "36126a82699f0096fd53380ebb47119eec03f00ef7ff82fd48bad933b08b595a"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/quantization/w8a8/linear.py",
+        "bytes": 4881,
+        "sha256": "3235e549b81f53a6f739f453a6768bf6ca0451c0b272be715a2e27705c3b7194"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/quantization/w8a8/moe.py",
+        "bytes": 6738,
+        "sha256": "a496d71198d2133870089f99f1b8e82145d46914306b2cbf2310dcafe2d66f28"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/quantization/w8a8/moe_experts.py",
+        "bytes": 11205,
+        "sha256": "aec5835b39db75207755bdd2a0126d12088039febc8b854004cb45dd21120b3c"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/quantization/w8a8/packed.py",
+        "bytes": 5153,
+        "sha256": "ca886a6f54818ee8543b40b4cf3ed1b8326866f617c56376a41a717b214bb6e6"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/quantization/w8a8/reference.py",
+        "bytes": 4310,
+        "sha256": "564bf9ddd059eccac62c7509d68a4ebb1bac1ea05af9b4c139fc578bc4353c96"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/utils.py",
+        "bytes": 13969,
+        "sha256": "079274a443032608892d4a4b8bd9a1147e1188d97b77ef8c0e5c5a9a0230d00c"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/version.py",
+        "bytes": 3047,
+        "sha256": "7c2645c8b28d8fbb372eb6018f14439c6691492f78db6787dac69e2a95b6bc99"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/worker/__init__.py",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/worker/model_runner.py",
+        "bytes": 355538,
+        "sha256": "6e86acf3ee8329468278b0f708465ddf503eb7937a5cf24cbe43dcefd71e5517"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/worker/scheduler_fl.py",
+        "bytes": 5848,
+        "sha256": "8c17a41babc4eaa1df2ecc8ad0afd245852e679bb932f9467a76c16025739702"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/plugin/vllm_fl/worker/worker.py",
+        "bytes": 56371,
+        "sha256": "f6188c637dfa93a249e815c5bd411a368fbcde3be16d6abd0a17cc05c652e514"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/run_accuracy_gate.py",
+        "bytes": 14549,
+        "sha256": "35d30dfa4fc4d583c7fc62db1f18c992a7fd6a7e54fab95749710759b5df6a54"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/run_math500_level3.sh",
+        "bytes": 631,
+        "sha256": "6e045c1cda5a6379ddff1bf7c41ab1e4cbaaddd51b2ca9b4b1d2a92cfa8bb5f4"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/run_official_gate.py",
+        "bytes": 14424,
+        "sha256": "79119f1548b52e9fc1767ac66754272d046cb4bee8474315e9419606037ac579"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/source/snapshot_tuning_db.py",
+        "bytes": 6723,
+        "sha256": "0f2a57bf3bdb858756a1dedab5bd386a3a8bff384d925cf76461afb8c097e7a2"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds/started-at.txt",
+        "bytes": 33,
+        "sha256": "f87c93b1488d5e9a5bbca9fe5be6f2a031c824164fbfea0352ecb8645be40c58"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds.cache/config_cache/TunedConfig_iluvatar_triton_3_2.db",
+        "bytes": 1605632,
+        "sha256": "87c41ba8b6c6ac650e959c0e30de3f69c78eba95be7d106a1617d04a532810da"
+      },
+      {
+        "path": "official/20261029T174727581180Z-native-k8-sme-a-4096-four-rounds.cache/config_cache/TunedConfig_iluvatar_triton_3_6.db",
+        "bytes": 10133504,
+        "sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378"
+      }
+    ]
+  },
+  "original_recovery_tar_sha256": "26f789567b9640f694d300e6779e0ca0444499fdf9a5249ee88f8bf93be57156"
+}

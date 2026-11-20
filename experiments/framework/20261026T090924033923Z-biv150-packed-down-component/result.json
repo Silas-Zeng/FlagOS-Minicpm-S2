@@ -1,0 +1,124 @@
+{
+  "status": "failed",
+  "identity": [
+    {
+      "rows": 2030,
+      "config": {
+        "BLOCK_M": 256,
+        "BLOCK_N": 256,
+        "BLOCK_K": 32,
+        "num_warps": 16,
+        "num_stages": 2,
+        "num_ctas": 1,
+        "SPLIT_K": 1
+      },
+      "constexprs": {
+        "num_warps": "16",
+        "num_stages": "2",
+        "num_ctas": "1",
+        "BLOCK_M": "256",
+        "BLOCK_N": "256",
+        "BLOCK_K": "32",
+        "EVEN_K": "True"
+      },
+      "grid": [
+        64,
+        1
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "rows": 2030,
+      "label": "eager_normal",
+      "bitwise": true,
+      "finite": true,
+      "inputs_unchanged": true
+    }
+  ],
+  "timings": [],
+  "resources": [
+    {
+      "rows": 2030,
+      "name": "original_linear",
+      "shared": 65536,
+      "n_regs": 97,
+      "n_spills": 0,
+      "async_copy_ops": 4,
+      "B_dot_useSme2": true,
+      "B_SME_contract": {
+        "passed": true,
+        "dot_count": 1,
+        "records": [
+          {
+            "A": "%a_79",
+            "B": "%b_81",
+            "B_local_load_found": true,
+            "B_dot_op_layouts": [
+              "opIdx = 1, parent = #mma, kWidth = 2, useSme = 2"
+            ],
+            "B_same_layout_opIdx1_useSme2": true
+          }
+        ]
+      },
+      "asm_sme_load": true
+    },
+    {
+      "rows": 2030,
+      "name": "packed_linear",
+      "shared": 49152,
+      "n_regs": 98,
+      "n_spills": 0,
+      "async_copy_ops": 4,
+      "B_dot_useSme2": false,
+      "B_SME_contract": {
+        "passed": false,
+        "dot_count": 1,
+        "records": [
+          {
+            "A": "%a_76",
+            "B": "%b_78",
+            "B_local_load_found": true,
+            "B_dot_op_layouts": [
+              "opIdx = 1, parent = #mma, kWidth = 2, useSme = 0"
+            ],
+            "B_same_layout_opIdx1_useSme2": false
+          }
+        ]
+      },
+      "asm_sme_load": true
+    }
+  ],
+  "weights": [
+    {
+      "layer": 0,
+      "name": "model.layers.0.mlp.down_proj.weight",
+      "original_bytes": 25165824,
+      "packed_bytes": 25165824,
+      "original_sha256": "1a6e6d547d5f0ffd08fd020690ccf75323ba4dd54181617e406a84f644cee501",
+      "packed_sha256": "a84d4373322b4a9b66a55abcdde8122c672122cd69e4cae7a404aed5a509f33f",
+      "pack_unpack_bitwise": true,
+      "pack_location": "CPU加载一次；pack和传输成本不计暖态GEMM，非每token"
+    }
+  ],
+  "scope": "真实layer0 down [2048,6144]，M2030/2048；实际输出buffer按各调用捕获，计时完整GEMM Graph replay；正才3权重环",
+  "base_commit": "6971ef48615af97a1637405c71f96dd89969563e",
+  "official_qualified": false,
+  "layout": "P[N/256,K/128,256,128]；仅BF16位重排，加载一次",
+  "limitations": [
+    "组件保留原W与packed两份，各24MiB/层，不算KV容量收益。",
+    "合成激活、最多3真实层权重环；未包含Attention/KV交织，不是模型收益。",
+    "候选只用真实opaque选中配置；不符合唯一格式就停止，不自动改tile。",
+    "Graph replay不重新执行Python/allocator；Event不含每调用eager CPU输出分配或pack加载。该M生产可能图外，不外推官方。"
+  ],
+  "target": "GPUTarget(backend='corex', arch=71, warp_size=64)",
+  "config_sha256": "59613157e5357d62bcb121e04cb90f2170b43d789b142380c12c3d4277d95180",
+  "dispatch": {
+    "linear_source_sha256": "d431a4fa144ed67dc3deab46dd5beace3612858075f85c39e602447ba3bf768a",
+    "opaque_source_sha256": "c5a2dd6c69c514531fee4145621e51bd4e41c0d784f4d4e086fe48aad98104ba",
+    "registered": true,
+    "exclude_ops": [],
+    "baseline_route": "真实torch.ops.biv150_stable_small_o.linear→F.linear→原默认FlagGems linear；含分配"
+  },
+  "error": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/framework/20261026T090924033923Z-biv150-packed-down-component/source/worker.py\", line 126, in worker\n    assert resource['async_copy_ops']>=2 and resource['B_dot_useSme2'] and resource['asm_sme_load'], '编译未保留B SME流水；停止，不用普通load替换凑过'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 编译未保留B SME流水；停止，不用普通load替换凑过\n"
+}

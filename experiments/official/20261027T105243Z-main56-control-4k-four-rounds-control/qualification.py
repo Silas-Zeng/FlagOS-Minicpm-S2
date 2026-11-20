@@ -1,0 +1,47 @@
+"""main56完整807文件原官方控制组；旧control只提供native/环境出处。"""
+import importlib.util
+from pathlib import Path
+from types import SimpleNamespace
+HERE=Path(__file__).resolve().parent
+spec=importlib.util.spec_from_file_location('prior_native_qualification',HERE/'base_qualification.py')
+base=importlib.util.module_from_spec(spec);spec.loader.exec_module(base)
+ROOT,MODEL,SO=base.ROOT,base.MODEL,base.SO
+COMMIT='56f1838192abc940b3fb9accef490022ac125000'
+TREE='1e9af62de05aad53ee61c814054624de8e252dd0'
+read,sha,require,load,assets,check_reference=base.read,base.sha,base.require,base.load,base.assets,base.check_reference
+def qualify(control,lifecycle,origin):
+    _,native,reference=base.qualify(control,lifecycle)
+    main=read(HERE/'source-manifest.json')
+    require(main['commit']==COMMIT and main['tree']==TREE and main['source_count']==807,'不是冻结main56完整807源码')
+    origin=Path(origin)
+    require(origin.is_absolute() and not origin.is_symlink(),'要求实际绝对源码目录')
+    origin=origin.resolve(strict=True)
+    require(origin.is_relative_to(ROOT/'code') and origin!=ROOT/'code','源码越界')
+    blobs={p:dict(mode=v['mode'],sha=v['git_sha']) for p,v in main['files'].items()}
+    hashes={p:v['sha256'] for p,v in main['files'].items()}
+    require(lifecycle.source_maps(origin)==(blobs,hashes),'main56完整源码身份不符')
+    build,_,_=native
+    require(all(hashes[p]==v for p,v in build['source_sha256'].items()),'新main与原native构建源码不符')
+    reference['files'][str(HERE/'source-manifest.json')]=sha(HERE/'source-manifest.json')
+    # 只复用中断run的初始DB原件，不继承其completed/16K性能资格。
+    previous=ROOT/'official/20261026T154111Z-main594-official-control-four-rounds-control'
+    initial=previous/'database-original.sqlite'
+    require(sha(initial)==read(previous/'state.json')['database_before_sha256']
+        and sha(Path('/root/.flaggems/config_cache/TunedConfig_iluvatar_triton_3_6.db'))==sha(initial),
+        '必须先恢复154111原初始DB；本入口不自行改写或修复DB')
+    reference['files'][str(initial)]=sha(initial)
+    reference['split_service_protocol']='新main56独立4K四轮控制；154111仅供共同初始DB原件，不继承旧main成绩或105'
+    reference.update(main_tree=TREE,base_commit=COMMIT,main_commit=COMMIT,source_count=807,
+        accuracy_inherited=False,old_control_scope='仅已核native14f/环境与生命周期来源；不继承旧main性能或准确率，本轮建立本站main56控制组')
+    return (origin,blobs,hashes,TREE),native,reference
+def check_environment(source,env,build,graph):
+    require(sha(MODEL)==graph['model_config_sha256'],'模型config变化')
+    require(env.get('VLLM_DISABLE_COMPILE_CACHE')=='0' and not any(k in env for k in ('VLLM_CACHE_ROOT','TORCHINDUCTOR_CACHE_DIR')),'默认缓存策略变化')
+    require(not any(k.startswith('VLLM_FL_BIV150_') for k in env),'不能以环境覆盖新main生产默认行为')
+    helper=source/'vllm_fl/compile_semantics.py'
+    require(sha(helper)=='5d6fba4064980fc16991e4f42fbd19f50a9c8e8758db2d0c42dd440e244a7c0f','main56 compile语义变化')
+    semantics=load(helper,'main56_semantics')
+    config=SimpleNamespace(model_config=SimpleNamespace(hf_config=SimpleNamespace(**read(MODEL))))
+    expected=semantics.build_fingerprint(config,'iluvatar',package_root=source/'vllm_fl',environ=env,abi={'torch':build['abi']['torch_version'],'cxx11_abi':build['abi']['cxx11_abi']})
+    require(expected and expected['native_enabled'] and expected!=graph['fingerprint'],'main56源码未进入native-on新编译身份')
+    return expected

@@ -1,0 +1,38 @@
+{
+  "run": "20261030T003609248517Z-q32-score-scale-compile-probe",
+  "status": "compile_complete_resource_gate_pending",
+  "decision": "暂缓此版；保留编译机制证据与资源代价，未进入数值或性能测试。不是正确性失败。",
+  "ttgir_score_tensor_muls_in_kv_loop": {
+    "A": 3,
+    "B": 2
+  },
+  "B_query_scale_vector_mul_moved_outside_loop": true,
+  "resources": {
+    "A": {
+      "runtime_n_regs": 135,
+      "shared": 57344,
+      "runtime_n_spills": 0,
+      "asm_sgpr_spill_count": 98,
+      "asm_vgpr_spill_count": 0,
+      "asm_scratch_size": 0
+    },
+    "B": {
+      "runtime_n_regs": 135,
+      "shared": 57344,
+      "runtime_n_spills": 0,
+      "asm_sgpr_spill_count": 110,
+      "asm_vgpr_spill_count": 0,
+      "asm_scratch_size": 0
+    }
+  },
+  "effective_use_sme": 3,
+  "requested_use_sme": 229379,
+  "synthetic_abi": true,
+  "numerical_test": false,
+  "performance_test": false,
+  "official_or_accuracy_qualification": false,
+  "bundle_sha256": "b6889a58e10ca512b3ac7492724fec67ec593738c6c2d7d48f762e039aabe3c8",
+  "verified_files": 60,
+  "evidence": "archive/q32-score-scale-20261030/compile-003609/cpu-probes/20261030T003609248517Z-q32-score-scale-compile-probe",
+  "next": "先解释scalar spill代价或改用64元素K-scale融合以减少长期驻留；不把纯IR指令减少直接等同吞吐收益。"
+}

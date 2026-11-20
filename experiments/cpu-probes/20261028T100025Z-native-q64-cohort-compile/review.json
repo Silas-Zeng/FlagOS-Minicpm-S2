@@ -1,0 +1,56 @@
+{
+  "CPU_only": true,
+  "allow_component_GPU_gate": true,
+  "GPU_correctness_qualified": false,
+  "performance_qualified": false,
+  "source_sha256": "f9999d601abb51a1d2a2425d8101c0eaeabed284a7cc263c917b7282a4dcd106",
+  "LLVM_sha256": "69e97f4396beed4c8f3f4a79dea2041235ec2a2a29d46f14879ad9dc6f6e08d3",
+  "ASM_sha256": "2400b4aacd7197efaa07ce9d248f47958428068c1c61bc20a25723396ff6f1cd",
+  "resources": {
+    "shared_bytes": 65536,
+    "private_bytes": 0,
+    "SGPR": 83,
+    "VGPR": 107,
+    "sgpr_spill_count": 0,
+    "vgpr_spill_count": 0
+  },
+  "actual_LLVM_math": {
+    "QK_to_softmax_full_C_rescale_BF16_P_exact_SSA_renaming": 769,
+    "PV_MMA_dependencies_exact_after_declared_Vmask": 32,
+    "additional_PV_DAG_nodes_compared": 291,
+    "V_two_word_selects_checked": 32,
+    "per_page_mask_pairs": [
+      [
+        2226,
+        2227
+      ],
+      [
+        2356,
+        2357
+      ],
+      [
+        2487,
+        2488
+      ],
+      [
+        2618,
+        2619
+      ]
+    ]
+  },
+  "Q_registers": "v32..47: 16 load writes in each cohort arm only; no writes across other Q initialization or hot loop",
+  "CFG": "4 Q barriers at ASM573/608/1041/1066; common loop BB0_99 -> wait/barrier1894 -> uniform optional clear/barrier1971 -> globalwarp0 next32SME -> cohort math BB0_127..134/97 or bypass -> common BB0_98 wait/barrier1880; both paths retain old state via LLVM2733 phis",
+  "manual_checks": [
+    "LLVM %41=tid>>10, %42=globalwarp&15; Q phi979..986 is initialized in precisely one cohort arm.",
+    "LLVM %1001=(tid<64) remains sole copy/wait owner; math gate1435 uses cohort_live and own num_tiles, no CTA barrier inside math.",
+    "V masks use own prefix993, per-page rows begin+(lane>>3&6)+16*p and +8, two half comparisons; all invalid halves bitclear to positive zero.",
+    "Output guarded by cohort_live then original per-query tail checks; scalar FP flags/intrinsics/order unchanged, independent accumulator scheduling may differ.",
+    "No trace pointers used; static64MMA/64SME are one shared cohort math body, not evidence of measured speed."
+  ],
+  "remaining": [
+    "Actual extension 2048-thread launch and full long component bitwise/finite/output-storage/input guards/Graph/side stream/RNG gates are required.",
+    "Actual V mask expands to integer AND/select work even around full tile paths; two extra Q barriers and 32warp residency can offset shared KV reuse.",
+    "FP64 reference retains original reporting contract; no new tolerance or failure-gate relaxation.",
+    "No production/Manager/global metadata ABI qualification or end-to-end throughput claim."
+  ]
+}

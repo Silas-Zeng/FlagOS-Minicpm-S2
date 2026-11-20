@@ -1,0 +1,138 @@
+--- main594/stride+Qhoist
++++ panel4/producer
+@@ -97,6 +97,11 @@
+     USE_TD: tl.constexpr = False,
+     USE_TD_QO: tl.constexpr = False,
+     Q_IS_FP8: tl.constexpr = False,
++    panel_output_ptr=None,
++    panel_max_ptr=None,
++    panel_expsum_ptr=None,
++    PANEL_TOKENS: tl.constexpr = 0,
++    PANEL_COUNT: tl.constexpr = 4,
+ ):
+     block_table_stride_i64 = tl.full((), block_table_stride, tl.int64)
+     query_stride_0_i64 = tl.full((), query_stride_0, tl.int64)
+@@ -231,6 +236,14 @@
+         CHUNK_LOOKBACK,
+         CHUNK_SIZE,
+     )
++
++    # New implementation: split-major cache panels, not generic IS_3D routing.
++    tl.static_assert(not IS_3D)
++    tl.static_assert(PANEL_COUNT == 4 and PANEL_TOKENS > 0)
++    panel_idx = tl.program_id(2)
++    panel_tiles = tl.cdiv(seq_len, PANEL_COUNT * TILE_SIZE)
++    loop_lo = tl.maximum(loop_lo, panel_idx * panel_tiles)
++    loop_hi = tl.minimum(loop_hi, (panel_idx + 1) * panel_tiles)
+ 
+     # iterate through tiles (now limited to the sliding window range)
+     for j in range(loop_lo, loop_hi):
+@@ -396,98 +409,13 @@
+             acc += tl.dot(P.to(V.dtype), V)
+ 
+     # ---- Epilogue ---------------------------------------------------------
+-    if IS_3D:
+-        if USE_FP8_Q_DESCALE:
+-            acc *= value_scale
+-        # Store per-segment partials; finalized by ``reduce_segments``.
+-        if USE_TD_QO:
+-            # 3D target: segm_output[token, head, segm_idx, :].  Advance
+-            # the base to the correct (token-start, head-start, segm)
+-            # slice; strides step between tokens / heads of the flattened
+-            # (T, H, SEGS, PAD) layout.
+-            segm_base = (
+-                segm_output_ptr
+-                + (cur_batch_in_all_start_index + q_block_local_idx * BLOCK_Q).to(
+-                    tl.int64
+-                )
+-                * (num_query_heads * NUM_SEGMENTS_PER_SEQ * HEAD_SIZE_PADDED)
+-                + (kv_head_idx * num_queries_per_kv)
+-                * (NUM_SEGMENTS_PER_SEQ * HEAD_SIZE_PADDED)
+-                + segm_idx * HEAD_SIZE_PADDED
+-            )
+-            _store_output_td(
+-                segm_base,
+-                acc,
+-                q_block_local_len,
+-                num_query_heads * NUM_SEGMENTS_PER_SEQ * HEAD_SIZE_PADDED,
+-                NUM_SEGMENTS_PER_SEQ * HEAD_SIZE_PADDED,
+-                num_queries_per_kv,
+-                BLOCK_Q,
+-                HEAD_SIZE,
+-                HEAD_SIZE_PADDED,
+-            )
+-        else:
+-            segm_output_offset = (
+-                query_offset_0[:, None].to(tl.int64)
+-                * (num_query_heads * NUM_SEGMENTS_PER_SEQ * HEAD_SIZE_PADDED)
+-                + query_offset_1[:, None] * (NUM_SEGMENTS_PER_SEQ * HEAD_SIZE_PADDED)
+-                + segm_idx * HEAD_SIZE_PADDED
+-                + tl.arange(0, HEAD_SIZE_PADDED)[None, :]
+-            )
+-            tl.store(
+-                segm_output_ptr + segm_output_offset,
+-                acc,
+-                mask=dim_mask[None, :] & query_mask_0[:, None] & query_mask_1[:, None],
+-            )
+-        store_segm_reduce_scalars(
+-            segm_max_ptr,
+-            segm_expsum_ptr,
+-            query_offset_0,
+-            query_offset_1,
+-            segm_idx,
+-            M,
+-            L,
+-            query_mask_0,
+-            query_mask_1,
+-            num_query_heads,
+-            NUM_SEGMENTS_PER_SEQ,
+-        )
+-    else:
+-        acc = acc / L[:, None]
+-        if USE_FP8_Q_DESCALE:
+-            acc *= value_scale
+-        if USE_FP8:
+-            acc = acc * tl.load(out_scale)
+-            acc = tl.clamp(acc, FP8_MIN, FP8_MAX)
+-        if USE_TD_QO:
+-            # 2D target: flat output[token, head, :].  Strides come
+-            # straight from the caller (``output_stride_0_i64`` per token,
+-            # ``output_stride_1_i64`` per head).
+-            output_base = (
+-                output_ptr
+-                + (cur_batch_in_all_start_index + q_block_local_idx * BLOCK_Q)
+-                * output_stride_0_i64
+-                + (kv_head_idx * num_queries_per_kv) * output_stride_1_i64
+-            )
+-            _store_output_td(
+-                output_base,
+-                acc,
+-                q_block_local_len,
+-                output_stride_0_i64,
+-                output_stride_1_i64,
+-                num_queries_per_kv,
+-                BLOCK_Q,
+-                HEAD_SIZE,
+-                HEAD_SIZE_PADDED,
+-            )
+-        else:
+-            output_offset = (
+-                query_offset_0[:, None] * output_stride_0_i64
+-                + query_offset_1[:, None] * output_stride_1_i64
+-                + offs_d[None, :]
+-            )
+-            tl.store(
+-                output_ptr + output_offset,
+-                acc,
+-                mask=dim_mask[None, :] & query_mask_0[:, None] & query_mask_1[:, None],
+-            )
++    # Four FP32 partials. No visits: M=-inf; fully masked visits may M=0.
++    # Both empty cases write L=0 and acc=0; reducer validity is defined by L>0.
++    panel_scalar_offset = ((panel_idx * PANEL_TOKENS + query_offset_0.to(tl.int64))
++                           * num_query_heads + query_offset_1)
++    panel_offsets = panel_scalar_offset[:, None] * HEAD_SIZE_PADDED + offs_d[None, :]
++    panel_valid = query_mask_0 & query_mask_1
++    tl.store(panel_output_ptr + panel_offsets, acc,
++             mask=panel_valid[:, None] & dim_mask[None, :])
++    tl.store(panel_max_ptr + panel_scalar_offset, M, mask=panel_valid)
++    tl.store(panel_expsum_ptr + panel_scalar_offset, L, mask=panel_valid)

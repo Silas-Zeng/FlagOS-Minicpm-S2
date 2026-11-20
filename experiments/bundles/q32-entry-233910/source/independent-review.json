@@ -1,0 +1,18 @@
+{
+  "候选": "Q32 causal interior tile split",
+  "source_sha256": "ac0ee4caaeed8dfd211a57cd4d3d130d8437a2a0129c1c915e1b19ed4fc66b4b",
+  "candidate_sha256": "f4534a6fcc77b68b8d17e5dfb8ddad412a17293c8f6f4e627297141983f6d1a5",
+  "prepare_sha256": "d67819df0da59e9df41e2ee9a0b072829a2bd9efdb5c33edcd4f0426612edfe6",
+  "check_contract_sha256": "60a88c3248d4208641139ab673637c0c014d97918d8f4bacffc7b915a7770bea",
+  "结论": "PASS：可进入隔离编译与组件正确性验证；不代表数值、性能或生产资格通过。",
+  "审阅": {
+    "范围": "仅CPU源码、生成变换和tile边界契约；未编译Triton、未运行GPU。",
+    "循环与数学顺序": "原loop按j递增被拆成[loop_lo, full_history_end)和[full_history_end, loop_hi)，两段仍按同一递增次序消费tile；softmax递推、QK/PV和acc更新未重排。完整历史段只替换KV/scale tile_mask和seq_mask为全真。",
+    "完整tile安全性": "源helper的max_seq_prefix_len在该静态普通causal范围为min(context_len + qblock*32 + 32, seq_len)。候选边界end=floor((first_query_abs+1)/64)，所以完整段tile最后位置不晚于该Q块首个有效query位置；也不越过seq_len或原loop_hi。",
+    "mask与边界": "query/head mask继续参与最终score mask；非完整tile继续走原tile_mask及compute_kv_seq_mask。普通causal的partial首块/尾块保留原路径，检查器给出的每Q块最多两个边界tile。",
+    "回退与适用范围": "分割仅在2D、causal、非per-seq causal、非MM prefix、无sliding window、无chunk时启用；其他条件下full_history_end=loop_lo，首循环为空、第二循环仍覆盖原范围。候选的静态断言也将验证范围进一步限制为文档所述 specialization。",
+    "CPU证据": "prepare.py核验原源SHA并生成候选，py_compile通过；check_contract.py通过4,259,840个q-block案例，覆盖64种context tile余数及Q长度1–2048。检查是算术边界模型，不是Triton编译或设备数值证据。",
+    "风险与下一门": "静态复制loop body可能增大代码体积、寄存器或spill；隔离编译需确认完整段K/V/scale与causal谓词确实被移除，并检查代码尺寸/寄存器/spill。之后需做逐位数值与尾Q/尾KV、page/guard测试，再做producer+原reducer对照。不能从CPU检查推断性能收益。"
+  }
+}
+

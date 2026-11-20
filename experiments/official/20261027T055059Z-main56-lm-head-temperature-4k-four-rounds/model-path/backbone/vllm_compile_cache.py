@@ -1,0 +1,12 @@
+{   ((1, 2048), 0, 'inductor_standalone'): {   'cache_key': 'a5tutxrx74fnelftgds6wcl6pxt6gh5pnwlffjibh32rpxt6p6qu',
+                                               'graph_handle': (   'artifact_compile_range_1_2048_subgraph_0',
+                                                                   '/root/.cache/vllm/torch_compile_cache/331f7a7d22/rank_0_0/backbone/artifact_compile_range_1_2048_subgraph_0')},
+    ((1, 2048), 1, 'inductor_standalone'): {   'cache_key': 'azsxgwlzdybbo22lag7cj47nwhcpoeyxtuxeaqjk7pvo6rqvx224',
+                                               'graph_handle': (   'artifact_compile_range_1_2048_subgraph_1',
+                                                                   '/root/.cache/vllm/torch_compile_cache/331f7a7d22/rank_0_0/backbone/artifact_compile_range_1_2048_subgraph_1')},
+    ((1, 2048), 5, 'inductor_standalone'): {   'cache_key': 'ajkmrfj2k2dzpkejlh4nekkmwmkmpvrptjqbkgljpvtz7o5j2pnv',
+                                               'graph_handle': (   'artifact_compile_range_1_2048_subgraph_5',
+                                                                   '/root/.cache/vllm/torch_compile_cache/331f7a7d22/rank_0_0/backbone/artifact_compile_range_1_2048_subgraph_5')},
+    ((1, 2048), 42, 'inductor_standalone'): {   'cache_key': 'a67pj4yohsaqpy4dik22ycoymlvbctt2ruoettygadfsb4gdixqh',
+                                                'graph_handle': (   'artifact_compile_range_1_2048_subgraph_42',
+                                                                    '/root/.cache/vllm/torch_compile_cache/331f7a7d22/rank_0_0/backbone/artifact_compile_range_1_2048_subgraph_42')}}

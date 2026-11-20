@@ -1,0 +1,159 @@
+{
+  "run": "20261028T132807Z-native-gqa-t32-reuse-4k-four-rounds",
+  "status": "native_gqa_t32_reuse_official4k_first_warm_negative",
+  "conclusion": "T32复用4K原官方首冷5491.63／首暖6412.53 tok/s，两轮512请求成功；对PR105首暖6441.35观察−0.447422%，按门停止。KV548432对548336不同，非严格因果/稳定退化；源/两SO/DB与清理通过。无完整四轮/16K/准确率，不合并、不改PR105。",
+  "raw_original_files": 341,
+  "model_qualified": false,
+  "new_baseline": false,
+  "review": {
+    "reviewer": "experiment_sync_resume，终态薄审",
+    "decision": "FIRST_WARM_NEGATIVE_PLANNED_STOP_NO_MERGE",
+    "checks": {
+      "two_complete_successful_rounds": true,
+      "original_workload": true,
+      "CSV_stop_matches": true,
+      "delta_matches": true,
+      "original_stack_head_GQA": true,
+      "T32_CAPTURED_and_SO": true,
+      "KV_mismatch_explicit": true,
+      "source_and_two_SO_unchanged": true,
+      "database_restored": true,
+      "original_database_reused": true,
+      "planned_SIGTERM_not_full_pass": true,
+      "original_RUNS_SKIP_FIRST": true,
+      "cleanup": true
+    },
+    "run": "20261028T132807Z-native-gqa-t32-reuse-4k-four-rounds",
+    "rates": [
+      5491.63,
+      6412.53
+    ],
+    "successful_requests": 512,
+    "first_warm_baseline": 6441.35,
+    "first_warm_delta_percent": -0.44742173612675185,
+    "candidate_KV": 548432,
+    "baseline_KV": 548336,
+    "strictly_causal": false,
+    "stable_regression_asserted": false,
+    "full_four_rounds": false,
+    "accuracy_tested": false,
+    "model_qualified": false,
+    "new_baseline": false,
+    "source_tree": "a2ad827092b3cbcc52763d0a4cd7623bb2bd4efe",
+    "source_count": 814,
+    "base_commit": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd",
+    "merged_baseline": "1cbac531ca9afaa0e9a68624d5d10cb1d0412055",
+    "native_gqa_sha256": "502e1570a07a4a80a9575fd6a166ba5ad1649305bfafde31ecb358db53c754ea",
+    "t32_reuse_dispatch": {
+      "qualified": true,
+      "source_sha256": "22e0b2c3e32ade0eaca4fc5efe25a5147151b26f4d91106e59d54251e96a7487",
+      "library_sha256": "502e1570a07a4a80a9575fd6a166ba5ad1649305bfafde31ecb358db53c754ea",
+      "symbol_lines": [
+        "0000000000017090 W void __device_stub__corex_native_gqa_t32_reuse_probe<2u>(__ix_bfloat16 const*, __ix_bfloat16 const*, __ix_bfloat16 const*, int const*, int const*, float, long, long, long, long, long, long, long, long, float*, float*, float*)"
+      ],
+      "symbols_sha256": "33042387e150140132585e54faa9c10e2b825419d3e8ecc0233b7bcefe88934d",
+      "host_condition": {
+        "rows": 64,
+        "segments": 2,
+        "q_stride": [
+          2048,
+          128,
+          1
+        ]
+      },
+      "scope": "冻结唯一host分支+125302实际SO定义符号；需与服务CAPTURED N64/S2/2048共同使用，不代表调用比例"
+    },
+    "original_result": {
+      "status": "failed",
+      "exit_code": 1,
+      "benchmark_final_returncode": -15,
+      "error": "KeyboardInterrupt('received signal 15')"
+    },
+    "original_csv": "archive/hotspot-layout-20261026/batch-132807-native-t32-official4k-negative/official/20261028T132807Z-native-gqa-t32-reuse-4k-four-rounds/benchmark_results/raw_runs_20261028_213018.csv",
+    "original_csv_sha256": "321a102e80c6e749e4a51e3b216e885852daa0bd4285d5e2f1ccb03e50d1131d",
+    "finished_utc": "2026-10-28T13:38:47.750359+00:00",
+    "raw_member_SHA_reused": "root已核341原件，不重复全量",
+    "note": "原failed/KeyboardInterrupt/未完成四轮保留，与performance-stop决策一致的主动筛停，不写成服务正确性错误。实际SO定义符号/冻结host dispatch与CAPTURED联合证明适用，不证明逐请求覆盖率或模型准确率；不继续16K/105。"
+  },
+  "original_results": {
+    "status": "failed",
+    "benchmark_completed": false,
+    "accuracy_gate": "separate",
+    "cleanup_errors": [],
+    "score": "not computed by driver",
+    "benchmark_started_utc": "2026-10-28T13:30:18.346461+00:00",
+    "error": "KeyboardInterrupt('received signal 15')",
+    "traceback": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/scripts/run_official_gate.py\", line 222, in main\n    result['benchmark_exit_code'] = benchmark.wait(timeout=OUTER_TIMEOUT)\n                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 1264, in wait\n    return self._wait(timeout=timeout)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 2047, in _wait\n    time.sleep(delay)\n  File \"/workspace/experiments/minicpm-s2/scripts/run_official_gate.py\", line 176, in <lambda>\n    signal.signal(signum, lambda number, frame: (_ for _ in ()).throw(\n                                                ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/experiments/minicpm-s2/scripts/run_official_gate.py\", line 176, in <genexpr>\n    signal.signal(signum, lambda number, frame: (_ for _ in ()).throw(\nKeyboardInterrupt: received signal 15\n",
+    "benchmark_final_returncode": -15,
+    "server_final_returncode": 0,
+    "monitor_final_returncode": -15,
+    "postflight": {
+      "checked_utc": "2026-10-28T13:38:47.094982+00:00",
+      "port_9031": "free",
+      "free_mib": 32700
+    },
+    "benchmark_source_after": {
+      "RUNS": 4,
+      "SKIP_FIRST": 1
+    },
+    "exit_code": 1,
+    "finished_utc": "2026-10-28T13:38:47.105033+00:00",
+    "cpu_after": {
+      "cpu.cfs_quota_us": "600000\n",
+      "cpu.cfs_period_us": "100000\n",
+      "cpu.stat": "nr_periods 397330\nnr_throttled 2477\nthrottled_time 10205857272254\n"
+    }
+  },
+  "CSV_rows": [
+    {
+      "Prefill": "4096",
+      "Decode": "1024",
+      "Conc": "64",
+      "Num Prompts": "256",
+      "Successful Requests": "256.0",
+      "Run Status": "SUCCESS",
+      "Benchmark Duration (s)": "238.68",
+      "Total Input Tokens": "1048576.0",
+      "Total Output Tokens": "262144.0",
+      "Req/s": "1.07",
+      "Output tok/s": "1098.33",
+      "Peak Output tok/s": "2245.0",
+      "Total tok/s": "5491.63",
+      "Mean TTFT (ms)": "10356.79",
+      "Median TTFT (ms)": "1145.21",
+      "P99 TTFT (ms)": "47829.86",
+      "Mean TPOT (ms)": "47.62",
+      "Median TPOT (ms)": "50.31",
+      "P99 TPOT (ms)": "52.41",
+      "Mean ITL (ms)": "47.62",
+      "Median ITL (ms)": "30.39",
+      "P99 ITL (ms)": "185.65"
+    },
+    {
+      "Prefill": "4096",
+      "Decode": "1024",
+      "Conc": "64",
+      "Num Prompts": "256",
+      "Successful Requests": "256.0",
+      "Run Status": "SUCCESS",
+      "Benchmark Duration (s)": "204.4",
+      "Total Input Tokens": "1048576.0",
+      "Total Output Tokens": "262144.0",
+      "Req/s": "1.25",
+      "Output tok/s": "1282.51",
+      "Peak Output tok/s": "2243.0",
+      "Total tok/s": "6412.53",
+      "Mean TTFT (ms)": "3332.72",
+      "Median TTFT (ms)": "1162.68",
+      "P99 TTFT (ms)": "18610.41",
+      "Mean TPOT (ms)": "46.34",
+      "Median TPOT (ms)": "48.26",
+      "P99 TPOT (ms)": "53.23",
+      "Mean ITL (ms)": "46.34",
+      "Median ITL (ms)": "30.38",
+      "P99 ITL (ms)": "184.59"
+    }
+  ],
+  "full_four_rounds": false,
+  "accuracy_tested": false
+}

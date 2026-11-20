@@ -1,0 +1,192 @@
+--- reviewed-vtranspose-worker
++++ fused-append-worker
+@@ -55,15 +55,15 @@
+ 
+ 
+ from fp_reference import sampled_reference
+-import layout_kernels
++from contract import validate as validate_contract
+ import writer_gate
+ 
+ 
+ def worker(run, model, shape="hotspot"):
+     result = dict(status="started", kind="真实模型KV位样本拓展的writer+GQA+reducer组件，随机Q；无模型/官方资格", checks=[], timings=[],
+                   limitations=["没有模型权重；真实KV仅一条256token原题的128token采样，重复页不代表16K真实激活",
+-                               "仅N64/B64/S2；128token真实KV页样本重复到容量，随机Q；原while/page16/FP/split，K保持原NHD，仅V改页内head/dim/slot物理布局",
+-                               "完整writer+producer+reducer同流Graph ABBA；整池编码只初始化/门内刷新，不在每decode计时"])
++                               "仅N64/B64/S2；128token真实KV页样本重复到容量，随机Q；原while/page16/FP/split，仅私有尾slot append并入producer；原NHD/BF16/while/FP/reducer",
++                               "完整writer+producer+reducer同流Graph ABBA；无整池编码；A原writer+producer+reducer，B融合producer+reducer，CPU准入只组件门外"])
+     gqa = producer_capture = reducer_capture = None
+     original_producer = original_reducer = None
+     try:
+@@ -95,9 +95,9 @@
+             raise RuntimeError("共同 native 安装链不符")
+         gqa = importlib.import_module("vllm_fl.patches.biv150_gqa_decode")
+         if digest(Path(gqa.__file__)) != SOURCE_SHA or digest(HERE / "baseline.py") != SOURCE_SHA:
+-            raise RuntimeError("实际 GQA 不是冻结 main241/765 原件")
++            raise RuntimeError("实际 GQA 不是冻结 main56 原件")
+         backend = importlib.import_module("vllm.v1.attention.backends.triton_attn")
+-        candidate = load("gqa_bf16_vtranspose_candidate", HERE / "candidate.py")
++        candidate = load("gqa_fused_append_candidate", HERE / "candidate.py")
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("非单卡")
+         torch.cuda.set_device(0)
+@@ -187,47 +187,49 @@
+             query_start_loc=common.query_start_loc_cpu.tolist(), seq_lens=common.seq_lens.cpu().tolist(),
+             padded_slot_values=common.slot_mapping[active:].cpu().tolist())
+         original_inputs = (query.clone(), cache.clone(), common.seq_lens.clone(), common.block_table_tensor.clone())
+-        packed=torch.empty((len(cache),8192),device='cuda',dtype=torch.bfloat16)
+-        decoded=torch.empty_like(cache)
++        cache_b=cache.clone()
++        result['metadata_admissions']=[]
+         def refresh():
+-            packed.view(torch.int16).fill_(-23131)
+-            layout_kernels.encode_cache[(len(cache),16)](cache,packed,num_warps=1,num_stages=1)
+-            layout_kernels.decode_cache[(len(cache),16)](packed,decoded,num_warps=1,num_stages=1)
+-            if not torch.equal(decoded.view(torch.int16),cache.view(torch.int16)):
+-                raise RuntimeError('整池V转置/逆变换位型不精确；停止')
+-        # 特殊值只核整数位型回读，不以NaN Attention证明正确性。
+-        allbits=((torch.arange(65536,device='cuda',dtype=torch.int32)*40503+97)&65535).to(torch.int16)
+-        special=allbits.view(torch.bfloat16).reshape(8,2,16,2,128)
+-        sp=torch.empty((8,8192),device='cuda',dtype=torch.bfloat16);back=torch.empty_like(special)
+-        layout_kernels.encode_cache[(8,16)](special,sp,num_warps=1,num_stages=1)
+-        layout_kernels.decode_cache[(8,16)](sp,back,num_warps=1,num_stages=1)
+-        if not torch.equal(special.view(torch.int16),back.view(torch.int16)):
+-            raise RuntimeError('65536 BF16位型GPU地址往返失败')
+-        result['layout_special_patterns_exact']=65536
++            # CPU-only cold qualification, not a claimed free production scheduler.
++            lens=common.seq_lens.cpu().tolist();tab=common.block_table_tensor.cpu().tolist()
++            mapping=[int(tab[row][(n-1)//16])*16+(n-1)%16 if n>0 else -1
++                for row,n in enumerate(lens)]
++            common.slot_mapping[:B].copy_(torch.tensor(mapping,device='cuda',dtype=torch.int64))
++            result['metadata_admissions'].append(validate_contract(lens,tab,mapping))
++            rows=torch.arange(B,device='cuda');positions=(common.seq_lens.to(torch.int64)-1).clamp_min(0)
++            pages=common.block_table_tensor[rows,positions//16].to(torch.int64)
++            key[:B].copy_(cache[pages,0,positions%16]);value[:B].copy_(cache[pages,1,positions%16])
++            cache_b.copy_(cache)
+         refresh()
+-        # 两view均持有packed base；原K offset与stride不动，V末维step16。
+-        packed_k=packed.as_strided((len(cache),16,2,128),(8192,256,128,1),0)
+-        packed_v=packed.as_strided((len(cache),16,2,128),(8192,1,2048,16),4096)
+-        result['physical_layout']=dict(page_bytes=16384,metadata_bytes_per_page=0,
+-            capacity_reclaimed=False,additional_runtime_metadata=False,
+-            k_strides=list(packed_k.stride()),v_strides=list(packed_v.stride()),
+-            initialization_only_full_transform=True,one_new_token_writer_per_timed_call=True,
+-            normal_prefill_consumer_qualified=False)
++        # Explicit invalid packets are rejected before any candidate launch.
++        good_lens=common.seq_lens.cpu().tolist();good_table=common.block_table_tensor.cpu().tolist()
++        good_slots=common.slot_mapping[:B].cpu().tolist()
++        bad_slot=list(good_slots);bad_slot[0]=int(good_table[0][0])*16
++        alias_table=[list(row) for row in good_table];alias_table[1][0]=good_slots[0]//16
++        rejected=[]
++        for label,tab,slots in [('wrong-tail-mapping',good_table,bad_slot),('cross-request-prefix-alias',alias_table,good_slots)]:
++            try:validate_contract(good_lens,tab,slots)
++            except ValueError as error:rejected.append(dict(case=label,error=str(error)))
++            else:raise RuntimeError('非法append packet未被拒绝:'+label)
++        result['invalid_metadata_rejections']=rejected
++        result['resource_budget_note']='仅省旧约0.7% Graph writer目标；无新shared/scratch，fresh K/V合512B逻辑值/CTA。实际VGPR/shared大涨即停止，不推定occupancy。'
+         arms = {}
+-        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_vtranspose)):
++        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_fused_append)):
+             out = torch.full_like(query, -17)
+             partial = torch.full_like(metadata.softmax_segm_output, -17)
+             maxima = torch.full_like(metadata.softmax_segm_max, -17)
+             sums = torch.full_like(metadata.softmax_segm_expsum, -17)
+             pk = dict(kwargs, segm_output_ptr=partial.narrow(2, 0, segments), segm_max_ptr=maxima.narrow(2, 0, segments),
+                       segm_expsum_ptr=sums.narrow(2, 0, segments))
+-            keepalive = [packed,packed_k,packed_v]
++            keepalive=[cache_b,key,value,common.slot_mapping]
+             if name=='candidate':
+-                pk.update(key_cache_ptr=packed_k,value_cache_ptr=packed_v,
+-                    v_stride_slot=1,v_stride_head=2048)
++                pk.update(key_cache_ptr=cache_b[:,0],value_cache_ptr=cache_b[:,1],
++                    fresh_key_ptr=key,fresh_value_ptr=value,append_slot_ptr=common.slot_mapping,
++                    fresh_key_stride=key.stride(0),fresh_value_stride=value.stride(0))
+             rk = dict(rkwargs, output_ptr=out[:B], segm_output_ptr=pk["segm_output_ptr"],
+                       segm_max_ptr=pk["segm_max_ptr"], segm_expsum_ptr=pk["segm_expsum_ptr"])
+-            def call(kernel=kernel, pk=pk, rk=rk, keepalive=keepalive):
++            def call(kernel=kernel, pk=pk, rk=rk, keepalive=keepalive, name=name):
++                if name=='baseline':impl.do_kv_cache_update(layer,key,value,cache,common.slot_mapping)
+                 compiled = kernel[grid](**pk)
+                 original_reducer[rgrid](**rk)
+                 return compiled
+@@ -240,18 +242,16 @@
+         result['actual_baseline_identity']=dict(source_sha256=SOURCE_SHA,
+             production_hash=production_compiled.hash,direct_baseline_hash=first['baseline'].hash,
+             matched=production_compiled.hash==first['baseline'].hash,
+-            note='绑定本次main241实际backend调用；旧641478只作历史来源，不强置编译身份')
++            note='绑定本次main56实际backend调用；旧641478只作历史来源，不强置编译身份')
+         if not result['actual_baseline_identity']['matched']:
+             raise RuntimeError('baseline直接对照不是本次实际生产编译产物')
+         result["resources"]["reducer"] = dump(reducer_compiled, run / "ir-reducer")
+-        result['layout_resources_note']='只改变V物理地址；核实际V byte-permute/global-load/shared变化，不因元数据预测收益'
+-        enc=layout_kernels.encode_cache[(len(cache),16)](cache,packed,num_warps=1,num_stages=1)
+-        dec=layout_kernels.decode_cache[(len(cache),16)](packed,decoded,num_warps=1,num_stages=1)
+-        wr=layout_kernels.write_rows[(B,)](key,value,common.slot_mapping,packed,
+-            INPUT_STRIDE=key.stride(0),num_warps=1,num_stages=1)
+-        result['resources']['initializer']=dump(enc,run/'ir-initializer')
+-        result['resources']['inverse_diagnostic']=dump(dec,run/'ir-inverse-diagnostic')
+-        result['resources']['writer']=dump(wr,run/'ir-writer')
++        base_resource=result['resources']['baseline'];new_resource=result['resources']['candidate']
++        result['resource_growth']=dict(vgpr_delta=(new_resource.get('vgpr_count') or 0)-(base_resource.get('vgpr_count') or 0),
++            shared_delta=new_resource['shared']-base_resource['shared'])
++        # Explicit engineering cutoff for this <=~0.7% target, not an occupancy claim.
++        if result['resource_growth']['vgpr_delta']>16 or result['resource_growth']['shared_delta']>2048:
++            raise RuntimeError('小收益目标的明显资源增长，停止不计时:'+repr(result['resource_growth']))
+         same_bits = lambda a, b: torch.equal(a.view(torch.int16 if a.element_size() == 2 else torch.int32),
+                                             b.view(torch.int16 if b.element_size() == 2 else torch.int32))
+         if not same_bits(production_output, arms["baseline"].out):
+@@ -272,9 +272,9 @@
+         torch.cuda.synchronize()
+ 
+         def check(label, finite=True, changed=False):
+-            refresh()  # 门内一次刷新；不是每个attention call，更不进入最终成本Graph。
++            refresh()  # 每项冷门核私有tail并使旧8门append幂等；完整writer仍在两臂实际调用中。
+             # 整份 KV/输入逐位和 RNG 门在计时外；失败也先保存响应与 partial。
+-            before = tuple(x.clone() for x in (query, cache, common.seq_lens, common.block_table_tensor))
++            before = tuple(x.clone() for x in (query, cache, common.seq_lens, common.block_table_tensor, key, value, common.slot_mapping))
+             rng_cpu, rng_gpu = torch.get_rng_state().clone(), torch.cuda.get_rng_state().clone()
+             for arm in arms.values():
+                 for tensor in arm.tensors:
+@@ -307,14 +307,15 @@
+             checks["graph_fresh_bits"] = all(same_bits(x, y) for name, arm in arms.items()
+                 for x, y in zip(expected[name], arm.tensors))
+             checks["inputs_unchanged"] = all(same_bits(x, y) for x, y in zip(
+-                before, (query, cache, common.seq_lens, common.block_table_tensor)))
++                before, (query, cache, common.seq_lens, common.block_table_tensor, key, value, common.slot_mapping)))
+             checks["rng_unchanged"] = torch.equal(rng_cpu, torch.get_rng_state()) and torch.equal(rng_gpu, torch.cuda.get_rng_state())
+             if changed:
+                 checks["output_changed"] = not same_bits(initial_output[:B], expected["baseline"][0][:B])
+-            checks['actual_layout_pointers']=(arms['candidate'].pk['key_cache_ptr'] is packed_k
+-                and arms['candidate'].pk['value_cache_ptr'] is packed_v
+-                and packed_k.untyped_storage().data_ptr()==packed.untyped_storage().data_ptr()
+-                and packed_v.untyped_storage().data_ptr()==packed.untyped_storage().data_ptr())
++            checks['fused_cache_allocation_exact']=same_bits(cache_b,cache)
++            checks['actual_fused_inputs']=(arms['candidate'].pk['fresh_key_ptr'] is key
++                and arms['candidate'].pk['fresh_value_ptr'] is value
++                and arms['candidate'].pk['append_slot_ptr'] is common.slot_mapping
++                and arms['candidate'].pk['key_cache_ptr'].untyped_storage().data_ptr()==cache_b.untyped_storage().data_ptr())
+             checks['finite_cross_arm_bitwise']=same_bits(a.out[:B],b.out[:B]) if finite else True
+             record = dict(case=label, checks=checks, independent_reference=oracle, nonfinite_diagnostic=not finite,
+                           baseline_nan=int(torch.isnan(a.out[:B]).sum().item()),
+@@ -368,9 +369,8 @@
+         for target, saved in zip((query, cache, common.seq_lens, common.block_table_tensor), original_inputs):
+             target.copy_(saved)
+         check("restored-dense-before-ABBA")
+-        full_graphs,writer_checks=writer_gate.qualify(torch,run,arms,impl,layer,key,value,cache,
+-            common.slot_mapping,packed,layout_kernels,sampled_reference,query,
+-            common.seq_lens,common.block_table_tensor,active)
++        full_graphs,writer_checks=writer_gate.qualify(torch,run,arms,key,value,cache,cache_b,
++            common.slot_mapping,query,common.seq_lens,common.block_table_tensor,sampled_reference,active)
+         result['new_writer_graph_checks']=writer_checks
+         refresh()
+         for name in arms:full_graphs[name].replay()
+@@ -396,7 +396,7 @@
+             a = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "baseline")
+             b = statistics.median(x[metric + "_per_call_ms"] for x in result["timings"] if x["arm"] == "candidate")
+             result["summary"][metric] = dict(baseline_ms=a, candidate_ms=b, fraction_saved=1 - b / a)
+-        result.update(status="component_signal_only", decision="仅N64/S2真实样本分布writer+producer+reducer组件；负即停，正仍需全部消费者/实际模型/准确率资格")
++        result.update(status="component_signal_only", decision="仅N64/S2真实样本分布writer+producer+reducer组件；负即停，正仍需真实元数据/联合调用边界/模型和准确率资格")
+     except BaseException:
+         result.update(status="failed", error=traceback.format_exc())
+         traceback.print_exc()

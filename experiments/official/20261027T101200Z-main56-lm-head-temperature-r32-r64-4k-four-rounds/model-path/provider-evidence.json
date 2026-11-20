@@ -1,0 +1,60 @@
+{
+  "valid": true,
+  "installed_valid": true,
+  "records": [
+    {
+      "line": 72,
+      "value": {
+        "installed": true,
+        "allocation": "Inductor out buffer",
+        "small_rows": "unchanged masked BF16 kernel M1-8",
+        "larger_rows": "provided linear M128-2048 when eligible; otherwise original MM",
+        "large_linear": true,
+        "provider_provenance": {
+          "module": "_iluvatar.ops.linear",
+          "linear_sha256": "d431a4fa144ed67dc3deab46dd5beace3612858075f85c39e602447ba3bf768a",
+          "libentry_sha256": "414e8a3f74e2522e40659e7fccd84e301f4517220837a87af0311f050bbf3025",
+          "kernel_type": "flag_gems.utils.libentry.LibEntry",
+          "bias": false,
+          "group_m": 8,
+          "split_k": 1,
+          "sdk_mutated": false
+        },
+        "unsupported": "previous functional-op fallback"
+      },
+      "valid": true
+    }
+  ],
+  "parse_errors": [],
+  "generated_out_modules": [
+    {
+      "artifact": "/root/.cache/vllm/torch_compile_cache/3ba5726988/rank_0_0/backbone/artifact_compile_range_1_2048_subgraph_0",
+      "artifact_sha256": "1372687c5bfb13b1f70524075aee59e6ed41c2435434849cbfea5e965aa5c084",
+      "member": "cachecompiled-v1/a5tutxrx74fnelftgds6wcl6pxt6gh5pnwlffjibh32rpxt6p6qu/inductor/f32die3lqs3n2aalwyrbuqqkoykmvp5rromo3yah3jcemfgrgamr/pickle-string-215",
+      "source_sha256": "f21bb028ddb871bf99c86a9888e2bc81c3965db3a6086c089d07746f08d52f3a",
+      "out_calls": 1
+    },
+    {
+      "artifact": "/root/.cache/vllm/torch_compile_cache/3ba5726988/rank_0_0/backbone/artifact_compile_range_1_2048_subgraph_1",
+      "artifact_sha256": "357bc4dbc5d236ba30a0e50446bc2bb121f6b104389c813bfa9bec0e934e4ce7",
+      "member": "cachecompiled-v1/azsxgwlzdybbo22lag7cj47nwhcpoeyxtuxeaqjk7pvo6rqvx224/inductor/fcs23ca4pinnw6n47bpyy4nnjjt4kecohtblyggp47lr2gucrkgs/pickle-string-215",
+      "source_sha256": "dc24f680c8585a5fa970fccd65f9794f6b3d09a3925e353ff5783e3e53017e7e",
+      "out_calls": 4
+    },
+    {
+      "artifact": "/root/.cache/vllm/torch_compile_cache/3ba5726988/rank_0_0/backbone/artifact_compile_range_1_2048_subgraph_5",
+      "artifact_sha256": "514e07cf9f75736c72dc5d45d44d036729451dd75987a4bcff0dd7219c0e0535",
+      "member": "cachecompiled-v1/ajkmrfj2k2dzpkejlh4nekkmwmkmpvrptjqbkgljpvtz7o5j2pnv/inductor/fimjdyla367qv4aept3chpxpqm6w5dmbkm66xz5u3u5kxcbub5t7/pickle-string-215",
+      "source_sha256": "3bfa88aaf65e164b8dacda326d406b50e2a4f27c2d8a8ff6d8b84cddca0471a0",
+      "out_calls": 3
+    },
+    {
+      "artifact": "/root/.cache/vllm/torch_compile_cache/3ba5726988/rank_0_0/backbone/artifact_compile_range_1_2048_subgraph_42",
+      "artifact_sha256": "1388e5627382636ad7b5321cce32fbb0dee9a6fb79be644b5b56c5b09677ac56",
+      "member": "cachecompiled-v1/a67pj4yohsaqpy4dik22ycoymlvbctt2ruoettygadfsb4gdixqh/inductor/f7ztfoozztawgmnrjjdczllpqlum3r4p3uhbflnrjosrww2kc75b/pickle-string-215",
+      "source_sha256": "a706183e96e89a596a44d914eadd5c2da25aaa928588a24b52086d4cef28cd11",
+      "out_calls": 3
+    }
+  ],
+  "limitation": "只证明本轮绑定artifact内真实out callback和安装SDK身份；不把M64 provider日志缺失解释成未执行，也不声称逐step调用计数。缺可读artifact源码标资格未完整，不修改成绩或放宽门。"
+}

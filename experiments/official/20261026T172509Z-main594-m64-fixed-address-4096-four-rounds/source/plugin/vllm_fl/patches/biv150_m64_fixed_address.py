@@ -1,0 +1,48 @@
+"""仅M64/N2048下行MM固定地址：原W、原tile/dot、runtime K，不改流水。"""
+import torch
+import triton
+import triton.language as tl
+CONFIG=dict(BLOCK_M=64,BLOCK_N=64,BLOCK_K=128,SPLIT_K=1,num_warps=16,num_stages=2,num_ctas=1)
+
+@triton.jit
+def fixed_address_mm(A,B,C,M,N,K,stride_am,stride_bn,stride_cm,
+                     BLOCK_M:tl.constexpr,BLOCK_N:tl.constexpr,BLOCK_K:tl.constexpr):
+    pid=tl.program_id(0)
+    pid_z=tl.program_id(1)
+    # Host精确M64/N2048/grid32；原通用ceil(N/BN)/pid除余改常量网格。
+    grid_n=32
+    pid_m=pid//grid_n
+    pid_n=pid%grid_n
+    rm=pid_m*BLOCK_M+tl.arange(0,BLOCK_M)
+    rn=pid_n*BLOCK_N+tl.arange(0,BLOCK_N)
+    # 仅此范围内原rm%M/rn%N恒等，保原连续性/对齐提示。
+    ram=tl.max_contiguous(tl.multiple_of(rm,BLOCK_M),BLOCK_M)
+    rbn=tl.max_contiguous(tl.multiple_of(rn,BLOCK_N),BLOCK_N)
+    rk=pid_z*BLOCK_K+tl.arange(0,BLOCK_K)
+    Ap=A+ram[:,None]*stride_am+rk[None,:]
+    Bp=B+rk[:,None]+rbn[None,:]*stride_bn
+    acc=tl.zeros((BLOCK_M,BLOCK_N),dtype=tl.float32)
+    # 原K仍runtime；本次K6144/BK128为48步，未constexpr或unroll。
+    for k in range(0,tl.cdiv(K,BLOCK_K)):
+        a=tl.load(Ap);b=tl.load(Bp)
+        a=a.to(tl.bfloat16);b=b.to(tl.bfloat16)
+        acc=tl.dot(a,b,acc,out_dtype=tl.float32,input_precision=None)
+        Ap+=BLOCK_K
+        Bp+=BLOCK_K
+    rr=pid_m*BLOCK_M+tl.arange(0,BLOCK_M)
+    cc=pid_n*BLOCK_N+tl.arange(0,BLOCK_N)
+    mask=(rr[:,None]<M)&(cc[None,:]<N)
+    tl.store(C+rr[:,None]*stride_cm+cc[None,:],acc.to(tl.bfloat16),mask=mask)
+
+def launch_into(x,weight,out):
+    tensors=(x,weight,out)
+    if (tuple(x.shape)!=(64,6144) or tuple(weight.shape)!=(2048,6144) or tuple(out.shape)!=(64,2048)
+            or any(t.dtype!=torch.bfloat16 or not t.is_cuda or t.device!=x.device or not t.is_contiguous() or t.requires_grad for t in tensors)
+            or len({t.untyped_storage().data_ptr() for t in tensors})!=3):
+        raise ValueError('仅真实M64 down原W及独立caller out，不提供M63或其它M资格')
+    with torch.cuda.device(x.device):
+        prop=torch.cuda.get_device_properties(x.device)
+        if 'BI-V150' not in prop.name or prop.multi_processor_count!=16:raise ValueError('仅BI-V150 16SM')
+        # 与实际原MM相同的B view metadata，不能只保证等价data_ptr。
+        return fixed_address_mm[(32,1)](x,weight.t(),out,64,2048,6144,6144,6144,2048,
+            BLOCK_M=64,BLOCK_N=64,BLOCK_K=128,num_warps=16,num_stages=2,num_ctas=1,enable_fp_fusion=True)

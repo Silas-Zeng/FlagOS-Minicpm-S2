@@ -1,0 +1,91 @@
+{
+  "base_registry_sha256": "69317f1a2b6c1dcd3b4d1b3f6b4f7e63e72b53537d238b520ce15cdfac393dad",
+  "base_rows": 532,
+  "base_unique_runs": 529,
+  "candidate_registry_sha256": "b26ecd475ebf25aaf5a2bb3eef301bc98c04660e6b2e6657dbde3977e75bf2d5",
+  "candidate_rows": 534,
+  "candidate_unique_runs": 531,
+  "runs": [
+    {
+      "run_id": "20261030T002901364769Z-q32-head4-component",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-30T00:29:01.364769+00:00",
+      "profile_id": "q32-gqa-head4",
+      "phase": "component_abba",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce774",
+      "flaggems_commit": "",
+      "input_len": "2018",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "completed_negative",
+      "artifacts": "experiments/bundles/20261030T002901364769Z-q32-head4-component",
+      "conclusion": "四例逐位与guard/readonly门通过；Q2018/KV14126组件A/B Event为7.983063/10.274864 ms，B慢28.7083%，停止，不进入服务/官方测量。"
+    },
+    {
+      "run_id": "20261030T003609248517Z-q32-score-scale-compile-probe",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-30T00:36:09.248517+00:00",
+      "profile_id": "q32-score-scale",
+      "phase": "component_compile_only",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce774",
+      "flaggems_commit": "",
+      "input_len": "2018",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "compiled_only_resource_caveat",
+      "artifacts": "experiments/bundles/20261030T003609248517Z-q32-score-scale-compile-probe",
+      "conclusion": "TTGIR循环内score乘法3→2；ASM SGPR spill计数98→110，资源差异未闭合。无reader数值/性能测量，暂缓，不作收益或生产资格结论。"
+    }
+  ],
+  "bundle_indexes": {
+    "20261030T002901364769Z-q32-head4-component": {
+      "run_id": "20261030T002901364769Z-q32-head4-component",
+      "original_name": "recovery.tar.gz",
+      "original_bytes": 509124,
+      "original_sha256": "e9ff1c52b94b92ed2fedc8b1b23104653a15202526c8cd01e0c86b1e241a7e13",
+      "chunk_bytes": 262144,
+      "chunks": [
+        {
+          "path": "experiments/raw-blobs/20261030T002901364769Z-q32-head4-component/0000.part",
+          "offset": 0,
+          "bytes": 262144,
+          "sha256": "576c4c18c456486826ec778a11eb486fe4d8b6de37ae80c329e0e66444c986dc"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T002901364769Z-q32-head4-component/0001.part",
+          "offset": 262144,
+          "bytes": 246980,
+          "sha256": "e56c03b4382ba4c6846e92faa139ef5bfa58b74f8da89e3dc4742007701b0948"
+        }
+      ]
+    },
+    "20261030T003609248517Z-q32-score-scale-compile-probe": {
+      "run_id": "20261030T003609248517Z-q32-score-scale-compile-probe",
+      "original_name": "recovery.tar.gz",
+      "original_bytes": 504197,
+      "original_sha256": "b6889a58e10ca512b3ac7492724fec67ec593738c6c2d7d48f762e039aabe3c8",
+      "chunk_bytes": 262144,
+      "chunks": [
+        {
+          "path": "experiments/raw-blobs/20261030T003609248517Z-q32-score-scale-compile-probe/0000.part",
+          "offset": 0,
+          "bytes": 262144,
+          "sha256": "03dcb191e6f8cff868329306c218186adec4f06f536a292df1b54af0fbddb108"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T003609248517Z-q32-score-scale-compile-probe/0001.part",
+          "offset": 262144,
+          "bytes": 242053,
+          "sha256": "303ea5986196c9dafe084f42df3526d9f4be1c8ffdf0b3731b92445f9b590b1d"
+        }
+      ]
+    }
+  },
+  "limits": "两项均为组件/编译探针；非官方吞吐、非模型准确率，不更新基线。原压缩包按256KiB分块保存且可按索引重组。"
+}

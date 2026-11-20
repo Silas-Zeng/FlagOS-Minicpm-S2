@@ -1,0 +1,60 @@
+{
+  "status": "COMPILE_DELTA_CONFIRMED_WITH_SMALL_RESOURCE_CHANGE",
+  "run": "20261030T005910507361Z-q32-key-scale-compile-probe",
+  "recovery_archive": "archive/q32-key-scale-20261030/compile-005910/",
+  "recovery_tar_sha256": "2d44f5a47557d483f6cb682bf90b755f6cb60905f28dfc3c3003ccddd889a317",
+  "scope": "仅复核编译 IR/ASM、资源摘要和终态；未执行 attention reader、数值检查或性能计时。",
+  "kernel_hashes": {
+    "A": "761ee8398ab5fccc658e25b62e58da8baa306722d6b4dd08320b6909836a6050",
+    "B": "832315da67926fb91ff4cfe765c49b9bc9ef409af8aef1da950680fd1ef81215"
+  },
+  "ttgir": {
+    "A": {
+      "loop_starts_line": 350,
+      "score_tensor_mul_count_inside_loop": 3
+    },
+    "B": {
+      "key_scale_vector_mul_line_inside_loop": 416,
+      "key_scale_vector_elements": 64,
+      "score_tensor_mul_count_inside_loop": 2
+    },
+    "interpretation": "B 每个 KV tile 对64项 K scale 向量乘 score_scale；TTGIR score tensor 乘法由循环内3项降至2项，符合候选改动。"
+  },
+  "resources": {
+    "A": {
+      "runtime_regs": 135,
+      "shared_bytes": 57344,
+      "triton_spill_count": 0,
+      "asm_num_sgprs": 104,
+      "asm_num_vgprs": 135,
+      "asm_scratch_size": 0,
+      "asm_sgpr_spill_count": 98,
+      "asm_vgpr_spill_count": 0
+    },
+    "B": {
+      "runtime_regs": 135,
+      "shared_bytes": 57344,
+      "triton_spill_count": 0,
+      "asm_num_sgprs": 104,
+      "asm_num_vgprs": 135,
+      "asm_scratch_size": 0,
+      "asm_sgpr_spill_count": 99,
+      "asm_vgpr_spill_count": 0
+    },
+    "interpretation": "除 ASM SGPR spill 计数增加1外，报告的寄存器/shared/scratch/VGPR spill相同；这项轻微变化记录为风险，不单独否决后续数值组件验证。"
+  },
+  "terminal": {
+    "owner_pid": 97575,
+    "worker_pid": 97577,
+    "worker_returncode": 0,
+    "state": "completed",
+    "preflight_gpu_and_9031": "空闲",
+    "postflight_gpu_and_9031": "空闲",
+    "writer_launches": 1,
+    "attention_reader_launches": 0,
+    "requested_use_sme": 229379,
+    "effective_use_sme_A_B": 3,
+    "numerical_or_performance_test": false
+  },
+  "conclusion": "可进入同几何的数值与组件 ABBA 验证；SGPR spill +1 保留为资源风险。编译探针本身不构成数值、性能或生产资格。"
+}

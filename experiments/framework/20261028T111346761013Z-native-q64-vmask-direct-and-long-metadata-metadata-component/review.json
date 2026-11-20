@@ -1,0 +1,112 @@
+{
+  "reviewer": "/root/q32_review_resume",
+  "review_role": "本候选作者终态核；不冒充独立审阅。主线已独立核关键原件。",
+  "status": "组件正确性通过，保留正信号，幅度不作稳定结论",
+  "run_id": "20261028T111346761013Z",
+  "evidence": "archive/hotspot-layout-20261026/batch-111346-native-q64-long-metadata/framework/20261028T111346761013Z-native-q64-vmask-direct-and-long-metadata-metadata-component",
+  "evidence_hashes": {
+    "results.json": "a72e8cd90494bf7543be4665bdf837eb28eba4450ad74c912661e2e2eb3113b1",
+    "manifest.json": "944e0136fc054b779e672677392038c185eb4c2f9622d4eb74bb25bcfd6b1ffa"
+  },
+  "reuse": "81件归档完整SHA由root已核，不重复源证明或GPU。",
+  "hard_gates": 20,
+  "FP64": {
+    "FP64_initial": {
+      "current": {
+        "max_abs": 0.0001364723083135816,
+        "rms_abs": 3.0695905011833144e-05,
+        "relative_l2": 0.0022837951317542346,
+        "finite": true,
+        "passed": true
+      },
+      "native": {
+        "max_abs": 0.0001364723083135816,
+        "rms_abs": 3.0695905011833144e-05,
+        "relative_l2": 0.0022837951317542346,
+        "finite": true,
+        "passed": true
+      }
+    },
+    "FP64_restored_changed": {
+      "current": {
+        "max_abs": 4.368252990235265e-05,
+        "rms_abs": 1.0902033464049342e-05,
+        "relative_l2": 0.002408900153354835,
+        "finite": true,
+        "passed": true
+      },
+      "native": {
+        "max_abs": 4.368252990235265e-05,
+        "rms_abs": 1.0902033464049342e-05,
+        "relative_l2": 0.002408900153354835,
+        "finite": true,
+        "passed": true
+      }
+    }
+  },
+  "actual_dispatch": [
+    {
+      "grid": [
+        64,
+        2
+      ],
+      "native_grid": [
+        32,
+        2
+      ],
+      "query_rows": 2047,
+      "q_storage_offset": 0,
+      "out_storage_offset": 0,
+      "metadata_GPU": true,
+      "production_hook": false
+    }
+  ],
+  "ABBA_recomputed": {
+    "event": {
+      "current_ms": 6.770494222640991,
+      "native_ms": 6.295501232147217,
+      "fraction_saved": 0.07015632461591437,
+      "current_samples_ms": [
+        6.568206310272217,
+        6.972782135009766
+      ],
+      "native_samples_ms": [
+        6.295509338378906,
+        6.295493125915527
+      ]
+    },
+    "wall": {
+      "current_ms": 7.072618562500001,
+      "native_ms": 6.62439309375,
+      "fraction_saved": 0.06337475502023449,
+      "current_samples_ms": [
+        7.1615943125,
+        6.9836428125
+      ],
+      "native_samples_ms": [
+        6.626689875,
+        6.6220963125
+      ]
+    }
+  },
+  "event_drift": {
+    "A2_vs_A1_fraction": 0.06159608965157215,
+    "slowest_B_vs_fastest_A_fraction_saved": 0.04151772325830139,
+    "both_B_faster_than_fastest_A": true
+  },
+  "cpu_throttle_delta": 0,
+  "identities": {
+    "CU": "e5aa9bef311a8d59991a31e53a2173d595dcc794e5bd66fc29e44b87c8568692",
+    "actual_SO": "9884d8024325b02c06f36ac869eddfb64c6a21499473dd72e20a94bd28c45b19",
+    "base_commit": "dac1b8fb48e7983e48283032efeee9b592c5fbe5",
+    "original_A_LLVM": "e70cf3f96934011db2e86a1044042913c493e89cad43f9b98d653f5a9677cd29"
+  },
+  "cleanup": "exit0；DB恢复，source/native14f/GQA库未改；9031空闲、free32700MiB、无剩余GPU进程。",
+  "conclusion": "ABBA均值Event省7.015632%，但A2较A1漂移；两B均快于较快A，足以保留正信号，不称稳定7%或官方吞吐提升，也不为幅度追加矩阵。",
+  "production_wiring_suggestion": [
+    "等待当前16K coverage给出真实长context热点；只据已有CPU seq/query镜像作上下文分流，metadata值仍由GPU入口读取，禁止新增D2H或从max_seq_len/缓存池猜长度。",
+    "在原Q32选择后挂薄adapter，维持原Policy/Manager资格和feature边界；未命中、mixed/decode或未知镜像直接原路径，发起native后异常不重试。不要重包会触compute_order检查的类方法。",
+    "复用本CU/桥/原FP与20门，新增验证集中于CPU镜像绑定/生命周期、实际生产安装加载及模型官方准确率/吞吐；Graph直接诊断不授capture路由资格，保留原capture限制。",
+    "本步仅建议，不修改生产代码、不扫描阈值或形状。长context区间应依据coverage选择并在实际模型验证，避免以某个benchmark长度作为精确开关。"
+  ]
+}

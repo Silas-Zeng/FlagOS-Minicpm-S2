@@ -1,0 +1,3686 @@
+	.text
+	.globl	_gqa_decode_attention           ; -- Begin function _gqa_decode_attention
+	.p2align	3
+	.type	_gqa_decode_attention,@function
+	.iluvatar_kernel _gqa_decode_attention
+_gqa_decode_attention:                  ; @_gqa_decode_attention
+.Lfunc_begin0:
+	.file	1 "/workspace/experiments/minicpm-s2/framework/20261025T152940014266Z-gqa-four-page-t64-w4-hotspot-component/source" "candidate.py"
+	.loc	1 89 0                          ; candidate.py:89:0
+	.cfi_sections .debug_frame
+	.cfi_startproc
+	.cfi_return_column 32
+	.iluvatar_kernel_code_t
+		iluvatar_code_version_major = 1
+		iluvatar_code_version_minor = 3
+		iluvatar_machine_kind = 1
+		iluvatar_machine_version_major = 1
+		iluvatar_machine_version_minor = 1
+		iluvatar_machine_version_stepping = 0
+		kernel_code_entry_byte_offset = 256
+		kernel_code_prefetch_byte_size = 0
+		granulated_workitem_vgpr_count = 21
+		granulated_warp_sgpr_count = 12
+		float_mode = 12
+		debug_mode = 0
+		has_mbar = 0
+		user_sgpr_count = 6
+		enable_sgpr_workgroup_id_x = 1
+		enable_sgpr_workgroup_id_y = 1
+		enable_sgpr_workgroup_id_z = 1
+		enable_sgpr_workgroup_info = 1
+		enable_vgpr_workitem_id = 3
+		granulated_slb_size = 0
+		enable_exception = 128
+		enable_sgpr_private_segment_buffer = 1
+		enable_sgpr_globalvariable_ptr = 0
+		enable_sgpr_kernarg_segment_ptr = 1
+		enable_sgpr_constvariable_ptr = 0
+		enable_sgpr_private_segment_size = 0
+		enable_sgpr_grid_workgroup_count_x = 0
+		enable_sgpr_grid_workgroup_count_y = 0
+		enable_sgpr_grid_workgroup_count_z = 0
+		private_element_size = 1
+		is_ptr64 = 1
+		is_dynamic_callstack = 0
+		is_debug_enabled = 0
+		enable_private_swizzle = 1
+		has_called_assert = 0
+		has_called_printf = 0
+		has_called_malloc = 0
+		enable_srf_flat_shared = 0
+		enable_srf_flat_scratch = 0
+		has_wgmma = 0
+		has_dva = 0
+		enable_dynamic_smem_size = 0
+		workitem_private_segment_byte_size = 0
+		workgroup_group_segment_byte_size = 0
+		kernarg_segment_byte_size = 144
+		workgroup_fbarrier_count = 0
+		warp_sgpr_count = 99
+		workitem_vgpr_count = 88
+		reserved_vgpr_first = 0
+		reserved_vgpr_count = 0
+		reserved_sgpr_first = 0
+		reserved_sgpr_count = 0
+		debug_warp_private_segment_offset_sgpr = 0
+		debug_private_segment_buffer_sgpr = 0
+		kernarg_segment_alignment = 3
+		group_segment_alignment = 4
+		private_segment_alignment = 4
+		warp_size = 6
+		call_convention = -1
+		runtime_loader_kernel_symbol = 0
+	.end_iluvatar_kernel_code_t
+; %bb.0:
+	; Func LiveIn Regs:
+	;  blockIdx.x : s6  blockIdx.y : s7  blockIdx.z : s8
+	ml_vrf_init_u32 v24, tcr
+	sl_mov_b32 s20, s6
+.Ltmp0:
+	.loc	1 121 28 prologue_end           ; candidate.py:121:28
+	sl_lsa_load_b32x16 s[24:39], s[4:5], noreg, #0, ca
+	.loc	1 125 37                        ; candidate.py:125:37
+	sl_mov_b32 s59, 0x0
+	sl_mov_b32 s21, s59
+	sl_shl_b64 {s[2:3], wcr}, s[20:21], 0x2
+	sl_mov_b32 s15, 0xffffffff
+	sl_wait smcnt(0)
+	sl_add_i64 s[12:13], s[36:37], s[2:3]
+	.loc	1 125 22 is_stmt 0              ; candidate.py:125:22
+	ml_lsa_load_dword v0, s[12:15], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s1, v0, 0x0
+.Ltmp1:
+	.file	2 "/usr/local/lib/python3.12/site-packages/triton/language" "standard.py"
+	.loc	2 65 17 is_stmt 1               ; standard.py:65:17 @[ candidate.py:126:41 ]
+	sl_add_i32 s2, s1, 0xff
+	.loc	2 65 30 is_stmt 0               ; standard.py:65:30 @[ candidate.py:126:41 ]
+	sl_sra_b32 {s3, wcr}, s2, 0x1f
+	sl_srl_b32 {s3, wcr}, s3, 0x18
+	sl_add_i32 s2, s2, s3
+	sl_sra_b32 {s2, wcr}, s2, 0x8
+.Ltmp2:
+	.loc	1 127 26 is_stmt 1              ; candidate.py:127:26
+	sl_mull_u32 s3, s2, s8
+	.loc	1 130 31                        ; candidate.py:130:31
+	sl_add_i32 s2, s3, s2
+	.loc	1 127 46                        ; candidate.py:127:46
+	sl_mull_u32 s14, s3, 0x10
+	.loc	1 128 16                        ; candidate.py:128:16
+	sl_cmp_lt_i32 wcr, s14, s1
+	sl_cbr_wcrz BB0_163, wcr
+; %bb.1:
+	.loc	1 0 16 is_stmt 0                ; candidate.py:0:16
+	sl_mov_b32 s0, tcr_lo
+	ml_mov_s2v_b32 v87, s8, 0x0
+	sl_lsa_load_b32x16 s[40:55], s[4:5], noreg, #64, ca
+	.loc	1 132 28 is_stmt 1              ; candidate.py:132:28
+	ml_and_b32 v27, v24, 0xff
+	ml_mov_v2s_b32 s3, v27, 0x0
+	.loc	1 130 31                        ; candidate.py:130:31
+	sl_mull_u32 s2, s2, 0x10
+	.loc	1 130 62 is_stmt 0              ; candidate.py:130:62
+	sl_min_i32 s8, s2, s1
+	.loc	1 132 28 is_stmt 1              ; candidate.py:132:28
+	sl_and_b32 {s1, wcr}, tcr_lo, 0xc0
+	sl_srl_b32 {s6, wcr}, s3, 0x6
+	ml_mov_s2v_b32 v87, s1, 0x2
+	sl_bfe2_b32 s57, tcr_lo, 0x46
+	sl_add_i32 s71, s57, 0x4
+	ml_and_b32 v40, tid, 0x30
+	ml_and_b32 v0, tid, 0x7
+	.loc	1 134 29                        ; candidate.py:134:29
+	sl_add_i32 s70, s57, 0x8
+	sl_add_i32 s62, s57, 0xc
+	sl_add_i32 s63, s57, 0x10
+	sl_add_i32 s61, s57, 0x14
+	sl_add_i32 s60, s57, 0x18
+	sl_wait smcnt(0)
+	sl_add_i32 s41, s57, 0x1c
+	sl_add_i32 s56, s57, 0x20
+	sl_add_i32 s36, s57, 0x24
+	sl_add_i32 s23, s57, 0x28
+	.loc	1 140 29                        ; candidate.py:140:29
+	sl_mull_u32 s5, s7, 0x8
+	.loc	1 140 46 is_stmt 0              ; candidate.py:140:46
+	sl_add_i32 s1, s71, s5
+	.loc	1 142 20 is_stmt 1              ; candidate.py:142:20
+	sl_mull_u32 s4, s45, s20
+	sl_mul_u64_u32 s[2:3], s44, s20
+	sl_add_i32 s3, s3, s4
+	.loc	1 146 28                        ; candidate.py:146:28
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[2:3], s[30:31], s[2:3]
+	sl_mull_u32 s58, s1, 0x100
+	sl_add_i64 s[16:17], s[2:3], s[58:59]
+	ml_mov_s2v_b32 v87, s5, 0x3
+	.loc	1 140 46                        ; candidate.py:140:46
+	sl_add_i32 s1, s57, s5
+	.loc	1 146 28                        ; candidate.py:146:28
+	sl_mull_u32 s58, s1, 0x100
+	sl_add_i64 s[12:13], s[2:3], s[58:59]
+	.loc	1 146 16 is_stmt 0              ; candidate.py:146:16
+	sl_mov_b32 s15, 0xfff00004
+	ml_lsa_blkload_x1 v1, s[12:15], noreg, noreg, #0, ca
+	.loc	1 134 29 is_stmt 1              ; candidate.py:134:29
+	sl_add_i32 s30, s57, 0x2c
+	sl_add_i32 s9, s57, 0x34
+	.loc	1 146 16                        ; candidate.py:146:16
+	sl_mov_b64 s[18:19], s[14:15]
+	ml_lsa_blkload_x1 v2, s[16:19], noreg, noreg, #0, ca
+	ml_shl_b32 v3, v40, 0x5
+	ml_shl_b32 v32, v0, 0x3
+	ml_and_b32 v0, tid, 0x8
+	ml_cmp_eq_u32 tcr, v0, 0x0
+	ml_mov_b32 v0, 0x180
+	ml_csel_b32 v0, 0, v0, tcr
+	sl_mov_b32 s1, 0x280
+	sl_and_b32 {s2, wcr}, s0, 0x40
+	sl_csel_b32 s4, s1, 0x0, wcr
+	sl_srl_b32 {s37, wcr}, s2, 0x5
+	sl_and_b32 {s58, wcr}, s0, 0x80
+	sl_srl_b32 {s5, wcr}, s58, 0x1
+	ml_anyop3_b32 v0, v0, v3, s37, 0xfffffffe
+	ml_anyop3_b32 v0, v0, v32, s5, 0xfffffffe
+	.loc	1 134 29                        ; candidate.py:134:29
+	sl_add_i32 s22, s57, 0x38
+	.loc	1 146 16                        ; candidate.py:146:16
+	sl_wait vmcnt(1)
+	ml_slb_store_b16  v1, v0, noreg, #0, null
+	.loc	1 134 29                        ; candidate.py:134:29
+	sl_add_i32 s1, s57, 0x3c
+	.loc	1 146 16                        ; candidate.py:146:16
+	ml_srl_b32 v1, v1, 0x10
+	.loc	1 148 50                        ; candidate.py:148:50
+	sl_mull_u32 s0, s43, s20
+	.loc	1 146 16                        ; candidate.py:146:16
+	ml_slb_store_b16  v1, v0, noreg, #4, null
+	ml_mov_b32 v1, 0x280
+	ml_csel_b32 v33, 0, v1, tcr
+	ml_xor_b32 v0, v0, 0x80
+	sl_wait vmcnt(0)
+	ml_slb_store_b16  v2, v0, noreg, #0, null
+	ml_mov_s2v_b32 v87, s20, 0x4
+	ml_mov_s2v_b32 v87, s21, 0x5
+	.loc	1 148 50                        ; candidate.py:148:50
+	sl_mul_u64_u32 s[2:3], s42, s20
+	sl_add_i32 s3, s3, s0
+	ml_mov_s2v_b32 v87, s61, 0x6
+	.loc	1 149 30                        ; candidate.py:149:30
+	sl_and_b32 {s12, wcr}, s61, 0x7
+	ml_mov_s2v_b32 v87, s60, 0x7
+	sl_and_b32 {s13, wcr}, s60, 0xb
+	ml_mov_s2v_b32 v87, s41, 0x8
+	sl_and_b32 {s16, wcr}, s41, 0xf
+	ml_mov_s2v_b32 v87, s36, 0x9
+	sl_and_b32 {s17, wcr}, s36, 0x7
+	ml_mov_s2v_b32 v87, s23, 0xa
+	sl_and_b32 {s18, wcr}, s23, 0xb
+	ml_mov_s2v_b32 v87, s30, 0xb
+	sl_and_b32 {s19, wcr}, s30, 0xf
+	ml_mov_s2v_b32 v87, s9, 0xc
+	sl_and_b32 {s20, wcr}, s9, 0x7
+	ml_mov_s2v_b32 v87, s22, 0xd
+	sl_and_b32 {s21, wcr}, s22, 0xb
+	ml_mov_s2v_b32 v87, s1, 0xe
+	sl_and_b32 {s22, wcr}, s1, 0xf
+	ml_mov_s2v_b32 v87, s8, 0xf
+	.loc	1 155 35                        ; candidate.py:155:35
+	sl_sub_i32 s0, s8, s14
+	.loc	1 155 45 is_stmt 0              ; candidate.py:155:45
+	sl_sra_b32 {s1, wcr}, s0, 0x1f
+	sl_srl_b32 {s1, wcr}, s1, 0x1a
+	sl_add_i32 s23, s0, s1
+	.loc	1 162 37 is_stmt 1              ; candidate.py:162:37
+	sl_mull_u32 s0, s49, s57
+	sl_mul_u64_u32 s[66:67], s48, s57
+	sl_add_i32 s67, s67, s0
+	sl_mull_u32 s0, s49, s71
+	sl_mul_u64_u32 s[64:65], s48, s71
+	sl_add_i32 s65, s65, s0
+	sl_mull_u32 s0, s49, s70
+	sl_mul_u64_u32 s[44:45], s48, s70
+	sl_add_i32 s45, s45, s0
+	sl_mull_u32 s0, s49, s62
+	sl_mul_u64_u32 s[84:85], s48, s62
+	sl_add_i32 s85, s85, s0
+	sl_mull_u32 s0, s49, s12
+	sl_mul_u64_u32 s[42:43], s48, s12
+	sl_add_i32 s43, s43, s0
+	sl_mull_u32 s0, s49, s13
+	sl_mul_u64_u32 s[30:31], s48, s13
+	sl_add_i32 s31, s31, s0
+	sl_mull_u32 s0, s49, s16
+	sl_mul_u64_u32 s[8:9], s48, s16
+	sl_add_i32 s9, s9, s0
+	sl_mull_u32 s36, s49, s17
+	sl_mul_u64_u32 s[0:1], s48, s17
+	sl_add_i32 s1, s1, s36
+	sl_mull_u32 s36, s49, s18
+	sl_mul_u64_u32 s[92:93], s48, s18
+	sl_add_i32 s93, s93, s36
+	sl_mull_u32 s36, s49, s19
+	sl_mul_u64_u32 s[90:91], s48, s19
+	sl_add_i32 s91, s91, s36
+	sl_mull_u32 s36, s49, s20
+	sl_mul_u64_u32 s[88:89], s48, s20
+	sl_add_i32 s89, s89, s36
+	sl_mull_u32 s36, s49, s21
+	sl_mul_u64_u32 s[86:87], s48, s21
+	sl_add_i32 s87, s87, s36
+	sl_mull_u32 s36, s49, s22
+	sl_mul_u64_u32 s[48:49], s48, s22
+	sl_add_i32 s49, s49, s36
+	ml_mov_s2v_b32 v87, s48, 0x10
+	ml_mov_s2v_b32 v87, s49, 0x11
+	.loc	1 163 28                        ; candidate.py:163:28
+	sl_mull_u32 s36, s51, s7
+	sl_mul_u64_u32 s[68:69], s50, s7
+	sl_add_i32 s69, s69, s36
+	.loc	1 168 37                        ; candidate.py:168:37
+	sl_mull_u32 s36, s55, s57
+	sl_mul_u64_u32 s[48:49], s54, s57
+	sl_add_i32 s49, s49, s36
+	ml_mov_s2v_b32 v87, s48, 0x12
+	ml_mov_s2v_b32 v87, s49, 0x13
+	sl_mull_u32 s36, s55, s71
+	ml_mov_s2v_b32 v87, s71, 0x14
+	sl_mul_u64_u32 s[48:49], s54, s71
+	sl_add_i32 s49, s49, s36
+	ml_mov_s2v_b32 v87, s48, 0x15
+	ml_mov_s2v_b32 v87, s49, 0x16
+	sl_mull_u32 s36, s55, s70
+	ml_mov_s2v_b32 v87, s70, 0x17
+	sl_mul_u64_u32 s[48:49], s54, s70
+	sl_add_i32 s49, s49, s36
+	ml_mov_s2v_b32 v87, s48, 0x18
+	ml_mov_s2v_b32 v87, s49, 0x19
+	sl_mull_u32 s36, s55, s62
+	ml_mov_s2v_b32 v87, s62, 0x1a
+	sl_mul_u64_u32 s[48:49], s54, s62
+	sl_add_i32 s49, s49, s36
+	ml_mov_s2v_b32 v87, s48, 0x1b
+	ml_mov_s2v_b32 v87, s49, 0x1c
+	sl_mull_u32 s36, s55, s12
+	sl_mul_u64_u32 s[48:49], s54, s12
+	sl_add_i32 s49, s49, s36
+	ml_mov_s2v_b32 v87, s48, 0x1d
+	ml_mov_s2v_b32 v87, s49, 0x1e
+	sl_mull_u32 s12, s55, s13
+	sl_mul_u64_u32 s[48:49], s54, s13
+	sl_add_i32 s49, s49, s12
+	ml_mov_s2v_b32 v87, s48, 0x1f
+	ml_mov_s2v_b32 v87, s49, 0x20
+	sl_mull_u32 s12, s55, s16
+	sl_mul_u64_u32 s[48:49], s54, s16
+	sl_add_i32 s49, s49, s12
+	ml_mov_s2v_b32 v87, s48, 0x21
+	ml_mov_s2v_b32 v87, s49, 0x22
+	sl_mull_u32 s12, s55, s17
+	sl_mul_u64_u32 s[16:17], s54, s17
+	sl_add_i32 s17, s17, s12
+	ml_mov_s2v_b32 v87, s16, 0x23
+	ml_mov_s2v_b32 v87, s17, 0x24
+	sl_mull_u32 s12, s55, s18
+	sl_mul_u64_u32 s[16:17], s54, s18
+	sl_add_i32 s17, s17, s12
+	ml_mov_s2v_b32 v87, s16, 0x25
+	ml_mov_s2v_b32 v87, s17, 0x26
+	sl_mull_u32 s12, s55, s19
+	sl_mul_u64_u32 s[16:17], s54, s19
+	sl_add_i32 s17, s17, s12
+	ml_mov_s2v_b32 v87, s16, 0x27
+	ml_mov_s2v_b32 v87, s17, 0x28
+	sl_mull_u32 s12, s55, s20
+	sl_mul_u64_u32 s[16:17], s54, s20
+	sl_add_i32 s17, s17, s12
+	ml_mov_s2v_b32 v87, s16, 0x29
+	ml_mov_s2v_b32 v87, s17, 0x2a
+	sl_mull_u32 s12, s55, s21
+	sl_mul_u64_u32 s[16:17], s54, s21
+	sl_add_i32 s17, s17, s12
+	ml_mov_s2v_b32 v87, s16, 0x2b
+	ml_mov_s2v_b32 v87, s17, 0x2c
+	sl_mull_u32 s12, s55, s22
+	sl_mul_u64_u32 s[16:17], s54, s22
+	sl_add_i32 s17, s17, s12
+	ml_mov_s2v_b32 v87, s16, 0x2d
+	ml_mov_s2v_b32 v87, s17, 0x2e
+	.loc	1 134 29                        ; candidate.py:134:29
+	sl_add_i32 s41, s57, 0x30
+	ml_and_b32 v1, tid, 0xf
+	.loc	1 146 16                        ; candidate.py:146:16
+	ml_srl_b32 v2, v2, 0x10
+	ml_slb_store_b16  v2, v0, noreg, #4, null
+	.loc	1 148 40                        ; candidate.py:148:40
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x2
+	sl_add_i64 s[60:61], s[38:39], s[2:3]
+	.loc	1 155 58                        ; candidate.py:155:58
+	sl_and_b32 {s2, wcr}, s23, 0xffffffc0
+	.loc	1 155 25 is_stmt 0              ; candidate.py:155:25
+	sl_add_i32 s18, s2, s14
+	.loc	1 146 16 is_stmt 1              ; candidate.py:146:16
+	sl_wait lmcnt(0)
+	sl_barrier 
+	ml_shl_b32 v0, tid, 0x2
+	sl_mov_b32 s54, 0x400
+	ml_slb_blkload_x1  v16, noreg, noreg, #0, null
+	ml_xor_b32 v2, v0, 0x80
+	.loc	1 157 21                        ; candidate.py:157:21
+	sl_cmp_lt_i32 wcr, s14, s18
+	.loc	1 169 33                        ; candidate.py:169:33
+	ml_mov_b32 v36, 0xff800000
+	.loc	1 146 16                        ; candidate.py:146:16
+	ml_slb_blkload_x1  v12, noreg, noreg, #512, null
+	.loc	1 169 61                        ; candidate.py:169:61
+	ml_mov_b32 v25, 0x0
+	ml_mov_s2v_b32 v87, s37, 0x2f
+	sl_add_i32 s2, s5, s37
+	ml_mov_s2v_b32 v87, s2, 0x30
+	ml_shl_b32 v34, v24, 0x6
+	.loc	1 146 16                        ; candidate.py:146:16
+	ml_slb_blkload_x1  v10, noreg, s54, #0, null
+	ml_shl_b32 v3, v24, 0x2
+	ml_shl_b32 v35, v40, 0x6
+	ml_xor_b32 v41, tid, 0x8
+	ml_slb_blkload_x1  v8, noreg, s54, #512, null
+	ml_xor_b32 v42, tid, 0x4
+	ml_xor_b32 v43, tid, 0x2
+	ml_xor_b32 v44, tid, 0x1
+	ml_slb_load_b32x1  v22, v2, noreg, #256, null
+	ml_shl_b32 v31, v27, 0x2
+	ml_shl_b32 v1, v1, 0x3
+	ml_and_b32 v4, tid, 0x10
+	ml_slb_load_b32x1  v20, v2, noreg, #768, null
+	ml_and_b32 v5, tid, 0x20
+	ml_xor_b32 v28, s4, v0
+	ml_and_b32 v38, v34, 0xcc0
+	ml_slb_load_b32x1  v18, v2, s54, #256, null
+	ml_and_b32 v39, v3, 0x30
+	ml_shl_b32 v0, v4, 0x4
+	ml_srl_b32 v3, v5, 0x3
+	ml_slb_load_b32x1  v14, v2, s54, #768, null
+	ml_srl_b32 v2, v4, 0x2
+	ml_shl_b32 v4, v5, 0x4
+	ml_mov_s2v_b32 v87, s58, 0x31
+	sl_mull_u32 s94, s58, 0x8
+	ml_mov_s2v_b32 v87, s7, 0x32
+	sl_mull_u32 s58, s7, 0x100
+	ml_mov_s2v_b32 v87, s6, 0x33
+	sl_mull_u32 s62, s6, 0x4
+	ml_anyop3_b32 v30, v1, v3, v0, 0xfffffffe
+	ml_anyop3_b32 v29, v1, v4, v2, 0xfffffffe
+	ml_mov_b32 v37, 0xff800000
+	ml_mov_b32 v26, 0x0
+	ml_mov_b32 v0, 0x0
+	ml_mov_b32 v1, 0x0
+	ml_mov_b32 v2, 0x0
+	ml_mov_b32 v3, 0x0
+	ml_mov_b32 v4, 0x0
+	ml_mov_b32 v5, 0x0
+	ml_mov_b32 v6, 0x0
+	ml_mov_b32 v7, 0x0
+	sl_cbr_wcrz BB0_16, wcr
+; %bb.2:                                ; %.lr.ph
+	.loc	1 157 4                         ; candidate.py:157:4
+	ml_mov_v2s_b32 s2, v87, 0x30
+	sl_wait lmcnt(7)
+	ml_mov_b32 v17, v16
+	sl_wait lmcnt(3)
+	ml_mov_b32 v23, v22
+	ml_mov_b32 v13, v12
+	ml_add_i32 v0, s2, v32
+	ml_mov_v2s_b32 s2, v87, 0x2
+	ml_anyop3_b32 v49, v33, v35, v0, 0xfffffffe
+	ml_xor_b32 v50, v49, 0x80
+	.loc	1 146 16                        ; candidate.py:146:16
+	ml_shl_b32 v0, tid, 0x2
+	sl_srl_b32 {s2, wcr}, s2, 0x4
+	ml_anyop3_b32 v45, v38, v39, s2, 0xfffffffe
+	ml_xor_b32 v46, v45, 0x10
+	ml_xor_b32 v47, v45, 0x20
+	ml_xor_b32 v48, v45, 0x30
+	sl_mov_b32 s2, 0x3300
+	ml_anyop3_b32 v51, s2, v34, v0, 0xf8
+	ml_xor_b32 v52, v51, 0x10
+	ml_xor_b32 v53, v51, 0x20
+	ml_xor_b32 v54, v51, 0x30
+	sl_wait lmcnt(2)
+	ml_mov_b32 v21, v20
+	ml_mov_b32 v11, v10
+	sl_wait lmcnt(1)
+	ml_mov_b32 v19, v18
+	ml_mov_b32 v9, v8
+	sl_wait lmcnt(0)
+	ml_mov_b32 v15, v14
+	ml_mov_b32 v55, 0x0
+	.loc	1 134 29                        ; candidate.py:134:29
+	ml_and_b32 v0, tid, 0xf
+	ml_cmp_eq_u32 tcr, v0, 0x0
+	ml_and_b32 v0, tid, 0x3
+	ml_mov_b32 v56, 0xff800000
+	sl_mov_b32 s19, 0xffffffff
+	sl_mov_b64 s[2:3], tcr
+	ml_cmp_lt_u32 tcr, v27, 0x20
+	sl_mov_b32 s55, 0x1000504
+	sl_mov_b32 s70, 0x1000
+	sl_mov_b32 s71, 0x2000
+	sl_mov_b64 s[4:5], tcr
+	ml_cmp_eq_u32 tcr, v0, 0x0
+	sl_mov_b32 s72, 0x3000
+	sl_mov_b32 s73, 0x4000
+	sl_mov_b32 s74, 0x5000
+	sl_and_b64 {s[36:37], wcr}, s[4:5], tcr
+	sl_mov_b32 tcr_lo, 0x3020706
+	sl_mov_b32 s75, 0x6000
+	sl_mov_b32 s76, 0x7000
+	sl_mov_b32 s77, 0x800
+	sl_mov_b32 s78, 0xc00
+	ml_mov_b32 v0, 0x0
+	ml_mov_b32 v57, 0xff800000
+	sl_jump BB0_4
+BB0_3:                                  ;   in Loop: Header=BB0_4 Depth=1
+	.loc	1 0 29 is_stmt 0                ; candidate.py:0:29
+	sl_or_b64 {tmsk, wcr}, tmsk, s[12:13]
+	.loc	1 178 45 is_stmt 1              ; candidate.py:178:45
+	ml_sub_f32 v56, v56, v36
+	ml_sub_f32 v57, v57, v37
+	.loc	1 178 31 is_stmt 0              ; candidate.py:178:31
+	ml_exp_f32 v56, v56
+	ml_exp_f32 v57, v57
+.Ltmp3:
+	.loc	2 315 36 is_stmt 1              ; standard.py:315:36 @[ candidate.py:179:66 ]
+	sl_wait lmcnt(0)
+	sl_barrier 
+	ml_slb_load_b32x1  v60, v40, noreg, #0, null
+.Ltmp4:
+	.loc	1 180 36                        ; candidate.py:180:36
+	ml_mul_f32 v0, v0, v56
+	ml_mul_f32 v1, v1, v57
+	ml_mul_f32 v2, v2, v56
+.Ltmp5:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	ml_slb_load_b32x1  v61, v40, noreg, #64, null
+.Ltmp6:
+	.loc	1 180 36                        ; candidate.py:180:36
+	ml_mul_f32 v3, v3, v57
+	ml_mul_f32 v4, v4, v56
+	ml_mul_f32 v5, v5, v57
+	ml_mul_f32 v6, v6, v56
+	ml_mul_f32 v7, v7, v57
+	.loc	1 181 27                        ; candidate.py:181:27
+	ml_cvt_bf16_f32  v58, v58
+	.loc	1 179 46                        ; candidate.py:179:46
+	sl_wait lmcnt(1)
+	ml_fma_f32 v25, v25, v56, v60
+	.loc	1 181 27                        ; candidate.py:181:27
+	ml_cvt_bf16_f32  v56, v59
+	.loc	1 179 46                        ; candidate.py:179:46
+	sl_wait lmcnt(0)
+	ml_fma_f32 v26, v26, v57, v61
+	.loc	1 181 27                        ; candidate.py:181:27
+	sl_barrier 
+	ml_mov_v2s_b32 s6, v87, 0x2f
+	ml_mov_v2s_b32 s7, v87, 0x31
+	sl_add_i32 s12, s7, s6
+	ml_slb_store_b16  v58, v30, s12, #0, null
+	ml_slb_store_b16  v56, v30, s12, #512, null
+	sl_wait lmcnt(0)
+	sl_barrier 
+	ml_slb_load_b32x1  v62, v29, noreg, #0, null
+	.loc	1 173 20                        ; candidate.py:173:20
+	sl_add_i32 s12, s94, 0x4000
+	sl_add_i32 s13, s94, 0x4800
+	sl_add_i32 s16, s94, 0x5000
+	.loc	1 181 27                        ; candidate.py:181:27
+	ml_slb_load_b32x1  v63, v29, noreg, #256, null
+	.loc	1 173 20                        ; candidate.py:173:20
+	sl_add_i32 s17, s94, 0x5800
+	sl_add_i32 s20, s94, 0x6000
+	sl_add_i32 s21, s94, 0x6800
+	ml_slb_load_b32x1  v56, v28, s12, #0, null
+	sl_add_i32 s22, s94, 0x7000
+	sl_add_i32 s23, s94, 0x7800
+	.loc	1 184 20                        ; candidate.py:184:20
+	sl_add_i32 s14, s14, 0x40
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_slb_load_b32x1  v57, v28, s12, #256, null
+	.loc	1 157 21                        ; candidate.py:157:21
+	sl_cmp_lt_i32 wcr, s14, s18
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_slb_load_b32x1  v58, v28, s13, #0, null
+	ml_slb_load_b32x1  v59, v28, s13, #256, null
+	.loc	1 181 37                        ; candidate.py:181:37
+	sl_wait lmcnt(4)
+	ml_byte_permute_b32 v60, v63, v62, s55
+	ml_mov_b32 v61, v60
+	.loc	1 181 27 is_stmt 0              ; candidate.py:181:27
+	ml_slb_load_b32x1  v64, v29, noreg, #128, null
+	.loc	1 181 37                        ; candidate.py:181:37
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[60:61], v[56:57], v[0:3]
+	.loc	1 173 20 is_stmt 1              ; candidate.py:173:20
+	ml_slb_load_b32x1  v56, v28, s16, #0, null
+	ml_slb_load_b32x1  v57, v28, s16, #256, null
+	.loc	1 181 37                        ; candidate.py:181:37
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[60:61], v[58:59], v[4:7]
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_slb_load_b32x1  v58, v28, s17, #0, null
+	ml_slb_load_b32x1  v59, v28, s17, #256, null
+	.loc	1 181 37                        ; candidate.py:181:37
+	ml_byte_permute_b32 v60, v63, v62, tcr_lo
+	ml_mov_b32 v61, v60
+	.loc	1 181 27 is_stmt 0              ; candidate.py:181:27
+	ml_slb_load_b32x1  v62, v29, noreg, #384, null
+	.loc	1 181 37                        ; candidate.py:181:37
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[60:61], v[56:57], v[0:3]
+	.loc	1 173 20 is_stmt 1              ; candidate.py:173:20
+	ml_slb_load_b32x1  v56, v28, s20, #0, null
+	ml_slb_load_b32x1  v57, v28, s20, #256, null
+	.loc	1 181 37                        ; candidate.py:181:37
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[60:61], v[58:59], v[4:7]
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_slb_load_b32x1  v58, v28, s21, #0, null
+	ml_slb_load_b32x1  v59, v28, s21, #256, null
+	.loc	1 181 37                        ; candidate.py:181:37
+	sl_wait lmcnt(4)
+	ml_byte_permute_b32 v60, v62, v64, s55
+	ml_mov_b32 v61, v60
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[60:61], v[56:57], v[0:3]
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_slb_load_b32x1  v56, v28, s22, #0, null
+	ml_slb_load_b32x1  v57, v28, s22, #256, null
+	.loc	1 181 37                        ; candidate.py:181:37
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[60:61], v[58:59], v[4:7]
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_slb_load_b32x1  v58, v28, s23, #0, null
+	ml_slb_load_b32x1  v59, v28, s23, #256, null
+	.loc	1 181 37                        ; candidate.py:181:37
+	ml_byte_permute_b32 v60, v62, v64, tcr_lo
+	ml_mov_b32 v61, v60
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[60:61], v[56:57], v[0:3]
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[60:61], v[58:59], v[4:7]
+	ml_mov_b32 v56, v36
+	ml_mov_b32 v57, v37
+	.loc	1 157 21                        ; candidate.py:157:21
+	sl_cbr_wcrz BB0_16, wcr
+BB0_4:                                  ; =>This Inner Loop Header: Depth=1
+	.loc	1 159 53                        ; candidate.py:159:53
+	sl_add_i32 s12, s14, s57
+	sl_add_i32 s13, s14, s63
+	sl_add_i32 s16, s14, s56
+	sl_add_i32 s17, s14, s41
+	.loc	1 159 67 is_stmt 0              ; candidate.py:159:67
+	sl_sra_b32 {s20, wcr}, s14, 0x1f
+	sl_srl_b32 {s20, wcr}, s20, 0x1c
+	sl_add_i32 s12, s12, s20
+	sl_sra_b32 {s12, wcr}, s12, 0x4
+	sl_sra_b32 {s20, wcr}, s13, 0x1f
+	sl_srl_b32 {s20, wcr}, s20, 0x1c
+	sl_add_i32 s13, s13, s20
+	sl_sra_b32 {s20, wcr}, s13, 0x4
+	sl_sra_b32 {s13, wcr}, s16, 0x1f
+	sl_srl_b32 {s13, wcr}, s13, 0x1c
+	sl_add_i32 s13, s16, s13
+	sl_sra_b32 {s38, wcr}, s13, 0x4
+	sl_sra_b32 {s13, wcr}, s17, 0x1f
+	sl_srl_b32 {s13, wcr}, s13, 0x1c
+	sl_add_i32 s13, s17, s13
+	sl_sra_b32 {s48, wcr}, s13, 0x4
+	.loc	1 159 41                        ; candidate.py:159:41
+	sl_sra_b32 {s13, wcr}, s12, 0x1f
+	sl_shl_b64 {s[12:13], wcr}, s[12:13], 0x2
+	sl_add_i64 s[16:17], s[60:61], s[12:13]
+	sl_sra_b32 {s21, wcr}, s20, 0x1f
+	sl_shl_b64 {s[12:13], wcr}, s[20:21], 0x2
+	sl_add_i64 s[20:21], s[60:61], s[12:13]
+	.loc	1 159 23                        ; candidate.py:159:23
+	ml_lsa_load_dword v36, s[16:19], noreg, noreg, #0, ca
+	.loc	1 159 41                        ; candidate.py:159:41
+	sl_mov_b64 s[22:23], s[18:19]
+	sl_sra_b32 {s39, wcr}, s38, 0x1f
+	sl_shl_b64 {s[12:13], wcr}, s[38:39], 0x2
+	.loc	1 159 23                        ; candidate.py:159:23
+	ml_lsa_load_dword v37, s[20:23], noreg, noreg, #0, ca
+	.loc	1 159 41                        ; candidate.py:159:41
+	sl_add_i64 s[20:21], s[60:61], s[12:13]
+	sl_sra_b32 {s49, wcr}, s48, 0x1f
+	sl_shl_b64 {s[12:13], wcr}, s[48:49], 0x2
+	.loc	1 159 23                        ; candidate.py:159:23
+	ml_lsa_load_dword v58, s[20:23], noreg, noreg, #0, ca
+	.loc	1 159 41                        ; candidate.py:159:41
+	sl_add_i64 s[20:21], s[60:61], s[12:13]
+	.loc	1 172 36 is_stmt 1              ; candidate.py:172:36
+	sl_shl_b64 {s[38:39], wcr}, s[66:67], 0x1
+	ml_mov_v2s_b32 s6, v87, 0x10
+	.loc	1 159 23                        ; candidate.py:159:23
+	ml_lsa_load_dword v59, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[64:65], 0x1
+	.loc	1 172 20 is_stmt 0              ; candidate.py:172:20
+	sl_mov_b64 s[22:23], s[14:15]
+	.loc	1 172 36                        ; candidate.py:172:36
+	ml_mov_v2s_b32 s7, v87, 0x11
+	.loc	1 159 23 is_stmt 1              ; candidate.py:159:23
+	sl_wait vmcnt(3)
+	ml_mov_v2s_b32 s50, v36, 0x0
+	sl_wait vmcnt(2)
+	ml_mov_v2s_b32 s82, v37, 0x0
+	sl_sra_b32 {tcr_hi, wcr}, s50, 0x1f
+	.loc	1 161 28                        ; candidate.py:161:28
+	sl_mull_u32 s16, s46, tcr_hi
+	sl_mul_u64_u32 s[12:13], s46, s50
+	.loc	1 159 23                        ; candidate.py:159:23
+	sl_wait vmcnt(1)
+	ml_mov_v2s_b32 s80, v58, 0x0
+	sl_sra_b32 {s51, wcr}, s82, 0x1f
+	.loc	1 161 28                        ; candidate.py:161:28
+	sl_add_i32 s13, s13, s16
+	sl_mull_u32 s16, s47, s50
+	.loc	1 159 23                        ; candidate.py:159:23
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s79, v59, 0x0
+	sl_sra_b32 {s83, wcr}, s80, 0x1f
+	.loc	1 161 28                        ; candidate.py:161:28
+	sl_add_i32 s13, s13, s16
+	sl_mull_u32 s16, s46, s51
+	.loc	1 159 23                        ; candidate.py:159:23
+	sl_sra_b32 {s81, wcr}, s79, 0x1f
+	.loc	1 161 28                        ; candidate.py:161:28
+	sl_mul_u64_u32 s[48:49], s46, s82
+	sl_add_i32 s16, s49, s16
+	sl_mull_u32 s17, s47, s82
+	sl_add_i32 s49, s16, s17
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[12:13], wcr}, s[12:13], 0x1
+	sl_add_i64 s[16:17], s[32:33], s[12:13]
+	sl_shl_b64 {s[12:13], wcr}, s[68:69], 0x1
+	sl_add_i64 s[20:21], s[16:17], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	.loc	1 172 20 is_stmt 0              ; candidate.py:172:20
+	ml_lsa_blkload_x1 v36, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[44:45], 0x1
+	sl_add_i64 s[20:21], s[16:17], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_lsa_blkload_x1 v37, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[84:85], 0x1
+	sl_add_i64 s[20:21], s[16:17], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	sl_shl_b64 {s[22:23], wcr}, s[48:49], 0x1
+	sl_add_i64 s[48:49], s[32:33], s[22:23]
+	.loc	1 172 20                        ; candidate.py:172:20
+	sl_mov_b64 s[22:23], s[14:15]
+	ml_lsa_blkload_x1 v58, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_add_i64 s[20:21], s[48:49], s[38:39]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	sl_add_i64 s[16:17], s[16:17], s[38:39]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_lsa_blkload_x1 v59, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[42:43], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_lsa_blkload_x1 v60, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[30:31], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_lsa_blkload_x1 v61, s[20:23], noreg, noreg, #0, ca
+	.loc	1 161 28 is_stmt 1              ; candidate.py:161:28
+	sl_mull_u32 s20, s46, s83
+	sl_mul_u64_u32 s[22:23], s46, s80
+	sl_add_i32 s20, s23, s20
+	sl_mull_u32 s21, s47, s80
+	sl_add_i32 s23, s20, s21
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[8:9], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	sl_shl_b64 {s[22:23], wcr}, s[22:23], 0x1
+	sl_add_i64 s[48:49], s[32:33], s[22:23]
+	.loc	1 172 20 is_stmt 0              ; candidate.py:172:20
+	sl_mov_b64 s[22:23], s[14:15]
+	ml_lsa_blkload_x1 v62, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_add_i64 s[20:21], s[48:49], s[38:39]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_lsa_blkload_x1 v63, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[0:1], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_lsa_blkload_x1 v64, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[92:93], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_lsa_blkload_x1 v65, s[20:23], noreg, noreg, #0, ca
+	.loc	1 161 28 is_stmt 1              ; candidate.py:161:28
+	sl_mull_u32 s20, s46, s81
+	sl_mul_u64_u32 s[22:23], s46, s79
+	sl_add_i32 s20, s23, s20
+	sl_mull_u32 s21, s47, s79
+	sl_add_i32 s23, s20, s21
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[90:91], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	sl_shl_b64 {s[22:23], wcr}, s[22:23], 0x1
+	sl_add_i64 s[48:49], s[32:33], s[22:23]
+	.loc	1 172 20 is_stmt 0              ; candidate.py:172:20
+	sl_mov_b64 s[22:23], s[14:15]
+	ml_lsa_blkload_x1 v66, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_add_i64 s[20:21], s[48:49], s[38:39]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	.loc	1 167 28 is_stmt 1              ; candidate.py:167:28
+	sl_mul_u64_u32 s[38:39], s52, s79
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_lsa_blkload_x1 v67, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36 is_stmt 0              ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[88:89], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_lsa_blkload_x1 v68, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[86:87], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_lsa_blkload_x1 v69, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[12:13]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_lsa_blkload_x1 v70, s[20:23], noreg, noreg, #0, ca
+	.loc	1 167 28 is_stmt 1              ; candidate.py:167:28
+	sl_mull_u32 s22, s52, tcr_hi
+	sl_mul_u64_u32 s[20:21], s52, s50
+	sl_add_i32 s21, s21, s22
+	sl_mull_u32 s22, s53, s50
+	sl_add_i32 s21, s21, s22
+	sl_mull_u32 s22, s52, s51
+	sl_mul_u64_u32 s[50:51], s52, s82
+	sl_add_i32 s22, s51, s22
+	sl_mull_u32 s23, s53, s82
+	.loc	1 172 36                        ; candidate.py:172:36
+	sl_add_i64 s[12:13], s[16:17], s[12:13]
+	.loc	1 172 20 is_stmt 0              ; candidate.py:172:20
+	ml_lsa_blkload_x1 v71, s[12:15], noreg, noreg, #0, ca
+	.loc	1 167 28 is_stmt 1              ; candidate.py:167:28
+	sl_add_i32 s51, s22, s23
+	sl_mull_u32 s12, s52, s83
+	sl_mul_u64_u32 s[48:49], s52, s80
+	sl_add_i32 s12, s49, s12
+	sl_mull_u32 s13, s53, s80
+	sl_add_i32 s49, s12, s13
+	sl_mull_u32 s12, s52, s81
+	sl_add_i32 s12, s39, s12
+	sl_mull_u32 s13, s53, s79
+	sl_add_i32 s39, s12, s13
+	.loc	1 172 20                        ; candidate.py:172:20
+	sl_wait vmcnt(0)
+	sl_barrier 
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[12:13], wcr}, s[20:21], 0x1
+	sl_add_i64 s[12:13], s[34:35], s[12:13]
+	ml_mov_v2s_b32 s6, v87, 0x12
+	ml_mov_v2s_b32 s7, v87, 0x13
+	.loc	1 173 20 is_stmt 0              ; candidate.py:173:20
+	sl_mov_b64 s[22:23], s[14:15]
+	.loc	1 172 20 is_stmt 1              ; candidate.py:172:20
+	ml_slb_store_b32x1  v71, v45, noreg, #0, null
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[16:17], wcr}, s[6:7], 0x1
+	ml_mov_v2s_b32 s6, v87, 0x15
+	ml_mov_v2s_b32 s7, v87, 0x16
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_slb_store_b32x1  v59, v45, s70, #0, null
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[12:13], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20 is_stmt 0              ; candidate.py:173:20
+	ml_lsa_blkload_x1 v72, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	ml_mov_v2s_b32 s6, v87, 0x18
+	ml_mov_v2s_b32 s7, v87, 0x19
+	.loc	1 172 20 is_stmt 1              ; candidate.py:172:20
+	ml_slb_store_b32x1  v63, v45, s71, #0, null
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[12:13], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20 is_stmt 0              ; candidate.py:173:20
+	ml_lsa_blkload_x1 v73, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	ml_mov_v2s_b32 s6, v87, 0x1b
+	ml_mov_v2s_b32 s7, v87, 0x1c
+	sl_shl_b64 {s[22:23], wcr}, s[50:51], 0x1
+	sl_add_i64 s[50:51], s[34:35], s[22:23]
+	.loc	1 173 20                        ; candidate.py:173:20
+	sl_mov_b64 s[22:23], s[14:15]
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[12:13], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_lsa_blkload_x1 v74, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_add_i64 s[20:21], s[50:51], s[16:17]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	ml_mov_v2s_b32 s6, v87, 0x1d
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_lsa_blkload_x1 v75, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	ml_mov_v2s_b32 s7, v87, 0x1e
+	sl_add_i64 s[12:13], s[12:13], s[16:17]
+	sl_add_i64 s[12:13], s[12:13], s[58:59]
+	.loc	1 172 20 is_stmt 1              ; candidate.py:172:20
+	ml_slb_store_b32x1  v67, v45, s72, #0, null
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[50:51], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20 is_stmt 0              ; candidate.py:173:20
+	ml_lsa_blkload_x1 v76, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	ml_mov_v2s_b32 s6, v87, 0x1f
+	ml_mov_v2s_b32 s7, v87, 0x20
+	.loc	1 172 20 is_stmt 1              ; candidate.py:172:20
+	ml_slb_store_b32x1  v36, v46, noreg, #256, null
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[50:51], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20 is_stmt 0              ; candidate.py:173:20
+	ml_lsa_blkload_x1 v77, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	ml_mov_v2s_b32 s6, v87, 0x21
+	ml_mov_v2s_b32 s7, v87, 0x22
+	sl_shl_b64 {s[22:23], wcr}, s[48:49], 0x1
+	sl_add_i64 s[48:49], s[34:35], s[22:23]
+	.loc	1 173 20                        ; candidate.py:173:20
+	sl_mov_b64 s[22:23], s[14:15]
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[50:51], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_lsa_blkload_x1 v78, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_add_i64 s[20:21], s[48:49], s[16:17]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	ml_mov_v2s_b32 s6, v87, 0x23
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_lsa_blkload_x1 v79, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	ml_mov_v2s_b32 s7, v87, 0x24
+	.loc	1 172 20 is_stmt 1              ; candidate.py:172:20
+	ml_slb_store_b32x1  v60, v46, s70, #256, null
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20 is_stmt 0              ; candidate.py:173:20
+	ml_lsa_blkload_x1 v80, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	ml_mov_v2s_b32 s6, v87, 0x25
+	ml_mov_v2s_b32 s7, v87, 0x26
+	.loc	1 172 20 is_stmt 1              ; candidate.py:172:20
+	ml_slb_store_b32x1  v64, v46, s71, #256, null
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20 is_stmt 0              ; candidate.py:173:20
+	ml_lsa_blkload_x1 v81, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	ml_mov_v2s_b32 s6, v87, 0x27
+	ml_mov_v2s_b32 s7, v87, 0x28
+	sl_shl_b64 {s[22:23], wcr}, s[38:39], 0x1
+	sl_add_i64 s[38:39], s[34:35], s[22:23]
+	.loc	1 173 20                        ; candidate.py:173:20
+	sl_mov_b64 s[22:23], s[14:15]
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[48:49], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_lsa_blkload_x1 v82, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_add_i64 s[20:21], s[38:39], s[16:17]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	ml_mov_v2s_b32 s6, v87, 0x29
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_lsa_blkload_x1 v83, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	ml_mov_v2s_b32 s7, v87, 0x2a
+	.loc	1 172 20 is_stmt 1              ; candidate.py:172:20
+	ml_slb_store_b32x1  v68, v46, s72, #256, null
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[38:39], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20 is_stmt 0              ; candidate.py:173:20
+	ml_lsa_blkload_x1 v84, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	ml_mov_v2s_b32 s6, v87, 0x2b
+	ml_mov_v2s_b32 s7, v87, 0x2c
+	.loc	1 172 20 is_stmt 1              ; candidate.py:172:20
+	ml_slb_store_b32x1  v37, v47, noreg, #512, null
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[38:39], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20 is_stmt 0              ; candidate.py:173:20
+	ml_lsa_blkload_x1 v85, s[20:23], noreg, noreg, #0, ca
+	.loc	1 173 38                        ; candidate.py:173:38
+	ml_mov_v2s_b32 s6, v87, 0x2d
+	ml_mov_v2s_b32 s7, v87, 0x2e
+	.loc	1 172 20 is_stmt 1              ; candidate.py:172:20
+	ml_slb_store_b32x1  v61, v47, s70, #512, null
+	.loc	1 173 38                        ; candidate.py:173:38
+	sl_shl_b64 {s[20:21], wcr}, s[6:7], 0x1
+	sl_add_i64 s[20:21], s[38:39], s[20:21]
+	sl_add_i64 s[20:21], s[20:21], s[58:59]
+	.loc	1 173 20 is_stmt 0              ; candidate.py:173:20
+	ml_lsa_blkload_x1 v86, s[20:23], noreg, noreg, #0, ca
+	.loc	1 172 20 is_stmt 1              ; candidate.py:172:20
+	ml_slb_store_b32x1  v65, v47, s71, #512, null
+	ml_slb_store_b32x1  v69, v47, s72, #512, null
+	ml_slb_store_b32x1  v58, v48, noreg, #768, null
+	ml_slb_store_b32x1  v62, v48, s70, #768, null
+	.loc	1 173 20                        ; candidate.py:173:20
+	ml_lsa_blkload_x1 v36, s[12:15], noreg, noreg, #0, ca
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_slb_store_b32x1  v66, v48, s71, #768, null
+	ml_slb_store_b32x1  v70, v48, s72, #768, null
+	.loc	1 173 20                        ; candidate.py:173:20
+	sl_wait vmcnt(14)
+	ml_slb_store_b16  v73, v49, s73, #256, null
+	sl_wait vmcnt(0)
+	ml_slb_store_b16  v36, v49, s73, #0, null
+	ml_srl_b32 v36, v36, 0x10
+	ml_slb_store_b16  v36, v49, s73, #4, null
+	ml_srl_b32 v36, v73, 0x10
+	ml_slb_store_b16  v36, v49, s73, #260, null
+	ml_srl_b32 v36, v75, 0x10
+	ml_slb_store_b16  v75, v49, s74, #0, null
+	ml_slb_store_b16  v36, v49, s74, #4, null
+	ml_srl_b32 v36, v77, 0x10
+	ml_slb_store_b16  v77, v49, s74, #256, null
+	ml_slb_store_b16  v36, v49, s74, #260, null
+	ml_srl_b32 v36, v79, 0x10
+	ml_slb_store_b16  v79, v49, s75, #0, null
+	ml_slb_store_b16  v36, v49, s75, #4, null
+	ml_srl_b32 v36, v81, 0x10
+	ml_slb_store_b16  v81, v49, s75, #256, null
+	ml_slb_store_b16  v36, v49, s75, #260, null
+	ml_srl_b32 v36, v83, 0x10
+	ml_slb_store_b16  v83, v49, s76, #0, null
+	ml_slb_store_b16  v36, v49, s76, #4, null
+	ml_srl_b32 v36, v85, 0x10
+	ml_slb_store_b16  v85, v49, s76, #256, null
+	ml_slb_store_b16  v36, v49, s76, #260, null
+	ml_srl_b32 v36, v72, 0x10
+	ml_slb_store_b16  v72, v50, s73, #0, null
+	ml_slb_store_b16  v36, v50, s73, #4, null
+	ml_srl_b32 v36, v74, 0x10
+	ml_slb_store_b16  v74, v50, s73, #256, null
+	ml_slb_store_b16  v36, v50, s73, #260, null
+	ml_srl_b32 v36, v76, 0x10
+	ml_slb_store_b16  v76, v50, s74, #0, null
+	ml_slb_store_b16  v36, v50, s74, #4, null
+	ml_srl_b32 v36, v78, 0x10
+	ml_slb_store_b16  v78, v50, s74, #256, null
+	ml_slb_store_b16  v36, v50, s74, #260, null
+	ml_srl_b32 v36, v80, 0x10
+	ml_slb_store_b16  v80, v50, s75, #0, null
+	ml_slb_store_b16  v36, v50, s75, #4, null
+	ml_srl_b32 v36, v82, 0x10
+	ml_slb_store_b16  v82, v50, s75, #256, null
+	ml_slb_store_b16  v36, v50, s75, #260, null
+	ml_srl_b32 v36, v84, 0x10
+	ml_slb_store_b16  v84, v50, s76, #0, null
+	ml_slb_store_b16  v36, v50, s76, #4, null
+	ml_srl_b32 v36, v86, 0x10
+	ml_slb_store_b16  v86, v50, s76, #256, null
+	ml_slb_store_b16  v36, v50, s76, #260, null
+	.loc	1 172 20                        ; candidate.py:172:20
+	sl_wait lmcnt(0)
+	sl_barrier 
+	ml_slb_load_b32x1  v36, v51, noreg, #0, null
+	.loc	1 175 27                        ; candidate.py:175:27
+	ml_mov_b32 v58, 0x0
+	ml_mov_b32 v59, v55
+	ml_mov_b32 v60, v55
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_slb_load_b32x1  v37, v52, noreg, #0, null
+	.loc	1 175 27                        ; candidate.py:175:27
+	ml_mov_b32 v61, v55
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_slb_load_b32x1  v62, v53, noreg, #0, null
+	ml_slb_load_b32x1  v63, v54, noreg, #0, null
+	.loc	1 175 27                        ; candidate.py:175:27
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[58:61], v[16:17], v[36:37], v[58:61]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_slb_load_b32x1  v36, v51, s54, #0, null
+	ml_slb_load_b32x1  v37, v52, s54, #0, null
+	.loc	1 175 27                        ; candidate.py:175:27
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[58:61], v[22:23], v[62:63], v[58:61]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_slb_load_b32x1  v62, v53, s54, #0, null
+	ml_slb_load_b32x1  v63, v54, s54, #0, null
+	.loc	1 175 27                        ; candidate.py:175:27
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[58:61], v[12:13], v[36:37], v[58:61]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_slb_load_b32x1  v36, v51, s77, #0, null
+	ml_slb_load_b32x1  v37, v52, s77, #0, null
+	.loc	1 175 27                        ; candidate.py:175:27
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[58:61], v[20:21], v[62:63], v[58:61]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_slb_load_b32x1  v62, v53, s77, #0, null
+	ml_slb_load_b32x1  v63, v54, s77, #0, null
+	.loc	1 175 27                        ; candidate.py:175:27
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[58:61], v[10:11], v[36:37], v[58:61]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_slb_load_b32x1  v36, v51, s78, #0, null
+	ml_slb_load_b32x1  v37, v52, s78, #0, null
+	.loc	1 175 27                        ; candidate.py:175:27
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[58:61], v[18:19], v[62:63], v[58:61]
+	.loc	1 172 20                        ; candidate.py:172:20
+	ml_slb_load_b32x1  v62, v53, s78, #0, null
+	ml_slb_load_b32x1  v63, v54, s78, #0, null
+	.loc	1 175 27                        ; candidate.py:175:27
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[58:61], v[8:9], v[36:37], v[58:61]
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[58:61], v[14:15], v[62:63], v[58:61]
+	.loc	1 175 32 is_stmt 0              ; candidate.py:175:32
+	ml_mul_f32 v37, s40, v58
+	ml_mul_f32 v59, s40, v59
+.Ltmp7:
+	.loc	2 213 40 is_stmt 1              ; standard.py:213:40 @[ candidate.py:176:57 ]
+	sl_barrier 
+	ml_slb_shuffle_rtn_b32 v36, v37, v41
+	ml_slb_shuffle_rtn_b32 v58, v59, v41
+.Ltmp8:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:176:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v36, v37, v36
+.Ltmp9:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	ml_slb_shuffle_rtn_b32 v60, v36, v42
+.Ltmp10:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:176:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v58, v59, v58
+.Ltmp11:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	ml_slb_shuffle_rtn_b32 v61, v58, v42
+.Ltmp12:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:176:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v36, v36, v60
+.Ltmp13:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	ml_slb_shuffle_rtn_b32 v60, v36, v43
+.Ltmp14:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:176:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v58, v58, v61
+.Ltmp15:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	ml_slb_shuffle_rtn_b32 v61, v58, v43
+.Ltmp16:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:176:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v36, v36, v60
+.Ltmp17:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	ml_slb_shuffle_rtn_b32 v60, v36, v44
+.Ltmp18:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:176:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v58, v58, v61
+	sl_wait lmcnt(0)
+	ml_max_f32 v36, v36, v60
+.Ltmp19:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	ml_slb_shuffle_rtn_b32 v60, v58, v44
+	sl_wait lmcnt(0)
+	ml_max_f32 v58, v58, v60
+	sl_and_savetmsk_b64 {s[12:13], wcr}, s[2:3], tmsk
+	; mask branch BB0_6
+BB0_5:                                  ;   in Loop: Header=BB0_4 Depth=1
+	ml_slb_store_b32x1  v36, v40, s62, #0, null
+	ml_slb_store_b32x1  v58, v40, s62, #64, null
+BB0_6:                                  ;   in Loop: Header=BB0_4 Depth=1
+	.loc	2 0 40 is_stmt 0                ; standard.py:0:40
+	sl_or_b64 {tmsk, wcr}, tmsk, s[12:13]
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	sl_wait lmcnt(0)
+	sl_barrier 
+.Ltmp20:
+	.loc	1 176 57 is_stmt 1              ; candidate.py:176:57
+	ml_mov_b32 v36, 0x0
+.Ltmp21:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	sl_and_savetmsk_b64 {s[12:13], wcr}, s[4:5], tmsk
+	; mask branch BB0_8
+BB0_7:                                  ;   in Loop: Header=BB0_4 Depth=1
+	ml_slb_load_b32x1  v36, v31, noreg, #0, null
+BB0_8:                                  ;   in Loop: Header=BB0_4 Depth=1
+	.loc	2 0 40 is_stmt 0                ; standard.py:0:40
+	sl_or_b64 {tmsk, wcr}, tmsk, s[12:13]
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	sl_wait lmcnt(0)
+	ml_slb_shuffle_rtn_b32 v58, v36, v43
+.Ltmp22:
+	.loc	2 192 27 is_stmt 1              ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:176:57 ] ]
+	sl_wait lmcnt(0)
+	ml_max_f32 v36, v36, v58
+.Ltmp23:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	ml_slb_shuffle_rtn_b32 v58, v36, v44
+	sl_and_savetmsk_b64 {s[12:13], wcr}, s[36:37], tmsk
+	; mask branch BB0_10
+BB0_9:                                  ;   in Loop: Header=BB0_4 Depth=1
+	.loc	2 0 40 is_stmt 0                ; standard.py:0:40
+	sl_wait lmcnt(0)
+	ml_max_f32 v36, v36, v58
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	ml_slb_store_b32x1  v36, v31, noreg, #0, null
+BB0_10:                                 ;   in Loop: Header=BB0_4 Depth=1
+	.loc	2 0 40                          ; standard.py:0:40
+	sl_or_b64 {tmsk, wcr}, tmsk, s[12:13]
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:176:57 ]
+	sl_wait lmcnt(0)
+	sl_barrier 
+	ml_slb_load_b32x1  v36, v40, noreg, #0, null
+	ml_slb_load_b32x1  v60, v40, noreg, #64, null
+.Ltmp24:
+	.loc	1 176 42 is_stmt 1              ; candidate.py:176:42
+	sl_wait lmcnt(1)
+	ml_max_f32 v36, v56, v36
+	.loc	1 177 44                        ; candidate.py:177:44
+	ml_sub_f32 v37, v37, v36
+	.loc	1 177 35 is_stmt 0              ; candidate.py:177:35
+	ml_exp_f32 v58, v37
+	.loc	1 176 42 is_stmt 1              ; candidate.py:176:42
+	sl_wait lmcnt(0)
+	ml_max_f32 v37, v57, v60
+	.loc	1 177 44                        ; candidate.py:177:44
+	ml_sub_f32 v59, v59, v37
+	.loc	1 177 35 is_stmt 0              ; candidate.py:177:35
+	ml_exp_f32 v59, v59
+.Ltmp25:
+	.loc	2 315 36 is_stmt 1              ; standard.py:315:36 @[ candidate.py:179:66 ]
+	sl_barrier 
+	ml_slb_shuffle_rtn_b32 v60, v58, v41
+	ml_slb_shuffle_rtn_b32 v61, v59, v41
+.Ltmp26:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:179:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v60, v58, v60
+.Ltmp27:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	ml_slb_shuffle_rtn_b32 v62, v60, v42
+.Ltmp28:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:179:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v61, v59, v61
+.Ltmp29:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	ml_slb_shuffle_rtn_b32 v63, v61, v42
+.Ltmp30:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:179:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v60, v60, v62
+.Ltmp31:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	ml_slb_shuffle_rtn_b32 v62, v60, v43
+.Ltmp32:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:179:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v61, v61, v63
+.Ltmp33:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	ml_slb_shuffle_rtn_b32 v64, v61, v43
+.Ltmp34:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:179:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v62, v60, v62
+.Ltmp35:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	ml_slb_shuffle_rtn_b32 v63, v62, v44
+.Ltmp36:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:179:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v60, v61, v64
+.Ltmp37:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	ml_slb_shuffle_rtn_b32 v61, v60, v44
+	sl_and_savetmsk_b64 {s[12:13], wcr}, s[2:3], tmsk
+	; mask branch BB0_12
+BB0_11:                                 ;   in Loop: Header=BB0_4 Depth=1
+	.loc	2 0 36 is_stmt 0                ; standard.py:0:36
+	sl_wait lmcnt(1)
+	ml_add_f32 v62, v62, v63
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	ml_slb_store_b32x1  v62, v40, s62, #0, null
+	sl_wait lmcnt(1)
+	ml_add_f32 v60, v60, v61
+	ml_slb_store_b32x1  v60, v40, s62, #64, null
+BB0_12:                                 ; %.critedge
+                                        ;   in Loop: Header=BB0_4 Depth=1
+	.loc	2 0 36                          ; standard.py:0:36
+	sl_or_b64 {tmsk, wcr}, tmsk, s[12:13]
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	sl_wait lmcnt(0)
+	sl_barrier 
+.Ltmp38:
+	.loc	1 179 66 is_stmt 1              ; candidate.py:179:66
+	ml_mov_b32 v60, 0x0
+.Ltmp39:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	sl_and_savetmsk_b64 {s[12:13], wcr}, s[4:5], tmsk
+	; mask branch BB0_14
+BB0_13:                                 ;   in Loop: Header=BB0_4 Depth=1
+	ml_slb_load_b32x1  v60, v31, noreg, #0, null
+BB0_14:                                 ;   in Loop: Header=BB0_4 Depth=1
+	.loc	2 0 36 is_stmt 0                ; standard.py:0:36
+	sl_or_b64 {tmsk, wcr}, tmsk, s[12:13]
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	sl_wait lmcnt(0)
+	ml_slb_shuffle_rtn_b32 v61, v60, v43
+.Ltmp40:
+	.loc	2 285 15 is_stmt 1              ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:179:66 ] ]
+	sl_wait lmcnt(0)
+	ml_add_f32 v60, v60, v61
+.Ltmp41:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	ml_slb_shuffle_rtn_b32 v61, v60, v44
+	sl_and_savetmsk_b64 {s[12:13], wcr}, s[36:37], tmsk
+	; mask branch BB0_3
+	sl_cbr_tmskaz BB0_3
+BB0_15:                                 ;   in Loop: Header=BB0_4 Depth=1
+	.loc	2 0 36 is_stmt 0                ; standard.py:0:36
+	sl_wait lmcnt(0)
+	ml_add_f32 v60, v60, v61
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:179:66 ]
+	ml_slb_store_b32x1  v60, v31, noreg, #0, null
+	sl_jump BB0_3
+.Ltmp42:
+BB0_16:                                 ; %._crit_edge
+	.loc	1 134 29 is_stmt 1              ; candidate.py:134:29
+	ml_mov_v2s_b32 s2, v87, 0x2
+	ml_and_b32 v9, tid, 0xf
+	ml_mov_v2s_b32 s6, v87, 0xf
+	sl_srl_b32 {s2, wcr}, s2, 0x2
+	ml_add_i32 v40, s2, v9
+	.loc	1 186 20                        ; candidate.py:186:20
+	sl_cmp_lt_i32 wcr, s18, s6
+	.loc	1 186 7 is_stmt 0               ; candidate.py:186:7
+	sl_cbr_wcrz BB0_160, wcr
+; %bb.17:
+	.loc	1 188 36 is_stmt 1              ; candidate.py:188:36
+	sl_add_i32 s2, s18, s57
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s2, s6
+	sl_sub_bi_u32 s20, s10, s10, wcr
+	.loc	1 189 69 is_stmt 1              ; candidate.py:189:69
+	sl_sra_b32 {s3, wcr}, s18, 0x1f
+	sl_srl_b32 {s3, wcr}, s3, 0x1c
+	sl_add_i32 s2, s2, s3
+	sl_sra_b32 {s2, wcr}, s2, 0x4
+	.loc	1 189 41 is_stmt 0              ; candidate.py:189:41
+	sl_sra_b32 {s3, wcr}, s2, 0x1f
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x2
+	sl_add_i64 s[36:37], s[60:61], s[2:3]
+	sl_mov_b32 s39, 0xffffffff
+	sl_mov_b32 s13, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	sl_or_b32 {s20, wcr}, s20, 0x0
+	sl_mov_b32 s15, 0x0
+	sl_cbr_wcrz BB0_19, wcr
+; %bb.18:
+	ml_lsa_load_dword v9, s[36:39], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s15, v9, 0x0
+BB0_19:
+	.loc	1 188 36 is_stmt 1              ; candidate.py:188:36
+	ml_mov_v2s_b32 s2, v87, 0x14
+	sl_add_i32 s2, s18, s2
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s2, s6
+	sl_sub_bi_u32 s21, s10, s10, wcr
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_21, wcr
+; %bb.20:
+	ml_lsa_load_dword v9, s[36:39], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s13, v9, 0x0
+BB0_21:
+	.loc	1 188 36                        ; candidate.py:188:36
+	ml_mov_v2s_b32 s2, v87, 0x17
+	sl_mov_b32 s72, 0x0
+	sl_mov_b32 s50, 0x0
+	sl_add_i32 s2, s18, s2
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s2, s6
+	sl_sub_bi_u32 s19, s10, s10, wcr
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_23, wcr
+; %bb.22:
+	ml_lsa_load_dword v9, s[36:39], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s50, v9, 0x0
+BB0_23:
+	.loc	1 188 36                        ; candidate.py:188:36
+	ml_mov_v2s_b32 s2, v87, 0x1a
+	sl_add_i32 s2, s18, s2
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s2, s6
+	sl_sub_bi_u32 s2, s10, s10, wcr
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_25, wcr
+; %bb.24:
+	ml_lsa_load_dword v9, s[36:39], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s72, v9, 0x0
+BB0_25:
+	.loc	1 188 36                        ; candidate.py:188:36
+	sl_add_i32 s3, s18, s63
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s3, s6
+	sl_sub_bi_u32 s16, s10, s10, wcr
+	.loc	1 189 69 is_stmt 1              ; candidate.py:189:69
+	sl_sra_b32 {s4, wcr}, s3, 0x1f
+	sl_srl_b32 {s4, wcr}, s4, 0x1c
+	sl_add_i32 s3, s3, s4
+	sl_sra_b32 {s4, wcr}, s3, 0x4
+	.loc	1 189 41 is_stmt 0              ; candidate.py:189:41
+	sl_sra_b32 {s5, wcr}, s4, 0x1f
+	sl_shl_b64 {s[4:5], wcr}, s[4:5], 0x2
+	sl_add_i64 s[48:49], s[60:61], s[4:5]
+	sl_mov_b32 s51, 0xffffffff
+	sl_mov_b32 s23, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	sl_or_b32 {s16, wcr}, s16, 0x0
+	sl_mov_b32 s73, 0x0
+	sl_cbr_wcrz BB0_27, wcr
+; %bb.26:
+	ml_lsa_load_dword v9, s[48:51], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s73, v9, 0x0
+BB0_27:
+	.loc	1 188 36 is_stmt 1              ; candidate.py:188:36
+	ml_mov_v2s_b32 s3, v87, 0x6
+	sl_add_i32 s3, s18, s3
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s3, s6
+	sl_sub_bi_u32 s17, s10, s10, wcr
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_29, wcr
+; %bb.28:
+	ml_lsa_load_dword v9, s[48:51], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s23, v9, 0x0
+BB0_29:
+	.loc	1 188 36                        ; candidate.py:188:36
+	ml_mov_v2s_b32 s3, v87, 0x7
+	sl_mov_b32 s22, 0x0
+	sl_add_i32 s3, s18, s3
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s3, s6
+	sl_sub_bi_u32 s11, tcr_lo, tcr_lo, wcr
+	ml_mov_s2v_b32 v87, s11, 0x7
+	sl_mov_b32 s3, 0x0
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_31, wcr
+; %bb.30:
+	ml_lsa_load_dword v9, s[48:51], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s22, v9, 0x0
+BB0_31:
+	.loc	1 188 36                        ; candidate.py:188:36
+	ml_mov_v2s_b32 s4, v87, 0x8
+	sl_add_i32 s4, s18, s4
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s4, s6
+	sl_sub_bi_u32 s11, tcr_lo, tcr_lo, wcr
+	ml_mov_s2v_b32 v87, s11, 0x8
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_33, wcr
+; %bb.32:
+	ml_lsa_load_dword v9, s[48:51], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s3, v9, 0x0
+BB0_33:
+	.loc	1 188 36                        ; candidate.py:188:36
+	sl_add_i32 s4, s18, s56
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s4, s6
+	sl_sub_bi_u32 s12, s10, s10, wcr
+	.loc	1 189 69 is_stmt 1              ; candidate.py:189:69
+	sl_sra_b32 {s5, wcr}, s4, 0x1f
+	sl_srl_b32 {s5, wcr}, s5, 0x1c
+	sl_add_i32 s4, s4, s5
+	sl_sra_b32 {s4, wcr}, s4, 0x4
+	.loc	1 189 41 is_stmt 0              ; candidate.py:189:41
+	sl_sra_b32 {s5, wcr}, s4, 0x1f
+	sl_shl_b64 {s[4:5], wcr}, s[4:5], 0x2
+	sl_add_i64 s[56:57], s[60:61], s[4:5]
+	sl_mov_b32 s59, 0xffffffff
+	sl_mov_b32 s70, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	sl_or_b32 {s12, wcr}, s12, 0x0
+	sl_mov_b32 s5, 0x0
+	sl_cbr_wcrz BB0_35, wcr
+; %bb.34:
+	ml_lsa_load_dword v9, s[56:59], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s5, v9, 0x0
+BB0_35:
+	.loc	1 188 36 is_stmt 1              ; candidate.py:188:36
+	ml_mov_v2s_b32 s4, v87, 0x9
+	sl_add_i32 s4, s18, s4
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s4, s6
+	sl_sub_bi_u32 s11, tcr_lo, tcr_lo, wcr
+	ml_mov_s2v_b32 v87, s11, 0x9
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_37, wcr
+; %bb.36:
+	ml_lsa_load_dword v9, s[56:59], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s70, v9, 0x0
+BB0_37:
+	.loc	1 188 36                        ; candidate.py:188:36
+	ml_mov_v2s_b32 s4, v87, 0xa
+	sl_mov_b32 s54, 0x0
+	sl_mov_b32 s71, 0x0
+	sl_add_i32 s4, s18, s4
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s4, s6
+	sl_sub_bi_u32 s11, tcr_lo, tcr_lo, wcr
+	ml_mov_s2v_b32 v87, s11, 0xa
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_39, wcr
+; %bb.38:
+	ml_lsa_load_dword v9, s[56:59], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s71, v9, 0x0
+BB0_39:
+	.loc	1 188 36                        ; candidate.py:188:36
+	ml_mov_v2s_b32 s4, v87, 0xb
+	sl_add_i32 s4, s18, s4
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s4, s6
+	sl_sub_bi_u32 s83, s10, s10, wcr
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_41, wcr
+; %bb.40:
+	ml_lsa_load_dword v9, s[56:59], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s54, v9, 0x0
+BB0_41:
+	.loc	1 188 36                        ; candidate.py:188:36
+	sl_add_i32 s14, s18, s41
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	sl_cmp_lt_i32 wcr, s14, s6
+	sl_sub_bi_u32 s4, s10, s10, wcr
+	.loc	1 189 69 is_stmt 1              ; candidate.py:189:69
+	sl_sra_b32 {s38, wcr}, s14, 0x1f
+	sl_srl_b32 {s38, wcr}, s38, 0x1c
+	sl_add_i32 s14, s14, s38
+	sl_sra_b32 {s74, wcr}, s14, 0x4
+	.loc	1 189 41 is_stmt 0              ; candidate.py:189:41
+	sl_sra_b32 {s75, wcr}, s74, 0x1f
+	sl_shl_b64 {s[74:75], wcr}, s[74:75], 0x2
+	sl_add_i64 s[60:61], s[60:61], s[74:75]
+	sl_mov_b32 s63, 0xffffffff
+	sl_mov_b32 s14, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	sl_or_b32 {s4, wcr}, s4, 0x0
+	sl_mov_b32 s55, 0x0
+	sl_cbr_wcrz BB0_43, wcr
+; %bb.42:
+	ml_lsa_load_dword v9, s[60:63], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s55, v9, 0x0
+BB0_43:
+	.loc	1 188 36 is_stmt 1              ; candidate.py:188:36
+	ml_mov_v2s_b32 s6, v87, 0xc
+	sl_add_i32 s38, s18, s6
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	ml_mov_v2s_b32 s6, v87, 0xf
+	sl_cmp_lt_i32 wcr, s38, s6
+	sl_sub_bi_u32 s82, s10, s10, wcr
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_45, wcr
+; %bb.44:
+	ml_lsa_load_dword v9, s[60:63], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s14, v9, 0x0
+BB0_45:
+	.loc	1 188 36                        ; candidate.py:188:36
+	ml_mov_v2s_b32 s6, v87, 0xd
+	sl_mov_b32 s79, 0x0
+	sl_mov_b32 s41, 0x0
+	sl_add_i32 s38, s18, s6
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	ml_mov_v2s_b32 s6, v87, 0xf
+	sl_cmp_lt_i32 wcr, s38, s6
+	sl_sub_bi_u32 s81, s10, s10, wcr
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_47, wcr
+; %bb.46:
+	ml_lsa_load_dword v9, s[60:63], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s41, v9, 0x0
+BB0_47:
+	.loc	1 188 36                        ; candidate.py:188:36
+	ml_mov_v2s_b32 s6, v87, 0xe
+	sl_add_i32 s38, s18, s6
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	ml_mov_v2s_b32 s6, v87, 0xf
+	sl_cmp_lt_i32 wcr, s38, s6
+	sl_sub_bi_u32 s80, s10, s10, wcr
+	.loc	1 189 23 is_stmt 1              ; candidate.py:189:23
+	sl_cbr_wcrz BB0_49, wcr
+; %bb.48:
+	ml_lsa_load_dword v9, s[60:63], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s79, v9, 0x0
+BB0_49:
+	.loc	1 0 23 is_stmt 0                ; candidate.py:0:23
+	sl_mov_b32 s77, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	sl_or_b32 {s20, wcr}, s20, 0x0
+	sl_mov_b32 s78, 0x0
+	sl_cbr_wcrz BB0_51, wcr
+; %bb.50:
+	ml_lsa_load_dword v9, s[36:39], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s78, v9, 0x0
+BB0_51:
+	sl_or_b32 {s21, wcr}, s21, 0x0
+	sl_cbr_wcrz BB0_53, wcr
+; %bb.52:
+	ml_lsa_load_dword v9, s[36:39], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s77, v9, 0x0
+BB0_53:
+	.loc	1 0 23                          ; candidate.py:0:23
+	sl_mov_b32 s75, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	sl_or_b32 {s19, wcr}, s19, 0x0
+	sl_mov_b32 s76, 0x0
+	sl_cbr_wcrz BB0_55, wcr
+; %bb.54:
+	ml_lsa_load_dword v9, s[36:39], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s76, v9, 0x0
+BB0_55:
+	sl_or_b32 {s2, wcr}, s2, 0x0
+	sl_cbr_wcrz BB0_57, wcr
+; %bb.56:
+	ml_lsa_load_dword v9, s[36:39], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s75, v9, 0x0
+BB0_57:
+	.loc	1 0 23                          ; candidate.py:0:23
+	sl_mov_b32 s6, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	ml_mov_s2v_b32 v87, s6, 0x1a
+	sl_or_b32 {s16, wcr}, s16, 0x0
+	sl_mov_b32 s74, 0x0
+	sl_cbr_wcrz BB0_59, wcr
+; %bb.58:
+	ml_lsa_load_dword v9, s[48:51], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s74, v9, 0x0
+BB0_59:
+	sl_or_b32 {s17, wcr}, s17, 0x0
+	sl_cbr_wcrz BB0_61, wcr
+; %bb.60:
+	ml_lsa_load_dword v9, s[48:51], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s6, v9, 0x0
+	ml_mov_s2v_b32 v87, s6, 0x1a
+BB0_61:
+	.loc	1 0 23                          ; candidate.py:0:23
+	sl_mov_b32 s6, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	ml_mov_s2v_b32 v87, s6, 0xb
+	ml_mov_v2s_b32 s11, v87, 0x7
+	ml_mov_s2v_b32 v87, s6, 0x6
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_63, wcr
+; %bb.62:
+	ml_lsa_load_dword v9, s[48:51], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s6, v9, 0x0
+	ml_mov_s2v_b32 v87, s6, 0x6
+BB0_63:
+	ml_mov_v2s_b32 s11, v87, 0x8
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_65, wcr
+; %bb.64:
+	ml_lsa_load_dword v9, s[48:51], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s6, v9, 0x0
+	ml_mov_s2v_b32 v87, s6, 0xb
+BB0_65:
+	.loc	1 0 23                          ; candidate.py:0:23
+	sl_mov_b32 s49, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	sl_or_b32 {s12, wcr}, s12, 0x0
+	sl_mov_b32 s51, 0x0
+	sl_cbr_wcrz BB0_67, wcr
+; %bb.66:
+	ml_lsa_load_dword v9, s[56:59], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s51, v9, 0x0
+BB0_67:
+	ml_mov_v2s_b32 s11, v87, 0x9
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_69, wcr
+; %bb.68:
+	ml_lsa_load_dword v9, s[56:59], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s49, v9, 0x0
+BB0_69:
+	.loc	1 0 23                          ; candidate.py:0:23
+	sl_mov_b32 s6, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	ml_mov_s2v_b32 v87, s6, 0xd
+	ml_mov_v2s_b32 s11, v87, 0xa
+	sl_mov_b32 s48, 0x0
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_71, wcr
+; %bb.70:
+	ml_lsa_load_dword v9, s[56:59], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s48, v9, 0x0
+BB0_71:
+	sl_or_b32 {s83, wcr}, s83, 0x0
+	sl_cbr_wcrz BB0_73, wcr
+; %bb.72:
+	ml_lsa_load_dword v9, s[56:59], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s6, v9, 0x0
+	ml_mov_s2v_b32 v87, s6, 0xd
+BB0_73:
+	.loc	1 0 23                          ; candidate.py:0:23
+	sl_mov_b32 s56, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	sl_or_b32 {s4, wcr}, s4, 0x0
+	sl_mov_b32 s57, 0x0
+	sl_cbr_wcrz BB0_75, wcr
+; %bb.74:
+	ml_lsa_load_dword v9, s[60:63], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s57, v9, 0x0
+BB0_75:
+	sl_or_b32 {s82, wcr}, s82, 0x0
+	sl_cbr_wcrz BB0_77, wcr
+; %bb.76:
+	ml_lsa_load_dword v9, s[60:63], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s56, v9, 0x0
+BB0_77:
+	.loc	1 0 23                          ; candidate.py:0:23
+	sl_mov_b32 s6, 0x0
+	.loc	1 189 23                        ; candidate.py:189:23
+	ml_mov_s2v_b32 v87, s6, 0xe
+	sl_or_b32 {s81, wcr}, s81, 0x0
+	ml_mov_s2v_b32 v87, s6, 0xc
+	sl_cbr_wcrz BB0_79, wcr
+; %bb.78:
+	ml_lsa_load_dword v9, s[60:63], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s6, v9, 0x0
+	ml_mov_s2v_b32 v87, s6, 0xc
+BB0_79:
+	sl_or_b32 {s80, wcr}, s80, 0x0
+	sl_cbr_wcrz BB0_81, wcr
+; %bb.80:
+	ml_lsa_load_dword v9, s[60:63], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s6, v9, 0x0
+	ml_mov_s2v_b32 v87, s6, 0xe
+BB0_81:
+	.loc	1 203 36 is_stmt 1              ; candidate.py:203:36
+	sl_shl_b64 {s[36:37], wcr}, s[68:69], 0x1
+	sl_shl_b64 {s[38:39], wcr}, s[66:67], 0x1
+	.loc	1 203 20 is_stmt 0              ; candidate.py:203:20
+	ml_mov_b32 v9, 0x0
+	sl_or_b32 {s20, wcr}, s20, 0x0
+	ml_mov_b32 v11, 0x0
+	sl_cbr_wcrz BB0_83, wcr
+; %bb.82:
+	.loc	1 190 54 is_stmt 1              ; candidate.py:190:54
+	sl_sra_b32 {s59, wcr}, s15, 0x1f
+	.loc	1 192 28                        ; candidate.py:192:28
+	sl_mull_u32 s59, s46, s59
+	sl_mul_u64_u32 s[60:61], s46, s15
+	sl_add_i32 s59, s61, s59
+	sl_mull_u32 s15, s47, s15
+	sl_add_i32 s61, s59, s15
+	.loc	1 203 36                        ; candidate.py:203:36
+	sl_shl_b64 {s[60:61], wcr}, s[60:61], 0x1
+	sl_add_i64 s[60:61], s[32:33], s[60:61]
+	sl_add_i64 s[60:61], s[60:61], s[38:39]
+	sl_add_i64 s[60:61], s[60:61], s[36:37]
+	.loc	1 203 20 is_stmt 0              ; candidate.py:203:20
+	sl_mov_b32 s63, 0xfff00004
+	ml_lsa_blkload_x1 v11, s[60:63], noreg, noreg, #0, ca
+BB0_83:
+	sl_or_b32 {s21, wcr}, s21, 0x0
+	sl_cbr_wcrz BB0_85, wcr
+; %bb.84:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s15, wcr}, s13, 0x1f
+	sl_mul_u64_u32 s[60:61], s46, s13
+	sl_mull_u32 s15, s46, s15
+	sl_add_i32 s15, s61, s15
+	sl_mull_u32 s13, s47, s13
+	sl_add_i32 s61, s15, s13
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[60:61], wcr}, s[60:61], 0x1
+	sl_add_i64 s[60:61], s[32:33], s[60:61]
+	sl_shl_b64 {s[64:65], wcr}, s[64:65], 0x1
+	sl_add_i64 s[60:61], s[60:61], s[64:65]
+	sl_add_i64 s[60:61], s[60:61], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s63, 0xfff00004
+	ml_lsa_blkload_x1 v9, s[60:63], noreg, noreg, #0, ca
+BB0_85:
+	ml_mov_b32 v13, 0x0
+	sl_or_b32 {s19, wcr}, s19, 0x0
+	ml_mov_b32 v15, 0x0
+	sl_cbr_wcrz BB0_87, wcr
+; %bb.86:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s13, wcr}, s50, 0x1f
+	sl_mul_u64_u32 s[60:61], s46, s50
+	sl_mull_u32 s13, s46, s13
+	sl_add_i32 s13, s61, s13
+	sl_mull_u32 s15, s47, s50
+	sl_add_i32 s61, s13, s15
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[60:61], wcr}, s[60:61], 0x1
+	sl_add_i64 s[60:61], s[32:33], s[60:61]
+	sl_shl_b64 {s[44:45], wcr}, s[44:45], 0x1
+	sl_add_i64 s[44:45], s[60:61], s[44:45]
+	sl_add_i64 s[60:61], s[44:45], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s63, 0xfff00004
+	ml_lsa_blkload_x1 v15, s[60:63], noreg, noreg, #0, ca
+BB0_87:
+	sl_or_b32 {s2, wcr}, s2, 0x0
+	sl_cbr_wcrz BB0_89, wcr
+; %bb.88:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s13, wcr}, s72, 0x1f
+	sl_mul_u64_u32 s[44:45], s46, s72
+	sl_mull_u32 s13, s46, s13
+	sl_add_i32 s13, s45, s13
+	sl_mull_u32 s15, s47, s72
+	sl_add_i32 s45, s13, s15
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[44:45], wcr}, s[44:45], 0x1
+	sl_add_i64 s[44:45], s[32:33], s[44:45]
+	sl_shl_b64 {s[6:7], wcr}, s[84:85], 0x1
+	sl_add_i64 s[6:7], s[44:45], s[6:7]
+	sl_add_i64 s[60:61], s[6:7], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s63, 0xfff00004
+	ml_lsa_blkload_x1 v13, s[60:63], noreg, noreg, #0, ca
+BB0_89:
+	ml_mov_b32 v17, 0x0
+	sl_or_b32 {s16, wcr}, s16, 0x0
+	ml_mov_b32 v19, 0x0
+	sl_cbr_wcrz BB0_91, wcr
+; %bb.90:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s13, wcr}, s73, 0x1f
+	sl_mul_u64_u32 s[6:7], s46, s73
+	sl_mull_u32 s13, s46, s13
+	sl_add_i32 s7, s7, s13
+	sl_mull_u32 s13, s47, s73
+	sl_add_i32 s7, s7, s13
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[6:7], s[32:33], s[6:7]
+	sl_add_i64 s[6:7], s[6:7], s[38:39]
+	sl_add_i64 s[60:61], s[6:7], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s63, 0xfff00004
+	ml_lsa_blkload_x1 v19, s[60:63], noreg, noreg, #0, ca
+BB0_91:
+	sl_or_b32 {s17, wcr}, s17, 0x0
+	sl_cbr_wcrz BB0_93, wcr
+; %bb.92:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s13, wcr}, s23, 0x1f
+	sl_mul_u64_u32 s[6:7], s46, s23
+	sl_mull_u32 s13, s46, s13
+	sl_add_i32 s7, s7, s13
+	sl_mull_u32 s13, s47, s23
+	sl_add_i32 s7, s7, s13
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[6:7], s[32:33], s[6:7]
+	sl_shl_b64 {s[42:43], wcr}, s[42:43], 0x1
+	sl_add_i64 s[6:7], s[6:7], s[42:43]
+	sl_add_i64 s[60:61], s[6:7], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s63, 0xfff00004
+	ml_lsa_blkload_x1 v17, s[60:63], noreg, noreg, #0, ca
+BB0_93:
+	ml_mov_b32 v21, 0x0
+	ml_mov_v2s_b32 s11, v87, 0x7
+	ml_mov_b32 v23, 0x0
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_95, wcr
+; %bb.94:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s13, wcr}, s22, 0x1f
+	sl_mul_u64_u32 s[6:7], s46, s22
+	sl_mull_u32 s13, s46, s13
+	sl_add_i32 s7, s7, s13
+	sl_mull_u32 s13, s47, s22
+	sl_add_i32 s7, s7, s13
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[6:7], s[32:33], s[6:7]
+	sl_shl_b64 {s[22:23], wcr}, s[30:31], 0x1
+	sl_add_i64 s[6:7], s[6:7], s[22:23]
+	sl_add_i64 s[60:61], s[6:7], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s63, 0xfff00004
+	ml_lsa_blkload_x1 v23, s[60:63], noreg, noreg, #0, ca
+BB0_95:
+	ml_mov_v2s_b32 s11, v87, 0x8
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_97, wcr
+; %bb.96:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s13, wcr}, s3, 0x1f
+	sl_mul_u64_u32 s[6:7], s46, s3
+	sl_mull_u32 s13, s46, s13
+	sl_add_i32 s7, s7, s13
+	sl_mull_u32 s3, s47, s3
+	sl_add_i32 s7, s7, s3
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[6:7], s[32:33], s[6:7]
+	sl_shl_b64 {s[8:9], wcr}, s[8:9], 0x1
+	sl_add_i64 s[6:7], s[6:7], s[8:9]
+	sl_add_i64 s[60:61], s[6:7], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s63, 0xfff00004
+	ml_lsa_blkload_x1 v21, s[60:63], noreg, noreg, #0, ca
+BB0_97:
+	ml_mov_b32 v41, 0x0
+	sl_or_b32 {s12, wcr}, s12, 0x0
+	ml_mov_b32 v42, 0x0
+	sl_cbr_wcrz BB0_99, wcr
+; %bb.98:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s3, wcr}, s5, 0x1f
+	sl_mul_u64_u32 s[6:7], s46, s5
+	sl_mull_u32 s3, s46, s3
+	sl_add_i32 s3, s7, s3
+	sl_mull_u32 s5, s47, s5
+	sl_add_i32 s7, s3, s5
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[6:7], s[32:33], s[6:7]
+	sl_add_i64 s[6:7], s[6:7], s[38:39]
+	sl_add_i64 s[60:61], s[6:7], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s63, 0xfff00004
+	ml_lsa_blkload_x1 v42, s[60:63], noreg, noreg, #0, ca
+BB0_99:
+	ml_mov_v2s_b32 s11, v87, 0x9
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_101, wcr
+; %bb.100:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s3, wcr}, s70, 0x1f
+	sl_mul_u64_u32 s[6:7], s46, s70
+	sl_mull_u32 s3, s46, s3
+	sl_add_i32 s3, s7, s3
+	sl_mull_u32 s5, s47, s70
+	sl_add_i32 s7, s3, s5
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[6:7], s[32:33], s[6:7]
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	sl_add_i64 s[0:1], s[6:7], s[0:1]
+	sl_add_i64 s[0:1], s[0:1], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s3, 0xfff00004
+	ml_lsa_blkload_x1 v41, s[0:3], noreg, noreg, #0, ca
+BB0_101:
+	ml_mov_b32 v43, 0x0
+	ml_mov_v2s_b32 s11, v87, 0xa
+	ml_mov_b32 v44, 0x0
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_103, wcr
+; %bb.102:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s3, wcr}, s71, 0x1f
+	sl_mul_u64_u32 s[0:1], s46, s71
+	sl_mull_u32 s3, s46, s3
+	sl_add_i32 s1, s1, s3
+	sl_mull_u32 s3, s47, s71
+	sl_add_i32 s1, s1, s3
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	sl_add_i64 s[0:1], s[32:33], s[0:1]
+	sl_shl_b64 {s[6:7], wcr}, s[92:93], 0x1
+	sl_add_i64 s[0:1], s[0:1], s[6:7]
+	sl_add_i64 s[0:1], s[0:1], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s3, 0xfff00004
+	ml_lsa_blkload_x1 v44, s[0:3], noreg, noreg, #0, ca
+BB0_103:
+	sl_or_b32 {s83, wcr}, s83, 0x0
+	sl_cbr_wcrz BB0_105, wcr
+; %bb.104:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s3, wcr}, s54, 0x1f
+	sl_mul_u64_u32 s[0:1], s46, s54
+	sl_mull_u32 s3, s46, s3
+	sl_add_i32 s1, s1, s3
+	sl_mull_u32 s3, s47, s54
+	sl_add_i32 s1, s1, s3
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	sl_add_i64 s[0:1], s[32:33], s[0:1]
+	sl_shl_b64 {s[6:7], wcr}, s[90:91], 0x1
+	sl_add_i64 s[0:1], s[0:1], s[6:7]
+	sl_add_i64 s[0:1], s[0:1], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s3, 0xfff00004
+	ml_lsa_blkload_x1 v43, s[0:3], noreg, noreg, #0, ca
+BB0_105:
+	ml_mov_b32 v45, 0x0
+	sl_or_b32 {s4, wcr}, s4, 0x0
+	ml_mov_b32 v46, 0x0
+	sl_cbr_wcrz BB0_107, wcr
+; %bb.106:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s3, wcr}, s55, 0x1f
+	sl_mul_u64_u32 s[0:1], s46, s55
+	sl_mull_u32 s3, s46, s3
+	sl_add_i32 s1, s1, s3
+	sl_mull_u32 s3, s47, s55
+	sl_add_i32 s1, s1, s3
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	sl_add_i64 s[0:1], s[32:33], s[0:1]
+	sl_add_i64 s[0:1], s[0:1], s[38:39]
+	sl_add_i64 s[0:1], s[0:1], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s3, 0xfff00004
+	ml_lsa_blkload_x1 v46, s[0:3], noreg, noreg, #0, ca
+BB0_107:
+	sl_or_b32 {s82, wcr}, s82, 0x0
+	sl_cbr_wcrz BB0_109, wcr
+; %bb.108:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s3, wcr}, s14, 0x1f
+	sl_mul_u64_u32 s[0:1], s46, s14
+	sl_mull_u32 s3, s46, s3
+	sl_add_i32 s1, s1, s3
+	sl_mull_u32 s3, s47, s14
+	sl_add_i32 s1, s1, s3
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	sl_add_i64 s[0:1], s[32:33], s[0:1]
+	sl_shl_b64 {s[6:7], wcr}, s[88:89], 0x1
+	sl_add_i64 s[0:1], s[0:1], s[6:7]
+	sl_add_i64 s[0:1], s[0:1], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s3, 0xfff00004
+	ml_lsa_blkload_x1 v45, s[0:3], noreg, noreg, #0, ca
+BB0_109:
+	ml_mov_b32 v47, 0x0
+	sl_or_b32 {s81, wcr}, s81, 0x0
+	ml_mov_b32 v48, 0x0
+	ml_mov_v2s_b32 s14, v87, 0xf
+	sl_cbr_wcrz BB0_111, wcr
+; %bb.110:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s3, wcr}, s41, 0x1f
+	sl_mul_u64_u32 s[0:1], s46, s41
+	sl_mull_u32 s3, s46, s3
+	sl_add_i32 s1, s1, s3
+	sl_mull_u32 s3, s47, s41
+	sl_add_i32 s1, s1, s3
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	sl_add_i64 s[0:1], s[32:33], s[0:1]
+	sl_shl_b64 {s[6:7], wcr}, s[86:87], 0x1
+	sl_add_i64 s[0:1], s[0:1], s[6:7]
+	sl_add_i64 s[0:1], s[0:1], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s3, 0xfff00004
+	ml_lsa_blkload_x1 v48, s[0:3], noreg, noreg, #0, ca
+BB0_111:
+	sl_or_b32 {s80, wcr}, s80, 0x0
+	sl_cbr_wcrz BB0_113, wcr
+; %bb.112:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s3, wcr}, s79, 0x1f
+	sl_mul_u64_u32 s[0:1], s46, s79
+	sl_mull_u32 s3, s46, s3
+	sl_add_i32 s1, s1, s3
+	sl_mull_u32 s3, s47, s79
+	sl_add_i32 s1, s1, s3
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	sl_add_i64 s[0:1], s[32:33], s[0:1]
+	ml_mov_v2s_b32 s6, v87, 0x10
+	ml_mov_v2s_b32 s7, v87, 0x11
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s3, 0xfff00004
+	.loc	1 203 0                         ; candidate.py:203
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[0:1], s[0:1], s[6:7]
+	sl_add_i64 s[0:1], s[0:1], s[36:37]
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_lsa_blkload_x1 v47, s[0:3], noreg, noreg, #0, ca
+BB0_113:
+	sl_wait vmcnt(0) lmcnt(0)
+	sl_barrier 
+	ml_mov_v2s_b32 s0, v87, 0x2
+	sl_mov_b32 s1, 0x2000
+	sl_mov_b32 s3, 0x3000
+	sl_mov_b32 s59, 0x0
+	sl_srl_b32 {s0, wcr}, s0, 0x4
+	ml_anyop3_b32 v38, v38, v39, s0, 0xfffffffe
+	ml_slb_store_b32x1  v11, v38, noreg, #0, null
+	sl_mov_b32 s0, 0x1000
+	ml_xor_b32 v11, v38, 0x10
+	ml_slb_store_b32x1  v19, v38, s0, #0, null
+	ml_slb_store_b32x1  v42, v38, s1, #0, null
+	ml_slb_store_b32x1  v46, v38, s3, #0, null
+	ml_slb_store_b32x1  v9, v11, noreg, #256, null
+	ml_xor_b32 v9, v38, 0x20
+	ml_slb_store_b32x1  v17, v11, s0, #256, null
+	ml_slb_store_b32x1  v41, v11, s1, #256, null
+	ml_slb_store_b32x1  v45, v11, s3, #256, null
+	ml_mov_b32 v11, 0x0
+	ml_slb_store_b32x1  v15, v9, noreg, #512, null
+	ml_xor_b32 v15, v38, 0x30
+	ml_slb_store_b32x1  v23, v9, s0, #512, null
+	ml_slb_store_b32x1  v44, v9, s1, #512, null
+	ml_slb_store_b32x1  v48, v9, s3, #512, null
+	.loc	1 204 20 is_stmt 1              ; candidate.py:204:20
+	ml_mov_b32 v9, 0x0
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_slb_store_b32x1  v13, v15, noreg, #768, null
+	ml_slb_store_b32x1  v21, v15, s0, #768, null
+	ml_slb_store_b32x1  v43, v15, s1, #768, null
+	.loc	1 204 38                        ; candidate.py:204:38
+	ml_mov_v2s_b32 s0, v87, 0x12
+	ml_mov_v2s_b32 s1, v87, 0x13
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_slb_store_b32x1  v47, v15, s3, #768, null
+	.loc	1 204 38                        ; candidate.py:204:38
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	.loc	1 204 20 is_stmt 0              ; candidate.py:204:20
+	sl_or_b32 {s20, wcr}, s20, 0x0
+	sl_cbr_wcrz BB0_115, wcr
+; %bb.114:
+	.loc	1 0 20                          ; candidate.py:0:20
+	sl_sra_b32 {s3, wcr}, s78, 0x1f
+	sl_mull_u32 s3, s52, s3
+	sl_mul_u64_u32 s[6:7], s52, s78
+	sl_add_i32 s3, s7, s3
+	sl_mull_u32 s5, s53, s78
+	sl_add_i32 s7, s3, s5
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[6:7], s[34:35], s[6:7]
+	sl_add_i64 s[6:7], s[6:7], s[0:1]
+	sl_add_i64 s[36:37], s[6:7], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s39, 0xfff00004
+	ml_lsa_blkload_x1 v11, s[36:39], noreg, noreg, #0, ca
+BB0_115:
+	sl_or_b32 {s21, wcr}, s21, 0x0
+	sl_cbr_wcrz BB0_117, wcr
+; %bb.116:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s3, wcr}, s77, 0x1f
+	sl_mul_u64_u32 s[6:7], s52, s77
+	sl_mull_u32 s3, s52, s3
+	sl_add_i32 s3, s7, s3
+	sl_mull_u32 s5, s53, s77
+	sl_add_i32 s7, s3, s5
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[6:7], s[34:35], s[6:7]
+	ml_mov_v2s_b32 s8, v87, 0x15
+	ml_mov_v2s_b32 s9, v87, 0x16
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s23, 0xfff00004
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[8:9], wcr}, s[8:9], 0x1
+	sl_add_i64 s[6:7], s[6:7], s[8:9]
+	sl_add_i64 s[20:21], s[6:7], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_lsa_blkload_x1 v9, s[20:23], noreg, noreg, #0, ca
+BB0_117:
+	ml_mov_b32 v13, 0x0
+	sl_or_b32 {s19, wcr}, s19, 0x0
+	ml_mov_b32 v15, 0x0
+	sl_cbr_wcrz BB0_119, wcr
+; %bb.118:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s3, wcr}, s76, 0x1f
+	sl_mul_u64_u32 s[6:7], s52, s76
+	sl_mull_u32 s3, s52, s3
+	sl_add_i32 s3, s7, s3
+	sl_mull_u32 s5, s53, s76
+	sl_add_i32 s7, s3, s5
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[6:7], s[34:35], s[6:7]
+	ml_mov_v2s_b32 s8, v87, 0x18
+	ml_mov_v2s_b32 s9, v87, 0x19
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s23, 0xfff00004
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[8:9], wcr}, s[8:9], 0x1
+	sl_add_i64 s[6:7], s[6:7], s[8:9]
+	sl_add_i64 s[20:21], s[6:7], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_lsa_blkload_x1 v15, s[20:23], noreg, noreg, #0, ca
+BB0_119:
+	sl_or_b32 {s2, wcr}, s2, 0x0
+	sl_cbr_wcrz BB0_121, wcr
+; %bb.120:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s5, wcr}, s75, 0x1f
+	sl_mul_u64_u32 s[2:3], s52, s75
+	sl_mull_u32 s5, s52, s5
+	sl_add_i32 s3, s3, s5
+	sl_mull_u32 s5, s53, s75
+	sl_add_i32 s3, s3, s5
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[2:3], s[34:35], s[2:3]
+	ml_mov_v2s_b32 s6, v87, 0x1b
+	ml_mov_v2s_b32 s7, v87, 0x1c
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s23, 0xfff00004
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[2:3], s[2:3], s[6:7]
+	sl_add_i64 s[20:21], s[2:3], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_lsa_blkload_x1 v13, s[20:23], noreg, noreg, #0, ca
+BB0_121:
+	ml_mov_b32 v17, 0x0
+	sl_or_b32 {s16, wcr}, s16, 0x0
+	ml_mov_b32 v19, 0x0
+	sl_cbr_wcrz BB0_123, wcr
+; %bb.122:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s5, wcr}, s74, 0x1f
+	sl_mul_u64_u32 s[2:3], s52, s74
+	sl_mull_u32 s5, s52, s5
+	sl_add_i32 s3, s3, s5
+	sl_mull_u32 s5, s53, s74
+	sl_add_i32 s3, s3, s5
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[2:3], s[34:35], s[2:3]
+	sl_add_i64 s[2:3], s[2:3], s[0:1]
+	sl_add_i64 s[20:21], s[2:3], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s23, 0xfff00004
+	ml_lsa_blkload_x1 v19, s[20:23], noreg, noreg, #0, ca
+BB0_123:
+	sl_or_b32 {s17, wcr}, s17, 0x0
+	sl_cbr_wcrz BB0_125, wcr
+; %bb.124:
+	.loc	1 0 20                          ; candidate.py:0:20
+	ml_mov_v2s_b32 s6, v87, 0x1a
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s19, 0xfff00004
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s5, wcr}, s6, 0x1f
+	sl_mul_u64_u32 s[2:3], s52, s6
+	sl_mull_u32 s5, s52, s5
+	sl_add_i32 s3, s3, s5
+	sl_mull_u32 s5, s53, s6
+	sl_add_i32 s3, s3, s5
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[2:3], s[34:35], s[2:3]
+	ml_mov_v2s_b32 s6, v87, 0x1d
+	ml_mov_v2s_b32 s7, v87, 0x1e
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[2:3], s[2:3], s[6:7]
+	sl_add_i64 s[16:17], s[2:3], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_lsa_blkload_x1 v17, s[16:19], noreg, noreg, #0, ca
+BB0_125:
+	ml_mov_b32 v21, 0x0
+	ml_mov_v2s_b32 s11, v87, 0x7
+	ml_mov_b32 v23, 0x0
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_127, wcr
+; %bb.126:
+	.loc	1 0 20                          ; candidate.py:0:20
+	ml_mov_v2s_b32 s6, v87, 0x6
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s19, 0xfff00004
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s5, wcr}, s6, 0x1f
+	sl_mul_u64_u32 s[2:3], s52, s6
+	sl_mull_u32 s5, s52, s5
+	sl_add_i32 s3, s3, s5
+	sl_mull_u32 s5, s53, s6
+	sl_add_i32 s3, s3, s5
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[2:3], s[34:35], s[2:3]
+	ml_mov_v2s_b32 s6, v87, 0x1f
+	ml_mov_v2s_b32 s7, v87, 0x20
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[2:3], s[2:3], s[6:7]
+	sl_add_i64 s[16:17], s[2:3], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_lsa_blkload_x1 v23, s[16:19], noreg, noreg, #0, ca
+BB0_127:
+	ml_mov_v2s_b32 s11, v87, 0x8
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_129, wcr
+; %bb.128:
+	.loc	1 0 20                          ; candidate.py:0:20
+	ml_mov_v2s_b32 s6, v87, 0xb
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s19, 0xfff00004
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s5, wcr}, s6, 0x1f
+	sl_mul_u64_u32 s[2:3], s52, s6
+	sl_mull_u32 s5, s52, s5
+	sl_add_i32 s3, s3, s5
+	sl_mull_u32 s5, s53, s6
+	sl_add_i32 s3, s3, s5
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[2:3], s[34:35], s[2:3]
+	ml_mov_v2s_b32 s6, v87, 0x21
+	ml_mov_v2s_b32 s7, v87, 0x22
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[2:3], s[2:3], s[6:7]
+	sl_add_i64 s[16:17], s[2:3], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_lsa_blkload_x1 v21, s[16:19], noreg, noreg, #0, ca
+BB0_129:
+	ml_mov_b32 v38, 0x0
+	sl_or_b32 {s12, wcr}, s12, 0x0
+	ml_mov_b32 v39, 0x0
+	sl_cbr_wcrz BB0_131, wcr
+; %bb.130:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s5, wcr}, s51, 0x1f
+	sl_mul_u64_u32 s[2:3], s52, s51
+	sl_mull_u32 s5, s52, s5
+	sl_add_i32 s3, s3, s5
+	sl_mull_u32 s5, s53, s51
+	sl_add_i32 s3, s3, s5
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[2:3], s[34:35], s[2:3]
+	sl_add_i64 s[2:3], s[2:3], s[0:1]
+	sl_add_i64 s[12:13], s[2:3], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s15, 0xfff00004
+	ml_lsa_blkload_x1 v39, s[12:15], noreg, noreg, #0, ca
+BB0_131:
+	ml_mov_v2s_b32 s11, v87, 0x9
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_133, wcr
+; %bb.132:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s5, wcr}, s49, 0x1f
+	sl_mul_u64_u32 s[2:3], s52, s49
+	sl_mull_u32 s5, s52, s5
+	sl_add_i32 s3, s3, s5
+	sl_mull_u32 s5, s53, s49
+	sl_add_i32 s3, s3, s5
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[2:3], s[34:35], s[2:3]
+	ml_mov_v2s_b32 s6, v87, 0x23
+	ml_mov_v2s_b32 s7, v87, 0x24
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s15, 0xfff00004
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[2:3], s[2:3], s[6:7]
+	sl_add_i64 s[12:13], s[2:3], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_lsa_blkload_x1 v38, s[12:15], noreg, noreg, #0, ca
+BB0_133:
+	ml_mov_b32 v41, 0x0
+	ml_mov_v2s_b32 s11, v87, 0xa
+	ml_mov_b32 v42, 0x0
+	sl_or_b32 {s11, wcr}, s11, 0x0
+	sl_cbr_wcrz BB0_135, wcr
+; %bb.134:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s5, wcr}, s48, 0x1f
+	sl_mul_u64_u32 s[2:3], s52, s48
+	sl_mull_u32 s5, s52, s5
+	sl_add_i32 s3, s3, s5
+	sl_mull_u32 s5, s53, s48
+	sl_add_i32 s3, s3, s5
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[2:3], s[34:35], s[2:3]
+	ml_mov_v2s_b32 s6, v87, 0x25
+	ml_mov_v2s_b32 s7, v87, 0x26
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s15, 0xfff00004
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[2:3], s[2:3], s[6:7]
+	sl_add_i64 s[12:13], s[2:3], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_lsa_blkload_x1 v42, s[12:15], noreg, noreg, #0, ca
+BB0_135:
+	sl_or_b32 {s83, wcr}, s83, 0x0
+	sl_cbr_wcrz BB0_137, wcr
+; %bb.136:
+	.loc	1 0 20                          ; candidate.py:0:20
+	ml_mov_v2s_b32 s6, v87, 0xd
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s15, 0xfff00004
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s5, wcr}, s6, 0x1f
+	sl_mul_u64_u32 s[2:3], s52, s6
+	sl_mull_u32 s5, s52, s5
+	sl_add_i32 s3, s3, s5
+	sl_mull_u32 s5, s53, s6
+	sl_add_i32 s3, s3, s5
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[2:3], s[34:35], s[2:3]
+	ml_mov_v2s_b32 s6, v87, 0x27
+	ml_mov_v2s_b32 s7, v87, 0x28
+	sl_shl_b64 {s[6:7], wcr}, s[6:7], 0x1
+	sl_add_i64 s[2:3], s[2:3], s[6:7]
+	sl_add_i64 s[12:13], s[2:3], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_lsa_blkload_x1 v41, s[12:15], noreg, noreg, #0, ca
+BB0_137:
+	ml_mov_b32 v43, 0x0
+	sl_or_b32 {s4, wcr}, s4, 0x0
+	ml_mov_b32 v44, 0x0
+	sl_cbr_wcrz BB0_139, wcr
+; %bb.138:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s4, wcr}, s57, 0x1f
+	sl_mul_u64_u32 s[2:3], s52, s57
+	sl_mull_u32 s4, s52, s4
+	sl_add_i32 s3, s3, s4
+	sl_mull_u32 s4, s53, s57
+	sl_add_i32 s3, s3, s4
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[2:3], s[34:35], s[2:3]
+	sl_add_i64 s[0:1], s[2:3], s[0:1]
+	sl_add_i64 s[0:1], s[0:1], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s3, 0xfff00004
+	ml_lsa_blkload_x1 v44, s[0:3], noreg, noreg, #0, ca
+BB0_139:
+	sl_or_b32 {s82, wcr}, s82, 0x0
+	sl_cbr_wcrz BB0_141, wcr
+; %bb.140:
+	.loc	1 0 0                           ; candidate.py:0
+	sl_sra_b32 {s2, wcr}, s56, 0x1f
+	sl_mul_u64_u32 s[0:1], s52, s56
+	sl_mull_u32 s2, s52, s2
+	sl_add_i32 s1, s1, s2
+	sl_mull_u32 s2, s53, s56
+	sl_add_i32 s1, s1, s2
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	sl_add_i64 s[0:1], s[34:35], s[0:1]
+	ml_mov_v2s_b32 s2, v87, 0x29
+	ml_mov_v2s_b32 s3, v87, 0x2a
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[0:1], s[0:1], s[2:3]
+	sl_add_i64 s[0:1], s[0:1], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s3, 0xfff00004
+	ml_lsa_blkload_x1 v43, s[0:3], noreg, noreg, #0, ca
+BB0_141:
+	ml_mov_b32 v45, 0x0
+	sl_or_b32 {s81, wcr}, s81, 0x0
+	ml_mov_b32 v46, 0x0
+	sl_cbr_wcrz BB0_143, wcr
+; %bb.142:
+	.loc	1 0 20                          ; candidate.py:0:20
+	ml_mov_v2s_b32 s3, v87, 0xc
+	sl_sra_b32 {s2, wcr}, s3, 0x1f
+	sl_mul_u64_u32 s[0:1], s52, s3
+	sl_mull_u32 s2, s52, s2
+	sl_add_i32 s1, s1, s2
+	sl_mull_u32 s2, s53, s3
+	sl_add_i32 s1, s1, s2
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	sl_add_i64 s[0:1], s[34:35], s[0:1]
+	ml_mov_v2s_b32 s2, v87, 0x2b
+	ml_mov_v2s_b32 s3, v87, 0x2c
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[0:1], s[0:1], s[2:3]
+	sl_add_i64 s[0:1], s[0:1], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s3, 0xfff00004
+	ml_lsa_blkload_x1 v46, s[0:3], noreg, noreg, #0, ca
+BB0_143:
+	sl_or_b32 {s80, wcr}, s80, 0x0
+	sl_cbr_wcrz BB0_145, wcr
+; %bb.144:
+	.loc	1 0 20                          ; candidate.py:0:20
+	ml_mov_v2s_b32 s3, v87, 0xe
+	sl_sra_b32 {s2, wcr}, s3, 0x1f
+	sl_mul_u64_u32 s[0:1], s52, s3
+	sl_mull_u32 s2, s52, s2
+	sl_add_i32 s1, s1, s2
+	sl_mull_u32 s2, s53, s3
+	sl_add_i32 s1, s1, s2
+	.loc	1 204 0                         ; candidate.py:204
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	sl_add_i64 s[0:1], s[34:35], s[0:1]
+	ml_mov_v2s_b32 s2, v87, 0x2d
+	ml_mov_v2s_b32 s3, v87, 0x2e
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], 0x1
+	sl_add_i64 s[0:1], s[0:1], s[2:3]
+	sl_add_i64 s[0:1], s[0:1], s[58:59]
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_mov_b32 s3, 0xfff00004
+	ml_lsa_blkload_x1 v45, s[0:3], noreg, noreg, #0, ca
+BB0_145:
+	ml_anyop3_b32 v32, v33, v35, v32, 0xfffffffe
+	ml_mov_v2s_b32 s0, v87, 0x30
+	sl_mov_b32 s1, 0x5000
+	sl_mov_b32 s2, 0x6000
+	sl_mov_b32 s3, 0x7000
+	ml_add_i32 v32, s0, v32
+	sl_mov_b32 s0, 0x4000
+	sl_wait vmcnt(0)
+	ml_slb_store_b16  v11, v32, s0, #0, null
+	ml_srl_b32 v11, v11, 0x10
+	ml_slb_store_b16  v11, v32, s0, #4, null
+	ml_srl_b32 v11, v15, 0x10
+	ml_slb_store_b16  v15, v32, s0, #256, null
+	ml_slb_store_b16  v11, v32, s0, #260, null
+	ml_srl_b32 v11, v19, 0x10
+	ml_slb_store_b16  v19, v32, s1, #0, null
+	ml_slb_store_b16  v11, v32, s1, #4, null
+	ml_srl_b32 v11, v23, 0x10
+	ml_slb_store_b16  v23, v32, s1, #256, null
+	ml_slb_store_b16  v11, v32, s1, #260, null
+	ml_srl_b32 v11, v39, 0x10
+	ml_slb_store_b16  v39, v32, s2, #0, null
+	ml_slb_store_b16  v11, v32, s2, #4, null
+	ml_srl_b32 v11, v42, 0x10
+	ml_slb_store_b16  v42, v32, s2, #256, null
+	ml_slb_store_b16  v11, v32, s2, #260, null
+	ml_srl_b32 v11, v44, 0x10
+	ml_slb_store_b16  v44, v32, s3, #0, null
+	ml_slb_store_b16  v11, v32, s3, #4, null
+	ml_srl_b32 v11, v46, 0x10
+	ml_slb_store_b16  v46, v32, s3, #256, null
+	ml_slb_store_b16  v11, v32, s3, #260, null
+	ml_xor_b32 v11, v32, 0x80
+	ml_slb_store_b16  v9, v11, s0, #0, null
+	ml_srl_b32 v9, v9, 0x10
+	ml_slb_store_b16  v9, v11, s0, #4, null
+	ml_srl_b32 v9, v13, 0x10
+	ml_slb_store_b16  v13, v11, s0, #256, null
+	ml_slb_store_b16  v9, v11, s0, #260, null
+	ml_srl_b32 v9, v17, 0x10
+	ml_slb_store_b16  v17, v11, s1, #0, null
+	ml_slb_store_b16  v9, v11, s1, #4, null
+	ml_srl_b32 v9, v21, 0x10
+	ml_slb_store_b16  v21, v11, s1, #256, null
+	ml_slb_store_b16  v9, v11, s1, #260, null
+	ml_srl_b32 v9, v38, 0x10
+	ml_slb_store_b16  v38, v11, s2, #0, null
+	ml_slb_store_b16  v9, v11, s2, #4, null
+	ml_srl_b32 v9, v41, 0x10
+	ml_slb_store_b16  v41, v11, s2, #256, null
+	ml_slb_store_b16  v9, v11, s2, #260, null
+	ml_srl_b32 v9, v43, 0x10
+	ml_slb_store_b16  v43, v11, s3, #0, null
+	ml_slb_store_b16  v9, v11, s3, #4, null
+	.loc	1 188 36 is_stmt 1              ; candidate.py:188:36
+	ml_add_i32 v9, s18, v40
+	.loc	1 188 48 is_stmt 0              ; candidate.py:188:48
+	ml_cmp_gt_i32 tcr, s14, v9
+	.loc	1 204 20 is_stmt 1              ; candidate.py:204:20
+	ml_srl_b32 v9, v45, 0x10
+	ml_slb_store_b16  v45, v11, s3, #256, null
+	ml_slb_store_b16  v9, v11, s3, #260, null
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_wait lmcnt(0)
+	sl_barrier 
+	sl_mov_b32 s0, 0x3300
+	.loc	1 146 16                        ; candidate.py:146:16
+	ml_shl_b32 v9, tid, 0x2
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_anyop3_b32 v9, v9, v34, s0, 0xffffffea
+	ml_slb_load_b32x1  v38, v9, noreg, #0, null
+	ml_xor_b32 v43, v9, 0x10
+	.loc	1 206 27                        ; candidate.py:206:27
+	ml_mov_b32 v17, v16
+	ml_mov_b32 v32, 0x0
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_slb_load_b32x1  v39, v43, noreg, #0, null
+	.loc	1 206 27                        ; candidate.py:206:27
+	ml_mov_b32 v33, 0x0
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_xor_b32 v44, v9, 0x20
+	.loc	1 206 27                        ; candidate.py:206:27
+	ml_mov_b32 v34, 0x0
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_slb_load_b32x1  v41, v44, noreg, #0, null
+	.loc	1 206 27                        ; candidate.py:206:27
+	ml_mov_b32 v35, 0x0
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_xor_b32 v45, v9, 0x30
+	sl_mov_b32 s0, 0x400
+	ml_slb_load_b32x1  v42, v45, noreg, #0, null
+	.loc	1 206 27                        ; candidate.py:206:27
+	ml_mov_b32 v23, v22
+	ml_mov_b32 v13, v12
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s1, 0x800
+	ml_slb_load_b32x1  v15, v9, s0, #0, null
+	.loc	1 206 27                        ; candidate.py:206:27
+	ml_mov_b32 v21, v20
+	ml_mov_b32 v11, v10
+	.loc	1 203 20                        ; candidate.py:203:20
+	sl_mov_b32 s2, 0xc00
+	.loc	1 206 27                        ; candidate.py:206:27
+	ml_mov_b32 v19, v18
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[16:17], v[38:39], v[32:35]
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_slb_load_b32x1  v16, v43, s0, #0, null
+	.loc	1 206 27                        ; candidate.py:206:27
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[22:23], v[41:42], v[32:35]
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_slb_load_b32x1  v22, v44, s0, #0, null
+	ml_slb_load_b32x1  v23, v45, s0, #0, null
+	.loc	1 206 27                        ; candidate.py:206:27
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[12:13], v[15:16], v[32:35]
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_slb_load_b32x1  v12, v9, s1, #0, null
+	ml_slb_load_b32x1  v13, v43, s1, #0, null
+	ml_slb_load_b32x1  v15, v44, s1, #0, null
+	ml_slb_load_b32x1  v16, v45, s1, #0, null
+	.loc	1 206 27                        ; candidate.py:206:27
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[20:21], v[22:23], v[32:35]
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[10:11], v[12:13], v[32:35]
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_slb_load_b32x1  v10, v9, s2, #0, null
+	ml_slb_load_b32x1  v11, v43, s2, #0, null
+	.loc	1 206 27                        ; candidate.py:206:27
+	ml_mov_b32 v9, v8
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_slb_load_b32x1  v12, v44, s2, #0, null
+	.loc	1 206 27                        ; candidate.py:206:27
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[18:19], v[15:16], v[32:35]
+	.loc	1 203 20                        ; candidate.py:203:20
+	ml_slb_load_b32x1  v13, v45, s2, #0, null
+	.loc	1 206 27                        ; candidate.py:206:27
+	ml_mov_b32 v15, v14
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[8:9], v[10:11], v[32:35]
+	ml_mov_b32 v11, 0xff800000
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[32:35], v[14:15], v[12:13], v[32:35]
+	.loc	1 206 32 is_stmt 0              ; candidate.py:206:32
+	ml_mul_f32 v8, s40, v32
+	ml_mul_f32 v10, s40, v33
+	.loc	1 207 57 is_stmt 1              ; candidate.py:207:57
+	ml_csel_b32 v9, v8, v11, tcr
+	ml_csel_b32 v10, v10, v11, tcr
+.Ltmp43:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	sl_barrier 
+	ml_xor_b32 v8, tid, 0x8
+	ml_slb_shuffle_rtn_b32 v11, v9, v8
+	ml_xor_b32 v12, tid, 0x4
+	ml_xor_b32 v14, tid, 0x2
+	ml_xor_b32 v15, tid, 0x1
+	ml_slb_shuffle_rtn_b32 v8, v10, v8
+.Ltmp44:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:208:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v11, v9, v11
+.Ltmp45:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_slb_shuffle_rtn_b32 v13, v11, v12
+.Ltmp46:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:208:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v8, v10, v8
+.Ltmp47:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_slb_shuffle_rtn_b32 v12, v8, v12
+.Ltmp48:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:208:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v11, v11, v13
+.Ltmp49:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_slb_shuffle_rtn_b32 v13, v11, v14
+.Ltmp50:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:208:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v8, v8, v12
+.Ltmp51:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_slb_shuffle_rtn_b32 v14, v8, v14
+.Ltmp52:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:208:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v12, v11, v13
+.Ltmp53:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_slb_shuffle_rtn_b32 v13, v12, v15
+.Ltmp54:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:208:57 ] ]
+	sl_wait lmcnt(1)
+	ml_max_f32 v8, v8, v14
+.Ltmp55:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_slb_shuffle_rtn_b32 v11, v8, v15
+.Ltmp56:
+	.loc	1 134 29                        ; candidate.py:134:29
+	ml_and_b32 v14, tid, 0xf
+.Ltmp57:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_cmp_eq_u32 tcr, v14, 0x0
+	sl_mov_b64 s[2:3], tcr
+	ml_cmp_ne_u32 tcr, v14, 0x0
+	sl_and_savetmsk_b64 {s[0:1], wcr}, tcr, tmsk
+	sl_xor_b64 {s[0:1], wcr}, tmsk, s[0:1]
+	; mask branch BB0_147
+BB0_146:
+                                        ; implicit-def: $vgpr8
+	.loc	2 0 40 is_stmt 0                ; standard.py:0:40
+	sl_wait lmcnt(0)
+                                        ; implicit-def: $vgpr11
+                                        ; implicit-def: $vgpr12
+                                        ; implicit-def: $vgpr13
+BB0_147:                                ; %Flow347
+	sl_or_savetmsk_b64 {s[0:1], wcr}, s[0:1], tmsk
+	sl_xor_savetmsk_b64 {s[4:5], wcr}, s[0:1], tmsk
+	; mask branch BB0_149
+BB0_148:
+.Ltmp58:
+	.loc	2 192 27 is_stmt 1              ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:208:57 ] ]
+	ml_max_f32 v12, v12, v13
+.Ltmp59:
+	.loc	1 132 28                        ; candidate.py:132:28
+	ml_and_b32 v13, tid, 0x30
+.Ltmp60:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_slb_store_b32x1  v12, v13, s62, #0, null
+.Ltmp61:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:208:57 ] ]
+	ml_max_f32 v8, v8, v11
+.Ltmp62:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_slb_store_b32x1  v8, v13, s62, #64, null
+BB0_149:
+	.loc	2 0 40 is_stmt 0                ; standard.py:0:40
+	sl_or_b64 {tmsk, wcr}, tmsk, s[0:1]
+	.loc	2 213 40 is_stmt 1              ; standard.py:213:40 @[ candidate.py:208:57 ]
+	sl_wait lmcnt(0)
+	sl_barrier 
+	ml_cmp_lt_u32 tcr, v27, 0x20
+.Ltmp63:
+	.loc	1 208 57                        ; candidate.py:208:57
+	ml_mov_b32 v8, 0x0
+.Ltmp64:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	sl_mov_b64 s[4:5], tcr
+	sl_and_savetmsk_b64 {s[0:1], wcr}, tcr, tmsk
+	; mask branch BB0_151
+BB0_150:
+	ml_slb_load_b32x1  v8, v31, noreg, #0, null
+BB0_151:
+	.loc	2 0 40 is_stmt 0                ; standard.py:0:40
+	sl_or_b64 {tmsk, wcr}, tmsk, s[0:1]
+	ml_xor_b32 v11, tid, 0x2
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	sl_wait lmcnt(0)
+	ml_slb_shuffle_rtn_b32 v11, v8, v11
+	ml_and_b32 v12, tid, 0x3
+	ml_cmp_eq_u32 tcr, v12, 0x0
+	sl_and_b64 {s[0:1], wcr}, s[4:5], tcr
+.Ltmp65:
+	.loc	2 192 27 is_stmt 1              ; standard.py:192:27 @[ standard.py:213:40 @[ candidate.py:208:57 ] ]
+	sl_wait lmcnt(0)
+	ml_max_f32 v8, v8, v11
+	ml_xor_b32 v11, tid, 0x1
+.Ltmp66:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_slb_shuffle_rtn_b32 v11, v8, v11
+	sl_and_savetmsk_b64 {s[6:7], wcr}, s[0:1], tmsk
+	; mask branch BB0_153
+BB0_152:
+	.loc	2 0 40 is_stmt 0                ; standard.py:0:40
+	sl_wait lmcnt(0)
+	ml_max_f32 v8, v8, v11
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_slb_store_b32x1  v8, v31, noreg, #0, null
+BB0_153:
+	.loc	2 0 40                          ; standard.py:0:40
+	sl_or_b64 {tmsk, wcr}, tmsk, s[6:7]
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	sl_wait lmcnt(0)
+	sl_barrier 
+.Ltmp67:
+	.loc	1 132 28 is_stmt 1              ; candidate.py:132:28
+	ml_and_b32 v8, tid, 0x30
+.Ltmp68:
+	.loc	2 213 40                        ; standard.py:213:40 @[ candidate.py:208:57 ]
+	ml_slb_load_b32x1  v11, v8, noreg, #0, null
+	ml_slb_load_b32x1  v12, v8, noreg, #64, null
+.Ltmp69:
+	.loc	1 208 42                        ; candidate.py:208:42
+	sl_wait lmcnt(1)
+	ml_max_f32 v8, v36, v11
+	.loc	1 209 44                        ; candidate.py:209:44
+	ml_sub_f32 v9, v9, v8
+	.loc	1 209 35 is_stmt 0              ; candidate.py:209:35
+	ml_exp_f32 v11, v9
+	.loc	1 208 42 is_stmt 1              ; candidate.py:208:42
+	sl_wait lmcnt(0)
+	ml_max_f32 v9, v37, v12
+	.loc	1 209 44                        ; candidate.py:209:44
+	ml_sub_f32 v10, v10, v9
+	.loc	1 209 35 is_stmt 0              ; candidate.py:209:35
+	ml_exp_f32 v10, v10
+.Ltmp70:
+	.loc	2 315 36 is_stmt 1              ; standard.py:315:36 @[ candidate.py:211:66 ]
+	sl_barrier 
+	ml_xor_b32 v12, tid, 0x8
+	ml_slb_shuffle_rtn_b32 v13, v11, v12
+	ml_xor_b32 v14, tid, 0x4
+	ml_xor_b32 v16, tid, 0x2
+	ml_xor_b32 v17, tid, 0x1
+	ml_slb_shuffle_rtn_b32 v12, v10, v12
+.Ltmp71:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:211:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v13, v11, v13
+.Ltmp72:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	ml_slb_shuffle_rtn_b32 v15, v13, v14
+.Ltmp73:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:211:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v12, v10, v12
+.Ltmp74:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	ml_slb_shuffle_rtn_b32 v14, v12, v14
+.Ltmp75:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:211:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v13, v13, v15
+.Ltmp76:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	ml_slb_shuffle_rtn_b32 v15, v13, v16
+.Ltmp77:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:211:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v12, v12, v14
+.Ltmp78:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	ml_slb_shuffle_rtn_b32 v16, v12, v16
+.Ltmp79:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:211:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v14, v13, v15
+.Ltmp80:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	ml_slb_shuffle_rtn_b32 v15, v14, v17
+.Ltmp81:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:211:66 ] ]
+	sl_wait lmcnt(1)
+	ml_add_f32 v12, v12, v16
+.Ltmp82:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	ml_slb_shuffle_rtn_b32 v13, v12, v17
+	sl_and_savetmsk_b64 {s[6:7], wcr}, s[2:3], tmsk
+	; mask branch BB0_155
+.Ltmp83:
+BB0_154:
+	.loc	2 0 36 is_stmt 0                ; standard.py:0:36
+	sl_wait lmcnt(1)
+	ml_add_f32 v14, v14, v15
+	.loc	1 132 28 is_stmt 1              ; candidate.py:132:28
+	ml_and_b32 v15, tid, 0x30
+.Ltmp84:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	ml_slb_store_b32x1  v14, v15, s62, #0, null
+	sl_wait lmcnt(1)
+	ml_add_f32 v12, v12, v13
+	ml_slb_store_b32x1  v12, v15, s62, #64, null
+BB0_155:                                ; %.critedge2
+	.loc	2 0 36 is_stmt 0                ; standard.py:0:36
+	sl_or_b64 {tmsk, wcr}, tmsk, s[6:7]
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	sl_wait lmcnt(0)
+	sl_barrier 
+.Ltmp85:
+	.loc	1 211 66 is_stmt 1              ; candidate.py:211:66
+	ml_mov_b32 v12, 0x0
+.Ltmp86:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	sl_and_savetmsk_b64 {s[2:3], wcr}, s[4:5], tmsk
+	; mask branch BB0_157
+BB0_156:
+	ml_slb_load_b32x1  v12, v31, noreg, #0, null
+BB0_157:
+	.loc	2 0 36 is_stmt 0                ; standard.py:0:36
+	sl_or_b64 {tmsk, wcr}, tmsk, s[2:3]
+	ml_xor_b32 v13, tid, 0x2
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	sl_wait lmcnt(0)
+	ml_slb_shuffle_rtn_b32 v13, v12, v13
+.Ltmp87:
+	.loc	2 285 15 is_stmt 1              ; standard.py:285:15 @[ standard.py:315:36 @[ candidate.py:211:66 ] ]
+	sl_wait lmcnt(0)
+	ml_add_f32 v12, v12, v13
+	ml_xor_b32 v13, tid, 0x1
+.Ltmp88:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	ml_slb_shuffle_rtn_b32 v13, v12, v13
+	sl_and_savetmsk_b64 {s[2:3], wcr}, s[0:1], tmsk
+	; mask branch BB0_159
+BB0_158:
+	.loc	2 0 36 is_stmt 0                ; standard.py:0:36
+	sl_wait lmcnt(0)
+	ml_add_f32 v12, v12, v13
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	ml_slb_store_b32x1  v12, v31, noreg, #0, null
+.Ltmp89:
+BB0_159:
+	.loc	2 0 36                          ; standard.py:0:36
+	sl_or_b64 {tmsk, wcr}, tmsk, s[2:3]
+	.loc	1 210 45 is_stmt 1              ; candidate.py:210:45
+	ml_sub_f32 v12, v36, v8
+	ml_sub_f32 v13, v37, v9
+	.loc	1 210 31 is_stmt 0              ; candidate.py:210:31
+	ml_exp_f32 v12, v12
+	ml_exp_f32 v13, v13
+.Ltmp90:
+	.loc	2 315 36 is_stmt 1              ; standard.py:315:36 @[ candidate.py:211:66 ]
+	sl_wait lmcnt(0)
+	sl_barrier 
+.Ltmp91:
+	.loc	1 132 28                        ; candidate.py:132:28
+	ml_and_b32 v14, tid, 0x30
+.Ltmp92:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	ml_slb_load_b32x1  v15, v14, noreg, #0, null
+.Ltmp93:
+	.loc	1 212 36                        ; candidate.py:212:36
+	ml_mul_f32 v0, v0, v12
+	ml_mul_f32 v1, v1, v13
+	ml_mul_f32 v2, v2, v12
+.Ltmp94:
+	.loc	2 315 36                        ; standard.py:315:36 @[ candidate.py:211:66 ]
+	ml_slb_load_b32x1  v14, v14, noreg, #64, null
+.Ltmp95:
+	.loc	1 212 36                        ; candidate.py:212:36
+	ml_mul_f32 v3, v3, v13
+	ml_mul_f32 v4, v4, v12
+	ml_mul_f32 v5, v5, v13
+	ml_mul_f32 v6, v6, v12
+	ml_mul_f32 v7, v7, v13
+	.loc	1 213 27                        ; candidate.py:213:27
+	ml_cvt_bf16_f32  v11, v11
+	ml_cvt_bf16_f32  v10, v10
+	.loc	1 211 46                        ; candidate.py:211:46
+	sl_wait lmcnt(1)
+	ml_fma_f32 v25, v25, v12, v15
+	sl_wait lmcnt(0)
+	ml_fma_f32 v26, v26, v13, v14
+	.loc	1 213 27                        ; candidate.py:213:27
+	sl_barrier 
+	ml_mov_v2s_b32 s0, v87, 0x2f
+	ml_mov_v2s_b32 s1, v87, 0x31
+	sl_add_i32 s0, s1, s0
+	ml_slb_store_b16  v11, v30, s0, #0, null
+	ml_slb_store_b16  v10, v30, s0, #512, null
+	sl_wait lmcnt(0)
+	sl_barrier 
+	ml_slb_load_b32x1  v16, v29, noreg, #0, null
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_add_i32 s0, s94, 0x4000
+	sl_add_i32 s1, s94, 0x5000
+	sl_add_i32 s2, s94, 0x6000
+	.loc	1 213 27                        ; candidate.py:213:27
+	ml_slb_load_b32x1  v17, v29, noreg, #256, null
+	ml_mov_b32 v36, v8
+	ml_mov_b32 v37, v9
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_slb_load_b32x1  v10, v28, s0, #0, null
+	ml_slb_load_b32x1  v11, v28, s0, #256, null
+	sl_add_i32 s0, s94, 0x4800
+	ml_slb_load_b32x1  v12, v28, s0, #0, null
+	ml_slb_load_b32x1  v13, v28, s0, #256, null
+	.loc	1 213 37                        ; candidate.py:213:37
+	sl_mov_b32 s0, 0x1000504
+	sl_wait lmcnt(4)
+	ml_byte_permute_b32 v14, v17, v16, s0
+	ml_mov_b32 v15, v14
+	.loc	1 213 27 is_stmt 0              ; candidate.py:213:27
+	ml_slb_load_b32x1  v18, v29, noreg, #128, null
+	.loc	1 213 37                        ; candidate.py:213:37
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[14:15], v[10:11], v[0:3]
+	.loc	1 204 20 is_stmt 1              ; candidate.py:204:20
+	ml_slb_load_b32x1  v10, v28, s1, #0, null
+	ml_slb_load_b32x1  v11, v28, s1, #256, null
+	sl_add_i32 s1, s94, 0x5800
+	.loc	1 213 37                        ; candidate.py:213:37
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[14:15], v[12:13], v[4:7]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_slb_load_b32x1  v12, v28, s1, #0, null
+	ml_slb_load_b32x1  v13, v28, s1, #256, null
+	.loc	1 213 37                        ; candidate.py:213:37
+	sl_mov_b32 s1, 0x3020706
+	ml_byte_permute_b32 v14, v17, v16, s1
+	ml_mov_b32 v15, v14
+	.loc	1 213 27 is_stmt 0              ; candidate.py:213:27
+	ml_slb_load_b32x1  v16, v29, noreg, #384, null
+	.loc	1 213 37                        ; candidate.py:213:37
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[14:15], v[10:11], v[0:3]
+	.loc	1 204 20 is_stmt 1              ; candidate.py:204:20
+	ml_slb_load_b32x1  v10, v28, s2, #0, null
+	ml_slb_load_b32x1  v11, v28, s2, #256, null
+	sl_add_i32 s2, s94, 0x6800
+	.loc	1 213 37                        ; candidate.py:213:37
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[14:15], v[12:13], v[4:7]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_slb_load_b32x1  v12, v28, s2, #0, null
+	ml_slb_load_b32x1  v13, v28, s2, #256, null
+	.loc	1 213 37                        ; candidate.py:213:37
+	sl_wait lmcnt(4)
+	ml_byte_permute_b32 v14, v16, v18, s0
+	ml_mov_b32 v15, v14
+	.loc	1 204 20                        ; candidate.py:204:20
+	sl_add_i32 s0, s94, 0x7000
+	.loc	1 213 37                        ; candidate.py:213:37
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[14:15], v[10:11], v[0:3]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_slb_load_b32x1  v10, v28, s0, #0, null
+	ml_slb_load_b32x1  v11, v28, s0, #256, null
+	sl_add_i32 s0, s94, 0x7800
+	.loc	1 213 37                        ; candidate.py:213:37
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[14:15], v[12:13], v[4:7]
+	.loc	1 204 20                        ; candidate.py:204:20
+	ml_slb_load_b32x1  v12, v28, s0, #0, null
+	ml_slb_load_b32x1  v13, v28, s0, #256, null
+	.loc	1 213 37                        ; candidate.py:213:37
+	ml_byte_permute_b32 v14, v16, v18, s1
+	ml_mov_b32 v15, v14
+	sl_wait lmcnt(2)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[14:15], v[10:11], v[0:3]
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[4:7], v[14:15], v[12:13], v[4:7]
+BB0_160:
+	.loc	1 132 28                        ; candidate.py:132:28
+	sl_wait lmcnt(4)
+	ml_and_b32 v8, tid, 0x30
+	ml_srl_b32 v8, v8, 0x4
+	.loc	1 140 46                        ; candidate.py:140:46
+	ml_mov_v2s_b32 s0, v87, 0x3
+	ml_mov_v2s_b32 s6, v87, 0x4
+	ml_mov_v2s_b32 s7, v87, 0x5
+	.loc	1 223 31                        ; candidate.py:223:31
+	sl_mov_b32 s3, 0x0
+	.loc	1 140 46                        ; candidate.py:140:46
+	ml_add_i32 v8, s0, v8
+	.loc	1 223 31                        ; candidate.py:223:31
+	ml_shl_b32 v10, v8, 0xd
+	sl_shl_b64 {s[0:1], wcr}, s[6:7], 0x11
+	sl_add_i64 s[0:1], s[24:25], s[0:1]
+	ml_mov_v2s_b32 s4, v87, 0x0
+	ml_mov_v2s_b32 s5, v87, 0x1
+	ml_shl_b32 v11, v40, 0x2
+	.loc	1 225 68                        ; candidate.py:225:68
+	sl_mov_b32 s5, s3
+	.loc	1 223 31                        ; candidate.py:223:31
+	sl_mull_u32 s2, s4, 0x200
+	sl_add_i64 s[0:1], s[2:3], s[0:1]
+	ml_addo_u32 {v8, tcr}, s0, v10
+	ml_mov_b32 v9, s1
+	sl_add_i64 s[0:1], s[0:1], 0x8000
+	ml_mov_b32 v12, s1
+	ml_addc_i32 v9, 0, v9, tcr
+	ml_addo_u32 {v8, tcr}, v11, v8
+	.loc	1 231 44                        ; candidate.py:231:44
+	ml_mov_v2s_b32 s2, v87, 0x33
+	sl_mov_b32 s15, 0xffffffff
+	.loc	1 223 31                        ; candidate.py:223:31
+	ml_addc_i32 v9, 0, v9, tcr
+	ml_addo_u32 {v10, tcr}, s0, v10
+	.loc	1 223 47 is_stmt 0              ; candidate.py:223:47
+	ml_lsa_store_a64_dword  v[8:9], v0, kop=0
+	.loc	1 223 31                        ; candidate.py:223:31
+	sl_mov_b32 s0, 0x100
+	ml_addc_i32 v12, 0, v12, tcr
+	ml_addo_u32 {v10, tcr}, v11, v10
+	ml_addc_i32 v11, 0, v12, tcr
+	.loc	1 223 47                        ; candidate.py:223:47
+	ml_lsa_store_a64_dword  v[10:11], v1, kop=0
+	.loc	1 223 31                        ; candidate.py:223:31
+	ml_addo_u32 {v0, tcr}, s0, v8
+	.loc	1 223 47                        ; candidate.py:223:47
+	ml_lsa_store_a64_dword  v[8:9], v2, kop=0
+	.loc	1 223 31                        ; candidate.py:223:31
+	ml_addc_i32 v1, 0, v9, tcr
+	ml_addo_u32 {v2, tcr}, s0, v10
+	.loc	1 225 20 is_stmt 1              ; candidate.py:225:20
+	sl_shl_b64 {s[0:1], wcr}, s[6:7], 0x8
+	.loc	1 223 47                        ; candidate.py:223:47
+	ml_lsa_store_a64_dword  v[10:11], v3, kop=0
+	.loc	1 225 39                        ; candidate.py:225:39
+	sl_add_i64 s[4:5], s[0:1], s[4:5]
+	.loc	1 223 31                        ; candidate.py:223:31
+	ml_addc_i32 v3, 0, v11, tcr
+	.loc	1 231 44                        ; candidate.py:231:44
+	sl_shl_b64 {s[4:5], wcr}, s[4:5], 0x2
+	.loc	1 223 47                        ; candidate.py:223:47
+	ml_lsa_store_a64_dword  v[0:1], v4, kop=0
+	.loc	1 231 44                        ; candidate.py:231:44
+	ml_bfe2_b32 v4, tid, 0x22
+	sl_add_i64 s[12:13], s[26:27], s[4:5]
+	ml_mov_v2s_b32 s6, v87, 0x32
+	.loc	1 223 47                        ; candidate.py:223:47
+	ml_lsa_store_a64_dword  v[2:3], v5, kop=0
+	.loc	1 231 44                        ; candidate.py:231:44
+	sl_mull_u32 s6, s6, 0x200
+	.loc	1 223 47                        ; candidate.py:223:47
+	ml_lsa_store_a64_dword  v[0:1], v6, kop=0
+	.loc	1 231 58                        ; candidate.py:231:58
+	ml_mul_f32 v0, v36, 0x3f317218
+	ml_mul_f32 v1, v37, 0x3f317218
+	.loc	1 223 47                        ; candidate.py:223:47
+	ml_lsa_store_a64_dword  v[2:3], v7, kop=0
+	.loc	1 231 44                        ; candidate.py:231:44
+	ml_and_b32 v2, tid, 0x1
+	ml_cmp_eq_u32 tcr, v2, 0x0
+	ml_csel_b32 v2, v0, v1, tcr
+	ml_csel_b32 v0, v1, v0, tcr
+	ml_shl_b32 v1, v24, 0x4
+	ml_srl_b32 v3, v24, 0x3
+	ml_and_b32 v3, v3, 0x6
+	ml_anyop3_b32 v1, 48, v1, v3, 0xfffffff8
+	.loc	1 146 16                        ; candidate.py:146:16
+	ml_and_b32 v3, tid, 0x8
+	.loc	1 231 44                        ; candidate.py:231:44
+	ml_anyop3_b32 v1, v1, v4, v3, 0xfffffffe
+	ml_slb_shuffle_rtn_b32 v2, v2, v1
+	.loc	1 232 47                        ; candidate.py:232:47
+	ml_csel_b32 v3, v25, v26, tcr
+	ml_csel_b32 v4, v26, v25, tcr
+	.loc	1 231 44                        ; candidate.py:231:44
+	ml_xor_b32 v5, v1, 0x1
+	ml_slb_shuffle_rtn_b32 v6, v0, v5
+	ml_and_b32 v0, tid, 0x4
+	ml_cmp_eq_u32 tcr, v0, 0x0
+	ml_and_b32 v7, tid, 0x38
+	.loc	1 232 47                        ; candidate.py:232:47
+	ml_slb_shuffle_rtn_b32 v0, v3, v1
+	.loc	1 231 44                        ; candidate.py:231:44
+	ml_add_i32 v1, s2, v7
+	sl_mov_b64 s[0:1], tcr
+	ml_cmp_eq_u32 tcr, v1, 0x0
+	.loc	1 232 47                        ; candidate.py:232:47
+	ml_slb_shuffle_rtn_b32 v1, v4, v5
+	.loc	1 132 28                        ; candidate.py:132:28
+	ml_and_b32 v3, tid, 0x7
+	ml_shl_b32 v3, v3, 0x6
+	.loc	1 231 44                        ; candidate.py:231:44
+	sl_mov_b64 s[2:3], tcr
+	sl_mov_b64 tcr, s[0:1]
+	sl_wait lmcnt(2)
+	ml_csel_b32 v4, v2, v6, tcr
+	ml_add_i32 v2, s6, v3
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[2:3], tmsk
+	ml_lsa_store_dword v4, s[12:15], signed v2, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 232 47                        ; candidate.py:232:47
+	sl_and_savetmsk_b64 {s[6:7], wcr}, s[2:3], tmsk
+	sl_xor_b64 {s[2:3], wcr}, tmsk, s[6:7]
+	; mask branch BB0_162
+BB0_161:
+	.loc	1 0 47 is_stmt 0                ; candidate.py:0:47
+	sl_mov_b64 tcr, s[0:1]
+	sl_wait lmcnt(0)
+	ml_csel_b32 v0, v0, v1, tcr
+	.loc	1 232 47                        ; candidate.py:232:47
+	sl_add_i64 s[12:13], s[28:29], s[4:5]
+	ml_lsa_store_dword v0, s[12:15], signed v2, noreg, #0, wb
+BB0_162:                                ; %Flow
+	.loc	1 0 47                          ; candidate.py:0:47
+	sl_or_b64 {tmsk, wcr}, tmsk, s[2:3]
+BB0_163:                                ; %common.ret
+	sl_eop 
+.Ltmp96:
+	.section	.rodata,"a",@progbits
+	.p2align	6, 0x0
+	.globl	_gqa_decode_attention.kd
+	.type	_gqa_decode_attention.kd,@object
+	.size	_gqa_decode_attention.kd, 64
+_gqa_decode_attention.kd:
+	.asciz	"\000\000\000"
+	.long	0
+	.asciz	"\000\000\000\000\000\000\000"
+	.quad	_gqa_decode_attention@rel64-_gqa_decode_attention.kd
+	.asciz	"\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.long	537365
+	.asciz	"\003\000\364\006\211\000\000\000\000\000\000"
+	.text
+.Lfunc_end0:
+	.size	_gqa_decode_attention, .Lfunc_end0-_gqa_decode_attention
+	.cfi_endproc
+                                        ; -- End function
+	.section	.Iluvatar.csdata,"",@progbits
+; Kernel info:
+; codeLenInByte = 17768
+; NumSgprs: 99
+; NumVgprs: 88
+; ScratchSize: 0
+; MemoryBound: 0
+; FloatMode: 12
+; IeeeMode: 1
+; SLBByteSize: 0 bytes/workgroup (compile time only)
+; SGPRBlocks: 12
+; VGPRBlocks: 21
+; NumSGPRsForWarpsPerNU: 95
+; NumVGPRsForWarpsPerNR: 88
+; ReqNTIDx: 0
+; MaxNTIDx: 0
+; MinCTASm: 0
+; ActiveWarp: 2
+; WarpLimiterHint : 0
+	.section	.debug_abbrev,"",@progbits
+	.byte	1                               ; Abbreviation Code
+	.byte	17                              ; DW_TAG_compile_unit
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	37                              ; DW_AT_producer
+	.byte	8                               ; DW_FORM_string
+	.byte	19                              ; DW_AT_language
+	.byte	5                               ; DW_FORM_data2
+	.byte	3                               ; DW_AT_name
+	.byte	8                               ; DW_FORM_string
+	.byte	16                              ; DW_AT_stmt_list
+	.byte	6                               ; DW_FORM_data4
+	.byte	27                              ; DW_AT_comp_dir
+	.byte	8                               ; DW_FORM_string
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	2                               ; Abbreviation Code
+	.byte	46                              ; DW_TAG_subprogram
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	3                               ; DW_AT_name
+	.byte	8                               ; DW_FORM_string
+	.byte	32                              ; DW_AT_inline
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	3                               ; Abbreviation Code
+	.byte	46                              ; DW_TAG_subprogram
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	4                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	11                              ; DW_FORM_data1
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	5                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	11                              ; DW_FORM_data1
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	6                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	5                               ; DW_FORM_data2
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	7                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	11                              ; DW_FORM_data1
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	0                               ; EOM(3)
+	.section	.debug_info,"",@progbits
+	.long	336                             ; Length of Unit
+	.short	2                               ; DWARF version number
+	.long	.debug_abbrev                   ; Offset Into Abbrev. Section
+	.byte	8                               ; Address Size (in bytes)
+	.byte	1                               ; Abbrev [1] 0xb:0x149 DW_TAG_compile_unit
+	.ascii	"triton"                        ; DW_AT_producer
+	.byte	0
+	.short	2                               ; DW_AT_language
+	.ascii	"candidate.py"                  ; DW_AT_name
+	.byte	0
+	.long	.debug_line                     ; DW_AT_stmt_list
+	.ascii	"/workspace/experiments/minicpm-s2/framework/20261025T152940014266Z-gqa-four-page-t64-w4-hotspot-component/source" ; DW_AT_comp_dir
+	.byte	0
+	.quad	.Lfunc_begin0                   ; DW_AT_low_pc
+	.quad	.Lfunc_end0                     ; DW_AT_high_pc
+	.byte	2                               ; Abbrev [2] 0xa7:0x18 DW_TAG_subprogram
+	.ascii	"_gqa_decode_attention"         ; DW_AT_name
+	.byte	0
+	.byte	1                               ; DW_AT_inline
+	.byte	3                               ; Abbrev [3] 0xbf:0x94 DW_TAG_subprogram
+	.quad	.Lfunc_begin0                   ; DW_AT_low_pc
+	.quad	.Lfunc_end0                     ; DW_AT_high_pc
+	.long	167                             ; DW_AT_abstract_origin
+	.byte	4                               ; Abbrev [4] 0xd4:0x18 DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.quad	.Ltmp1                          ; DW_AT_low_pc
+	.quad	.Ltmp2                          ; DW_AT_high_pc
+	.byte	1                               ; DW_AT_call_file
+	.byte	126                             ; DW_AT_call_line
+	.byte	41                              ; DW_AT_call_column
+	.byte	5                               ; Abbrev [5] 0xec:0x1a DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges0                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.byte	179                             ; DW_AT_call_line
+	.byte	66                              ; DW_AT_call_column
+	.byte	6                               ; Abbrev [6] 0xf8:0xd DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges1                 ; DW_AT_ranges
+	.byte	2                               ; DW_AT_call_file
+	.short	315                             ; DW_AT_call_line
+	.byte	36                              ; DW_AT_call_column
+	.byte	0                               ; End Of Children Mark
+	.byte	5                               ; Abbrev [5] 0x106:0x19 DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges2                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.byte	176                             ; DW_AT_call_line
+	.byte	57                              ; DW_AT_call_column
+	.byte	7                               ; Abbrev [7] 0x112:0xc DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges3                 ; DW_AT_ranges
+	.byte	2                               ; DW_AT_call_file
+	.byte	213                             ; DW_AT_call_line
+	.byte	40                              ; DW_AT_call_column
+	.byte	0                               ; End Of Children Mark
+	.byte	5                               ; Abbrev [5] 0x11f:0x19 DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges4                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.byte	208                             ; DW_AT_call_line
+	.byte	57                              ; DW_AT_call_column
+	.byte	7                               ; Abbrev [7] 0x12b:0xc DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges5                 ; DW_AT_ranges
+	.byte	2                               ; DW_AT_call_file
+	.byte	213                             ; DW_AT_call_line
+	.byte	40                              ; DW_AT_call_column
+	.byte	0                               ; End Of Children Mark
+	.byte	5                               ; Abbrev [5] 0x138:0x1a DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges6                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.byte	211                             ; DW_AT_call_line
+	.byte	66                              ; DW_AT_call_column
+	.byte	6                               ; Abbrev [6] 0x144:0xd DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges7                 ; DW_AT_ranges
+	.byte	2                               ; DW_AT_call_file
+	.short	315                             ; DW_AT_call_line
+	.byte	36                              ; DW_AT_call_column
+	.byte	0                               ; End Of Children Mark
+	.byte	0                               ; End Of Children Mark
+	.byte	0                               ; End Of Children Mark
+	.section	.debug_ranges,"",@progbits
+.Ldebug_ranges0:
+	.quad	.Ltmp3-.Lfunc_begin0
+	.quad	.Ltmp4-.Lfunc_begin0
+	.quad	.Ltmp5-.Lfunc_begin0
+	.quad	.Ltmp6-.Lfunc_begin0
+	.quad	.Ltmp25-.Lfunc_begin0
+	.quad	.Ltmp38-.Lfunc_begin0
+	.quad	.Ltmp39-.Lfunc_begin0
+	.quad	.Ltmp42-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges1:
+	.quad	.Ltmp26-.Lfunc_begin0
+	.quad	.Ltmp27-.Lfunc_begin0
+	.quad	.Ltmp28-.Lfunc_begin0
+	.quad	.Ltmp29-.Lfunc_begin0
+	.quad	.Ltmp30-.Lfunc_begin0
+	.quad	.Ltmp31-.Lfunc_begin0
+	.quad	.Ltmp32-.Lfunc_begin0
+	.quad	.Ltmp33-.Lfunc_begin0
+	.quad	.Ltmp34-.Lfunc_begin0
+	.quad	.Ltmp35-.Lfunc_begin0
+	.quad	.Ltmp36-.Lfunc_begin0
+	.quad	.Ltmp37-.Lfunc_begin0
+	.quad	.Ltmp40-.Lfunc_begin0
+	.quad	.Ltmp41-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges2:
+	.quad	.Ltmp7-.Lfunc_begin0
+	.quad	.Ltmp20-.Lfunc_begin0
+	.quad	.Ltmp21-.Lfunc_begin0
+	.quad	.Ltmp24-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges3:
+	.quad	.Ltmp8-.Lfunc_begin0
+	.quad	.Ltmp9-.Lfunc_begin0
+	.quad	.Ltmp10-.Lfunc_begin0
+	.quad	.Ltmp11-.Lfunc_begin0
+	.quad	.Ltmp12-.Lfunc_begin0
+	.quad	.Ltmp13-.Lfunc_begin0
+	.quad	.Ltmp14-.Lfunc_begin0
+	.quad	.Ltmp15-.Lfunc_begin0
+	.quad	.Ltmp16-.Lfunc_begin0
+	.quad	.Ltmp17-.Lfunc_begin0
+	.quad	.Ltmp18-.Lfunc_begin0
+	.quad	.Ltmp19-.Lfunc_begin0
+	.quad	.Ltmp22-.Lfunc_begin0
+	.quad	.Ltmp23-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges4:
+	.quad	.Ltmp43-.Lfunc_begin0
+	.quad	.Ltmp56-.Lfunc_begin0
+	.quad	.Ltmp57-.Lfunc_begin0
+	.quad	.Ltmp59-.Lfunc_begin0
+	.quad	.Ltmp60-.Lfunc_begin0
+	.quad	.Ltmp63-.Lfunc_begin0
+	.quad	.Ltmp64-.Lfunc_begin0
+	.quad	.Ltmp67-.Lfunc_begin0
+	.quad	.Ltmp68-.Lfunc_begin0
+	.quad	.Ltmp69-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges5:
+	.quad	.Ltmp44-.Lfunc_begin0
+	.quad	.Ltmp45-.Lfunc_begin0
+	.quad	.Ltmp46-.Lfunc_begin0
+	.quad	.Ltmp47-.Lfunc_begin0
+	.quad	.Ltmp48-.Lfunc_begin0
+	.quad	.Ltmp49-.Lfunc_begin0
+	.quad	.Ltmp50-.Lfunc_begin0
+	.quad	.Ltmp51-.Lfunc_begin0
+	.quad	.Ltmp52-.Lfunc_begin0
+	.quad	.Ltmp53-.Lfunc_begin0
+	.quad	.Ltmp54-.Lfunc_begin0
+	.quad	.Ltmp55-.Lfunc_begin0
+	.quad	.Ltmp58-.Lfunc_begin0
+	.quad	.Ltmp59-.Lfunc_begin0
+	.quad	.Ltmp61-.Lfunc_begin0
+	.quad	.Ltmp62-.Lfunc_begin0
+	.quad	.Ltmp65-.Lfunc_begin0
+	.quad	.Ltmp66-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges6:
+	.quad	.Ltmp70-.Lfunc_begin0
+	.quad	.Ltmp83-.Lfunc_begin0
+	.quad	.Ltmp84-.Lfunc_begin0
+	.quad	.Ltmp85-.Lfunc_begin0
+	.quad	.Ltmp86-.Lfunc_begin0
+	.quad	.Ltmp89-.Lfunc_begin0
+	.quad	.Ltmp90-.Lfunc_begin0
+	.quad	.Ltmp91-.Lfunc_begin0
+	.quad	.Ltmp92-.Lfunc_begin0
+	.quad	.Ltmp93-.Lfunc_begin0
+	.quad	.Ltmp94-.Lfunc_begin0
+	.quad	.Ltmp95-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges7:
+	.quad	.Ltmp71-.Lfunc_begin0
+	.quad	.Ltmp72-.Lfunc_begin0
+	.quad	.Ltmp73-.Lfunc_begin0
+	.quad	.Ltmp74-.Lfunc_begin0
+	.quad	.Ltmp75-.Lfunc_begin0
+	.quad	.Ltmp76-.Lfunc_begin0
+	.quad	.Ltmp77-.Lfunc_begin0
+	.quad	.Ltmp78-.Lfunc_begin0
+	.quad	.Ltmp79-.Lfunc_begin0
+	.quad	.Ltmp80-.Lfunc_begin0
+	.quad	.Ltmp81-.Lfunc_begin0
+	.quad	.Ltmp82-.Lfunc_begin0
+	.quad	.Ltmp87-.Lfunc_begin0
+	.quad	.Ltmp88-.Lfunc_begin0
+	.quad	0
+	.quad	0
+	.section	".note.GNU-stack","",@progbits
+	.iluvatar_isa "bi-iluvatar-ilurt--ivcore-1-1-0"
+	.iluvatar_hsa_metadata
+---
+iluvatar.kernels:
+  - .args:
+      - .address_space:  global
+        .name:           KArg_0
+        .offset:         0
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_1
+        .offset:         8
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_2
+        .offset:         16
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_3
+        .offset:         24
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_4
+        .offset:         32
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_5
+        .offset:         40
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_6
+        .offset:         48
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_7
+        .offset:         56
+        .size:           8
+        .value_kind:     global_buffer
+      - .name:           KArg_8
+        .offset:         64
+        .size:           4
+        .value_kind:     by_value
+      - .name:           KArg_9
+        .offset:         72
+        .size:           8
+        .value_kind:     by_value
+      - .name:           KArg_10
+        .offset:         80
+        .size:           8
+        .value_kind:     by_value
+      - .name:           KArg_11
+        .offset:         88
+        .size:           8
+        .value_kind:     by_value
+      - .name:           KArg_12
+        .offset:         96
+        .size:           8
+        .value_kind:     by_value
+      - .name:           KArg_13
+        .offset:         104
+        .size:           8
+        .value_kind:     by_value
+      - .name:           KArg_14
+        .offset:         112
+        .size:           8
+        .value_kind:     by_value
+      - .name:           KArg_15
+        .offset:         120
+        .size:           8
+        .value_kind:     by_value
+      - .address_space:  global
+        .name:           KArg_16
+        .offset:         128
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_17
+        .offset:         136
+        .size:           8
+        .value_kind:     global_buffer
+    .group_segment_fixed_size: 0
+    .kernarg_segment_align: 8
+    .kernarg_segment_size: 144
+    .max_flat_workgroup_size: 0
+    .name:           _gqa_decode_attention
+    .private_segment_fixed_size: 0
+    .sgpr_count:     99
+    .sgpr_spill_count: 68
+    .symbol:         _gqa_decode_attention.kd
+    .vgpr_count:     88
+    .vgpr_spill_count: 0
+    .warp_size:      64
+iluvatar.version:
+  - 1
+  - 0
+...
+
+	.end_iluvatar_hsa_metadata

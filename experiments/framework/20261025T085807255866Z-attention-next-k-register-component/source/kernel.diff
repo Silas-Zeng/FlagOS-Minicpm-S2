@@ -1,0 +1,64 @@
+--- affine+Q/kernel.py
++++ affine+nextK+Q/kernel.py
+@@ -228,6 +228,10 @@
+         CHUNK_SIZE,
+     )
+ 
++    # 第一轮仍使用本轮 K 原始加载；空循环不读取 K。
++    next_k_valid = tl.full((), False, tl.int1)
++    next_k_value = tl.zeros((HEAD_SIZE_PADDED, TILE_SIZE), dtype=Q.dtype)
++
+     # iterate through tiles (now limited to the sliding window range)
+     for j in range(loop_lo, loop_hi):
+         seq_offset = j * TILE_SIZE + offs_t
+@@ -300,11 +304,14 @@
+                 + (seq_offset % BLOCK_SIZE)[None, :] * stride_k_cache_1
+             )
+             # K : (HEAD_SIZE, TILE_SIZE)
+-            K_load = tl.load(
+-                key_cache_ptr + k_offset,
+-                mask=dim_mask[:, None] & tile_mask[None, :],
+-                other=0.0,
+-            )
++            if next_k_valid:
++                K_load = next_k_value
++            else:
++                K_load = tl.load(
++                    key_cache_ptr + k_offset,
++                    mask=dim_mask[:, None] & tile_mask[None, :],
++                    other=0.0,
++                )
+             # V : (TILE_SIZE, HEAD_SIZE)
+             V_load = tl.load(
+                 value_cache_ptr + v_offset,
+@@ -378,6 +385,30 @@
+ 
+         M, L, P, alpha = softmax_step(S, M, L)
+         acc = acc * alpha[:, None]
++
++        # 仅预取下一轮确实访问且完整位于当前已验证连续段的 TILE64。
++        # V 保持原时序；没有新 shared buffer，不 carry 物理页向量。
++        next_first_page = (j + 1) * (TILE_SIZE // BLOCK_SIZE)
++        next_k_valid = ((j + 1 < loop_hi)
++                        & (next_first_page >= affine_lo)
++                        & (next_first_page + TILE_SIZE // BLOCK_SIZE <= affine_hi))
++        if next_k_valid:
++            next_seq = (j + 1) * TILE_SIZE + offs_t
++            next_physical = (affine_base.to(tl.int64)
++                             + next_seq // BLOCK_SIZE - affine_lo.to(tl.int64))
++            next_offset = (
++                next_physical[None, :] * stride_k_cache_0
++                + kv_head_idx * stride_k_cache_2
++                + offs_d[:, None] * stride_k_cache_3
++                + (next_seq % BLOCK_SIZE)[None, :] * stride_k_cache_1
++            )
++            next_k_value = tl.load(
++                key_cache_ptr + next_offset,
++                mask=dim_mask[:, None] & (next_seq < max_seq_prefix_len)[None, :],
++                other=0.0,
++            )
++        else:
++            next_k_value = tl.zeros((HEAD_SIZE_PADDED, TILE_SIZE), dtype=Q.dtype)
+ 
+         if SLIDING_WINDOW:
+             qpos_lo = q_block_local_idx * BLOCK_Q

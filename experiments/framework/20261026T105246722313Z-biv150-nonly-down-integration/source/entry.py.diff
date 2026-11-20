@@ -1,0 +1,51 @@
+--- previous-component/entry.py
++++ integration/entry.py
+@@ -38,13 +38,26 @@
+     source = args.source_dir.resolve(strict=True)
+     if sha(source / "vllm_fl/patches/biv150_stable_small_o.py") != "c5a2dd6c69c514531fee4145621e51bd4e41c0d784f4d4e086fe48aad98104ba":
+         raise RuntimeError("冻结源码的原opaque不匹配main6971")
++    manifest = read(HERE / "source-manifest.json")
++    if manifest['source_count'] != 620 or not source.is_relative_to(ROOT / "code"):
++        raise RuntimeError("必须使用独立code内620文件候选")
++    def source_identity():
++        found={}
++        for name,record in manifest['files'].items():
++            p=source/name
++            raw=p.readlink().as_posix().encode() if record['mode']=='120000' else p.read_bytes()
++            found[name]=hashlib.sha256(raw).hexdigest()
++        if any(found[n] != r['sha256'] for n,r in manifest['files'].items()):
++            raise RuntimeError("冻结生产源身份不符")
++        return found
++    before_source=source_identity()
+     import fcntl
+     import reused_helpers as owner
+     for name, expected in read(HERE / "asset-pins.json").items():
+         if sha(HERE / name) != expected:
+             raise RuntimeError("入口资产变化：" + name)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-biv150-nonly-down-component")
++    run = ROOT / "framework" / (stamp + "-biv150-nonly-down-integration")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+@@ -53,7 +66,7 @@
+         shutil.copyfile(HERE / name, assets / name)
+     shutil.copyfile(HERE / "asset-pins.json", assets / "asset-pins.json")
+     state = dict(started_utc=stamp, owner_pid=os.getpid(),
+-        scope="BF16 down N128唯一无损格式，真实M64 opaque F.linear固定配置完整对照；非官方成绩", run=str(run),
++        scope="42 down GPU helper/opaque新增接线，不重复旧组件；无性能或完整Llama资格", run=str(run),
+         command=[sys.executable, *sys.argv], owned_processes=[], exit_code=1)
+     save(run / "manifest.json", state)
+     lock = child = monitor = None
+@@ -135,6 +148,11 @@
+             except BaseException:
+                 state["postflight_error"], status = traceback.format_exc(), 1
+         state["source_unchanged"] = all(sha(assets / name) == expected for name, expected in read(HERE / "asset-pins.json").items())
++        try:
++            state['production_source_unchanged'] = source_identity() == before_source
++            if not state['production_source_unchanged']:status=1
++        except BaseException:
++            state['production_source_error']=traceback.format_exc();status=1
+         state["native_loaded"] = False
+         state.update(exit_code=status, finished_utc=datetime.now(timezone.utc).isoformat())
+         save(run / "manifest.json", state)

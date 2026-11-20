@@ -1,0 +1,30 @@
+--- a8-Q16/entry.py
++++ main241-Q32/entry.py
+@@ -38,7 +38,7 @@
+         import distributed_bootstrap
+         return distributed_bootstrap.execute(lambda: worker(args.run_dir, args.model, args.case), args.run_dir)
+     if args.source_dir is None or args.native_library is None:
+-        parser.error("需要已冻结的 main594 --source-dir 和已构建 --native-library")
++        parser.error("需要已冻结的 main241 --source-dir 和已构建 --native-library")
+     import fcntl
+     import validate_block_table_candidate as owner
+     import source_identity
+@@ -51,15 +51,15 @@
+     native = args.native_library.resolve(strict=True)
+     source_before = source_identity.check(source, native)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-prefill-panel4-" + args.case + "-component")
++    run = ROOT / "framework" / (stamp + "-prefill-q32-panel4-" + args.case + "-component")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+     for name in read(HERE / "asset-pins.json"):
+         shutil.copyfile(HERE / name, assets / name)
+     shutil.copyfile(HERE / "asset-pins.json", assets / "asset-pins.json")
+-    state = dict(started_utc=stamp, owner_pid=os.getpid(), source=str(source), source_count=690,
+-        base_commit="594ae2a9d17aadc4587ad54ade2b34e17f4af990", native=str(native), native_sha256=NATIVE_SHA,
++    state = dict(started_utc=stamp, owner_pid=os.getpid(), source=str(source), source_count=765,
++        base_commit="241220723a09061c182764f8f738e5ec01190367", native=str(native), native_sha256=NATIVE_SHA,
+         run=str(run), command=[sys.executable, *sys.argv], owned_processes=[], exit_code=1)
+     state["source_identity"] = source_before
+     save(run / "manifest.json", state)

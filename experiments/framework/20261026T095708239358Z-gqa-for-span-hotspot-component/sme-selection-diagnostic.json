@@ -1,0 +1,731 @@
+{
+  "diagnostic_only": true,
+  "no_asm_selection_claim": true,
+  "expected_mask_delta_hex": "0x30",
+  "masks": {
+    "baseline": 14,
+    "candidate": 62
+  },
+  "evidence": {
+    "baseline": {
+      "source": {
+        "sme_transport": [],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": []
+      },
+      "ttir": {
+        "sme_transport": [],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": []
+      },
+      "ttgir": {
+        "sme_transport": [
+          {
+            "line": 1,
+            "text": "#blocked = #ttg.blocked<{sizePerThread = [1, 2], threadsPerWarp = [1, 64], warpsPerCTA = [1, 1], order = [1, 0], isSme = false, smeMask = false, smeWarpsPerCTA = [0, 0]}>"
+          },
+          {
+            "line": 2,
+            "text": "#blocked1 = #ttg.blocked<{sizePerThread = [2, 1], threadsPerWarp = [64, 1], warpsPerCTA = [1, 1], order = [0, 1], isSme = false, smeMask = false, smeWarpsPerCTA = [0, 0]}>"
+          },
+          {
+            "line": 3,
+            "text": "#blocked2 = #ttg.blocked<{sizePerThread = [1], threadsPerWarp = [64], warpsPerCTA = [1], order = [0], isSme = false, smeMask = false, smeWarpsPerCTA = [0]}>"
+          },
+          {
+            "line": 14,
+            "text": "#smem = #ttg.shared_memory"
+          },
+          {
+            "line": 130,
+            "text": "    %Q_55 = ttg.local_alloc %Q_54 : (tensor<8x128xbf16, #blocked>) -> !ttg.memdesc<8x128xbf16, #shared, #smem> loc(#loc185)"
+          },
+          {
+            "line": 160,
+            "text": "    %Q_78 = ttg.local_load %Q_55 : !ttg.memdesc<8x128xbf16, #shared, #smem> -> tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc185)"
+          },
+          {
+            "line": 185,
+            "text": "      %K_117 = ttg.local_alloc %K_116 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc216)"
+          },
+          {
+            "line": 188,
+            "text": "      %V_120 = ttg.local_alloc %V_119 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc217)"
+          },
+          {
+            "line": 189,
+            "text": "      %K_121 = ttg.local_load %K_117 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc216)"
+          },
+          {
+            "line": 190,
+            "text": "      %scores_122 = tt.dot %Q_78, %K_121, %cst_1, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x16xf32, #mma> loc(#loc218)"
+          },
+          {
+            "line": 215,
+            "text": "      %accumulator_135 = ttg.convert_layout %accumulator_134 : tensor<8x16xbf16, #mma> -> tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc231)"
+          },
+          {
+            "line": 216,
+            "text": "      %V_136 = ttg.local_load %V_120 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc217)"
+          },
+          {
+            "line": 217,
+            "text": "      %accumulator_137 = tt.dot %accumulator_135, %V_136, %accumulator_133, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x128xf32, #mma> loc(#loc232)"
+          },
+          {
+            "line": 256,
+            "text": "      %K_127 = ttg.local_alloc %K_126 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc250)"
+          },
+          {
+            "line": 261,
+            "text": "      %V_132 = ttg.local_alloc %V_131 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc253)"
+          },
+          {
+            "line": 262,
+            "text": "      %K_133 = ttg.local_load %K_127 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc250)"
+          },
+          {
+            "line": 263,
+            "text": "      %scores_134 = tt.dot %Q_78, %K_133, %cst_1, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x16xf32, #mma> loc(#loc254)"
+          },
+          {
+            "line": 290,
+            "text": "      %accumulator_148 = ttg.convert_layout %accumulator_147 : tensor<8x16xbf16, #mma> -> tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc269)"
+          },
+          {
+            "line": 291,
+            "text": "      %V_149 = ttg.local_load %V_132 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc253)"
+          },
+          {
+            "line": 292,
+            "text": "      %accumulator_150 = tt.dot %accumulator_148, %V_149, %accumulator_146, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x128xf32, #mma> loc(#loc270)"
+          }
+        ],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": [
+          {
+            "line": 12,
+            "text": "#shared = #ttg.swizzled_shared<{vec = 32, perPhase = 1, maxPhase = 1, order = [1, 0], useTcu = true}>"
+          },
+          {
+            "line": 13,
+            "text": "#shared1 = #ttg.swizzled_shared<{vec = 32, perPhase = 1, maxPhase = 1, order = [0, 1], useTcu = true}>"
+          },
+          {
+            "line": 14,
+            "text": "#smem = #ttg.shared_memory"
+          },
+          {
+            "line": 130,
+            "text": "    %Q_55 = ttg.local_alloc %Q_54 : (tensor<8x128xbf16, #blocked>) -> !ttg.memdesc<8x128xbf16, #shared, #smem> loc(#loc185)"
+          },
+          {
+            "line": 160,
+            "text": "    %Q_78 = ttg.local_load %Q_55 : !ttg.memdesc<8x128xbf16, #shared, #smem> -> tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc185)"
+          },
+          {
+            "line": 185,
+            "text": "      %K_117 = ttg.local_alloc %K_116 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc216)"
+          },
+          {
+            "line": 188,
+            "text": "      %V_120 = ttg.local_alloc %V_119 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc217)"
+          },
+          {
+            "line": 189,
+            "text": "      %K_121 = ttg.local_load %K_117 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc216)"
+          },
+          {
+            "line": 216,
+            "text": "      %V_136 = ttg.local_load %V_120 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc217)"
+          },
+          {
+            "line": 256,
+            "text": "      %K_127 = ttg.local_alloc %K_126 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc250)"
+          },
+          {
+            "line": 261,
+            "text": "      %V_132 = ttg.local_alloc %V_131 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc253)"
+          },
+          {
+            "line": 262,
+            "text": "      %K_133 = ttg.local_load %K_127 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc250)"
+          },
+          {
+            "line": 291,
+            "text": "      %V_149 = ttg.local_load %V_132 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc253)"
+          }
+        ]
+      },
+      "llir": {
+        "sme_transport": [
+          {
+            "line": 6,
+            "text": "@global_smem = external local_unnamed_addr addrspace(3) global [0 x i8], align 16"
+          },
+          {
+            "line": 95,
+            "text": "  %95 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %94, !dbg !35"
+          },
+          {
+            "line": 102,
+            "text": "  %100 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %99, !dbg !35"
+          },
+          {
+            "line": 148,
+            "text": "  %143 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %142, !dbg !35"
+          },
+          {
+            "line": 153,
+            "text": "  %148 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %147, !dbg !35"
+          },
+          {
+            "line": 158,
+            "text": "  %153 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %152, !dbg !35"
+          },
+          {
+            "line": 175,
+            "text": "  %167 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %166"
+          },
+          {
+            "line": 177,
+            "text": "  %169 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %168"
+          },
+          {
+            "line": 179,
+            "text": "  %171 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %170"
+          },
+          {
+            "line": 181,
+            "text": "  %173 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %172"
+          },
+          {
+            "line": 186,
+            "text": "  %178 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %177"
+          },
+          {
+            "line": 191,
+            "text": "  %183 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %182"
+          },
+          {
+            "line": 197,
+            "text": "  %189 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %188"
+          },
+          {
+            "line": 202,
+            "text": "  %194 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %193"
+          },
+          {
+            "line": 207,
+            "text": "  %199 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %198"
+          },
+          {
+            "line": 212,
+            "text": "  %204 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %203"
+          },
+          {
+            "line": 237,
+            "text": "  %229 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %142"
+          },
+          {
+            "line": 239,
+            "text": "  %231 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %147"
+          },
+          {
+            "line": 246,
+            "text": "  %238 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %237"
+          },
+          {
+            "line": 1009,
+            "text": "  %919 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %918, !dbg !88"
+          },
+          {
+            "line": 1016,
+            "text": "  %925 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %924, !dbg !88"
+          },
+          {
+            "line": 1022,
+            "text": "  %930 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %929, !dbg !88"
+          },
+          {
+            "line": 1028,
+            "text": "  %935 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %934, !dbg !88"
+          },
+          {
+            "line": 1206,
+            "text": "  %1052 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1051, !dbg !90"
+          },
+          {
+            "line": 1219,
+            "text": "  %1061 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1060, !dbg !90"
+          },
+          {
+            "line": 1234,
+            "text": "  %1071 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1070, !dbg !88"
+          },
+          {
+            "line": 1243,
+            "text": "  %1080 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1079, !dbg !88"
+          },
+          {
+            "line": 1252,
+            "text": "  %1089 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1088, !dbg !88"
+          },
+          {
+            "line": 1261,
+            "text": "  %1098 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1097, !dbg !88"
+          },
+          {
+            "line": 1438,
+            "text": "  %1275 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %142, !dbg !90"
+          },
+          {
+            "line": 1442,
+            "text": "  %1279 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %147, !dbg !90"
+          },
+          {
+            "line": 1455,
+            "text": "  %1292 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1291, !dbg !90"
+          }
+        ],
+        "wait": [],
+        "barrier": [
+          {
+            "line": 146,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !35"
+          },
+          {
+            "line": 374,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !54"
+          },
+          {
+            "line": 471,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !54"
+          },
+          {
+            "line": 1003,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !88"
+          },
+          {
+            "line": 1231,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !88"
+          },
+          {
+            "line": 1760,
+            "text": "declare void @llvm.nvvm.barrier.cta.sync.aligned.all(i32) #5"
+          }
+        ],
+        "shared_fragment": []
+      },
+      "asm": {
+        "sme_transport": [
+          {
+            "line": 55,
+            "text": "\t\tenable_dynamic_smem_size = 0"
+          }
+        ],
+        "wait": [],
+        "barrier": [
+          {
+            "line": 59,
+            "text": "\t\tworkgroup_fbarrier_count = 0"
+          },
+          {
+            "line": 199,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 405,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 509,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 1091,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 1295,
+            "text": "\tsl_barrier "
+          }
+        ],
+        "shared_fragment": [
+          {
+            "line": 51,
+            "text": "\t\tenable_srf_flat_shared = 0"
+          }
+        ]
+      }
+    },
+    "candidate": {
+      "source": {
+        "sme_transport": [],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": []
+      },
+      "ttir": {
+        "sme_transport": [],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": []
+      },
+      "ttgir": {
+        "sme_transport": [
+          {
+            "line": 1,
+            "text": "#blocked = #ttg.blocked<{sizePerThread = [1, 2], threadsPerWarp = [1, 64], warpsPerCTA = [1, 1], order = [1, 0], isSme = false, smeMask = false, smeWarpsPerCTA = [0, 0]}>"
+          },
+          {
+            "line": 2,
+            "text": "#blocked1 = #ttg.blocked<{sizePerThread = [2, 1], threadsPerWarp = [64, 1], warpsPerCTA = [1, 1], order = [0, 1], isSme = false, smeMask = false, smeWarpsPerCTA = [0, 0]}>"
+          },
+          {
+            "line": 3,
+            "text": "#blocked2 = #ttg.blocked<{sizePerThread = [1], threadsPerWarp = [64], warpsPerCTA = [1], order = [0], isSme = false, smeMask = false, smeWarpsPerCTA = [0]}>"
+          },
+          {
+            "line": 13,
+            "text": "#smem = #ttg.shared_memory"
+          },
+          {
+            "line": 124,
+            "text": "    %Q_57 = ttg.local_alloc %Q_56 : (tensor<8x128xbf16, #blocked>) -> !ttg.memdesc<8x128xbf16, #shared, #smem> loc(#loc186)"
+          },
+          {
+            "line": 152,
+            "text": "    %Q_78 = ttg.local_load %Q_57 : !ttg.memdesc<8x128xbf16, #shared, #smem> -> tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc186)"
+          },
+          {
+            "line": 175,
+            "text": "      %K_116 = ttg.local_alloc %K_115 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc218)"
+          },
+          {
+            "line": 178,
+            "text": "      %V_119 = ttg.local_alloc %V_118 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc219)"
+          },
+          {
+            "line": 179,
+            "text": "      %Q_120 = ttg.local_load %Q_57 : !ttg.memdesc<8x128xbf16, #shared, #smem> -> tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc186)"
+          },
+          {
+            "line": 180,
+            "text": "      %K_121 = ttg.local_load %K_116 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc218)"
+          },
+          {
+            "line": 181,
+            "text": "      %scores_122 = tt.dot %Q_120, %K_121, %cst_1, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x16xf32, #mma> loc(#loc220)"
+          },
+          {
+            "line": 206,
+            "text": "      %accumulator_135 = ttg.convert_layout %accumulator_134 : tensor<8x16xbf16, #mma> -> tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc233)"
+          },
+          {
+            "line": 207,
+            "text": "      %V_136 = ttg.local_load %V_119 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc219)"
+          },
+          {
+            "line": 208,
+            "text": "      %accumulator_137 = tt.dot %accumulator_135, %V_136, %accumulator_133, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x128xf32, #mma> loc(#loc234)"
+          },
+          {
+            "line": 248,
+            "text": "      %K_129 = ttg.local_alloc %K_128 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc253)"
+          },
+          {
+            "line": 253,
+            "text": "      %V_134 = ttg.local_alloc %V_133 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc256)"
+          },
+          {
+            "line": 254,
+            "text": "      %K_135 = ttg.local_load %K_129 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc253)"
+          },
+          {
+            "line": 255,
+            "text": "      %scores_136 = tt.dot %Q_78, %K_135, %cst_1, inputPrecision = tf32 : tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x16xf32, #mma> loc(#loc257)"
+          },
+          {
+            "line": 282,
+            "text": "      %accumulator_150 = ttg.convert_layout %accumulator_149 : tensor<8x16xbf16, #mma> -> tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc272)"
+          },
+          {
+            "line": 283,
+            "text": "      %V_151 = ttg.local_load %V_134 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc256)"
+          },
+          {
+            "line": 284,
+            "text": "      %accumulator_152 = tt.dot %accumulator_150, %V_151, %accumulator_148, inputPrecision = tf32 : tensor<8x16xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> * tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> -> tensor<8x128xf32, #mma> loc(#loc273)"
+          }
+        ],
+        "wait": [],
+        "barrier": [],
+        "shared_fragment": [
+          {
+            "line": 11,
+            "text": "#shared = #ttg.swizzled_shared<{vec = 32, perPhase = 1, maxPhase = 1, order = [1, 0], useTcu = true}>"
+          },
+          {
+            "line": 12,
+            "text": "#shared1 = #ttg.swizzled_shared<{vec = 32, perPhase = 1, maxPhase = 1, order = [0, 1], useTcu = true}>"
+          },
+          {
+            "line": 13,
+            "text": "#smem = #ttg.shared_memory"
+          },
+          {
+            "line": 124,
+            "text": "    %Q_57 = ttg.local_alloc %Q_56 : (tensor<8x128xbf16, #blocked>) -> !ttg.memdesc<8x128xbf16, #shared, #smem> loc(#loc186)"
+          },
+          {
+            "line": 152,
+            "text": "    %Q_78 = ttg.local_load %Q_57 : !ttg.memdesc<8x128xbf16, #shared, #smem> -> tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc186)"
+          },
+          {
+            "line": 175,
+            "text": "      %K_116 = ttg.local_alloc %K_115 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc218)"
+          },
+          {
+            "line": 178,
+            "text": "      %V_119 = ttg.local_alloc %V_118 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc219)"
+          },
+          {
+            "line": 179,
+            "text": "      %Q_120 = ttg.local_load %Q_57 : !ttg.memdesc<8x128xbf16, #shared, #smem> -> tensor<8x128xbf16, #ttg.dot_op<{opIdx = 0, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc186)"
+          },
+          {
+            "line": 180,
+            "text": "      %K_121 = ttg.local_load %K_116 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc218)"
+          },
+          {
+            "line": 207,
+            "text": "      %V_136 = ttg.local_load %V_119 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc219)"
+          },
+          {
+            "line": 248,
+            "text": "      %K_129 = ttg.local_alloc %K_128 : (tensor<128x16xbf16, #blocked1>) -> !ttg.memdesc<128x16xbf16, #shared1, #smem> loc(#loc253)"
+          },
+          {
+            "line": 253,
+            "text": "      %V_134 = ttg.local_alloc %V_133 : (tensor<16x128xbf16, #blocked>) -> !ttg.memdesc<16x128xbf16, #shared, #smem> loc(#loc256)"
+          },
+          {
+            "line": 254,
+            "text": "      %K_135 = ttg.local_load %K_129 : !ttg.memdesc<128x16xbf16, #shared1, #smem> -> tensor<128x16xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc253)"
+          },
+          {
+            "line": 283,
+            "text": "      %V_151 = ttg.local_load %V_134 : !ttg.memdesc<16x128xbf16, #shared, #smem> -> tensor<16x128xbf16, #ttg.dot_op<{opIdx = 1, parent = #mma, kWidth = 2, useSme = 0}>> loc(#loc256)"
+          }
+        ]
+      },
+      "llir": {
+        "sme_transport": [
+          {
+            "line": 6,
+            "text": "@global_smem = external local_unnamed_addr addrspace(3) global [0 x i8], align 16"
+          },
+          {
+            "line": 95,
+            "text": "  %95 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 8192), i32 %94, !dbg !35"
+          },
+          {
+            "line": 102,
+            "text": "  %100 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 8192), i32 %99, !dbg !35"
+          },
+          {
+            "line": 146,
+            "text": "  %141 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 8192), i32 %140, !dbg !35"
+          },
+          {
+            "line": 151,
+            "text": "  %146 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 8192), i32 %145, !dbg !35"
+          },
+          {
+            "line": 156,
+            "text": "  %151 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 8192), i32 %150, !dbg !35"
+          },
+          {
+            "line": 205,
+            "text": "  %195 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %194"
+          },
+          {
+            "line": 207,
+            "text": "  %197 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %196"
+          },
+          {
+            "line": 209,
+            "text": "  %199 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %198"
+          },
+          {
+            "line": 211,
+            "text": "  %201 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %200"
+          },
+          {
+            "line": 216,
+            "text": "  %206 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %205"
+          },
+          {
+            "line": 221,
+            "text": "  %211 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %210"
+          },
+          {
+            "line": 227,
+            "text": "  %217 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %216"
+          },
+          {
+            "line": 232,
+            "text": "  %222 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %221"
+          },
+          {
+            "line": 237,
+            "text": "  %227 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %226"
+          },
+          {
+            "line": 242,
+            "text": "  %232 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %231"
+          },
+          {
+            "line": 259,
+            "text": "  %249 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %140"
+          },
+          {
+            "line": 261,
+            "text": "  %251 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %145"
+          },
+          {
+            "line": 268,
+            "text": "  %258 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %257"
+          },
+          {
+            "line": 1109,
+            "text": "  %937 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %936, !dbg !90"
+          },
+          {
+            "line": 1116,
+            "text": "  %943 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %942, !dbg !90"
+          },
+          {
+            "line": 1122,
+            "text": "  %948 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %947, !dbg !90"
+          },
+          {
+            "line": 1128,
+            "text": "  %953 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %952, !dbg !90"
+          },
+          {
+            "line": 1306,
+            "text": "  %1054 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1053, !dbg !92"
+          },
+          {
+            "line": 1319,
+            "text": "  %1063 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1062, !dbg !92"
+          },
+          {
+            "line": 1334,
+            "text": "  %1073 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1072, !dbg !90"
+          },
+          {
+            "line": 1343,
+            "text": "  %1082 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1081, !dbg !90"
+          },
+          {
+            "line": 1352,
+            "text": "  %1091 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1090, !dbg !90"
+          },
+          {
+            "line": 1361,
+            "text": "  %1100 = getelementptr inbounds nuw i8, ptr addrspace(3) @global_smem, i32 %1099, !dbg !90"
+          },
+          {
+            "line": 1538,
+            "text": "  %1277 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %140, !dbg !92"
+          },
+          {
+            "line": 1542,
+            "text": "  %1281 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %145, !dbg !92"
+          },
+          {
+            "line": 1555,
+            "text": "  %1294 = getelementptr inbounds nuw i8, ptr addrspace(3) getelementptr (i8, ptr addrspace(3) @global_smem, i32 4096), i32 %1293, !dbg !92"
+          }
+        ],
+        "wait": [],
+        "barrier": [
+          {
+            "line": 144,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !35"
+          },
+          {
+            "line": 412,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !54"
+          },
+          {
+            "line": 501,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !54"
+          },
+          {
+            "line": 1103,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !90"
+          },
+          {
+            "line": 1331,
+            "text": "  tail call void @llvm.nvvm.barrier.cta.sync.aligned.all(i32 0), !dbg !90"
+          },
+          {
+            "line": 1860,
+            "text": "declare void @llvm.nvvm.barrier.cta.sync.aligned.all(i32) #5"
+          }
+        ],
+        "shared_fragment": []
+      },
+      "asm": {
+        "sme_transport": [
+          {
+            "line": 55,
+            "text": "\t\tenable_dynamic_smem_size = 0"
+          }
+        ],
+        "wait": [],
+        "barrier": [
+          {
+            "line": 59,
+            "text": "\t\tworkgroup_fbarrier_count = 0"
+          },
+          {
+            "line": 202,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 456,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 584,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 1247,
+            "text": "\tsl_barrier "
+          },
+          {
+            "line": 1501,
+            "text": "\tsl_barrier "
+          }
+        ],
+        "shared_fragment": [
+          {
+            "line": 51,
+            "text": "\t\tenable_srf_flat_shared = 0"
+          }
+        ]
+      }
+    }
+  },
+  "note": "\u751f\u4ea7N64/S2\u7a84scratch\u9884\u671f14->62\uff1bmask\u4e0d\u7b49\u4e8e\u5b9e\u9645SME\u3002\u987b\u6838for\u7ed3\u6784\u3001copy/wait\u4e0e\u8d44\u6e90\u3002",
+  "mask_delta_matches": true
+}

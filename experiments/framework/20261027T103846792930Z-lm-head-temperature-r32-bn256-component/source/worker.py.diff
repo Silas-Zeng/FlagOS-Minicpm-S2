@@ -1,0 +1,113 @@
+--- R32-original-epilogue/worker.py
++++ R32-BN256/worker.py
+@@ -1,4 +1,4 @@
+-"""M32真实head→完整原Sampler：唯一温度epilogue组件。"""
++"""M32真实head→完整原Sampler：唯一BN64→256组件。"""
+ from pathlib import Path
+ from types import SimpleNamespace
+ import hashlib,importlib,inspect,json,statistics,traceback
+@@ -9,10 +9,11 @@
+ 
+ def worker(run,model):
+     run,model=Path(run),Path(model)
+-    result=dict(status='started',cases=[],timings=[],resources=[],kind='lm_head_temperature_epilogue',
++    result=dict(status='started',cases=[],timings=[],resources=[],kind='lm_head_temperature_r32_bn256',
+         source_main='56f1838192abc940b3fb9accef490022ac125000',rows=32,vocab=130560,
+         new_persistent_weight_bytes=0,precision_qualified=False,official_qualified=False,
+-        limitations=['单层真实head W与合成hidden；不是模型/官方收益。','完整eager head+Sampler含实际分配/原RNG；Graph仅确定性prefix。','实际原F.linear配置首次捕获；未变原stats，失败不救旧stats融合。'])
++        comparison=dict(A='tested R32 temperature epilogue BN64 plus complete original Sampler',B='same kernel and complete Sampler; BLOCK_N256 only',F_linear='numeric and actual-provider reference only; not timing A'),
++        limitations=['单层真实head W与合成hidden；不是模型/官方收益。','完整eager head+Sampler含实际分配/原RNG；Graph仅确定性prefix。','A为已测R32温度epilogue完整链，B仅BN64→256；真实F.linear作数值参考，非手工MM。'])
+     module=original=None
+     try:
+         import torch,triton,flag_gems,factory,candidate
+@@ -59,6 +60,7 @@
+         finally:module.linear_kernel=original
+         torch.cuda.synchronize();assert len(capture.records)==1 and initial.dtype==torch.bfloat16
+         record=capture.records[0]
++        factory.qualify_original_record(record)
+         result['identity']=dict(constants={k:str(v) for k,v in record['constants'].items()},kwargs=record['kwargs'],grid=record['grid'],linear_source_sha256=factory.LINEAR_SHA,
+             head_source='actual UnquantizedLinearMethod.apply/F.linear default dispatch',weight_name=name,weight_sha256=hashlib.sha256(wc.view(torch.uint8).numpy().tobytes()).hexdigest(),output_dtype=str(initial.dtype),output_stride=list(initial.stride()))
+         def preserve(label,kernel):
+@@ -70,7 +72,8 @@
+         sm=SamplingMetadata(temperature=temp,all_greedy=False,all_random=True,top_p=pp,top_k=None,generators={},max_num_logprobs=None,no_penalties=True,prompt_token_ids=None,
+             frequency_penalties=zeros,presence_penalties=zeros,repetition_penalties=torch.ones_like(zeros),output_token_ids=[[] for _ in range(32)],allowed_token_ids_mask=None,bad_words_token_ids={},
+             logitsprocs=SimpleNamespace(argmax_invariant=[],non_argmax_invariant=[]))
+-        a_sampler=smod.Sampler();b_sampler=factory.PreScaledSampler(smod.Sampler(),torch)
++        reference_sampler=smod.Sampler()
++        a_sampler=factory.PreScaledSampler(smod.Sampler(),torch);b_sampler=factory.PreScaledSampler(smod.Sampler(),torch)
+         def bits(a,b):return a.dtype==b.dtype and torch.equal(a.contiguous().view(torch.uint8),b.contiguous().view(torch.uint8))
+         def rng():return dict(cpu=torch.get_rng_state().clone(),default=torch.cuda.get_rng_state().clone(),request={i:g.get_state().clone() for i,g in sm.generators.items()})
+         def reset(s):
+@@ -78,12 +81,13 @@
+             for i,v in s['request'].items():sm.generators[i].set_state(v)
+         def equal_rng(a,b):return bits(a['cpu'],b['cpu']) and bits(a['default'],b['default']) and a['request'].keys()==b['request'].keys() and all(bits(a['request'][i],b['request'][i]) for i in a['request'])
+         latest={}
+-        def scaled_b():
++        def scaled(arm):
+             out=torch.empty((32,130560),dtype=torch.float32,device=x.device)
+-            ck=factory.launch(candidate,record,x,w,temp,out);latest['kernel']=ck
++            ck=factory.launch(candidate,record,x,w,temp,out,wide=arm=='B');latest[arm]=ck
+             return out
+-        def complete_a():return a_sampler(head(),sm)
+-        def complete_b():return b_sampler(scaled_b(),sm)
++        def complete_reference():return reference_sampler(head(),sm)
++        def complete_a():return a_sampler(scaled('A'),sm)
++        def complete_b():return b_sampler(scaled('B'),sm)
+         def observe(callback,sampler,out):
+             old_temp=sampler.apply_temperature;old_filter=top.apply_top_k_top_p
+             def filter_hook(value,k,p):
+@@ -95,14 +99,22 @@
+             finally:
+                 sampler.apply_temperature=old_temp;top.apply_top_k_top_p=old_filter
+         def check(label):
+-            before=rng();aa={};bb={};tb=temp.clone();pb=pp.clone()
+-            a=observe(complete_a,a_sampler,aa);after_a=rng();reset(before)
++            before=rng();rr={};aa={};bb={};tb=temp.clone();pb=pp.clone()
++            ref=observe(complete_reference,reference_sampler,rr);after_ref=rng();reset(before)
++            a=observe(complete_a,a_sampler.sampler,aa);after_a=rng();reset(before)
+             b=observe(complete_b,b_sampler.sampler,bb);after_b=rng();torch.cuda.synchronize()
+-            case=dict(label=label,scaled_bitwise=bits(aa['scaled'],bb['scaled']),filtered_bitwise=bits(aa['filtered'],bb['filtered']),ids_bitwise=bits(a.sampled_token_ids,b.sampled_token_ids),rng_equal=equal_rng(after_a,after_b),
++            case=dict(label=label,a_reference_scaled_bitwise=bits(rr['scaled'],aa['scaled']),a_reference_filtered_bitwise=bits(rr['filtered'],aa['filtered']),a_reference_ids_bitwise=bits(ref.sampled_token_ids,a.sampled_token_ids),a_reference_rng_equal=equal_rng(after_ref,after_a),scaled_bitwise=bits(aa['scaled'],bb['scaled']),filtered_bitwise=bits(aa['filtered'],bb['filtered']),ids_bitwise=bits(a.sampled_token_ids,b.sampled_token_ids),rng_equal=equal_rng(after_a,after_b),
+                 finite=bool(torch.isfinite(aa['scaled']).all() and torch.isfinite(bb['scaled']).all()),input_unchanged=bits(x,x_before) and bits(w,w_before) and bits(temp,tb) and bits(pp,pb))
+             result['cases'].append(case);save(run/'result.json',result)
+             assert all(v for k,v in case.items() if k!='label'),'逐位/RNG/输入门失败，停止不放宽'
+-        check('normal_real_head');preserve('candidate-head',latest['kernel'])
++        check('normal_real_head')
++        preserve('baseline-epilogue',latest['A']);preserve('candidate-head',latest['B'])
++        result['baseline_epilogue_expected_hash']='bacf34cbfb5b4a100448451f4a6f6eccf5309b10dad7e87b7e9259c023152c9e'
++        result['resource_gate']=dict(no_spills=all(getattr(latest[arm],'n_spills',None)==0 for arm in 'AB'),
++            loaded_fields_present=all(isinstance(getattr(latest[arm],'n_regs',None),int) and isinstance(getattr(latest[arm].metadata,'shared',None),int) for arm in 'AB'),
++            tested_baseline_hash_matches=getattr(latest['A'].metadata,'hash',None)==result['baseline_epilogue_expected_hash'])
++        save(run/'result.json',result)
++        assert all(result['resource_gate'].values()),'实际spill/资源缺失或受测A身份改变，停止不计时'
+         # FP64独立样本只核点积→原BF16 round；跨臂全scaled/全filtered另为零容差。
+         rows=[0,1,15,31];cols=[0,1,127,65535,130559]
+         reference=(xc[rows].double()@wc[cols].double().T).bfloat16().double()
+@@ -118,15 +130,15 @@
+         with torch.cuda.stream(side):check('side_stream')
+         torch.cuda.current_stream().wait_stream(side);torch.cuda.synchronize()
+         # Graph只覆盖新增确定性head/cast/temperature，不捕随机Sampler。
+-        def prefix_a():return a_sampler.apply_temperature(head().float(),temp,True)
++        def prefix_reference():return reference_sampler.apply_temperature(head().float(),temp,True)
+         graphs={};outputs={}
+-        for arm,callback in (('A',prefix_a),('B',scaled_b)):
++        for arm,callback in (('A',lambda:scaled('A')),('B',lambda:scaled('B'))):
+             callback();torch.cuda.synchronize();graphs[arm]=torch.cuda.CUDAGraph()
+             with torch.cuda.graph(graphs[arm]):outputs[arm]=callback()
+         for ver,source,t in ((0,-xc.flip(0),.5),(1,xc,1.)):
+             x.copy_(source.cuda());x_before.copy_(x);temp.fill_(t)
+             for arm in 'AB':outputs[arm].fill_(float('nan'));graphs[arm].replay()
+-            torch.cuda.synchronize();case=dict(label='changed_graph_'+str(ver),bitwise=bits(outputs['A'],outputs['B']) and bits(prefix_a(),outputs['B']),finite=bool(torch.isfinite(outputs['B']).all()),input_unchanged=bits(x,x_before) and bits(w,w_before))
++            torch.cuda.synchronize();case=dict(label='changed_graph_'+str(ver),bitwise=bits(outputs['A'],outputs['B']) and bits(prefix_reference(),outputs['B']),finite=bool(torch.isfinite(outputs['B']).all()),input_unchanged=bits(x,x_before) and bits(w,w_before))
+             result['cases'].append(case);assert all(v for k,v in case.items() if k!='label'),'Graph逐位门失败'
+         del graphs,outputs
+         x.copy_(xc.cuda());x_before.copy_(x);temp.fill_(1.)
+@@ -136,7 +148,7 @@
+         check('after_timing')
+         result['median']={arm:{metric:statistics.median(v[metric] for v in result['timings'] if v['arm']==arm) for metric in ('event_per_call_ms','wall_per_call_ms')} for arm in 'AB'}
+         result['status']='component_one_abba_positive' if all(result['median']['B'][k]<result['median']['A'][k] for k in ('event_per_call_ms','wall_per_call_ms')) else 'nonpositive_stop'
+-        result['cost_includes']='完整eager原head与Sampler、实际输出分配、原统计/采样/RNG及Python提交；不含W加载，不以prefix Graph计性能'
++        result['cost_includes']='完整eager温度epilogue head与Sampler、两臂实际FP32输出分配、原统计/采样/RNG及Python提交；不含W加载，不以prefix Graph计性能'
+         save(run/'result.json',result);return 0
+     except BaseException:
+         result.update(status='failed_stop',error=traceback.format_exc());save(run/'result.json',result);traceback.print_exc();return 1

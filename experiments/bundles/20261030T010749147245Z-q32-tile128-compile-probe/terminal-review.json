@@ -1,0 +1,57 @@
+{
+  "status": "COMPILE_CONFIRMED_RESOURCE_COST_RECORDED",
+  "run": "20261030T010749147245Z-q32-tile128-compile-probe",
+  "recovery_archive": "archive/q32-tile128-20261030/compile-010749/",
+  "recovery_tar_sha256": "e28e79de5f9f6d762906ad8484c74027911de99eef75eb37906fa23d8eeb3a90",
+  "recovered_files": 61,
+  "scope": "仅复核真实A/B编译产物、配置、资源及终态；没有attention reader、数值正确性或性能测量。",
+  "compiled_kernel_hashes": {
+    "A_TILE64": "761ee8398ab5fccc658e25b62e58da8baa306722d6b4dd08320b6909836a6050",
+    "B_TILE128": "f4a9d07580f8c4dd910215847dfa60146e55b4bd37cffe8db6a9f317e69f5424"
+  },
+  "configuration": {
+    "A_TILE_SIZE": 64,
+    "B_TILE_SIZE": 128,
+    "BLOCK_M": 256,
+    "BLOCK_Q": 32,
+    "grid": [
+      64,
+      2
+    ],
+    "num_warps": 16,
+    "num_stages": 1,
+    "requested_use_sme": 229379,
+    "effective_use_sme_A_B": 3,
+    "synthetic_abi": true
+  },
+  "resources": {
+    "A": {
+      "vgpr": 135,
+      "shared_bytes": 57344,
+      "triton_runtime_spills": 0,
+      "asm_sgpr_spill_count": 98,
+      "asm_vgpr_spill_count": 0,
+      "asm_scratch_size": 0
+    },
+    "B": {
+      "vgpr": 164,
+      "shared_bytes": 81920,
+      "triton_runtime_spills": 0,
+      "asm_sgpr_spill_count": 128,
+      "asm_vgpr_spill_count": 0,
+      "asm_scratch_size": 0
+    },
+    "interpretation": "B资源增加29 VGPR、24576 bytes shared及30 SGPR spill计数；无报告runtime spill、VGPR spill或scratch。资源压力需在组件数值与计时中评价，不能把编译门当收益证据。"
+  },
+  "terminal": {
+    "owner_pid": 97737,
+    "worker_pid": 97739,
+    "worker_returncode": 0,
+    "status": "completed",
+    "writer_launches": 1,
+    "attention_reader_launches": 0,
+    "preflight_gpu_and_9031": "空闲",
+    "postflight_gpu_and_9031": "空闲"
+  },
+  "conclusion": "编译成功且配置符合探针声明；记录的B资源开销不单独判收益或正确性。可供后续组件验证参考；本探针未作数值、性能或生产资格判断。"
+}

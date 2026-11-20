@@ -1,0 +1,548 @@
+	.text
+	.globl	_small_o_kernel                 ; -- Begin function _small_o_kernel
+	.p2align	3
+	.type	_small_o_kernel,@function
+	.iluvatar_kernel _small_o_kernel
+_small_o_kernel:                        ; @_small_o_kernel
+.Lfunc_begin0:
+	.file	1 "/workspace/experiments/minicpm-s2/code/20261026T023321Z-main34942f7-prefill-stride-accuracy/vllm_fl/patches" "biv150_stable_small_o.py"
+	.loc	1 15 0                          ; biv150_stable_small_o.py:15:0
+	.cfi_sections .debug_frame
+	.cfi_startproc
+	.cfi_return_column 32
+	.iluvatar_kernel_code_t
+		iluvatar_code_version_major = 1
+		iluvatar_code_version_minor = 3
+		iluvatar_machine_kind = 1
+		iluvatar_machine_version_major = 1
+		iluvatar_machine_version_minor = 1
+		iluvatar_machine_version_stepping = 0
+		kernel_code_entry_byte_offset = 256
+		kernel_code_prefetch_byte_size = 0
+		granulated_workitem_vgpr_count = 6
+		granulated_warp_sgpr_count = 5
+		float_mode = 12
+		debug_mode = 0
+		has_mbar = 0
+		user_sgpr_count = 6
+		enable_sgpr_workgroup_id_x = 1
+		enable_sgpr_workgroup_id_y = 0
+		enable_sgpr_workgroup_id_z = 0
+		enable_sgpr_workgroup_info = 1
+		enable_vgpr_workitem_id = 3
+		granulated_slb_size = 0
+		enable_exception = 128
+		enable_sgpr_private_segment_buffer = 1
+		enable_sgpr_globalvariable_ptr = 0
+		enable_sgpr_kernarg_segment_ptr = 1
+		enable_sgpr_constvariable_ptr = 0
+		enable_sgpr_private_segment_size = 0
+		enable_sgpr_grid_workgroup_count_x = 0
+		enable_sgpr_grid_workgroup_count_y = 0
+		enable_sgpr_grid_workgroup_count_z = 0
+		private_element_size = 1
+		is_ptr64 = 1
+		is_dynamic_callstack = 0
+		is_debug_enabled = 0
+		enable_private_swizzle = 1
+		has_called_assert = 0
+		has_called_printf = 0
+		has_called_malloc = 0
+		enable_srf_flat_shared = 0
+		enable_srf_flat_scratch = 0
+		has_wgmma = 0
+		has_dva = 0
+		enable_dynamic_smem_size = 0
+		workitem_private_segment_byte_size = 0
+		workgroup_group_segment_byte_size = 0
+		kernarg_segment_byte_size = 48
+		workgroup_fbarrier_count = 0
+		warp_sgpr_count = 46
+		workitem_vgpr_count = 27
+		reserved_vgpr_first = 0
+		reserved_vgpr_count = 0
+		reserved_sgpr_first = 0
+		reserved_sgpr_count = 0
+		debug_warp_private_segment_offset_sgpr = 0
+		debug_private_segment_buffer_sgpr = 0
+		kernarg_segment_alignment = 3
+		group_segment_alignment = 4
+		private_segment_alignment = 4
+		warp_size = 6
+		call_convention = -1
+		runtime_loader_kernel_symbol = 0
+	.end_iluvatar_kernel_code_t
+; %bb.0:
+	; Func LiveIn Regs:
+	;  blockIdx.x : s6
+	sl_mov_b32 s2, tcr_lo
+	ml_vrf_init_u32 v4, tcr
+.Ltmp0:
+	.loc	1 20 24 prologue_end            ; biv150_stable_small_o.py:20:24
+	sl_lsa_load_b32x16 s[12:27], s[4:5], noreg, #0, ca
+	.loc	1 20 44 is_stmt 0               ; biv150_stable_small_o.py:20:44
+	ml_and_b32 v0, tid, 0x7
+	sl_wait smcnt(0)
+	sl_and_b32 {s19, wcr}, tcr_lo, 0xc0
+	.loc	1 26 29 is_stmt 1               ; biv150_stable_small_o.py:26:29
+	sl_bfe2_b32 s3, tcr_lo, 0x46
+	.loc	1 25 24                         ; biv150_stable_small_o.py:25:24
+	sl_mov_b32 s1, 0x0
+	.loc	1 26 29                         ; biv150_stable_small_o.py:26:29
+	sl_add_i32 s7, s3, 0x4
+	sl_add_i32 s22, s3, 0x8
+	sl_add_i32 s23, s3, 0xc
+	.loc	1 25 24                         ; biv150_stable_small_o.py:25:24
+	sl_mull_u32 s0, s3, 0x3000
+	ml_shl_b32 v1, v4, 0x6
+	ml_shl_b32 v0, v0, 0x3
+	ml_and_b32 v2, tid, 0x8
+	sl_add_i64 s[4:5], s[12:13], s[0:1]
+	sl_add_i64 s[12:13], s[4:5], 0xc000
+	sl_add_i64 s[20:21], s[4:5], 0x18000
+	sl_add_i64 s[24:25], s[4:5], 0x24000
+	.loc	1 27 36                         ; biv150_stable_small_o.py:27:36
+	sl_mull_u32 s0, s6, 0x60000
+	.loc	1 27 24 is_stmt 0               ; biv150_stable_small_o.py:27:24
+	sl_sra_b32 {s1, wcr}, s0, 0x1f
+	sl_shl_b64 {s[0:1], wcr}, s[0:1], 0x1
+	sl_add_i64 s[10:11], s[14:15], s[0:1]
+	ml_cmp_eq_u32 tcr, v2, 0x0
+	ml_mov_b32 v2, 0x280
+	ml_csel_b32 v2, 0, v2, tcr
+	sl_srl_b32 {s0, wcr}, s2, 0x5
+	sl_and_b32 {s0, wcr}, s0, 0x2
+	sl_srl_b32 {s1, wcr}, s2, 0x1
+	sl_and_b32 {s1, wcr}, s1, 0x40
+	sl_add_i32 s0, s1, s0
+	sl_mov_b32 s14, 0xc00
+	ml_anyop3_b32 v0, s14, v1, v0, 0xfffffff8
+	ml_anyop3_b32 v5, s0, v2, v0, 0xfffffffe
+	ml_xor_b32 v6, v5, 0x80
+	sl_bfe2_b32 s0, s2, 0x26
+	sl_bfe2_b32 s1, s2, 0x27
+	sl_mull_u32 s2, s0, 0x400
+	sl_mull_u32 s15, s1, 0x1000
+	sl_add_i32 s33, s2, s15
+	sl_mull_u32 s0, s0, 0x40
+	sl_mull_u32 s1, s1, 0x30000
+	sl_add_i32 s32, s0, s1
+	sl_add_i32 s34, s32, 0x60000
+	ml_shl_b32 v7, tid, 0x2
+	ml_xor_b32 v8, v7, 0x80
+	sl_mov_b32 s0, 0x3300
+	ml_anyop3_b32 v9, s0, v1, v7, 0xf8
+	ml_xor_b32 v10, v9, 0x10
+	ml_xor_b32 v11, v9, 0x20
+	ml_xor_b32 v12, v9, 0x30
+	sl_sub_u64 s[36:37], s[8:9], s[8:9]
+	ml_mov_b32 v0, 0x0
+	sl_mov_b32 s30, 0xffffffff
+	sl_cmp_lt_i32 wcr, s7, s18
+	sl_sub_bi_u32 s0, s8, s8, wcr
+	sl_cmp_lt_i32 wcr, s22, s18
+	sl_sub_bi_u32 s1, s8, s8, wcr
+	sl_cmp_lt_i32 wcr, s23, s18
+	sl_sub_bi_u32 s2, s8, s8, wcr
+	sl_mov_b32 s31, 0x3000
+	sl_cmp_lt_i32 wcr, s3, s18
+	sl_sub_bi_u32 s3, s8, s8, wcr
+	sl_mov_b32 s22, 0x4000
+	sl_mov_b32 s35, s33
+	sl_mov_b32 s26, 0x4400
+	sl_mov_b32 s38, 0x4800
+	sl_mov_b32 s39, 0x4c00
+	sl_mov_b32 s40, 0x400
+	sl_mov_b32 s41, 0x800
+	ml_mov_b32 v1, 0x0
+	ml_mov_b32 v2, 0x0
+	ml_mov_b32 v3, 0x0
+	sl_jump BB0_2
+BB0_1:                                  ;   in Loop: Header=BB0_2 Depth=1
+	.loc	1 0 0                           ; biv150_stable_small_o.py:0
+	sl_shl_b64 {s[28:29], wcr}, s[36:37], 0x7
+	.loc	1 25 20 is_stmt 1               ; biv150_stable_small_o.py:25:20
+	sl_wait vmcnt(0)
+	sl_barrier 
+	.loc	1 27 42                         ; biv150_stable_small_o.py:27:42
+	sl_shl_b64 {s[28:29], wcr}, s[28:29], 0x1
+	sl_add_i64 s[28:29], s[10:11], s[28:29]
+	.loc	1 27 20 is_stmt 0               ; biv150_stable_small_o.py:27:20
+	sl_sme_load_16x1b64_col s[28:31], s[32:33], 0x0, 0x0, 0x0, 0x1
+	.loc	1 25 20 is_stmt 1               ; biv150_stable_small_o.py:25:20
+	ml_slb_store_b16  v13, v5, s22, #0, null
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	sl_sme_load_16x1b64_col s[28:31], s[34:35], 0x0, 0x0, 0x800, 0x1
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	ml_srl_b32 v13, v13, 0x10
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	sl_sme_load_16x1b64_col s[28:31], s[32:33], 0x0, 0x2, 0x200, 0x1
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	ml_slb_store_b16  v13, v5, s22, #4, null
+	ml_srl_b32 v13, v15, 0x10
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	sl_sme_load_16x1b64_col s[28:31], s[34:35], 0x0, 0x2, 0xa00, 0x1
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	ml_slb_store_b16  v15, v5, s22, #256, null
+	ml_slb_store_b16  v13, v5, s22, #260, null
+	ml_srl_b32 v13, v14, 0x10
+	ml_slb_store_b16  v14, v6, s22, #0, null
+	ml_slb_store_b16  v13, v6, s22, #4, null
+	ml_srl_b32 v13, v16, 0x10
+	ml_slb_store_b16  v16, v6, s22, #256, null
+	ml_slb_store_b16  v13, v6, s22, #260, null
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	sl_wait lmcnt(0) g2scnt(0)
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	sl_barrier 
+	ml_slb_blkload_x1  v13, noreg, s22, #0, null
+	.loc	1 23 23                         ; biv150_stable_small_o.py:23:23
+	sl_add_i64 s[36:37], s[36:37], 0x1
+	sl_xor_b64 {s[28:29], wcr}, s[36:37], 0x30
+	ml_add_i32 v7, v7, 0x100
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	ml_slb_blkload_x1  v14, noreg, s22, #256, null
+	ml_slb_blkload_x1  v15, noreg, s26, #0, null
+	ml_slb_blkload_x1  v16, noreg, s26, #256, null
+	ml_slb_blkload_x1  v17, noreg, s38, #0, null
+	ml_slb_blkload_x1  v18, noreg, s38, #256, null
+	ml_slb_blkload_x1  v19, noreg, s39, #0, null
+	ml_slb_blkload_x1  v20, noreg, s39, #256, null
+	ml_slb_load_b32x1  v21, v8, s22, #512, null
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	ml_slb_load_b32x1  v23, v9, noreg, #0, null
+	ml_slb_load_b32x1  v24, v10, noreg, #0, null
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	ml_slb_load_b32x1  v22, v8, s22, #768, null
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	ml_slb_load_b32x1  v25, v11, noreg, #0, null
+	ml_slb_load_b32x1  v26, v12, noreg, #0, null
+	.loc	1 28 33                         ; biv150_stable_small_o.py:28:33
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[13:14], v[23:24], v[0:3]
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	ml_slb_load_b32x1  v13, v8, s26, #512, null
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	ml_slb_load_b32x1  v23, v9, s40, #0, null
+	ml_slb_load_b32x1  v24, v10, s40, #0, null
+	.loc	1 28 33                         ; biv150_stable_small_o.py:28:33
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[21:22], v[25:26], v[0:3]
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	ml_slb_load_b32x1  v14, v8, s26, #768, null
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	ml_slb_load_b32x1  v21, v11, s40, #0, null
+	ml_slb_load_b32x1  v22, v12, s40, #0, null
+	.loc	1 28 33                         ; biv150_stable_small_o.py:28:33
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[15:16], v[23:24], v[0:3]
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	ml_slb_load_b32x1  v15, v8, s38, #512, null
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	ml_slb_load_b32x1  v23, v9, s41, #0, null
+	ml_slb_load_b32x1  v24, v10, s41, #0, null
+	.loc	1 28 33                         ; biv150_stable_small_o.py:28:33
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[13:14], v[21:22], v[0:3]
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	ml_slb_load_b32x1  v16, v8, s38, #768, null
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	ml_slb_load_b32x1  v13, v11, s41, #0, null
+	ml_slb_load_b32x1  v14, v12, s41, #0, null
+	ml_slb_load_b32x1  v21, v9, s14, #0, null
+	.loc	1 28 33                         ; biv150_stable_small_o.py:28:33
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[17:18], v[23:24], v[0:3]
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	ml_slb_load_b32x1  v17, v8, s39, #512, null
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	ml_slb_load_b32x1  v22, v10, s14, #0, null
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	ml_slb_load_b32x1  v18, v8, s39, #768, null
+	.loc	1 28 33                         ; biv150_stable_small_o.py:28:33
+	sl_wait lmcnt(4)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[15:16], v[13:14], v[0:3]
+	.loc	1 27 20                         ; biv150_stable_small_o.py:27:20
+	ml_slb_load_b32x1  v13, v11, s14, #0, null
+	ml_slb_load_b32x1  v14, v12, s14, #0, null
+	.loc	1 28 33                         ; biv150_stable_small_o.py:28:33
+	sl_wait lmcnt(3)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[19:20], v[21:22], v[0:3]
+	sl_wait lmcnt(0)
+	ml_matrix_mad_f32_bf16_m16n16k16 v[0:3], v[17:18], v[13:14], v[0:3]
+	.loc	1 23 23                         ; biv150_stable_small_o.py:23:23
+	sl_cbr_wcrz BB0_10, wcr
+BB0_2:                                  ; =>This Inner Loop Header: Depth=1
+	.loc	1 25 20                         ; biv150_stable_small_o.py:25:20
+	sl_or_b32 {s3, wcr}, s3, 0x0
+	ml_mov_b32 v13, 0x0
+	sl_cbr_wcrz BB0_4, wcr
+; %bb.3:                                ;   in Loop: Header=BB0_2 Depth=1
+	sl_mov_b32 s7, s30
+	ml_lsa_load_dword v13, s[4:7], signed v7, noreg, #0, ca
+BB0_4:                                  ;   in Loop: Header=BB0_2 Depth=1
+	ml_mov_b32 v15, 0x0
+	sl_or_b32 {s0, wcr}, s0, 0x0
+	ml_mov_b32 v14, 0x0
+	sl_cbr_wcrz BB0_6, wcr
+; %bb.5:                                ;   in Loop: Header=BB0_2 Depth=1
+	sl_mov_b32 s15, s30
+	ml_lsa_load_dword v14, s[12:15], signed v7, noreg, #0, ca
+BB0_6:                                  ;   in Loop: Header=BB0_2 Depth=1
+	sl_or_b32 {s1, wcr}, s1, 0x0
+	sl_cbr_wcrz BB0_8, wcr
+; %bb.7:                                ;   in Loop: Header=BB0_2 Depth=1
+	sl_mov_b32 s23, s30
+	ml_lsa_load_dword v15, s[20:23], signed v7, noreg, #0, ca
+BB0_8:                                  ;   in Loop: Header=BB0_2 Depth=1
+	sl_or_b32 {s2, wcr}, s2, 0x0
+	ml_mov_b32 v16, 0x0
+	sl_cbr_wcrz BB0_1, wcr
+; %bb.9:                                ;   in Loop: Header=BB0_2 Depth=1
+	sl_mov_b32 s27, s30
+	ml_lsa_load_dword v16, s[24:27], signed v7, noreg, #0, ca
+	sl_jump BB0_1
+BB0_10:
+	.loc	1 20 27                         ; biv150_stable_small_o.py:20:27
+	sl_mull_u32 s0, s6, 0x40
+	.loc	1 20 44 is_stmt 0               ; biv150_stable_small_o.py:20:44
+	ml_and_b32 v5, tid, 0x7
+	ml_shl_b32 v5, v5, 0x1
+	sl_srl_b32 {s1, wcr}, s19, 0x2
+	.loc	1 20 32                         ; biv150_stable_small_o.py:20:32
+	sl_add_i32 s0, s0, s1
+	ml_add_i32 v5, s0, v5
+	.loc	1 30 50 is_stmt 1               ; biv150_stable_small_o.py:30:50
+	ml_bfe2_b32 v6, v4, 0x63
+	ml_add_i32 v7, v6, 0x8
+	.loc	1 30 58 is_stmt 0               ; biv150_stable_small_o.py:30:58
+	ml_cmp_gt_i32 tcr, s18, v6
+	.loc	1 29 17 is_stmt 1               ; biv150_stable_small_o.py:29:17
+	ml_shl_b32 v8, v6, 0xc
+	.loc	1 29 29 is_stmt 0               ; biv150_stable_small_o.py:29:29
+	ml_shl_b32 v6, v6, 0xb
+	.loc	1 29 17                         ; biv150_stable_small_o.py:29:17
+	ml_mov_b32 v9, s17
+	.loc	1 30 58 is_stmt 1               ; biv150_stable_small_o.py:30:58
+	sl_mov_b64 s[0:1], tcr
+	ml_cmp_gt_i32 tcr, s18, v7
+	.loc	1 29 29                         ; biv150_stable_small_o.py:29:29
+	ml_shl_b32 v7, v7, 0xc
+	.loc	1 29 35 is_stmt 0               ; biv150_stable_small_o.py:29:35
+	ml_sra_b32 v10, v5, 0x1f
+	ml_shl_b32 v11, v5, 0x1
+	.loc	1 30 58 is_stmt 1               ; biv150_stable_small_o.py:30:58
+	sl_mov_b64 s[2:3], tcr
+	.loc	1 29 17                         ; biv150_stable_small_o.py:29:17
+	ml_addo_u32 {v8, tcr}, s16, v8
+	.loc	1 29 35 is_stmt 0               ; biv150_stable_small_o.py:29:35
+	ml_shl_b32 v10, v10, 0x1
+	ml_srl_b32 v12, v5, 0x1f
+	ml_or_b32 v10, v10, v12
+	.loc	1 29 17                         ; biv150_stable_small_o.py:29:17
+	ml_addc_i32 v9, 0, v9, tcr
+	.loc	1 29 35                         ; biv150_stable_small_o.py:29:35
+	ml_addo_u32 {v8, tcr}, v11, v8
+	.loc	1 30 28 is_stmt 1               ; biv150_stable_small_o.py:30:28
+	ml_cvt_bf16_f32  v0, v0
+	ml_cvt_bf16_f32  v1, v1
+	ml_cvt_bf16_f32  v2, v2
+	.loc	1 29 35                         ; biv150_stable_small_o.py:29:35
+	ml_addc_i32 v9, v9, v10, tcr
+	.loc	1 30 28                         ; biv150_stable_small_o.py:30:28
+	ml_cvt_bf16_f32  v3, v3
+	sl_mov_b32 s4, 0x1000504
+	ml_byte_permute_b32 v0, v1, v0, s4
+	ml_byte_permute_b32 v1, v3, v2, s4
+	ml_and_b32 v2, tid, 0x1
+	ml_cmp_eq_u32 tcr, v2, 0x0
+	ml_mov_b32 v2, 0x7632
+	ml_mov_b32 v3, 0x5410
+	ml_csel_b32 v10, v3, v2, tcr
+	ml_csel_b32 v12, v2, v3, tcr
+	sl_mov_b32 s5, 0x2010200
+	ml_byte_permute_b32 v10, v10, v10, s5
+	ml_pk_shl_b16 v10, v10, 0x40004
+	ml_pk_srl_b8 v10, v10, 0x40004
+	ml_byte_permute_b32 v10, v0, v1, v10
+	ml_byte_permute_b32 v12, v12, v12, s5
+	ml_pk_shl_b16 v12, v12, 0x40004
+	ml_shl_b32 v4, v4, 0x1
+	ml_bfe2_b32 v13, tid, 0x25
+	ml_anyop3_b32 v4, 62, v4, v13, 0xfffffff8
+	ml_slb_shuffle_rtn_b32 v10, v10, v4
+	ml_pk_srl_b8 v12, v12, 0x40004
+	ml_byte_permute_b32 v0, v0, v1, v12
+	ml_xor_b32 v1, v4, 0x1
+	ml_slb_shuffle_rtn_b32 v0, v0, v1
+	.loc	1 29 35                         ; biv150_stable_small_o.py:29:35
+	ml_add_i32 v1, v6, v5
+	ml_add_i32 v4, v7, v11
+	.loc	1 30 28                         ; biv150_stable_small_o.py:30:28
+	ml_and_b32 v5, tid, 0x20
+	ml_cmp_eq_u32 tcr, v5, 0x0
+	ml_mov_b32 v5, 0x1054
+	ml_csel_b32 v3, v3, v5, tcr
+	ml_mov_b32 v5, 0x3276
+	ml_csel_b32 v2, v2, v5, tcr
+	ml_byte_permute_b32 v3, v3, v3, s5
+	ml_pk_shl_b16 v3, v3, 0x40004
+	ml_pk_srl_b8 v3, v3, 0x40004
+	.loc	1 30 13 is_stmt 0               ; biv150_stable_small_o.py:30:13
+	ml_mov_v2s_b32 s4, v8, 0x0
+	.loc	1 30 28                         ; biv150_stable_small_o.py:30:28
+	ml_byte_permute_b32 v2, v2, v2, s5
+	ml_pk_shl_b16 v2, v2, 0x40004
+	.loc	1 30 13                         ; biv150_stable_small_o.py:30:13
+	ml_mov_v2s_b32 s5, v9, 0x0
+	ml_mov_b32 v5, s4
+	ml_sub_i32 v5, v8, v5
+	sl_mov_b32 s7, 0xffffffff
+	ml_shl_b32 v1, v1, 0x1
+	.loc	1 30 28                         ; biv150_stable_small_o.py:30:28
+	sl_wait lmcnt(0)
+	ml_byte_permute_b32 v3, v10, v0, v3
+	.loc	1 30 13                         ; biv150_stable_small_o.py:30:13
+	ml_sub_i32 v1, v4, v1
+	ml_mov_v2s_b32 s6, v1, 0x0
+	sl_and_savetmsk_b64 {s[8:9], wcr}, s[0:1], tmsk
+	ml_lsa_store_dword v3, s[4:7], signed v5, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[8:9]
+	.loc	1 30 28                         ; biv150_stable_small_o.py:30:28
+	ml_pk_srl_b8 v1, v2, 0x40004
+	ml_byte_permute_b32 v0, v10, v0, v1
+	.loc	1 30 13                         ; biv150_stable_small_o.py:30:13
+	ml_add_i32 v1, s6, v5
+	sl_and_savetmsk_b64 {s[8:9], wcr}, s[2:3], tmsk
+	ml_lsa_store_dword v0, s[4:7], signed v1, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[8:9]
+	.loc	1 29 4 is_stmt 1                ; biv150_stable_small_o.py:29:4
+	sl_eop 
+.Ltmp1:
+	.section	.rodata,"a",@progbits
+	.p2align	6, 0x0
+	.globl	_small_o_kernel.kd
+	.type	_small_o_kernel.kd,@object
+	.size	_small_o_kernel.kd, 64
+_small_o_kernel.kd:
+	.asciz	"\000\000\000"
+	.long	0
+	.asciz	"\000\000\000\000\000\000\000"
+	.quad	_small_o_kernel@rel64-_small_o_kernel.kd
+	.asciz	"\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.long	536902
+	.asciz	"\003\000\224\006\211\000\000\000\000\000\000"
+	.text
+.Lfunc_end0:
+	.size	_small_o_kernel, .Lfunc_end0-_small_o_kernel
+	.cfi_endproc
+                                        ; -- End function
+	.section	.Iluvatar.csdata,"",@progbits
+; Kernel info:
+; codeLenInByte = 2048
+; NumSgprs: 46
+; NumVgprs: 27
+; ScratchSize: 0
+; MemoryBound: 0
+; FloatMode: 12
+; IeeeMode: 1
+; SLBByteSize: 0 bytes/workgroup (compile time only)
+; SGPRBlocks: 5
+; VGPRBlocks: 6
+; NumSGPRsForWarpsPerNU: 42
+; NumVGPRsForWarpsPerNR: 27
+; ReqNTIDx: 0
+; MaxNTIDx: 0
+; MinCTASm: 0
+; ActiveWarp: 8
+; WarpLimiterHint : 0
+	.section	.debug_abbrev,"",@progbits
+	.byte	1                               ; Abbreviation Code
+	.byte	17                              ; DW_TAG_compile_unit
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	37                              ; DW_AT_producer
+	.byte	8                               ; DW_FORM_string
+	.byte	19                              ; DW_AT_language
+	.byte	5                               ; DW_FORM_data2
+	.byte	3                               ; DW_AT_name
+	.byte	8                               ; DW_FORM_string
+	.byte	16                              ; DW_AT_stmt_list
+	.byte	6                               ; DW_FORM_data4
+	.byte	27                              ; DW_AT_comp_dir
+	.byte	8                               ; DW_FORM_string
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	0                               ; EOM(3)
+	.section	.debug_info,"",@progbits
+	.long	170                             ; Length of Unit
+	.short	2                               ; DWARF version number
+	.long	.debug_abbrev                   ; Offset Into Abbrev. Section
+	.byte	8                               ; Address Size (in bytes)
+	.byte	1                               ; Abbrev [1] 0xb:0xa3 DW_TAG_compile_unit
+	.ascii	"triton"                        ; DW_AT_producer
+	.byte	0
+	.short	2                               ; DW_AT_language
+	.ascii	"biv150_stable_small_o.py"      ; DW_AT_name
+	.byte	0
+	.long	.debug_line                     ; DW_AT_stmt_list
+	.ascii	"/workspace/experiments/minicpm-s2/code/20261026T023321Z-main34942f7-prefill-stride-accuracy/vllm_fl/patches" ; DW_AT_comp_dir
+	.byte	0
+	.quad	.Lfunc_begin0                   ; DW_AT_low_pc
+	.quad	.Lfunc_end0                     ; DW_AT_high_pc
+	.section	".note.GNU-stack","",@progbits
+	.iluvatar_isa "bi-iluvatar-ilurt--ivcore-1-1-0"
+	.iluvatar_hsa_metadata
+---
+iluvatar.kernels:
+  - .args:
+      - .address_space:  global
+        .name:           KArg_0
+        .offset:         0
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_1
+        .offset:         8
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_2
+        .offset:         16
+        .size:           8
+        .value_kind:     global_buffer
+      - .name:           KArg_3
+        .offset:         24
+        .size:           4
+        .value_kind:     by_value
+      - .address_space:  global
+        .name:           KArg_4
+        .offset:         32
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_5
+        .offset:         40
+        .size:           8
+        .value_kind:     global_buffer
+    .group_segment_fixed_size: 0
+    .kernarg_segment_align: 8
+    .kernarg_segment_size: 48
+    .max_flat_workgroup_size: 0
+    .name:           _small_o_kernel
+    .private_segment_fixed_size: 0
+    .sgpr_count:     46
+    .sgpr_spill_count: 0
+    .symbol:         _small_o_kernel.kd
+    .vgpr_count:     27
+    .vgpr_spill_count: 0
+    .warp_size:      64
+iluvatar.version:
+  - 1
+  - 0
+...
+
+	.end_iluvatar_hsa_metadata

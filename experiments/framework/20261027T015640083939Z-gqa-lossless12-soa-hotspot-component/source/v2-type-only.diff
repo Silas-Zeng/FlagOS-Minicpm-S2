@@ -1,0 +1,11 @@
+--- b440/soa_kernels.py
++++ v2/soa_kernels.py
+@@ -56,7 +56,7 @@
+     high=tl.load(data+3072+slot*64+dim//2,mask=valid&(mode==0),other=0).to(tl.uint16)
+     exp=tl.where(mode!=0,base+code,code|(((high>>shift)&15)<<4))
+     bits=((low&128)<<8)|(low&127)|(exp<<7)
+-    return bits.to(tl.bfloat16,bitcast=True)
++    return bits.to(tl.uint16).to(tl.bfloat16,bitcast=True)
+ 
+ 
+ @triton.jit

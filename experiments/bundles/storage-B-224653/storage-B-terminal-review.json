@@ -1,0 +1,22 @@
+{
+  "run_id": "20261029T224653126532Z-native-k8-storage-snapshot-b-16384-four-rounds",
+  "review_scope": "官方16K终态与A/B可比性增量复核",
+  "evidence_root": "archive/native-k8-storage-snapshot-20261030/service-b-224653/",
+  "rounds_tok_s": [3923.23, 4555.17, 4551.99, 4550.26],
+  "warm_mean_rounds_2_to_4_tok_s": 4552.473333,
+  "comparison": {
+    "A_run": "20261029T205801Z-native-k8-sme-mixed-a-16384-four-rounds",
+    "A_warm_mean_tok_s": 4548.78,
+    "observed_relative_delta_percent": 0.0812,
+    "starting_tuning_db": "A/B同一快照",
+    "ending_tuning_db": "A/B不同，调优后状态不一致",
+    "kv_pages": {"A": 34271, "B": 34271}
+  },
+  "checks": {
+    "four_rounds_complete": true,
+    "all_requests_successful": true,
+    "route_and_library_identity": "与既有Mixed A相同；仅存储快照候选差异",
+    "cleanup_and_postflight": "成功，GPU/9031已清理"
+  },
+  "assessment": "仅是同起始DB、相同KV页数下的16K小幅观察；末态调优DB不同，不能称稳定或严格因果收益。PR120既有4K ABA无稳定收益。本轮只补16K证据，不升级基线，也未完成准确率资格。"
+}

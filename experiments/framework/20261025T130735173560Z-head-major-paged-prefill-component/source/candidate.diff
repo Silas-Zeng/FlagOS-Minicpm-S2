@@ -1,0 +1,79 @@
+--- FlagGems-v5.3.5/ops/flash_kernel.py
++++ candidate/ops/flash_kernel.py
+@@ -1244,6 +1244,31 @@
+     return bK, bV
+ 
+ 
++
++@triton.jit
++def load_paged_kv16_rows(
++    start_n, k_len, page_table_ptr, k_ptr_base, v_ptr_base,
++    k_row_stride, k_page_stride, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr,
++    block_size: tl.constexpr, d: tl.constexpr,
++):
++    # 按物理页的连续 token/channel 读取，再将 K 转成 QK 点积布局。
++    # 仅验证 page16/D128；V 与 K 的 stride 相等由真实入口核实。
++    tl.static_assert(block_size == 16 and d == 128 and BLOCK_K == 128)
++    tl.static_assert(BLOCK_N % 16 == 0)
++    page = start_n // 16 + tl.arange(0, BLOCK_N // 16)
++    token = tl.arange(0, 16)
++    channel = tl.arange(0, 128)
++    physical = tl.load(page_table_ptr + page, mask=page * 16 < k_len, other=0).to(tl.int64)
++    offsets = (physical[:, None, None] * k_page_stride
++               + token[None, :, None] * k_row_stride + channel[None, None, :])
++    valid = page[:, None, None] * 16 + token[None, :, None] < k_len
++    k_rows = tl.load(k_ptr_base + offsets, mask=valid, other=0.0)
++    v_rows = tl.load(v_ptr_base + offsets, mask=valid, other=0.0)
++    k_rows = tl.reshape(k_rows, (BLOCK_N, 128))
++    v_rows = tl.reshape(v_rows, (BLOCK_N, 128))
++    return tl.trans(k_rows), v_rows
++
++
+ @libentry()
+ @triton.jit(
+     do_not_specialize=[
+@@ -1439,18 +1464,10 @@
+     for step in tl.range(0, n_masking_steps):
+         col_idx = n_block * BLOCK_N + tl.arange(0, BLOCK_N)
+         if is_paged:
+-            bK, bV = load_from_kvcache(
+-                col_idx,
+-                k_len,
+-                page_table_ptr,
+-                k_ptr_base,
+-                v_ptr_base,
+-                block_size,
+-                d,
+-                k_row_stride,
+-                BLOCK_K=BLOCK_K,
+-                k_page_stride=k_page_stride,
+-                boundary_check=True,
++            bK, bV = load_paged_kv16_rows(
++                n_block * BLOCK_N, k_len, page_table_ptr, k_ptr_base, v_ptr_base,
++                k_row_stride, k_page_stride, BLOCK_N=BLOCK_N, BLOCK_K=BLOCK_K,
++                block_size=block_size, d=d,
+             )
+         else:
+             start_n = n_block * BLOCK_N
+@@ -1536,17 +1553,10 @@
+     ):
+         col_idx = n_block * BLOCK_N + tl.arange(0, BLOCK_N)
+         if is_paged:
+-            bK, bV = load_from_kvcache(
+-                col_idx,
+-                k_len,
+-                page_table_ptr,
+-                k_ptr_base,
+-                v_ptr_base,
+-                block_size,
+-                d,
+-                k_row_stride,
+-                BLOCK_K=BLOCK_K,
+-                k_page_stride=k_page_stride,
++            bK, bV = load_paged_kv16_rows(
++                n_block * BLOCK_N, k_len, page_table_ptr, k_ptr_base, v_ptr_base,
++                k_row_stride, k_page_stride, BLOCK_N=BLOCK_N, BLOCK_K=BLOCK_K,
++                block_size=block_size, d=d,
+             )
+         else:
+             start_n = n_block * BLOCK_N

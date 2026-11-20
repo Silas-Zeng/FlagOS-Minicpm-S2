@@ -1,0 +1,99 @@
+{
+  "decision": "POSITIVE_4K_PENDING_16K_ACCURACY",
+  "run": "20261028T194258Z-native-gqa-overlap-4k-four-rounds",
+  "rates": [
+    5244.67,
+    6450.53,
+    6723.84,
+    6723.28
+  ],
+  "successful_requests": 1024,
+  "baseline_first_warm": 6441.35,
+  "first_warm_delta_percent": 0.1425167084539547,
+  "warm_mean": 6632.55,
+  "baseline_warm_mean": 6627.816666666667,
+  "warm_mean_delta_percent": 0.07141617777599585,
+  "actual_normal_and_direct_selector": {
+    "valid": true,
+    "group_record": {
+      "K": 6144,
+      "M": 2048,
+      "N": 2048,
+      "asm_sha256": "1f54574cfd8bb82cbf9fc7d17e2377b8919997652c0db510cdfd248089a5a64d",
+      "binary_sha256": null,
+      "capture": false,
+      "compiled_type": "triton.compiler.compiler.CompiledKernel",
+      "config": {
+        "BLOCK_K": 32,
+        "BLOCK_M": 256,
+        "BLOCK_N": 256,
+        "SPLIT_K": 1,
+        "num_ctas": 1,
+        "num_stages": 2,
+        "num_warps": 16
+      },
+      "device_cache": {
+        "cache_attribute": "device_caches",
+        "device_key": "0",
+        "entry_identity_match": true
+      },
+      "group_m": 4,
+      "metadata": "KernelMetadata(allowed_dot_input_precisions=['tf32', 'tf32x3', 'ieee', 'bf16x3', 'bf16x6'], arch='sm71', backend_name='corex', debug=False, default_dot_input_precision='tf32', deprecated_fp8_dot_operand_dtypes=[], enable_fp_fusion=True, enable_reflect_ftz=True, extern_libs=[['libdevice', '/usr/local/corex-4.5.0/nvvm/libdevice/libdevice.compute_bi.10.bc']], global_scratch_align=1, global_scratch_size=0, hash='79d0c072011d59224089be06b7925cf37268ffa7f71ae7188e2b43b309c16940', instrumentation_mode='', ir_override=None, launch_cooperative_grid=False, launch_pdl=False, max_num_imprecise_acc_default=0, maxnreg=None, name='linear_kernel_groupm4', num_ctas=1, num_stages=2, num_warps=16, profile_scratch_align=1, profile_scratch_size=0, ptx_options=None, ptx_version=None, sanitize_overflow=True, shared=65536, supported_fp8_dtypes=['fp8e4nv', 'fp8e5'], target=GPUTarget(backend='corex', arch=71, warp_size=64), tensordesc_meta=[], tmem_size=None, triton_version='3.6.0', use_sme=15, warp_size=64)",
+      "metadata_sha256": "3786ca44c95c1d62bc050426337c27274f4bb5bd28f929834055c97721ace980"
+    },
+    "direct_record": {
+      "K": 6144,
+      "M": 2048,
+      "N": 2048,
+      "asm_sha256": "1f54574cfd8bb82cbf9fc7d17e2377b8919997652c0db510cdfd248089a5a64d",
+      "binary_sha256": null,
+      "capture": false,
+      "compiled_type": "triton.compiler.compiler.CompiledKernel",
+      "config": {
+        "BLOCK_K": 32,
+        "BLOCK_M": 256,
+        "BLOCK_N": 256,
+        "SPLIT_K": 1,
+        "num_ctas": 1,
+        "num_stages": 2,
+        "num_warps": 16
+      },
+      "device": "cuda:0",
+      "device_cache": {
+        "cache_attribute": "device_caches",
+        "device_key": "0",
+        "entry_identity_match": true
+      },
+      "direct": true,
+      "group_m": 4,
+      "launch_synchronized": true,
+      "layout": "contiguous BF16, 16-byte aligned x/weight/out, exact M2048/N2048/K6144",
+      "metadata": "KernelMetadata(allowed_dot_input_precisions=['tf32', 'tf32x3', 'ieee', 'bf16x3', 'bf16x6'], arch='sm71', backend_name='corex', debug=False, default_dot_input_precision='tf32', deprecated_fp8_dot_operand_dtypes=[], enable_fp_fusion=True, enable_reflect_ftz=True, extern_libs=[['libdevice', '/usr/local/corex-4.5.0/nvvm/libdevice/libdevice.compute_bi.10.bc']], global_scratch_align=1, global_scratch_size=0, hash='79d0c072011d59224089be06b7925cf37268ffa7f71ae7188e2b43b309c16940', instrumentation_mode='', ir_override=None, launch_cooperative_grid=False, launch_pdl=False, max_num_imprecise_acc_default=0, maxnreg=None, name='linear_kernel_groupm4', num_ctas=1, num_stages=2, num_warps=16, profile_scratch_align=1, profile_scratch_size=0, ptx_options=None, ptx_version=None, sanitize_overflow=True, shared=65536, supported_fp8_dtypes=['fp8e4nv', 'fp8e5'], target=GPUTarget(backend='corex', arch=71, warp_size=64), tensordesc_meta=[], tmem_size=None, triton_version='3.6.0', use_sme=15, warp_size=64)",
+      "metadata_sha256": "3786ca44c95c1d62bc050426337c27274f4bb5bd28f929834055c97721ace980",
+      "stream_handle": 0
+    },
+    "scope": "cold normal-JIT compile object reused by an actual synchronized direct launch before benchmark"
+  },
+  "first_round_stack_valid": true,
+  "kv_comparison": {
+    "valid": true,
+    "compare_kv_match": false,
+    "baseline": 548336,
+    "candidate": 548432,
+    "limitation": "KV容量不一致时仍记录官方观测和首暖筛选，但不能声称相同显存条件下的严格因果收益。"
+  },
+  "compare_kv_match": false,
+  "official_four_rounds_complete": true,
+  "accuracy_run": false,
+  "new_baseline": false,
+  "merge": false,
+  "raw_csv_sha256": "3807b2a53053c95b22e7a38e90c8dc18a20c0226d08ffeae81260d01dac2c3db",
+  "cleanup": "DB/source/both native libraries restored; original owner cleanup passed",
+  "limits": [
+    "组件墙钟收益不等于模型吞吐收益；本项没有继承105题准确率资格。",
+    "KV条件若不匹配，只记录观测差异，不声称严格因果或稳定幅度。",
+    "性能主动筛停产生的SIGTERM/completed=false须与模型运行错误分开。"
+  ],
+  "source_archive": "archive/direct-launch-eager-20261029/batch-194258-official4k",
+  "no_retest": true
+}

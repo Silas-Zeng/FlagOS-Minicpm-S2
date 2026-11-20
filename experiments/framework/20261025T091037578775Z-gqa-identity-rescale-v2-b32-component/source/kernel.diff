@@ -1,0 +1,26 @@
+--- main526/biv150_gqa_decode.py
++++ strict-identity/biv150_gqa_decode.py
+@@ -174,11 +174,18 @@
+         scores = tl.dot(Q, K) * softmax_scale_log2e
+         new_max = tl.maximum(running_max, tl.max(scores, 1))
+         probability = tl.math.exp2(scores - new_max[:, None])
+-        rescale = tl.math.exp2(running_max - new_max)
+-        running_sum = running_sum * rescale + tl.sum(probability, 1)
+-        accumulator = accumulator * rescale[:, None] + tl.dot(
+-            probability.to(V.dtype), V
+-        )
++        # Exact, finite equality across all eight real heads; no threshold.
++        unchanged = (new_max == running_max) & (tl.abs(new_max) < float("inf"))
++        skip_rescale = tl.sum(unchanged.to(tl.int32), 0) == ROWS
++        if skip_rescale:
++            running_sum = running_sum + tl.sum(probability, 1)
++            accumulator = accumulator + tl.dot(probability.to(V.dtype), V)
++        else:
++            rescale = tl.math.exp2(running_max - new_max)
++            running_sum = running_sum * rescale + tl.sum(probability, 1)
++            accumulator = accumulator * rescale[:, None] + tl.dot(
++                probability.to(V.dtype), V
++            )
+         running_max = new_max
+         position += PAGE_SIZE
+ 

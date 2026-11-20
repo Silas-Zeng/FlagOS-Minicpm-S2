@@ -1,0 +1,39 @@
+{
+  "started_utc": "2026-10-24T19:26:17.921989+00:00",
+  "source_sha256": "f1b576b6c3eba2bf22257695aa5d8b5a39a2086fd31b2f213540a828ecb9d74b",
+  "builder_sha256": "88d68a7bd91732a59856e5d0e8bbdb945a85e185b789b68f426dc5086878a20f",
+  "commands": [
+    [
+      "/usr/local/corex/bin/clang++",
+      "-O3",
+      "-std=c++17",
+      "-fPIC",
+      "-x",
+      "ivcore",
+      "--cuda-gpu-arch=ivcore11",
+      "--cuda-path=/usr/local/corex",
+      "-D__ILUVATAR__",
+      "-c",
+      "/workspace/experiments/minicpm-s2/scripts/kv-staging-primitive-20261024T1910/staging.cu",
+      "-o",
+      "/workspace/experiments/minicpm-s2/scripts/kv-staging-primitive-20261024T1910/build/staging.o"
+    ],
+    [
+      "c++",
+      "-shared",
+      "/workspace/experiments/minicpm-s2/scripts/kv-staging-primitive-20261024T1910/build/staging.o",
+      "-L/usr/local/corex/lib64",
+      "-Wl,-rpath,/usr/local/corex/lib64",
+      "-lcudart",
+      "-o",
+      "/workspace/experiments/minicpm-s2/scripts/kv-staging-primitive-20261024T1910/build/staging.so"
+    ]
+  ],
+  "library": "/workspace/experiments/minicpm-s2/scripts/kv-staging-primitive-20261024T1910/build/staging.so",
+  "compiled": true,
+  "compiler": "/usr/local/corex-4.5.0/bin/clang-22",
+  "compiler_sha256": "8428e871501b05213d5b7ec0ecf796f4d04de24e5bf75c2539dc812f52ab3101",
+  "library_sha256": "71608fea43df03f279985f18e505aa652393f0a59884142422c7e195bdf54223",
+  "build_log_sha256": "d3035f6dc88dd37bc5bb287bfe617980ade1867f16d72a591c77605a5e415646",
+  "finished_utc": "2026-10-24T19:26:19.528335+00:00"
+}

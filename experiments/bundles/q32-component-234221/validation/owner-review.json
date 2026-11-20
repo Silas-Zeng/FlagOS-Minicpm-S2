@@ -1,0 +1,19 @@
+{
+  "schema": "q32-causal-interior-owner-review-v1",
+  "verdict": "PASS：owner可供root隔离编译/组件启动流程复核；本审阅不授权设备启动。",
+  "owner_sha256": "609406b064962265342fc414712c89117a4fab09e42c6d473217b72c6145bcec",
+  "review_scope": "仅owner锁、设备/端口准入、子进程归属/超时/信号及恢复包路径。未审worker数值逻辑。",
+  "findings": {
+    "cli": "owner parser要求--gpu及--root-owned-exclusive；本次增量确认owner启动worker的command也传入--gpu，worker parser接受并将其作为必须的设备阶段声明。",
+    "preflight": "先取得framework-device.lock非阻塞独占锁，再检查9031和ixsmi；运行后仍持锁做postflight。",
+    "child_lifecycle": "worker以start_new_session启动，stop只对该child PID对应进程组发送TERM，20秒后才KILL；owner的SIGTERM/SIGINT转为KeyboardInterrupt并进入finally；900秒超时也先清理子组。",
+    "recovery_collision": "已加唯一run输出及同名恢复包均拒绝覆盖的检查，避免旧证据被覆盖。",
+    "recovery": "成功/失败路径都写最终state并尝试打包PACKAGE与本次out成员及根manifest；预检前失败也会走归档。",
+    "limitations": "本地只做py_compile与--help；未运行远端preflight/worker。worker的数值、设备配置与执行正确性不在本次审阅范围。"
+  },
+  "cpu_checks": [
+    "python -m py_compile owner.py: PASS",
+    "owner.py --help: PASS"
+  ],
+  "remote_or_gpu_actions": false
+}

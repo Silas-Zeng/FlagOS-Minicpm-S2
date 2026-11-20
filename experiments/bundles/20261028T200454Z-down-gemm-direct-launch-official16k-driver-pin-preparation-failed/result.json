@@ -1,0 +1,65 @@
+{
+  "status": "preparation_failed_before_benchmark",
+  "supervisor_launch": {
+    "supervisor_pid": 169985,
+    "owner_pid": 169986,
+    "label": "down-gemm-direct-launch-official16k",
+    "log": "/workspace/experiments/minicpm-s2/owner-assets/down-groupm4-direct-16k-2ce0392c-20261029-v1/entry/official-owner-20261028T200454Z.log",
+    "command": [
+      "/usr/local/bin/python",
+      "/workspace/experiments/minicpm-s2/owner-assets/down-groupm4-direct-16k-2ce0392c-20261029-v1/entry/official_owner.py",
+      "--performance-control",
+      "/workspace/experiments/minicpm-s2/official/20261024T161030Z-main0bf9-main-official-four-rounds-control",
+      "--source-dir",
+      "/workspace/experiments/minicpm-s2/code/down-groupm4-direct-2ce0392c-16k-20261029-v1",
+      "--native-gqa-library",
+      "/workspace/experiments/minicpm-s2/build/native-gqa-overlap1-58a2fc96-20261028/corex_native_gqa_s2_probe.so",
+      "--native-gqa-build-receipt",
+      "/workspace/experiments/minicpm-s2/cpu-probes/20261027T191340Z-native-gqa-overlap1-production-build/build-receipt.json"
+    ],
+    "started_utc": "20261028T200454Z",
+    "prefill": 16384,
+    "baseline": {
+      "run": "/workspace/experiments/minicpm-s2/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds",
+      "control": "/workspace/experiments/minicpm-s2/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds-control",
+      "commit": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd",
+      "tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+      "source_count": 814,
+      "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+      "native_gqa_sha256": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+      "rates": [
+        4269.6,
+        4834.45,
+        4832.36,
+        4831.17
+      ],
+      "first_warm": {
+        "16384": 4834.45
+      },
+      "warm_mean": 4832.66,
+      "raw_csv": "/workspace/experiments/minicpm-s2/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds/benchmark_results/raw_runs_20261028_034438.csv",
+      "raw_csv_sha256": "3a1345745bbb39c5b21d3ef6574b32739e881043d2721a57176598f80846235b",
+      "kv_tokens": 548288,
+      "initial_database_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+      "files": {
+        "/workspace/experiments/minicpm-s2/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds-control/state.json": "6126d931df0103f6bf6a612a04157f69b8608fa822ba542a0b85db6bad0ac315",
+        "/workspace/experiments/minicpm-s2/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds-control/source-sha256.json": "2b9aeffd36984e4221bd8da1bd29b0dfa525e84d4b793a834a08f88994d79244",
+        "/workspace/experiments/minicpm-s2/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds-control/model-path-evidence.json": "bcbf3dfc7c7d0dbc6ced969792893886c158b084012f3575ecf6724c5aa1a5fe",
+        "/workspace/experiments/minicpm-s2/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds-control/database-original.sqlite": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+        "/workspace/experiments/minicpm-s2/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds/result.json": "016914239988d0b5db98f552ac51306a1c36bb5c90fd014af22555ddf983fb71",
+        "/workspace/experiments/minicpm-s2/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds/server.log": "f365af0c3634bef69ce5a61869f54b7c56bdf57336619d6e238a4901005771a9",
+        "/workspace/experiments/minicpm-s2/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds/benchmark_results/raw_runs_20261028_034438.csv": "3a1345745bbb39c5b21d3ef6574b32739e881043d2721a57176598f80846235b",
+        "/workspace/experiments/minicpm-s2/official/20261027T194324Z-native-gqa-overlap-16k-four-rounds/benchmark_results/summary_20261028_034438.csv": "853ef234b3cb8315dc2c67f45e84ec48f6c99db9f8a7e7b2c647c843bdd2f258"
+      },
+      "limitation": "仅复用PR105共同基线194324原官方16K四轮；不重测、不继承候选准确率。"
+    },
+    "stop_policy": "每档仅第2轮首暖筛；正首暖后跑满该档四轮，不因后续波动早停；错误立即停止",
+    "owner_exit_code": 1,
+    "finished_utc": "2026-10-28T20:04:54.656067+00:00"
+  },
+  "source_archive": "archive/direct-launch-eager-20261029/batch-200454-16k-driver-pin-preparation-failed",
+  "official_owner_log": "Traceback: ValueError 原官方driver或35d common变化",
+  "gpu_started": false,
+  "benchmark_started": false,
+  "completion": "仅启动owner Python后在driver/common SHA门退出；没有服务或benchmark子进程。"
+}

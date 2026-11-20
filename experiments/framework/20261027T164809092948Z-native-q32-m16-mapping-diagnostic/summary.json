@@ -1,0 +1,47 @@
+{
+  "run": "20261027T164809092948Z-native-q32-m16-mapping-diagnostic",
+  "status": "m16_mapping_diagnostic_passed",
+  "raw_result": "framework/20261027T164809092948Z-native-q32-m16-mapping-diagnostic/result.json",
+  "cleanup": {
+    "database_restored": true,
+    "source_unchanged": true,
+    "native_unchanged": true,
+    "cleanup_error": null,
+    "postflight_error": null,
+    "finished_utc": "2026-10-27T16:48:25.799391+00:00"
+  },
+  "method": "原生Q32完整M16矩阵布局；两组同形状换值，第二组沿首组固定映射",
+  "checks": {
+    "Q_echo_bitwise": true,
+    "KV_echo_bitwise": true,
+    "inputs_unchanged": true,
+    "cpu_rng_unchanged": true,
+    "gpu_rng_unchanged": true,
+    "full_C_finite": true
+  },
+  "changed_checks": {
+    "Q_echo_bitwise": true,
+    "KV_echo_bitwise": true,
+    "inputs_unchanged": true,
+    "cpu_rng_unchanged": true,
+    "gpu_rng_unchanged": true,
+    "full_C_finite": true,
+    "table_unchanged": true
+  },
+  "QK": {
+    "passed": true,
+    "mismatched_words": 0,
+    "full_values": 16384,
+    "coordinate_map_refitted": false,
+    "comparison": "FP32 bitwise to independent CPU FP64 cast using fixed first-launch coordinates"
+  },
+  "PV": {
+    "passed": true,
+    "mismatched_words": 0,
+    "full_values": 32768,
+    "coordinate_map_refitted": false,
+    "comparison": "FP32 bitwise to independent CPU FP64 cast using fixed first-launch coordinates"
+  },
+  "QK_PV_map_equal": true,
+  "decision": "映射诊断通过；继续原T64/L16/exp数学的完整Attention实现。无softmax、Graph、性能或模型准确率资格。"
+}

@@ -1,0 +1,41 @@
+{
+  "run_id": "20261029T043401Z-native-gqa-s8-16k-four-rounds",
+  "platform": "BI-V150",
+  "method": "native GQA S8",
+  "status": "official_benchmark_completed",
+  "case": {
+    "prefill": 16384,
+    "decode": 1024,
+    "concurrency": 64,
+    "num_prompts_per_round": 128,
+    "rounds": 4,
+    "successful_requests": 512
+  },
+  "round_total_tok_s": [
+    4422.66,
+    4888.63,
+    4887.29,
+    4885.53
+  ],
+  "skip_first_warm_mean_total_tok_s": 4887.15,
+  "reference": {
+    "baseline": "PR105 16K",
+    "warm_mean_total_tok_s": 4832.66,
+    "relative_change_percent": 1.1275,
+    "candidate_kv": 548384,
+    "reference_kv": 548288,
+    "strictly_comparable": false
+  },
+  "qualification": {
+    "natural_s8_selected": true,
+    "execution_mode": "eager_only",
+    "captured": false,
+    "accuracy_gate": "separate"
+  },
+  "assessment": "四轮有效且出现正向吞吐信号；KV条件不匹配，不作严格因果结论或新基线。官方4K与accuracy-105仍为独立后续门。",
+  "evidence": {
+    "archive_manifest": "experiments/bundles/20261029T043401Z-native-gqa-s8-16k-four-rounds/manifest.json",
+    "compressed_archive_storage": "experiments/bundles/20261029T043401Z-native-gqa-s8-16k-four-rounds/raw.tar.gz.storage.json",
+    "independent_review": "analysis/native-gqa-s8-20261029/official16k/terminal-043401-review.md"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "kind": "完整规模两轮筛选，非官方分数",
+  "role": "kv",
+  "source_dir": "/workspace/experiments/minicpm-s2/code/20261024T204402Z-main0bf9-staging-kv-screen",
+  "server_command": [
+    "vllm",
+    "serve",
+    "/workspace/MiniCPM5-2B",
+    "--port",
+    "9031",
+    "--compilation-config",
+    "{\"cudagraph_mode\": \"FULL_DECODE_ONLY\"}",
+    "--served-model-name",
+    "minicpm",
+    "--gpu-memory-utilization",
+    "0.85",
+    "--max-model-len",
+    "131072"
+  ],
+  "started_utc": "2026-10-24T20:44:04.135834+00:00",
+  "cases": [
+    [
+      4096,
+      1024,
+      64,
+      256
+    ],
+    [
+      16384,
+      1024,
+      64,
+      128
+    ]
+  ],
+  "screen_rounds_per_case": 2,
+  "official_constants_unchanged": {
+    "RUNS": 4,
+    "SKIP_FIRST": 1
+  },
+  "profiler": false,
+  "smoke_requests": 0,
+  "cpu_before": {
+    "cpu.cfs_quota_us": "600000\n",
+    "cpu.cfs_period_us": "100000\n",
+    "cpu.stat": "nr_periods 518041\nnr_throttled 3006\nthrottled_time 11716074023113\n"
+  },
+  "source_sha256": {
+    "driver.py": "7828274129777a5d2fd98bdff082752e2a0c1a3fc8a63c09472646b9c97e6d26",
+    "benchmark_throughput_serve.py": "0813eba574e9d1eb50c297c515baa426da1bcb61ce8c78a398b482f246005565",
+    "run_accuracy_gate.py": "35d30dfa4fc4d583c7fc62db1f18c992a7fd6a7e54fab95749710759b5df6a54",
+    "monitor_gpu.sh": "af90002eebd4dade188c8efd58e025c3ce3cbcfa022a0e2d7a49fe2e8870f88a"
+  },
+  "limitations": [
+    "两轮分别报告，不丢首轮、不套官方三轮均值。",
+    "DB播种/恢复、完整source/native资格与两角色比较由外层owner负责。"
+  ],
+  "preflight": {
+    "checked_utc": "2026-10-24T20:44:04.143566+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "reviewer": "/root/q32_review_resume",
+  "status": "终态独立复核通过，仅组件资格",
+  "run_id": "20261028T104549355108Z",
+  "evidence": "archive/hotspot-layout-20261026/batch-104549-native-q32-long-metadata/framework/20261028T104549355108Z-native-q32-kv-double-slot-long-metadata-metadata-component",
+  "evidence_sha256": {
+    "results.json": "f6a887348cb9a85fe829fbe29e5643ca9acf7476ea7788f209e011ae2479627e",
+    "manifest.json": "6bb37c5f13f2c00febaf68d7f96fdc0f79c1e745effb6121570e05b213f91cb5"
+  },
+  "reuse": "83 件归档 SHA 由主线已核；未重复源码数学、同步证明或 GPU 测试。",
+  "hard_gates": {
+    "passed": 20,
+    "total": 20,
+    "FP64": {
+      "FP64_initial": {
+        "current": {
+          "max_abs": 0.0001364723083135816,
+          "rms_abs": 3.0695905011833144e-05,
+          "relative_l2": 0.0022837951317542346,
+          "finite": true,
+          "passed": true
+        },
+        "native": {
+          "max_abs": 0.0001364723083135816,
+          "rms_abs": 3.0695905011833144e-05,
+          "relative_l2": 0.0022837951317542346,
+          "finite": true,
+          "passed": true
+        }
+      },
+      "FP64_restored_changed": {
+        "current": {
+          "max_abs": 4.368252990235265e-05,
+          "rms_abs": 1.0902033464049342e-05,
+          "relative_l2": 0.002408900153354835,
+          "finite": true,
+          "passed": true
+        },
+        "native": {
+          "max_abs": 4.368252990235265e-05,
+          "rms_abs": 1.0902033464049342e-05,
+          "relative_l2": 0.002408900153354835,
+          "finite": true,
+          "passed": true
+        }
+      }
+    },
+    "coverage": "完整 storage bitwise/finite、真实 writer、尾页 NaN、同址 metadata 改值后 Graph replay 再 fresh eager、side stream、RNG 与原绑定恢复均通过。"
+  },
+  "actual_call": "Q2047/KV16384、GPU cu=[0,2047]、seq=16384，V view offset4096 BF16；经原 Builder/Policy/Manager 的完整 Impl.forward，native 单次 launch。writer/setup/编译不在计时内。",
+  "ABBA_recomputed": {
+    "event": {
+      "current_ms": 6.559120178222656,
+      "native_ms": 6.387941837310791,
+      "fraction_saved": 0.02609775949527582
+    },
+    "wall": {
+      "current_ms": 7.1012651875,
+      "native_ms": 6.7185523125,
+      "fraction_saved": 0.053893618234912566
+    }
+  },
+  "cpu_throttle_delta": 0,
+  "throttle_limit": "0 指 CPU cgroup 的 nr_throttled/throttled_time；不据稀疏 GPU 采样推断硬件节流或逐臂利用率。",
+  "identities": {
+    "base_commit": "dac1b8fb48e7983e48283032efeee9b592c5fbe5",
+    "source_tree": "3e2d08790fad834abff66dc1002a86f15eb65b38",
+    "CU": "8fb6758a4288bf1712f54e45ea0fbda632737a43366a983a1f99ac47e9d61d4a",
+    "actual_loaded_SO": "5c007e9117ae52bbbc3620302b3fb9bbd6fb783eb0678f48aacc8f57e915807c"
+  },
+  "cleanup": "exit 0；DB 哈希恢复，源码、原 native14f、GQA SO 未变；9031 空闲，空闲显存恢复 32700 MiB，无 cleanup/postflight error。",
+  "conclusion": "保留：长上下文组件 Event 延迟减少 2.6098%，wall 减少 5.3894%。不是官方吞吐提升，不与旧 host ABI 结果相加；本结果未授予生产路由或模型准确率资格。",
+  "production_next": {
+    "reuse": "若 8fb CU/桥不变，可复用上述数值、slot、真实 metadata ABI、指针偏移和直接 Graph/side-stream 门；未变原 fallback/error 不重试 CPU 检查复用。",
+    "new_checks": [
+      "生产 installer/加载身份与实际团队基线整合；分流只读已有 CPU metadata，避免新增同步或 D2H。",
+      "严格核单请求长 prefill 的真实 q/seq/context、布局与 feature 条件，不能从 max_seq_len 或共享池容量猜序列；pure/mixed/decode/未资格范围走原 fallback。",
+      "直接 Graph 诊断不等于生产 capture 路由资格；保持原策略的 capture 限制，除非新增行为另测。",
+      "真实模型准确率及可比官方 4K/16K 验证；组件单点正信号不授权阈值扫描、全范围或正式收益结论。"
+    ]
+  }
+}

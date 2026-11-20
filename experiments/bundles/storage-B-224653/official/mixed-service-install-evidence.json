@@ -1,0 +1,54 @@
+{
+  "schema": "native-k8-mixed-sme-install-evidence-v1",
+  "cudagraph_mode": "FULL_DECODE_ONLY",
+  "mixed_graph_policy": "NONE",
+  "library_identity_provenance": {
+    "pure_decode": "依据运行时 INSTALL marker 核验身份",
+    "mixed": "依据运行时 SELECTED marker 核验身份；仅为主机侧选择，不代表请求覆盖",
+    "w8a8": "仅核验磁盘 SHA 并通过子进程环境注入库路径；没有运行时 marker",
+    "stock_gqa": "仅核验磁盘 SHA 并通过子进程环境注入库路径；没有运行时 marker",
+    "loaded_libraries_field": "为兼容旧结构保留；其中并非所有库都经过运行时 marker 确认"
+  },
+  "loaded_libraries": {
+    "parent_pure_decode": {
+      "sha256": "824f7dda043dd8e101b0f2296cba4aeda14d0718ae673805da1564a141c1f734"
+    },
+    "w8a8": {
+      "sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd"
+    },
+    "stock_gqa": {
+      "sha256": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b"
+    },
+    "mixed": {
+      "sha256": "2b16e692005ee01f3e8ffe659ccfeaa3b4550d32cfdd003588f31343cc407526",
+      "namespace": "cjj_native_k8_mixed_sme_a",
+      "operator": "cjj_native_k8_mixed_sme_a::produce"
+    }
+  },
+  "service_flags": {
+    "VLLM_FL_BIV150_KONLY_ENCODED_SERVICE": "1",
+    "VLLM_FL_BIV150_KONLY_NATIVE_DECODE": "1",
+    "VLLM_FL_BIV150_KONLY_MIXED_NATIVE": "1",
+    "VLLM_FL_BIV150_KONLY_COMPACT_SERVICE": "0"
+  },
+  "database_before": {
+    "TunedConfig_iluvatar_triton_3_2.db": "87c41ba8b6c6ac650e959c0e30de3f69c78eba95be7d106a1617d04a532810da",
+    "TunedConfig_iluvatar_triton_3_6.db": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378"
+  },
+  "mixed_selected_markers": [
+    {
+      "rows": 30,
+      "segments": 4,
+      "library_sha256": "2b16e692005ee01f3e8ffe659ccfeaa3b4550d32cfdd003588f31343cc407526",
+      "namespace": "cjj_native_k8_mixed_sme_a",
+      "operator": "cjj_native_k8_mixed_sme_a::produce",
+      "query_stride": [
+        2048,
+        128,
+        1
+      ],
+      "worker_pid": 88754,
+      "host_selection_not_replay_count": true
+    }
+  ]
+}

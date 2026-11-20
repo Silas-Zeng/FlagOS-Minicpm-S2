@@ -1,0 +1,328 @@
+{
+  "cache_archive_sha256": "6068500540415061c6b699b3b4e78d9339bf7cc816886b6a68456ad93608ef63",
+  "note": "Root已逐文件核56个SHA。此分析只读取既有cache，不编译/触设备。5canonical主loop相同；2mixed clone排除。",
+  "canonical_count": 5,
+  "records": [
+    {
+      "cache": "24MV3MQU2TCQND4FAGI3QXM264FWZJ5TH7O66ODEPKW5EQ4ZHMOQ",
+      "source_origin": [
+        "/workspace/experiments/minicpm-s2/code/benefit-integration-d28f922-20261023T170814Z/vllm_fl/patches/biv150_mixed_attention.py",
+        29
+      ],
+      "canonical": false,
+      "compiled_hash": "d7195db214d4c5068f850191b85d9af70b6ca7b33fddef38647aadd243993b1d",
+      "source_sha256": "fc9e973f31a976244522d902d1cc6896b881ab5a0ad6719821543994ed441699",
+      "target": {
+        "backend": "corex",
+        "arch": 71,
+        "warp_size": 64
+      },
+      "num_warps": 1,
+      "num_stages": 1,
+      "shared": 8192,
+      "segment_div_source": [
+        "%steps_per_segment = tt.call @\"triton.language.standard.cdiv__i32__(1,)cconstexpr_256_\"(%seq_len_6) : (i32) -> i32 loc(#loc224)"
+      ],
+      "full_page_loc_counts": null
+    },
+    {
+      "cache": "4KNAZBGWXGPRVVCBRH55W5CDJMWX3JLHLLZOFYSCFFAXHGIWVW4Q",
+      "source_origin": [
+        "/workspace/experiments/minicpm-s2/code/q-gqa-service-baseline-20261022T183552Z/vllm_fl/patches/biv150_gqa_decode.py",
+        89
+      ],
+      "canonical": true,
+      "compiled_hash": "e29a0c84d6b99f1ad44189fbdb74434b2d7da5675af2e2e2422941739916adb9",
+      "source_sha256": "a4c68f230660a586f9d868807d5c4802bb5f460a88fa9922601e54f963b3ce22",
+      "target": {
+        "backend": "corex",
+        "arch": 71,
+        "warp_size": 64
+      },
+      "num_warps": 1,
+      "num_stages": 1,
+      "shared": 8192,
+      "segment_div_source": [
+        "%steps_per_segment = tt.call @\"triton.language.standard.cdiv__i32__(1,)cconstexpr_64_\"(%seq_len_0) : (i32) -> i32 loc(#loc206)"
+      ],
+      "full_page_loc_counts": {
+        "176": {
+          "ml_sub_f32": 2,
+          "sl_wait": 1,
+          "ml_max_f32": 1,
+          "ml_exp_f32": 2
+        },
+        "177": {
+          "ml_sub_f32": 2,
+          "ml_exp_f32": 2
+        },
+        "178": {
+          "ml_fma_f32": 2,
+          "sl_wait": 1,
+          "ml_add_f32": 1,
+          "sl_cbr_wcrnz": 1
+        },
+        "179": {
+          "ml_mul_f32": 32
+        },
+        "180": {
+          "sl_mov_b64": 2,
+          "ml_cvt_bf16_f32": 2,
+          "ml_slb_shuffle_rtn_b32": 8,
+          "ml_csel_b32": 4,
+          "ml_cvt_i32_i16": 2,
+          "sl_wait": 14,
+          "ml_and_b32": 2,
+          "ml_byte_permute_b32": 1,
+          "ml_mov_b32": 1,
+          "ml_matrix_mad_f32_bf16_m16n16k16": 8,
+          "ml_add_f32": 5
+        }
+      }
+    },
+    {
+      "cache": "7HZNLWTXUTFTDMX4EV3FKGDTTV6HVPTDFYQGJL2J5RDSKQQNU2LQ",
+      "source_origin": [
+        "/workspace/experiments/minicpm-s2/code/q-gqa-service-baseline-20261022T183552Z/vllm_fl/patches/biv150_gqa_decode.py",
+        89
+      ],
+      "canonical": true,
+      "compiled_hash": "f9f2d5da77a4cb31b2fc25765518739d7c7abe632e2064af49ec4725420da697",
+      "source_sha256": "8d7601175d0c04bf07a7ee71b92bfa984b2710b815759e3b253899f86c103b2f",
+      "target": {
+        "backend": "corex",
+        "arch": 71,
+        "warp_size": 64
+      },
+      "num_warps": 1,
+      "num_stages": 1,
+      "shared": 8192,
+      "segment_div_source": [
+        "%steps_per_segment = tt.call @\"triton.language.standard.cdiv__i32__(1,)cconstexpr_128_\"(%seq_len_0) : (i32) -> i32 loc(#loc206)"
+      ],
+      "full_page_loc_counts": {
+        "176": {
+          "ml_sub_f32": 2,
+          "sl_wait": 1,
+          "ml_max_f32": 1,
+          "ml_exp_f32": 2
+        },
+        "177": {
+          "ml_sub_f32": 2,
+          "ml_exp_f32": 2
+        },
+        "178": {
+          "ml_fma_f32": 2,
+          "sl_wait": 1,
+          "ml_add_f32": 1,
+          "sl_cbr_wcrnz": 1
+        },
+        "179": {
+          "ml_mul_f32": 32
+        },
+        "180": {
+          "sl_mov_b64": 2,
+          "ml_cvt_bf16_f32": 2,
+          "ml_slb_shuffle_rtn_b32": 8,
+          "ml_csel_b32": 4,
+          "ml_cvt_i32_i16": 2,
+          "sl_wait": 14,
+          "ml_and_b32": 2,
+          "ml_byte_permute_b32": 1,
+          "ml_mov_b32": 1,
+          "ml_matrix_mad_f32_bf16_m16n16k16": 8,
+          "ml_add_f32": 5
+        }
+      }
+    },
+    {
+      "cache": "MQKHRZW5ZU6ZYEIZF66QY3KNI4V7RLJ6HOZP3H5CPME7DDSNZH7Q",
+      "source_origin": [
+        "/workspace/experiments/minicpm-s2/code/q-gqa-service-baseline-20261022T183552Z/vllm_fl/patches/biv150_gqa_decode.py",
+        89
+      ],
+      "canonical": true,
+      "compiled_hash": "641478e6ddcd3d9c11192fbd0c6d4d472bf8ad3e3bb2fd9fa27b09f18e4dc9ff",
+      "source_sha256": "ff7c4640f1bca06e610a01050bbc3f03b8e0370b7f7a4a5b3e544836107098ce",
+      "target": {
+        "backend": "corex",
+        "arch": 71,
+        "warp_size": 64
+      },
+      "num_warps": 1,
+      "num_stages": 1,
+      "shared": 8192,
+      "segment_div_source": [
+        "%steps_per_segment = tt.call @\"triton.language.standard.cdiv__i32__(1,)cconstexpr_32_\"(%seq_len_0) : (i32) -> i32 loc(#loc206)"
+      ],
+      "full_page_loc_counts": {
+        "176": {
+          "ml_sub_f32": 2,
+          "sl_wait": 1,
+          "ml_max_f32": 1,
+          "ml_exp_f32": 2
+        },
+        "177": {
+          "ml_sub_f32": 2,
+          "ml_exp_f32": 2
+        },
+        "178": {
+          "ml_fma_f32": 2,
+          "sl_wait": 1,
+          "ml_add_f32": 1,
+          "sl_cbr_wcrnz": 1
+        },
+        "179": {
+          "ml_mul_f32": 32
+        },
+        "180": {
+          "sl_mov_b64": 2,
+          "ml_cvt_bf16_f32": 2,
+          "ml_slb_shuffle_rtn_b32": 8,
+          "ml_csel_b32": 4,
+          "ml_cvt_i32_i16": 2,
+          "sl_wait": 14,
+          "ml_and_b32": 2,
+          "ml_byte_permute_b32": 1,
+          "ml_mov_b32": 1,
+          "ml_matrix_mad_f32_bf16_m16n16k16": 8,
+          "ml_add_f32": 5
+        }
+      }
+    },
+    {
+      "cache": "R26EWAJGICA62GONHUZES4R76T4YY6TB6PPDAUSWABT5QCMPNHWA",
+      "source_origin": [
+        "/workspace/experiments/minicpm-s2/code/main0bf9-base-20261024T1548/vllm_fl/patches/biv150_gqa_decode.py",
+        89
+      ],
+      "canonical": true,
+      "compiled_hash": "8ebc4b01264081ed19cd3d3249723ff4f98c7a61f3de3052560067d8098f69ec",
+      "source_sha256": "23c7bbcdcfc8fbcb2feb48c1b7f0091c66a85b95b1d2ba8e85c1857d1ce09798",
+      "target": {
+        "backend": "corex",
+        "arch": 71,
+        "warp_size": 64
+      },
+      "num_warps": 1,
+      "num_stages": 1,
+      "shared": 8192,
+      "segment_div_source": [
+        "%steps_per_segment = tt.call @\"triton.language.standard.cdiv__i32__(1,)cconstexpr_256_\"(%seq_len_0) : (i32) -> i32 loc(#loc206)"
+      ],
+      "full_page_loc_counts": {
+        "176": {
+          "ml_sub_f32": 2,
+          "sl_wait": 1,
+          "ml_max_f32": 1,
+          "ml_exp_f32": 2
+        },
+        "177": {
+          "ml_sub_f32": 2,
+          "ml_exp_f32": 2
+        },
+        "178": {
+          "ml_fma_f32": 2,
+          "sl_wait": 1,
+          "ml_add_f32": 1,
+          "sl_cbr_wcrnz": 1
+        },
+        "179": {
+          "ml_mul_f32": 32
+        },
+        "180": {
+          "sl_mov_b64": 2,
+          "ml_cvt_bf16_f32": 2,
+          "ml_slb_shuffle_rtn_b32": 8,
+          "ml_csel_b32": 4,
+          "ml_cvt_i32_i16": 2,
+          "sl_wait": 14,
+          "ml_and_b32": 2,
+          "ml_byte_permute_b32": 1,
+          "ml_mov_b32": 1,
+          "ml_matrix_mad_f32_bf16_m16n16k16": 8,
+          "ml_add_f32": 5
+        }
+      }
+    },
+    {
+      "cache": "V3DMOEQPCWOLUZQG4DCMOT2UPZYN5XCYREE4IF4NWSXHAPZHGYQQ",
+      "source_origin": [
+        "/workspace/experiments/minicpm-s2/code/benefit-integration-d28f922-20261023T170814Z/vllm_fl/patches/biv150_mixed_attention.py",
+        29
+      ],
+      "canonical": false,
+      "compiled_hash": "aec6c7120f159cba6606e0c4c74f547e70dedc588909c4178db4ae703f273621",
+      "source_sha256": "a20f9c3f4648346fbe617959ce500cecc5962726d14ad9b41bf26e2e9a8c04d2",
+      "target": {
+        "backend": "corex",
+        "arch": 71,
+        "warp_size": 64
+      },
+      "num_warps": 1,
+      "num_stages": 1,
+      "shared": 8192,
+      "segment_div_source": [
+        "%steps_per_segment = tt.call @\"triton.language.standard.cdiv__i32__(1,)cconstexpr_128_\"(%seq_len_6) : (i32) -> i32 loc(#loc224)"
+      ],
+      "full_page_loc_counts": null
+    },
+    {
+      "cache": "YRHNJSVAJAYU6R26KM5EPUDSZBDATB7JYQBWUMQX7PMVL5SE74MQ",
+      "source_origin": [
+        "/workspace/experiments/minicpm-s2/code/q-gqa-service-baseline-20261022T183552Z/vllm_fl/patches/biv150_gqa_decode.py",
+        89
+      ],
+      "canonical": true,
+      "compiled_hash": "c44ed4caa048314f475e533a47d072c8460987e9c4036a3217fbd955f644ff19",
+      "source_sha256": "84959564b6d8a3d7f92bf4a71c3d4ff5ca824d844eeeeaaa7774327ed6088f1e",
+      "target": {
+        "backend": "corex",
+        "arch": 71,
+        "warp_size": 64
+      },
+      "num_warps": 1,
+      "num_stages": 1,
+      "shared": 8192,
+      "segment_div_source": [
+        "%steps_per_segment = tt.call @\"triton.language.standard.cdiv__i32__(1,)cconstexpr_256_\"(%seq_len_0) : (i32) -> i32 loc(#loc206)"
+      ],
+      "full_page_loc_counts": {
+        "176": {
+          "ml_sub_f32": 2,
+          "sl_wait": 1,
+          "ml_max_f32": 1,
+          "ml_exp_f32": 2
+        },
+        "177": {
+          "ml_sub_f32": 2,
+          "ml_exp_f32": 2
+        },
+        "178": {
+          "ml_fma_f32": 2,
+          "sl_wait": 1,
+          "ml_add_f32": 1,
+          "sl_cbr_wcrnz": 1
+        },
+        "179": {
+          "ml_mul_f32": 32
+        },
+        "180": {
+          "sl_mov_b64": 2,
+          "ml_cvt_bf16_f32": 2,
+          "ml_slb_shuffle_rtn_b32": 8,
+          "ml_csel_b32": 4,
+          "ml_cvt_i32_i16": 2,
+          "sl_wait": 14,
+          "ml_and_b32": 2,
+          "ml_byte_permute_b32": 1,
+          "ml_mov_b32": 1,
+          "ml_matrix_mad_f32_bf16_m16n16k16": 8,
+          "ml_add_f32": 5
+        }
+      }
+    }
+  ],
+  "conclusion": "PV加法已融合MMA accumulator；32重缩放mul仍独立，2rescale exp可在有限严格恒等时省。2running_sum FMA与fast add的实际位等价待设备。",
+  "new_cost": "8头比较+8元素整数sum及uniform分支；warp64实际归约/分支指令数须新编译记录，不能套CUDA ballot或预测净收益。"
+}

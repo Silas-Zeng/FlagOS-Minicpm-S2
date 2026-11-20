@@ -1,0 +1,3 @@
+<!-- 自动生成：python scripts/build_team_view.py；登记源 experiments/registry.csv -->
+
+# 20261029T113526Z-native-gqa-s8-shared4k-official-entry\n\n- **尝试了什么：** 尝试启动独立PR105 shared4k S8官方候选入口。\n- **改了什么：** 本批三次失败分别为旧overlay路径、旧DRIVER_SHA、qualification manifest字段结构不符；都发生在GPU启动前。\n- **怎么测：** 核查owner/launcher终态、入口日志及回收原件；三轮均无benchmark请求、无吞吐计时。 证据：[入口失败汇总](../shared4k-official-entry-failures.md)。\n- **结果怎样：** 入口接线失败，不代表候选数值错误，也没有GPU性能结果。\n- **是否保留：** 保留失败原件；修正入口后另行启动，不把失败登记为模型负结果。\n

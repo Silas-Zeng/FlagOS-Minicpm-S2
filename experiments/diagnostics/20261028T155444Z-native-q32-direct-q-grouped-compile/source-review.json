@@ -1,0 +1,23 @@
+{
+  "decision": "GO_ONE_PURE_INCREMENTAL_COMPONENT",
+  "source_sha256": "d1d43c9973651ab32f8d01a3ee73ec93aa44fe15d2873b698a100194173ebdde",
+  "compiled_files": {
+    "probe.ll": "27a7066d02c3eda54f6d950a67c1bfacee19243eb8c4f8ed762897675d765677",
+    "probe.s": "20194a906dd7a754efe6fe05a0cc108510de6049828097dc8d9e896ed1a3902b"
+  },
+  "FP_DAG_review_passed": true,
+  "resource_review_passed": true,
+  "GPU_executed": false,
+  "findings": {
+    "loop_recurrence": "All 45 phi nodes have the same incoming predecessor edges and recursively normalized incoming expressions as the direct-Q parent; ordered roots for all 64 MMA operations and all 48 final BF16 truncations match.",
+    "softmax_and_output": "FMA roots are the same multiset (schedule reordered); fadd/fmul/fsub/fdiv/select/fptrunc dataflow roots match as multisets. Per-row max operand order and P/rho/L/acc recurrence are unchanged; the only intended scheduling change is issuing four independent row shuffles before consuming them at each max-tree distance.",
+    "q_and_kv_lifecycle": "Q initialization remains the same 32 ushort loads, 16 byte permutes and 16 waits as the parent. The 32 SME prefetches enter the existing QK/softmax/PV path; original drain and all three barriers remain. No new Q shared stage or early drain.",
+    "resources": "Both use 64 KiB shared and zero private bytes; SGPR remains 99, VGPR rises 106 to 107, scalar spill count remains 2, VGPR spills remain 0. The predicate moves via four lane-transfer instructions outside the hot loop; no per-tile reload or private/HBM spill was found.",
+    "archive": "All 29 files listed in the raw archive manifest matched their recorded sizes and SHA-256 values."
+  },
+  "limits": [
+    "This approves only one pure2048 incremental A/B component run: A is already qualified direct-Q and B adds grouped max.",
+    "No GPU execution, numerical/model qualification, performance claim, official benchmark qualification, or inherited 151702 qualification is asserted.",
+    "The existing direct-Q eligibility and error-propagation gates remain required; compile evidence does not relax them."
+  ]
+}

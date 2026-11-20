@@ -1,0 +1,1 @@
+独立复核：ffn_resume_review，2026-10-25。新增owner/图门/observer无阻断；5项CPU窗口检查通过，未重复旧资格检查或触设备。实际source.tar核当前native after/apply/forward绑定，EXPECTED为当前P/Q/native；当前真实FP/AOT/34native由服务证据门核。所属vLLM先TERM等ixsys flush，再6秒清组、idle及DB恢复。保留首两步sync扰动、FULL图内节点未知和缺窗不作性能结论边界。

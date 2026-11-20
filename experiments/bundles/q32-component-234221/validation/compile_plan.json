@@ -1,0 +1,48 @@
+{
+  "schema": "encoded-q32-causal-interior-compile-plan-v1",
+  "status": "prepared_cpu_only",
+  "base_source": {
+    "path": "archive/native-k8-sme-20261029/service-a-official16k-183714/official/20261029T183714307637Z-native-k8-sme-a-16384-four-rounds/source/plugin/vllm_fl/patches/biv150_konly_encoded_q32.py",
+    "sha256": "ac0ee4caaeed8dfd211a57cd4d3d130d8437a2a0129c1c915e1b19ed4fc66b4b"
+  },
+  "candidate": {
+    "path": "tmp/q32-causal-interior-20261030/candidate.py",
+    "sha256": "f4534a6fcc77b68b8d17e5dfb8ddad412a17293c8f6f4e627297141983f6d1a5"
+  },
+  "warm_profile": {
+    "root": "archive/native-k8-sme-mixed-20261030/profile-warm-222344/profile",
+    "cache_key": "c0a523d9d0d4d5dde57b241df9d22c9c38fa71e480878d18e690b4eb002e24f7",
+    "cache_dir": "YCSSHWOQ2TK53ZL3EQO7TURMTQ4PU4PEQCDY2GHGSC2OWABOET3Q",
+    "kernel": "kernel_cjj_konly_q32",
+    "grids_observed": [[64, 2, 1], [65, 2, 1]],
+    "block": [1024, 1, 1],
+    "target": "CoreX arch71, warp64, 16 warps, 1 stage, dynamic shared 57344 B, Triton 3.6.0"
+  },
+  "required_specialization": {
+    "IS_3D": false,
+    "BLOCK_M": 256,
+    "BLOCK_Q": 32,
+    "TILE_SIZE": 64,
+    "HEAD_SIZE": 128,
+    "HEAD_SIZE_PADDED": 128,
+    "BLOCK_SIZE": 16,
+    "num_query_heads": 16,
+    "num_queries_per_kv": 8,
+    "KV_QUANT_MODE": 0,
+    "key_cache_dtype": "int8",
+    "key_code_scale_dtype": "float32",
+    "query_value_output_dtype": "bfloat16",
+    "num_warps": 16,
+    "num_stages": 1,
+    "disabled": ["FP8", "Q_IS_FP8", "sink", "alibi", "qq_bias", "softcap", "sliding_window", "per_seq_causal", "MM_prefix", "chunked", "tensor_descriptor"]
+  },
+  "shapes": [
+    {"step": 1048, "q": 2018, "context": 12108, "total_kv": 14126, "role": "primary ABBA"},
+    {"step": 1042, "q": 2018, "context": 0, "total_kv": 2018, "role": "no-history boundary"},
+    {"step": 1049, "q": 2019, "context": 14126, "total_kv": 16145, "role": "tail-Q and tail-KV boundary"}
+  ],
+  "compile_gate": ["A and B use same runtime-captured pointer/scalar/constexpr ABI", "A IR/resource output checked against pinned warm profile cache", "B must show interior K/V/scale and causal predicates removed", "record TTIR/TTGIR/LLIR/ASM and resource metadata", "any ABI mismatch or baseline A compilation mismatch stops before numeric/timing"],
+  "numeric_gate": ["real encoded writer produces int8 K + per-token-head FP32 scale + BF16 V", "A/B full outputs and retained scratch compared bitwise", "finite outputs", "tail-Q, tail-KV, output/cache/scale/table guards and changed-Q Graph", "no FP64 gate is claimed; any optional encoded reference remains diagnostic and cannot replace A/B bitwise"],
+  "prohibited_reuse": ["BF16-KV Q32 worker as current reference", "native Q32 CUDA worker output as actual Triton A", "warmed TTGIR signature as full constexpr/launch ABI"],
+  "remote_or_device_actions_performed": false
+}

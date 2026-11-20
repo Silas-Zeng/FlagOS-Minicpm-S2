@@ -1,0 +1,15 @@
+{
+  "reviewer": "root, independent of author q32_review_resume",
+  "source_sha256": "f2975861706d922f5f50ead1781e67a46a8405b69f151c982e4e6187c35847be",
+  "decision": "compile-only approved; GPU pending actual code/resource and component review",
+  "checked": [
+    "page0 and page1 use separate original table entries; segment lower/upper unchanged",
+    "full pair always 32 valid slots; partial pair only 17..31, last single page 1..16 reuses original consume_page",
+    "two 8 KiB stages are disjoint; K wait and barrier precede loads, V wait and barrier precede PV, final barrier precedes reuse",
+    "second physical page K/V tails cleared using original mapping; absent second page never read",
+    "QK uses original per-page dot order, two score chains interleaved; combined max/sum and single rho are a new numeric algorithm",
+    "P packing, query mapping and final output mapping copied from original; each accumulator scales once then receives page0 and page1 PV"
+  ],
+  "numerical_contract": "Original independent FP64 atol/rtol .03, relative L2 .01; finite, nonfinite pattern, per-arm tail poison, per-arm eager/Graph bitwise, input/RNG and side-stream gates. Cross-arm output/partial bitwise is diagnostic for this new algorithm, not inherited qualification.",
+  "limits": ["No GPU numerical result yet", "SME wait overlap and extra resources must be read from real ASM", "No occupancy or end-to-end gain inferred"]
+}

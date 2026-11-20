@@ -1,0 +1,100 @@
+{
+  "reviewer": "experiment_sync_resume，终态薄审",
+  "decision": "NUMERIC_PASS_PERFORMANCE_NEGATIVE_STOP",
+  "checks": {
+    "nine_original_cases": true,
+    "six_FP64_both_arms": true,
+    "three_nonfinite_original_cases": true,
+    "original_FP64_thresholds": true,
+    "side_tail": true,
+    "ABBA32_order": true,
+    "summary_from_raw_timing": true,
+    "CPU_no_throttle_in_timing": true,
+    "same_original_producer_reducer_contract": true,
+    "source_and_two_original_SO_unchanged": true,
+    "database_restored": true,
+    "terminal_exit_cleanup": true,
+    "negative_status": true
+  },
+  "run": "20261028T134552095824Z-native-gqa-t64-reuse-hotspot-component",
+  "summary": {
+    "event": {
+      "macro1_ms": 0.4095947742462158,
+      "t64_reuse_ms": 0.42110054194927216,
+      "fraction_saved": -0.02809061156659176
+    },
+    "wall": {
+      "macro1_ms": 0.41266153125,
+      "t64_reuse_ms": 0.42370240625,
+      "fraction_saved": -0.02675528045116282
+    }
+  },
+  "shape": {
+    "N": 64,
+    "S": 2,
+    "KV": 4096,
+    "cache_capacity": 16384,
+    "Q_stride": [
+      2048,
+      128,
+      1
+    ]
+  },
+  "source_identity": {
+    "commit": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd",
+    "tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+    "tracked_files": 814,
+    "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+    "extras": {}
+  },
+  "base_commit": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd",
+  "source_count": 814,
+  "actual_candidate_SO": "a2f62d46cbb207edefea3568238548efad52dc7722b3341653c4fdb8d9c33a2b",
+  "actual_candidate_source": "714bc94aa79f270d884d5cfbfdc1c3d1ca44a0bfae94f9c8060341debd5eb038",
+  "numerical_contract": {
+    "source": "scripts/remote/validate_mapped_decode.py:70-92",
+    "atol": 0.03,
+    "rtol": 0.03,
+    "relative_l2_limit": 0.01,
+    "description": "新T64四页数学顺序；沿原独立FP64阈值，cross-arm/partial bitwise仅诊断，同arm Graph/eager与tail poison仍逐位；不是模型准确率"
+  },
+  "timing_contract": {
+    "order": [
+      "macro1",
+      "t64_reuse",
+      "t64_reuse",
+      "macro1"
+    ],
+    "loops_per_window": 32,
+    "per_replay": [
+      "one native producer",
+      "one unchanged original reducer"
+    ],
+    "writer_in_timing": false,
+    "input": "restored exact initial seed725013; N64/S2/KV4096/Qstride2048",
+    "SO0": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+    "SO1": "a2f62d46cbb207edefea3568238548efad52dc7722b3341653c4fdb8d9c33a2b"
+  },
+  "original_result_sha256": "affaf3efaf95bb842b7153299bb4632cc29deb66c517cc76994f86f862609571",
+  "case_names": [
+    "dense-random",
+    "graph-changed-q-kv-pages-ragged-zero-tail",
+    "tail-unused-KV-NaN-masked",
+    "finite-equal-max-negative-zero-v",
+    "finite-equal-max-subnormal-cancellation-v",
+    "finite-max-nonfinite-accumulator",
+    "negative-infinity-max-original-path",
+    "positive-infinity-max-original-path",
+    "restored-dense-before-ABBA"
+  ],
+  "nonfinite_case_names": [
+    "finite-max-nonfinite-accumulator",
+    "negative-infinity-max-original-path",
+    "positive-infinity-max-original-path"
+  ],
+  "finished_utc": "2026-10-28T13:46:47.695609+00:00",
+  "model_qualified": false,
+  "new_baseline": false,
+  "raw_member_SHA_reused": "root已核86原件，不重复全量",
+  "note": "九原case和六双臂FP64通过，跨算法output/partial位型只诊断。Event慢2.809061%、wall慢2.675528%，不扩shape、不进模型、不新合并；CPU compile资源不冒充actual SO逐kernel资源。"
+}

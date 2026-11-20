@@ -1,0 +1,34 @@
+{
+  "review_scope": "N30/S4/16K Mixed SME首组件A/B源码、host ABI、同步、fixture与worker生命周期增量复核",
+  "source_pins_sha256": "f07e9ec222f2660ef456746d853d97974be547cdde52befd53086f1814c797ea",
+  "package_manifest_sha256": "10abb23ee37547c8b95bfd627fd0d7c0e3d75bf5ef87cb6a42020418a19bd95f",
+  "worker_sha256": "1a173e944941b8198d52c2e346553eb8ecb320b6c922215d949660f56922b122",
+  "owner_sha256": "220bb6d9236711a0d3abfccb7872d0ce06866bc447e6d9aca5e87fd419a45148",
+  "fixture_manifest_sha256": "70adb4fe697beae6648cdbebdde764ed1bc11eb7bc8cce49319f5c36f570f320",
+  "result": "组件CPU实现与部署入口增量复核通过，可交root安排编译或隔离组件执行；不代表性能、生产资格或准确率通过。",
+  "findings": [
+    "A/B分别绑定main899 Mixed v_overlap与新的Mixed+SME lookahead producer；host/device launcher、codec helper和Torch namespace分别使用a/b后缀。host严格限制N=30、S=4、Q stride=(2048,128,1)，未开放2560路径。",
+    "两臂共用Mixed ABI及main899固定SHA的原reducer；仅向producer暴露物理S=16 scratch的前4段，stride为partial=(32768,2048,128,1)、scalar=(256,16,1)。",
+    "compile-only回执中的CUDA初始化字段在torch子对象内，worker已按嵌套字段读取；库路径、SHA、namespace、launcher与source pins均有运行前核验。",
+    "B满页先发K SME并等待后再读；当前页V SME在PV读前等待，V就绪屏障后才覆盖K区预取下一页，PV后等待K传输并屏障；最后满页无额外预取，尾页走普通K加载。此为源码静态判断，最终编译物仍需复核。",
+    "mixed长度仅用于数值边界检查；全长正确性及计时将30行长度恢复为16384。A/B输出要求有限且逐位一致，先保存原始数组再触发失败门，不自动放宽容差，也不声称FP64或Graph覆盖。",
+    "active segment掩码按(N,S)扩展到(N,16,S)与(N,16,S,128)，CPU假Tensor fixture验证维度及边界长度；post-timing重新核输出、空段/宽度前缀/guard和只读输入。BF16输出归档按uint16原始位保存并注明重解释方式。",
+    "paired timing在每臂持有稳定输出buffer，初始化后串接default到side stream依赖，warmup与计时复用同一buffer并在warmup后同步，避免异步使用期间释放和allocator复用。owner在释放设备锁前终止并等待自有worker进程组，保留失败原件。",
+    "CPU验证：worker/owner/mask fixture py_compile成功；mask fixture和owner默认prepare-only通过。未执行编译、SSH或GPU。",
+    "reducer来源增量已独立核实：main899 Git LF文件SHA f1877ad06e8be4cef5960ef2d66d59045b4ac1ac0d7f2fe448618bbdec0d7f40，AST提取规则函数SHA 3685996879558c702d535bc62fea2dcd32150710c2286734797ada35450e75c5，与worker固定值一致；Windows CRLF副本不作为来源身份。"
+  ],
+  "limits": [
+    "本次未编译或反汇编；最终二进制中的等待顺序与传输重叠仍需单独检查。",
+    "本次未运行组件；数值门与局部时延仍待实测。",
+    "Mixed+SME是新组合，不继承纯SME或Mixed v_overlap的既有资格；无服务吞吐、Graph、准确率或官方资格结论。"
+  ],
+  "transport_review": {
+    "package_sha256": "f1ac231d6dba9430a57663ea5e2a1d18e70ca478d4ae08b8a49add692df0d25d",
+    "launcher_sha256": "4ba3f64f7f58dbcf8f69133a144652744d807f7b51a106c41583e256cb1060ef",
+    "prepare_component_deploy_sha256": "7bdcf5927b803bd111fa229ac6a7369802011ce64a0a9c4334a36c792b89d683",
+    "root_start_wait_sha256": "fe6f6b617a263988ba349d9986d4ba20e0fe7141a230a2d5474ad9cf3a554e1b",
+    "assessment": "先前单参数分派阻断已修复：默认进入launch；仅首参为--worker时走内部worker分支；单参数run路径传给BUILD_RUN，内部worker仍校验4个参数。封包/manifest/launcher哈希闭合。",
+    "validated": "当前launcher结构静态检查通过，bash -n通过；内嵌包SHA、外部包SHA、manifest launcher SHA以及tar逐成员SHA互相闭合。作者提供Git Bash dispatch smoke：单参数进入worker参数分支，空参数及不完整worker参数退出2；clean extraction CPU mask与owner prepare-only通过。root构建入口SHA+pidfd等待及构建锁/preflight静态链路维持已审结论。",
+    "cpu_checks": "py_compile worker/owner/fixture、active-mask fixture及owner prepare-only通过；launcher语法与pins一致性通过。未启动launcher、SSH或设备任务。"
+  }
+}

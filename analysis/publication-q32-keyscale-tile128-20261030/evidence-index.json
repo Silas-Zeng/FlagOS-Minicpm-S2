@@ -1,0 +1,268 @@
+{
+  "base_registry_sha256": "b26ecd475ebf25aaf5a2bb3eef301bc98c04660e6b2e6657dbde3977e75bf2d5",
+  "base_rows": 534,
+  "base_unique_runs": 531,
+  "candidate_registry_sha256": "7dd33de23451ccf6552e1f4a94cebc5e6500dab087fdacbd4c7afe8ec686a40b",
+  "candidate_rows": 538,
+  "candidate_unique_runs": 535,
+  "runs": [
+    {
+      "run_id": "20261030T005910507361Z-q32-key-scale-compile-probe",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-30T00:59:10.507361+00:00",
+      "profile_id": "q32-key-scale",
+      "phase": "component_compile_only",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce774",
+      "flaggems_commit": "",
+      "input_len": "2018",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "compiled_only_numeric_next",
+      "artifacts": "experiments/bundles/20261030T005910507361Z-q32-key-scale-compile-probe",
+      "conclusion": "TTGIR循环内score乘法由3次降至2次，ASM SGPR spill计数98→99；runtime regs135/shared57344，runtime spills0、VGPR spills0、ScratchSize0。仅编译探针，无attention reader数值或性能，不是收益或生产资格。"
+    },
+    {
+      "run_id": "20261030T011120000584Z-q32-key-scale-component",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-30T01:11:20.073272+00:00",
+      "profile_id": "q32-key-scale",
+      "phase": "component_numerical_abba",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce774",
+      "flaggems_commit": "",
+      "input_len": "2018",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "component_negative_stopped_numeric_gate_unresolved",
+      "artifacts": "experiments/bundles/20261030T011120000584Z-q32-key-scale-component",
+      "conclusion": "四组ABBA Event A7.9743986/B8.0439349 ms，B慢0.872%，性能负向并停止、不重测。五例各臂选定FP64抽样通过；full-output helper报告AB非逐位却max-abs=0，CPU回读五份均见非零差且均在点式门内，全量AB数值门未闭合。不能称全数值通过，也不是已确认候选错误；原summary保持不变，附posthoc CPU脚本与JSON。"
+    },
+    {
+      "run_id": "20261030T010749147245Z-q32-tile128-compile-probe",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-30T01:07:49.220219+00:00",
+      "profile_id": "q32-tile128",
+      "phase": "component_compile_only",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce774",
+      "flaggems_commit": "",
+      "input_len": "2018",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "compiled_only_resource_cost_recorded",
+      "artifacts": "experiments/bundles/20261030T010749147245Z-q32-tile128-compile-probe",
+      "conclusion": "固定合成ABI编译成功；B TILE128相对A TILE64的VGPR 135→164、shared 57,344→81,920 B、ASM SGPR spill计数98→128。runtime spill、ASM VGPR spill与ScratchSize均为0；有效SME均3。仅writer和编译，无Attention reader/数值/性能测试；保留待数值与组件门，不由资源数据单独宣判。"
+    },
+    {
+      "run_id": "20261030T012148540966Z-q32-tile128-component",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-30T01:21:48.614830+00:00",
+      "profile_id": "q32-tile128",
+      "phase": "component_numerical_abba",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce774",
+      "flaggems_commit": "",
+      "input_len": "2018",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "component_numeric_pass_performance_negative_stopped",
+      "artifacts": "experiments/bundles/20261030T012148540966Z-q32-tile128-component",
+      "conclusion": "五个合成ABI case 的A/B逐点门、FP64抽样、guard/readonly/changed-Q及同臂稳定检查均通过。四组ABBA Event A7.9793690/B8.4068933 ms，B慢5.358%；停止TILE128候选，不进官方/生产资格，不更新基线。"
+    }
+  ],
+  "evidence": {
+    "20261030T005910507361Z-q32-key-scale-compile-probe": {
+      "result": "tmp/q32-key-scale-20261030/validation/result.json",
+      "review": "tmp/q32-key-scale-20261030/validation/terminal-review.json",
+      "execution": "tmp/q32-key-scale-20261030/validation/execution-state.json",
+      "bundle": "tmp/q32-key-scale-20261030/validation/recovery.tar.gz",
+      "extra_evidence": []
+    },
+    "20261030T011120000584Z-q32-key-scale-component": {
+      "result": "tmp/q32-key-scale-20261030/component/result.json",
+      "review": "tmp/q32-key-scale-20261030/component/terminal-review.json",
+      "execution": "tmp/q32-key-scale-20261030/component/execution-state.json",
+      "bundle": "tmp/q32-key-scale-20261030/component/recovery.tar.gz",
+      "extra_evidence": [
+        "tmp/q32-key-scale-20261030/component/selected-cpu-check.json",
+        "tmp/q32-key-scale-20261030/component/check_saved_outputs.py"
+      ]
+    },
+    "20261030T010749147245Z-q32-tile128-compile-probe": {
+      "result": "tmp/q32-tile128-20261030/validation/result.json",
+      "review": "tmp/q32-tile128-20261030/validation/terminal-review.json",
+      "execution": "tmp/q32-tile128-20261030/validation/execution-state.json",
+      "bundle": "tmp/q32-tile128-20261030/validation/recovery.tar.gz",
+      "extra_evidence": []
+    },
+    "20261030T012148540966Z-q32-tile128-component": {
+      "result": "tmp/q32-tile128-20261030/component/result.json",
+      "review": "tmp/q32-tile128-20261030/component/terminal-review.json",
+      "execution": "tmp/q32-tile128-20261030/component/execution-state.json",
+      "bundle": "tmp/q32-tile128-20261030/component/recovery.tar.gz",
+      "extra_evidence": []
+    }
+  },
+  "bundle_indexes": {
+    "20261030T005910507361Z-q32-key-scale-compile-probe": {
+      "run_id": "20261030T005910507361Z-q32-key-scale-compile-probe",
+      "original_name": "recovery.tar.gz",
+      "original_bytes": 501872,
+      "original_sha256": "2d44f5a47557d483f6cb682bf90b755f6cb60905f28dfc3c3003ccddd889a317",
+      "chunk_bytes": 262144,
+      "chunks": [
+        {
+          "path": "experiments/raw-blobs/20261030T005910507361Z-q32-key-scale-compile-probe/0000.part",
+          "offset": 0,
+          "bytes": 262144,
+          "sha256": "e791dd362c2f65086b7c3904553924f86a17621ac9b72f304fea548e364e2a62"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T005910507361Z-q32-key-scale-compile-probe/0001.part",
+          "offset": 262144,
+          "bytes": 239728,
+          "sha256": "98a7bcd8bf64a9b1a726d715a238f1eabea837c941bc926a1522434c0ff085db"
+        }
+      ]
+    },
+    "20261030T011120000584Z-q32-key-scale-component": {
+      "run_id": "20261030T011120000584Z-q32-key-scale-component",
+      "original_name": "recovery.tar.gz",
+      "original_bytes": 1619140,
+      "original_sha256": "f69ddf679ed5f1a760e68dbdbd52a83683ec940d88ab7189051d8f99678bbc41",
+      "chunk_bytes": 262144,
+      "chunks": [
+        {
+          "path": "experiments/raw-blobs/20261030T011120000584Z-q32-key-scale-component/0000.part",
+          "offset": 0,
+          "bytes": 262144,
+          "sha256": "7fea4533df223aa658d9b83a674960c4d375d05937795431c4c2f64de8bc6039"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T011120000584Z-q32-key-scale-component/0001.part",
+          "offset": 262144,
+          "bytes": 262144,
+          "sha256": "2a415eaaf69f816ccf36b691bb118a0c26c4c79bbdf51029a3b4278cfadd745b"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T011120000584Z-q32-key-scale-component/0002.part",
+          "offset": 524288,
+          "bytes": 262144,
+          "sha256": "573637b5aab7523f682055eea31970a1aa0ef674e77c2c7cbbec3b385e745ce1"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T011120000584Z-q32-key-scale-component/0003.part",
+          "offset": 786432,
+          "bytes": 262144,
+          "sha256": "7284b81d139f0202c47c3b0c0d2cddd9bc88aa1148cebbc65266d98e0e2e351f"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T011120000584Z-q32-key-scale-component/0004.part",
+          "offset": 1048576,
+          "bytes": 262144,
+          "sha256": "3149cd16e626d713be9e9b915ec53f2ac5f7653569e092036106b13d0cc01723"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T011120000584Z-q32-key-scale-component/0005.part",
+          "offset": 1310720,
+          "bytes": 262144,
+          "sha256": "4d9bc1c3a69625fc8a8b0ef7c3e553b8fbf26191cf24c479d8942505f640e08c"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T011120000584Z-q32-key-scale-component/0006.part",
+          "offset": 1572864,
+          "bytes": 46276,
+          "sha256": "ef24276405ae446a0f25181b3c74d0a1d7c5b4aaef1864b10eaf14c0dcfc63a8"
+        }
+      ]
+    },
+    "20261030T010749147245Z-q32-tile128-compile-probe": {
+      "run_id": "20261030T010749147245Z-q32-tile128-compile-probe",
+      "original_name": "recovery.tar.gz",
+      "original_bytes": 527136,
+      "original_sha256": "e28e79de5f9f6d762906ad8484c74027911de99eef75eb37906fa23d8eeb3a90",
+      "chunk_bytes": 262144,
+      "chunks": [
+        {
+          "path": "experiments/raw-blobs/20261030T010749147245Z-q32-tile128-compile-probe/0000.part",
+          "offset": 0,
+          "bytes": 262144,
+          "sha256": "2ab270d7fd6e6afd36476b91cb1faee107fac359b0821d5bff264343969ab81a"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T010749147245Z-q32-tile128-compile-probe/0001.part",
+          "offset": 262144,
+          "bytes": 262144,
+          "sha256": "3d8d582f77b30bae3e979f1ead3c5e9e36f09f65bd41c44943a608105e823e43"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T010749147245Z-q32-tile128-compile-probe/0002.part",
+          "offset": 524288,
+          "bytes": 2848,
+          "sha256": "3eba856a1f05f768a89b10c9b78e3321d6bfc7e7deccdfc75c0d2b4d9c6d8566"
+        }
+      ]
+    },
+    "20261030T012148540966Z-q32-tile128-component": {
+      "run_id": "20261030T012148540966Z-q32-tile128-component",
+      "original_name": "recovery.tar.gz",
+      "original_bytes": 1647001,
+      "original_sha256": "284311144f33238f102fbb9599c4ca0d25b2753dbd15d2a1bbfda942dd4fc1e9",
+      "chunk_bytes": 262144,
+      "chunks": [
+        {
+          "path": "experiments/raw-blobs/20261030T012148540966Z-q32-tile128-component/0000.part",
+          "offset": 0,
+          "bytes": 262144,
+          "sha256": "3f25b0b92645cbf5a503500f8e522f702544865938a65333d8152f8f76a537f5"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T012148540966Z-q32-tile128-component/0001.part",
+          "offset": 262144,
+          "bytes": 262144,
+          "sha256": "4520448b9a4578a4b492dac54e5a03183327d0f8ed8847f67e77f6251b14da8d"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T012148540966Z-q32-tile128-component/0002.part",
+          "offset": 524288,
+          "bytes": 262144,
+          "sha256": "5503b72f0b0dfd6357d4d0fc61b7f8ad54cd32709d71a96e028fa88bd6750f70"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T012148540966Z-q32-tile128-component/0003.part",
+          "offset": 786432,
+          "bytes": 262144,
+          "sha256": "259bf743f74f56a2ab3c57247fb65dd1c9be15bf5120ca3c3d5c89c5aedd706f"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T012148540966Z-q32-tile128-component/0004.part",
+          "offset": 1048576,
+          "bytes": 262144,
+          "sha256": "0b4ac1eb00c3008780387b0d183c33ecfa1d06a2b1e9bfca91aeccdafe29b924"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T012148540966Z-q32-tile128-component/0005.part",
+          "offset": 1310720,
+          "bytes": 262144,
+          "sha256": "a72498f9d883d28b3856c5befcbb82f18268639fbcb924771be89c02e035519c"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T012148540966Z-q32-tile128-component/0006.part",
+          "offset": 1572864,
+          "bytes": 74137,
+          "sha256": "d59be5d1be08cddf53c31671f79c76aee9c93804230e36508e999ef49a513966"
+        }
+      ]
+    }
+  },
+  "limits": "恢复包以256KiB原字节分块；组件/编译结论严格按独立审阅，不外推为官方成绩、准确率或新基线。"
+}

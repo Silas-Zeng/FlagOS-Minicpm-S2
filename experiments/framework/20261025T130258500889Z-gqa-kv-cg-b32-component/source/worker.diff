@@ -1,0 +1,69 @@
+--- frozen-v3/worker
++++ gqa-kv-cg/worker
+@@ -48,34 +48,7 @@
+     return fields
+ 
+ 
+-def branch_evidence(ttgir):
+-    """只检查新增条件分支是否仍省略重缩放；不据此虚构分支周期或实际命中率。"""
+-    lines = ttgir.splitlines()
+-    start_loop = next((i for i, line in enumerate(lines) if "scf.while" in line), None)
+-    if start_loop is None:
+-        raise RuntimeError("未找到真实 GQA 页循环，保留 IR 后停止计时")
+-    for pos in range(start_loop + 1, len(lines)):
+-        if "scf.if " not in lines[pos]:
+-            continue
+-        indent = len(lines[pos]) - len(lines[pos].lstrip())
+-        middle = end = None
+-        for k in range(pos + 1, len(lines)):
+-            if len(lines[k]) - len(lines[k].lstrip()) != indent:
+-                continue
+-            if lines[k].strip().startswith("} else {"):
+-                middle = k
+-            elif middle is not None and lines[k].strip().startswith("}"):
+-                end = k
+-                break
+-        if middle is None or end is None:
+-            continue
+-        fast, slow = "\n".join(lines[pos:middle]), "\n".join(lines[middle:end])
+-        if ("math.exp2" not in fast and "math.exp2" in slow
+-                and not re.search(r"arith.mulf.*tensor<8x128xf32", fast)
+-                and re.search(r"arith.mulf.*tensor<8x128xf32", slow)):
+-            return dict(pass_=True, line=pos + 1, region="\n".join(lines[pos:end + 1]),
+-                        limitation="TTGIR 条件路径；机器码原件另存，动态命中率/分支成本未知")
+-    raise RuntimeError("真实 TTGIR 未保留一臂省略 exp2/acc mul 的分支，不计时")
++from cache_policy import cache_evidence
+ 
+ 
+ def worker(run, model, shape="hotspot"):
+@@ -116,7 +89,7 @@
+         if digest(Path(gqa.__file__)) != SOURCE_SHA or digest(HERE / "baseline.py") != SOURCE_SHA:
+             raise RuntimeError("实际 GQA 不是冻结 main526 原件")
+         backend = importlib.import_module("vllm.v1.attention.backends.triton_attn")
+-        candidate = load("strict_identity_gqa_candidate", HERE / "candidate.py")
++        candidate = load("gqa_kv_cg_candidate", HERE / "candidate.py")
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("非单卡")
+         torch.cuda.set_device(0)
+@@ -210,9 +183,9 @@
+                                             b.view(torch.int16 if b.element_size() == 2 else torch.int32))
+         if not same_bits(production_output, arms["baseline"].out):
+             raise RuntimeError("捕获 ABI 重放不同于实际 backend 输出")
+-        # 静态资源只记录；是否值得保留由通过数值门后的净性能判断。
+-        # 不因新增分支的 private/spill/寄存器变化跳过实际 ABBA。
+-        result["branch"] = branch_evidence(first["candidate"].asm["ttgir"])
++        # 只确认 .cg 落到机器访存指令；提示被忽略时不做计时。
++        # 寄存器/shared 仅记录，不另增资源阈值。
++        result["cache_policy"] = cache_evidence(first["baseline"].asm["asm"], first["candidate"].asm["asm"])
+         stream = torch.cuda.Stream()
+         stream.wait_stream(torch.cuda.current_stream())
+         with torch.cuda.stream(stream):
+@@ -284,7 +257,7 @@
+         ragged = [ragged_pattern[i % len(ragged_pattern)] for i in range(active)] + [0] * (B - active)
+         common.seq_lens.copy_(torch.tensor(ragged, dtype=torch.int32, device="cuda"))
+         check("graph-changed-q-kv-pages-ragged-zero-tail", changed=True)
+-        # 按既定 split 造首页/三页/尾页边界，S16 也确实执行恒等快支。
++        # 按既定 split 造首页/三页/尾页边界，S16 也覆盖多个完整页与尾页。
+         # B32/S4 的模式仍为原来的 0/1/15/16/17/64/160/163。
+         boundary = [0, 1, 15, 16, 17, segments * 16, segments * 48 - 32, segments * 48 - 29]
+         common.seq_lens.copy_(torch.tensor([boundary[i % 8] for i in range(active)] + [0] * (B - active),

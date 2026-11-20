@@ -1,0 +1,35 @@
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:728: DeprecationWarning: use_cuda_graph is deprecated; use benchmark_mode='replay' or benchmark_mode='event'
+  super().__init__(*args, **kwargs)
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:411: RuntimeWarning: active Triton backend does not provide a replay benchmarker; falling back to event timing
+  resolved_benchmark = resolve_benchmarker(
+/usr/local/lib/python3.12/site-packages/flag_gems/config.py:171: UserWarning: resolve_user_setting: no exclude ops found; returning empty list
+  warnings.warn(
+/usr/local/lib/python3.12/site-packages/torch/library.py:357: UserWarning: Warning only once for all operators,  other operators may also be overridden.
+  Overriding a previously registered kernel for the same operator and the same dispatch key
+  operator: aten::__ilshift__.Tensor(Tensor(a!) self, Tensor other) -> Tensor(a!)
+    registered at /home/corex/sw_home/apps/pytorch/build/aten/src/ATen/RegisterSchema.cpp:6
+  dispatch key: CUDA
+  previous kernel: registered at /home/corex/sw_home/apps/pytorch/build/aten/src/ATen/RegisterCPU_3.cpp:7148
+       new kernel: registered at /usr/local/lib/python3.12/site-packages/flag_gems/__init__.py:62 (Triggered internally at /home/corex/sw_home/apps/pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:208.)
+  self.m.impl(
+WARNING:root:Skipped registering operator: This is not allowed since there's already a kernel registered from python overriding ne_.Scalar's behavior for CUDA dispatch key and aten namespace.
+WARNING:root:Skipped registering operator: This is not allowed since there's already a kernel registered from python overriding ne_.Tensor's behavior for CUDA dispatch key and aten namespace.
+/usr/local/lib/python3.12/site-packages/torch/jit/_script.py:362: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:411: RuntimeWarning: active Triton backend does not provide a replay benchmarker; falling back to event timing
+  resolved_benchmark = resolve_benchmarker(
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/scripts/final-ffn-row-prune-20261024T2039/run_component.py", line 153, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/workspace/experiments/minicpm-s2/scripts/final-ffn-row-prune-20261024T2039/run_component.py", line 71, in main
+    return worker(args.run_dir)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/experiments/minicpm-s2/scripts/final-ffn-row-prune-20261024T2039/run_component.py", line 62, in worker
+    component.run(Path(run_dir), Path('/workspace/MiniCPM5-2B'))
+  File "/workspace/experiments/minicpm-s2/scripts/final-ffn-row-prune-20261024T2039/component.py", line 150, in run
+    require('.mm_out:' in executed and '.index:' in executed,'本组件未记录实际mm_out/index执行')
+  File "/workspace/experiments/minicpm-s2/scripts/final-ffn-row-prune-20261024T2039/component.py", line 24, in require
+    if not ok: raise ValueError(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: 本组件未记录实际mm_out/index执行

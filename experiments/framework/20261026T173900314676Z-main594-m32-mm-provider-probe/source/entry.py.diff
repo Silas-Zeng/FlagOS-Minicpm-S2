@@ -1,0 +1,20 @@
+--- 150802-M64/entry.py
++++ M32-identity/entry.py
+@@ -45,7 +45,7 @@
+         if sha(HERE / name) != expected:
+             raise RuntimeError("入口资产变化：" + name)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-main594-m64-mm-provider-probe")
++    run = ROOT / "framework" / (stamp + "-main594-m32-mm-provider-probe")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+@@ -54,7 +54,7 @@
+         shutil.copyfile(HERE / name, assets / name)
+     shutil.copyfile(HERE / "asset-pins.json", assets / "asset-pins.json")
+     state = dict(started_utc=stamp, owner_pid=os.getpid(),
+-        scope="merge594实际small_linear_out M64唯一MM调用，仅身份/config资源，不计时或写候选", run=str(run),
++        scope="merge594实际small_linear_out M32唯一MM调用，仅身份/config资源，不计时或写候选", run=str(run),
+         command=[sys.executable, *sys.argv], owned_processes=[], exit_code=1)
+     save(run / "manifest.json", state)
+     lock = child = monitor = None

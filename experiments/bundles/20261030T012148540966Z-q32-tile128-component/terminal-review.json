@@ -1,0 +1,62 @@
+{
+  "结论": "组件数值门通过，性能负向；停止候选，不进入服务或官方验证。",
+  "run": "20261030T012148540966Z-q32-tile128-component",
+  "evidence": {
+    "archive": "archive/q32-tile128-20261030/component-012148/cpu-probes/20261030T012148540966Z-q32-tile128-component",
+    "bundle_sha256": "284311144f33238f102fbb9599c4ca0d25b2753dbd15d2a1bbfda942dd4fc1e9",
+    "verified_files": 70,
+    "summary_sha256": "bfa9fd4868ce860c723b43ed73045f95a3bf852b856e0a1e3bc73af33994f1f1"
+  },
+  "scope": {
+    "candidate_sha256": "4b6e3018feb8abce0b61c44a940053286f641aa9af35cf543535a5d4f9219b1d",
+    "synthetic_abi": true,
+    "service_capture_claim": false,
+    "A_TILE_SIZE": 64,
+    "B_TILE_SIZE": 128,
+    "common_geometry": "BM256/BQ32/grid-y2/16 warps/1 stage/effective SME=3"
+  },
+  "correctness": {
+    "cases": [
+      "main_q2018_kv14126",
+      "main_changed_q",
+      "no_history_q2018_kv2018",
+      "tail_q2019_kv16145",
+      "short_q33_kv65"
+    ],
+    "A_B_max_abs_by_case": [
+      0.000244140625,
+      0.00048828125,
+      0.00390625,
+      0.000244140625,
+      0.0
+    ],
+    "pointwise_violations_by_case": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "selected_FP64": "5项每臂通过",
+    "guards_readonly_changedQ_same_arm_stability": "全部通过",
+    "note": "AB张量已先复制CPU再FP64比较；全量比较器修复通过CPU BF16下一ULP检测。本次全量GPU输出门正常完成。"
+  },
+  "performance": {
+    "ABBA_groups": 4,
+    "repetitions_per_block": 50,
+    "event_A_mean_ms": 7.97936897277832,
+    "event_B_mean_ms": 8.406893310546875,
+    "B_vs_A_percent": 5.357871521257618,
+    "direction": "四组均负向，B平均慢约5.358%。"
+  },
+  "execution_cleanup": {
+    "owner_pid": 98116,
+    "child_pid": 98118,
+    "worker_returncode": 0,
+    "preflight_9031": "free",
+    "preflight_GPU_processes": "none",
+    "postflight_9031": "free",
+    "postflight_GPU_processes": "none"
+  },
+  "qualification": "仅合成ABI组件结果；不代表生产请求覆盖、官方性能或准确率资格；不更新基线。原始证据未修改。"
+}

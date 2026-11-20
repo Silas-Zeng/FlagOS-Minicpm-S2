@@ -1,0 +1,28 @@
+{
+  "run": "20261027T171100Z-c75db-production-hotspot-4k",
+  "status": "diagnostic_incomplete",
+  "original_posthoc_valid": false,
+  "node_analysis_passed": true,
+  "original_failure": "native_graphs empty: compile cache disabled; no cache directory log/computation_graph.py. Original posthoc unchanged.",
+  "samples": 4,
+  "num_tokens": 64,
+  "num_reqs": 64,
+  "node_intervals": 1988,
+  "boundary_median_ms": 26.72533416748047,
+  "full_median_ms": 29.22206687927246,
+  "top_interval_sums_ms": {
+    "native_S2_42layers": 17.900484666228294,
+    "MM": 6.114815393462777,
+    "W8A8_GEMM": 1.8052673023194075,
+    "reduce": 0.4304673057049513
+  },
+  "identity_valid_after": true,
+  "native_S2_S4_service_lifetime_covered": true,
+  "limitations": [
+    "All intervals include event instrumentation; not actual HBM counters or uninstrumented kernel latency.",
+    "Original posthoc remains incomplete, node analysis passed independently.",
+    "No M32 node sample (17 natural replays < first sample32); no M2048 graph sample.",
+    "Native driver symbol retained; Triton binding unmatched is expected, direct function->module resolution unproven."
+  ],
+  "decision": "保留原posthoc失败与解析通过两个事实；编译缓存关闭时无fresh FX目录，非GPU/数值错误。插桩区间仅诊断，无官方吞吐成绩。N32仅17replay未达采样32，未采M2048，不扩写为所有负载热点。"
+}

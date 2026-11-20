@@ -1,0 +1,749 @@
+	.text
+	.globl	write_rows                      ; -- Begin function write_rows
+	.p2align	3
+	.type	write_rows,@function
+	.iluvatar_kernel write_rows
+write_rows:                             ; @write_rows
+.Lfunc_begin0:
+	.file	1 "/workspace/experiments/minicpm-s2/framework/20261027T015640083939Z-gqa-lossless12-soa-hotspot-component/source" "soa_kernels.py"
+	.loc	1 37 0                          ; soa_kernels.py:37:0
+	.cfi_sections .debug_frame
+	.cfi_startproc
+	.cfi_return_column 32
+	.iluvatar_kernel_code_t
+		iluvatar_code_version_major = 1
+		iluvatar_code_version_minor = 3
+		iluvatar_machine_kind = 1
+		iluvatar_machine_version_major = 1
+		iluvatar_machine_version_minor = 1
+		iluvatar_machine_version_stepping = 0
+		kernel_code_entry_byte_offset = 256
+		kernel_code_prefetch_byte_size = 0
+		granulated_workitem_vgpr_count = 4
+		granulated_warp_sgpr_count = 3
+		float_mode = 12
+		debug_mode = 0
+		has_mbar = 0
+		user_sgpr_count = 6
+		enable_sgpr_workgroup_id_x = 1
+		enable_sgpr_workgroup_id_y = 1
+		enable_sgpr_workgroup_id_z = 1
+		enable_sgpr_workgroup_info = 1
+		enable_vgpr_workitem_id = 3
+		granulated_slb_size = 0
+		enable_exception = 128
+		enable_sgpr_private_segment_buffer = 1
+		enable_sgpr_globalvariable_ptr = 0
+		enable_sgpr_kernarg_segment_ptr = 1
+		enable_sgpr_constvariable_ptr = 0
+		enable_sgpr_private_segment_size = 0
+		enable_sgpr_grid_workgroup_count_x = 0
+		enable_sgpr_grid_workgroup_count_y = 0
+		enable_sgpr_grid_workgroup_count_z = 0
+		private_element_size = 1
+		is_ptr64 = 1
+		is_dynamic_callstack = 0
+		is_debug_enabled = 0
+		enable_private_swizzle = 1
+		has_called_assert = 0
+		has_called_printf = 0
+		has_called_malloc = 0
+		enable_srf_flat_shared = 0
+		enable_srf_flat_scratch = 0
+		has_wgmma = 0
+		has_dva = 0
+		enable_dynamic_smem_size = 0
+		workitem_private_segment_byte_size = 0
+		workgroup_group_segment_byte_size = 0
+		kernarg_segment_byte_size = 56
+		workgroup_fbarrier_count = 0
+		warp_sgpr_count = 32
+		workitem_vgpr_count = 18
+		reserved_vgpr_first = 0
+		reserved_vgpr_count = 0
+		reserved_sgpr_first = 0
+		reserved_sgpr_count = 0
+		debug_warp_private_segment_offset_sgpr = 0
+		debug_private_segment_buffer_sgpr = 0
+		kernarg_segment_alignment = 3
+		group_segment_alignment = 4
+		private_segment_alignment = 4
+		warp_size = 6
+		call_convention = -1
+		runtime_loader_kernel_symbol = 0
+	.end_iluvatar_kernel_code_t
+; %bb.0:
+	; Func LiveIn Regs:
+	;  blockIdx.x : s6  blockIdx.y : s7  blockIdx.z : s8
+	sl_mov_b32 s0, s7
+.Ltmp0:
+	.loc	1 38 24 prologue_end            ; soa_kernels.py:38:24
+	sl_lsa_load_b32x16 s[12:27], s[4:5], noreg, #0, ca
+	.loc	1 39 26                         ; soa_kernels.py:39:26
+	sl_mov_b32 s7, 0x0
+	sl_shl_b64 {s[2:3], wcr}, s[6:7], 0x3
+	sl_wait smcnt(0)
+	sl_mov_b32 s27, 0xffffffff
+	sl_add_i64 s[24:25], s[16:17], s[2:3]
+	.loc	1 39 20 is_stmt 0               ; soa_kernels.py:39:20
+	ml_lsa_load_dwordx2 v[0:1], s[24:27], noreg, noreg, #0, ca
+	sl_wait vmcnt(0)
+	ml_mov_v2s_b32 s3, v1, 0x0
+	ml_mov_v2s_b32 s2, v0, 0x0
+	.loc	1 40 15 is_stmt 1               ; soa_kernels.py:40:15
+	sl_cmp_lt_i32 wcr, s3, 0x0
+	sl_cbr_wcrnz BB0_4, wcr
+; %bb.1:
+	.loc	1 42 79                         ; soa_kernels.py:42:79
+	ml_mov_b32 v1, tid
+	.loc	1 41 26                         ; soa_kernels.py:41:26
+	sl_cmp_eq_u32 wcr, s8, 0x0
+	.loc	1 41 32 is_stmt 0               ; soa_kernels.py:41:32
+	sl_csel_b64 s[4:5], s[12:13], s[14:15], wcr
+	.loc	1 42 26 is_stmt 1               ; soa_kernels.py:42:26
+	sl_shl_b64 {s[12:13], wcr}, s[6:7], 0x9
+	sl_add_i64 s[4:5], s[4:5], s[12:13]
+	.loc	1 42 58 is_stmt 0               ; soa_kernels.py:42:58
+	sl_mull_u32 s6, s0, 0x100
+	sl_add_i64 s[12:13], s[4:5], s[6:7]
+	.loc	1 42 19                         ; soa_kernels.py:42:19
+	sl_mov_b32 s15, 0xfff00004
+	ml_lsa_blkload_x1 v0, s[12:15], noreg, noreg, #0, ca
+.Ltmp1:
+	.file	2 "/usr/local/lib/python3.12/site-packages/triton/language" "standard.py"
+	.loc	2 213 40 is_stmt 1              ; standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ]
+	ml_xor_b32 v2, tid, 0x20
+	ml_xor_b32 v11, tid, 0x10
+	ml_xor_b32 v12, tid, 0x8
+.Ltmp2:
+	.loc	1 43 55                         ; soa_kernels.py:43:55
+	sl_mull_u32 s1, s8, 0x2
+.Ltmp3:
+	.loc	2 213 40                        ; standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ]
+	ml_xor_b32 v13, tid, 0x4
+	ml_xor_b32 v14, tid, 0x1
+.Ltmp4:
+	.loc	1 16 78                         ; soa_kernels.py:16:78 @[ soa_kernels.py:43:62 ]
+	sl_mov_b32 s12, 0xff
+	.loc	1 21 32                         ; soa_kernels.py:21:32 @[ soa_kernels.py:43:62 ]
+	sl_mov_b32 s13, 0x3020400
+	sl_mov_b32 s26, s27
+	.loc	1 22 31                         ; soa_kernels.py:22:31 @[ soa_kernels.py:43:62 ]
+	sl_mov_b32 s14, 0x800
+	.loc	1 23 31                         ; soa_kernels.py:23:31 @[ soa_kernels.py:43:62 ]
+	sl_mov_b32 s15, 0xc00
+.Ltmp5:
+	.loc	1 43 47                         ; soa_kernels.py:43:47
+	sl_srl_b64 {s[4:5], wcr}, s[2:3], 0x4
+	.loc	1 43 57 is_stmt 0               ; soa_kernels.py:43:57
+	sl_add_i32 s9, s1, s0
+	.loc	1 43 70                         ; soa_kernels.py:43:70
+	sl_and_b32 {s8, wcr}, s2, 0xf
+.Ltmp6:
+	.loc	1 19 34 is_stmt 1               ; soa_kernels.py:19:34 @[ soa_kernels.py:43:62 ]
+	sl_shl_b64 {s[0:1], wcr}, s[4:5], 0xe
+	.loc	1 19 16 is_stmt 0               ; soa_kernels.py:19:16 @[ soa_kernels.py:43:62 ]
+	sl_add_i64 s[0:1], s[18:19], s[0:1]
+	.loc	1 19 46                         ; soa_kernels.py:19:46 @[ soa_kernels.py:43:62 ]
+	sl_mull_u32 s6, s9, 0x1000
+	.loc	1 19 40                         ; soa_kernels.py:19:40 @[ soa_kernels.py:43:62 ]
+	sl_add_i64 s[0:1], s[0:1], s[6:7]
+	.loc	1 21 23 is_stmt 1               ; soa_kernels.py:21:23 @[ soa_kernels.py:43:62 ]
+	sl_mull_u32 s6, s8, 0x80
+	.loc	1 10 19                         ; soa_kernels.py:10:19 @[ soa_kernels.py:43:62 ]
+	sl_wait vmcnt(0)
+	ml_and_b32 v3, v0, 0xffff
+	.loc	1 11 16                         ; soa_kernels.py:11:16 @[ soa_kernels.py:43:62 ]
+	ml_bfe2_b32 v4, v0, 0x217
+	ml_srl_b16 v5, v3, 0x7
+	.loc	1 11 27 is_stmt 0               ; soa_kernels.py:11:27 @[ soa_kernels.py:43:62 ]
+	ml_and_b32 v6, v4, 0xff
+	ml_and_b32 v7, v5, 0xff
+.Ltmp7:
+	.loc	2 192 27 is_stmt 1              ; standard.py:192:27 @[ standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ] ]
+	ml_max_u32 v8, v7, v6
+.Ltmp8:
+	.loc	2 213 40                        ; standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v9, v8, v2
+.Ltmp9:
+	.loc	2 251 27                        ; standard.py:251:27 @[ standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ] ]
+	ml_min_u32 v10, v7, v6
+.Ltmp10:
+	.loc	1 21 18                         ; soa_kernels.py:21:18 @[ soa_kernels.py:43:62 ]
+	sl_add_i64 s[2:3], s[0:1], s[6:7]
+	.loc	1 22 28                         ; soa_kernels.py:22:28 @[ soa_kernels.py:43:62 ]
+	sl_mull_u32 s6, s8, 0x40
+.Ltmp11:
+	.loc	2 272 40                        ; standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v2, v10, v2
+.Ltmp12:
+	.loc	1 22 23                         ; soa_kernels.py:22:23 @[ soa_kernels.py:43:62 ]
+	sl_add_i64 s[6:7], s[0:1], s[6:7]
+	.loc	1 10 19                         ; soa_kernels.py:10:19 @[ soa_kernels.py:43:62 ]
+	ml_bfe2_b32 v15, v0, 0x210
+	.loc	1 17 14                         ; soa_kernels.py:17:14 @[ soa_kernels.py:43:62 ]
+	ml_srl_b32 v16, v6, 0x4
+	.loc	1 18 41                         ; soa_kernels.py:18:41 @[ soa_kernels.py:43:62 ]
+	ml_slb_shuffle_rtn_b32 v16, v16, v1
+	.loc	1 15 17                         ; soa_kernels.py:15:17 @[ soa_kernels.py:43:62 ]
+	ml_bfe2_b32 v0, v0, 0x218
+	.loc	1 14 43                         ; soa_kernels.py:14:43 @[ soa_kernels.py:43:62 ]
+	ml_and_b32 v4, v4, 0xf
+	.loc	1 15 17                         ; soa_kernels.py:15:17 @[ soa_kernels.py:43:62 ]
+	ml_srl_b16 v17, v3, 0x8
+	.loc	1 15 20 is_stmt 0               ; soa_kernels.py:15:20 @[ soa_kernels.py:43:62 ]
+	ml_and_b16 v0, v0, 0x80
+	.loc	1 15 31                         ; soa_kernels.py:15:31 @[ soa_kernels.py:43:62 ]
+	ml_and_b16 v3, v3, 0x7f
+	.loc	1 14 43 is_stmt 1               ; soa_kernels.py:14:43 @[ soa_kernels.py:43:62 ]
+	ml_and_b32 v5, v5, 0xf
+.Ltmp13:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(2)
+	ml_max_i32 v8, v8, v9
+.Ltmp14:
+	.loc	2 213 40                        ; standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v9, v8, v11
+.Ltmp15:
+	.loc	2 251 27                        ; standard.py:251:27 @[ standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(2)
+	ml_min_i32 v2, v10, v2
+.Ltmp16:
+	.loc	2 272 40                        ; standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v10, v2, v11
+.Ltmp17:
+	.loc	1 42 79                         ; soa_kernels.py:42:79
+	ml_shl_b32 v11, tid, 0x1
+.Ltmp18:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(1)
+	ml_max_i32 v8, v8, v9
+.Ltmp19:
+	.loc	2 213 40                        ; standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v9, v8, v12
+.Ltmp20:
+	.loc	2 251 27                        ; standard.py:251:27 @[ standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(1)
+	ml_min_i32 v2, v2, v10
+.Ltmp21:
+	.loc	2 272 40                        ; standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v10, v2, v12
+.Ltmp22:
+	.loc	2 213 40                        ; standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ]
+	ml_xor_b32 v12, tid, 0x2
+.Ltmp23:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(1)
+	ml_max_i32 v8, v8, v9
+.Ltmp24:
+	.loc	2 213 40                        ; standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v9, v8, v13
+.Ltmp25:
+	.loc	2 251 27                        ; standard.py:251:27 @[ standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(1)
+	ml_min_i32 v2, v2, v10
+.Ltmp26:
+	.loc	2 272 40                        ; standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v10, v2, v13
+.Ltmp27:
+	.loc	1 21 27                         ; soa_kernels.py:21:27 @[ soa_kernels.py:43:62 ]
+	ml_mov_b32 v13, s3
+.Ltmp28:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(1)
+	ml_max_i32 v8, v8, v9
+.Ltmp29:
+	.loc	2 213 40                        ; standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v9, v8, v12
+.Ltmp30:
+	.loc	2 251 27                        ; standard.py:251:27 @[ standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(1)
+	ml_min_i32 v2, v2, v10
+.Ltmp31:
+	.loc	2 272 40                        ; standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v10, v2, v12
+.Ltmp32:
+	.loc	1 22 31                         ; soa_kernels.py:22:31 @[ soa_kernels.py:43:62 ]
+	ml_mov_b32 v12, s7
+.Ltmp33:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(1)
+	ml_max_i32 v8, v8, v9
+.Ltmp34:
+	.loc	2 213 40                        ; standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v9, v8, v14
+.Ltmp35:
+	.loc	2 251 27                        ; standard.py:251:27 @[ standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(1)
+	ml_min_i32 v2, v2, v10
+.Ltmp36:
+	.loc	2 272 40                        ; standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ]
+	ml_slb_shuffle_rtn_b32 v10, v2, v14
+.Ltmp37:
+	.loc	1 15 31                         ; soa_kernels.py:15:31 @[ soa_kernels.py:43:62 ]
+	ml_and_b16 v14, v15, 0x7f
+	.loc	1 15 20 is_stmt 0               ; soa_kernels.py:15:20 @[ soa_kernels.py:43:62 ]
+	ml_and_b16 v15, v17, 0x80
+	.loc	1 15 26                         ; soa_kernels.py:15:26 @[ soa_kernels.py:43:62 ]
+	ml_or_b16 v0, v0, v14
+	ml_or_b16 v3, v15, v3
+	.loc	1 17 14 is_stmt 1               ; soa_kernels.py:17:14 @[ soa_kernels.py:43:62 ]
+	ml_srl_b32 v14, v7, 0x4
+	.loc	1 18 41                         ; soa_kernels.py:18:41 @[ soa_kernels.py:43:62 ]
+	ml_slb_shuffle_rtn_b32 v14, v14, v1
+	.loc	1 21 32                         ; soa_kernels.py:21:32 @[ soa_kernels.py:43:62 ]
+	ml_byte_permute_b32 v3, v3, v0, s13
+	.loc	1 18 74                         ; soa_kernels.py:18:74 @[ soa_kernels.py:43:62 ]
+	ml_shl_b32 v15, v16, 0x4
+.Ltmp38:
+	.loc	2 192 27                        ; standard.py:192:27 @[ standard.py:213:40 @[ soa_kernels.py:12:31 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(2)
+	ml_max_i32 v0, v8, v9
+.Ltmp39:
+	.loc	1 12 37                         ; soa_kernels.py:12:37 @[ soa_kernels.py:43:62 ]
+	ml_max_u32 v0, v0, 0xf
+	ml_add_i32 v0, v0, 0xfffffff1
+	.loc	1 14 34                         ; soa_kernels.py:14:34 @[ soa_kernels.py:43:62 ]
+	ml_sub_i32 v7, v7, v0
+.Ltmp40:
+	.loc	2 251 27                        ; standard.py:251:27 @[ standard.py:272:40 @[ soa_kernels.py:13:26 @[ soa_kernels.py:43:62 ] ] ]
+	sl_wait lmcnt(1)
+	ml_min_i32 v2, v2, v10
+.Ltmp41:
+	.loc	1 13 30                         ; soa_kernels.py:13:30 @[ soa_kernels.py:43:62 ]
+	ml_cmp_ge_i32 tcr, v2, v0
+	.loc	1 14 34                         ; soa_kernels.py:14:34 @[ soa_kernels.py:43:62 ]
+	ml_sub_i32 v6, v6, v0
+	.loc	1 14 39 is_stmt 0               ; soa_kernels.py:14:39 @[ soa_kernels.py:43:62 ]
+	ml_csel_b32 v5, v7, v5, tcr
+	ml_csel_b32 v4, v6, v4, tcr
+	.loc	1 13 30 is_stmt 1               ; soa_kernels.py:13:30 @[ soa_kernels.py:43:62 ]
+	sl_mov_b64 s[0:1], tcr
+	.loc	1 21 27                         ; soa_kernels.py:21:27 @[ soa_kernels.py:43:62 ]
+	ml_addo_u32 {v6, tcr}, s2, v11
+	.loc	1 18 81                         ; soa_kernels.py:18:81 @[ soa_kernels.py:43:62 ]
+	sl_wait lmcnt(0)
+	ml_anyop3_b32 v7, v15, v14, s12, 0xe0
+	.loc	1 16 37                         ; soa_kernels.py:16:37 @[ soa_kernels.py:43:62 ]
+	ml_slb_shuffle_rtn_b32 v4, v4, v1
+	.loc	1 21 32                         ; soa_kernels.py:21:32 @[ soa_kernels.py:43:62 ]
+	ml_mov_v2s_b32 s24, v6, 0x0
+	.loc	1 21 27 is_stmt 0               ; soa_kernels.py:21:27 @[ soa_kernels.py:43:62 ]
+	ml_addc_i32 v8, 0, v13, tcr
+	.loc	1 22 31 is_stmt 1               ; soa_kernels.py:22:31 @[ soa_kernels.py:43:62 ]
+	ml_addo_u32 {v9, tcr}, s6, v1
+	.loc	1 16 37                         ; soa_kernels.py:16:37 @[ soa_kernels.py:43:62 ]
+	ml_slb_shuffle_rtn_b32 v1, v5, v1
+	.loc	1 21 32                         ; soa_kernels.py:21:32 @[ soa_kernels.py:43:62 ]
+	ml_mov_v2s_b32 s25, v8, 0x0
+	ml_mov_b32 v5, s24
+	.loc	1 22 31                         ; soa_kernels.py:22:31 @[ soa_kernels.py:43:62 ]
+	ml_addc_i32 v8, 0, v12, tcr
+	ml_addo_u32 {v10, tcr}, s14, v9
+	.loc	1 21 32                         ; soa_kernels.py:21:32 @[ soa_kernels.py:43:62 ]
+	ml_sub_i32 v5, v6, v5
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[26:27], tmsk
+	ml_lsa_store_short v3, s[24:27], signed v5, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 22 37                         ; soa_kernels.py:22:37 @[ soa_kernels.py:43:62 ]
+	ml_mov_v2s_b32 s24, v10, 0x0
+	.loc	1 22 31 is_stmt 0               ; soa_kernels.py:22:31 @[ soa_kernels.py:43:62 ]
+	ml_addc_i32 v3, 0, v8, tcr
+	.loc	1 0 0                           ; soa_kernels.py:0 @[ soa_kernels.py:43:62 ]
+	ml_cmp_lt_i32 tcr, v2, v0
+	.loc	1 16 71 is_stmt 1               ; soa_kernels.py:16:71 @[ soa_kernels.py:43:62 ]
+	sl_wait lmcnt(1)
+	ml_shl_b32 v2, v4, 0x4
+	.loc	1 22 37                         ; soa_kernels.py:22:37 @[ soa_kernels.py:43:62 ]
+	ml_mov_v2s_b32 s25, v3, 0x0
+	ml_mov_b32 v3, s24
+	.loc	1 0 0 is_stmt 0                 ; soa_kernels.py:0 @[ soa_kernels.py:43:62 ]
+	sl_mov_b64 s[2:3], tcr
+	.loc	1 23 31 is_stmt 1               ; soa_kernels.py:23:31 @[ soa_kernels.py:43:62 ]
+	ml_addo_u32 {v4, tcr}, s15, v9
+	.loc	1 16 78                         ; soa_kernels.py:16:78 @[ soa_kernels.py:43:62 ]
+	sl_wait lmcnt(0)
+	ml_anyop3_b32 v1, v2, v1, s12, 0xe0
+	.loc	1 22 37                         ; soa_kernels.py:22:37 @[ soa_kernels.py:43:62 ]
+	ml_sub_i32 v2, v10, v3
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[26:27], tmsk
+	ml_lsa_store_byte v1, s[24:27], signed v2, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 23 37                         ; soa_kernels.py:23:37 @[ soa_kernels.py:43:62 ]
+	ml_mov_v2s_b32 s24, v4, 0x0
+	.loc	1 23 31 is_stmt 0               ; soa_kernels.py:23:31 @[ soa_kernels.py:43:62 ]
+	ml_addc_i32 v1, 0, v8, tcr
+	.loc	1 23 37                         ; soa_kernels.py:23:37 @[ soa_kernels.py:43:62 ]
+	ml_mov_v2s_b32 s25, v1, 0x0
+	.loc	1 24 18 is_stmt 1               ; soa_kernels.py:24:18 @[ soa_kernels.py:43:62 ]
+	ml_cmp_eq_u32 tcr, tid, 0x0
+	.loc	1 23 37                         ; soa_kernels.py:23:37 @[ soa_kernels.py:43:62 ]
+	ml_mov_b32 v1, s24
+	ml_sub_i32 v1, v4, v1
+	sl_and_savetmsk_b64 {s[10:11], wcr}, s[2:3], tmsk
+	ml_lsa_store_byte v7, s[24:27], signed v1, noreg, #0, wb
+	sl_or_b64 {tmsk, wcr}, tmsk, s[10:11]
+	.loc	1 24 18                         ; soa_kernels.py:24:18 @[ soa_kernels.py:43:62 ]
+	sl_and_savetmsk_b64 {s[2:3], wcr}, tcr, tmsk
+	sl_xor_b64 {s[2:3], wcr}, tmsk, s[2:3]
+	; mask branch BB0_3
+	sl_cbr_tmskaz BB0_3
+BB0_2:
+	.loc	1 24 43 is_stmt 0               ; soa_kernels.py:24:43 @[ soa_kernels.py:43:62 ]
+	sl_mov_b64 tcr, s[0:1]
+	ml_and_b32 v0, v0, 0xffff
+	sl_mov_b32 s1, 0x0
+	ml_mov_b32 v1, 0x0
+	ml_csel_b32 v0, v0, v1, tcr
+	.loc	1 20 36 is_stmt 1               ; soa_kernels.py:20:36 @[ soa_kernels.py:43:62 ]
+	sl_shl_b64 {s[4:5], wcr}, s[4:5], 0x7
+	.loc	1 20 18 is_stmt 0               ; soa_kernels.py:20:18 @[ soa_kernels.py:43:62 ]
+	sl_add_i64 s[4:5], s[20:21], s[4:5]
+	.loc	1 20 46                         ; soa_kernels.py:20:46 @[ soa_kernels.py:43:62 ]
+	sl_mull_u32 s0, s9, 0x20
+	.loc	1 20 40                         ; soa_kernels.py:20:40 @[ soa_kernels.py:43:62 ]
+	sl_add_i64 s[4:5], s[4:5], s[0:1]
+	.loc	1 20 54                         ; soa_kernels.py:20:54 @[ soa_kernels.py:43:62 ]
+	sl_mull_u32 s0, s8, 0x2
+	.loc	1 20 49                         ; soa_kernels.py:20:49 @[ soa_kernels.py:43:62 ]
+	sl_mov_b32 s7, 0xffffffff
+	.loc	1 24 18 is_stmt 1               ; soa_kernels.py:24:18 @[ soa_kernels.py:43:62 ]
+	ml_lsa_store_byte v0, s[4:7], noreg, s0, #0, wb
+	.loc	1 25 34                         ; soa_kernels.py:25:34 @[ soa_kernels.py:43:62 ]
+	ml_csel_b32 v0, 1, v1, tcr
+	.loc	1 25 20 is_stmt 0               ; soa_kernels.py:25:20 @[ soa_kernels.py:43:62 ]
+	ml_lsa_store_byte v0, s[4:7], noreg, s0, #1, wb
+.Ltmp42:
+BB0_3:                                  ; %Flow
+	.loc	1 0 20                          ; soa_kernels.py:0:20
+	sl_or_b64 {tmsk, wcr}, tmsk, s[2:3]
+BB0_4:                                  ; %common.ret
+	sl_eop 
+.Ltmp43:
+	.section	.rodata,"a",@progbits
+	.p2align	6, 0x0
+	.globl	write_rows.kd
+	.type	write_rows.kd,@object
+	.size	write_rows.kd, 64
+write_rows.kd:
+	.asciz	"\000\000\000"
+	.long	0
+	.asciz	"\000\000\000\000\000\000\000"
+	.quad	write_rows@rel64-write_rows.kd
+	.asciz	"\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.long	536772
+	.asciz	"\003\000\364\006\211\000\000\000\000\000\000"
+	.text
+.Lfunc_end0:
+	.size	write_rows, .Lfunc_end0-write_rows
+	.cfi_endproc
+                                        ; -- End function
+	.section	.Iluvatar.csdata,"",@progbits
+; Kernel info:
+; codeLenInByte = 1408
+; NumSgprs: 32
+; NumVgprs: 18
+; ScratchSize: 0
+; MemoryBound: 0
+; FloatMode: 12
+; IeeeMode: 1
+; SLBByteSize: 0 bytes/workgroup (compile time only)
+; SGPRBlocks: 3
+; VGPRBlocks: 4
+; NumSGPRsForWarpsPerNU: 28
+; NumVGPRsForWarpsPerNR: 18
+; ReqNTIDx: 0
+; MaxNTIDx: 0
+; MinCTASm: 0
+; ActiveWarp: 8
+; WarpLimiterHint : 0
+	.section	.debug_abbrev,"",@progbits
+	.byte	1                               ; Abbreviation Code
+	.byte	17                              ; DW_TAG_compile_unit
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	37                              ; DW_AT_producer
+	.byte	8                               ; DW_FORM_string
+	.byte	19                              ; DW_AT_language
+	.byte	5                               ; DW_FORM_data2
+	.byte	3                               ; DW_AT_name
+	.byte	8                               ; DW_FORM_string
+	.byte	16                              ; DW_AT_stmt_list
+	.byte	6                               ; DW_FORM_data4
+	.byte	27                              ; DW_AT_comp_dir
+	.byte	8                               ; DW_FORM_string
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	2                               ; Abbreviation Code
+	.byte	46                              ; DW_TAG_subprogram
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	3                               ; DW_AT_name
+	.byte	8                               ; DW_FORM_string
+	.byte	32                              ; DW_AT_inline
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	3                               ; Abbreviation Code
+	.byte	46                              ; DW_TAG_subprogram
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	4                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	11                              ; DW_FORM_data1
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	5                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	11                              ; DW_FORM_data1
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	6                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	5                               ; DW_FORM_data2
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	0                               ; EOM(3)
+	.section	.debug_info,"",@progbits
+	.long	263                             ; Length of Unit
+	.short	2                               ; DWARF version number
+	.long	.debug_abbrev                   ; Offset Into Abbrev. Section
+	.byte	8                               ; Address Size (in bytes)
+	.byte	1                               ; Abbrev [1] 0xb:0x100 DW_TAG_compile_unit
+	.ascii	"triton"                        ; DW_AT_producer
+	.byte	0
+	.short	2                               ; DW_AT_language
+	.ascii	"soa_kernels.py"                ; DW_AT_name
+	.byte	0
+	.long	.debug_line                     ; DW_AT_stmt_list
+	.ascii	"/workspace/experiments/minicpm-s2/framework/20261027T015640083939Z-gqa-lossless12-soa-hotspot-component/source" ; DW_AT_comp_dir
+	.byte	0
+	.quad	.Lfunc_begin0                   ; DW_AT_low_pc
+	.quad	.Lfunc_end0                     ; DW_AT_high_pc
+	.byte	2                               ; Abbrev [2] 0xa7:0xd DW_TAG_subprogram
+	.ascii	"write_rows"                    ; DW_AT_name
+	.byte	0
+	.byte	1                               ; DW_AT_inline
+	.byte	3                               ; Abbrev [3] 0xb4:0x56 DW_TAG_subprogram
+	.quad	.Lfunc_begin0                   ; DW_AT_low_pc
+	.quad	.Lfunc_end0                     ; DW_AT_high_pc
+	.long	167                             ; DW_AT_abstract_origin
+	.byte	4                               ; Abbrev [4] 0xc9:0x40 DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges0                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.byte	43                              ; DW_AT_call_line
+	.byte	62                              ; DW_AT_call_column
+	.byte	4                               ; Abbrev [4] 0xd5:0x19 DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges1                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.byte	12                              ; DW_AT_call_line
+	.byte	31                              ; DW_AT_call_column
+	.byte	5                               ; Abbrev [5] 0xe1:0xc DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges2                 ; DW_AT_ranges
+	.byte	2                               ; DW_AT_call_file
+	.byte	213                             ; DW_AT_call_line
+	.byte	40                              ; DW_AT_call_column
+	.byte	0                               ; End Of Children Mark
+	.byte	4                               ; Abbrev [4] 0xee:0x1a DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges3                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.byte	13                              ; DW_AT_call_line
+	.byte	26                              ; DW_AT_call_column
+	.byte	6                               ; Abbrev [6] 0xfa:0xd DW_TAG_inlined_subroutine
+	.long	167                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges4                 ; DW_AT_ranges
+	.byte	2                               ; DW_AT_call_file
+	.short	272                             ; DW_AT_call_line
+	.byte	40                              ; DW_AT_call_column
+	.byte	0                               ; End Of Children Mark
+	.byte	0                               ; End Of Children Mark
+	.byte	0                               ; End Of Children Mark
+	.byte	0                               ; End Of Children Mark
+	.section	.debug_ranges,"",@progbits
+.Ldebug_ranges0:
+	.quad	.Ltmp1-.Lfunc_begin0
+	.quad	.Ltmp2-.Lfunc_begin0
+	.quad	.Ltmp3-.Lfunc_begin0
+	.quad	.Ltmp5-.Lfunc_begin0
+	.quad	.Ltmp6-.Lfunc_begin0
+	.quad	.Ltmp17-.Lfunc_begin0
+	.quad	.Ltmp18-.Lfunc_begin0
+	.quad	.Ltmp42-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges1:
+	.quad	.Ltmp1-.Lfunc_begin0
+	.quad	.Ltmp2-.Lfunc_begin0
+	.quad	.Ltmp3-.Lfunc_begin0
+	.quad	.Ltmp4-.Lfunc_begin0
+	.quad	.Ltmp7-.Lfunc_begin0
+	.quad	.Ltmp9-.Lfunc_begin0
+	.quad	.Ltmp13-.Lfunc_begin0
+	.quad	.Ltmp15-.Lfunc_begin0
+	.quad	.Ltmp18-.Lfunc_begin0
+	.quad	.Ltmp20-.Lfunc_begin0
+	.quad	.Ltmp22-.Lfunc_begin0
+	.quad	.Ltmp25-.Lfunc_begin0
+	.quad	.Ltmp28-.Lfunc_begin0
+	.quad	.Ltmp30-.Lfunc_begin0
+	.quad	.Ltmp33-.Lfunc_begin0
+	.quad	.Ltmp35-.Lfunc_begin0
+	.quad	.Ltmp38-.Lfunc_begin0
+	.quad	.Ltmp39-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges2:
+	.quad	.Ltmp7-.Lfunc_begin0
+	.quad	.Ltmp8-.Lfunc_begin0
+	.quad	.Ltmp13-.Lfunc_begin0
+	.quad	.Ltmp14-.Lfunc_begin0
+	.quad	.Ltmp18-.Lfunc_begin0
+	.quad	.Ltmp19-.Lfunc_begin0
+	.quad	.Ltmp23-.Lfunc_begin0
+	.quad	.Ltmp24-.Lfunc_begin0
+	.quad	.Ltmp28-.Lfunc_begin0
+	.quad	.Ltmp29-.Lfunc_begin0
+	.quad	.Ltmp33-.Lfunc_begin0
+	.quad	.Ltmp34-.Lfunc_begin0
+	.quad	.Ltmp38-.Lfunc_begin0
+	.quad	.Ltmp39-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges3:
+	.quad	.Ltmp9-.Lfunc_begin0
+	.quad	.Ltmp10-.Lfunc_begin0
+	.quad	.Ltmp11-.Lfunc_begin0
+	.quad	.Ltmp12-.Lfunc_begin0
+	.quad	.Ltmp15-.Lfunc_begin0
+	.quad	.Ltmp17-.Lfunc_begin0
+	.quad	.Ltmp20-.Lfunc_begin0
+	.quad	.Ltmp22-.Lfunc_begin0
+	.quad	.Ltmp25-.Lfunc_begin0
+	.quad	.Ltmp27-.Lfunc_begin0
+	.quad	.Ltmp30-.Lfunc_begin0
+	.quad	.Ltmp32-.Lfunc_begin0
+	.quad	.Ltmp35-.Lfunc_begin0
+	.quad	.Ltmp37-.Lfunc_begin0
+	.quad	.Ltmp40-.Lfunc_begin0
+	.quad	.Ltmp41-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges4:
+	.quad	.Ltmp9-.Lfunc_begin0
+	.quad	.Ltmp10-.Lfunc_begin0
+	.quad	.Ltmp15-.Lfunc_begin0
+	.quad	.Ltmp16-.Lfunc_begin0
+	.quad	.Ltmp20-.Lfunc_begin0
+	.quad	.Ltmp21-.Lfunc_begin0
+	.quad	.Ltmp25-.Lfunc_begin0
+	.quad	.Ltmp26-.Lfunc_begin0
+	.quad	.Ltmp30-.Lfunc_begin0
+	.quad	.Ltmp31-.Lfunc_begin0
+	.quad	.Ltmp35-.Lfunc_begin0
+	.quad	.Ltmp36-.Lfunc_begin0
+	.quad	.Ltmp40-.Lfunc_begin0
+	.quad	.Ltmp41-.Lfunc_begin0
+	.quad	0
+	.quad	0
+	.section	".note.GNU-stack","",@progbits
+	.iluvatar_isa "bi-iluvatar-ilurt--ivcore-1-1-0"
+	.iluvatar_hsa_metadata
+---
+iluvatar.kernels:
+  - .args:
+      - .address_space:  global
+        .name:           KArg_0
+        .offset:         0
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_1
+        .offset:         8
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_2
+        .offset:         16
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_3
+        .offset:         24
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_4
+        .offset:         32
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_5
+        .offset:         40
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_6
+        .offset:         48
+        .size:           8
+        .value_kind:     global_buffer
+    .group_segment_fixed_size: 0
+    .kernarg_segment_align: 8
+    .kernarg_segment_size: 56
+    .max_flat_workgroup_size: 0
+    .name:           write_rows
+    .private_segment_fixed_size: 0
+    .sgpr_count:     32
+    .sgpr_spill_count: 0
+    .symbol:         write_rows.kd
+    .vgpr_count:     18
+    .vgpr_spill_count: 0
+    .warp_size:      64
+iluvatar.version:
+  - 1
+  - 0
+...
+
+	.end_iluvatar_hsa_metadata

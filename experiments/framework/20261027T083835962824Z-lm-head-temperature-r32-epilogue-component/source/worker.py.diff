@@ -1,0 +1,65 @@
+--- R64/worker.py
++++ R32/worker.py
+@@ -1,4 +1,4 @@
+-"""M64真实head→完整原Sampler：唯一温度epilogue组件。"""
++"""M32真实head→完整原Sampler：唯一温度epilogue组件。"""
+ from pathlib import Path
+ from types import SimpleNamespace
+ import hashlib,importlib,inspect,json,statistics,traceback
+@@ -10,7 +10,7 @@
+ def worker(run,model):
+     run,model=Path(run),Path(model)
+     result=dict(status='started',cases=[],timings=[],resources=[],kind='lm_head_temperature_epilogue',
+-        source_main='56f1838192abc940b3fb9accef490022ac125000',rows=64,vocab=130560,
++        source_main='56f1838192abc940b3fb9accef490022ac125000',rows=32,vocab=130560,
+         new_persistent_weight_bytes=0,precision_qualified=False,official_qualified=False,
+         limitations=['单层真实head W与合成hidden；不是模型/官方收益。','完整eager head+Sampler含实际分配/原RNG；Graph仅确定性prefix。','实际原F.linear配置首次捕获；未变原stats，失败不救旧stats融合。'])
+     module=original=None
+@@ -50,7 +50,7 @@
+         assert tuple(wc.shape)==(130560,2048) and wc.dtype==torch.bfloat16
+         w=wc.cuda();w_before=w.clone()
+         generator=torch.Generator().manual_seed(20261027)
+-        xc=(torch.randn((64,2048),generator=generator)*.125).bfloat16();x=xc.cuda();x_before=x.clone()
++        xc=(torch.randn((32,2048),generator=generator)*.125).bfloat16();x=xc.cuda();x_before=x.clone()
+         layer=SimpleNamespace(weight=w,prefix='lm_head')
+         head_method=UnquantizedLinearMethod()
+         def head():return head_method.apply(layer,x,bias=None)
+@@ -66,9 +66,9 @@
+             for kind,data in kernel.asm.items():
+                 if isinstance(data,(str,bytes)):(run/(label+'.'+kind)).write_bytes(data.encode() if isinstance(data,str) else data)
+         preserve('original-head',record['kernel']);save(run/'result.json',result)
+-        temp=torch.ones(64,dtype=torch.float32,device='cuda');pp=torch.full((64,),.95,device='cuda');zeros=torch.zeros_like(temp)
++        temp=torch.ones(32,dtype=torch.float32,device='cuda');pp=torch.full((32,),.95,device='cuda');zeros=torch.zeros_like(temp)
+         sm=SamplingMetadata(temperature=temp,all_greedy=False,all_random=True,top_p=pp,top_k=None,generators={},max_num_logprobs=None,no_penalties=True,prompt_token_ids=None,
+-            frequency_penalties=zeros,presence_penalties=zeros,repetition_penalties=torch.ones_like(zeros),output_token_ids=[[] for _ in range(64)],allowed_token_ids_mask=None,bad_words_token_ids={},
++            frequency_penalties=zeros,presence_penalties=zeros,repetition_penalties=torch.ones_like(zeros),output_token_ids=[[] for _ in range(32)],allowed_token_ids_mask=None,bad_words_token_ids={},
+             logitsprocs=SimpleNamespace(argmax_invariant=[],non_argmax_invariant=[]))
+         a_sampler=smod.Sampler();b_sampler=factory.PreScaledSampler(smod.Sampler(),torch)
+         def bits(a,b):return a.dtype==b.dtype and torch.equal(a.contiguous().view(torch.uint8),b.contiguous().view(torch.uint8))
+@@ -79,7 +79,7 @@
+         def equal_rng(a,b):return bits(a['cpu'],b['cpu']) and bits(a['default'],b['default']) and a['request'].keys()==b['request'].keys() and all(bits(a['request'][i],b['request'][i]) for i in a['request'])
+         latest={}
+         def scaled_b():
+-            out=torch.empty((64,130560),dtype=torch.float32,device=x.device)
++            out=torch.empty((32,130560),dtype=torch.float32,device=x.device)
+             ck=factory.launch(candidate,record,x,w,temp,out);latest['kernel']=ck
+             return out
+         def complete_a():return a_sampler(head(),sm)
+@@ -104,7 +104,7 @@
+             assert all(v for k,v in case.items() if k!='label'),'逐位/RNG/输入门失败，停止不放宽'
+         check('normal_real_head');preserve('candidate-head',latest['kernel'])
+         # FP64独立样本只核点积→原BF16 round；跨臂全scaled/全filtered另为零容差。
+-        rows=[0,1,31,63];cols=[0,1,127,65535,130559]
++        rows=[0,1,15,31];cols=[0,1,127,65535,130559]
+         reference=(xc[rows].double()@wc[cols].double().T).bfloat16().double()
+         measured=initial[rows][:,cols].cpu().double()
+         oracle=dict(label='independent_fp64',passed=bool(torch.allclose(measured,reference,atol=.001,rtol=.01)),max_abs=float((measured-reference).abs().max()))
+@@ -112,7 +112,7 @@
+         for label,source,t in (('changed',-xc.flip(0),.8),('zero',torch.zeros_like(xc),1.),('extreme',xc*64,2.)):
+             x.copy_(source.cuda());x_before.copy_(x);temp.fill_(t);check(label)
+         x.copy_(xc.cuda());x_before.copy_(x);temp.fill_(1.)
+-        sm.generators={0:torch.Generator(device='cuda').manual_seed(19),63:torch.Generator(device='cuda').manual_seed(37)}
++        sm.generators={0:torch.Generator(device='cuda').manual_seed(19),31:torch.Generator(device='cuda').manual_seed(37)}
+         check('per_request_generators');sm.generators={}
+         side=torch.cuda.Stream();side.wait_stream(torch.cuda.current_stream())
+         with torch.cuda.stream(side):check('side_stream')

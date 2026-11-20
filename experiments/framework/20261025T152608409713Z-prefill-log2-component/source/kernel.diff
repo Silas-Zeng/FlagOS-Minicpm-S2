@@ -1,0 +1,49 @@
+--- current-normalized-plus-helper
++++ log2-normalized-plus-helper
+@@ -1,5 +1,5 @@
+ @triton.jit
+-def softmax_step(S, M, L):
++def softmax_step_log2(S, M, L):
+     """Online softmax update for one tile.
+ 
+     Returns ``(M_new, L_new, P, alpha)``.  Caller is responsible for
+@@ -14,18 +14,18 @@
+     # the entire row. In this case we need to set m_j 0 to avoid NaN
+     m_j = tl.where(m_j > float("-inf"), m_j, 0.0)
+     # P : (BLOCK_M, TILE_SIZE)
+-    P = tl.exp(S - m_j[:, None])
++    P = tl.exp2(S - m_j[:, None])
+     # l_j : (BLOCK_M,)
+     l_j = tl.sum(P, axis=1)
+     # alpha : (BLOCK_M, )
+-    alpha = tl.exp(M - m_j)
++    alpha = tl.exp2(M - m_j)
+     # update constants
+     L_new = L * alpha + l_j
+     return m_j, L_new, P, alpha
+ 
+ 
+ @triton.jit
+-def kernel_biv150_prefill_normalized(
++def kernel_biv150_prefill_log2(
+     # Output destination for the 2D path.  In 3D mode per-segment partials
+     # go to the ``segm_*`` tensors (see bottom of signature) and
+     # ``output_ptr`` is unused (callers may pass any non-null pointer).
+@@ -211,7 +211,7 @@
+     L = tl.zeros([BLOCK_M], dtype=tl.float32)
+     # acc : (BLOCK_M, HEAD_SIZE_PADDED)
+     acc = tl.zeros([BLOCK_M, HEAD_SIZE_PADDED], dtype=tl.float32)
+-    score_scale = scale
++    score_scale = scale * 1.4426950408889634074
+     value_scale = 1.0
+     if USE_FP8_Q_DESCALE:
+         score_scale = scale * tl.load(q_scale) * tl.load(k_scale)
+@@ -385,7 +385,7 @@
+                 qq_bias_row_ptrs, seq_offset, context_len, qq_bias_stride_0
+             )
+ 
+-        M, L, P, alpha = softmax_step(S, M, L)
++        M, L, P, alpha = softmax_step_log2(S, M, L)
+         acc = acc * alpha[:, None]
+ 
+         if SLIDING_WINDOW:

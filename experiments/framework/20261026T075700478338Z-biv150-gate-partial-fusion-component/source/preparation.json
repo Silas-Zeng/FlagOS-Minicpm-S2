@@ -1,0 +1,34 @@
+{
+  "status": "prepared_cpu_only_pending_independent_review",
+  "gpu_started": false,
+  "baseline_route": "真实原main6971 opaque→F.linear，原默认FlagGems上下文；完整分配＋原SiLU",
+  "fixed_mm_baseline": false,
+  "baseline_silu_math_AST_exact": true,
+  "actual_linear_dot": "acc += tl.dot(a,b,allow_tf32=False)；原GROUP_M8",
+  "config": "在真实opaque原调用旁只读捕获(kernel,constexprs)，候选使用同一被选tile；恢复代理后计时",
+  "actual_wrapper_math_matches": {
+    "artifact_compile_range_1_2048_subgraph_1-0.py": {
+      "kernel": "triton_poi_fused_linear_mul_silu_slice_1",
+      "source_sha256": "52c1984c9afd4b2bf748fece3b876cab05b74c493eab14605aab2b6777fc1bf3"
+    },
+    "artifact_compile_range_1_2048_subgraph_42-0.py": {
+      "kernel": "triton_poi_fused_linear_mul_silu_slice_1",
+      "source_sha256": "52c1984c9afd4b2bf748fece3b876cab05b74c493eab14605aab2b6777fc1bf3"
+    }
+  },
+  "current_live_silu_sha256": "52c1984c9afd4b2bf748fece3b876cab05b74c493eab14605aab2b6777fc1bf3",
+  "live_current_service_silu_captured": true,
+  "live_capture_scope": "现有LPT服务cache只读提取；未执行pickle/import CUDA/写cache；不另起服务",
+  "baseline_metadata_change": "仅filename移Torch cache；原heuristic与数学/默认enable_fp_fusion保持",
+  "owner_cleanup_exact": true,
+  "layer": 0,
+  "rows": [
+    2030,
+    2048
+  ],
+  "dimensions": {
+    "hidden": 2048,
+    "FFN": 6144
+  },
+  "decision": "任一数值门失败即停；首shape完整Graph总链不优即停后shape，不自动扩大工作集"
+}

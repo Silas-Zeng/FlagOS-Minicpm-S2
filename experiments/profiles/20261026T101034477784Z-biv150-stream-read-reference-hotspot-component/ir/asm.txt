@@ -1,0 +1,639 @@
+	.text
+	.globl	stream_read_checksum            ; -- Begin function stream_read_checksum
+	.p2align	3
+	.type	stream_read_checksum,@function
+	.iluvatar_kernel stream_read_checksum
+stream_read_checksum:                   ; @stream_read_checksum
+.Lfunc_begin0:
+	.file	1 "/workspace/experiments/minicpm-s2/profiles/20261026T101034477784Z-biv150-stream-read-reference-hotspot-component/source" "reader.py"
+	.loc	1 5 0                           ; reader.py:5:0
+	.cfi_sections .debug_frame
+	.cfi_startproc
+	.cfi_return_column 32
+	.iluvatar_kernel_code_t
+		iluvatar_code_version_major = 1
+		iluvatar_code_version_minor = 3
+		iluvatar_machine_kind = 1
+		iluvatar_machine_version_major = 1
+		iluvatar_machine_version_minor = 1
+		iluvatar_machine_version_stepping = 0
+		kernel_code_entry_byte_offset = 256
+		kernel_code_prefetch_byte_size = 0
+		granulated_workitem_vgpr_count = 8
+		granulated_warp_sgpr_count = 2
+		float_mode = 12
+		debug_mode = 0
+		has_mbar = 0
+		user_sgpr_count = 6
+		enable_sgpr_workgroup_id_x = 1
+		enable_sgpr_workgroup_id_y = 0
+		enable_sgpr_workgroup_id_z = 0
+		enable_sgpr_workgroup_info = 1
+		enable_vgpr_workitem_id = 3
+		granulated_slb_size = 0
+		enable_exception = 128
+		enable_sgpr_private_segment_buffer = 1
+		enable_sgpr_globalvariable_ptr = 0
+		enable_sgpr_kernarg_segment_ptr = 1
+		enable_sgpr_constvariable_ptr = 0
+		enable_sgpr_private_segment_size = 0
+		enable_sgpr_grid_workgroup_count_x = 0
+		enable_sgpr_grid_workgroup_count_y = 0
+		enable_sgpr_grid_workgroup_count_z = 0
+		private_element_size = 1
+		is_ptr64 = 1
+		is_dynamic_callstack = 0
+		is_debug_enabled = 0
+		enable_private_swizzle = 1
+		has_called_assert = 0
+		has_called_printf = 0
+		has_called_malloc = 0
+		enable_srf_flat_shared = 0
+		enable_srf_flat_scratch = 0
+		has_wgmma = 0
+		has_dva = 0
+		enable_dynamic_smem_size = 0
+		workitem_private_segment_byte_size = 0
+		workgroup_group_segment_byte_size = 0
+		kernarg_segment_byte_size = 32
+		workgroup_fbarrier_count = 0
+		warp_sgpr_count = 24
+		workitem_vgpr_count = 35
+		reserved_vgpr_first = 0
+		reserved_vgpr_count = 0
+		reserved_sgpr_first = 0
+		reserved_sgpr_count = 0
+		debug_warp_private_segment_offset_sgpr = 0
+		debug_private_segment_buffer_sgpr = 0
+		kernarg_segment_alignment = 3
+		group_segment_alignment = 4
+		private_segment_alignment = 4
+		warp_size = 6
+		call_convention = -1
+		runtime_loader_kernel_symbol = 0
+	.end_iluvatar_kernel_code_t
+; %bb.0:
+	; Func LiveIn Regs:
+	;  blockIdx.x : s6
+	ml_vrf_init_u32 v1, tcr
+.Ltmp0:
+	.loc	1 7 40 prologue_end             ; reader.py:7:40
+	ml_mov_b32 v0, tid
+	.loc	1 6 24                          ; reader.py:6:24
+	sl_lsa_load_b32x8 s[12:19], s[4:5], noreg, #0, ca
+	.loc	1 7 19                          ; reader.py:7:19
+	sl_mull_u32 s0, s6, 0x2000
+	.loc	1 7 40 is_stmt 0                ; reader.py:7:40
+	ml_and_b32 v2, v1, 0xff
+	ml_mov_v2s_b32 s2, v2, 0x0
+	ml_shl_b32 v1, v1, 0x1
+	sl_mov_b32 s1, 0x1fe
+	.loc	1 7 27                          ; reader.py:7:27
+	ml_mov_b32 v3, s0
+	ml_anyop3_b32 v19, s1, v1, v3, 0xfffffff8
+	.loc	1 8 47 is_stmt 1                ; reader.py:8:47
+	ml_cmp_lt_i32 tcr, v19, 0x10000000
+	ml_mov_b32 v1, 0x0
+	ml_mov_b32 v9, 0x0
+	ml_mov_b32 v8, 0x0
+	ml_mov_b32 v3, 0x0
+	ml_mov_b32 v6, 0x0
+	ml_mov_b32 v10, 0x0
+	ml_mov_b32 v13, 0x0
+	ml_mov_b32 v17, 0x0
+	ml_mov_b32 v5, 0x0
+	ml_mov_b32 v18, 0x0
+	ml_mov_b32 v16, 0x0
+	ml_mov_b32 v12, 0x0
+	ml_mov_b32 v11, 0x0
+	ml_mov_b32 v7, 0x0
+	ml_mov_b32 v4, 0x0
+	ml_mov_b32 v14, 0x0
+	ml_mov_b32 v15, 0x0
+	.loc	1 8 21 is_stmt 0                ; reader.py:8:21
+	sl_and_savetmsk_b64 {s[0:1], wcr}, tcr, tmsk
+	; mask branch BB0_2
+	sl_cbr_tmskaz BB0_2
+BB0_1:
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_sra_b32 v3, v19, 0x1f
+	ml_shl_b32 v4, v19, 0x1
+	ml_shl_b32 v3, v3, 0x1
+	sl_wait smcnt(0)
+	ml_addo_u32 {v14, tcr}, s12, v4
+	ml_srl_b32 v4, v19, 0x1f
+	ml_or_b32 v3, v3, v4
+	ml_mov_b32 v4, s13
+	ml_addc_i32 v15, v4, v3, tcr
+	sl_mov_b32 s3, 0x3c00
+	ml_addo_u32 {v19, tcr}, s3, v14
+	sl_mov_b32 s3, 0x3800
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v5, v[14:15], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_addc_i32 v20, 0, v15, tcr
+	ml_addo_u32 {v21, tcr}, s3, v14
+	sl_mov_b32 s3, 0x3400
+	ml_addc_i32 v22, 0, v15, tcr
+	ml_addo_u32 {v23, tcr}, s3, v14
+	sl_mov_b32 s3, 0x3000
+	ml_addc_i32 v24, 0, v15, tcr
+	ml_addo_u32 {v8, tcr}, s3, v14
+	sl_mov_b32 s3, 0x2c00
+	ml_addc_i32 v9, 0, v15, tcr
+	ml_addo_u32 {v3, tcr}, s3, v14
+	sl_mov_b32 s3, 0x2800
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v8, v[8:9], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_addc_i32 v4, 0, v15, tcr
+	ml_addo_u32 {v6, tcr}, s3, v14
+	sl_mov_b32 s3, 0x2400
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v4, v[3:4], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_addc_i32 v7, 0, v15, tcr
+	ml_addo_u32 {v10, tcr}, s3, v14
+	sl_mov_b32 s3, 0x2000
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v3, v[6:7], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_addc_i32 v11, 0, v15, tcr
+	ml_addo_u32 {v12, tcr}, s3, v14
+	sl_mov_b32 s3, 0x1c00
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v7, v[10:11], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_addc_i32 v13, 0, v15, tcr
+	ml_addo_u32 {v10, tcr}, s3, v14
+	sl_mov_b32 s3, 0x1800
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v6, v[12:13], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_addc_i32 v11, 0, v15, tcr
+	ml_addo_u32 {v12, tcr}, s3, v14
+	sl_mov_b32 s3, 0x1400
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v11, v[10:11], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_addc_i32 v13, 0, v15, tcr
+	ml_addo_u32 {v16, tcr}, s3, v14
+	sl_mov_b32 s3, 0x1000
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v10, v[12:13], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_addc_i32 v17, 0, v15, tcr
+	ml_addo_u32 {v25, tcr}, s3, v14
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v12, v[16:17], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	sl_mov_b32 s3, 0xc00
+	ml_addc_i32 v26, 0, v15, tcr
+	ml_addo_u32 {v16, tcr}, s3, v14
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v13, v[25:26], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	sl_mov_b32 s3, 0x800
+	ml_addc_i32 v17, 0, v15, tcr
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v16, v[16:17], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_addo_u32 {v17, tcr}, s3, v14
+	sl_mov_b32 s3, 0x400
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v9, v[21:22], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_addc_i32 v18, 0, v15, tcr
+	ml_addo_u32 {v25, tcr}, s3, v14
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v17, v[17:18], kop=0
+	.loc	1 8 25                          ; reader.py:8:25
+	ml_addc_i32 v26, 0, v15, tcr
+	.loc	1 8 21                          ; reader.py:8:21
+	ml_lsa_load_a64_dword  v14, v[23:24], kop=0
+	ml_lsa_load_a64_dword  v18, v[25:26], kop=0
+	ml_lsa_load_a64_dword  v15, v[19:20], kop=0
+BB0_2:
+	.loc	1 0 21                          ; reader.py:0:21
+	sl_or_b64 {tmsk, wcr}, tmsk, s[0:1]
+	.loc	1 8 64                          ; reader.py:8:64
+	sl_wait vmcnt(15)
+	ml_shl_b32 v19, v5, 0x10
+	ml_and_b32 v5, v5, 0xffff0000
+	sl_wait vmcnt(1)
+	ml_shl_b32 v20, v18, 0x10
+	ml_and_b32 v18, v18, 0xffff0000
+	ml_shl_b32 v21, v17, 0x10
+	ml_and_b32 v17, v17, 0xffff0000
+	ml_shl_b32 v22, v16, 0x10
+	ml_and_b32 v16, v16, 0xffff0000
+	ml_shl_b32 v23, v13, 0x10
+	ml_and_b32 v13, v13, 0xffff0000
+	ml_shl_b32 v24, v12, 0x10
+	ml_and_b32 v12, v12, 0xffff0000
+	ml_shl_b32 v25, v10, 0x10
+	ml_and_b32 v10, v10, 0xffff0000
+	ml_shl_b32 v26, v11, 0x10
+	ml_and_b32 v11, v11, 0xffff0000
+	ml_shl_b32 v27, v6, 0x10
+	ml_and_b32 v6, v6, 0xffff0000
+	ml_shl_b32 v28, v7, 0x10
+	ml_and_b32 v7, v7, 0xffff0000
+	ml_shl_b32 v29, v3, 0x10
+	ml_and_b32 v3, v3, 0xffff0000
+	ml_shl_b32 v30, v4, 0x10
+	ml_and_b32 v4, v4, 0xffff0000
+	ml_shl_b32 v31, v8, 0x10
+	ml_and_b32 v8, v8, 0xffff0000
+	ml_shl_b32 v32, v14, 0x10
+	ml_and_b32 v14, v14, 0xffff0000
+	ml_shl_b32 v33, v9, 0x10
+	ml_and_b32 v9, v9, 0xffff0000
+	sl_wait vmcnt(0)
+	ml_shl_b32 v34, v15, 0x10
+	ml_and_b32 v15, v15, 0xffff0000
+.Ltmp1:
+	.file	2 "/usr/local/lib/python3.12/site-packages/triton/language" "standard.py"
+	.loc	2 285 15 is_stmt 1              ; standard.py:285:15 @[ standard.py:315:36 @[ reader.py:9:30 ] ]
+	ml_add_f32 v5, v19, v5
+	ml_add_f32 v5, v5, v20
+	ml_add_f32 v5, v5, v18
+	ml_add_f32 v5, v5, v21
+	ml_add_f32 v5, v5, v17
+	ml_add_f32 v5, v5, v22
+	ml_add_f32 v5, v5, v16
+	ml_add_f32 v5, v5, v23
+	ml_add_f32 v5, v5, v13
+	ml_add_f32 v5, v5, v24
+	ml_add_f32 v5, v5, v12
+	ml_add_f32 v5, v5, v25
+	ml_add_f32 v5, v5, v10
+	ml_add_f32 v5, v5, v26
+	ml_add_f32 v5, v5, v11
+	ml_add_f32 v5, v5, v27
+	ml_add_f32 v5, v5, v6
+	ml_add_f32 v5, v5, v28
+	ml_add_f32 v5, v5, v7
+	ml_add_f32 v5, v5, v29
+	ml_add_f32 v3, v5, v3
+	ml_add_f32 v3, v3, v30
+	ml_add_f32 v3, v3, v4
+	ml_add_f32 v3, v3, v31
+	ml_add_f32 v3, v3, v8
+	ml_add_f32 v3, v3, v32
+	ml_add_f32 v3, v3, v14
+	ml_add_f32 v3, v3, v33
+	ml_add_f32 v3, v3, v9
+	ml_add_f32 v3, v3, v34
+	ml_add_f32 v3, v3, v15
+.Ltmp2:
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	ml_xor_b32 v4, tid, 0x20
+	ml_slb_shuffle_rtn_b32 v4, v3, v4
+.Ltmp3:
+	.loc	1 7 40                          ; reader.py:7:40
+	sl_srl_b32 {s4, wcr}, s2, 0x6
+.Ltmp4:
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	ml_cmp_eq_u32 tcr, tid, 0x0
+.Ltmp5:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ reader.py:9:30 ] ]
+	sl_wait lmcnt(0)
+	ml_add_f32 v3, v3, v4
+.Ltmp6:
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	ml_xor_b32 v4, tid, 0x10
+	ml_slb_shuffle_rtn_b32 v4, v3, v4
+.Ltmp7:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ reader.py:9:30 ] ]
+	sl_wait lmcnt(0)
+	ml_add_f32 v3, v3, v4
+.Ltmp8:
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	ml_xor_b32 v4, tid, 0x8
+	ml_slb_shuffle_rtn_b32 v4, v3, v4
+.Ltmp9:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ reader.py:9:30 ] ]
+	sl_wait lmcnt(0)
+	ml_add_f32 v4, v3, v4
+.Ltmp10:
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	ml_xor_b32 v3, tid, 0x4
+	ml_slb_shuffle_rtn_b32 v5, v4, v3
+	ml_xor_b32 v3, tid, 0x2
+.Ltmp11:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ reader.py:9:30 ] ]
+	sl_wait lmcnt(0)
+	ml_add_f32 v4, v4, v5
+.Ltmp12:
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	ml_slb_shuffle_rtn_b32 v5, v4, v3
+.Ltmp13:
+	.loc	2 285 15                        ; standard.py:285:15 @[ standard.py:315:36 @[ reader.py:9:30 ] ]
+	sl_wait lmcnt(0)
+	ml_add_f32 v5, v4, v5
+.Ltmp14:
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	ml_xor_b32 v4, tid, 0x1
+	ml_slb_shuffle_rtn_b32 v6, v5, v4
+	sl_wait lmcnt(0)
+	ml_add_f32 v5, v5, v6
+	sl_and_savetmsk_b64 {s[0:1], wcr}, tcr, tmsk
+	; mask branch BB0_4
+BB0_3:
+	.loc	2 0 36 is_stmt 0                ; standard.py:0:36
+	sl_mull_u32 s2, s4, 0x4
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	ml_mov_b32 v6, s2
+	ml_slb_store_b32x1  v5, v6, noreg, #0, null
+BB0_4:
+	.loc	2 0 36                          ; standard.py:0:36
+	sl_or_b64 {tmsk, wcr}, tmsk, s[0:1]
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	sl_wait smcnt(0) lmcnt(0)
+	sl_barrier 
+	ml_cmp_lt_u32 tcr, v2, 0x4
+	ml_shl_b32 v2, v2, 0x2
+	sl_mov_b64 s[0:1], tcr
+	sl_and_savetmsk_b64 {s[2:3], wcr}, tcr, tmsk
+	; mask branch BB0_6
+BB0_5:
+	ml_slb_load_b32x1  v1, v2, noreg, #0, null
+BB0_6:
+	.loc	2 0 36                          ; standard.py:0:36
+	sl_or_b64 {tmsk, wcr}, tmsk, s[2:3]
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	sl_wait lmcnt(0)
+	ml_slb_shuffle_rtn_b32 v3, v1, v3
+.Ltmp15:
+	.loc	2 285 15 is_stmt 1              ; standard.py:285:15 @[ standard.py:315:36 @[ reader.py:9:30 ] ]
+	sl_wait lmcnt(0)
+	ml_add_f32 v1, v1, v3
+.Ltmp16:
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	ml_slb_shuffle_rtn_b32 v3, v1, v4
+	ml_and_b32 v4, tid, 0x3
+	ml_cmp_eq_u32 tcr, v4, 0x0
+	sl_and_b64 {s[2:3], wcr}, s[0:1], tcr
+	sl_and_savetmsk_b64 {s[0:1], wcr}, s[2:3], tmsk
+	; mask branch BB0_8
+BB0_7:
+	.loc	2 0 36 is_stmt 0                ; standard.py:0:36
+	sl_wait lmcnt(0)
+	ml_add_f32 v1, v1, v3
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	ml_slb_store_b32x1  v1, v2, noreg, #0, null
+BB0_8:
+	.loc	2 0 36                          ; standard.py:0:36
+	sl_or_b64 {tmsk, wcr}, tmsk, s[0:1]
+	.loc	2 315 36                        ; standard.py:315:36 @[ reader.py:9:30 ]
+	sl_wait lmcnt(0)
+	sl_barrier 
+.Ltmp17:
+	.loc	1 10 22 is_stmt 1               ; reader.py:10:22
+	ml_or_b32 v0, s4, v0
+	ml_cmp_eq_u32 tcr, v0, 0x0
+	sl_and_savetmsk_b64 {s[0:1], wcr}, tcr, tmsk
+	; mask branch BB0_10
+	sl_cbr_tmskaz BB0_10
+BB0_9:
+	.loc	1 0 22 is_stmt 0                ; reader.py:0:22
+	sl_mov_b32 s7, 0x0
+	sl_shl_b64 {s[2:3], wcr}, s[6:7], 0x2
+	sl_add_i64 s[4:5], s[14:15], s[2:3]
+	sl_mov_b32 s7, 0xffffffff
+	.loc	1 10 22                         ; reader.py:10:22
+	sl_blocl_b64 x0, tmsk
+	sl_add_u32 s6, x0, 0x1
+	sl_srl_b64 {s[2:3], wcr}, tmsk, s6
+	sl_shl_b64 {s[2:3], wcr}, s[2:3], s6
+	ml_mov_b32 v0, 0x0
+	sl_andn1_savetmsk_b64 {s[2:3], wcr}, s[2:3], tmsk
+	ml_slb_load_b32x1  v0, v0, noreg, #0, null
+	sl_wait lmcnt(0)
+	ml_mov_v2s_b32 s6, v0, x0
+	sl_mov_b64 tmsk, s[2:3]
+	ml_mov_b32 v0, s6
+	ml_lsa_store_dword v0, s[4:7], noreg, noreg, #0, wb
+BB0_10:
+	.loc	1 0 22                          ; reader.py:0:22
+	sl_or_b64 {tmsk, wcr}, tmsk, s[0:1]
+	.loc	1 10 4                          ; reader.py:10:4
+	sl_eop 
+.Ltmp18:
+	.section	.rodata,"a",@progbits
+	.p2align	6, 0x0
+	.globl	stream_read_checksum.kd
+	.type	stream_read_checksum.kd,@object
+	.size	stream_read_checksum.kd, 64
+stream_read_checksum.kd:
+	.asciz	"\000\000\000"
+	.long	0
+	.asciz	"\000\000\000\000\000\000\000"
+	.quad	stream_read_checksum@rel64-stream_read_checksum.kd
+	.asciz	"\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.long	536712
+	.asciz	"\003\000\224\006\211\000\000\000\000\000\000"
+	.text
+.Lfunc_end0:
+	.size	stream_read_checksum, .Lfunc_end0-stream_read_checksum
+	.cfi_endproc
+                                        ; -- End function
+	.section	.Iluvatar.csdata,"",@progbits
+; Kernel info:
+; codeLenInByte = 1944
+; NumSgprs: 24
+; NumVgprs: 35
+; ScratchSize: 0
+; MemoryBound: 0
+; FloatMode: 12
+; IeeeMode: 1
+; SLBByteSize: 0 bytes/workgroup (compile time only)
+; SGPRBlocks: 2
+; VGPRBlocks: 8
+; NumSGPRsForWarpsPerNU: 20
+; NumVGPRsForWarpsPerNR: 35
+; ReqNTIDx: 0
+; MaxNTIDx: 0
+; MinCTASm: 0
+; ActiveWarp: 7
+; WarpLimiterHint : 0
+	.section	.debug_abbrev,"",@progbits
+	.byte	1                               ; Abbreviation Code
+	.byte	17                              ; DW_TAG_compile_unit
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	37                              ; DW_AT_producer
+	.byte	8                               ; DW_FORM_string
+	.byte	19                              ; DW_AT_language
+	.byte	5                               ; DW_FORM_data2
+	.byte	3                               ; DW_AT_name
+	.byte	8                               ; DW_FORM_string
+	.byte	16                              ; DW_AT_stmt_list
+	.byte	6                               ; DW_FORM_data4
+	.byte	27                              ; DW_AT_comp_dir
+	.byte	8                               ; DW_FORM_string
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	2                               ; Abbreviation Code
+	.byte	46                              ; DW_TAG_subprogram
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	3                               ; DW_AT_name
+	.byte	8                               ; DW_FORM_string
+	.byte	32                              ; DW_AT_inline
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	3                               ; Abbreviation Code
+	.byte	46                              ; DW_TAG_subprogram
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	17                              ; DW_AT_low_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	18                              ; DW_AT_high_pc
+	.byte	1                               ; DW_FORM_addr
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	4                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	1                               ; DW_CHILDREN_yes
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	11                              ; DW_FORM_data1
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	5                               ; Abbreviation Code
+	.byte	29                              ; DW_TAG_inlined_subroutine
+	.byte	0                               ; DW_CHILDREN_no
+	.byte	49                              ; DW_AT_abstract_origin
+	.byte	19                              ; DW_FORM_ref4
+	.byte	85                              ; DW_AT_ranges
+	.byte	6                               ; DW_FORM_data4
+	.byte	88                              ; DW_AT_call_file
+	.byte	11                              ; DW_FORM_data1
+	.byte	89                              ; DW_AT_call_line
+	.byte	5                               ; DW_FORM_data2
+	.byte	87                              ; DW_AT_call_column
+	.byte	11                              ; DW_FORM_data1
+	.byte	0                               ; EOM(1)
+	.byte	0                               ; EOM(2)
+	.byte	0                               ; EOM(3)
+	.section	.debug_info,"",@progbits
+	.long	239                             ; Length of Unit
+	.short	2                               ; DWARF version number
+	.long	.debug_abbrev                   ; Offset Into Abbrev. Section
+	.byte	8                               ; Address Size (in bytes)
+	.byte	1                               ; Abbrev [1] 0xb:0xe8 DW_TAG_compile_unit
+	.ascii	"triton"                        ; DW_AT_producer
+	.byte	0
+	.short	2                               ; DW_AT_language
+	.ascii	"reader.py"                     ; DW_AT_name
+	.byte	0
+	.long	.debug_line                     ; DW_AT_stmt_list
+	.ascii	"/workspace/experiments/minicpm-s2/profiles/20261026T101034477784Z-biv150-stream-read-reference-hotspot-component/source" ; DW_AT_comp_dir
+	.byte	0
+	.quad	.Lfunc_begin0                   ; DW_AT_low_pc
+	.quad	.Lfunc_end0                     ; DW_AT_high_pc
+	.byte	2                               ; Abbrev [2] 0xab:0x17 DW_TAG_subprogram
+	.ascii	"stream_read_checksum"          ; DW_AT_name
+	.byte	0
+	.byte	1                               ; DW_AT_inline
+	.byte	3                               ; Abbrev [3] 0xc2:0x30 DW_TAG_subprogram
+	.quad	.Lfunc_begin0                   ; DW_AT_low_pc
+	.quad	.Lfunc_end0                     ; DW_AT_high_pc
+	.long	171                             ; DW_AT_abstract_origin
+	.byte	4                               ; Abbrev [4] 0xd7:0x1a DW_TAG_inlined_subroutine
+	.long	171                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges0                 ; DW_AT_ranges
+	.byte	1                               ; DW_AT_call_file
+	.byte	9                               ; DW_AT_call_line
+	.byte	30                              ; DW_AT_call_column
+	.byte	5                               ; Abbrev [5] 0xe3:0xd DW_TAG_inlined_subroutine
+	.long	171                             ; DW_AT_abstract_origin
+	.long	.Ldebug_ranges1                 ; DW_AT_ranges
+	.byte	2                               ; DW_AT_call_file
+	.short	315                             ; DW_AT_call_line
+	.byte	36                              ; DW_AT_call_column
+	.byte	0                               ; End Of Children Mark
+	.byte	0                               ; End Of Children Mark
+	.byte	0                               ; End Of Children Mark
+	.section	.debug_ranges,"",@progbits
+.Ldebug_ranges0:
+	.quad	.Ltmp1-.Lfunc_begin0
+	.quad	.Ltmp3-.Lfunc_begin0
+	.quad	.Ltmp4-.Lfunc_begin0
+	.quad	.Ltmp17-.Lfunc_begin0
+	.quad	0
+	.quad	0
+.Ldebug_ranges1:
+	.quad	.Ltmp1-.Lfunc_begin0
+	.quad	.Ltmp2-.Lfunc_begin0
+	.quad	.Ltmp5-.Lfunc_begin0
+	.quad	.Ltmp6-.Lfunc_begin0
+	.quad	.Ltmp7-.Lfunc_begin0
+	.quad	.Ltmp8-.Lfunc_begin0
+	.quad	.Ltmp9-.Lfunc_begin0
+	.quad	.Ltmp10-.Lfunc_begin0
+	.quad	.Ltmp11-.Lfunc_begin0
+	.quad	.Ltmp12-.Lfunc_begin0
+	.quad	.Ltmp13-.Lfunc_begin0
+	.quad	.Ltmp14-.Lfunc_begin0
+	.quad	.Ltmp15-.Lfunc_begin0
+	.quad	.Ltmp16-.Lfunc_begin0
+	.quad	0
+	.quad	0
+	.section	".note.GNU-stack","",@progbits
+	.iluvatar_isa "bi-iluvatar-ilurt--ivcore-1-1-0"
+	.iluvatar_hsa_metadata
+---
+iluvatar.kernels:
+  - .args:
+      - .address_space:  global
+        .name:           KArg_0
+        .offset:         0
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_1
+        .offset:         8
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_2
+        .offset:         16
+        .size:           8
+        .value_kind:     global_buffer
+      - .address_space:  global
+        .name:           KArg_3
+        .offset:         24
+        .size:           8
+        .value_kind:     global_buffer
+    .group_segment_fixed_size: 0
+    .kernarg_segment_align: 8
+    .kernarg_segment_size: 32
+    .max_flat_workgroup_size: 0
+    .name:           stream_read_checksum
+    .private_segment_fixed_size: 0
+    .sgpr_count:     24
+    .sgpr_spill_count: 0
+    .symbol:         stream_read_checksum.kd
+    .vgpr_count:     35
+    .vgpr_spill_count: 0
+    .warp_size:      64
+iluvatar.version:
+  - 1
+  - 0
+...
+
+	.end_iluvatar_hsa_metadata

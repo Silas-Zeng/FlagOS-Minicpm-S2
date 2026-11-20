@@ -1,0 +1,19 @@
+--- b104/page16.cu
++++ v2/page16.cu
+@@ -3,6 +3,7 @@
+ #include <type_traits>
+ #include <cmath>
+ #include <cuda_runtime.h>
++#include <math_functions.h>
+ #include <cuda_bf16.h>
+ #include <mma.h>
+ 
+@@ -72,7 +73,7 @@
+  #pragma unroll
+  for(unsigned mask=8;mask;mask>>=1){m0=fmaxf(m0,shuffle(m0,lane^mask));m1=fmaxf(m1,shuffle(m1,lane^mask));}
+  // Actual LLVM must lower these to original ex2.approx.ftz before GPU admission.
+- const float p0=__exp2f(s0-m0),p1=__exp2f(s1-m1);
++ const float p0=exp2f(s0-m0),p1=exp2f(s1-m1);
+  float l0=p0,l1=p1;
+  #pragma unroll
+  for(unsigned mask=8;mask;mask>>=1){l0=l0+shuffle(l0,lane^mask);l1=l1+shuffle(l1,lane^mask);}

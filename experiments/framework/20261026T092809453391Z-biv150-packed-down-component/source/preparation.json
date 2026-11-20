@@ -1,0 +1,48 @@
+{
+  "status": "CPU_PREPARED_V2_SME_DIAGNOSTIC_ONLY_PENDING_REVIEW_AND_GPU",
+  "gpu_started": false,
+  "shape": {
+    "rows": [
+      2030,
+      2048
+    ],
+    "N": 2048,
+    "K": 6144
+  },
+  "layers_first": [
+    0
+  ],
+  "positive_only_ring_layers": [
+    0,
+    20,
+    41
+  ],
+  "layout": [
+    8,
+    48,
+    256,
+    128
+  ],
+  "supported_BN": [
+    32,
+    64,
+    128,
+    256
+  ],
+  "supported_BK": [
+    32,
+    64,
+    128
+  ],
+  "config": "只用真实opaque原调用的实际constexprs，GROUP_M8/SPLIT1；不借gate配置，不扫描",
+  "actual_linear_sha256": "d431a4fa144ed67dc3deab46dd5beace3612858075f85c39e602447ba3bf768a",
+  "original_opaque_sha256": "c5a2dd6c69c514531fee4145621e51bd4e41c0d784f4d4e086fe48aad98104ba",
+  "precision": "无量化、无浮点预处理，原acc+=dot/K遍历/最终BF16；pack/unpack逐bit",
+  "baseline": "原生产opaque→F.linear、候选packed各自实际输出buffer捕获；计时完整GEMM Graph replay，不含eager CPU分配/pack加载，不能外推官方",
+  "owner_cleanup_exact": true,
+  "pack_cpu_once_not_warm_timing": true,
+  "component_holds_original_and_packed": true,
+  "extra_weight_bytes_per_layer": 25165824,
+  "SME_gate": "仅诊断：实际B SSA布局/ASM/async证据照存；未保留SME不早停，严格完整数值门不变；唯一原ABBA判断性能",
+  "negative_stop": "任一原数值/身份门失败即停；首M2030性能不正停M2048/三权重环；无新增ABBA或参数扫描"
+}

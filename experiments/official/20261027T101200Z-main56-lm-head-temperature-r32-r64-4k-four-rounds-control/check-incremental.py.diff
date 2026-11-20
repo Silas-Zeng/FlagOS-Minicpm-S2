@@ -1,0 +1,37 @@
+--- fe3e/check-incremental.py
++++ 4k/check-incremental.py
+@@ -2,7 +2,7 @@
+ from pathlib import Path
+ from types import SimpleNamespace,ModuleType
+ import ast,hashlib,importlib.util,json,sys,tempfile
+-P=Path(__file__).resolve().parent;OLD=P.parent/'lm-head-temperature-official-16k-20261027'
++P=Path(__file__).resolve().parent;OLD=P.parent/'lm-head-temperature-r32-r64-official-16k-20261027'
+ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+ def load(name,path):
+     spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);sys.modules[name]=m;spec.loader.exec_module(m);return m
+@@ -40,10 +40,10 @@
+     log.write_text(ready+markers(32)+'GPU KV cache size: 548,384 tokens\n',encoding='utf-8')
+     activation.stack_evidence=lambda p:dict(valid=False);assert not sup.first_round_stack(log,{'kv_tokens':548384})['valid']
+     def row(rate,status='SUCCESS'):
+-        return {'Prefill':'16384','Decode':'1024','Conc':'64','Num Prompts':'128','Run Status':status,'Successful Requests':'128','Total tok/s':str(rate)}
+-    assert sup.new_row_decision([row(4000),row(4528)],0,{16384:4529})['kind']=='performance'
+-    assert sup.new_row_decision([row(4000),row(4530),row(4400),row(4410)],0,{16384:4529}) is None
+-    assert sup.new_row_decision([row(4000),row(4530,'FAIL')],0,{16384:4529})['kind']=='runtime_error'
++        return {'Prefill':'4096','Decode':'1024','Conc':'64','Num Prompts':'256','Run Status':status,'Successful Requests':'256','Total tok/s':str(rate)}
++    assert sup.new_row_decision([row(4000),row(4528)],0,{4096:4529})['kind']=='performance'
++    assert sup.new_row_decision([row(4000),row(4530),row(4400),row(4410)],0,{4096:4529}) is None
++    assert sup.new_row_decision([row(4000),row(4530,'FAIL')],0,{4096:4529})['kind']=='runtime_error'
+ def main_try(path):
+     m=next(n for n in ast.parse(path.read_text(encoding='utf-8')).body if isinstance(n,ast.FunctionDef) and n.name=='main')
+     return m,next(n for n in m.body if isinstance(n,ast.Try))
+@@ -53,8 +53,8 @@
+     assert dump(ast.Module(body=ot.finalbody,type_ignores=[]))==dump(ast.Module(body=nt.finalbody,type_ignores=[])),name
+     assignment=lambda m:next(n for n in ast.walk(m) if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='command' for t in n.targets))
+     assert dump(assignment(old))==dump(assignment(new)),name
+-for name in ('case_driver.py','baseline_reference.py','base_qualification.py','activation_evidence.py','cache_gate.py','graph_gate.py','lifecycle.py','provider_evidence.py','q32_evidence.py','team-source-manifest.json'):
++for name in ('head_activation.py','base_qualification.py','activation_evidence.py','cache_gate.py','graph_gate.py','lifecycle.py','provider_evidence.py','q32_evidence.py','team-source-manifest.json'):
+     assert (OLD/name).read_bytes()==(P/name).read_bytes(),name
+ for file in P.glob('*.py'):ast.parse(file.read_text(encoding='utf-8'))
+-result=dict(cpu_only=True,parser_cases=len(cases),per_shape_selected_sampled_closed=True,kv_equal_valid=True,kv_unequal_valid_but_compare_false=True,kv_missing_or_conflicting_rejected=True,original_stack_false_rejected=True,firstwarm_negative_stop=True,positive_then_four_rounds=True,runtime_error_stop=True,owner_supervisor_command_and_finally_ast_equal=True,baseline_fixed='20261027T075834Z-main56-control-16k-four-rounds',original_case_driver_sha256=sha(P/'case_driver.py'),production_source_tar_sha256='8d1a3de438f460bdc021d8bcb4a7ac66c1915a569ec8539f1392c3ec9c44f309',limitations='没有设备/SSH；KV不匹配只允许继续观测，不等于严格因果可比或官方准确率资格。')
++result=dict(cpu_only=True,parser_cases=len(cases),per_shape_selected_sampled_closed=True,kv_equal_valid=True,kv_unequal_valid_but_compare_false=True,kv_missing_or_conflicting_rejected=True,original_stack_false_rejected=True,firstwarm_negative_stop=True,positive_then_four_rounds=True,runtime_error_stop=True,owner_supervisor_command_and_finally_ast_equal=True,baseline_fixed='20261027T052425Z-main56-control-4k-four-rounds',original_case_driver_sha256=sha(P/'case_driver.py'),production_source_tar_sha256='8d1a3de438f460bdc021d8bcb4a7ac66c1915a569ec8539f1392c3ec9c44f309',limitations='没有设备/SSH；KV不匹配只允许继续观测，不等于严格因果可比或官方准确率资格。')
+ (P/'cpu-check.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');print('new official contracts passed')

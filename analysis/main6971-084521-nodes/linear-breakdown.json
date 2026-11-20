@@ -1,0 +1,440 @@
+{
+  "diagnostic_only": true,
+  "graph_descriptor": {
+    "num_tokens": 64,
+    "num_reqs": 64,
+    "uniform": true,
+    "has_lora": false,
+    "num_active_loras": 0
+  },
+  "measurement": "per-sample sum of inserted event intervals; then median across four samples",
+  "limitations": [
+    "Only sampled M64 Graph, not large-M prefill or whole-workload fractions",
+    "M/N/K numeric values inferred from graph descriptor and audited model geometry, not decoded kernel parameter payload",
+    "Compiled tiles/resources/SME instructions proven from this graph function-to-hash matched real cache",
+    "Medians of subgroups need not sum exactly to combined linear median"
+  ],
+  "linear_groups": [
+    {
+      "role": "down",
+      "source_mapping": "model geometry + graph neighbor topology + exact matching grid; runtime scalar values not captured",
+      "inferred_M_N_K": [
+        64,
+        2048,
+        6144
+      ],
+      "actual_tile_BM_BN_BK": [
+        64,
+        128,
+        64
+      ],
+      "grid": [
+        16,
+        1,
+        1
+      ],
+      "node_indices": [
+        10,
+        21,
+        32,
+        43,
+        55,
+        67,
+        79,
+        91,
+        103,
+        115,
+        127,
+        139,
+        151,
+        163,
+        175,
+        187,
+        199,
+        211,
+        223,
+        235,
+        247,
+        259,
+        271,
+        283,
+        295,
+        307,
+        319,
+        331,
+        343,
+        355,
+        367,
+        379,
+        391,
+        403,
+        415,
+        427,
+        439,
+        451,
+        462,
+        473,
+        484,
+        495
+      ],
+      "nodes_per_graph": 42,
+      "observed_samples": 4,
+      "sample_interval_sums_ms": [
+        3.645515389740467,
+        3.668142281472683,
+        3.645238474011421,
+        3.624761536717415
+      ],
+      "median_sample_interval_sum_ms": 3.645376931875944,
+      "median_individual_interval_ms": 0.08667884767055511,
+      "function_handle_process_local": 93831859965648,
+      "hash": "15ef15aa299d507601ce6980ee4bd56928142529471fbb7e63ea9470df04af6f",
+      "num_warps": 8,
+      "num_stages": 2,
+      "shared": 49152,
+      "resources": {
+        "sgpr_count": 39,
+        "vgpr_count": 31,
+        "sgpr_spill_count": 0,
+        "vgpr_spill_count": 0
+      },
+      "actual_SME_ASM_static_load_sites": 6,
+      "TTGIR_dot_operand_useSme": [
+        "1",
+        "2"
+      ],
+      "runtime_lowered_ABI": "input_ptr, weight_ptr, bias_ptr, output_ptr, M, N, K, stride_im, stride_wn, stride_om, stride_bn",
+      "runtime_scalar_values_directly_captured": false,
+      "cache_folder": "archive\\hotspot-layout-20261026\\batch-101034\\profiles\\20261026T084521Z-main6971-production-hotspot-4k\\triton-cache\\CXXRLKRJTVIHMAOONGAO4S6VNEUBIJJJI4P3W7TD5KKHBXYEV5XQ",
+      "files_sha256": {
+        "linear_kernel.asm": "54285a3ed1be2bc7beecda1baff985261032cd813a3d7601e4a5a174acb52e54",
+        "linear_kernel.json": "057ef1de095877369c6fcd8fc15dbaddc516a783c12d8673e07a92f6900c38f6",
+        "linear_kernel.llir": "aff39391b56728593e4c48b91c22e5e229d7a774979640df32be7ed7ecb6828d",
+        "linear_kernel.source": "5e624ed2d190024707710e86f537a576512d0e7a714db61f02e7d264bc9377e4",
+        "linear_kernel.ttgir": "da9d48f0362d00adcc0562cac31449de9c390aa489b9711e4a990eb56d58cee7"
+      }
+    },
+    {
+      "role": "QKV",
+      "source_mapping": "model geometry + graph neighbor topology + exact matching grid; runtime scalar values not captured",
+      "inferred_M_N_K": [
+        64,
+        2560,
+        2048
+      ],
+      "actual_tile_BM_BN_BK": [
+        64,
+        64,
+        64
+      ],
+      "grid": [
+        40,
+        1,
+        1
+      ],
+      "node_indices": [
+        1,
+        12,
+        23,
+        34,
+        45,
+        57,
+        69,
+        81,
+        93,
+        105,
+        117,
+        129,
+        141,
+        153,
+        165,
+        177,
+        189,
+        201,
+        213,
+        225,
+        237,
+        249,
+        261,
+        273,
+        285,
+        297,
+        309,
+        321,
+        333,
+        345,
+        357,
+        369,
+        381,
+        393,
+        405,
+        417,
+        429,
+        441,
+        453,
+        464,
+        475,
+        486
+      ],
+      "nodes_per_graph": 42,
+      "observed_samples": 4,
+      "sample_interval_sums_ms": [
+        1.8723461478948593,
+        1.863896157592535,
+        1.8741884753108025,
+        1.864157684147358
+      ],
+      "median_sample_interval_sum_ms": 1.8682519160211086,
+      "median_individual_interval_ms": 0.0442826934158802,
+      "function_handle_process_local": 93831745360224,
+      "hash": "7b6bdabffccbe91283f2a1861787f9aa7a20accd8827dd0c0e22705d95d5b066",
+      "num_warps": 8,
+      "num_stages": 1,
+      "shared": 16384,
+      "resources": {
+        "sgpr_count": 36,
+        "vgpr_count": 28,
+        "sgpr_spill_count": 0,
+        "vgpr_spill_count": 0
+      },
+      "actual_SME_ASM_static_load_sites": 2,
+      "TTGIR_dot_operand_useSme": [
+        "1",
+        "2"
+      ],
+      "runtime_lowered_ABI": "input_ptr, weight_ptr, bias_ptr, output_ptr, M, N, K, stride_im, stride_wn, stride_om, stride_bn",
+      "runtime_scalar_values_directly_captured": false,
+      "cache_folder": "archive\\hotspot-layout-20261026\\batch-101034\\profiles\\20261026T084521Z-main6971-production-hotspot-4k\\triton-cache\\PNV5VP74ZPURFA7SUGDBPB7ZVJ5CBLGNRAT52DAOEJYF3FOVWBTA",
+      "files_sha256": {
+        "linear_kernel.asm": "67a5334c6b6c19b84ed2b6de8fffea0b05fef2e5888a9e6007d4a9cc3cd26b30",
+        "linear_kernel.json": "6408560d36135f6a510ef922c71344051f9b310e9520f7ba3c8e9d8af6bae25a",
+        "linear_kernel.llir": "f93b70d17b2561c09d6e4a770b011946a0820f12338685968f142c63a368876f",
+        "linear_kernel.source": "d6298e518f4f1b31bed8a492eccfd82207784399c3a13218b2d203733c2dcf40",
+        "linear_kernel.ttgir": "b351a7ada0ea9e18d7857ed0b23050cf6434f02780329880125f7fcfe9c88848"
+      }
+    },
+    {
+      "role": "O",
+      "source_mapping": "model geometry + graph neighbor topology + exact matching grid; runtime scalar values not captured",
+      "inferred_M_N_K": [
+        64,
+        2048,
+        2048
+      ],
+      "actual_tile_BM_BN_BK": [
+        64,
+        64,
+        64
+      ],
+      "grid": [
+        32,
+        1,
+        1
+      ],
+      "node_indices": [
+        6,
+        17,
+        28,
+        39,
+        50,
+        62,
+        74,
+        86,
+        98,
+        110,
+        122,
+        134,
+        146,
+        158,
+        170,
+        182,
+        194,
+        206,
+        218,
+        230,
+        242,
+        254,
+        266,
+        278,
+        290,
+        302,
+        314,
+        326,
+        338,
+        350,
+        362,
+        374,
+        386,
+        398,
+        410,
+        422,
+        434,
+        446,
+        458,
+        469,
+        480,
+        491
+      ],
+      "nodes_per_graph": 42,
+      "observed_samples": 4,
+      "sample_interval_sums_ms": [
+        1.6125307641923428,
+        1.615796148777008,
+        1.6154692322015762,
+        1.6125576943159103
+      ],
+      "median_sample_interval_sum_ms": 1.6140134632587433,
+      "median_individual_interval_ms": 0.038442306220531464,
+      "function_handle_process_local": 93831745360224,
+      "hash": "7b6bdabffccbe91283f2a1861787f9aa7a20accd8827dd0c0e22705d95d5b066",
+      "num_warps": 8,
+      "num_stages": 1,
+      "shared": 16384,
+      "resources": {
+        "sgpr_count": 36,
+        "vgpr_count": 28,
+        "sgpr_spill_count": 0,
+        "vgpr_spill_count": 0
+      },
+      "actual_SME_ASM_static_load_sites": 2,
+      "TTGIR_dot_operand_useSme": [
+        "1",
+        "2"
+      ],
+      "runtime_lowered_ABI": "input_ptr, weight_ptr, bias_ptr, output_ptr, M, N, K, stride_im, stride_wn, stride_om, stride_bn",
+      "runtime_scalar_values_directly_captured": false,
+      "cache_folder": "archive\\hotspot-layout-20261026\\batch-101034\\profiles\\20261026T084521Z-main6971-production-hotspot-4k\\triton-cache\\PNV5VP74ZPURFA7SUGDBPB7ZVJ5CBLGNRAT52DAOEJYF3FOVWBTA",
+      "files_sha256": {
+        "linear_kernel.asm": "67a5334c6b6c19b84ed2b6de8fffea0b05fef2e5888a9e6007d4a9cc3cd26b30",
+        "linear_kernel.json": "6408560d36135f6a510ef922c71344051f9b310e9520f7ba3c8e9d8af6bae25a",
+        "linear_kernel.llir": "f93b70d17b2561c09d6e4a770b011946a0820f12338685968f142c63a368876f",
+        "linear_kernel.source": "d6298e518f4f1b31bed8a492eccfd82207784399c3a13218b2d203733c2dcf40",
+        "linear_kernel.ttgir": "b351a7ada0ea9e18d7857ed0b23050cf6434f02780329880125f7fcfe9c88848"
+      }
+    },
+    {
+      "role": "BF16 edge gate/up",
+      "source_mapping": "model geometry + graph neighbor topology + exact matching grid; runtime scalar values not captured",
+      "inferred_M_N_K": [
+        64,
+        12288,
+        2048
+      ],
+      "actual_tile_BM_BN_BK": [
+        64,
+        256,
+        32
+      ],
+      "grid": [
+        48,
+        1,
+        1
+      ],
+      "node_indices": [
+        8,
+        19,
+        30,
+        41,
+        460,
+        471,
+        482,
+        493
+      ],
+      "nodes_per_graph": 8,
+      "observed_samples": 4,
+      "sample_interval_sums_ms": [
+        0.8270115256309509,
+        0.8267999961972237,
+        0.8288230821490288,
+        0.8200076892971992
+      ],
+      "median_sample_interval_sum_ms": 0.8269057609140873,
+      "median_individual_interval_ms": 0.10309423133730888,
+      "function_handle_process_local": 93831906190496,
+      "hash": "4fc8b438c6ddeaf70b9526277d56cd70b722a440738aeab469e171b1c28abeff",
+      "num_warps": 16,
+      "num_stages": 2,
+      "shared": 40960,
+      "resources": {
+        "sgpr_count": 39,
+        "vgpr_count": 31,
+        "sgpr_spill_count": 0,
+        "vgpr_spill_count": 0
+      },
+      "actual_SME_ASM_static_load_sites": 4,
+      "TTGIR_dot_operand_useSme": [
+        "1",
+        "2"
+      ],
+      "runtime_lowered_ABI": "input_ptr, weight_ptr, bias_ptr, output_ptr, M, N, K, stride_im, stride_wn, stride_om, stride_bn",
+      "runtime_scalar_values_directly_captured": false,
+      "cache_folder": "archive\\hotspot-layout-20261026\\batch-101034\\profiles\\20261026T084521Z-main6971-production-hotspot-4k\\triton-cache\\J7ELIOGG3XVPOC4VEYTX2VWNOC3SFJCAOOFOVNDJ4FY3DQUKX37Q",
+      "files_sha256": {
+        "linear_kernel.asm": "7476af5dee24bc859696a728baeed600cf240a463af85660dce41c5fc84311c8",
+        "linear_kernel.json": "b6d5aab1ce0f2e91ba592f271eccbda033e8e25be0bf25d3da50b53fd2eab22a",
+        "linear_kernel.llir": "391d74d2cc4c1b4ec294b73912849c44fbc8aeeb43bc738cf502c9212d50f00c",
+        "linear_kernel.source": "8ac9abf46c5348d36687b93b3b31744b4d77d3f6690f91b31ce4ab06ffadacbc",
+        "linear_kernel.ttgir": "56401c6092c2f0d608a6ca303fb6386811c37074e3d448bc3a58fb1178a4bdfe"
+      }
+    }
+  ],
+  "recommendation": "GEMM agent N-only constant-stride pack: start from actual decode down BM64/BN128/BK64 w8s2; preserve actual SME and accumulation order; no old large-M mm budget substitution",
+  "nonly_memory_and_scope": {
+    "additional_weight_bytes": 1056964608,
+    "additional_MiB": 1008,
+    "equivalent_all_layer_KV_tokens": 24576,
+    "old_KV_reference_tokens": 548336,
+    "theoretical_new_KV_tokens": 523760,
+    "prompt_16K_times32": 524288,
+    "decode_4K64_max_page_tokens": 327680,
+    "limitation": "理论预算，不代替本次日志；新方法会改变容量，不能包装为同容量因果收益",
+    "old_16K_scope": {
+      "archive": "tmp\\team-main-34942f7\\source\\docs\\evidence\\baseline-profiler-20261025\\v2-pair\\baseline-profiler-v2-16k-window-20261025.tar.gz",
+      "raw_member": "observations/worker-290618-window-2.json",
+      "raw_sha256": "cd3b35e7d9cd23d5a6e3fd773f30ef42723be70e56d58888f106dcc32a1948d7",
+      "graph_replays_by_M": {
+        "40": 241,
+        "32": 2903,
+        "24": 65,
+        "16": 65,
+        "8": 33,
+        "4": 16,
+        "2": 8,
+        "1": 418
+      },
+      "samples": [
+        {
+          "num_tokens": 32,
+          "num_reqs": 32,
+          "uniform": true,
+          "has_lora": false,
+          "num_active_loras": 0
+        },
+        {
+          "num_tokens": 32,
+          "num_reqs": 32,
+          "uniform": true,
+          "has_lora": false,
+          "num_active_loras": 0
+        },
+        {
+          "num_tokens": 32,
+          "num_reqs": 32,
+          "uniform": true,
+          "has_lora": false,
+          "num_active_loras": 0
+        },
+        {
+          "num_tokens": 32,
+          "num_reqs": 32,
+          "uniform": true,
+          "has_lora": false,
+          "num_active_loras": 0
+        }
+      ],
+      "M64_replays": 0,
+      "official_concurrency": 64,
+      "version_limitation": "旧PR43 profiler，非当前main6971；不能据此证明新正式全程M64不命中"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "decision": "GO_CPU_COMPILE_ONLY",
+  "source_sha256": "bb36451e9e8e26aa7e3e7a94395b6292d8559da9b8f22482878b172194985e2d",
+  "package_sha256": "da4f07791ea949c6f6721afb7df21ea833cd369ce95e631e4b3835f4fc0942d8",
+  "pins": 9,
+  "tar_files": 10,
+  "exact_inverse_to_tested_PR105": true,
+  "entire_L_P_PV_wait_barrier_suffix_identical": true,
+  "actual_score_coordinates": {
+    "s0": "head = lane//16, col = lane%16",
+    "s1": "head = lane//16+4, col = lane%16",
+    "unique": 128
+  },
+  "coordinate_note": "包内check-source的2*g+p是A打包编号，作为128覆盖双射仍成立；本独审按原QK输出g/g+4核。该注释不影响CU，不需要重封包。",
+  "sdk_intrinsic": {
+    "decl": "i32 __ivcorex_vote_all(i32), IntrNoMem+IntrConvergent",
+    "ballot_and_activemask": "i64",
+    "file_sha256": "be23b2645afe5a89269e8fb1a883c9943a8867e3e6c1dfa5ad365f4488a6d878",
+    "machine_vote64_pending": true
+  },
+  "guard_samples_passed": 54,
+  "float_semantics": "有限running max且所有score严格更小使旧max位型保持，rho=exp2(+0)=1；NaN/+Inf/tie、非有限max和tail回原，-Inf score允许。L/acc原FP不删。",
+  "control": "CTA仅一个warp64；uniform empty-segment return/loop；bitwise predicate每lane到vote；新分支中无shared读写或barrier，原等待完整保留。",
+  "dedup": "PR77/旧identity-rescale先完成max再判identity，本候选在max树前vote；不是复测旧负版本，不覆盖PR38/NativeK8。",
+  "source_budget": {
+    "saved_fast_path": "8 shuffle + 8 page fmax + 2 running fmax + 2 sub + 2 rho exp（实际删量待ASM）",
+    "added": "6 ordered FP compare + predicate AND + vote + uniform branch；首page/任一head增长必不命中",
+    "not_saved": "K/V、QK/PV、L FMA、32 acc multiply、sum tree、P exp和所有wait/barrier"
+  },
+  "remaining_gate": [
+    "实际vote覆盖64lane且branch真的跳max/rho",
+    "快慢分支重汇合及原L/PV实际FP链，不把literal1优化当已证",
+    "8KiB/零spill与资源变化",
+    "只有通过实际编译后才考虑原数值/Graph/side/RNG组件；当前无GPU资格"
+  ],
+  "compiled": false,
+  "gpu_executed": false,
+  "observed_hit_frequency": null,
+  "performance_gain_claimed": false
+}

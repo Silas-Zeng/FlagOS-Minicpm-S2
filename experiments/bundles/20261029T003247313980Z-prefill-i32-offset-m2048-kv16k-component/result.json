@@ -1,0 +1,97 @@
+{
+  "raw_source_manifest_sha256": "11e24b6d4099fa73fab46653658dd2c2241a43697575218842c3761bd4c14a81",
+  "source": {
+    "started_utc": "20261029T003247313980Z",
+    "owner_pid": 196550,
+    "source": "/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028",
+    "source_count": 814,
+    "base_commit": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd",
+    "source_tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+    "native": "/workspace/experiments/minicpm-s2/official/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds-control/native/biv150_native_w8a8.so",
+    "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+    "run": "/workspace/experiments/minicpm-s2/framework/20261029T003247313980Z-prefill-i32-offset-m2048-kv16k-component",
+    "command": [
+      "/usr/local/bin/python3",
+      "/workspace/experiments/minicpm-s2/scripts/prefill-i32-component-452e2dd1/entry.py",
+      "--source-dir",
+      "/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028",
+      "--native-library",
+      "/workspace/experiments/minicpm-s2/official/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds-control/native/biv150_native_w8a8.so"
+    ],
+    "owned_processes": [
+      {
+        "role": "worker",
+        "pid": 196553
+      },
+      {
+        "role": "monitor",
+        "pid": 196554
+      }
+    ],
+    "exit_code": 1,
+    "source_identity": {
+      "tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+      "tracked_files": 814,
+      "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+      "extras": {}
+    },
+    "preflight": {
+      "checked_utc": "2026-10-29T00:32:47.324580+00:00",
+      "port_9031": "free",
+      "free_mib": 32700
+    },
+    "database_original_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+    "environment": {
+      "PYTHONPATH": "/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028:/workspace/experiments/minicpm-s2/framework/20261029T003247313980Z-prefill-i32-offset-m2048-kv16k-component/source",
+      "COREX_VISIBLE_DEVICES": "all",
+      "VLLM_PLUGINS": "fl",
+      "BIV150_NATIVE_W8A8_LIBRARY": "/workspace/experiments/minicpm-s2/official/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds-control/native/biv150_native_w8a8.so",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "worker_command": [
+      "/usr/local/bin/python3",
+      "/workspace/experiments/minicpm-s2/framework/20261029T003247313980Z-prefill-i32-offset-m2048-kv16k-component/source/entry.py",
+      "--worker",
+      "--run-dir",
+      "/workspace/experiments/minicpm-s2/framework/20261029T003247313980Z-prefill-i32-offset-m2048-kv16k-component",
+      "--model",
+      "/workspace/MiniCPM5-2B",
+      "--case",
+      "long"
+    ],
+    "database_after_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+    "database_restored": true,
+    "postflight": {
+      "checked_utc": "2026-10-29T00:33:06.091176+00:00",
+      "port_9031": "free",
+      "free_mib": 32700
+    },
+    "source_unchanged": true,
+    "native_unchanged": true,
+    "finished_utc": "2026-10-29T00:33:06.330509+00:00"
+  },
+  "component_result": {
+    "status": "failed",
+    "kind": "真实单层attention同ABI组件；无模型权重/官方性能结论",
+    "shape": {
+      "M": 2048,
+      "KV": 16384,
+      "Q_heads": 16,
+      "KV_heads": 2,
+      "D": 128,
+      "page": 16,
+      "page_table_stride": 8192
+    },
+    "candidate": "原kernel与严格i32相对offset变体；同Q-fragment lowering，不改FP循环",
+    "limitations": [
+      "只有一个合成shape M2048/KV16K；不是实际模型输出或完整官方基线。",
+      "只改变相对地址整数位宽与无效尾页地址归零；FP循环与cache布局不变。",
+      "计时两臂直接已暖 Q-hoist 私有 JIT 的完整2D输出；共同writer/metadata不计差额。",
+      "两臂同输入缓存/进程/ABI，既无affine/next-K，也不扩大tile或减少KV字节。"
+    ],
+    "timings": [],
+    "ir": {},
+    "error": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/framework/20261029T003247313980Z-prefill-i32-offset-m2048-kv16k-component/source/worker.py\", line 133, in worker\n    compilation_config=CompilationConfig(cudagraph_mode=CUDAGraphMode.FULL_DECODE_ONLY)).create_engine_config()\n                                                                                         ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/vllm/engine/arg_utils.py\", line 2316, in create_engine_config\n    config = VllmConfig(\n             ^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/pydantic/_internal/_dataclasses.py\", line 121, in __init__\n    s.__pydantic_validator__.validate_python(ArgsKwargs(args, kwargs), self_instance=s)\n  File \"/usr/local/lib/python3.12/site-packages/vllm/config/vllm.py\", line 1350, in __post_init__\n    current_platform.check_and_update_config(self)\n  File \"/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028/vllm_fl/platform.py\", line 312, in check_and_update_config\n    apply_compile_semantics(vllm_config, cls.vendor_name)\n  File \"/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028/vllm_fl/compile_semantics.py\", line 153, in apply_compile_semantics\n    fingerprint = build_fingerprint(vllm_config, vendor_name)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028/vllm_fl/compile_semantics.py\", line 121, in build_fingerprint\n    facts[\"native_gqa\"] = {\"library_sha256\": _sha(library), \"source\": sources}\n                                             ^^^^^^^^^^^^^\n  File \"/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028/vllm_fl/compile_semantics.py\", line 47, in _sha\n    with path.open(\"rb\") as stream:\n         ^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/pathlib.py\", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028/build-native-gqa/corex_native_gqa_s2_probe.so'\n"
+  },
+  "limitation": "没有有效A/B数值或计时；本次harness/依赖问题不得记作候选数值失败或性能负结果。"
+}

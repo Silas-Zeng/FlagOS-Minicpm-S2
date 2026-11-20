@@ -1,0 +1,55 @@
+{
+  "status": "failed",
+  "checks": [
+    {
+      "projection": "mlp.down_proj",
+      "rows": 1,
+      "split": true,
+      "passed": true
+    },
+    {
+      "projection": "mlp.down_proj",
+      "rows": 2,
+      "split": true,
+      "passed": true
+    },
+    {
+      "projection": "mlp.down_proj",
+      "rows": 8,
+      "split": true,
+      "passed": true
+    },
+    {
+      "projection": "mlp.down_proj",
+      "rows": 9,
+      "split": false,
+      "passed": true
+    },
+    {
+      "projection": "self_attn.o_proj",
+      "rows": 1,
+      "split": false,
+      "passed": true
+    },
+    {
+      "projection": "self_attn.o_proj",
+      "rows": 8,
+      "split": false,
+      "passed": true
+    },
+    {
+      "projection": "self_attn.qkv_proj",
+      "rows": 1,
+      "split": false,
+      "passed": true
+    },
+    {
+      "projection": "self_attn.qkv_proj",
+      "rows": 8,
+      "split": false,
+      "passed": true
+    }
+  ],
+  "scope": "新增生产opaque路由/Graph/side-stream；不重跑336例",
+  "error": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/framework/20261026T053309258487Z-biv150-down-small-integration-component/source/worker.py\", line 31, in worker\n    with safe_open(str(model/index['weight_map'][name]),framework='pt',device='cpu') as f:w=f.get_tensor(name).contiguous().cuda()\n                             ~~~~~~~~~~~~~~~~~~~^^^^^^\nKeyError: 'model.layers.0.mlp.gate_up_proj.weight'\n"
+}

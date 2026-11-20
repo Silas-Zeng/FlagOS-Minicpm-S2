@@ -1,0 +1,11 @@
+--- 6f975/bridge.cpp
++++ stride2560/bridge.cpp
+@@ -11,7 +11,7 @@
+ void produce(const at::Tensor& q,const at::Tensor& k,const at::Tensor& v,
+  const at::Tensor& lengths,const at::Tensor& table,const at::Tensor& partial,
+  const at::Tensor& maximum,const at::Tensor& summation,double scale){
+- TORCH_CHECK(q.is_cuda() && q.scalar_type()==at::kBFloat16 && q.sizes()==at::IntArrayRef({64,16,128}) && q.is_contiguous());
++ TORCH_CHECK(q.is_cuda() && q.scalar_type()==at::kBFloat16 && q.sizes()==at::IntArrayRef({64,16,128}) && q.strides()==at::IntArrayRef({2560,128,1}));
+  for(const auto& t:{k,v,lengths,table,partial,maximum,summation})TORCH_CHECK(t.is_cuda() && t.device()==q.device());
+  for(const auto& t:{k,v}){
+   TORCH_CHECK(t.scalar_type()==at::kBFloat16 && t.dim()==4 && t.size(1)==16 && t.size(2)==2 && t.size(3)==128);

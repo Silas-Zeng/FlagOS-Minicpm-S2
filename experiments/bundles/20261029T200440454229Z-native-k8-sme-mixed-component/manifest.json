@@ -1,0 +1,299 @@
+{
+  "schema": "experiment-bundle-v1",
+  "run_id": "20261029T200440454229Z-native-k8-sme-mixed-component",
+  "source_commit": "899ce77470b0b539aebc108fd122f668c2d5894d",
+  "scope": "BI-V150 NativeK8 Mixed SME isolated component; not official service/accuracy qualification",
+  "result": "BI-V150 N30/S4、Q pitch 2048 的 producer+原 reducer 隔离组件中，8个ABBA/BAAB顺序窗口（每臂4个，每窗8次） Event 均值 A 0.630725ms、B 0.581648ms（观察省7.7811%）；wall A 0.699091ms、B 0.646848ms（观察省7.4730%）。A/B partial、maximum、summation、reduced output逐位一致；混合边界、满16K、变Q、guard、只读及计时后复核通过。仅为组件局部观察：无独立FP64 oracle、actual writer/fullstep、Graph、官方服务或准确率；不更新基线。",
+  "deployment_recovery_manifest": {
+    "run": "20261029T200440454229Z-native-k8-sme-mixed-component",
+    "build_run": "/workspace/experiments/minicpm-s2/cpu-probes/20261029T195932238481Z-native-k8-sme-mixed-build",
+    "files": [
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/README.md",
+        "bytes": 1529,
+        "sha256": "2a8a9bc6c285afcce5cc489ffed0a2dcfe6c25da271874dd8a8bac1ff3427e4d"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/compile_pair.py",
+        "bytes": 6798,
+        "sha256": "efbcfe70350838d3c250e6baf8c966fafdd4efcc3fa17dd383dc61c2eec92605"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/component/README.md",
+        "bytes": 2807,
+        "sha256": "e7cf78360895c4a99075b3d3982a73c822bd4e0ceec2c060795c5a50fe005633"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/component/check_active_masks_cpu.py",
+        "bytes": 2018,
+        "sha256": "0487373f0889ae8017d9535f9be0285537059451c7b7a7f414fd8d6104adea2c"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/component/fixture-manifest.json",
+        "bytes": 4429,
+        "sha256": "70adb4fe697beae6648cdbebdde764ed1bc11eb7bc8cce49319f5c36f570f320"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/component/owner.py",
+        "bytes": 6604,
+        "sha256": "220bb6d9236711a0d3abfccb7872d0ce06866bc447e6d9aca5e87fd419a45148"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/component/worker.py",
+        "bytes": 25072,
+        "sha256": "1a173e944941b8198d52c2e346553eb8ecb320b6c922215d949660f56922b122"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/package-manifest.json",
+        "bytes": 767,
+        "sha256": "10abb23ee37547c8b95bfd627fd0d7c0e3d75bf5ef87cb6a42020418a19bd95f"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/A/biv150_native_k8_codec.cuh",
+        "bytes": 652,
+        "sha256": "a594ea8fc0b76d795170a987cfaac5102dbb681de2bc5d24efa9f9f200827444"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/A/codec.cu",
+        "bytes": 1365,
+        "sha256": "eefd1509ffc63d533ee853afe61b5dd5661bc11bb4951e0e5f6e4f591810bba1"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/A/mixed_qk.cpp",
+        "bytes": 7408,
+        "sha256": "55dc1cf4a43eaa2dec60f17004023f15ead7f092a8a2056b80d21ec7f84bd9ec"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/A/producer.cu",
+        "bytes": 14557,
+        "sha256": "5cdf9940ece52756c35df8395ea81164d2691e2730464b89bf849c1268a0b711"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/B/biv150_native_k8_codec.cuh",
+        "bytes": 652,
+        "sha256": "709fada50ca384d6c3578be27a73a226eb940398c800150b1d38fe18915583fd"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/B/codec.cu",
+        "bytes": 1365,
+        "sha256": "56374906e102af54ccd150b83110cf9c1b96e4f3d0e469e04cee346e214b513a"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/B/mixed_qk.cpp",
+        "bytes": 7408,
+        "sha256": "1b6922f1a04b71a5383e1bef52f1a614099962dd0f9026a90d6428790db54a38"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/B/producer.cu",
+        "bytes": 15601,
+        "sha256": "6836e37acb5741e4fd2d33e1c45b8c6b048bd52b0eff79a84db9ef8c08ed9640"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source-pins.json",
+        "bytes": 3833,
+        "sha256": "f07e9ec222f2660ef456746d853d97974be547cdde52befd53086f1814c797ea"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-launch/cpu-mask-check.log",
+        "bytes": 102,
+        "sha256": "6b771256d49359ccffe001417e8eaf664988b12343303124999bda5a5a9b50f5"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-launch/launch-component.sh",
+        "bytes": 45500,
+        "sha256": "95b5b04d049a6d293d707fbe505058f69e745f7663ec551312483e7003368e35"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-launch/launch-state.json",
+        "bytes": 10300,
+        "sha256": "9ff7bce08a0ce6ea0012748db664c3d8f7b99b18045f79dc44bc178b144f0340"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-launch/launcher.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-launch/launcher.pid",
+        "bytes": 6,
+        "sha256": "c9ff3767926c55e10dd60f6edc1b90ce61bf6eed43d5e0805c9c351f65ec5a74"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-launch/owner-console.log",
+        "bytes": 5072,
+        "sha256": "53dbed8c0d1de8d53cb03a47d2a38389ade9c6bbd1e921c71472e1925e9af479"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-launch/receipt.json",
+        "bytes": 10300,
+        "sha256": "9ff7bce08a0ce6ea0012748db664c3d8f7b99b18045f79dc44bc178b144f0340"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-launch/root-launch.json",
+        "bytes": 532,
+        "sha256": "d0b52103ccca970c74635eda677fe979c8791a898021dc75d0e8038f401ddfb6"
+      },
+      {
+        "path": "20261029T200440454229Z-native-k8-sme-mixed-component-recovery.tar.gz",
+        "bytes": 11157116,
+        "sha256": "123797d84cdec3803fa9b628c0e48c84d7b1bf327c8b7a2b2604f0faae1f0c91"
+      }
+    ]
+  },
+  "original_recovery_tar_sha256": "1b49eab44f4b605f3af700a38887fc2e4819ad2c08fe5b3a8143b5e9a2ff60d6",
+  "owner_recovery_manifest": {
+    "run": "20261029T200440454229Z-native-k8-sme-mixed-component",
+    "files": [
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/README.md",
+        "bytes": 1529,
+        "sha256": "2a8a9bc6c285afcce5cc489ffed0a2dcfe6c25da271874dd8a8bac1ff3427e4d"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/compile_pair.py",
+        "bytes": 6798,
+        "sha256": "efbcfe70350838d3c250e6baf8c966fafdd4efcc3fa17dd383dc61c2eec92605"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/component/README.md",
+        "bytes": 2807,
+        "sha256": "e7cf78360895c4a99075b3d3982a73c822bd4e0ceec2c060795c5a50fe005633"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/component/check_active_masks_cpu.py",
+        "bytes": 2018,
+        "sha256": "0487373f0889ae8017d9535f9be0285537059451c7b7a7f414fd8d6104adea2c"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/component/fixture-manifest.json",
+        "bytes": 4429,
+        "sha256": "70adb4fe697beae6648cdbebdde764ed1bc11eb7bc8cce49319f5c36f570f320"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/component/owner.py",
+        "bytes": 6604,
+        "sha256": "220bb6d9236711a0d3abfccb7872d0ce06866bc447e6d9aca5e87fd419a45148"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/component/worker.py",
+        "bytes": 25072,
+        "sha256": "1a173e944941b8198d52c2e346553eb8ecb320b6c922215d949660f56922b122"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/package-manifest.json",
+        "bytes": 767,
+        "sha256": "10abb23ee37547c8b95bfd627fd0d7c0e3d75bf5ef87cb6a42020418a19bd95f"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/A/biv150_native_k8_codec.cuh",
+        "bytes": 652,
+        "sha256": "a594ea8fc0b76d795170a987cfaac5102dbb681de2bc5d24efa9f9f200827444"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/A/codec.cu",
+        "bytes": 1365,
+        "sha256": "eefd1509ffc63d533ee853afe61b5dd5661bc11bb4951e0e5f6e4f591810bba1"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/A/mixed_qk.cpp",
+        "bytes": 7408,
+        "sha256": "55dc1cf4a43eaa2dec60f17004023f15ead7f092a8a2056b80d21ec7f84bd9ec"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/A/producer.cu",
+        "bytes": 14557,
+        "sha256": "5cdf9940ece52756c35df8395ea81164d2691e2730464b89bf849c1268a0b711"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/B/biv150_native_k8_codec.cuh",
+        "bytes": 652,
+        "sha256": "709fada50ca384d6c3578be27a73a226eb940398c800150b1d38fe18915583fd"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/B/codec.cu",
+        "bytes": 1365,
+        "sha256": "56374906e102af54ccd150b83110cf9c1b96e4f3d0e469e04cee346e214b513a"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/B/mixed_qk.cpp",
+        "bytes": 7408,
+        "sha256": "1b6922f1a04b71a5383e1bef52f1a614099962dd0f9026a90d6428790db54a38"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source/B/producer.cu",
+        "bytes": 15601,
+        "sha256": "6836e37acb5741e4fd2d33e1c45b8c6b048bd52b0eff79a84db9ef8c08ed9640"
+      },
+      {
+        "path": "scripts/native-k8-sme-mixed-component-20261029T200440454229Z-native-k8-sme-mixed-component/source-pins.json",
+        "bytes": 3833,
+        "sha256": "f07e9ec222f2660ef456746d853d97974be547cdde52befd53086f1814c797ea"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/changed-q-outputs.npz",
+        "bytes": 1782490,
+        "sha256": "4d5e7a8a2feff13b1f6011882479b4f6633fa2c10b5398b3b2c444c229c14491"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/component.log",
+        "bytes": 33285,
+        "sha256": "873c8ddcea1e9e8dddd7d5fae2475b9cecb45cecdaf8de2533631b76681a1124"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/full-16k-outputs.npz",
+        "bytes": 2049825,
+        "sha256": "8003c0fc806b30ed607c9fa340efef98beaff89e46275068f0a2c68052162cb5"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/full-16k-producer-outputs.npz",
+        "bytes": 1854411,
+        "sha256": "0f541bc55fb64ad099d72934a327e7075df281aada35611551ecc6730f5b1893"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/mixed-boundary-outputs.npz",
+        "bytes": 1780692,
+        "sha256": "cae37cfb63fcf571c1ee64c66c5d2fa0c169cdf0970dc7533642142f20648999"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/mixed-boundary-producer-outputs.npz",
+        "bytes": 1596980,
+        "sha256": "09ba05dd112beff1ca3441dc1ece1b2148bb7511781e373a1c25915b54f9c0a3"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/mixed_sme_original_reducer_368599687955.py",
+        "bytes": 3130,
+        "sha256": "f29d74e7a0ef9ff9953ff7c6d5cb7c14b41c6b10b707ebadeccf17fd77c08a4d"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/owner.pid",
+        "bytes": 6,
+        "sha256": "bcd206f9040f8497378d3afd47af0916646a04ddf2d655388942a24516d03b70"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/post-timing-full-16k-outputs.npz",
+        "bytes": 2049825,
+        "sha256": "8003c0fc806b30ed607c9fa340efef98beaff89e46275068f0a2c68052162cb5"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/postflight-ixsmi.txt",
+        "bytes": 1284,
+        "sha256": "49eb7e0a1bb5fcb1956d0bcb4ef39dcb645f411735208ac6d9d443e8d602e963"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/preflight-ixsmi.txt",
+        "bytes": 1284,
+        "sha256": "1745f10d1dd8d68f72acd360d65f63486ff1c985b48d3664f52d8b239171388a"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/state.json",
+        "bytes": 4494,
+        "sha256": "77424867e1b00bc0dc4a90dba7c36249738f3973dd494b2a5cc12b4cea873103"
+      },
+      {
+        "path": "cpu-probes/20261029T200440454229Z-native-k8-sme-mixed-component/summary.json",
+        "bytes": 33285,
+        "sha256": "25726806c94b0d9045bee217b6e958dee54b35c10e4b82a2957d8c85626be661"
+      }
+    ]
+  }
+}

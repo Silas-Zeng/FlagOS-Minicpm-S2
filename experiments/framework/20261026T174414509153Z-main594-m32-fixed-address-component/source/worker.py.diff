@@ -1,0 +1,63 @@
+--- bf16-m64-fixed-address-component-20261026/worker.py
++++ M32-component/worker.py
+@@ -1,18 +1,18 @@
+-"""main594实际callback MM-out与固定M64地址；两臂独立caller out，唯一完整ABBA。"""
++"""main594实际callback MM-out与固定M32地址；两臂独立caller out，唯一完整ABBA。"""
+ from pathlib import Path
+ import hashlib,json,statistics,traceback,re
+ from reused_helpers import timed_batch
+ from ir_contract import b_sme_contract
+-EXPECTED_CONFIG=dict(BLOCK_M=64,BLOCK_N=64,BLOCK_K=128,SPLIT_K=1,num_warps=16,num_stages=2,num_ctas=1)
+-EXPECTED_HASH='87fa576ed1c7527759db403f017f02d00299fdf6de6de02f32ce898893df36ed'
++EXPECTED_CONFIG=dict(BLOCK_M=32,BLOCK_N=64,BLOCK_K=128,SPLIT_K=1,num_warps=8,num_stages=2,num_ctas=1)
++EXPECTED_HASH='021fc309970d19083a26d80d3065d99f8fdf4a88fb3f8623706af86849ee3430'
+ def save(p,v):Path(p).write_text(json.dumps(v,ensure_ascii=False,indent=2,allow_nan=False)+'\n',encoding='utf-8')
+ def worker(run,model):
+     run,model=Path(run),Path(model);module=original=None
+-    result=dict(status='started',cases=[],timings=[],resources=[],kind='M64_fixed_address_component',
+-        source_main='594ae2a9d17aadc4587ad54ade2b34e17f4af990',rows=64,layer=0,config_difference={},
++    result=dict(status='started',cases=[],timings=[],resources=[],kind='M32_fixed_address_component',
++        source_main='594ae2a9d17aadc4587ad54ade2b34e17f4af990',rows=32,layer=0,config_difference={},
+         permanent_extra_weight_bytes=0,pack=False,performance_qualified=False,official_qualified=False,
+-        scope='原MM64/64/128 w16s2与runtime K；仅消M/N通用grid除余与A/B行列取余，caller-owned独立out',
+-        limitations=['仅合成M64激活/真实layer0权重；无其它M、42层/模型、105或新基线资格。',
++        scope='原MM32/64/128 w8s2与runtime K；仅消M/N通用grid除余与A/B行列取余，caller-owned独立out',
++        limitations=['仅合成M32激活/真实layer0权重；无其它M、42层/模型、105或新基线资格。',
+             '只计完整MM Graph replay；两out于capture前独立分配，不含CPU allocator。',
+             '实际3rcp减少、SME/资源只诊断；不凭指令数或静态shared假称occupancy或收益。'])
+     try:
+@@ -27,8 +27,8 @@
+         index=json.loads((model/'model.safetensors.index.json').read_bytes());name='model.layers.0.mlp.down_proj.weight'
+         with safe_open(str(model/index['weight_map'][name]),framework='pt',device='cpu') as f:wc=f.get_tensor(name).contiguous()
+         assert tuple(wc.shape)==(2048,6144) and wc.dtype==torch.bfloat16
+-        w=wc.cuda();g=torch.Generator().manual_seed(20261026);xc=(torch.randn((64,6144),generator=g)*.125).bfloat16();x=xc.cuda();origin=x.clone()
+-        out_a=torch.empty((64,2048),device='cuda',dtype=torch.bfloat16);out_b=torch.empty_like(out_a)
++        w=wc.cuda();g=torch.Generator().manual_seed(20261026);xc=(torch.randn((32,6144),generator=g)*.125).bfloat16();x=xc.cuda();origin=x.clone()
++        out_a=torch.empty((32,2048),device='cuda',dtype=torch.bfloat16);out_b=torch.empty_like(out_a)
+         assert len({t.untyped_storage().data_ptr() for t in (x,w,out_a,out_b)})==4
+         result['weight']=dict(name=name,bytes=wc.numel()*2,sha256=hashlib.sha256(wc.view(torch.uint8).numpy().tobytes()).hexdigest(),extra_weight_bytes=0)
+         bv=w.t();assert tuple(bv.shape)==(6144,2048) and tuple(bv.stride())==(1,6144) and bv.data_ptr()==w.data_ptr()
+@@ -66,7 +66,7 @@
+         for label,source in (('normal',xc),('zero',torch.zeros_like(xc)),('changed',-xc.flip(0)),('finite_extreme',xc*64)):
+             x.copy_(source.cuda());origin.copy_(x);baseline();kernel=changed();torch.cuda.synchronize();verify('eager_'+label)
+             if label=='normal':preserve('fixed_address',kernel);save(run/'resources-before-timing.json',result['resources'])
+-        rows=[0,1,7,15,31,63];cols=[0,1,63,127,511,1023,2047]
++        rows=[0,1,7,15,23,31];cols=[0,1,63,127,511,1023,2047]
+         reference=(x[rows].cpu().double()@wc[cols].double().T).bfloat16().double();arms={}
+         for arm,value in (('A',out_a),('B',out_b)):
+             sample=value[rows][:,cols].cpu().double();arms[arm]=dict(passed=bool(torch.allclose(sample,reference,rtol=.01,atol=.001)),max_abs=float((sample-reference).abs().max()))
+@@ -90,12 +90,12 @@
+         for arm in 'ABBA':
+             for _ in range(3):graphs[arm].replay()
+             pair=(torch.cuda.Event(enable_timing=True),torch.cuda.Event(enable_timing=True))
+-            result['timings'].append(dict(arm=arm,rows=64,mode='完整MM Graph replay；两caller-owned out预分配，不含CPU allocator',**timed_batch(torch,graphs[arm].replay,pair,16)))
++            result['timings'].append(dict(arm=arm,rows=32,mode='完整MM Graph replay；两caller-owned out预分配，不含CPU allocator',**timed_batch(torch,graphs[arm].replay,pair,16)))
+         means={arm:statistics.mean(t['event_per_call_ms'] for t in result['timings'] if t['arm']==arm) for arm in 'AB'}
+         result['means']=means
+         result['rng_unchanged']=bits(cpu_rng,torch.get_rng_state()) and bits(gpu_rng,torch.cuda.get_rng_state());assert result['rng_unchanged']
+         result.update(status='component_positive' if means['B']<means['A'] else 'stopped_negative',
+-            decision='仅保留单次M64组件信号，不自动扩大权重环/其它M/模型' if means['B']<means['A'] else '完整组件不正，停止后续/模型，不扫配置')
++            decision='仅保留单次M32组件信号，不自动扩大权重环/其它M/模型' if means['B']<means['A'] else '完整组件不正，停止后续/模型，不扫配置')
+     except BaseException:result.update(status='failed',error=traceback.format_exc())
+     finally:
+         if module is not None and original is not None:module.mm_kernel=original

@@ -1,0 +1,56 @@
+{
+  "scope": "A 臂 16K 官方服务终态增量复核；不重复历史组件资格或全包哈希扫描",
+  "archive": "archive/native-k8-sme-20261029/service-a-official16k-183714/",
+  "recovery_bundle_sha256": "ae60a760f9556beddf6b0ba189e2ab7e548a302a58b6d79f34c8b411837e30b0",
+  "run_id": "20261029T183714307637Z-native-k8-sme-a-16384-four-rounds",
+  "terminal": {
+    "benchmark_completed": true,
+    "raw_runs": 4,
+    "retained_runs": [2, 3, 4],
+    "all_requests_successful": true,
+    "requests_per_round": 128,
+    "driver_exit_code": 0,
+    "server_exit_code": 0,
+    "cleanup_errors": [],
+    "port_9031_after": "free",
+    "gpu_processes_after": "none",
+    "gpu_free_mib_after": 32700
+  },
+  "official_case": [16384, 1024, 64, 128],
+  "raw_runs": [
+    {"round": 1, "successful_requests": 128, "status": "SUCCESS", "total_tok_s": 3892.22, "duration_s": 572.48, "mean_ttft_ms": 137587.03, "mean_tpot_ms": 117.21},
+    {"round": 2, "successful_requests": 128, "status": "SUCCESS", "total_tok_s": 4518.22, "duration_s": 493.16, "mean_ttft_ms": 115081.3, "mean_tpot_ms": 103.89},
+    {"round": 3, "successful_requests": 128, "status": "SUCCESS", "total_tok_s": 4516.92, "duration_s": 493.31, "mean_ttft_ms": 115053.91, "mean_tpot_ms": 103.96},
+    {"round": 4, "successful_requests": 128, "status": "SUCCESS", "total_tok_s": 4513.15, "duration_s": 493.72, "mean_ttft_ms": 115176.19, "mean_tpot_ms": 104.03}
+  ],
+  "official_retained_runs_2_to_4": {
+    "mean_total_tok_s": 4516.096667,
+    "summary_csv_total_tok_s": 4516.1,
+    "mean_ttft_ms": 115103.8,
+    "mean_tpot_ms": 103.96,
+    "driver_recomputed_summary": true
+  },
+  "runtime_identity": {
+    "source_base": "main899 899ce77470b0b539aebc108fd122f668c2d5894d with declared A overlay",
+    "operator": "cjj_native_k8_klookahead_probe_a::produce",
+    "installed_library_sha256": "824f7dda043dd8e101b0f2296cba4aeda14d0718ae673805da1564a141c1f734",
+    "installed": true,
+    "loaded_library_confirmed": true,
+    "runtime_compile": false,
+    "physical_page_bytes": 16384,
+    "host_or_capture_events": 84,
+    "target_geometry_observed": {"shape": 32, "segments": 4, "q_stride": [2048, 128, 1], "eager_events": 42, "capture_events": 42},
+    "cache_pages": 34271,
+    "event_limit": "事件确认A库及32/S4路由在主机调用和capture阶段均出现；不代表Graph replay次数，也不能逐轮归属或证明每个请求命中。"
+  },
+  "database": {
+    "selected": "TunedConfig_iluvatar_triton_3_6.db",
+    "selected_before_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+    "selected_after_sha256": "0151ad95bb5aa88a14725c7647993c0c16b6daad5ed6ab930fdca18a24281b63",
+    "other_db_before_and_after_sha256": "87c41ba8b6c6ac650e959c0e30de3f69c78eba95be7d106a1617d04a532810da",
+    "selected_snapshot_change": "573张表/21187行增至592张表/22051行；新增19张表，5张既有表行数变化。",
+    "interpretation": "运行期间私有调优数据库有变化，但前后快照未把写入对应到具体轮次，不能据此解释轮次间差异。"
+  },
+  "errors": "官方driver验证4轮并弃首轮，所有请求成功；driver、server均以0退出，cleanup_errors为空。日志存在 vllm._C 导入失败警告及既有 UserWarning；未见本次benchmark异常退出或请求失败。",
+  "conclusion": "A臂16K官方运行完整完成，观察到启用并加载的A库以及32/S4/Qstride2048调用事件。保留三轮均值4516.096667 tok/s作为本次观察值；未与PR105或PR118作因果比较，不据此更新团队基线。TTFT/TPOT仅记录官方统计口径；准确率尚未测试，事件也不证明Graph replay或逐请求覆盖。"
+}

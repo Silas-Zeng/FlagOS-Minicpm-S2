@@ -1,0 +1,29 @@
+--- R32-original-epilogue/entry.py
++++ R32-BN256/entry.py
+@@ -46,7 +46,7 @@
+     native = args.native_library.resolve(strict=True)
+     source_before = source_identity.check(source, native)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-lm-head-temperature-r32-epilogue-component")
++    run = ROOT / "framework" / (stamp + "-lm-head-temperature-r32-bn256-component")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+@@ -54,7 +54,7 @@
+         shutil.copyfile(HERE / name, assets / name)
+     shutil.copyfile(HERE / "asset-pins.json", assets / "asset-pins.json")
+     state = dict(started_utc=stamp, owner_pid=os.getpid(),
+-        scope="固定R32完整head+Sampler；只head温度epilogue，原stats/RNG不改", run=str(run),
++        scope="固定R32完整head+Sampler；A已测温度epilogue，B仅BN64→256；原stats/RNG不改", run=str(run),
+         command=[sys.executable, *sys.argv], owned_processes=[], exit_code=1)
+     state.update(source=str(source), source_count=807, source_identity=source_before,
+                  base_commit="56f1838192abc940b3fb9accef490022ac125000",
+@@ -78,7 +78,7 @@
+         state["database_original_sha256"] = sha(DB)
+         shutil.copyfile(args.model / "config.json", assets / "model-config.json")
+         env = dict(os.environ)
+-        # 固定两臂同一个 worker/DB；本组件同一默认FlagGems注册；A原完整Sampler、B仅确定性物化融合，不修改生产文件。
++        # 固定两臂同一个 worker/DB；本组件同一默认FlagGems注册；A/B均已完成温度epilogue，B只加宽N片段，不修改生产文件。
+         for key in tuple(env):
+             if key.startswith(("VLLM_FL_BIV150_", "BIV150_", "MINICPM_NATIVE_", "MINICPM_DECODE_GAP_")):
+                 del env[key]

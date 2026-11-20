@@ -1,0 +1,33 @@
+--- R64-105/accuracy_owner.py
++++ R32-R64-105/accuracy_owner.py
+@@ -44,7 +44,8 @@
+     evidence['optimization_coverage'] = {
+         'Q32': evidence['q32'],
+         'head_temperature': evidence['head_temperature'],
+-        'note': '未选中Q32或R64 head不等于数值/请求失败；REJECTED、RAW_FALLBACK和解析问题原样保留为独立资格证据，不强求本105覆盖。'
++        'branch_accuracy_inferred_from_coverage': False,
++        'note': '未选中Q32或R32/R64 head不等于数值/请求失败；未覆盖的head分支不赋准确率资格。REJECTED、RAW_FALLBACK和解析问题保留为独立覆盖证据，不改变原105判分。'
+     }
+     save(control / 'head-temperature-coverage.json', evidence['head_temperature'])
+     save(control / 'optimization-coverage.json', evidence['optimization_coverage'])
+@@ -70,9 +71,9 @@
+     performance_control = Path(reference['control'])
+     origin, blobs, hashes, tree = source_identity
+     stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+-    run = ROOT / 'accuracy' / (stamp + '-main56-head-temperature-native14f-math500')
++    run = ROOT / 'accuracy' / (stamp + '-main56-head-temperature-r32-r64-native14f-math500')
+     control = run.with_name(run.name + '-control')
+-    source = ROOT / 'code' / (stamp + '-main56-head-temperature-native14f-accuracy')
++    source = ROOT / 'code' / (stamp + '-main56-head-temperature-r32-r64-native14f-accuracy')
+     control.mkdir(exist_ok=False)
+     shutil.copytree(origin, source, symlinks=True, ignore=shutil.ignore_patterns('.git', '__pycache__', '*.pyc', '*.pyo'))
+     if u.source_maps(source) != (blobs, hashes):
+@@ -111,7 +112,7 @@
+     state = dict(owner_pid=os.getpid(), run=str(run), control=str(control), source=str(source),
+                  commit=None, base_commit=q.COMMIT, tree=tree, source_count=len(blobs), completed=False,
+                  performance_control=str(performance_control),
+-                 qualification='main56受审head-temperature完整809源/tree8125c3及本站native14f/共同DB，原105题及采样/服务不变；不继承队友native5cbb或旧main准确率')
++                 qualification='main56受审head-temperature完整809源/tree8060aac6及本站native14f/共同DB，原105题及采样/服务不变；不继承队友native5cbb或旧main准确率')
+     lock = (ROOT / 'framework-device.lock').open('a')
+     process = None
+     original = None

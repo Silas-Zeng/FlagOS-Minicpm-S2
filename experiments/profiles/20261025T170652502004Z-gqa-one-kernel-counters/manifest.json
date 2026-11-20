@@ -1,0 +1,90 @@
+{
+  "started_utc": "20261025T170652502004Z",
+  "owner_pid": 281694,
+  "source": "/workspace/experiments/minicpm-s2/code/20261024T161030Z-main0bf9-main-official",
+  "source_count": 526,
+  "base_commit": "0bf9d2efeaa10144dd7f0ff4597298df029f9328",
+  "native": "/workspace/experiments/minicpm-s2/official/20261024T161030Z-main0bf9-main-official-four-rounds-control/native/biv150_native_w8a8.so",
+  "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+  "run": "/workspace/experiments/minicpm-s2/profiles/20261025T170652502004Z-gqa-one-kernel-counters",
+  "command": [
+    "/usr/local/bin/python",
+    "/workspace/experiments/minicpm-s2/scripts/night-20261026-gqa-counters/entry.py",
+    "--source-dir",
+    "/workspace/experiments/minicpm-s2/code/20261024T161030Z-main0bf9-main-official",
+    "--native-library",
+    "/workspace/experiments/minicpm-s2/official/20261024T161030Z-main0bf9-main-official-four-rounds-control/native/biv150_native_w8a8.so"
+  ],
+  "owned_processes": [
+    {
+      "role": "worker",
+      "pid": 281698
+    },
+    {
+      "role": "monitor",
+      "pid": 281699
+    }
+  ],
+  "exit_code": 255,
+  "source_identity": {
+    "tree": "8671e2ec040601981d1533d6a09beb20b9e507db",
+    "tracked_files": 526,
+    "native_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+    "extras": {}
+  },
+  "preflight": {
+    "checked_utc": "2026-10-25T17:06:52.512341+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "database_original_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+  "environment": {
+    "PYTHONPATH": "/workspace/experiments/minicpm-s2/code/20261024T161030Z-main0bf9-main-official:/workspace/experiments/minicpm-s2/profiles/20261025T170652502004Z-gqa-one-kernel-counters/source",
+    "COREX_VISIBLE_DEVICES": "all",
+    "VLLM_PLUGINS": "fl",
+    "BIV150_NATIVE_W8A8_LIBRARY": "/workspace/experiments/minicpm-s2/official/20261024T161030Z-main0bf9-main-official-four-rounds-control/native/biv150_native_w8a8.so",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "purpose": "单个原baseline gqa launch硬件计数；本run全部timing禁止作为收益或基线",
+  "worker_command": [
+    "/usr/local/corex/bin/ixkn-cli",
+    "--section",
+    "SpeedOfLight,ComputeWorkload,Memory",
+    "--kernel-name",
+    "_gqa_decode_attention",
+    "--launch-skip",
+    "0",
+    "--launch-count",
+    "1",
+    "--kill",
+    "off",
+    "--replay-mode",
+    "kernel",
+    "--export-profile",
+    "/workspace/experiments/minicpm-s2/profiles/20261025T170652502004Z-gqa-one-kernel-counters/gqa-baseline",
+    "/usr/local/bin/python",
+    "/workspace/experiments/minicpm-s2/profiles/20261025T170652502004Z-gqa-one-kernel-counters/source/entry.py",
+    "--worker",
+    "--run-dir",
+    "/workspace/experiments/minicpm-s2/profiles/20261025T170652502004Z-gqa-one-kernel-counters",
+    "--model",
+    "/workspace/MiniCPM5-2B",
+    "--shape",
+    "hotspot"
+  ],
+  "profile_process_group": {
+    "owner_pid": 281698,
+    "members": [],
+    "errors": []
+  },
+  "database_after_sha256": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+  "database_restored": true,
+  "postflight": {
+    "checked_utc": "2026-10-25T17:06:52.738931+00:00",
+    "port_9031": "free",
+    "free_mib": 32700
+  },
+  "source_unchanged": true,
+  "native_unchanged": true,
+  "finished_utc": "2026-10-25T17:06:52.915971+00:00"
+}

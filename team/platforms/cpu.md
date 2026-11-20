@@ -2,6 +2,11 @@
 
 # CPU
 
-现有登记1条。打开[唯一实验总表](../experiments.md)查看平台列和每轮原件。
+现有登记24条。打开[唯一实验总表](../experiments.md)查看平台列和每轮原件。
 
 - [SQLite 反射及 SQL+C2/C3 组合](../methods/sql.md)
+- [NativeK8 SME布局与lookahead组件探针](../methods/native-k8-sme.md)
+- [BI-V150特定形状GEMM](../methods/shape-gemm.md)
+- [native GQA S8与shared4k官方筛选](../methods/native-gqa-s8.md)
+- [Prefill i32 offset 组件筛查](../methods/prefill-i32-offset.md)
+- [Prefill base2 CPU编译筛查](../methods/prefill-base2.md)

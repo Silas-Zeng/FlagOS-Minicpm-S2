@@ -1,0 +1,171 @@
+--- reviewed-vtranspose/worker
++++ s2-incta/worker
+@@ -55,14 +55,12 @@
+ 
+ 
+ from fp_reference import sampled_reference
+-import layout_kernels
+-import writer_gate
+ 
+ 
+ def worker(run, model, shape="hotspot"):
+     result = dict(status="started", kind="真实模型KV位样本拓展的writer+GQA+reducer组件，随机Q；无模型/官方资格", checks=[], timings=[],
+                   limitations=["没有模型权重；真实KV仅一条256token原题的128token采样，重复页不代表16K真实激活",
+-                               "仅N64/B64/S2；128token真实KV页样本重复到容量，随机Q；原while/page16/FP/split，K保持原NHD，仅V改页内head/dim/slot物理布局",
++                               "仅N64/B64/S2；128token真实KV页样本重复到容量，随机Q；原while/page16/FP/split，原S2两段同CTA/两warp与原顺序归约；不改K/V布局",
+                                "完整writer+producer+reducer同流Graph ABBA；整池编码只初始化/门内刷新，不在每decode计时"])
+     gqa = producer_capture = reducer_capture = None
+     original_producer = original_reducer = None
+@@ -97,7 +95,7 @@
+         if digest(Path(gqa.__file__)) != SOURCE_SHA or digest(HERE / "baseline.py") != SOURCE_SHA:
+             raise RuntimeError("实际 GQA 不是冻结 main241/765 原件")
+         backend = importlib.import_module("vllm.v1.attention.backends.triton_attn")
+-        candidate = load("gqa_bf16_vtranspose_candidate", HERE / "candidate.py")
++        candidate = load("gqa_s2_incta_candidate", HERE / "candidate.py")
+         if torch.cuda.device_count() != 1:
+             raise RuntimeError("非单卡")
+         torch.cuda.set_device(0)
+@@ -187,49 +185,28 @@
+             query_start_loc=common.query_start_loc_cpu.tolist(), seq_lens=common.seq_lens.cpu().tolist(),
+             padded_slot_values=common.slot_mapping[active:].cpu().tolist())
+         original_inputs = (query.clone(), cache.clone(), common.seq_lens.clone(), common.block_table_tensor.clone())
+-        packed=torch.empty((len(cache),8192),device='cuda',dtype=torch.bfloat16)
+-        decoded=torch.empty_like(cache)
+-        def refresh():
+-            packed.view(torch.int16).fill_(-23131)
+-            layout_kernels.encode_cache[(len(cache),16)](cache,packed,num_warps=1,num_stages=1)
+-            layout_kernels.decode_cache[(len(cache),16)](packed,decoded,num_warps=1,num_stages=1)
+-            if not torch.equal(decoded.view(torch.int16),cache.view(torch.int16)):
+-                raise RuntimeError('整池V转置/逆变换位型不精确；停止')
+-        # 特殊值只核整数位型回读，不以NaN Attention证明正确性。
+-        allbits=((torch.arange(65536,device='cuda',dtype=torch.int32)*40503+97)&65535).to(torch.int16)
+-        special=allbits.view(torch.bfloat16).reshape(8,2,16,2,128)
+-        sp=torch.empty((8,8192),device='cuda',dtype=torch.bfloat16);back=torch.empty_like(special)
+-        layout_kernels.encode_cache[(8,16)](special,sp,num_warps=1,num_stages=1)
+-        layout_kernels.decode_cache[(8,16)](sp,back,num_warps=1,num_stages=1)
+-        if not torch.equal(special.view(torch.int16),back.view(torch.int16)):
+-            raise RuntimeError('65536 BF16位型GPU地址往返失败')
+-        result['layout_special_patterns_exact']=65536
+-        refresh()
+-        # 两view均持有packed base；原K offset与stride不动，V末维step16。
+-        packed_k=packed.as_strided((len(cache),16,2,128),(8192,256,128,1),0)
+-        packed_v=packed.as_strided((len(cache),16,2,128),(8192,1,2048,16),4096)
+-        result['physical_layout']=dict(page_bytes=16384,metadata_bytes_per_page=0,
+-            capacity_reclaimed=False,additional_runtime_metadata=False,
+-            k_strides=list(packed_k.stride()),v_strides=list(packed_v.stride()),
+-            initialization_only_full_transform=True,one_new_token_writer_per_timed_call=True,
+-            normal_prefill_consumer_qualified=False)
++        result['in_cta_contract']=dict(batch_segments=2,candidate_warps=2,baseline_warps=1,
++            candidate_grid=[B,2],baseline_grid=list(grid),global_partial_buffers_used=False,
++            no_new_kv_layout=True,no_new_math=True,actual_occupancy_proven=False,
++            note='数学源码逐段反投影相同；不等于实际编译FMA/数值已通过')
+         arms = {}
+-        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_vtranspose)):
++        for name, kernel in (("baseline", original_producer), ("candidate", candidate._gqa_decode_attention_s2_incta)):
+             out = torch.full_like(query, -17)
+             partial = torch.full_like(metadata.softmax_segm_output, -17)
+             maxima = torch.full_like(metadata.softmax_segm_max, -17)
+             sums = torch.full_like(metadata.softmax_segm_expsum, -17)
+             pk = dict(kwargs, segm_output_ptr=partial.narrow(2, 0, segments), segm_max_ptr=maxima.narrow(2, 0, segments),
+                       segm_expsum_ptr=sums.narrow(2, 0, segments))
+-            keepalive = [packed,packed_k,packed_v]
+-            if name=='candidate':
+-                pk.update(key_cache_ptr=packed_k,value_cache_ptr=packed_v,
+-                    v_stride_slot=1,v_stride_head=2048)
++            keepalive = []
++            fused = name=='candidate'
++            if fused:
++                pk.update(output_ptr=out[:B],output_stride_token=out.stride(0),
++                    output_stride_head=out.stride(1),num_warps=2)
+             rk = dict(rkwargs, output_ptr=out[:B], segm_output_ptr=pk["segm_output_ptr"],
+                       segm_max_ptr=pk["segm_max_ptr"], segm_expsum_ptr=pk["segm_expsum_ptr"])
+-            def call(kernel=kernel, pk=pk, rk=rk, keepalive=keepalive):
+-                compiled = kernel[grid](**pk)
+-                original_reducer[rgrid](**rk)
++            def call(kernel=kernel,pk=pk,rk=rk,keepalive=keepalive,fused=fused):
++                compiled=kernel[(B,2) if fused else grid](**pk)
++                if not fused:original_reducer[rgrid](**rk)
+                 return compiled
+             arms[name] = NS(call=call, out=out, partial=partial, maxima=maxima, sums=sums,
+                             tensors=(out, partial, maxima, sums), keepalive=keepalive, pk=pk)
+@@ -244,14 +221,8 @@
+         if not result['actual_baseline_identity']['matched']:
+             raise RuntimeError('baseline直接对照不是本次实际生产编译产物')
+         result["resources"]["reducer"] = dump(reducer_compiled, run / "ir-reducer")
+-        result['layout_resources_note']='只改变V物理地址；核实际V byte-permute/global-load/shared变化，不因元数据预测收益'
+-        enc=layout_kernels.encode_cache[(len(cache),16)](cache,packed,num_warps=1,num_stages=1)
+-        dec=layout_kernels.decode_cache[(len(cache),16)](packed,decoded,num_warps=1,num_stages=1)
+-        wr=layout_kernels.write_rows[(B,)](key,value,common.slot_mapping,packed,
+-            INPUT_STRIDE=key.stride(0),num_warps=1,num_stages=1)
+-        result['resources']['initializer']=dump(enc,run/'ir-initializer')
+-        result['resources']['inverse_diagnostic']=dump(dec,run/'ir-inverse-diagnostic')
+-        result['resources']['writer']=dump(wr,run/'ir-writer')
++        result['call_graph']=dict(baseline=['original_writer','original_producer','original_reducer'],
++            candidate=['original_writer','s2_in_cta_attention_with_original_reduction'])
+         same_bits = lambda a, b: torch.equal(a.view(torch.int16 if a.element_size() == 2 else torch.int32),
+                                             b.view(torch.int16 if b.element_size() == 2 else torch.int32))
+         if not same_bits(production_output, arms["baseline"].out):
+@@ -272,7 +243,6 @@
+         torch.cuda.synchronize()
+ 
+         def check(label, finite=True, changed=False):
+-            refresh()  # 门内一次刷新；不是每个attention call，更不进入最终成本Graph。
+             # 整份 KV/输入逐位和 RNG 门在计时外；失败也先保存响应与 partial。
+             before = tuple(x.clone() for x in (query, cache, common.seq_lens, common.block_table_tensor))
+             rng_cpu, rng_gpu = torch.get_rng_state().clone(), torch.cuda.get_rng_state().clone()
+@@ -311,10 +281,8 @@
+             checks["rng_unchanged"] = torch.equal(rng_cpu, torch.get_rng_state()) and torch.equal(rng_gpu, torch.cuda.get_rng_state())
+             if changed:
+                 checks["output_changed"] = not same_bits(initial_output[:B], expected["baseline"][0][:B])
+-            checks['actual_layout_pointers']=(arms['candidate'].pk['key_cache_ptr'] is packed_k
+-                and arms['candidate'].pk['value_cache_ptr'] is packed_v
+-                and packed_k.untyped_storage().data_ptr()==packed.untyped_storage().data_ptr()
+-                and packed_v.untyped_storage().data_ptr()==packed.untyped_storage().data_ptr())
++            checks['original_KV_pointers']=all(arms['candidate'].pk[p] is kwargs[p]
++                for p in ('key_cache_ptr','value_cache_ptr'))
+             checks['finite_cross_arm_bitwise']=same_bits(a.out[:B],b.out[:B]) if finite else True
+             record = dict(case=label, checks=checks, independent_reference=oracle, nonfinite_diagnostic=not finite,
+                           baseline_nan=int(torch.isnan(a.out[:B]).sum().item()),
+@@ -328,7 +296,7 @@
+             write(run / "results.json", result)
+             if not all(checks.values()):
+                 torch.save(cache.cpu(), run / (label + "-failed-kv.pt"))
+-                raise RuntimeError("新增数值/Graph 边界失败：" + label + repr(checks))
++                raise RuntimeError("同CTA数值/Graph 边界失败：" + label + repr(checks))
+             return expected["baseline"][0]
+ 
+         initial_output = check("dense-random")
+@@ -368,11 +336,28 @@
+         for target, saved in zip((query, cache, common.seq_lens, common.block_table_tensor), original_inputs):
+             target.copy_(saved)
+         check("restored-dense-before-ABBA")
+-        full_graphs,writer_checks=writer_gate.qualify(torch,run,arms,impl,layer,key,value,cache,
+-            common.slot_mapping,packed,layout_kernels,sampled_reference,query,
+-            common.seq_lens,common.block_table_tensor,active)
+-        result['new_writer_graph_checks']=writer_checks
+-        refresh()
++        # 两臂均含实际原writer；新核省去原producer全局partial与第二reducer。
++        full_graphs={}
++        for name,arm in arms.items():
++            def fullcall(arm=arm):
++                impl.do_kv_cache_update(layer,key,value,cache,common.slot_mapping)
++                return arm.call()
++            fullcall();fullcall();torch.cuda.synchronize()
++            graph=torch.cuda.CUDAGraph()
++            with torch.cuda.graph(graph):fullcall()
++            full_graphs[name]=graph
++        saved_key,saved_value,saved_cache=key.clone(),value.clone(),cache.clone()
++        key[:B].neg_();value[:B].add_(.125)
++        for name in arms:full_graphs[name].replay()
++        torch.cuda.synchronize()
++        writer_reference=sampled_reference(torch,run,'writer-changed-key-value',query,cache,
++            common.seq_lens,common.block_table_tensor,{name:arm.out for name,arm in arms.items()},active)
++        require_writer=(not same_bits(cache,saved_cache)
++            and same_bits(arms['baseline'].out[:B],arms['candidate'].out[:B])
++            and all(row['passed'] for row in writer_reference['arms'].values()))
++        result['full_writer_graph_changed_inputs']=dict(passed=require_writer,independent_reference=writer_reference)
++        if not require_writer:raise RuntimeError('完整原writer+新consumer Graph变值失败')
++        key.copy_(saved_key);value.copy_(saved_value);cache.copy_(saved_cache)
+         for name in arms:full_graphs[name].replay()
+         torch.cuda.synchronize()
+         if not same_bits(arms['baseline'].out[:B],arms['candidate'].out[:B]):

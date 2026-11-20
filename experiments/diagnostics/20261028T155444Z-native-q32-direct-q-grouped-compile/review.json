@@ -1,0 +1,33 @@
+{
+  "decision": "GO_ONE_PURE_INCREMENTAL_COMPONENT",
+  "source_review": "tmp/native-q32-direct-q-grouped-incremental-component-20261028/compile-155444-independent-review.json",
+  "source_review_sha256": "4ad43889686f5bc318dd754497bc0c612f192188526ef06f6a8a2126ab3eb156",
+  "CPU_only": true,
+  "FP_DAG_review_passed": true,
+  "resource_review_passed": true,
+  "GPU_executed": false,
+  "summary": "direct-Q＋grouped四行max通过CPU编译与独立FP DAG/资源审阅，批准仅一次pure2048增量组件A/B（A=direct-Q v2，B=组合）；SGPR99/VGPR107、64KiB shared、2处scalar spill、无VGPR/private spill。未跑GPU，无数值/性能/模型/生产/官方资格，也不继承151702资格。",
+  "scope": "仅批准一次pure2048增量组件实验；不授数值、性能、模型、生产或官方资格。",
+  "evidence": {
+    "source_sha256": "d1d43c9973651ab32f8d01a3ee73ec93aa44fe15d2873b698a100194173ebdde",
+    "compiled_files": {
+      "probe.ll": "27a7066d02c3eda54f6d950a67c1bfacee19243eb8c4f8ed762897675d765677",
+      "probe.s": "20194a906dd7a754efe6fe05a0cc108510de6049828097dc8d9e896ed1a3902b"
+    },
+    "resources": {
+      "shared_bytes": 65536,
+      "private_bytes": 0,
+      "SGPR": 99,
+      "VGPR": 107,
+      "scalar_spill_count": 2,
+      "VGPR_spill_count": 0
+    },
+    "loop_recurrence": "All 45 phi nodes have the same incoming predecessor edges and recursively normalized incoming expressions as the direct-Q parent; ordered roots for all 64 MMA operations and all 48 final BF16 truncations match.",
+    "softmax_and_output": "FMA roots are the same multiset (schedule reordered); fadd/fmul/fsub/fdiv/select/fptrunc dataflow roots match as multisets. Per-row max operand order and P/rho/L/acc recurrence are unchanged; the only intended scheduling change is issuing four independent row shuffles before consuming them at each max-tree distance.",
+    "q_and_kv_lifecycle": "Q initialization remains the same 32 ushort loads, 16 byte permutes and 16 waits as the parent. The 32 SME prefetches enter the existing QK/softmax/PV path; original drain and all three barriers remain. No new Q shared stage or early drain."
+  },
+  "limits": [
+    "必须仍通过本次组件预声明的数值、全storage/Graph/side-stream/ABBA门。",
+    "不继承151702资格；出现launch错误须停止并传播错误。"
+  ]
+}

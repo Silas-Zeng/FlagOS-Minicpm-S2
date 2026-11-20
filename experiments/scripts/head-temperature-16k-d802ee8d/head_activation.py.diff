@@ -1,0 +1,12 @@
+--- 4K/head_activation.py
++++ 16K/head_activation.py
+@@ -35,3 +35,9 @@
+     values=[int(v.replace(',','')) for v in re.findall(r'GPU KV cache size:\s*([\d,]+)\s*tokens',text)]
+     if not values or len(set(values))!=1:raise ValueError('实际KV容量缺失或不唯一')
+     return values[0]
++
++
++def optional_scope_valid(evidence):
++    """16K可合法未命中R64；出现selection/sample则仍须原完整闭合。"""
++    observed = bool(evidence['records']['selected'] or evidence['records']['sampled'])
++    return bool(not evidence['abnormal'] and (not observed or evidence['valid']))

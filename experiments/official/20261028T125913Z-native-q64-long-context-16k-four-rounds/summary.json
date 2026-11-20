@@ -1,0 +1,176 @@
+{
+  "run": "20261028T125913Z-native-q64-long-context-16k-four-rounds",
+  "status": "native_q64_official16k_first_warm_negative",
+  "conclusion": "Q64生产16K原官方首冷4041.81、首暖4819.11 tok/s，两轮256请求成功。对PR105首暖4834.45观察-0.317306%，按预设停止；KV548432对548288不匹配，不称严格因果或稳定退化。实际Q64首launch/原栈通过，DB/源/三SO恢复与清理正常；无完整四轮或准确率，不合并、不改PR105基线。",
+  "raw_original_files": 352,
+  "model_qualified": false,
+  "new_baseline": false,
+  "review": {
+    "reviewer": "experiment_sync_resume，原终态薄审",
+    "decision": "FIRST_WARM_NEGATIVE_PLANNED_STOP_NO_MERGE",
+    "checks": {
+      "two_original_successful_rounds": true,
+      "original_workload": true,
+      "CSV_matches_performance_stop": true,
+      "delta_matches": true,
+      "first_round_stack": true,
+      "actual_Q64_first_launch": true,
+      "KV_mismatch_explicit": true,
+      "source_and_three_libraries_unchanged": true,
+      "database_restored": true,
+      "baseline_DB_reused": true,
+      "planned_SIGTERM_not_full_pass": true,
+      "original_RUNS_SKIP_FIRST": true,
+      "cleanup": true
+    },
+    "original_csv": "archive/hotspot-layout-20261026/batch-125913-native-q64-official16k-negative/official/20261028T125913Z-native-q64-long-context-16k-four-rounds/benchmark_results/raw_runs_20261028_210123.csv",
+    "original_csv_sha256": "84e8227980bfe6abc52a036390c0b1249384c5f8777a9cc96b1f87f6a8e88730",
+    "rates": [
+      4041.81,
+      4819.11
+    ],
+    "successful_requests": 256,
+    "first_warm_baseline": 4834.45,
+    "first_warm_delta_percent": -0.31730600171684387,
+    "candidate_KV": 548432,
+    "baseline_KV": 548288,
+    "strictly_causal": false,
+    "stable_regression_asserted": false,
+    "full_four_rounds": false,
+    "accuracy_tested": false,
+    "model_qualified": false,
+    "new_baseline": false,
+    "source_tree": "232258a88167bc85bb731848d010456acdf7957c",
+    "source_count": 821,
+    "base_commit": "1cbac531ca9afaa0e9a68624d5d10cb1d0412055",
+    "native_q64_sha256": "c157a26affd0dc7895342b15d1a7c1261dd2b7011da43769cc61223686b02999",
+    "native_gqa_sha256": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+    "native_q64_first_launch": {
+      "valid": true,
+      "installed": true,
+      "selected": true,
+      "records": {
+        "INSTALL": [
+          {
+            "GPU_metadata_authoritative": true,
+            "compile_at_runtime": false,
+            "installed": true,
+            "library_sha256": "c157a26affd0dc7895342b15d1a7c1261dd2b7011da43769cc61223686b02999",
+            "maximum_kv": 16384,
+            "maximum_query": 2048,
+            "minimum_context_query_ratio": 4,
+            "minimum_query": 1024
+          }
+        ],
+        "SELECTED": [
+          {
+            "context": 8192,
+            "grid": [
+              33,
+              2
+            ],
+            "kv": 10240,
+            "library_sha256": "c157a26affd0dc7895342b15d1a7c1261dd2b7011da43769cc61223686b02999",
+            "prefix": 0,
+            "proof": "首次成功native launch；不代表请求覆盖率或官方收益",
+            "q_storage_offset": 0,
+            "query": 2048,
+            "threads": 2048
+          }
+        ]
+      },
+      "errors": [],
+      "scope": "一次实际eager native launch；不是调用覆盖率或端到端收益"
+    },
+    "original_result": {
+      "status": "failed",
+      "exit_code": 1,
+      "benchmark_final_returncode": -15,
+      "error": "KeyboardInterrupt('received signal 15')"
+    },
+    "finished_utc": "2026-10-28T13:19:43.625326+00:00",
+    "raw_member_SHA_reused": "root已校验352原件，不重复全量",
+    "note": "保留原failed/KeyboardInterrupt/未完成四轮；与performance-stop时间一致的主动筛停，不写服务崩溃或正确性错误。首次Q64 SELECTED仅证明一次实际路径，不证明请求覆盖率。"
+  },
+  "original_results": {
+    "status": "failed",
+    "benchmark_completed": false,
+    "accuracy_gate": "separate",
+    "cleanup_errors": [],
+    "score": "not computed by driver",
+    "benchmark_started_utc": "2026-10-28T13:01:23.588201+00:00",
+    "error": "KeyboardInterrupt('received signal 15')",
+    "traceback": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/scripts/run_official_gate.py\", line 222, in main\n    result['benchmark_exit_code'] = benchmark.wait(timeout=OUTER_TIMEOUT)\n                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 1264, in wait\n    return self._wait(timeout=timeout)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 2047, in _wait\n    time.sleep(delay)\n  File \"/workspace/experiments/minicpm-s2/scripts/run_official_gate.py\", line 176, in <lambda>\n    signal.signal(signum, lambda number, frame: (_ for _ in ()).throw(\n                                                ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/experiments/minicpm-s2/scripts/run_official_gate.py\", line 176, in <genexpr>\n    signal.signal(signum, lambda number, frame: (_ for _ in ()).throw(\nKeyboardInterrupt: received signal 15\n",
+    "benchmark_final_returncode": -15,
+    "server_final_returncode": 0,
+    "monitor_final_returncode": -15,
+    "postflight": {
+      "checked_utc": "2026-10-28T13:19:42.982723+00:00",
+      "port_9031": "free",
+      "free_mib": 32700
+    },
+    "benchmark_source_after": {
+      "RUNS": 4,
+      "SKIP_FIRST": 1
+    },
+    "exit_code": 1,
+    "finished_utc": "2026-10-28T13:19:42.992993+00:00",
+    "cpu_after": {
+      "cpu.cfs_quota_us": "600000\n",
+      "cpu.cfs_period_us": "100000\n",
+      "cpu.stat": "nr_periods 390665\nnr_throttled 2447\nthrottled_time 10096324235840\n"
+    }
+  },
+  "CSV_rows": [
+    {
+      "Prefill": "16384",
+      "Decode": "1024",
+      "Conc": "64",
+      "Num Prompts": "128",
+      "Successful Requests": "128.0",
+      "Run Status": "SUCCESS",
+      "Benchmark Duration (s)": "551.29",
+      "Total Input Tokens": "2097152.0",
+      "Total Output Tokens": "131072.0",
+      "Req/s": "0.23",
+      "Output tok/s": "237.75",
+      "Peak Output tok/s": "736.0",
+      "Total tok/s": "4041.81",
+      "Mean TTFT (ms)": "130098.79",
+      "Median TTFT (ms)": "134870.54",
+      "P99 TTFT (ms)": "224119.02",
+      "Mean TPOT (ms)": "113.88",
+      "Median TPOT (ms)": "120.43",
+      "P99 TPOT (ms)": "150.87",
+      "Mean ITL (ms)": "113.88",
+      "Median ITL (ms)": "44.08",
+      "P99 ITL (ms)": "426.44"
+    },
+    {
+      "Prefill": "16384",
+      "Decode": "1024",
+      "Conc": "64",
+      "Num Prompts": "128",
+      "Successful Requests": "128.0",
+      "Run Status": "SUCCESS",
+      "Benchmark Duration (s)": "462.37",
+      "Total Input Tokens": "2097152.0",
+      "Total Output Tokens": "131072.0",
+      "Req/s": "0.28",
+      "Output tok/s": "283.48",
+      "Peak Output tok/s": "743.0",
+      "Total tok/s": "4819.11",
+      "Mean TTFT (ms)": "104652.38",
+      "Median TTFT (ms)": "118266.1",
+      "P99 TTFT (ms)": "182301.66",
+      "Mean TPOT (ms)": "99.26",
+      "Median TPOT (ms)": "104.64",
+      "P99 TPOT (ms)": "134.31",
+      "Mean ITL (ms)": "99.26",
+      "Median ITL (ms)": "44.1",
+      "P99 ITL (ms)": "399.24"
+    }
+  ],
+  "completed_four_rounds": false,
+  "accuracy_tested": false
+}

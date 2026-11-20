@@ -1,0 +1,151 @@
+{
+  "run": "20261027T190017939358Z-qkv-bn32-component",
+  "status": "qkv_bn32_w8_negative",
+  "conclusion": "M64真实layer0 QKV权重／合成激活，原64/64/128 w16s1对64/32/128 w8s1，仅BN与warp两项变化，原FPbody／runtime K不变、无额外权重。八项位型／独立FP64／换值Graph／side与RNG通过；完整MM Graph Event .03167163394→.03444711491ms慢8.7633%，停止形状／模型／官方，非数值错误。SME／shared静态减少不代表收益。",
+  "model_qualified": false,
+  "official_qualified": false,
+  "raw_original_files": 67,
+  "original_status": "stopped_negative",
+  "summary": {
+    "A": 0.03167163394391537,
+    "B": 0.034447114914655685
+  },
+  "numerical_component_passed": true,
+  "resources": [
+    {
+      "arm": "baseline",
+      "hash": "1c73eba813a2e0ae6425fb1fa53ea950add8987d2a5ad9e294197233a6b108ee",
+      "shared": 32768,
+      "use_sme": 7,
+      "n_regs": 25,
+      "n_spills": 0,
+      "async_copies": 0,
+      "B_SME_SSA": {
+        "passed": true,
+        "dot_count": 1,
+        "records": [
+          {
+            "A": "%a_66",
+            "B": "%b_67",
+            "B_local_load_found": true,
+            "B_dot_op_layouts": [
+              "opIdx = 1, parent = #mma, kWidth = 2, useSme = 2"
+            ],
+            "B_useSme_values": [
+              2
+            ],
+            "B_same_layout_opIdx1_useSme_nonzero": true
+          }
+        ]
+      },
+      "asm_sme_sites": 2,
+      "asm_rcp_count": 3,
+      "runtime_K_in_TTGIR": true,
+      "diagnostic_only": true,
+      "actual_asm_resources": {
+        "sgpr_count": 36,
+        "vgpr_count": 25,
+        "sgpr_spill_count": 0,
+        "vgpr_spill_count": 0
+      }
+    },
+    {
+      "arm": "bn32",
+      "hash": "69b4f7dba31eb0a1650fdad34a18a0e846851938ca21fb8bac44201b2f0e2f00",
+      "shared": 24576,
+      "use_sme": 7,
+      "n_regs": 25,
+      "n_spills": 0,
+      "async_copies": 0,
+      "B_SME_SSA": {
+        "passed": true,
+        "dot_count": 1,
+        "records": [
+          {
+            "A": "%a_66",
+            "B": "%b_67",
+            "B_local_load_found": true,
+            "B_dot_op_layouts": [
+              "opIdx = 1, parent = #mma, kWidth = 2, useSme = 2"
+            ],
+            "B_useSme_values": [
+              2
+            ],
+            "B_same_layout_opIdx1_useSme_nonzero": true
+          }
+        ]
+      },
+      "asm_sme_sites": 3,
+      "asm_rcp_count": 3,
+      "runtime_K_in_TTGIR": true,
+      "diagnostic_only": true,
+      "actual_asm_resources": {
+        "sgpr_count": 36,
+        "vgpr_count": 25,
+        "sgpr_spill_count": 0,
+        "vgpr_spill_count": 0
+      }
+    }
+  ],
+  "geometry": {
+    "M": 64,
+    "N": 2560,
+    "K": 2048,
+    "config": {
+      "BLOCK_M": 64,
+      "BLOCK_N": 64,
+      "BLOCK_K": 128,
+      "SPLIT_K": 1,
+      "num_warps": 16,
+      "num_stages": 1,
+      "num_ctas": 1
+    },
+    "grid": [
+      40,
+      1
+    ],
+    "constexprs": {
+      "num_warps": "16",
+      "num_stages": "1",
+      "num_ctas": "1",
+      "BLOCK_M": "64",
+      "BLOCK_N": "64",
+      "BLOCK_K": "128",
+      "SPLIT_K": "1",
+      "EVEN_K": "True",
+      "UPGRADE": "False",
+      "UPGRADE_A_OFFS": "False",
+      "UPGRADE_B_OFFS": "False",
+      "UPGRADE_C_OFFS": "False"
+    },
+    "mathematical_kwargs": {
+      "acc_dtype": "fp32",
+      "input_precision": "None",
+      "fp8_fast_accum": "True",
+      "GROUP_M": "8",
+      "AB_DTYPE": "bf16"
+    },
+    "A_stride": [
+      2048,
+      1
+    ],
+    "B_transposed_W_stride": [
+      1,
+      2048
+    ],
+    "out_stride": [
+      2560,
+      1
+    ]
+  },
+  "config_difference": {
+    "BLOCK_N": [
+      64,
+      32
+    ],
+    "num_warps": [
+      16,
+      8
+    ]
+  }
+}

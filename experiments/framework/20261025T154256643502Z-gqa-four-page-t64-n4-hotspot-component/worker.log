@@ -1,0 +1,47 @@
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:728: DeprecationWarning: use_cuda_graph is deprecated; use benchmark_mode='replay' or benchmark_mode='event'
+  super().__init__(*args, **kwargs)
+/usr/local/lib/python3.12/site-packages/flag_gems/utils/libentry.py:411: RuntimeWarning: active Triton backend does not provide a replay benchmarker; falling back to event timing
+  resolved_benchmark = resolve_benchmarker(
+INFO 10-25 23:43:01 [__init__.py:44] Available plugins for group vllm.platform_plugins:
+INFO 10-25 23:43:01 [__init__.py:46] - fl -> vllm_fl:register
+INFO 10-25 23:43:01 [__init__.py:58] Loading plugin fl
+INFO 10-25 23:43:05 [__init__.py:237] Platform plugin fl is activated
+WARNING 10-25 23:43:09 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+/usr/local/lib/python3.12/site-packages/torch/jit/_script.py:362: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+WARNING 10-25 23:43:10 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+WARNING 10-25 23:43:10 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+WARNING 10-25 23:43:10 [interface.py:358] Failed to import from vllm._C: ModuleNotFoundError("No module named 'vllm._C'")
+[2026-10-25 23:43:11] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_sampler_compile_for_iluvatar: unwrapped topk_topp_sampler.compiled_random_sample
+[2026-10-25 23:43:11] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_sampler_compile_for_iluvatar: unwrapped logprobs.batched_count_greater_than
+[2026-10-25 23:43:11] [INFO] [vllm_fl.dispatch.backends.vendor.iluvatar.iluvatar] patch_torch_inductor_for_iluvatar: backend '['iluvatar']' already supports target='cuda', no GPUTarget remap needed.
+INFO 10-25 23:43:11 [model.py:598] Resolved architecture: LlamaForCausalLM
+INFO 10-25 23:43:11 [model.py:1725] Using max model len 131072
+INFO 10-25 23:43:11 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=2048.
+INFO 10-25 23:43:11 [vllm.py:1006] Asynchronous scheduling is enabled.
+INFO 10-25 23:43:11 [kernel.py:276] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+BIV150_COMPILE_SEMANTICS {"native_enabled": true, "schema": 1, "sha256": "a14c669f6846888bd136d1ad91ef3f8c42cf03b46a09a80914933ab471f14ef8"}
+INFO 10-25 23:43:11 [parallel_state.py:1588] world_size=1 rank=0 local_rank=0 distributed_init_method=file:///workspace/experiments/minicpm-s2/framework/20261025T154256643502Z-gqa-four-page-t64-n4-hotspot-component/world1-rendezvous backend=nccl
+INFO 10-25 23:43:11 [parallel_state.py:1923] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+/usr/local/lib/python3.12/site-packages/flag_gems/config.py:171: UserWarning: resolve_user_setting: no exclude ops found; returning empty list
+  warnings.warn(
+/usr/local/lib/python3.12/site-packages/torch/library.py:357: UserWarning: Warning only once for all operators,  other operators may also be overridden.
+  Overriding a previously registered kernel for the same operator and the same dispatch key
+  operator: aten::__ilshift__.Tensor(Tensor(a!) self, Tensor other) -> Tensor(a!)
+    registered at /home/corex/sw_home/apps/pytorch/build/aten/src/ATen/RegisterSchema.cpp:6
+  dispatch key: CUDA
+  previous kernel: registered at /home/corex/sw_home/apps/pytorch/build/aten/src/ATen/RegisterCPU_3.cpp:7148
+       new kernel: registered at /usr/local/lib/python3.12/site-packages/flag_gems/__init__.py:62 (Triggered internally at /home/corex/sw_home/apps/pytorch/aten/src/ATen/core/dispatch/OperatorEntry.cpp:208.)
+  self.m.impl(
+WARNING:root:Skipped registering operator: This is not allowed since there's already a kernel registered from python overriding ne_.Scalar's behavior for CUDA dispatch key and aten namespace.
+WARNING:root:Skipped registering operator: This is not allowed since there's already a kernel registered from python overriding ne_.Tensor's behavior for CUDA dispatch key and aten namespace.
+BIV150_SQL_REFLECTION_INSTALLED sqlite_targeted_only=1
+BIV150_DECODE_LAUNCH_INSTALLED {'installed': True, 'num_warps': 2, 'num_stages': 1, 'scope': 'audited BF16 MiniCPM 3D decode only'}
+BIV150_MIXED_DECODE_INSTALLED {'installed': True, 'scope': 'BF16 MiniCPM natural-prefix mixed Attention only', 'ordinary_mixed_dummy_may_split': True, 'accuracy': 'mixed 2D to 3D remains unverified'}
+BIV150_GQA_DECODE_INSTALL {'installed': True, 'scope': 'BF16 MiniCPM pure-decode 3D only', 'rows': 8, 'page_size': 16, 'backend_rebound': True}
+BIV150_PREFILL_NORMALIZATION_INSTALL {'installed': True, 'scope': 'audited BF16 causal MiniCPM prefill without sinks', 'backend_rebound': True, 'audited': {'vllm.v1.attention.ops.triton_unified_attention': '54c495dcea404582a1526a96ae7e472965cbd03c8fa0931c71ef72223bf04e1f', 'vllm.v1.attention.ops.triton_attention_helpers': '59d9d34bbda988436593cfd9bcb05015d17db8ee85c50f6697e45f987acbf0b1'}, 'kernel_sha256': '0295ceff7472b60fbab69dda6557725e3bcb7ccb48aa841b1c1a13d8ec9cbb5d', 'initial_mass': 0}
+BIV150_Q_FRAGMENT_INSTALL {'installed': True, 'scope': 'audited BI-V150 MiniCPM BF16 prefill Q fragment lifetime', 'binding': 'normalization-over-gqa', 'temporary_ir': True}
+BIV150_NATIVE_W8A8_INSTALL {'installed': True, 'layers': ('gate_up_proj',), 'min_rows': 17, 'compressed_only': True, 'skip_edge_layers': 4, 'fused_silu': True, 'activation_residual_rows': [1, 16], 'cached_quantization_rows': [17, 2048], 'cached_quantization_threads': 256, 'gate_operator': 'gate_silu_auto'}
+BIV150_GQA_DECODE_FIRST_WIDTH seqs=40 builder_segments=16 segments=16 target_programs=256
+/usr/local/lib/python3.12/tempfile.py:940: ResourceWarning: Implicitly cleaning up <TemporaryDirectory '/tmp/biv150-q-fragment-lrteym_n'>
+  _warnings.warn(warn_message, ResourceWarning)

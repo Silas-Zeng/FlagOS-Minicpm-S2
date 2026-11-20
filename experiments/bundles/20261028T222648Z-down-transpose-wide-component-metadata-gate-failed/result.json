@@ -1,0 +1,607 @@
+{
+  "status": "failed",
+  "scope": "全部42层真实down权重；每个权重固定M64/N2048/K6144 BF16 GEMM；两种synthetic BF16输入；A为原生产small_linear_out→torch.mm(out)，B为独立转置宽输出Triton实现。",
+  "cases": [],
+  "timings": [],
+  "resources": [
+    {
+      "arm": "baseline",
+      "hash": "87fa576ed1c7527759db403f017f02d00299fdf6de6de02f32ce898893df36ed",
+      "config": {
+        "num_warps": 16,
+        "num_stages": 2,
+        "num_ctas": 1
+      },
+      "use_sme": 7,
+      "shared": 65536,
+      "n_regs": 25,
+      "n_spills": 0,
+      "async_copies": 4,
+      "use_sme1": 2,
+      "use_sme2": 2,
+      "asm_matrix_mad": 8,
+      "diagnostic_only": true
+    },
+    {
+      "arm": "transpose_wide",
+      "hash": "8e041436429db61d49af08f466c314867f3869d593ceecdf1e1832f4b5713e16",
+      "config": {
+        "num_warps": 32,
+        "num_stages": 2,
+        "num_ctas": 1
+      },
+      "use_sme": 7,
+      "shared": 98304,
+      "n_regs": 25,
+      "n_spills": 0,
+      "async_copies": 4,
+      "use_sme1": 2,
+      "use_sme2": 2,
+      "asm_matrix_mad": 8,
+      "diagnostic_only": true
+    }
+  ],
+  "weights": [
+    {
+      "layer": 0,
+      "name": "model.layers.0.mlp.down_proj.weight",
+      "sha256": "1a6e6d547d5f0ffd08fd020690ccf75323ba4dd54181617e406a84f644cee501",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 1,
+      "name": "model.layers.1.mlp.down_proj.weight",
+      "sha256": "ac16cd53cde587251ea28a1ec0f5d2e67eca0e16b3c394d16210aeb760db7948",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 2,
+      "name": "model.layers.2.mlp.down_proj.weight",
+      "sha256": "6b292ac8363a4f14a9bc358642fb80d381c80b01353a015126312ac8051be75e",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 3,
+      "name": "model.layers.3.mlp.down_proj.weight",
+      "sha256": "36006e60d99e9556e72e1227083948930a4d4b39a2761c48a0c6b10d271565c4",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 4,
+      "name": "model.layers.4.mlp.down_proj.weight",
+      "sha256": "3690f24dda50c10077130794835bce0810317c384f79151d06474e4ea33eae07",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 5,
+      "name": "model.layers.5.mlp.down_proj.weight",
+      "sha256": "c3eeb37b4989247a82c95a0b6885989cb19a16a4573e2b4dced65f711ad6f499",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 6,
+      "name": "model.layers.6.mlp.down_proj.weight",
+      "sha256": "6dd846b430b9657b14c25832b1f080da1556db9a32164b95ac075f788831ac61",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 7,
+      "name": "model.layers.7.mlp.down_proj.weight",
+      "sha256": "c83e02e165ee6e128e2d2b99c902121cdd4c0404f81fabeaf4aeb99bcbc4cec0",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 8,
+      "name": "model.layers.8.mlp.down_proj.weight",
+      "sha256": "2f008cb9727a513b8196d0df640b29b0df9ee32f56b7b533921a9117d6bbc03f",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 9,
+      "name": "model.layers.9.mlp.down_proj.weight",
+      "sha256": "31e1f672a503a6e18488e0b081cda6d64b4a147b70b78feaa66ccccc4e9d6eb4",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 10,
+      "name": "model.layers.10.mlp.down_proj.weight",
+      "sha256": "066817935f5bd067b2bdedc24ac4e73f84627c58c467634778f34f27b2637aa8",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 11,
+      "name": "model.layers.11.mlp.down_proj.weight",
+      "sha256": "243fde48ffba73095e041ba74c558646f70c72366e888d033388f5b084ac750f",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 12,
+      "name": "model.layers.12.mlp.down_proj.weight",
+      "sha256": "2d4773ed8f2cb2bf314201b32daeba10035975b91fe9a19cd72dfa0d98f78612",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 13,
+      "name": "model.layers.13.mlp.down_proj.weight",
+      "sha256": "07984652d568ba962673fd01747c96ef4a85bff3a833a803cba421b6746c11ec",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 14,
+      "name": "model.layers.14.mlp.down_proj.weight",
+      "sha256": "4ecdcb4859f9e59f55580229bacfabb301719c7e1571bb6be719927818fedc36",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 15,
+      "name": "model.layers.15.mlp.down_proj.weight",
+      "sha256": "1832fff773bf1726b4dcd31800a6d218f4652b82d21da5debaa18bbdbb3afb6c",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 16,
+      "name": "model.layers.16.mlp.down_proj.weight",
+      "sha256": "c44c533edcc1e82c63ca8ec69f5ea41db221f8042d8328b8ad12dbafc22bcee2",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 17,
+      "name": "model.layers.17.mlp.down_proj.weight",
+      "sha256": "8ea9e1421f84f171376bcb23fae411f332d29df39e94ed2373057427fadbecd6",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 18,
+      "name": "model.layers.18.mlp.down_proj.weight",
+      "sha256": "8da1c9b06e5e6d97db7452548d7cebe84bf0fb457f07aa52c265353e66331186",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 19,
+      "name": "model.layers.19.mlp.down_proj.weight",
+      "sha256": "f7c8623dc101ca2bfe5a5d1cac7dda109163aaeb7ea010aec3a9d3628f7ffd41",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 20,
+      "name": "model.layers.20.mlp.down_proj.weight",
+      "sha256": "9267dc789507453f482c38d122e1f4697288eba7a1042d6eb835cd8d27d3b85d",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 21,
+      "name": "model.layers.21.mlp.down_proj.weight",
+      "sha256": "5b2548b511ac2c5d85208aab1a9fddfbc7aff44f2a55179ce5ebfefd5a9f3a4e",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 22,
+      "name": "model.layers.22.mlp.down_proj.weight",
+      "sha256": "fc4ba1a5828c2bbd178e1e68adbf5dd24aceefd67151d3128715731e12111546",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 23,
+      "name": "model.layers.23.mlp.down_proj.weight",
+      "sha256": "7a6979e6cdf6de4fbbb19870c82f1e66fb5da3a4e851f241827be3239f1e8167",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 24,
+      "name": "model.layers.24.mlp.down_proj.weight",
+      "sha256": "a628c397983b9f9b9904d0dbe4b0be35f1eb88584dfa0442fa72cd31869f7076",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 25,
+      "name": "model.layers.25.mlp.down_proj.weight",
+      "sha256": "7d2aeea6a79714e69d409e9fabaa3158c3dd944015289d080b9b6c9c51f4c5ca",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 26,
+      "name": "model.layers.26.mlp.down_proj.weight",
+      "sha256": "c09f081115a4d2ea1bb2f15ea479dd9e809279401f39aaaf420d526189d202cb",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 27,
+      "name": "model.layers.27.mlp.down_proj.weight",
+      "sha256": "1c91d2912a1f38bab89e8cdaa9ebaa94c34ce926c35a269d6de62dc404471dab",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 28,
+      "name": "model.layers.28.mlp.down_proj.weight",
+      "sha256": "ef463522ea2645f27a9be7d92fa5aeef3c8074de1becd43059171607c20ea58a",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 29,
+      "name": "model.layers.29.mlp.down_proj.weight",
+      "sha256": "c4ff7fe98fef51bbd26c93ff4b8d38960ee2868d7e1952251c0ea39133dd4134",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 30,
+      "name": "model.layers.30.mlp.down_proj.weight",
+      "sha256": "52628085e81e44883919e12ef4e5b8081dd63e90a6bc1fabaeede7f28d97d7fa",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 31,
+      "name": "model.layers.31.mlp.down_proj.weight",
+      "sha256": "564d638c6781986ce1f88ebda70439c7fc8dc31a3109319812b195a22d0196f6",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 32,
+      "name": "model.layers.32.mlp.down_proj.weight",
+      "sha256": "49ddb2ec3a9c6b81cf921c2fba9f6a38df028e447159bd934fb75ac258ceaa7a",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 33,
+      "name": "model.layers.33.mlp.down_proj.weight",
+      "sha256": "36916260e1909c4dea3730950bb085c96f03255bb67386e6df15a1a7ceafd84d",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 34,
+      "name": "model.layers.34.mlp.down_proj.weight",
+      "sha256": "a46d3b39823bd42ceaf10c93ca2e4e10b95dbe81bb13aa4c26065230491bbcf2",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 35,
+      "name": "model.layers.35.mlp.down_proj.weight",
+      "sha256": "8ba238095b7be4a821473d475fcca5f5e540393b4c26d5ac10ed201eb846cb2d",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 36,
+      "name": "model.layers.36.mlp.down_proj.weight",
+      "sha256": "c99d921703c4054d5e8dab6eb73f5c9c87511d8953b9780ff1d751b9c3eb9f50",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 37,
+      "name": "model.layers.37.mlp.down_proj.weight",
+      "sha256": "84fdf0faf547d4aeee35e9ec525df5800c7d188ec2a53abafc59790fea817c83",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 38,
+      "name": "model.layers.38.mlp.down_proj.weight",
+      "sha256": "75d7e89ba31349ef3387b7495de7dfb1fd560f1459105da59f8d12a230dceed7",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 39,
+      "name": "model.layers.39.mlp.down_proj.weight",
+      "sha256": "37c93c11b4ee519d93dc478792a7a333a5f3aea4869e5c6ea3277528a5afd02a",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 40,
+      "name": "model.layers.40.mlp.down_proj.weight",
+      "sha256": "2dc311d6633611dc3ad54f938217016668f38f36154c5faa1724930ec80c6416",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    },
+    {
+      "layer": 41,
+      "name": "model.layers.41.mlp.down_proj.weight",
+      "sha256": "e49fd8c8e8247c37695256f5307a31cae451db169c44a44ff9efb57f2ba8b318",
+      "shape": [
+        2048,
+        6144
+      ],
+      "dtype": "torch.bfloat16",
+      "logical_bytes": 25165824
+    }
+  ],
+  "numerical_gate": {
+    "relative_l2_max": 0.001,
+    "normalized_max_max": 0.005,
+    "full_output_bitwise_equal": true
+  },
+  "coverage": {
+    "weights": 42,
+    "eager_patterns": 2,
+    "graph_captured_layers": 42,
+    "graph_changed_input_patterns": 2,
+    "side_stream_layers": 42,
+    "timing_graphs": "each graph is a 42-layer full down sequence"
+  },
+  "limitations": [
+    "42层权重均为checkpoint真实BF16张量，但激活为固定seed合成输入，不是生产激活。",
+    "B按W[2048,6144] @ X.T[6144,64]计算，逻辑输出按(1,2048)写回原[64,2048] contiguous存储；不声称HBM流量减少。",
+    "单组件吞吐不代表官方端到端成绩或准确率。"
+  ],
+  "target": "GPUTarget(backend='corex', arch=71, warp_size=64)",
+  "dispatch": {
+    "mm_source_sha256": "4c2e23da2a6b65b89cbb8170967f14c5327d143e21137387f3907ccb4fcde090",
+    "callback_source_sha256": "1edfba6c9176665312962e7ea7dc9cac15132403ca4fbbd92d86fd4894325302",
+    "registrar_mm_out": true,
+    "aten_dispatch": "CUDA FlagGems",
+    "callback_installer_called": false,
+    "scope": "原small_linear_out M64不依赖_LARGE_LINEAR策略，实际torch.mm(x,weight.t(),out=out)；不重编Inductor"
+  },
+  "weight_contract": {
+    "count": 42,
+    "all_unique_hashes": true,
+    "candidate_weight_shape": [
+      2048,
+      6144
+    ],
+    "candidate_weight_stride": [
+      6144,
+      1
+    ],
+    "candidate_logical_output_shape": [
+      2048,
+      64
+    ],
+    "physical_output_stride": [
+      1,
+      2048
+    ]
+  },
+  "original_identity": {
+    "M": 64,
+    "N": 2048,
+    "K": 6144,
+    "config": {
+      "BLOCK_M": 64,
+      "BLOCK_N": 64,
+      "BLOCK_K": 128,
+      "SPLIT_K": 1,
+      "num_warps": 16,
+      "num_stages": 2,
+      "num_ctas": 1
+    },
+    "grid": [
+      32,
+      1
+    ],
+    "constexprs": {
+      "num_warps": "16",
+      "num_stages": "2",
+      "num_ctas": "1",
+      "BLOCK_M": "64",
+      "BLOCK_N": "64",
+      "BLOCK_K": "128",
+      "SPLIT_K": "1",
+      "EVEN_K": "True",
+      "UPGRADE": "False",
+      "UPGRADE_A_OFFS": "False",
+      "UPGRADE_B_OFFS": "False",
+      "UPGRADE_C_OFFS": "False"
+    },
+    "mathematical_kwargs": {
+      "acc_dtype": "fp32",
+      "input_precision": "None",
+      "fp8_fast_accum": "True",
+      "GROUP_M": "8",
+      "AB_DTYPE": "bf16"
+    },
+    "A_stride": [
+      6144,
+      1
+    ],
+    "B_transposed_W_stride": [
+      1,
+      6144
+    ],
+    "out_stride": [
+      2048,
+      1
+    ]
+  },
+  "error": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/framework/20261028T222648495445Z-down-transpose-wide-42layer-component/source/worker.py\", line 173, in worker\n    assert ares[\"use_sme\"] == 15, f\"production metadata use_sme changed: {ares['use_sme']}\"\n           ^^^^^^^^^^^^^^^^^^^^^\nAssertionError: production metadata use_sme changed: 7\n"
+}

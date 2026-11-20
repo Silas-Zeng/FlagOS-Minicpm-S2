@@ -1,0 +1,148 @@
+{
+  "base_registry_sha256": "7dd33de23451ccf6552e1f4a94cebc5e6500dab087fdacbd4c7afe8ec686a40b",
+  "base_rows": 538,
+  "base_unique_runs": 535,
+  "candidate_registry_sha256": "f6217fceaf847f8dd13da5c36ac80434e9c9a2c79f4fa63deb3eae5e9c11546b",
+  "candidate_rows": 540,
+  "candidate_unique_runs": 537,
+  "runs": [
+    {
+      "run_id": "20261030T015910809947Z-q32-k-lookahead-compile-probe",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-30T01:59:10.809947+00:00",
+      "profile_id": "q32-k-lookahead",
+      "phase": "component_compile_only",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce774",
+      "flaggems_commit": "",
+      "input_len": "2018",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "compiled_only_component_candidate",
+      "artifacts": "experiments/bundles/20261030T015910809947Z-q32-k-lookahead-compile-probe",
+      "conclusion": "编译审阅在QK后、PV前定位到下一tile的页/K/scale加载，当前tile PV之后有完整vmcnt等待、下一轮才消费carry K，形成可能的重叠窗口；这只是机制窗口证据，未证明隐藏延迟或速度收益。VGPR135/shared57344均未上升，ASM SGPR spill计数98→88；仅writer与编译，无reader、数值或性能。"
+    },
+    {
+      "run_id": "20261030T021326156242Z-q32-k-lookahead-component",
+      "local_date": "2026-10-30",
+      "utc_start": "2026-10-30T02:13:26.156242+00:00",
+      "profile_id": "q32-k-lookahead",
+      "phase": "component_numerical_abba",
+      "device": "Iluvatar BI-V150",
+      "vllm_commit": "899ce774",
+      "flaggems_commit": "",
+      "input_len": "2018",
+      "output_len": "",
+      "concurrency": "",
+      "num_prompts": "",
+      "profiler": "false",
+      "status": "component_numeric_pass_performance_negative_stopped",
+      "artifacts": "experiments/bundles/20261030T021326156242Z-q32-k-lookahead-component",
+      "conclusion": "五个case（含changed-Q）全输出A/B逐位一致，CPU FP64抽样、guard、只读输入/缓存/表及重复稳定性通过。四组ABBA Event A8.031193/B8.537401 ms，B慢6.303%；四组分别慢7.0392%、7.0048%、6.8048%、4.4104%。停止此版，不进服务或官方测试，不升级基线。"
+    }
+  ],
+  "evidence": {
+    "20261030T015910809947Z-q32-k-lookahead-compile-probe": {
+      "result": "tmp/q32-k-lookahead-20261030/validation/result.json",
+      "review": "tmp/q32-k-lookahead-20261030/validation/terminal-review.json",
+      "execution": "tmp/q32-k-lookahead-20261030/validation/execution-state.json",
+      "bundle": "tmp/q32-k-lookahead-20261030/validation/compile-recovery.tar.gz",
+      "extra_evidence": [
+        "tmp/q32-k-lookahead-20261030/validation/assembly-review.json",
+        "tmp/q32-k-lookahead-20261030/validation/compile-015910-recovered.json"
+      ]
+    },
+    "20261030T021326156242Z-q32-k-lookahead-component": {
+      "result": "tmp/q32-k-lookahead-20261030/component/result.json",
+      "review": "tmp/q32-k-lookahead-20261030/component/terminal-review.json",
+      "execution": "tmp/q32-k-lookahead-20261030/component/execution-state.json",
+      "bundle": "tmp/q32-k-lookahead-20261030/component/component-recovery.tar.gz",
+      "extra_evidence": [
+        "tmp/q32-k-lookahead-20261030/validation/component-021326-recovered.json"
+      ]
+    }
+  },
+  "bundle_indexes": {
+    "20261030T015910809947Z-q32-k-lookahead-compile-probe": {
+      "run_id": "20261030T015910809947Z-q32-k-lookahead-compile-probe",
+      "original_name": "compile-recovery.tar.gz",
+      "original_bytes": 525878,
+      "original_sha256": "a9c41a1419b348d848ed5f1a6e92cd13b0f01c7a2cc257af7e3efd0914d6e27a",
+      "chunk_bytes": 262144,
+      "chunks": [
+        {
+          "path": "experiments/raw-blobs/20261030T015910809947Z-q32-k-lookahead-compile-probe/0000.part",
+          "offset": 0,
+          "bytes": 262144,
+          "sha256": "5217c9b7d128260500edb886e4600e2c252fdef9477f4e21f0ba7d6d292b6d73"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T015910809947Z-q32-k-lookahead-compile-probe/0001.part",
+          "offset": 262144,
+          "bytes": 262144,
+          "sha256": "e1a04316ec2b1fc925c7a70721dec6452d2c4264b3fe47247fa6557816d0bcdb"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T015910809947Z-q32-k-lookahead-compile-probe/0002.part",
+          "offset": 524288,
+          "bytes": 1590,
+          "sha256": "c84418a2d679e829dccbc9f2ce1df9b9c2d0d5ed1b8656ef4adaf53fac58831f"
+        }
+      ]
+    },
+    "20261030T021326156242Z-q32-k-lookahead-component": {
+      "run_id": "20261030T021326156242Z-q32-k-lookahead-component",
+      "original_name": "component-recovery.tar.gz",
+      "original_bytes": 1642099,
+      "original_sha256": "5a7722d74f949455bd134dedbd37b6997af3b48cb8d7741ced9ded653cecb3ad",
+      "chunk_bytes": 262144,
+      "chunks": [
+        {
+          "path": "experiments/raw-blobs/20261030T021326156242Z-q32-k-lookahead-component/0000.part",
+          "offset": 0,
+          "bytes": 262144,
+          "sha256": "58de28d30144ba155e5cbc7619d4b34b7608b167a1275cc6221b0902e839a0a3"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T021326156242Z-q32-k-lookahead-component/0001.part",
+          "offset": 262144,
+          "bytes": 262144,
+          "sha256": "694f416c1799ba3b9d7df86bb19bec1187f694f1692afbb77f0331dc0bdd1218"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T021326156242Z-q32-k-lookahead-component/0002.part",
+          "offset": 524288,
+          "bytes": 262144,
+          "sha256": "4f53a133a3b4f477d7e050fd681a38344eb83fbeb768598b70060f28f00f2c43"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T021326156242Z-q32-k-lookahead-component/0003.part",
+          "offset": 786432,
+          "bytes": 262144,
+          "sha256": "e56d684ef71327f0b413f7097b4fcb6d6a0091cb9bb944b1b3a1e97cf501392c"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T021326156242Z-q32-k-lookahead-component/0004.part",
+          "offset": 1048576,
+          "bytes": 262144,
+          "sha256": "e7351bde3fd41a26e6fa804111416d84c59e37771ff7399dd30880ed42a4e884"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T021326156242Z-q32-k-lookahead-component/0005.part",
+          "offset": 1310720,
+          "bytes": 262144,
+          "sha256": "ab2582221d202c89b4422f96e59268dd544df95ddbd3db10af948990e67913cb"
+        },
+        {
+          "path": "experiments/raw-blobs/20261030T021326156242Z-q32-k-lookahead-component/0006.part",
+          "offset": 1572864,
+          "bytes": 69235,
+          "sha256": "07b942f7e6b0b14f8309ef3a9f15541dda16f78dee29a129eb8020036a6e354b"
+        }
+      ]
+    }
+  },
+  "limits": "恢复包以256KiB原字节分块；组件/编译结论严格按独立审阅，不外推为官方成绩、准确率或新基线。"
+}

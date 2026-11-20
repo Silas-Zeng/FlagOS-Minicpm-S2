@@ -1,0 +1,70 @@
+--- 已测组件owner
++++ 单核硬件计数owner
+@@ -11,6 +11,8 @@
+ import subprocess
+ import sys
+ import traceback
++import time
++import lifecycle
+ 
+ HERE = Path(__file__).resolve().parent
+ ROOT = Path("/workspace/experiments/minicpm-s2")
+@@ -51,7 +53,7 @@
+     native = args.native_library.resolve(strict=True)
+     source_before = source_identity.check(source, native)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-gqa-four-page-t64-" + args.shape + "-component")
++    run = ROOT / "profiles" / (stamp + "-gqa-one-kernel-counters")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+@@ -92,6 +94,11 @@
+              "OMP_NUM_THREADS", "MKL_NUM_THREADS", "USE_FLAGGEMS", "USE_FLAGTUNE", "TRITON_CACHE_DIR",
+              "CUDA_VISIBLE_DEVICES", "IX_VISIBLE_DEVICES", "COREX_VISIBLE_DEVICES")}
+         command = [sys.executable, str(assets / "entry.py"), "--worker", "--run-dir", str(run), "--model", str(args.model), "--shape", args.shape]
++        command = ["/usr/local/corex/bin/ixkn-cli", "--section", "SpeedOfLight,ComputeWorkload,Memory",
++            "--kernel-name", "_gqa_decode_attention", "--launch-skip", "0",
++            "--launch-count", "1", "--kill", "off", "--replay-mode", "kernel",
++            "--export-profile", str(run / "gqa-baseline"), *command]
++        state["purpose"] = "单个原baseline gqa launch硬件计数；本run全部timing禁止作为收益或基线"
+         state["worker_command"] = command
+         with (run / "worker.log").open("x") as log:
+             child = subprocess.Popen(command, env=env, stdout=log, stderr=subprocess.STDOUT,
+@@ -121,7 +128,36 @@
+                 except BaseException:
+                     state["cleanup_error"] = traceback.format_exc()
+                     status = 1
+-        if copied_db:
++        # ixkn 可能先于 worker 退出；检查所属会话，不以 wrapper returncode 代替。
++        groups_clear = True
++        if child is not None:
++            try:
++                for sig in (signal.SIGTERM, signal.SIGKILL):
++                    group = lifecycle.owned_group(child.pid)
++                    if group["errors"]:
++                        raise RuntimeError("无法确认所属进程组")
++                    alive = [m for m in group["members"] if m["state"] != "Z"]
++                    if not alive:
++                        break
++                    for pgid in {m["pgrp"] for m in alive}:
++                        try:
++                            os.killpg(pgid, sig)
++                        except ProcessLookupError:
++                            pass
++                    deadline = time.monotonic() + 5
++                    while time.monotonic() < deadline:
++                        group = lifecycle.owned_group(child.pid)
++                        if group["errors"] or not any(m["state"] != "Z" for m in group["members"]):
++                            break
++                        time.sleep(.2)
++                state["profile_process_group"] = lifecycle.owned_group(child.pid)
++                if (state["profile_process_group"]["errors"] or
++                        any(m["state"] != "Z" for m in state["profile_process_group"]["members"])):
++                    raise RuntimeError("profiler所属子进程未退出，不恢复DB")
++            except BaseException:
++                state["profile_cleanup_error"] = traceback.format_exc()
++                groups_clear, status = False, 1
++        if copied_db and groups_clear:
+             try:
+                 if child is not None and child.poll() is None:
+                     raise RuntimeError("自有 worker 尚未退出，不覆盖它可能正在使用的 DB")

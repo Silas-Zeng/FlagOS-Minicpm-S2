@@ -1,67 +1,33 @@
-# 当前工作与接续入口
+# 当前实验与接续
 
-更新：2026-10-24（北京时间）。当前主线为含队友 PR24 的 `1ad9a708`；移植短验、CPU抢占观察和GPU恢复窗口均已结束并回收。目标Attention的局部计算预算支持下一步KV SAVE/FULL最短正确性验证，尚未证明新端到端收益。受测有收益的方法按用户授权提交并合并 PR。
+**2026-11-20 天数 BI-V150 最终主干准确率。** 官方 MATH-500 Level 3 答对 101/105 题，准确率 96.19%，通过比赛 95% 门槛。105 题均完成评分，0 个请求错误。 框架 `6220924c` 和 FlagGems `bda4a2e0` 均从完整 Git 检出构建。[官方报告](experiments/accuracy/20261120T082740Z-final-main-accuracy/math_500.json) · [逐题核对](experiments/accuracy/20261120T082740Z-final-main-accuracy/verdict.json) · [首次归档安装的记录](team/runs/bi-v150/20261120T082459Z-final-main-accuracy.md)。
 
-- 首次探针误拒绝原生 `@managed_inference_mode` wrapper，smoke HTTP500、正式32请求未发；[失败原件](experiments/framework/20261024T113346Z-pr24-resume-native-context16k-long-control/state.json)保留。修正后的114500轮32成功，native窗口valid；目标Attention恰168次（4×42）、1018.292405ms。P无需重排但原owner要求FIRST标记，原exit1保留；采样子进程退出后已重新持锁复核空闲并恢复DB，见[恢复凭据](experiments/framework/20261024T114500Z-pr24-resume-native-v2-context16k-long-control/cleanup-recovery.json)。
-- 该profile的KV546528低于无profiler547600；M457冷调优污染MM和总窗口，native MLP的逐请求设备路径也未由轨迹单独证明。因此只用明确归属的目标Attention筛选候选，见[完整分析](analysis/pr24-resume-native-v2-114500.json)和[汇总结论](analysis/pr24-kv-diagnostic.json)。
+当前有效BI-V150基线为[框架PR105](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/105)，merge `1cbac531ca9afaa0e9a68624d5d10cb1d0412055`。已完成原官方4K／16K各四轮与原105；源码实际启用原S2/S4 V等待重叠，不含mixed扩范围负候选。
 
-- 本实例 native SO 9项数值/Graph检查通过；16K/128 ×32请求全成功，P在ready后命中、Q无回退，KV547600。见[移植摘要](experiments/framework/20261024T105037Z-pr24-main-context16k-control/summary.json)。
-- 16K/1024 ×32请求全成功、1次抢占；准入时APC11536，随后3段重新提交，重叠旧CPU已提交前缀5446。M1441确有新调优，不能把CPU的6.265秒当GPU收益。见[诊断结论](analysis/pr24-kv-diagnostic.json)及[DB差异](analysis/pr24-resume-db-comparison.json)。
-- 该观察driver退出0；owner因monitor sleep短暂未退出而退出1，后续复核其已退出并恢复原DB，原失败与[恢复凭据](experiments/framework/20261024T110545Z-current-main-pr24-resume-cpu-context16k-long-control/cleanup-recovery.json)均保留。
-- 下一步仅迁移已有KV SAVE/FULL到当前组合并做一次VERIFY1；通过后才做关闭profiler的可比基线/候选对照，不重复采样或旧套件。已完成结果通过[实验PR #4](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/pull/4)批量同步；框架优化仍按方法独立PR。
+| 结果 | 已有证据及限制 |
+|---|---|
+| 4K暖均6627.816667 | 1024成功，同KV548336／DB；对PR92单组观察+2.261763% |
+| 16K暖均4832.66 | 512成功，同KV548288／DB；对PR92单组观察+0.128735% |
+| 原105为103/105 | 95%门通过，零请求错误／截断／空；GQA两个shape启动capture有效，非逐题覆盖；通用stack缺compute_order marker的pending与旧105相同 |
+| Q32 GPU metadata接线 | 091802实编通过；094028 pure2048的14硬门通过但Event慢9.30069%，wall省8.92290%；原FP64诊断两臂false且误差一致。按冻结Event筛选停止，mixed未测，无生产资格 |
+| Q64两个Q32 cohort共享KV | CPU64KiB／83SGPR／107VGPR／0spill；长输入位型/FP64/Graph/side与Q33八门通过，完整Event6.880203ms；对原Q32慢4.862870%、对旧双槽慢7.479299%，停止，无模型/官方资格 |
+| 原生GQA下一页16KiB双槽 | 102147完整窗口门NO-GO保留；后按部分next-K新假设测114531，原九门通过，Event慢4.116242%，停止，不扩S4 |
+| Q32真实长metadata | Q2047/KV16384完整forward Event省2.609776%，20门与两组原FP64通过，仅长组件资格 |
+| Q64 direct AND与真实长metadata | 标量组件对原省4.772124%／对双槽省2.421318%；真实metadata两B快于较快A，均值省7.015632%但A2漂移，只保留组件正信号；生产实际启用后125913官方首暖未通过，未获模型准确率或完整官方资格 |
+| 16K上下文诊断首次启动 | source-manifest整文件SHA绑定失败，服务/GPU启动前停止；13原件保留，无官方成绩 |
+| GQA逻辑T32 | 两页共同softmax属新数学顺序，115612实际编译16KiB／80SGPR／80VGPR／0spill；120451原九数值门通过，Event慢3.752166%，停止 |
+| Q64真实mixed边界 | 61 decode+1987 prefill、context7948，20门/FP64/位型通过；Event省2.380581%、wall慢0.367369%，仅旧c75/f720组件证据 |
+| 16K覆盖诊断v2 | 128请求成功，worker导出缺失，RAM观察不可恢复；覆盖诊断失败，不作为官方成绩、不重跑整轮 |
+| T32复用8KiB | 121814实际64SGPR／80VGPR／0spill；123106新生命周期原九门全过，Event省0.221958%、wall省0.287814%，不称稳定或官方收益；实际包bfff519b |
+| Q64生产16K官方两轮 | 125913首冷4041.81／首暖4819.11，256成功；对4834.45观察−0.317306%，按规则停止。KV548432≠548288，不称严格因果/稳定退化；未满四轮/准确率，不合并 |
+| 生产离线成品与T64 CPU | 124728 Q64 SOc157a26a；125302 T32 SO502e1570；132607 T64 16KiB／88SGPR／88VGPR／0spill，当次仅编译资格，后续T64组件见下行 |
+| T32复用4K官方两轮 | 132807首冷5491.63／首暖6412.53，512成功；对6441.35观察−0.447422%，按门停止。KV548432≠548336，不称严格因果/稳定退化；未满四轮/16K/准确率，不合并 |
+| T64四页复用组件 | 134552原九case、六双臂FP64、三非有限与Graph/尾/side通过；ABBA Event慢2.809061%、wall慢2.675528%，恢复正常，停止，不进模型 |
+| premax vote CPU编译 | 134934当次仅8KiB／64SGPR／76VGPR／0spill，无GPU资格；后续组件见下行 |
+| premax vote组件 | 141255共12case、有限output/partial硬逐位、FP64/Graph/边界通过；Event近持平慢0.001408%、wall省0.084431%，按Event门停止，不进生产/官方 |
+| Q32 direct-Q v2及组合 | 150532 pure2048与153450 mixed/long组件Event正向，但mixed wall慢1.110675%，均非官方收益；155444组合CPU编译审阅只批准一次pure组件A/B，无数值/生产资格。160148官方4K完整1024请求，弃首均6537.81，对PR105 6627.816667观察−1.358014%；KV548432≠548336，不作严格因果，按完整负结果停止direct-Q，不跑16K/105、不改基线 |
+| direct-Q＋grouped pure组合162319 | Event A/B .519592→.550852ms（慢6.0163%），wall省8.4983%但B两次波动较大；按Event负信号停止，raw顶层numerical_component_passed=false为earlyreturn未赋值，18硬门实际全过，不能称数值失败；98项原件及原包SHA已回收核验，终态审阅与登记完成。PR107 K8格式不兼容，不组合 |
 
-## 上阶段官方受测基线
+总443条／440个唯一run。本批覆盖12个run原件（含此前已登记的141255），98项原件与终态审阅已核验；累计964个原manifest成员。160148完整4K四轮为负，162319组件按Event门停止；不跑16K/105、不改PR105基线。
 
-组合：队友 main + PR15 computed H2D + PR21 计算顺序 + Q fragment lifetime。
-
-- 框架 PR22（PR15+PR21 兼容组合）已合并。
-- 框架 PR23（Q fragment）已合并。
-- 对应阶段的 main merge commit：`1ea082f79db65a66f78fdd7b1d958335450fa9f4`。
-- 实际受测运行时 commit：`4c57567d090bbb9aec1bbc2bef7847d3b4e5695a`。
-- 运行时 tree：`dd0554f3895d7ddf0691926ecd860ee1d6b3cd6c`。
-- 方法说明：[Q fragment](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/blob/main/docs/07-prefill-q-fragment-biv150.md)；聚合证据：[qfragment-pr15-pr21-final.json](analysis/qfragment-pr15-pr21-final.json)。
-
-## 上阶段性能与准确率
-
-原官方 4K/16K 各 4 轮，跳过首轮并使用第 2–4 轮均值：
-
-| 负载 | PR15+PR21 | +Q fragment | 变化 | 比赛初始基线 |
-|---|---:|---:|---:|---:|
-| 4K | 5118.99 tok/s | **5313.59 tok/s** | **+3.80%** | 1905.46（累计 +178.86%） |
-| 16K | 3436.17 tok/s | **3764.67 tok/s** | **+9.56%** | 861.99（累计 +336.74%） |
-
-- 官方 1536 请求全部成功，两档各 4 轮验证完整。
-- Math500 Level 3：`100/105 = 95.24%`，达到 `>=100/105` 门。
-- 105 请求成功，0 transport error，0 空最终答案；2 题达到输出上限（index 83、101）。
-
-原始证据：
-
-- [官方吞吐](experiments/official/20261024T061556Z-pr15-pr21-qfragment-official)
-- [完整准确率](experiments/accuracy/20261024T071802Z-pr15-pr21-qfragment)
-
-## Q fragment 实际选中
-
-官方和准确率服务均出现 `BIV150_Q_FRAGMENT_SELECTED`，fallback 为 0。
-
-- Q `ttg.local_load` 位于唯一 K 循环外。
-- LLVM Q shared read 共 32 次，循环内 0 次。
-- normal/candidate shared memory：`65536 / 32768` bytes。
-- 方法默认由提交代码启用，不依赖环境变量或外部 IR artifact；不匹配时返回已编译 normal kernel。
-- normalized clone 首次未满足旧 C2/源码行假设时保留为非性能失败；修复后短诊断先出现真实选中，再进入官方测试。详见[适配记录](analysis/qfragment-adaptation.json)。
-
-## 上阶段结果边界
-
-- 两次官方吞吐使用相同起始 DB 种子 `1907e03…`，但候选 KV 为 `521840`，PR15+PR21 旧基线为 `521936`。这是实际组合的保守绝对对照，不包装成严格等 KV 的单项因果拆分。
-- 仅验证天数 BI-V150；沐曦曦云 C500 未验证，不能复制 BI-V150 成绩。
-- 准确率为单次随机 105 题评测，不解释为精度提升或稳定等价证明。
-- 不修改模型、精度、量化、投机采样、benchmark 或官方 serve 参数。
-- CJJ 的 #17–#20 未合入。
-
-## 上阶段设备与仓库（历史）
-
-- BI-V150 实验结束：GPU `68 MiB / 0%`、9031 关闭、无模型/benchmark/Engine 进程。
-- 标准 tuning DB 已恢复为 `207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378`。
-- 框架 main 已包含 PR22、PR23；FlagGems 本阶段无算子库内代码改动。
-- 实验记录通过 PR #2 批量同步；`experiments/registry.csv` 为唯一登记源，`scripts/build_team_view.py` 生成团队视图。
-
-后续运行状态以上方当前接续入口为准。新方法沿用 `codex/` 分支和独立 PR，不重复已验证且未变的代码测试。
+沿[实验总表](team/experiments.md)、[原生GQA](team/methods/corex-native-gqa-page16.md)、[Q32](team/methods/native-q32-transfer.md)查阅短记与原始证据。设备排期由主线统一安排。

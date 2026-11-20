@@ -1,0 +1,20 @@
+{
+  "status": "CPU_ONLY_NOT_GPU_QUALIFIED",
+  "rows_default": 32,
+  "rows_explicit_alternative": 2048,
+  "auto_next_shape": false,
+  "baseline": "真实原opaque→F.linear/默认FlagGems，独立捕获本M实际配置，不借M64tile",
+  "layout": [
+    16,
+    6144,
+    128
+  ],
+  "layout_same_as_positive_M64": true,
+  "candidate_config": "原BM/BK/warps/stages/SPLIT1保持；BN<=128保持，原BN256才显式变128，不扫描",
+  "independent_input_allocation": true,
+  "strict_original_8_numerical_gates": true,
+  "performance": "单M唯一ABBA；负即停，不自动其它M/权重环/模型",
+  "ownership": "原owner DB锁/恢复/清理不变，只加rows CLI/运行名/worker转发",
+  "single_weight_production_qualified": false,
+  "original_W_and_P_both_present": true
+}

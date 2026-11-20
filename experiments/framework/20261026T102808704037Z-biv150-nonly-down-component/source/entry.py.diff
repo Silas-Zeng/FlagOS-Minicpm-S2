@@ -1,0 +1,20 @@
+--- old-negative/entry.py
++++ nonly/entry.py
+@@ -44,7 +44,7 @@
+         if sha(HERE / name) != expected:
+             raise RuntimeError("入口资产变化：" + name)
+     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+-    run = ROOT / "framework" / (stamp + "-biv150-packed-down-component")
++    run = ROOT / "framework" / (stamp + "-biv150-nonly-down-component")
+     run.mkdir(exist_ok=False)
+     assets = run / "source"
+     assets.mkdir()
+@@ -53,7 +53,7 @@
+         shutil.copyfile(HERE / name, assets / name)
+     shutil.copyfile(HERE / "asset-pins.json", assets / "asset-pins.json")
+     state = dict(started_utc=stamp, owner_pid=os.getpid(),
+-        scope="BF16 down唯一无损pack格式，真实opaque F.linear同配置完整对照；非官方成绩", run=str(run),
++        scope="BF16 down N128唯一无损格式，真实M64 opaque F.linear固定配置完整对照；非官方成绩", run=str(run),
+         command=[sys.executable, *sys.argv], owned_processes=[], exit_code=1)
+     save(run / "manifest.json", state)
+     lock = child = monitor = None

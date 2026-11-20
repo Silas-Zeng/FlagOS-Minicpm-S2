@@ -1,0 +1,35 @@
+--- R32-original-epilogue/factory.py
++++ R32-BN256/factory.py
+@@ -33,14 +33,18 @@
+     return module
+ 
+ 
+-def launch(candidate,record,x,w,temp,out):
++def launch(candidate,record,x,w,temp,out,*,wide=False):
+     assert tuple(x.shape)==(32,2048) and tuple(w.shape)==(130560,2048)
+     assert tuple(out.shape)==(32,130560) and tuple(temp.shape)==(32,)
+     assert x.is_contiguous() and w.is_contiguous() and out.is_contiguous() and temp.is_contiguous()
+     args=list(record['args']);args[:4]=[x,w,w,out]
+     args.append(temp)
+     options=dict(record['constants']);options.update(record['kwargs'])
+-    return candidate.head_temperature_kernel[record['grid']](*args,**options)
++    grid=record['grid']
++    if wide:
++        options['BLOCK_N']=256
++        grid=(510,1)
++    return candidate.head_temperature_kernel[grid](*args,**options)
+ 
+ 
+ class PreScaledSampler:
+@@ -68,3 +72,11 @@
+             assert self.pending is None,'原Sampler未消费已完成temperature'
+             return result
+         finally:self.pending=self.temperature=None
++
++
++def qualify_original_record(record):
++    """真实F.linear身份先闭合；不能按较弱手工配置替代A。"""
++    expected=dict(BLOCK_M=32,BLOCK_N=64,BLOCK_K=64,num_warps=8,num_stages=1,num_ctas=1,EVEN_K=True)
++    assert all(record['constants'].get(k)==v for k,v in expected.items()),'当前原head已换配置，停止本固定差分'
++    assert record['kwargs']==dict(BIAS=False,GROUP_M=8,SPLIT_K=1)
++    assert tuple(record['grid'])==(2040,1)

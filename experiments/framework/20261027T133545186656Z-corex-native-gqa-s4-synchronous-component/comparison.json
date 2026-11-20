@@ -1,0 +1,96 @@
+{
+  "run_id": "20261027T133545186656Z-corex-native-gqa-s4-synchronous-component",
+  "status": "corex_native_gqa_s4_real_stride_positive",
+  "all_checks_passed": true,
+  "checks": 9,
+  "metrics": {
+    "event": {
+      "baseline_ms": 1.0296220779418945,
+      "candidate_ms": 0.8014127314090729,
+      "fraction_saved": 0.22164379671130208
+    },
+    "wall": {
+      "baseline_ms": 1.0361306250000002,
+      "candidate_ms": 0.8066918750000001,
+      "fraction_saved": 0.22143805468543132
+    }
+  },
+  "timing_shape": {
+    "seq_lens": [
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384,
+      16384
+    ],
+    "N": 32,
+    "S": 4,
+    "actual_KV": 16384,
+    "cache_capacity": 16384,
+    "origin": "固定16K组件完整producer+reducer判别；合成输入，非官方成绩"
+  },
+  "query_stride": [
+    2560,
+    128,
+    1
+  ],
+  "original_result_sha256": "71cc6895e8afeee0ef64a7b42c087727820fa6d3904cc04d477afce3c4846fdc",
+  "source_sha256": {
+    "baseline": "2596cc09caf9b5b38b49755ae9af41ebdcf59a1d5ad889fc8e9319d1584438d1",
+    "candidate": "bb9bde970bcdd710bbdfe180e3711af069977d5815897538a62c358d84d28820"
+  },
+  "native_build": {
+    "library_sha256": "9f31674468793c318d4d1a5e0842c6126e3be4890f557caa8886562b59e0da7a",
+    "actual_cuda_command": "/usr/local/corex/bin/clang++  -DTORCH_EXTENSION_NAME=corex_native_gqa_s4_probe -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.12/site-packages/torch/include -isystem /usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/corex/include -isystem /usr/local/include/python3.12 -D_GLIBCXX_USE_CXX11_ABI=0 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__ILUVATAR__ -D__ILUVATAR_WORKAROUND__ -D__ILUVATAR_DIAG__ -cl-single-precision-constant -fPIC -mllvm --bonus-inst-threshold=0 -mllvm --skip-double -fclang-abi-compat=16 -D__MR__ -O3 -std=c++17 -D__ILUVATAR__ -D__MR__ -DCOREX_NATIVE_GQA_V_OVERLAP=0 -x ivcore --cuda-gpu-arch=ivcore11 --cuda-path=/usr/local/corex -c /workspace/experiments/minicpm-s2/framework/20261027T133545186656Z-corex-native-gqa-s4-synchronous-component/source/gqa_s4_draft.cu -o gqa_s4_draft.cuda.o ",
+    "flags": [
+      "-O3",
+      "-std=c++17",
+      "-D__ILUVATAR__",
+      "-D__MR__",
+      "-DCOREX_NATIVE_GQA_V_OVERLAP=0",
+      "-x",
+      "ivcore",
+      "--cuda-gpu-arch=ivcore11",
+      "--cuda-path=/usr/local/corex"
+    ],
+    "resources_scope": "此处candidate资源只读独立CPU probe；实际extension仅保存命令与二进制SHA，未反汇编.so，不迁移资源精确身份"
+  },
+  "official_qualified": false,
+  "model_accuracy_qualified": false,
+  "conclusion": "真实QKV行距2560的N32/S4/KV16384完整producer＋原reducer Graph ABBA：Event1.029622→0.801413ms（省22.1644%），wall省22.1438%。9组数值/FP64/完整partial逐位/Graph/尾槽NaN/空段/输入RNG及前后extra512守卫全部通过。v2仅修原zero_忽略非连续行距的测试构造，CU/bridge/容差/ABBA保持；旧失败与隔离诊断另存。writer仅准备一次，不计时；这是组件正信号，非官方吞吐或模型准确率。保留并进入生产验证。",
+  "raw_files": 129,
+  "cleanup": {
+    "exit_code": 0,
+    "finished_utc": "2026-10-27T13:36:29.787412+00:00",
+    "database_restored": true,
+    "source_unchanged": true,
+    "native_unchanged": true
+  }
+}

@@ -1,0 +1,350 @@
+{
+  "status": "completed",
+  "shape": [
+    2048,
+    2048,
+    6144
+  ],
+  "baseline": {
+    "BLOCK_M": 256,
+    "BLOCK_N": 128,
+    "BLOCK_K": 32,
+    "SPLIT_K": 1,
+    "GROUP_M": 8,
+    "EVEN_K": true,
+    "UPGRADE": false,
+    "UPGRADE_A_OFFS": false,
+    "UPGRADE_B_OFFS": false,
+    "UPGRADE_C_OFFS": false,
+    "num_warps": 8,
+    "num_stages": 2
+  },
+  "base_commit": "6971ef48615af97a1637405c71f96dd89969563e",
+  "seed": 20261026,
+  "cases": [
+    {
+      "label": "wide256",
+      "rows": 2048,
+      "finite": true,
+      "max_abs_vs_fp64": 0.0009083964769160957,
+      "max_abs_vs_baseline": 0.0,
+      "relative_l2_vs_baseline": 0.0,
+      "passed": true,
+      "case": "original"
+    },
+    {
+      "label": "wide256",
+      "rows": 2030,
+      "finite": true,
+      "max_abs_vs_fp64": 0.0009083964769160957,
+      "max_abs_vs_baseline": 0.0,
+      "relative_l2_vs_baseline": 0.0,
+      "passed": true,
+      "case": "original"
+    },
+    {
+      "label": "wide256",
+      "rows": 2048,
+      "finite": true,
+      "max_abs_vs_fp64": 0.0008281951868411852,
+      "max_abs_vs_baseline": 0.0,
+      "relative_l2_vs_baseline": 0.0,
+      "passed": true,
+      "case": "changed-pointers"
+    },
+    {
+      "label": "wide256",
+      "rows": 2030,
+      "finite": true,
+      "max_abs_vs_fp64": 0.0008281951868411852,
+      "max_abs_vs_baseline": 0.0,
+      "relative_l2_vs_baseline": 0.0,
+      "passed": true,
+      "case": "changed-pointers"
+    },
+    {
+      "label": "wide256",
+      "rows": 2048,
+      "finite": true,
+      "max_abs_vs_fp64": 0.0008281951868411852,
+      "max_abs_vs_baseline": 0.0,
+      "relative_l2_vs_baseline": 0.0,
+      "passed": true,
+      "case": "same-address-changed-poisoned-graph"
+    }
+  ],
+  "scope": "独立BF16 down GEMM组件；原模型权重，非整模型或官方性能资格",
+  "limitations": [
+    "BM256/BN256/BK32/w16/s2，同原BK/loop/无mask读取，扩大N复用A tile；理论panel请求减少，实际shared增加至64KiB。",
+    "warm单权重组件不代表42层工作集；组件正向后才测试完整工作集。",
+    "CPU FP64仅抽样，完整输出同时对原JIT比较；无新量化、split-K或库路由。"
+  ],
+  "environment": {
+    "torch": "2.10.0",
+    "triton": "3.6.0",
+    "gpu": "Iluvatar BI-V150",
+    "sm": 16,
+    "properties": "_CudaDeviceProperties(name='Iluvatar BI-V150', major=7, minor=1, total_memory=32768MB, multi_processor_count=16, uuid=b18272be-ac3a-5ec1-80d8-eed9d1d1b3ab, pci_bus_id=22, pci_device_id=0, pci_domain_id=0, L2_cache_size=16MB)",
+    "cpu_threads": 4
+  },
+  "candidate_configs": {
+    "wide256": {
+      "BM": 256,
+      "BN": 256,
+      "BK": 32,
+      "num_warps": 16,
+      "num_stages": 2
+    }
+  },
+  "weight": {
+    "name": "model.layers.0.mlp.down_proj.weight",
+    "shard": "model-00000-of-00001.safetensors",
+    "sha256": "1a6e6d547d5f0ffd08fd020690ccf75323ba4dd54181617e406a84f644cee501"
+  },
+  "resources": {
+    "baseline": {
+      "hash": "ada3d4e1b649856928be22b583adfcd495ce1c1a0b2f07d15bb193b3485b4893",
+      "n_regs": 97,
+      "n_spills": 0,
+      "metadata": "KernelMetadata(allowed_dot_input_precisions=['tf32', 'tf32x3', 'ieee', 'bf16x3', 'bf16x6'], arch='sm71', backend_name='corex', debug=False, default_dot_input_precision='tf32', deprecated_fp8_dot_operand_dtypes=[], enable_fp_fusion=True, enable_reflect_ftz=True, extern_libs=[['libdevice', '/usr/local/corex-4.5.0/nvvm/libdevice/libdevice.compute_bi.10.bc']], global_scratch_align=1, global_scratch_size=0, hash='ada3d4e1b649856928be22b583adfcd495ce1c1a0b2f07d15bb193b3485b4893', instrumentation_mode='', ir_override=None, launch_cooperative_grid=False, launch_pdl=False, max_num_imprecise_acc_default=0, maxnreg=None, name='mm_kernel', num_ctas=1, num_stages=2, num_warps=8, profile_scratch_align=1, profile_scratch_size=0, ptx_options=None, ptx_version=None, sanitize_overflow=True, shared=49152, supported_fp8_dtypes=['fp8e4nv', 'fp8e5'], target=GPUTarget(backend='corex', arch=71, warp_size=64), tensordesc_meta=[], tmem_size=None, triton_version='3.6.0', use_sme=7, warp_size=64)"
+    },
+    "wide256": {
+      "hash": "d9359b6a9cac2a9a67b967c9f30602d5fbce1d0961648b58b214ceda84eba67c",
+      "n_regs": 83,
+      "n_spills": 0,
+      "metadata": "KernelMetadata(allowed_dot_input_precisions=['tf32', 'tf32x3', 'ieee', 'bf16x3', 'bf16x6'], arch='sm71', backend_name='corex', debug=False, default_dot_input_precision='tf32', deprecated_fp8_dot_operand_dtypes=[], enable_fp_fusion=True, enable_reflect_ftz=True, extern_libs=[['libdevice', '/usr/local/corex-4.5.0/nvvm/libdevice/libdevice.compute_bi.10.bc']], global_scratch_align=1, global_scratch_size=0, hash='d9359b6a9cac2a9a67b967c9f30602d5fbce1d0961648b58b214ceda84eba67c', instrumentation_mode='', ir_override=None, launch_cooperative_grid=False, launch_pdl=False, max_num_imprecise_acc_default=0, maxnreg=None, name='down_gemm', num_ctas=1, num_stages=2, num_warps=16, profile_scratch_align=1, profile_scratch_size=0, ptx_options=None, ptx_version=None, sanitize_overflow=True, shared=65536, supported_fp8_dtypes=['fp8e4nv', 'fp8e5'], target=GPUTarget(backend='corex', arch=71, warp_size=64), tensordesc_meta=[], tmem_size=None, triton_version='3.6.0', use_sme=7, warp_size=64)"
+    }
+  },
+  "rng_unchanged": true,
+  "guards_unchanged": true,
+  "timings": [
+    {
+      "calls": 8,
+      "wall_total_ms": 46.5416,
+      "wall_per_call_ms": 5.8177,
+      "event_total_ms": 46.376068115234375,
+      "event_per_call_ms": 5.797008514404297,
+      "submit_thread_cpu_ns": 75280,
+      "submit_process_cpu_ns": 73457,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 893626\nnr_throttled 4507\nthrottled_time 17797065395919",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 893626,
+          "nr_throttled": 4507,
+          "throttled_time": 17797065395919
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 893627\nnr_throttled 4507\nthrottled_time 17797065395919",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 893627,
+          "nr_throttled": 4507,
+          "throttled_time": 17797065395919
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 1,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "baseline",
+      "gemms_per_replay": 8,
+      "event_per_gemm_ms": 0.7246260643005371,
+      "wall_per_gemm_ms": 0.7272125
+    },
+    {
+      "calls": 8,
+      "wall_total_ms": 35.212991,
+      "wall_per_call_ms": 4.401623875,
+      "event_total_ms": 35.11412048339844,
+      "event_per_call_ms": 4.389265060424805,
+      "submit_thread_cpu_ns": 69881,
+      "submit_process_cpu_ns": 77525,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 893627\nnr_throttled 4507\nthrottled_time 17797065395919",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 893627,
+          "nr_throttled": 4507,
+          "throttled_time": 17797065395919
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 893627\nnr_throttled 4507\nthrottled_time 17797065395919",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 893627,
+          "nr_throttled": 4507,
+          "throttled_time": 17797065395919
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 0,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "wide256",
+      "gemms_per_replay": 8,
+      "event_per_gemm_ms": 0.5486581325531006,
+      "wall_per_gemm_ms": 0.550202984375
+    },
+    {
+      "calls": 8,
+      "wall_total_ms": 35.210305,
+      "wall_per_call_ms": 4.401288125,
+      "event_total_ms": 35.13872146606445,
+      "event_per_call_ms": 4.392340183258057,
+      "submit_thread_cpu_ns": 67583,
+      "submit_process_cpu_ns": 67600,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 893627\nnr_throttled 4507\nthrottled_time 17797065395919",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 893627,
+          "nr_throttled": 4507,
+          "throttled_time": 17797065395919
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 893628\nnr_throttled 4507\nthrottled_time 17797065395919",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 893628,
+          "nr_throttled": 4507,
+          "throttled_time": 17797065395919
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 1,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "wide256",
+      "gemms_per_replay": 8,
+      "event_per_gemm_ms": 0.5490425229072571,
+      "wall_per_gemm_ms": 0.550161015625
+    },
+    {
+      "calls": 8,
+      "wall_total_ms": 46.545634,
+      "wall_per_call_ms": 5.81820425,
+      "event_total_ms": 46.47648620605469,
+      "event_per_call_ms": 5.809560775756836,
+      "submit_thread_cpu_ns": 63462,
+      "submit_process_cpu_ns": 63572,
+      "cpu_stat_before": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 893628\nnr_throttled 4507\nthrottled_time 17797065395919",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 893628,
+          "nr_throttled": 4507,
+          "throttled_time": 17797065395919
+        }
+      },
+      "cpu_stat_after": {
+        "paths": {
+          "stat": "/sys/fs/cgroup/cpu/cpu.stat",
+          "quota": "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+          "period": "/sys/fs/cgroup/cpu/cpu.cfs_period_us"
+        },
+        "raw": {
+          "stat": "nr_periods 893628\nnr_throttled 4507\nthrottled_time 17797065395919",
+          "quota": "600000",
+          "period": "100000"
+        },
+        "counters": {
+          "nr_periods": 893628,
+          "nr_throttled": 4507,
+          "throttled_time": 17797065395919
+        }
+      },
+      "cpu_stat_delta": {
+        "nr_periods": 0,
+        "nr_throttled": 0,
+        "throttled_time": 0
+      },
+      "arm": "baseline",
+      "gemms_per_replay": 8,
+      "event_per_gemm_ms": 0.7261950969696045,
+      "wall_per_gemm_ms": 0.72727553125
+    }
+  ],
+  "event_mean_ms": {
+    "baseline": 0.7254105806350708,
+    "wide256": 0.5488503277301788
+  },
+  "wall_mean_ms": {
+    "baseline": 0.727244015625,
+    "wide256": 0.550182
+  },
+  "post_timing_finite": true,
+  "post_timing_checks": [
+    {
+      "label": "wide256",
+      "rows": 2048,
+      "finite": true,
+      "max_abs_vs_fp64": 0.0008281951868411852,
+      "max_abs_vs_baseline": 0.0,
+      "relative_l2_vs_baseline": 0.0,
+      "passed": true
+    }
+  ]
+}

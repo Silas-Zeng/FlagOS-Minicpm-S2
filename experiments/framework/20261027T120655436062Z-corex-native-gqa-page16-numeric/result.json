@@ -1,0 +1,230 @@
+{
+  "status": "failed_stop",
+  "cases": [
+    {
+      "label": "normal_page2",
+      "raw_shared_bitwise": true,
+      "probability_fp32_bitwise": true,
+      "probability_bf16_bitwise": true,
+      "partial_acc_bitwise": true,
+      "max_natural_bitwise": true,
+      "sum_bitwise": true,
+      "finite": true,
+      "query_unchanged": true,
+      "cache_unchanged": true,
+      "table_unchanged": true,
+      "cpu_rng_unchanged": true,
+      "gpu_rng_unchanged": true
+    },
+    {
+      "label": "changed_Q_KV_page1",
+      "raw_shared_bitwise": true,
+      "probability_fp32_bitwise": true,
+      "probability_bf16_bitwise": true,
+      "partial_acc_bitwise": true,
+      "max_natural_bitwise": true,
+      "sum_bitwise": true,
+      "finite": true,
+      "query_unchanged": true,
+      "cache_unchanged": true,
+      "table_unchanged": true,
+      "cpu_rng_unchanged": true,
+      "gpu_rng_unchanged": true
+    },
+    {
+      "label": "zero_Q",
+      "raw_shared_bitwise": true,
+      "probability_fp32_bitwise": true,
+      "probability_bf16_bitwise": true,
+      "partial_acc_bitwise": true,
+      "max_natural_bitwise": true,
+      "sum_bitwise": true,
+      "finite": true,
+      "query_unchanged": true,
+      "cache_unchanged": true,
+      "table_unchanged": true,
+      "cpu_rng_unchanged": true,
+      "gpu_rng_unchanged": true
+    },
+    {
+      "label": "underflow_P",
+      "raw_shared_bitwise": true,
+      "probability_fp32_bitwise": true,
+      "probability_bf16_bitwise": true,
+      "partial_acc_bitwise": true,
+      "max_natural_bitwise": true,
+      "sum_bitwise": true,
+      "finite": true,
+      "query_unchanged": true,
+      "cache_unchanged": true,
+      "table_unchanged": true,
+      "cpu_rng_unchanged": true,
+      "gpu_rng_unchanged": true,
+      "underflow_input_covered": false
+    }
+  ],
+  "timings": [],
+  "kind": "native_single_page_numeric",
+  "performance_qualified": false,
+  "official_qualified": false,
+  "model_accuracy_qualified": false,
+  "cpu_layout": {
+    "original_Q_store_load_inverse": true,
+    "Q_native_fragments": 512,
+    "Q_packed_words": 1024,
+    "K_shared_bijection_2048": true,
+    "V_shared_bijection_2048": true,
+    "original_P_shuffle_equals_native_row_pair": true
+  },
+  "library_sha256": "47d1b81172e56bfae5ae06c56bb4ffde457e65a1baae7ae566f5682bcc566d05",
+  "actual_cuda_command": "/usr/local/corex/bin/clang++  -DTORCH_EXTENSION_NAME=corex_native_page16_probe -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.12/site-packages/torch/include -isystem /usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/corex/include -isystem /usr/local/include/python3.12 -D_GLIBCXX_USE_CXX11_ABI=0 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__ILUVATAR__ -D__ILUVATAR_WORKAROUND__ -D__ILUVATAR_DIAG__ -cl-single-precision-constant -fPIC -mllvm --bonus-inst-threshold=0 -mllvm --skip-double -fclang-abi-compat=16 -D__MR__ -O3 -std=c++17 -D__ILUVATAR__ -D__MR__ -x ivcore --cuda-gpu-arch=ivcore11 --cuda-path=/usr/local/corex -c /workspace/experiments/minicpm-s2/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/source/page16.cu -o page16.cuda.o ",
+  "cuda_compile_flags_match": true,
+  "last_raw_shared": {
+    "label": "underflow_P",
+    "passed": true,
+    "mismatched_bf16": 0
+  },
+  "fp64": [
+    {
+      "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+      "atol": 0.03,
+      "rtol": 0.03,
+      "relative_l2_limit": 0.01,
+      "rows": [
+        0
+      ],
+      "heads": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "lengths": [
+        16
+      ],
+      "arms": {
+        "original": {
+          "finite": true,
+          "max_abs": 0.0005292156529534686,
+          "relative_l2": 0.0020147424878318326,
+          "passed": true
+        },
+        "native": {
+          "finite": true,
+          "max_abs": 0.0005292156529534686,
+          "relative_l2": 0.0020147424878318326,
+          "passed": true
+        }
+      },
+      "scope": "合成组件抽样，不是模型准确率"
+    },
+    {
+      "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+      "atol": 0.03,
+      "rtol": 0.03,
+      "relative_l2_limit": 0.01,
+      "rows": [
+        0
+      ],
+      "heads": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "lengths": [
+        16
+      ],
+      "arms": {
+        "original": {
+          "finite": true,
+          "max_abs": 0.0005721975626881148,
+          "relative_l2": 0.0019546158243045155,
+          "passed": true
+        },
+        "native": {
+          "finite": true,
+          "max_abs": 0.0005721975626881148,
+          "relative_l2": 0.0019546158243045155,
+          "passed": true
+        }
+      },
+      "scope": "合成组件抽样，不是模型准确率"
+    },
+    {
+      "source": "scripts/remote/validate_mapped_decode.py:70-92; FP64 CPU实现与额外relative_l2界",
+      "atol": 0.03,
+      "rtol": 0.03,
+      "relative_l2_limit": 0.01,
+      "rows": [
+        0
+      ],
+      "heads": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "lengths": [
+        16
+      ],
+      "arms": {
+        "original": {
+          "finite": true,
+          "max_abs": 0.0004749298095703125,
+          "relative_l2": 0.0016234897944147524,
+          "passed": true
+        },
+        "native": {
+          "finite": true,
+          "max_abs": 0.0004749298095703125,
+          "relative_l2": 0.0016234897944147524,
+          "passed": true
+        }
+      },
+      "scope": "合成组件抽样，不是模型准确率"
+    }
+  ],
+  "underflow_input_coverage": {
+    "normal": true,
+    "subnormal": false,
+    "below_smallest_subnormal": false
+  },
+  "error": "Traceback (most recent call last):\n  File \"/workspace/experiments/minicpm-s2/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/source/worker.py\", line 83, in worker\n    check('underflow_P')\n  File \"/workspace/experiments/minicpm-s2/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/source/worker.py\", line 70, in check\n    raise AssertionError('原partial数值/只读/RNG门失败，停止不改容差')\nAssertionError: 原partial数值/只读/RNG门失败，停止不改容差\n"
+}

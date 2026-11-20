@@ -1,0 +1,39 @@
+--- next-k-v1/worker.py
++++ next-k-v2/worker.py
+@@ -50,13 +50,13 @@
+         qmod._q_debug_lines(kernel.fn) | qmod._q_debug_lines(attention.__file__))
+     resources = qmod._resources(compiled)
+     assembly = compiled.asm.get("asm", "")
+-    # BI 机器码资源与 runtime spill 两种证据都保存；无机器码证明则不计时。
++    # 资源变化记录成本；Q-hoist 仍须真实保留，不能用静态资源替代净计时。
+     private = re.search(r"workitem_private_segment_byte_size\s*=\s*(\d+)", assembly)
+-    if not proof["mechanism_pass"] or private is None or int(private[1]) != 0:
+-        raise RuntimeError("Q-hoist 或 private0 机器码门未通过")
+-    if getattr(compiled, "n_spills", None) not in (None, 0):
+-        raise RuntimeError("runtime 报告 spill")
+-    return dict(q_hoist=proof, resources=resources, private_bytes=int(private[1]))
++    if not proof["mechanism_pass"]:
++        raise RuntimeError("Q-hoist 机器码门未通过")
++    return dict(q_hoist=proof, resources=resources,
++                private_bytes=int(private[1]) if private is not None else None,
++                runtime_spills=getattr(compiled, "n_spills", None))
+ 
+ 
+ def conditional_lookup(ttgir):
+@@ -237,10 +237,12 @@
+                     write(run / "results.json", result)
+                     machine = arm_info["machine_resources"]
+                     ares, bres = machine["baseline"], machine["candidate"]
+-                    if (bres["shared"] != 32768 or bres["private_segment_fixed_size"] != 0
+-                            or bres["vgpr_spill_count"] != 0 or bres["vgpr_count"] > 128
+-                            or bres["sgpr_count"] > ares["sgpr_count"]):
+-                        raise RuntimeError("next-K 资源门失败；不扩大 shared/明显降低 raw 四CTA上界")
++                    cost_fields = ("shared", "private_segment_fixed_size", "vgpr_count",
++                                   "vgpr_spill_count", "sgpr_count", "sgpr_spill_count")
++                    arm_info["resource_cost"] = dict(
++                        delta={name: bres[name] - ares[name] for name in cost_fields},
++                        static_resources_are_not_performance_gate=True,
++                        actual_occupancy_proven=False)
+                     arm_info["next_k"] = next_k.mechanism(compiled_b.asm["ttgir"], compiled_b.asm["asm"], source)
+                 case["ir"] = arm_info
+                 # 同一已编译 JIT 及同一 GPU 页表指针，改当前旧 KV 页号后重建 descriptor。

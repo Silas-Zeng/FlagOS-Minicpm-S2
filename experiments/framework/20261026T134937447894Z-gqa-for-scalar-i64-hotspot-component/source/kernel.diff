@@ -1,0 +1,77 @@
+--- scalar-base/kernel.diff
++++ for-scalar-i64/kernel.diff
+@@ -1,10 +1,10 @@
+-"""研究原型：原while + 标量page base + 原合法二维span；未GPU编译或验证。"""
++"""研究原型：动态for + 标量page base + 1D i64后expand + 原span；未GPU编译或验证。"""
+ import triton
+ import triton.language as tl
+ LN2=tl.constexpr(0.6931471805599453)
+ 
+ @triton.jit
+-def _gqa_decode_attention_scalar_page_base(
++def _gqa_decode_attention_for_scalar_i64(
+     segm_output_ptr,
+     segm_max_ptr,
+     segm_expsum_ptr,
+@@ -62,28 +62,27 @@
+     Q = tl.load(query_ptr + query_offsets, mask=row_valid[:, None], other=0.0)
+ 
+     block_table_row = block_table_ptr + seq_idx * block_table_stride
+-    column_slot = offs_step % PAGE_SIZE
++    column_slot = (offs_step % PAGE_SIZE).to(tl.int64)
+ 
+     running_max = tl.full([ROWS], float("-inf"), dtype=tl.float32)
+     running_sum = tl.zeros([ROWS], dtype=tl.float32)
+     accumulator = tl.zeros([ROWS, HEAD_SIZE], dtype=tl.float32)
+ 
+     full_upper = lower + ((upper - lower) // PAGE_SIZE) * PAGE_SIZE
+-    position = lower
+-    while position < full_upper:
++    for position in range(lower, full_upper, PAGE_SIZE):
+         # A step is exactly one page and positions advance page-aligned, so one
+         # scalar block-table entry covers the whole tile.
+         page = tl.load(block_table_row + position // PAGE_SIZE).to(tl.int64)
+         k_page_base = key_cache_ptr + page * k_row_stride_block * HEAD_SIZE
+         k_offsets = (
+-            (column_slot[None, :] * k_row_stride_slot
+-             + kv_head_idx * k_row_stride_head) * HEAD_SIZE
++            (column_slot[None, :] * (k_row_stride_slot * HEAD_SIZE)
++             + kv_head_idx * (k_row_stride_head * HEAD_SIZE))
+             + offs_dim[:, None]
+         )
+         v_page_base = value_cache_ptr + page * v_row_stride_block * HEAD_SIZE
+         v_offsets = (
+-            (column_slot[:, None] * v_row_stride_slot
+-             + kv_head_idx * v_row_stride_head) * HEAD_SIZE
++            (column_slot[:, None] * (v_row_stride_slot * HEAD_SIZE)
++             + kv_head_idx * (v_row_stride_head * HEAD_SIZE))
+             + offs_dim[None, :]
+         )
+         K = tl.load(k_page_base + k_offsets)
+@@ -98,7 +97,6 @@
+             probability.to(V.dtype), V
+         )
+         running_max = new_max
+-        position += PAGE_SIZE
+ 
+     if full_upper < upper:
+         # Final partial page: bound the columns, and read the page only for the
+@@ -107,14 +105,14 @@
+         column_valid = full_upper + offs_step < upper
+         k_page_base = key_cache_ptr + page * k_row_stride_block * HEAD_SIZE
+         k_offsets = (
+-            (column_slot[None, :] * k_row_stride_slot
+-             + kv_head_idx * k_row_stride_head) * HEAD_SIZE
++            (column_slot[None, :] * (k_row_stride_slot * HEAD_SIZE)
++             + kv_head_idx * (k_row_stride_head * HEAD_SIZE))
+             + offs_dim[:, None]
+         )
+         v_page_base = value_cache_ptr + page * v_row_stride_block * HEAD_SIZE
+         v_offsets = (
+-            (column_slot[:, None] * v_row_stride_slot
+-             + kv_head_idx * v_row_stride_head) * HEAD_SIZE
++            (column_slot[:, None] * (v_row_stride_slot * HEAD_SIZE)
++             + kv_head_idx * (v_row_stride_head * HEAD_SIZE))
+             + offs_dim[None, :]
+         )
+         K = tl.load(k_page_base + k_offsets, mask=column_valid[None, :], other=0.0)

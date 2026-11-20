@@ -1,0 +1,42 @@
+{
+  "scope": "4K A/B 官方服务终态与可比性增量复核；未连接远端或设备",
+  "A_archive": "archive/native-k8-sme-20261029/service-a-official4k-175900/（完整原件 SHA 由 root 核验）",
+  "B_archive": "archive/native-k8-sme-20261029/service-b-official4k-175900/（318 原件 SHA 由 root 核验；恢复包 SHA256 d1fb556f4d261ce2750213b3d4b5f36ae4535f2eb2531666aa87f4cde0093ed0）",
+  "case": [4096, 1024, 64, 256],
+  "official_validation": {
+    "A": {"owner_completed": true, "driver_exit_code": 0, "four_rows": true, "requests_each": 256, "all_success": true, "cleanup_errors": [], "postflight_9031": "free", "postflight_gpu_free_mib": 32700},
+    "B": {"owner_completed": true, "driver_exit_code": 0, "four_rows": true, "requests_each": 256, "all_success": true, "cleanup_errors": [], "postflight_9031": "free", "postflight_gpu_free_mib": 32700}
+  },
+  "runtime_identity": {
+    "source_base": "两臂均为 main899 899ce77470b0b539aebc108fd122f668c2d5894d 与各自声明 overlay",
+    "A": {"library_sha256": "824f7dda043dd8e101b0f2296cba4aeda14d0718ae673805da1564a141c1f734", "operator": "cjj_native_k8_klookahead_probe_a::produce", "runtime_compile": false},
+    "B": {"library_sha256": "bdc16c49fef721b5dad7d7627f9c046f726f29a2f9c589297b9f4f036b08b6ef", "operator": "cjj_native_k8_klookahead_probe_b::produce", "runtime_compile": false},
+    "both_loaded_and_target_geometry_observed": true,
+    "geometry": {"shape": 64, "segments": 2, "physical_page_bytes": 16384},
+    "kv_cache_pages": {"A": 34277, "B": 34271, "difference_pages": 6},
+    "route_event_limit": "日志有 eager 与 captured host event；不等于各计分轮或 Graph replay 次数。"
+  },
+  "raw_total_tok_s": {
+    "A": [5579.18, 6400.98, 6970.94, 6967.59],
+    "B": [5653.86, 6470.63, 7003.28, 6915.42],
+    "A_retained_runs_2_to_4_mean": 6779.836667,
+    "B_retained_runs_2_to_4_mean": 6796.443333,
+    "B_vs_A_retained_mean_percent": 0.244941987,
+    "A_last_two_mean": 6969.265,
+    "B_last_two_mean": 6959.35,
+    "B_vs_A_last_two_percent": -0.1422675
+  },
+  "database_comparison": {
+    "common_starting_snapshot": {
+      "TunedConfig_iluvatar_triton_3_2.db": "87c41ba8b6c6ac650e959c0e30de3f69c78eba95be7d106a1617d04a532810da",
+      "TunedConfig_iluvatar_triton_3_6.db": "207f1bdad2e980fcddf40b8367158026332bb9c9f6e3ab2dced1246cbb0d4378",
+      "snapshot_content_sha256": "df6c02c51c9cdd5c4c769177ac944a479f33206d7cd95784b9eb5e60dfed25db"
+    },
+    "private_final_snapshot": {
+      "A": {"TunedConfig_iluvatar_triton_3_2.db": "87c41ba8b6c6ac650e959c0e30de3f69c78eba95be7d106a1617d04a532810da", "TunedConfig_iluvatar_triton_3_6.db": "1bf06dd2bdc37dd78f88a5d3bc85b34e775e0928ea473e008e93ab2c8ea17119", "tables": 585, "rows": 21832},
+      "B": {"TunedConfig_iluvatar_triton_3_2.db": "87c41ba8b6c6ac650e959c0e30de3f69c78eba95be7d106a1617d04a532810da", "TunedConfig_iluvatar_triton_3_6.db": "53fe96117b5f3c91c84a3a7bfe5b289156078da61817af1211746d52c4a87be3", "tables": 581, "rows": 22030}
+    },
+    "comparison_limit": "两臂从相同冻结快照起步，但独立运行期间 3_6 数据库均有变化，且最终 tuning 记录不同；不能将 A/B 均值差视为只由 dispatcher 内核造成的严格因果效果。"
+  },
+  "conclusion": "A/B 两臂均完成官方 4K 四轮且服务清理通过。按弃首轮口径 B 均值比 A 高约 0.245%，但 B 最后两轮均值比 A 低约 0.142%；同时 KV 页数相差 6，私有 tuning DB 终态不同。只能报告为同初始 DB 条件下的组合服务观察，不能据此声称稳定性能收益或内核因果收益。准确率未测试。"
+}

@@ -1,0 +1,99 @@
+{
+  "profile_manifest": {
+    "base_commit": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd",
+    "bootstrap_sha256": "50bf83648be604a55b0e7fa8a0382572acdba422d2c132885cf0f638290567ee",
+    "collector_command": [
+      "/usr/local/corex/bin/ixsys",
+      "-t",
+      "cuda,nvtx",
+      "--profile-from-start",
+      "off",
+      "--cuda-trace-scope",
+      "process-tree",
+      "-o",
+      "/workspace/experiments/minicpm-s2/profiles/20261028T231259Z-pr105-hotspot16k-single-diagnostic/baseline.ixsys",
+      "/usr/local/bin/python3",
+      "/workspace/experiments/minicpm-s2/profiles/20261028T231259Z-pr105-hotspot16k-single-diagnostic/bootstrap/owned_service.py",
+      "/workspace/experiments/minicpm-s2/profiles/20261028T231259Z-pr105-hotspot16k-single-diagnostic/service-owner.json",
+      "/usr/local/bin/vllm",
+      "serve",
+      "/workspace/MiniCPM5-2B",
+      "--port",
+      "9031",
+      "--compilation-config",
+      "{\"cudagraph_mode\":\"FULL_DECODE_ONLY\"}",
+      "--served-model-name",
+      "minicpm",
+      "--gpu-memory-utilization",
+      "0.85",
+      "--max-model-len",
+      "131072",
+      "--profiler-config",
+      "{\"profiler\":\"cuda\",\"delay_iterations\":0,\"max_iterations\":0}"
+    ],
+    "diagnostic_only": true,
+    "driver": "/workspace/experiments/minicpm-s2/scripts/pr105-hotspot16k-b5ca316a/tools/run_biv150_baseline_profile.py",
+    "driver_sha256": "14e37ab1f717412437037492120172a104f328288ddb995b2ce439d6a611779d",
+    "env_files": [
+      "service-env.json",
+      "benchmark-env.json"
+    ],
+    "gqa_library": "/workspace/experiments/minicpm-s2/build/native-gqa-overlap1-58a2fc96-20261028/corex_native_gqa_s2_probe.so",
+    "gqa_library_sha256": "c8a725daa29f7fb077d15f04dd9a3be8a419e12e857cc46b4b62870d4f97421b",
+    "gqa_receipt": "/workspace/experiments/minicpm-s2/cpu-probes/20261027T191340Z-native-gqa-overlap1-production-build/build-receipt.json",
+    "gqa_receipt_sha256": "b2087457f60c667da77e0331f0b01de7e5f1a724dc47017a7b2f9798641b053d",
+    "ixsys": "/usr/local/corex/bin/ixsys",
+    "launcher_sha256": "c1942f3c9fde671ce03631010284cf87f9e797329df41086fb35bdefb9f48dac",
+    "library": "/workspace/experiments/minicpm-s2/official/20261027T101200Z-main56-lm-head-temperature-r32-r64-4k-four-rounds-control/native/biv150_native_w8a8.so",
+    "library_sha256": "14f4457a82388a634e9d381190251223dc925d278753a27011e29999e42dd8fd",
+    "merged_main": "b3b87d2a1c13448bd8c6bc24e8045c0458b8b9dd",
+    "official_score": false,
+    "production_equivalent_to": "PR105 frozen tree f1658; exact 814-file source manifest",
+    "python": "/usr/local/bin/python3",
+    "receipt_sha256": "3474da8ba52e6274f73d6bf70725645b9995b598455d4d596d80d529bda11843",
+    "service_command": [
+      "/usr/local/bin/vllm",
+      "serve",
+      "/workspace/MiniCPM5-2B",
+      "--port",
+      "9031",
+      "--compilation-config",
+      "{\"cudagraph_mode\":\"FULL_DECODE_ONLY\"}",
+      "--served-model-name",
+      "minicpm",
+      "--gpu-memory-utilization",
+      "0.85",
+      "--max-model-len",
+      "131072",
+      "--profiler-config",
+      "{\"profiler\":\"cuda\",\"delay_iterations\":0,\"max_iterations\":0}"
+    ],
+    "source": "/workspace/experiments/minicpm-s2/code/pr92-native-gqa-overlap1-58a2fc96-20261028",
+    "source_count": 814,
+    "source_hashes": {
+      "csrc/iluvatar/native_gqa_s2.cpp": "f6bf9611184de7688a0460fe3b810bf0479e21a5dccdbbda77a7d69dadca7a9e",
+      "csrc/iluvatar/native_gqa_s2.cu": "dc9bc915c9f5b165cbf0915fe653caa4dd727b48d6f94a50064c5d3c572f60bf",
+      "csrc/iluvatar/native_w8a8.cpp": "b37c84064474fe904334d7c06f473712077230f0d319df53032372b8b8111bcb",
+      "csrc/iluvatar/native_w8a8.cu": "d18191625fe45ec4aacba09d1f982bfc88a61ddd0efae32566f8a8b91f502297",
+      "tools/run_biv150_gate_team_acceptance.py": "63000d2fc5e8bd1c80f36f12346914601ecc6a7bf50858e6de516c7ab739b3bc",
+      "vllm_fl/compile_semantics.py": "db70071554b24c33725a0548ce65ec5a089d7c38817f449811f729570a360148",
+      "vllm_fl/patches/biv150_native_gqa.py": "2f5e730a428548a235b7c1cee7f5222176cce6d840fb406079c042052a49b0e1",
+      "vllm_fl/worker/worker.py": "a8de1780d1b41bf4889c26f3d593e6ec54e91a5f61996ce64b4d79f2a97efa24"
+    },
+    "source_identity_kind": "frozen814_sha256_not_git_checkout",
+    "tree": "f1658b690011d1a6568bd07210eed597af6ff516",
+    "tuning_snapshot": {
+      "databases": [
+        {
+          "name": "TunedConfig_iluvatar_triton_3_6.db",
+          "sha256": "509de6f49aeeaaef7fc928f292f3c85e647f89b3a192e0041b23a3db53380f14"
+        }
+      ],
+      "normalized_fingerprint": "207f (file SHA is different)",
+      "snapshot_sha256": "509de6f49aeeaaef7fc928f292f3c85e647f89b3a192e0041b23a3db53380f14",
+      "source": "/workspace/experiments/minicpm-s2/official/20261026T013104Z-main34942f7-prefill-stride-four-rounds/database-before/snapshot.sqlite"
+    },
+    "workload": "16384"
+  },
+  "terminal_review": "# 独立终态复核：231259 16K 诊断失败\n\n该 run 不是模型数值或性能失败。冻结 PR105 source 身份为 f1658/814 文件，manifest SHA 与冻结值相同；GQA SO 为 `c8a725…`，build receipt 对应。server log 实际记录 `INSTALL installed=true`、以及 S2 `(64,2,2)` / S4 `(32,2,4)` 的 `SELECTED` 和 `CAPTURED`，均为 `q_stride=[2048,128,1]`、同一 library SHA。失败发生在 benchmark 前的 reader gate：归档 `native_gqa_activation.py` 把 `overlap_v` 硬性要求为 `false`，但冻结 PR105 生产 SO/receipt 的实际值是 `true`，因此有效回执被 reader 的 assert 拒绝；`benchmark_started` 不存在，未发出诊断请求，也没有吞吐样本。posthoc `diagnostic_incomplete` 及缺 fresh FX 只表示诊断证据未闭合，不能解释为模型错误。\n\n清理终态完整：owner/driver 已退出、collector exit 0，生成非空 trace；`cleanup_error=null`，共同 DB 前后 SHA 相同，source manifest 保持 f1658 SHA。该失败只要求修 reader 适配真实 PR105 receipt，并用真实日志 fixture 锁定；不得修改生产 SO/source 或声称需重跑准确率。\n"
+}

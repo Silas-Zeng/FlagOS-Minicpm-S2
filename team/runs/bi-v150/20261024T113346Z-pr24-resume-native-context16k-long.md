@@ -4,13 +4,13 @@
 
 平台：天数 BI-V150。本页只摘录既有登记；未记录字段不补猜。
 
-## 登记 #212 · PR24 组合基线与 KV 抢占诊断
+## 登记 #212 · PR24 真实路径复验与 KV 诊断
 
-- **尝试**：本实例 SO 的9项检查通过，短服务32请求全成功。CPU观察确认抢占后的重复提交；修正探针后捕获完整GPU窗口，目标Attention恰168次（4×42）、约1.018秒。P在本轮自然decode前缀下无需重排；KV容量变化、M457冷调优及原owner失败/DB恢复证据均保留。这里只得到局部计算预算，尚无端到端收益；保留KV SAVE/FULL，下一步做一次新组合VERIFY1，暂不重复profile。
-- **改动**：相关实现 [pr24-kv-diagnostic.json](../../../analysis/pr24-kv-diagnostic.json)；[pr24-resume-native-v2-114500.json](../../../analysis/pr24-resume-native-v2-114500.json)；[pr24-resume-native-failure.json](../../../analysis/pr24-resume-native-failure.json)；[pr24-resume-db-comparison.json](../../../analysis/pr24-resume-db-comparison.json)；[summary.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/summary.json)；[native-build-manifest.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/native-build-manifest.json)；[operator-check.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/operator-check.json)；本轮准确变体以原件源码清单为准。
+- **尝试**：131603同源码隔离编译缓存后，实际新图有34个native调用（layer4..37），完整Math500 Level3为100/105通过；0请求错误/0空最终，83/99/101达到输出上限，101无可提取答案。该结果仅证明本轮路径与准确率，不报吞吐或精度提升。105037至124000六轮仍因旧AOT图失配撤回PR24模型资格；standalone9、CPU/trace观察与VERIFY1字节事实保留，旧Attention1.018秒不能作有效PR24预算，也不追溯恢复旧性能资格。默认缓存修复和PR25复验另记。
+- **改动**：相关实现 [CURRENT_WORK.md](../../../CURRENT_WORK.md)；[accuracy-review.json](../../../experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/accuracy-review.json)；[active-graph-typed-assignment-check.json](../../../experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/active-graph-typed-assignment-check.json)；[computation_graph.py](../../../experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/active-graph/computation_graph.py)；[environment-overrides.json](../../../experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/environment-overrides.json)；[archive-receipt.json](../../../experiments/accuracy/20261024T131603Z-pr24-isolated-cache-math500-control/archive-receipt.json)；[loaded-computation-graph.py](../../../experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/loaded-computation-graph.py)；[early-stop-request.json](../../../experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/early-stop-request.json)；[state.json](../../../experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/state.json)；[archive-receipt.json](../../../experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds-control/archive-receipt.json)；[result.json](../../../experiments/framework/20261024T124000Z-pr24-main-fullsize-two-rounds/result.json)；[coverage.json](../../../experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/coverage.json)；[state.json](../../../experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/state.json)；[observer-manifest.json](../../../experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/observer-manifest.json)；[archive-receipt.json](../../../experiments/framework/20261024T122225Z-pr24-kv-swap-v1-verify1-context16k-long-control/archive-receipt.json)；[pr24-kv-diagnostic.json](../../../analysis/pr24-kv-diagnostic.json)；[pr24-resume-native-v2-114500.json](../../../analysis/pr24-resume-native-v2-114500.json)；[pr24-resume-native-failure.json](../../../analysis/pr24-resume-native-failure.json)；[pr24-resume-db-comparison.json](../../../analysis/pr24-resume-db-comparison.json)；[summary.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/summary.json)；[native-build-manifest.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/native-build-manifest.json)；[operator-check.json](../../../experiments/framework/20261024T105037Z-pr24-main-context16k-control/operator-check.json)；本轮准确变体以原件源码清单为准。
 - **怎么测**：具体测法未单列，见原命令；输入 / 输出 / 并发 / 请求数：16384 / 1024 / 64 / 32。
-- **结果**：DB由8acaab58种子恢复207f1b，source/native未变，结束时GPU68MiB/0%且9031关闭
-- **是否保留**：未集成；失败或无收益记录保留。
+- **结果**：后验修正：本实例旧AOT图失配，PR24真实模型路径资格撤回；本轮原smoke HTTP500、计划32请求未发，失败证据保留。
+- **是否保留**：保留探针识别失败原件；撤回PR24模型路径资格，不作有效基线、完整模型正确性或净收益预算。
 
 <details><summary>完整原登记（含UTC、状态、过程与标识）</summary>
 
@@ -29,9 +29,9 @@
   "concurrency": "64",
   "num_prompts": "32",
   "profiler": "true",
-  "status": "diagnostic_smoke_failed_scope_wrapper_no_performance",
+  "status": "model_path_invalidated_stale_aot_smoke_failed",
   "artifacts": "experiments/framework/20261024T113346Z-pr24-resume-native-context16k-long",
-  "conclusion": "warmed恢复窗口诊断在smoke阶段HTTP500，计划的32请求未发出；helper误拒绝原生@managed_inference_mode的execute_model wrapper，未取得恢复窗口或性能结果，不是PR24数值或吞吐负结果。driver1/owner1原件保留；DB由8acaab58种子恢复207f1b，source/native未变，结束时GPU68MiB/0%且9031关闭。只保留诊断失败证据；v2精确修复待启动，未重复已通过的移植检查。"
+  "conclusion": "后验修正：本实例旧AOT图失配，PR24真实模型路径资格撤回；本轮原smoke HTTP500、计划32请求未发，失败证据保留。原helper误拒绝@managed_inference_mode的execute_model wrapper，未取得恢复窗口或性能结果，不能归为PR24数值或吞吐负结果，也不能证明模型正确。原driver1/owner1；DB由8acaab58种子恢复207f1b，source/native未变，结束时GPU68MiB/0%且9031关闭。v2后续已完成，但同样因缓存失配撤回模型资格；见CURRENT_WORK.md。"
 }
 ```
 

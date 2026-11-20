@@ -1,0 +1,21 @@
+[1/3] c++ -MMD -MF bridge.o.d -DTORCH_EXTENSION_NAME=corex_native_page16_probe -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.12/site-packages/torch/include -isystem /usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/corex/include -isystem /usr/local/include/python3.12 -D_GLIBCXX_USE_CXX11_ABI=0 -fPIC -std=c++17 -O3 -std=c++17 -c /workspace/experiments/minicpm-s2/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/source/bridge.cpp -o bridge.o -D__ILUVATAR__
+[2/3] /usr/local/corex/bin/clang++  -DTORCH_EXTENSION_NAME=corex_native_page16_probe -DTORCH_API_INCLUDE_EXTENSION_H -isystem /usr/local/lib/python3.12/site-packages/torch/include -isystem /usr/local/lib/python3.12/site-packages/torch/include/torch/csrc/api/include -isystem /usr/local/corex/include -isystem /usr/local/include/python3.12 -D_GLIBCXX_USE_CXX11_ABI=0 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__ILUVATAR__ -D__ILUVATAR_WORKAROUND__ -D__ILUVATAR_DIAG__ -cl-single-precision-constant -fPIC -mllvm --bonus-inst-threshold=0 -mllvm --skip-double -fclang-abi-compat=16 -D__MR__ -O3 -std=c++17 -D__ILUVATAR__ -D__MR__ -x ivcore --cuda-gpu-arch=ivcore11 --cuda-path=/usr/local/corex -c /workspace/experiments/minicpm-s2/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/source/page16.cu -o page16.cuda.o 
+In file included from /workspace/experiments/minicpm-s2/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/source/page16.cu:6:
+In file included from /usr/local/corex/include/math_functions.h:18:
+/usr/local/corex/include/IX/ixrt/math_functions.h:19:2: warning: "math_functions.h is an internal header file and must not be used directly.  This file will be removed in a future IX release.  Please use ix_runtime_api.h or ix_runtime.h instead." [-W#warnings]
+   19 | #warning                                                                                                               \
+      |  ^
+1 warning generated when compiling for ivcore11.
+In file included from /workspace/experiments/minicpm-s2/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/source/page16.cu:6:
+In file included from /usr/local/corex/include/math_functions.h:18:
+/usr/local/corex/include/IX/ixrt/math_functions.h:19:2: warning: "math_functions.h is an internal header file and must not be used directly.  This file will be removed in a future IX release.  Please use ix_runtime_api.h or ix_runtime.h instead." [-W#warnings]
+   19 | #warning                                                                                                               \
+      |  ^
+1 warning generated when compiling for host.
+[3/3] c++ bridge.o page16.cuda.o -shared -L/usr/local/lib/python3.12/site-packages/torch/lib -lc10 -lc10_cuda -ltorch_cpu -ltorch_cuda -ltorch -ltorch_python -L/usr/local/corex/lib64 -lcudart -o corex_native_page16_probe.so
+Traceback (most recent call last):
+  File "/workspace/experiments/minicpm-s2/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/source/worker.py", line 83, in worker
+    check('underflow_P')
+  File "/workspace/experiments/minicpm-s2/framework/20261027T120655436062Z-corex-native-gqa-page16-numeric/source/worker.py", line 70, in check
+    raise AssertionError('原partial数值/只读/RNG门失败，停止不改容差')
+AssertionError: 原partial数值/只读/RNG门失败，停止不改容差

@@ -1,0 +1,163 @@
+--- 受测prefill组件/worker.py
++++ fresh-kv/worker.py
+@@ -1,4 +1,4 @@
+-"""真实 M2047/KV16K normalized+Q-hoist 对 stride 同形状组件。"""
++"""真实main6971 stride+Q-hoist对fresh-KV两场景组件，未注册生产。"""
+ from __future__ import annotations
+ import importlib
+ import importlib.util
+@@ -15,9 +15,8 @@
+ from validate_mixed_decode import make_data
+ 
+ import prototype
+-import alternate_stride
+ M, KV, D = 2047, 16384, 128
+-ARMS = ("current", "stride")
++ARMS = ("current", "fresh_kv")
+ SAMPLE_ROWS = (0, 15, 16, 127, 128, 1023, 2046)
+ SAMPLE_HEADS = (0, 7, 8, 15)
+ 
+@@ -103,9 +102,9 @@
+     run = Path(run)
+     result = dict(status="started", kind="真实同形状 prefill kernel 组件；无模型权重/官方性能结论",
+         shape=dict(M=M, KV=KV, Q_heads=16, KV_heads=2, D=D, page=16, page_table_stride=8192),
+-        candidate="当前stride+Q-hoist仅反转序列内query block的CTA枚举；每个query的K顺序不变",
++        candidate="当前stride+Q-hoist保持绝对T64顺序；本轮新KV直读post-RoPE张量，历史仍paged",
+         limitations=["只有一个合成形状；不是实际模型输出或完整官方基线。",
+-            "仅stride特化；原浮点表达式不变，独立FP64及每臂Graph门复用。",
++            "只改变KV地址来源；原FP64阈值及跨臂逐位不放宽。",
+             "计时两臂直接已暖 Q-hoist 私有 JIT 的完整2D输出；共同writer/metadata不计差额。",
+             "两臂同输入缓存/进程/ABI，既无affine/next-K，也不扩大tile或减少KV字节。"],
+         timings=[], ir={})
+@@ -141,11 +140,11 @@
+         manager = qmod._MANAGER
+         require(manager is not None and manager.active, "当前 main Q-hoist 未自然安装")
+         helpers = importlib.import_module("vllm.v1.attention.ops.triton_attention_helpers")
+-        raw_stride, source_stride = prototype.build(attention, manager, helpers)
++        raw_fresh, source_fresh = prototype.build(attention, manager, helpers)
+         original_source=__import__('inspect').getsource(manager.raw.fn)
+-        require(source_stride==prototype.transform(original_source),"实际候选不是固定CTA变换")
+-        candidate_manager = prototype.private_manager(raw_stride, attention, backend, qmod)
+-        (run / "candidate.kernel.py").write_text(source_stride, encoding="utf-8")
++        require(source_fresh==prototype.transform(original_source),"实际候选不是固定fresh-KV loader变换")
++        candidate_manager = prototype.private_manager(raw_fresh, attention, backend, qmod)
++        (run / "candidate.kernel.py").write_text(source_fresh, encoding="utf-8")
+         import inspect
+         (run / "current.kernel.py").write_text(inspect.getsource(manager.raw.fn), encoding="utf-8")
+         require(torch.cuda.device_count() == 1, "非单卡")
+@@ -162,6 +161,13 @@
+         layer = NS(_q_scale=torch.ones((), device="cuda"), _k_scale=torch.ones((), device="cuda"),
+                    _v_scale=torch.ones((), device="cuda"))
+         common, query, key, value, cache = make_data(torch, [M], KV)
++        # 共同模拟QKV投影后K/V视图的非连续token stride，不是候选独有副本。
++        raw_backing = torch.full((M + 3, 2560), -19, dtype=torch.bfloat16, device="cuda")
++        raw_k = raw_backing[:, 2048:2304].view(M + 3, 2, 128)
++        raw_v = raw_backing[:, 2304:2560].view(M + 3, 2, 128)
++        raw_k.copy_(key); raw_v.copy_(value)
++        key, value = raw_k, raw_v
++        raw_backing_before = raw_backing.clone()
+         query[M:] = float("nan")
+         page_ids = list(range(KV // 16))
+         page_ids[:8] = reversed(page_ids[:8])
+@@ -202,7 +208,7 @@
+             page_table=common.block_table_tensor.cpu(), slots=common.slot_mapping.cpu()), run / "inputs-initial.pt")
+         outputs = {name: torch.full_like(query, -17) for name in ARMS}
+         kw_a = dict(current_kwargs, output_ptr=outputs["current"][:M])
+-        kw_b = dict(current_kwargs, output_ptr=outputs["stride"][:M])
++        kw_b = prototype.add_fresh_kwargs(dict(current_kwargs, output_ptr=outputs["fresh_kv"][:M]), key[:M], value[:M])
+         require(qmod._eligible(kw_a) and qmod._eligible(kw_b), "不属于已限定普通causal/BF16无sink等scope")
+         # 先由原私有编译链生成并证明两臂Q-hoist，再直接调用同一已暖JIT；
+         # Graph capture不经外层wrapper的保守fallback，避免回放另一套内核。
+@@ -211,22 +217,22 @@
+         require(compiled_a.hash in manager.optimized and compiled_b.hash in candidate_manager.optimized,
+                 "两臂必须真实命中Q-hoist；不能带fallback进入对照")
+         calls = dict(current=lambda: manager.candidate[grid](**kw_a),
+-                     stride=lambda: candidate_manager.candidate[grid](**kw_b))
++                     fresh_kv=lambda: candidate_manager.candidate[grid](**kw_b))
+         result["configs"] = {name: dict(BLOCK_M=128, BLOCK_Q=16, TILE_SIZE=64,
+             num_warps=8, num_stages=1) for name in ARMS}
+         result["ir"]["current"] = preserve(compiled_a, run / "ir-current", qmod)
+-        result["ir"]["stride"] = preserve(compiled_b, run / "ir-stride", qmod)
++        result["ir"]["fresh_kv"] = preserve(compiled_b, run / "ir-fresh-kv", qmod)
+         result["q_hoist"] = {"current": manager.optimized[compiled_a.hash]["mechanism"],
+-            "stride": candidate_manager.optimized[compiled_b.hash]["mechanism"]}
++            "fresh_kv": candidate_manager.optimized[compiled_b.hash]["mechanism"]}
+         result["machine_diagnostic"] = {"current": prototype.machine_summary(compiled_a),
+-            "stride": prototype.machine_summary(compiled_b)}
++            "fresh_kv": prototype.machine_summary(compiled_b)}
+         active_arms = list(ARMS)
+-        expected_hashes = {"current": compiled_a.hash, "stride": compiled_b.hash}
++        expected_hashes = {"current": compiled_a.hash, "fresh_kv": compiled_b.hash}
+         for name in active_arms:
+             require(calls[name]().hash == expected_hashes[name], "直接JIT没有复用已核编译产物")
+         torch.cuda.synchronize()
+         result["active_arms"] = active_arms
+-        result["specialized_stride_values"] = {name: current_kwargs[name] for name in prototype.STRIDES}
++        result["fresh_stride_values"] = {name: kw_b[name] for name in prototype.FRESH_STRIDES}
+         require(torch.equal(cache_before.view(torch.int16), cache.view(torch.int16))
+                 and torch.equal(q_before.view(torch.int16), query.view(torch.int16))
+                 and torch.equal(key_before.view(torch.int16), key.view(torch.int16))
+@@ -239,10 +245,25 @@
+         require(all(x["passed"] for x in result["initial_oracle"]["arms"].values()), "初始独立 FP64 门未通过")
+         require(torch.equal(initial_output[:M].view(torch.int16), outputs["current"][:M].view(torch.int16)),
+                 "新直接基准调用与原生产forward结果不一致")
+-        result["initial_cross_arm"] = dict(bitwise=torch.equal(outputs["current"][:M].view(torch.int16), outputs["stride"][:M].view(torch.int16)),
+-            max_abs=float((outputs["current"][:M].float()-outputs["stride"][:M].float()).abs().max()), diagnostic_only=True)
+-        require(result["initial_cross_arm"]["bitwise"],"CTA调序不应改变每个query的数值")
++        result["initial_cross_arm"] = dict(bitwise=torch.equal(outputs["current"][:M].view(torch.int16), outputs["fresh_kv"][:M].view(torch.int16)),
++            max_abs=float((outputs["current"][:M].float()-outputs["fresh_kv"][:M].float()).abs().max()), diagnostic_only=True)
++        require(result["initial_cross_arm"]["bitwise"],"两来源同BF16值且原分组不变，必须跨臂逐位")
+         initial = {name: out.clone() for name, out in outputs.items()}
++        # 路由反事实只作机制门：raw与cache暂时不等，不计性能/正确性分数。
++        value[:M].mul_(-1)
++        calls["current"](); calls["fresh_kv"]()
++        torch.cuda.synchronize()
++        result["fresh_source_read_proof"] = dict(
++            cache_only_unchanged=torch.equal(initial["current"][:M].view(torch.int16),
++                                            outputs["current"][:M].view(torch.int16)),
++            fresh_arm_changed=not torch.equal(initial["fresh_kv"][:M].view(torch.int16),
++                                              outputs["fresh_kv"][:M].view(torch.int16)))
++        value.copy_(value_before)
++        calls["current"](); calls["fresh_kv"]()
++        torch.cuda.synchronize()
++        require(all(result["fresh_source_read_proof"].values()), "未证明候选实际读取新KV")
++        require(all(torch.equal(initial[name].view(torch.int16), outputs[name].view(torch.int16))
++                    for name in ARMS), "raw恢复后没有逐位恢复原输出")
+         graphs = {}
+         for name in active_arms:
+             calls[name](); calls[name]()
+@@ -261,6 +282,9 @@
+         value.mul_(-1)
+         cache.mul_(-0.5)
+         page_ids[0], page_ids[2] = page_ids[2], page_ids[0]
++        # 零prefix场景的新KV也覆盖这些页：slot与新页表必须同步重建。
++        common.slot_mapping.copy_(torch.tensor([page_ids[pos // 16] * 16 + pos % 16
++            for pos in range(KV - M, KV)], dtype=torch.int64, device="cuda"))
+         common.block_table_tensor[0, :KV // 16].copy_(torch.tensor(page_ids, dtype=torch.int32))
+         impl.do_kv_cache_update(layer, key, value, cache, common.slot_mapping)
+         result["changed_writer_exact"] = writer_exact(torch, key, value, k, v, common.slot_mapping)
+@@ -286,9 +310,9 @@
+             page_table=common.block_table_tensor.cpu(), slots=common.slot_mapping.cpu(),
+             outputs={name: out.cpu() for name, out in outputs.items()}), run / "changed-inputs-outputs.pt")
+         require(all(x["passed"] for x in result["changed_oracle"]["arms"].values()), "换值独立 FP64 门未通过")
+-        result["changed_cross_arm"] = dict(bitwise=torch.equal(outputs["current"][:M].view(torch.int16), outputs["stride"][:M].view(torch.int16)),
+-            max_abs=float((outputs["current"][:M].float()-outputs["stride"][:M].float()).abs().max()), diagnostic_only=True)
+-        require(result["changed_cross_arm"]["bitwise"],"换值后CTA调序出现数值差异")
++        result["changed_cross_arm"] = dict(bitwise=torch.equal(outputs["current"][:M].view(torch.int16), outputs["fresh_kv"][:M].view(torch.int16)),
++            max_abs=float((outputs["current"][:M].float()-outputs["fresh_kv"][:M].float()).abs().max()), diagnostic_only=True)
++        require(result["changed_cross_arm"]["bitwise"],"换值后fresh/cache同值却出现跨臂差异")
+         result["read_only_checks"] = dict(kv=torch.equal(cache_before.view(torch.int16), cache.view(torch.int16)),
+             query=torch.equal(q_before.view(torch.int16), query.view(torch.int16)),
+             key=torch.equal(key_before.view(torch.int16), key.view(torch.int16)),
+@@ -296,8 +320,10 @@
+             rng=torch.equal(rng_cpu, torch.get_rng_state()) and torch.equal(rng_gpu, torch.cuda.get_rng_state()),
+             guards=all(bool((x[M:] == -17).all()) for x in outputs.values()))
+         require(all(result["read_only_checks"].values()), "读取改变输入/RNG或越过输出guard")
++        require(torch.equal(raw_backing[:, :2048].view(torch.int16),
++                            raw_backing_before[:, :2048].view(torch.int16)), "raw KV相邻QKV区域被修改")
+         # 原同形状完整producer单ABBA；无独有的输入变换或计时外计算。
+-        groups = [("candidate", "stride")]
++        groups = [("candidate", "fresh_kv")]
+         order = [(group, name) for group, arm in groups for name in ("current", arm, arm, "current")]
+         pairs = [(torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)) for _ in order]
+         for start, end in pairs:

@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "gpu_executed": false,
+  "compilation_not_checked": true,
+  "checks": [
+    "真实AST两份K地址与原转置及尾mask地址集合一致，含大int64页号",
+    "真实AST QK轴2/PV轴1对独立FP64矩阵参考，P先舍入BF16",
+    "仅原三处partial输出store，无新增producer全局scratch",
+    "既有实际TCU产物被SIMT机制门拒绝，w1/64lane解析正确",
+    "合成w8可解析，dot/MMA/3Dglobalstore分别拒绝"
+  ],
+  "expression_errors": [
+    {
+      "qk_max_abs": 1.430511474609375e-06,
+      "pv_max_abs": 2.980232238769531e-07
+    },
+    {
+      "qk_max_abs": 1.430511474609375e-06,
+      "pv_max_abs": 2.980232238769531e-07
+    }
+  ],
+  "limits": "CPU真实表达与parser薄测，不证明Triton可编译、实际线程布局或数值资格。"
+}
