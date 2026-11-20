@@ -1,5 +1,7 @@
 # 当前实验与接续
 
+**2026-11-20 双平台复现说明及源码 ZIP 修复已交付。** [双平台 readme.md](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/blob/main/docs/submission/readme.md) 汇总两卡环境、启动和官方评测。 [FlagGems #15](https://github.com/Silas-Zeng/FlagGems/pull/15) 与[复现说明 #6](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/pull/6) 已合入。最终 ZIP 在 BI-V150 普通安装及 editable 安装通过，固定生成与此前一致，聊天加法答对 5，服务已退出。运行源码与此前 101/105 官方准确率测试逐文件一致。沐曦沿用团队 103/105。 [设备原件](https://github.com/Silas-Zeng/FlagOS-Minicpm-S2/blob/fc334a548d82d17242bb241b39ae387b57e35689/experiments/framework/20261120T091032Z-source-zip-install/status.json) · [独立复核](experiments/framework/20261120T091032Z-source-zip-install/packaging-review.md)。
+
 **2026-11-20 天数 BI-V150 最终主干准确率。** 官方 MATH-500 Level 3 答对 101/105 题，准确率 96.19%，通过比赛 95% 门槛。105 题均完成评分，0 个请求错误。 框架 `6220924c` 和 FlagGems `bda4a2e0` 均从完整 Git 检出构建。[官方报告](experiments/accuracy/20261120T082740Z-final-main-accuracy/math_500.json) · [逐题核对](experiments/accuracy/20261120T082740Z-final-main-accuracy/verdict.json) · [首次归档安装的记录](team/runs/bi-v150/20261120T082459Z-final-main-accuracy.md)。
 
 当前有效BI-V150基线为[框架PR105](https://github.com/Silas-Zeng/FlagOS-S2-vllm-plugin-FL/pull/105)，merge `1cbac531ca9afaa0e9a68624d5d10cb1d0412055`。已完成原官方4K／16K各四轮与原105；源码实际启用原S2/S4 V等待重叠，不含mixed扩范围负候选。
