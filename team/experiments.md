@@ -2,10 +2,12 @@
 
 # 实验总表
 
-唯一登记源：[registry.csv](../experiments/registry.csv)。共544条登记、541个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
+唯一登记源：[registry.csv](../experiments/registry.csv)。共546条登记、543个run；同一run的不同阶段保留。设备空白显示未记录，不自动归平台。
 
 | 平台 | 登记 | UTC开始 | 方法 | 状态 | 输入/输出/并发/请求 | 原登记摘录 | 每轮短记与原件 |
 |---|---:|---|---|---|---|---|---|
+| 天数 BI-V150 | 546 | 2026-11-20T09:11:01.918729+00:00 | 源码 ZIP 安装 | 功能验证通过 | 3 个生成请求 | 无 Git 源码 ZIP 的普通安装和可编辑安装通过，天数 2 条固定生成与此前逐字一致，聊天加法答对。最终包另核对 758 个测试文件和 738 个基准文件，全部与源码一致。 | [原始记录](runs/bi-v150/20261120T091032Z-source-zip-install.md) |
+| 天数 BI-V150 | 545 | 2026-11-20T09:05:47.425316+00:00 | 源码 ZIP 安装 | 功能验证通过 | 3 个生成请求 | 无 Git 源码 ZIP 的普通安装和可编辑安装通过，天数 2 条固定生成与此前逐字一致，聊天加法答对。 | [原始记录](runs/bi-v150/20261120T090515Z-source-zip-install.md) |
 | 天数 BI-V150 | 544 | 2026-11-20T08:28:14.575433+00:00 | [最终框架正确性](runs/bi-v150/20261120T082740Z-final-main-accuracy.md) | 精度达标 | 不定/上限32768/8/105 | 官方 MATH-500 Level 3 答对 101/105 题，准确率 96.19%，通过比赛 95% 门槛。105 题均完成评分，0 个请求错误。 | [原件与复现](runs/bi-v150/20261120T082740Z-final-main-accuracy.md) |
 | 天数 BI-V150 | 543 | 2026-11-20T08:25:27.473107+00:00 | [最终框架正确性](runs/bi-v150/20261120T082459Z-final-main-accuracy.md) | 安装失败 | 启动阶段/0 题 | 首次从无 Git 元数据的源码归档构建 FlagGems 时漏装 DSA 子目录，服务启动失败，发送 0 题。用同一提交完整导出源码再次构建，安装包仍缺 DSA 模块。从完整 Git 检出构建后，两个主干正常启动服务。 | [原件与复现](runs/bi-v150/20261120T082459Z-final-main-accuracy.md) |
 | 天数 BI-V150 | 541 | 2026-10-30T02:41:39.909755+00:00 | [Q32 连续页仿射寻址](methods/q32-affine-pages.md) | compiled_only_component_candidate | 2018/未记录/未记录/未记录 | 编译审阅确认完整连续页命中分支以仿射页号替代页表读取，fallback仍保留；A/B runtime寄存器135、shared57344、runtime spill均相同，但ASM SGPR spill计数98→110。仅合成descriptor编译探针，无reader、数值或性能测量，真实覆盖率与descriptor构建/H2D成本未知。 | [20261030T024139836824Z-q32-affine-pages-compile-probe](runs/bi-v150/20261030T024139836824Z-q32-affine-pages-compile-probe.md) |
